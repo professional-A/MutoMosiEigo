@@ -359,8 +359,10 @@ function showQ(){
     pEl.className="qprompt"; pEl.textContent=w[0];
     inp.style.display="none"; sb.style.display="none";
     opts.style.display="grid";
-    const uniq=[...new Set(WORDS.filter(x=>x[1]!==w[1]).map(x=>x[1]))];
-    for(let i=uniq.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[uniq[i],uniq[j]]=[uniq[j],uniq[i]];}
+    let dPool=WORDS.filter(x=>x[1]!==w[1]&&x[2]===w[2]);
+    if(dPool.length<3) dPool=WORDS.filter(x=>x[1]!==w[1]);
+    for(let i=dPool.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[dPool[i],dPool[j]]=[dPool[j],dPool[i]];}
+    const uniq=[...new Set(dPool.map(x=>x[1]))];
     let choices=[w[1], ...uniq.slice(0,3)];
     for(let i=choices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]];}
     opts.innerHTML=choices.map(c=>`<button class="qopt" onclick="pickQOpt(this,'${c.replace(/'/g,"\\'")}','${w[1].replace(/'/g,"\\'")}')">${c}</button>`).join("");

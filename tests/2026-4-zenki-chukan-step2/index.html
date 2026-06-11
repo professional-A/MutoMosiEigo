@@ -326,9 +326,11 @@ function showQ(){
     mEl.textContent="熟語 → 意味";
     pw.innerHTML=`<div class="qprompt">${p[0]}</div>`;
     sEl.className="qsmall"; sEl.textContent=p[3];
-    const uniq=[...new Set(PHRASES.filter(x=>x[1]!==p[1]).map(x=>x[1]))];
-    shuffle(uniq);
-    const choices=shuffle([p[1], ...uniq.slice(0,3)]);
+    const pType=p[1].startsWith("〜の")||/安全だ$/.test(p[1])?"o":"v";
+    let dPool=PHRASES.filter(x=>x[1]!==p[1]&&(x[1].startsWith("〜の")||/安全だ$/.test(x[1])?"o":"v")===pType);
+    if(dPool.length<3) dPool=PHRASES.filter(x=>x[1]!==p[1]);
+    shuffle(dPool);
+    const choices=shuffle([p[1], ...([...new Set(dPool.map(x=>x[1]))].slice(0,3))]);
     opts.innerHTML=choices.map(c=>`<button class="qopt" onclick="pick(this,${c===p[1]?1:0},'${p[1].replace(/'/g,"\\'")}','${p[0].replace(/'/g,"\\'")}','${p[1].replace(/'/g,"\\'")}')">${c}</button>`).join("");
   } else {
     const c=COMPLETE[it.i];
