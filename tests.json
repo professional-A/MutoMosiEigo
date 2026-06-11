@@ -27,5 +27,15 @@
     "path": "tests/2026-4-zenki-chukan-step2/",
     "storageKey": "idiom_known_u12",
     "totalItems": 26
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ ハンドアウト演習",
+    "path": "tests/2026-4-zenki-chukan-handout/",
+    "storageKey": "mutou_handout_u12",
+    "totalItems": 19
   }
 ]
