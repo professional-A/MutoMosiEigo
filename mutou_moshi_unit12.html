@@ -1,0 +1,586 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>武藤模試 — 科学技術英語Ⅰ Unit 1 & 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#1b2f4d;
+  --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c;
+  --muted2:#6f87a8;
+  --teal:#46d6c4; --teal-d:#1f9e90;
+  --amber:#f6b352; --rose:#f06b8e; --good:#5fe0a8; --bad:#f06b8e;
+  --glow: rgba(70,214,196,.35);
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Outfit","Noto Sans JP",sans-serif;
+  background:
+    radial-gradient(1100px 600px at 80% -8%, rgba(70,214,196,.10), transparent 55%),
+    radial-gradient(900px 500px at 5% 5%, rgba(246,179,82,.07), transparent 50%),
+    var(--bg);
+  color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased;
+  padding-bottom:80px;
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px}
+
+/* ---------- Header ---------- */
+header{
+  position:relative; overflow:hidden;
+  padding:46px 0 30px;
+  border-bottom:1px solid var(--line);
+  background:linear-gradient(180deg, var(--bg2), transparent);
+}
+.eyebrow{
+  font-size:.72rem; letter-spacing:.34em; text-transform:uppercase;
+  color:var(--teal); font-weight:600; margin-bottom:10px;
+}
+h1{
+  font-family:"Fraunces",serif; font-weight:600;
+  font-size:clamp(2.1rem,6vw,3.3rem); line-height:1.04; letter-spacing:-.01em;
+}
+h1 .jp{ font-family:"Noto Sans JP",sans-serif; font-weight:700; }
+.sub{ color:var(--muted); margin-top:12px; font-size:1.02rem; max-width:600px }
+.units{ display:flex; gap:10px; margin-top:18px; flex-wrap:wrap }
+.utag{
+  font-size:.8rem; padding:6px 13px; border:1px solid var(--line);
+  border-radius:99px; color:var(--muted); background:var(--card);
+}
+.utag b{color:var(--ink);font-weight:600}
+
+/* ---------- Scoreboard ---------- */
+.scoreboard{
+  position:sticky; top:0; z-index:50;
+  background:rgba(10,22,38,.82); backdrop-filter:blur(12px);
+  border-bottom:1px solid var(--line);
+}
+.scoreboard .wrap{display:flex;align-items:center;gap:14px;padding:11px 18px;flex-wrap:wrap}
+.scorenum{font-family:"JetBrains Mono",monospace;font-size:1.05rem;color:var(--teal);font-weight:500}
+.scorelbl{color:var(--muted);font-size:.85rem}
+.bar{flex:1;min-width:120px;height:7px;background:var(--card2);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal-d),var(--teal));border-radius:99px;transition:width .5s ease}
+.resetbtn{
+  font-family:inherit;font-size:.78rem;color:var(--muted);background:none;
+  border:1px solid var(--line);border-radius:8px;padding:5px 11px;cursor:pointer;transition:.2s
+}
+.resetbtn:hover{color:var(--ink);border-color:var(--teal-d)}
+
+/* ---------- Nav ---------- */
+nav.toc{display:flex;gap:8px;flex-wrap:wrap;padding:22px 0 6px}
+nav.toc a{
+  font-size:.82rem;color:var(--muted);text-decoration:none;
+  padding:7px 13px;border:1px solid var(--line);border-radius:99px;
+  background:var(--card);transition:.2s;white-space:nowrap
+}
+nav.toc a:hover{color:var(--ink);border-color:var(--teal-d);transform:translateY(-1px)}
+
+/* ---------- Section ---------- */
+section{margin-top:44px;scroll-margin-top:64px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.sec-no{font-family:"JetBrains Mono",monospace;font-size:.9rem;color:var(--teal);letter-spacing:.05em}
+.sec-head h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.62rem;letter-spacing:-.01em}
+.sec-desc{color:var(--muted);font-size:.92rem;margin-bottom:18px}
+.sec-score{
+  margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:.82rem;
+  color:var(--muted);white-space:nowrap;align-self:center
+}
+
+/* ---------- Card / Question ---------- */
+.q{
+  background:var(--card); border:1px solid var(--line); border-radius:15px;
+  padding:18px 18px 16px; margin-bottom:14px; transition:border-color .25s;
+}
+.q.correct{border-color:var(--teal-d)}
+.q.wrong{border-color:var(--rose)}
+.q-top{display:flex;gap:12px;align-items:flex-start}
+.qn{
+  font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--teal);
+  background:rgba(70,214,196,.1);border:1px solid var(--line);
+  border-radius:7px;padding:3px 8px;flex-shrink:0;margin-top:2px;min-width:34px;text-align:center
+}
+.q-body{flex:1}
+.prompt{font-size:1.02rem;margin-bottom:4px}
+.prompt .blank{color:var(--teal);font-weight:600}
+.jphint{color:var(--amber);font-size:.86rem;font-family:"Noto Sans JP",sans-serif}
+.def{color:var(--muted);font-size:.95rem;font-style:italic}
+.scramble{
+  font-family:"JetBrains Mono",monospace;font-size:.88rem;color:var(--muted2);
+  background:var(--bg2);border:1px dashed var(--line);border-radius:8px;
+  padding:8px 11px;margin:9px 0;line-height:1.5
+}
+
+/* options */
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.opt{
+  font-family:inherit;font-size:.95rem;color:var(--ink);
+  background:var(--card2);border:1px solid var(--line);border-radius:10px;
+  padding:9px 14px;cursor:pointer;transition:.16s;text-align:left;
+}
+.opt:hover:not(:disabled){border-color:var(--teal-d);transform:translateY(-1px)}
+.opt:disabled{cursor:default}
+.opt.pick-correct{background:rgba(95,224,168,.16);border-color:var(--good);color:#cdfbe5}
+.opt.pick-wrong{background:rgba(240,107,142,.14);border-color:var(--bad);color:#ffd6e1}
+.opt.reveal{border-color:var(--good);color:#cdfbe5}
+.opt .lab{font-family:"JetBrains Mono",monospace;color:var(--teal);margin-right:7px;font-size:.85rem}
+
+/* text input */
+.inrow{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.inrow input{
+  flex:1;min-width:180px;font-family:inherit;font-size:.98rem;color:var(--ink);
+  background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 13px;outline:none;transition:.2s
+}
+.inrow input:focus{border-color:var(--teal-d)}
+.inrow input.ok{border-color:var(--good);background:rgba(95,224,168,.08)}
+.inrow input.ng{border-color:var(--bad);background:rgba(240,107,142,.07)}
+.btn{
+  font-family:inherit;font-size:.9rem;font-weight:500;color:var(--bg);
+  background:var(--teal);border:none;border-radius:10px;padding:10px 16px;cursor:pointer;transition:.2s
+}
+.btn:hover{background:#5fe6d6}
+.btn.ghost{background:none;color:var(--muted);border:1px solid var(--line)}
+.btn.ghost:hover{color:var(--ink);border-color:var(--teal-d)}
+
+/* feedback / note */
+.fb{margin-top:10px;font-size:.9rem;display:none}
+.fb.show{display:block}
+.fb .verdict{font-weight:600}
+.fb .verdict.g{color:var(--good)}
+.fb .verdict.b{color:var(--bad)}
+.note{color:var(--muted);margin-top:4px;font-size:.88rem}
+.note .ans{color:var(--teal);font-weight:600}
+.note .jp{font-family:"Noto Sans JP",sans-serif}
+
+/* tf */
+.tf-opts{display:flex;gap:8px;margin-top:11px}
+.tf-opts .opt{flex:1;text-align:center;max-width:140px;font-weight:600}
+
+footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim);font-size:.82rem;text-align:center}
+footer b{color:var(--muted)}
+.tip{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:10px;padding:12px 15px;margin-bottom:18px;font-size:.9rem;color:var(--muted)}
+.tip b{color:var(--amber)}
+@media (max-width:560px){
+  .q-top{flex-direction:column;gap:7px}
+  .tf-opts .opt{max-width:none}
+}
+</style>
+</head>
+<body>
+
+<div class="scoreboard">
+  <div class="wrap">
+    <span class="scorenum" id="sNum">0 / 0</span>
+    <span class="scorelbl">正解</span>
+    <div class="bar"><i id="sBar"></i></div>
+    <button class="resetbtn" onclick="resetAll()">リセット</button>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">科学技術英語Ⅰ ・ 定期試験対策</div>
+    <h1>武藤模試 <span class="jp">総合</span><br>Unit 1 &amp; Unit 2</h1>
+    <p class="sub">Artificial Light on the Sea ／ Tuning Out Mom's Voice? — 試験範囲ぜんぶ入り。語彙・Word Choice・章末問題・並べ替え・T/F・本文Q&amp;Aを実際の出題形式でまとめた。</p>
+    <div class="units">
+      <span class="utag">出題形式：<b>Q&amp;A・T/F・定義→語・語彙6題程度</b></span>
+      <span class="utag">範囲：<b>本文・Word Choice・Exercises・Writing Strategy・Word List</b></span>
+    </div>
+  </div>
+</header>
+
+<div class="wrap">
+
+<nav class="toc" id="toc"></nav>
+
+<div class="tip" style="margin-top:18px">
+  <b>使い方：</b>選択式はタップで即判定、入力式はEnterか「答え合わせ」で判定。入力は大文字小文字・記号・前後の空白は気にしなくてOK（自動で吸収）。解説は判定後に出る。進捗は同じ端末・同じブラウザなら保存される。
+</div>
+
+<div id="app"></div>
+
+<footer>
+  <b>武藤模試 総合 Unit 1 &amp; 2</b><br>
+  Word List 60語・Word Choice・Key Phrases・In-Depth Review・Writing Strategy・T/F・本文Q&amp;A 収録<br>
+  ※ Summary / Approaching the Contents / Over to you! は試験範囲外のため未収録
+</footer>
+</div>
+
+<script>
+/* ============ DATA ============ */
+const VOCAB1 = [
+ ["to make information available to the public, typically in printed or electronic form","publish"],
+ ["the action or process of making land, water, air, etc., dirty and not safe to use","pollution"],
+ ["to put something in a situation in which it could be lost or damaged","risk"],
+ ["to make someone uncertain or unable to understand something","confuse"],
+ ["to cause something to be unable to continue in the normal way","disrupt"],
+ ["the way in which one acts or conducts oneself, especially toward others","behavior"],
+ ["to extend or spread over an area or period of time","stretch"],
+ ["something built by putting parts together that usually stands on its own","structure"],
+ ["to go through or into something","penetrate"],
+ ["made or produced by human beings rather than occurring naturally","artificial"],
+ ["to have an effect on someone or something","affect"],
+ ["to stop something from happening","prevent"],
+ ["the process of pollen entering a flower so that it produces seeds","pollination"],
+ ["emitting or reflecting a lot of light","bright"],
+ ["to evaluate or estimate the nature, ability, or quality of something","assess"],
+ ["to come together and have an effect on each other","interact"],
+ ["a person who works with you, especially in a profession or business","colleague"],
+ ["the whole mass of air that surrounds the Earth","atmosphere"],
+ ["the act or process of finding the size, quantity or degree of something","measurement"],
+ ["a machine sent into space that moves around the earth, moon, sun, or a planet","satellite"],
+ ["to roughly calculate or judge the value, number, quantity, or extent of something","estimate"],
+ ["to be different in size, amount, degree, or nature","vary"],
+ ["to create conditions that exist in real life using computers or models","simulate"],
+ ["the distance between two similar points on a wave of energy, such as light","wavelength"],
+ ["a group of animals or plants that are similar and can produce young","species"],
+ ["easily affected or damaged","sensitive"],
+ ["to concentrate one's attention or effort","focus"],
+ ["to try to find or obtain","seek"],
+ ["the outside part or uppermost layer of something","surface"],
+ ["very great in degree; very strong","intense"],
+];
+const VOCAB2 = [
+ ["to pay no attention to something or someone","ignore"],
+ ["to a moderate or acceptable extent; moderately","fairly"],
+ ["happening often; occurring frequently; not rare","common"],
+ ["to stop paying attention to someone or something (phrasal verb)","tune out"],
+ ["the results or conclusions reached through research, investigation, or study","findings"],
+ ["to examine something closely or quickly, often to find specific information","scan"],
+ ["not known or recognized; not frequently seen, heard, or experienced","unfamiliar"],
+ ["words or language that has no meaning","nonsense"],
+ ["to make it possible for someone or something to have or do something","allow"],
+ ["a particular area or place that is separate from other parts in some way","region"],
+ ["to discover or notice something, especially something not easily seen","detect"],
+ ["something given or received in return for good behavior, effort, or achievement","reward"],
+ ["a person who works with others in the same organization or profession","colleague"],
+ ["to react to something that has been said or done","respond"],
+ ["the middle or central part of something","midst"],
+ ["the stage in life when a person's body starts to develop sexually","puberty"],
+ ["a period of ten years","decade"],
+ ["the process or period of changing from one state or condition to another","transition"],
+ ["having enough good qualities to be considered important or useful","worthy"],
+ ["to become larger in size, volume, scope, or importance","expand"],
+ ["something that shows the effect, existence, or character of something else","reflection"],
+ ["to make someone feel very anxious, tense, or worried (phrasal verb)","stress out"],
+ ["a short message sent electronically to a cell phone or other device","text"],
+ ["to change in order to fit new circumstances or conditions; to adjust","adapt"],
+ ["to become fully developed in the body and mind","mature"],
+ ["the state or fact of continuing to live or exist despite difficult conditions","survival"],
+ ["relating to or characteristic of a mother or motherhood","maternal"],
+ ["to complete or perform something, such as a task or duty (phrasal verb)","carry out"],
+ ["a person who is equal to another in social status, abilities, age, or background","peer"],
+ ["very angry, discouraged, or upset because of being unable to do something","frustrated"],
+];
+
+const WORDCHOICE = [
+ // Unit1 Part1: a.artificial b.coastal c.global d.marine e.offshore f.southern
+ {u:"U1",jp:"世界的インフレについて警鐘を鳴らす",sen:"send a wake-up call about ___ inflation",opts:["artificial","coastal","global","marine","offshore","southern"],ans:"global"},
+ {u:"U1",jp:"海岸浸食の現地調査を行う",sen:"conduct an on-site survey for some ___ erosion",opts:["artificial","coastal","global","marine","offshore","southern"],ans:"coastal"},
+ {u:"U1",jp:"沖合の島に向かうボート旅行を予約する",sen:"book a boat trip to ___ islands",opts:["artificial","coastal","global","marine","offshore","southern"],ans:"offshore"},
+ {u:"U1",jp:"AI技術を運転に適用する",sen:"apply ___ intelligence technology to driving",opts:["artificial","coastal","global","marine","offshore","southern"],ans:"artificial"},
+ {u:"U1",jp:"海洋生物の多様性を確保する",sen:"ensure a diversity of ___ life",opts:["artificial","coastal","global","marine","offshore","southern"],ans:"marine"},
+ // Unit1 Part2: a.atmosphere b.colleague c.confuse d.cue e.factor f.predator
+ {u:"U1",jp:"大気中の二酸化炭素を減らす",sen:"reduce carbon dioxide in the ___",opts:["atmosphere","colleague","confuse","cue","factor","predator"],ans:"atmosphere"},
+ {u:"U1",jp:"研究室に新規採用された同僚を歓迎する",sen:"welcome a newly employed ___ in the laboratory",opts:["atmosphere","colleague","confuse","cue","factor","predator"],ans:"colleague"},
+ {u:"U1",jp:"恐竜絶滅の決定的要因を突き止める",sen:"pinpoint a decisive ___ in the extinction of dinosaurs",opts:["atmosphere","colleague","confuse","cue","factor","predator"],ans:"factor"},
+ {u:"U1",jp:"野生動物保護区での被食・捕食関係を調べる",sen:"study the prey-___ relationships in a wildlife reserve",opts:["atmosphere","colleague","confuse","cue","factor","predator"],ans:"predator"},
+ {u:"U1",jp:"映画監督からの合図を待つ",sen:"wait for a ___ from the film director",opts:["atmosphere","colleague","confuse","cue","factor","predator"],ans:"cue"},
+ // Unit2 Part1: a.adolescence b.detect c.fairly d.opposite e.region f.transition
+ {u:"U2",jp:"かなり英語を使いこなす",sen:"have a ___ good command of English",opts:["adolescence","detect","fairly","opposite","region","transition"],ans:"fairly"},
+ {u:"U2",jp:"脳の特定領野を調べる",sen:"examine a particular ___ of the brain",opts:["adolescence","detect","fairly","opposite","region","transition"],ans:"region"},
+ {u:"U2",jp:"彼女の態度の微妙な変化に気付く",sen:"___ a subtle change in her attitude",opts:["adolescence","detect","fairly","opposite","region","transition"],ans:"detect"},
+ {u:"U2",jp:"ようやく青年期を通過する",sen:"finally pass through ___",opts:["adolescence","detect","fairly","opposite","region","transition"],ans:"adolescence"},
+ {u:"U2",jp:"新生活への移行を経験する",sen:"experience a ___ into a new life",opts:["adolescence","detect","fairly","opposite","region","transition"],ans:"transition"},
+ // Unit2 Part2: a.biological b.maternal c.mature d.missed e.reflection f.worthy
+ {u:"U2",jp:"その本は買う価値があるとみなす",sen:"regard the book as ___ of purchasing",opts:["biological","maternal","mature","missed","reflection","worthy"],ans:"worthy"},
+ {u:"U2",jp:"その傾向を不安定な社会の反映と考える",sen:"consider the trend to be a ___ of the unstable society",opts:["biological","maternal","mature","missed","reflection","worthy"],ans:"reflection"},
+ {u:"U2",jp:"時間をかけて人間として成長する",sen:"___ as a person over the years",opts:["biological","maternal","mature","missed","reflection","worthy"],ans:"mature"},
+ {u:"U2",jp:"母親の出産時死亡率を測定する",sen:"monitor the rate of ___ death in childbirth",opts:["biological","maternal","mature","missed","reflection","worthy"],ans:"maternal"},
+ {u:"U2",jp:"逃した機会を悔やむ",sen:"regret the ___ opportunities",opts:["biological","maternal","mature","missed","reflection","worthy"],ans:"missed"},
+];
+
+// Key Phrases (Exercises) — choose phrase + 適切な語形
+const KEYPHRASE = [
+ {u:"U1",sen:"The entrance ceremony last April ___ a speech made by the president.",opts:["fight off","focus on","interact with","start with","vary from"],ans:"start with",disp:"started with",note:"主語が単数の過去なので started with。"},
+ {u:"U1",sen:"The budget provided by the company will ___ project to project.",opts:["fight off","focus on","interact with","start with","vary from"],ans:"vary from",disp:"vary from",note:"vary from A to A =「AごとにAへと異なる」。willの後なので原形。"},
+ {u:"U1",sen:"The vaccine ___ another drug and resulted in a deadly side effect.",opts:["fight off","focus on","interact with","start with","vary from"],ans:"interact with",disp:"interacted with",note:"resulted と並ぶ過去形 interacted with。"},
+ {u:"U1",sen:"We need to stop ___ unimportant details or we'll never move the discussion forward.",opts:["fight off","focus on","interact with","start with","vary from"],ans:"focus on",disp:"focusing on",note:"stop +動名詞「〜するのをやめる」→ focusing on。"},
+ {u:"U1",sen:"Some insects succeed in ___ their predators by emitting poisonous chemicals.",opts:["fight off","focus on","interact with","start with","vary from"],ans:"fight off",disp:"fighting off",note:"succeed in +動名詞 → fighting off「撃退する」。"},
+ {u:"U2",sen:"___ her doctor's advice led to her ruining her health.",opts:["adapt to","carry out","come with","respond to","tune out"],ans:"tune out",disp:"Tuning out",note:"文頭の主語＝動名詞、大文字で Tuning out「無視すること」。"},
+ {u:"U2",sen:"The researchers expected the microbe to ___ moisture.",opts:["adapt to","carry out","come with","respond to","tune out"],ans:"respond to",disp:"respond to",note:"to の後で原形 respond to「〜に反応する」。"},
+ {u:"U2",sen:"Some refugees have serious difficulties in ___ a new environment.",opts:["adapt to","carry out","come with","respond to","tune out"],ans:"adapt to",disp:"adapting to",note:"difficulty in +動名詞 → adapting to「適応する」。"},
+ {u:"U2",sen:"We need to respect the knowledge and experiences that ___ age.",opts:["adapt to","carry out","come with","respond to","tune out"],ans:"come with",disp:"come with",note:"先行詞は複数(knowledge and experiences)、関係詞節で come with「〜と共に生じる」。"},
+ {u:"U2",sen:"To get accurate data, we will ___ pre- and post-surveys of the experiment.",opts:["adapt to","carry out","come with","respond to","tune out"],ans:"carry out",disp:"carry out",note:"will の後で原形 carry out「実施する」。"},
+];
+
+const INDEPTH = [
+ {u:"U1",q:"One effect of artificial light is that it can be ___ to some marine creatures.",opts:["beneficial","stimulating","stressful"],ans:"stressful",note:"人工光は海洋生物の行動を乱す＝stressful。"},
+ {u:"U1",q:"Tim Smyth and his teammates aimed to identify ___.",opts:["the largest chunk of the sea lit up at night","the brightest place in the water","the interactions among life in the ocean"],ans:"the brightest place in the water",note:"\"assess where in the water this glow is strongest\"＝最も明るい場所。"},
+ {u:"U1",q:"___ affect the depth to which light can penetrate water.",opts:["The shipboard measurements","The particles in the air","Some small sea organisms can"],ans:"Some small sea organisms can",note:"本文の sediment や tiny floating plants and animals＝小さな海洋生物。"},
+ {u:"U1",q:"The researchers used ___ of copepods to conduct their study.",opts:["the light sensitivity","the physical strength","the popularity as the predator"],ans:"the light sensitivity",note:"カイアシは光を手がかりにする＝光感受性を利用。"},
+ {u:"U2",q:"Daniel Abram and his colleagues obtained the results by ___.",opts:["asking their mothers to speak meaningless words","publishing the Journal of Neuroscience","scanning the brains of young kids"],ans:"scanning the brains of young kids",note:"7〜16歳の脳をスキャンして得た結果。"},
+ {u:"U2",q:"Mom's voices ___ early teenagers.",opts:["become less appealing to","increase the impact on","sound more demanding to"],ans:"become less appealing to",note:"思春期初期に母の声の魅力が薄れる(less rewarding)。"},
+ {u:"U2",q:"According to the study on the stressed girls, ___ their stress hormone levels.",opts:["a call from their mothers reduced","the voices of their mothers maintained","email from their mothers raised"],ans:"a call from their mothers reduced",note:"電話で母の声を聞くとストレスホルモンが下がった(text/emailでは効果なし)。"},
+ {u:"U2",q:"According to Abram, teens can't help ignoring their mothers' voice because ___.",opts:["their brains are programmed to tune in to unfamiliar voices","they have already been frustrated by miscommunication with them","they have started to depend more on paternal support"],ans:"their brains are programmed to tune in to unfamiliar voices",note:"脳が見知らぬ声に注意を向けるよう変化するため。"},
+];
+
+const WRITING = [
+ {u:"U1",jp:"人工の光がどのように海洋生物の正常な行動に影響を与えるのかを知るために、研究者たちはデータを集めた。",
+  pre:"Researchers collected data to decide",post:"of sea creatures.",
+  bank:"artificial / behavior / can / how / light / normal / affect",
+  ans:"how artificial light can affect normal behavior"},
+ {u:"U1",jp:"「すべての種が光の輝きに等しく敏感だ、というわけではない」と、その科学者は言った。",
+  pre:"“",post:"the glow of light,” said the scientist.",
+  bank:"all / are / equally / not / sensitive / species / to",
+  ans:"Not all species are equally sensitive to"},
+ {u:"U2",jp:"子供たちは、それが当然の姿だが、身近な友人たちに、より多くの注意を向けた。",
+  pre:"Kids paid more attention to",post:".",
+  bank:"as / be / close / friends, / it / should / their",
+  ans:"their close friends, as it should be"},
+ {u:"U2",jp:"どんな本が子供たちの関心を引くかは、年齢次第で大きな差がある。",
+  pre:"The",post:"is great depending on their ages.",
+  bank:"attention / book / difference / draws / in / kids' / what",
+  ans:"difference in what book draws kids' attention"},
+];
+
+const TF = [
+ {u:"U1",s:"Researchers published the first global atlas of ocean light pollution.",a:true,note:"第1段落の通り、世界初の海洋光害の地図を発表した。"},
+ {u:"U1",s:"Artificial light at night affects only sea creatures, not land animals.",a:false,note:"陸の生き物(land dwellers)にも影響する＝受粉妨害・ホタル・スズメなど。"},
+ {u:"U1",s:"Tim Smyth works at a marine laboratory in California.",a:false,note:"Plymouth Marine Laboratory（イングランド南岸）勤務。"},
+ {u:"U1",s:"Copepods normally use the sun or the winter moon as a cue.",a:true,note:"通常は太陽や冬の月を手がかりにする。"},
+ {u:"U1",s:"Light pollution is strongest in the top meter of the water.",a:true,note:"水面付近(上から約1m)で最も強い。"},
+ {u:"U1",s:"The team described its findings in the Journal of Neuroscience.",a:false,note:"発表先は Elementa: Science of the Anthropocene。Journal of Neuroscience は Unit 2。"},
+ {u:"U2",s:"Young kids' brains are more tuned in to their mothers' voices than to strangers'.",a:true,note:"幼児期は母の声に強く反応する(思春期で逆転)。"},
+ {u:"U2",s:"The shift in voice preference seems to happen between ages 13 and 14.",a:true,note:"13〜14歳の間に変化が起こる。"},
+ {u:"U2",s:"Stress hormones dropped when stressed-out girls heard their moms' voices on the phone.",a:true,note:"2011年の研究：電話の声でストレスホルモンが低下。"},
+ {u:"U2",s:"Text messages from moms had the same calming effect as phone calls.",a:false,note:"テキストでは同じ効果は得られなかった(The same wasn't true for texts)。"},
+ {u:"U2",s:"As we mature, our survival depends more and more on maternal support.",a:false,note:"成熟するにつれ母親の支援への依存は less and less(減る)。"},
+ {u:"U2",s:"Daniel Abrams is a neuroscientist at Stanford University School of Medicine.",a:true,note:"スタンフォード大学医学部の神経科学者。"},
+];
+
+const QA = [
+ {u:"U2",q:"According to the research, what kind of voices do teenagers begin to pay more attention to as they grow up?",
+  opts:["their mothers' voices","unfamiliar (strangers') voices","their teachers' voices"],ans:"unfamiliar (strangers') voices",
+  note:"思春期には見知らぬ声(unfamiliar/strangers' voices)に注意が向く。"},
+ {u:"U2",q:"Why are young kids' brains very tuned in to their mothers' voices?",
+  opts:["Because they rely on maternal support for survival.","Because mothers speak more loudly.","Because they dislike strangers."],ans:"Because they rely on maternal support for survival.",
+  note:"幼児は生存(survival)のため母親の支援に強く依存しているから。"},
+ {u:"U2",q:"What was the purpose of using nonsense words (teebudieshawlt, etc.) in the experiment?",
+  opts:["To test the children's vocabulary.","To study the voices on their own, not what was said.","To make the children laugh."],ans:"To study the voices on their own, not what was said.",
+  note:"言葉の意味ではなく「声そのもの」を調べるため。"},
+ {u:"U2",q:"\"This shift\" (L.26) refers to the change in the ___ of teenagers' brains to voices.",
+  opts:["emotion","perception","response","cognition"],ans:"response",note:"声に対する脳の「反応(response)」の変化。"},
+ {u:"U2",q:"Approximately how long does puberty last?",
+  opts:["About one year","Roughly a decade","About five years"],ans:"Roughly a decade",note:"It lasts roughly a decade(約10年)。"},
+ {u:"U1",q:"What does Tim Smyth study as a marine biogeochemist?",
+  opts:["How life in the oceans interacts with the environment.","How to build offshore oil rigs.","How satellites are launched."],ans:"How life in the oceans interacts with the environment.",
+  note:"海の生命が環境とどう関わり合うかを、生物・化学・地質学で研究する。"},
+ {u:"U1",q:"What were the two factors that affect how far downward light travels in water?",
+  opts:["Temperature and salt","Sediment and tiny floating plants and animals","Wind and waves"],ans:"Sediment and tiny floating plants and animals",
+  note:"水中の沈殿物(sediment)と微小な浮遊する動植物。"},
+];
+
+/* ============ NOTES on tricky handout answers (表示用) ============ */
+const HANDOUT_TIPS = `
+<div class="q"><div class="q-body">
+<p class="prompt" style="color:var(--amber);font-family:'Noto Sans JP',sans-serif">⚠️ ハンドアウトで答えを直しておきたい所</p>
+<p class="note" style="margin-top:8px">
+<b style="color:var(--rose)">Unit 1-1 P7-3：</b> fight off West Nile virus＝「ウイルスを<span class="ans">撃退する</span>」。選択肢 [resist / endure / recover] のうち本文の意味に最も近いのは <span class="ans">resist</span>。recover は「回復する」で意味がずれるので注意。<br><br>
+<b style="color:var(--rose)">Unit 1-2 Q13：</b> 主語は <span class="ans">different wavelengths of light</span>（複数）なので動詞は <span class="ans">reach</span>（reaches は三単現でNG）。<br><br>
+<b style="color:var(--rose)">Unit 2 #2 Q14：</b> 主語は It なので <span class="ans">It lasts roughly a decade.</span>（"I lasts" は綴りミス）。<br><br>
+<b style="color:var(--rose)">Unit 2 #2 Q10：</b> younger kids の比較対象は本文上 <span class="ans">teenagers / adolescents（思春期の若者）</span>。実験参加者の「7〜16歳」とは別なので問われ方に注意。
+</p>
+</div></div>`;
+
+/* ============ RENDER ============ */
+const SECTIONS = [
+ {id:"voc1", no:"01", title:"語彙 — Word List Unit 1", desc:"定義(definition)が表す英単語を本文の語から答える。試験の「definition→語」対策。", type:"vocab", data:VOCAB1},
+ {id:"voc2", no:"02", title:"語彙 — Word List Unit 2", desc:"定義(definition)が表す英単語を答える。", type:"vocab", data:VOCAB2},
+ {id:"wc", no:"03", title:"Word Choice", desc:"日本語に合う語を選ぶ。Unit 1・2 両方。語彙問題6題程度の中心。", type:"wc", data:WORDCHOICE},
+ {id:"kp", no:"04", title:"Exercises — Key Phrases", desc:"語群から選んで文を完成。必要なら語形を変える点も意識。", type:"kp", data:KEYPHRASE},
+ {id:"idr", no:"05", title:"Exercises — In-Depth Review", desc:"本文内容に合う選択肢を選ぶ。", type:"idr", data:INDEPTH},
+ {id:"ws", no:"06", title:"Writing Strategy — 並べ替え", desc:"[ ]内を並べ替えて英文を完成。答えは並べ替え部分だけ入力(前後の語は不要)。", type:"ws", data:WRITING},
+ {id:"tf", no:"07", title:"T/F Questions", desc:"本文の内容に合えば True、合わなければ False。", type:"tf", data:TF},
+ {id:"qa", no:"08", title:"本文 Q&A", desc:"内容理解。ハンドアウトの Q&A 対策。", type:"qa", data:QA},
+];
+
+let state = {}; // key -> {correct:bool, done:bool}
+try{ state = JSON.parse(localStorage.getItem("mutou_u12")||"{}"); }catch(e){ state={}; }
+function save(){ try{ localStorage.setItem("mutou_u12", JSON.stringify(state)); }catch(e){} }
+
+function norm(s){
+  return (s||"").toLowerCase().trim()
+    .replace(/[’']/g,"'").replace(/[“”]/g,'"')
+    .replace(/\s+/g," ")
+    .replace(/[.,;:!?]+$/,"")
+    .replace(/^[.,;:!?]+/,"");
+}
+
+function mark(key, ok){
+  state[key] = {correct:ok, done:true};
+  save(); updateScore();
+}
+
+function updateScore(){
+  let total=0, correct=0;
+  document.querySelectorAll("[data-key]").forEach(el=>{ total++; });
+  for(const k in state){ if(state[k].done){ if(state[k].correct) correct++; } }
+  // total = number of questions actually rendered
+  const allKeys = [...document.querySelectorAll("[data-key]")].map(e=>e.dataset.key);
+  let done=0; correct=0;
+  allKeys.forEach(k=>{ if(state[k]&&state[k].done){done++; if(state[k].correct)correct++;} });
+  document.getElementById("sNum").textContent = correct+" / "+allKeys.length;
+  const pct = allKeys.length? Math.round(done/allKeys.length*100):0;
+  document.getElementById("sBar").style.width = (allKeys.length? (correct/allKeys.length*100):0)+"%";
+  // per-section
+  SECTIONS.forEach(sec=>{
+    const ks=[...document.querySelectorAll(`[data-key^="${sec.id}-"]`)].map(e=>e.dataset.key);
+    let c=0; ks.forEach(k=>{ if(state[k]&&state[k].done&&state[k].correct)c++; });
+    const sc=document.getElementById("score-"+sec.id);
+    if(sc) sc.textContent = c+" / "+ks.length;
+  });
+}
+
+function optButtons(key, opts, ans, noteHtml, dispMap){
+  let html = `<div class="opts">`;
+  opts.forEach((o,i)=>{
+    const lab = String.fromCharCode(97+i);
+    html += `<button class="opt" data-opt="${o.replace(/"/g,'&quot;')}" onclick="pickOpt(this,'${key}','${ans.replace(/'/g,"\\'")}')"><span class="lab">${lab}.</span>${o}</button>`;
+  });
+  html += `</div><div class="fb" id="fb-${key}"></div>`;
+  return html;
+}
+
+function pickOpt(btn, key, ans){
+  const q = btn.closest(".q");
+  if(q.dataset.locked) return;
+  q.dataset.locked="1";
+  const opts = q.querySelectorAll(".opt");
+  const chosen = btn.dataset.opt;
+  const ok = norm(chosen)===norm(ans);
+  opts.forEach(o=>{
+    o.disabled=true;
+    if(norm(o.dataset.opt)===norm(ans)) o.classList.add(ok? "pick-correct":"reveal");
+  });
+  if(!ok) btn.classList.add("pick-wrong");
+  q.classList.add(ok?"correct":"wrong");
+  const note = q.dataset.note? `<div class="note">${q.dataset.note}</div>`:"";
+  const disp = q.dataset.disp;
+  const ansShow = disp? disp : ans;
+  document.getElementById("fb-"+key).innerHTML =
+    `<span class="verdict ${ok?'g':'b'}">${ok?'◎ 正解':'✕ 不正解'}</span> — 答え: <span class="ans" style="color:var(--teal);font-weight:600">${ansShow}</span>${note}`;
+  document.getElementById("fb-"+key).classList.add("show");
+  mark(key, ok);
+}
+
+function checkInput(inp, key, ans, dispNote){
+  const q = inp.closest(".q");
+  const ok = norm(inp.value)===norm(ans);
+  inp.classList.remove("ok","ng"); inp.classList.add(ok?"ok":"ng");
+  q.classList.remove("correct","wrong"); q.classList.add(ok?"correct":"wrong");
+  const fb=document.getElementById("fb-"+key);
+  const note = q.dataset.note? `<div class="note">${q.dataset.note}</div>`:"";
+  fb.innerHTML = `<span class="verdict ${ok?'g':'b'}">${ok?'◎ 正解':'✕ おしい / 不正解'}</span> — 答え: <span class="ans" style="color:var(--teal);font-weight:600">${ans}</span>${note}`;
+  fb.classList.add("show");
+  mark(key, ok);
+}
+function revealInput(key, ans){
+  const fb=document.getElementById("fb-"+key);
+  const q=fb.closest(".q");
+  const note = q.dataset.note? `<div class="note">${q.dataset.note}</div>`:"";
+  fb.innerHTML = `答え: <span class="ans" style="color:var(--teal);font-weight:600">${ans}</span>${note}`;
+  fb.classList.add("show");
+  if(!state[key]||!state[key].done) mark(key,false);
+}
+
+function inputRow(key, ans, placeholder){
+  return `<div class="inrow">
+    <input type="text" id="in-${key}" placeholder="${placeholder||'英語で入力'}"
+      onkeydown="if(event.key==='Enter'){checkInput(this,'${key}','${ans.replace(/'/g,"\\'")}')}">
+    <button class="btn" onclick="checkInput(document.getElementById('in-${key}'),'${key}','${ans.replace(/'/g,"\\'")}')">答え合わせ</button>
+    <button class="btn ghost" onclick="revealInput('${key}','${ans.replace(/'/g,"\\'")}')">答えを見る</button>
+  </div><div class="fb" id="fb-${key}"></div>`;
+}
+
+function render(){
+  // TOC
+  document.getElementById("toc").innerHTML =
+    SECTIONS.map(s=>`<a href="#${s.id}">${s.no} ${s.title.replace(/^.*— /,'')}</a>`).join("");
+
+  let html="";
+  SECTIONS.forEach(sec=>{
+    html += `<section id="${sec.id}"><div class="sec-head">
+      <span class="sec-no">${sec.no}</span><h2>${sec.title}</h2>
+      <span class="sec-score" id="score-${sec.id}">0 / 0</span></div>
+      <p class="sec-desc">${sec.desc}</p>`;
+
+    sec.data.forEach((item,i)=>{
+      const key = sec.id+"-"+i;
+      const n = i+1;
+      let body="";
+      if(sec.type==="vocab"){
+        const [def,ans]=item;
+        body=`<p class="def">${def}</p>${inputRow(key,ans)}`;
+        html+=questionBox(key,n,body);
+      } else if(sec.type==="wc"){
+        const sen=item.sen.replace("___",'<span class="blank">______</span>');
+        body=`<p class="jphint">${item.jp}</p><p class="prompt">${sen}</p>${optButtons(key,item.opts,item.ans)}`;
+        html+=questionBox(key,n,body,null,null,item.u);
+      } else if(sec.type==="kp"){
+        const sen=item.sen.replace("___",'<span class="blank">______</span>');
+        body=`<p class="prompt">${sen}</p>${optButtons(key,item.opts,item.ans)}`;
+        html+=questionBox(key,n,body,item.note,item.disp,item.u);
+      } else if(sec.type==="idr"){
+        body=`<p class="prompt">${item.q.replace("___",'<span class="blank">______</span>')}</p>${optButtons(key,item.opts,item.ans)}`;
+        html+=questionBox(key,n,body,item.note,null,item.u);
+      } else if(sec.type==="ws"){
+        body=`<p class="jphint">${item.jp}</p>
+          <p class="prompt">${item.pre} <span class="blank">[ … ]</span> ${item.post}</p>
+          <div class="scramble">[ ${item.bank} ]</div>
+          ${inputRow(key,item.ans,'並べ替えた部分を入力')}`;
+        html+=questionBox(key,n,body,null,null,item.u);
+      } else if(sec.type==="tf"){
+        const k=key;
+        body=`<p class="prompt">${item.s}</p>
+          <div class="tf-opts">
+            <button class="opt" data-opt="T" onclick="pickOpt(this,'${k}','${item.a?'T':'F'}')">True</button>
+            <button class="opt" data-opt="F" onclick="pickOpt(this,'${k}','${item.a?'T':'F'}')">False</button>
+          </div><div class="fb" id="fb-${k}"></div>`;
+        html+=questionBox(key,n,body,item.note,item.a?"True":"False",item.u);
+      } else if(sec.type==="qa"){
+        body=`<p class="prompt">${item.q.replace("___",'<span class="blank">______</span>')}</p>${optButtons(key,item.opts,item.ans)}`;
+        html+=questionBox(key,n,body,item.note,null,item.u);
+      }
+    });
+    html += `</section>`;
+    if(sec.id==="qa"){ html += `<section style="margin-top:30px">${HANDOUT_TIPS}</section>`; }
+  });
+  document.getElementById("app").innerHTML = html;
+  restore();
+  updateScore();
+}
+
+function questionBox(key,n,body,note,disp,utag){
+  const tag = utag? `<span class="qn" style="min-width:auto">${utag}</span>`:"";
+  return `<div class="q" data-key="${key}" ${note?`data-note="${note.replace(/"/g,'&quot;')}"`:""} ${disp?`data-disp="${disp.replace(/"/g,'&quot;')}"`:""}>
+    <div class="q-top"><span class="qn">${n}</span>${tag}<div class="q-body">${body}</div></div></div>`;
+}
+
+function restore(){
+  // re-apply done states visually (simple: just leave; scoreboard reflects). For locked options we keep interactive fresh on reload.
+}
+
+function resetAll(){
+  if(!confirm("全部の解答状況をリセットする？")) return;
+  state={}; save(); render();
+  window.scrollTo({top:0,behavior:"smooth"});
+}
+
+render();
+</script>
+</body>
+</html>
