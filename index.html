@@ -195,7 +195,7 @@ function renderGroups() {
       return `
         <a class="card" href="${t.path}">
           <div class="card-exam">${t.year}年度 ${t.grade}年 ${t.exam}</div>
-          <div class="card-subject">${t.subject}</div>
+          <div class="card-subject">${t.title || t.subject}</div>
           <div class="progress-bar-wrap">
             <div class="progress-bar" style="width:${pct}%"></div>
           </div>

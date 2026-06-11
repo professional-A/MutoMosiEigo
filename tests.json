@@ -13,6 +13,7 @@
     "grade": 4,
     "exam": "前期中間試験",
     "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ 単語 (Step 1)",
     "path": "tests/2026-4-zenki-chukan-step1/",
     "storageKey": "vocab_known_u12",
     "totalItems": 60
@@ -22,6 +23,7 @@
     "grade": 4,
     "exam": "前期中間試験",
     "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ 熟語 (Step 2)",
     "path": "tests/2026-4-zenki-chukan-step2/",
     "storageKey": "idiom_known_u12",
     "totalItems": 26
