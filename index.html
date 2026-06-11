@@ -141,7 +141,7 @@ let activeExam = "すべて";
 function getProgress(storageKey, totalItems) {
   try {
     const state = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    const done = Object.values(state).filter(v => v && v.done).length;
+    const done = Object.values(state).filter(v => v === 1 || (v && v.done)).length;
     return { done, total: totalItems };
   } catch {
     return { done: 0, total: totalItems };

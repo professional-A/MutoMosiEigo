@@ -1,0 +1,431 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Step 1 単語 — 科学技術英語Ⅰ Unit 1 &amp; 2</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,600&family=Outfit:wght@400;500;600;700;800&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0f1117; --bg2:#171a24; --card:#1d212e; --card2:#252a3a;
+  --line:#2f3548; --ink:#eef1f7; --muted:#9aa3b8; --dim:#697089;
+  --accent:#ffd166; --accent2:#ff8c42;
+  --u1:#3dd7c4; --u2:#b08cff;
+  --good:#54e0a0; --bad:#ff6b8a;
+}
+*{box-sizing:border-box;margin:0;padding:0;-webkit-tap-highlight-color:transparent}
+body{
+  font-family:"Outfit","Noto Sans JP",sans-serif; background:var(--bg); color:var(--ink);
+  line-height:1.55; -webkit-font-smoothing:antialiased; min-height:100vh;
+  background:
+    radial-gradient(900px 500px at 90% -10%, rgba(255,140,66,.10), transparent 55%),
+    radial-gradient(700px 400px at -5% 0%, rgba(176,140,255,.08), transparent 50%),
+    var(--bg);
+}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px 50px}
+
+header{padding:26px 0 14px}
+.step-tag{font-size:.72rem;letter-spacing:.26em;text-transform:uppercase;color:var(--accent);font-weight:700}
+h1{font-family:"Fraunces",serif;font-weight:600;font-size:1.7rem;margin-top:6px;display:flex;align-items:baseline;gap:9px}
+h1 .n{font-family:"JetBrains Mono",monospace;font-size:1rem;color:var(--muted)}
+.sub{color:var(--muted);font-size:.9rem;margin-top:5px}
+
+/* progress */
+.prog{margin-top:16px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:13px 15px}
+.prog .row{display:flex;justify-content:space-between;align-items:center;font-size:.85rem;color:var(--muted)}
+.prog b{color:var(--accent);font-family:"JetBrains Mono",monospace;font-size:1.05rem}
+.pbar{height:8px;background:var(--card2);border-radius:99px;margin-top:9px;overflow:hidden}
+.pbar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--accent2),var(--accent));border-radius:99px;transition:width .5s}
+
+/* tabs / filters */
+.tabs{display:flex;gap:8px;margin-top:18px}
+.tab{flex:1;font-family:inherit;font-size:.95rem;font-weight:600;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:12px;padding:11px;cursor:pointer;transition:.18s}
+.tab.on{background:var(--accent);color:#1a1205;border-color:var(--accent)}
+.filters{display:flex;gap:7px;margin-top:11px;flex-wrap:wrap}
+.fchip{font-family:inherit;font-size:.8rem;color:var(--muted);background:var(--card);border:1px solid var(--line);border-radius:99px;padding:6px 13px;cursor:pointer;transition:.16s}
+.fchip.on{color:var(--ink);border-color:var(--accent)}
+.fchip.u1.on{border-color:var(--u1);color:var(--u1)}
+.fchip.u2.on{border-color:var(--u2);color:var(--u2)}
+
+/* ===== Flashcard ===== */
+#cardView{margin-top:18px}
+.counter{text-align:center;color:var(--muted);font-size:.85rem;font-family:"JetBrains Mono",monospace;margin-bottom:10px}
+.flip{perspective:1400px;cursor:pointer;height:300px;margin-bottom:16px}
+.flip-in{position:relative;width:100%;height:100%;transition:transform .5s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+.flip.flipped .flip-in{transform:rotateY(180deg)}
+.face{position:absolute;inset:0;backface-visibility:hidden;border-radius:20px;border:1px solid var(--line);background:linear-gradient(160deg,var(--card2),var(--card));display:flex;flex-direction:column;align-items:center;justify-content:center;padding:26px;text-align:center}
+.face.back{transform:rotateY(180deg)}
+.unitpill{position:absolute;top:14px;left:14px;font-size:.68rem;font-weight:700;letter-spacing:.05em;padding:3px 9px;border-radius:99px}
+.unitpill.u1{background:rgba(61,215,196,.15);color:var(--u1)}
+.unitpill.u2{background:rgba(176,140,255,.15);color:var(--u2)}
+.pos{position:absolute;top:14px;right:14px;font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--muted)}
+.word{font-family:"Fraunces",serif;font-size:2.5rem;font-weight:600;letter-spacing:-.01em}
+.tap-hint{position:absolute;bottom:16px;font-size:.72rem;color:var(--dim)}
+.jp-big{font-family:"Noto Sans JP",sans-serif;font-size:1.7rem;font-weight:700;margin-bottom:14px}
+.def-en{color:var(--muted);font-size:.92rem;font-style:italic;max-width:380px;opacity:.7}
+.keyword{font-family:"JetBrains Mono",monospace;font-size:1.08rem;color:var(--accent);background:rgba(255,209,102,.1);border:1px solid rgba(255,209,102,.32);border-radius:11px;padding:7px 15px;margin-bottom:12px;max-width:400px}
+.keyword::before{content:"🔑 "}
+.known-flag{position:absolute;bottom:14px;font-size:.74rem;color:var(--good);font-weight:600;display:none}
+.flip.isknown .known-flag{display:block}
+
+.cardbtns{display:flex;gap:9px;align-items:center}
+.navb{font-family:inherit;font-size:1.3rem;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:13px;width:54px;height:50px;cursor:pointer;transition:.16s;flex-shrink:0}
+.navb:active{transform:scale(.95)}
+.knowb{flex:1;font-family:inherit;font-size:.95rem;font-weight:700;height:50px;border-radius:13px;cursor:pointer;border:1px solid var(--line);background:var(--card2);color:var(--muted);transition:.16s}
+.knowb.yes{background:rgba(84,224,160,.16);color:var(--good);border-color:var(--good)}
+.toolrow{display:flex;gap:9px;margin-top:11px}
+.toolrow button{flex:1;font-family:inherit;font-size:.82rem;color:var(--muted);background:none;border:1px solid var(--line);border-radius:10px;padding:9px;cursor:pointer;transition:.16s}
+.toolrow button:hover{color:var(--ink);border-color:var(--accent)}
+
+/* ===== Quiz ===== */
+#quizView{margin-top:18px;display:none}
+.qhead{display:flex;justify-content:space-between;align-items:center;color:var(--muted);font-size:.85rem;font-family:"JetBrains Mono",monospace;margin-bottom:12px}
+.qcard{background:var(--card);border:1px solid var(--line);border-radius:18px;padding:22px 18px}
+.qmode{font-size:.74rem;color:var(--accent);font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:10px}
+.qprompt{font-size:1.15rem;margin-bottom:5px}
+.qprompt.jp{font-family:"Noto Sans JP",sans-serif;font-weight:700;font-size:1.5rem}
+.qprompt.def{font-style:italic;color:#cfd6e6;font-size:1.05rem}
+.qsmall{color:var(--muted);font-size:.82rem;margin-bottom:14px}
+.qin{width:100%;font-family:inherit;font-size:1.15rem;color:var(--ink);background:var(--bg2);border:2px solid var(--line);border-radius:13px;padding:13px 15px;outline:none;text-align:center;transition:.2s}
+.qin:focus{border-color:var(--accent)}
+.qin.ok{border-color:var(--good);background:rgba(84,224,160,.08)}
+.qin.ng{border-color:var(--bad);background:rgba(255,107,138,.07)}
+.qopts{display:none;grid-template-columns:1fr 1fr;gap:9px;margin-top:4px}
+.qopt{font-family:"Noto Sans JP",sans-serif;font-size:1rem;font-weight:500;color:var(--ink);background:var(--bg2);border:2px solid var(--line);border-radius:13px;padding:13px 12px;cursor:pointer;transition:.16s;text-align:center}
+.qopt:hover:not(:disabled){border-color:var(--accent)}
+.qopt:disabled{cursor:default}
+.qopt.ok{border-color:var(--good);background:rgba(84,224,160,.12);color:var(--good)}
+.qopt.ng{border-color:var(--bad);background:rgba(255,107,138,.1);color:var(--bad)}
+.qfb{margin-top:13px;text-align:center;font-size:.95rem;min-height:24px}
+.qfb .v{font-weight:700}
+.qfb .v.g{color:var(--good)} .qfb .v.b{color:var(--bad)}
+.qfb .corr{color:var(--accent);font-weight:700}
+.qfb .jp{font-family:"Noto Sans JP",sans-serif;color:var(--muted);font-size:.85rem}
+.qbtns{display:flex;gap:9px;margin-top:16px}
+.qbtns button{flex:1;font-family:inherit;font-size:.98rem;font-weight:700;height:48px;border-radius:13px;cursor:pointer;border:none;transition:.16s}
+.qsubmit{background:var(--accent);color:#1a1205}
+.qnext{background:var(--card2);color:var(--ink);border:1px solid var(--line) !important}
+.qskip{background:none;color:var(--muted);border:1px solid var(--line) !important;flex:0 0 90px}
+
+.done-banner{background:linear-gradient(135deg,rgba(84,224,160,.16),rgba(61,215,196,.1));border:1px solid var(--good);border-radius:18px;padding:24px;text-align:center;display:none}
+.done-banner h3{font-family:"Fraunces",serif;font-size:1.5rem;color:var(--good);margin-bottom:8px}
+.done-banner p{color:var(--muted);font-size:.92rem}
+.done-banner .jp{font-family:"Noto Sans JP",sans-serif}
+
+footer{text-align:center;color:var(--dim);font-size:.8rem;margin-top:30px}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header>
+  <div class="step-tag">Step 1 / 4 ・ 単語</div>
+  <h1>単語アプリ <span class="n">60 words</span></h1>
+  <p class="sub">Unit 1 &amp; 2 の Word List。カードで覚えて、テストで確認。「覚えた」が60になったらStep 2へ。</p>
+</header>
+
+<div class="prog">
+  <div class="row"><span>覚えた単語</span><span><b id="knownN">0</b> / 60</span></div>
+  <div class="pbar"><i id="knownBar"></i></div>
+</div>
+
+<div class="tabs">
+  <button class="tab on" id="tabCard" onclick="setView('card')">📇 カード</button>
+  <button class="tab" id="tabQuiz" onclick="setView('quiz')">✏️ テスト</button>
+</div>
+
+<div class="filters">
+  <button class="fchip on" id="fAll" onclick="setFilter('all')">ぜんぶ</button>
+  <button class="fchip u1" id="fU1" onclick="setFilter('U1')">Unit 1</button>
+  <button class="fchip u2" id="fU2" onclick="setFilter('U2')">Unit 2</button>
+  <button class="fchip" id="fUnknown" onclick="setFilter('unknown')">まだのみ</button>
+</div>
+
+<!-- FLASHCARD -->
+<div id="cardView">
+  <div class="counter" id="cardCounter">1 / 60</div>
+  <div class="flip" id="flip" onclick="flipCard()">
+    <div class="flip-in">
+      <div class="face front">
+        <span class="unitpill" id="fpUnit">U1</span>
+        <span class="pos" id="fpPos">[v]</span>
+        <div class="word" id="fpWord">word</div>
+        <div class="known-flag">✓ 覚えた</div>
+        <div class="tap-hint">タップで意味を見る</div>
+      </div>
+      <div class="face back">
+        <span class="unitpill" id="bpUnit">U1</span>
+        <div class="jp-big" id="bpJp">日本語</div>
+        <div class="def-en" id="bpDef">definition</div>
+        <div class="tap-hint">タップで戻る</div>
+      </div>
+    </div>
+  </div>
+  <div class="cardbtns">
+    <button class="navb" onclick="prevCard()">‹</button>
+    <button class="knowb" id="knowBtn" onclick="toggleKnown(event)">覚えた？</button>
+    <button class="navb" onclick="nextCard()">›</button>
+  </div>
+  <div class="toolrow">
+    <button onclick="shuffleCards()">🔀 シャッフル</button>
+    <button onclick="resetKnown()">↺ 覚えたをリセット</button>
+  </div>
+</div>
+
+<!-- QUIZ -->
+<div id="quizView">
+  <div class="qhead"><span id="qProgress">0 / 0 正解</span><span id="qRemain">残り 0</span></div>
+  <div class="qcard" id="qCard">
+    <div class="qmode" id="qMode">英語 → 日本語</div>
+    <div class="qprompt" id="qPrompt"></div>
+    <div class="qsmall" id="qSmall"></div>
+    <input class="qin" id="qInput" type="text" autocomplete="off" autocapitalize="off" placeholder="英語で入力" onkeydown="if(event.key==='Enter')quizCheck()">
+    <div class="qopts" id="qOpts"></div>
+    <div class="qfb" id="qFb"></div>
+    <div class="qbtns">
+      <button class="qskip" onclick="quizSkip()">スキップ</button>
+      <button class="qsubmit" id="qSubmit" onclick="quizCheck()">答え合わせ</button>
+    </div>
+  </div>
+  <div class="done-banner" id="doneBanner">
+    <h3>🎉 テスト全問クリア</h3>
+    <p class="jp">この範囲は完璧。<b>「単語OK」</b>って送ってStep 2（熟語）へ進もう。</p>
+  </div>
+</div>
+
+<footer>Step 1 単語 ／ Unit 1 &amp; 2 Word List 60語</footer>
+</div>
+
+<script>
+/* [word, jp, pos, def, unit] */
+const WORDS=[
+ ["publish","出版する","v","to make information available to the public","U1"],
+ ["pollution","公害・汚染","n","the action of making land, water, or air dirty and unsafe","U1"],
+ ["risk","〜する恐れがある","v","to put something in a situation where it could be lost or damaged","U1"],
+ ["confuse","混乱させる","v","to make someone unable to understand something","U1"],
+ ["disrupt","妨害する","v","to cause something to be unable to continue normally","U1"],
+ ["behavior","行動・行為","n","the way one acts, especially toward others","U1"],
+ ["stretch","伸びる・広がる","v","to extend or spread over an area or period of time","U1"],
+ ["structure","構造","n","something built from parts that stands on its own","U1"],
+ ["penetrate","届く・浸透する","v","to go through or into something","U1"],
+ ["artificial","人工の","adj","made by human beings rather than occurring naturally","U1"],
+ ["affect","影響を与える","v","to have an effect on someone or something","U1"],
+ ["prevent","妨げる","v","to stop something from happening","U1"],
+ ["pollination","受粉","n","the process of pollen entering a flower so it produces seeds","U1"],
+ ["bright","明るい","adj","emitting or reflecting a lot of light","U1"],
+ ["assess","評価する","v","to evaluate or estimate the nature or quality of something","U1"],
+ ["interact","関わり合う","v","to come together and have an effect on each other","U1"],
+ ["colleague","同僚","n","a person who works with you in a profession or business","U1"],
+ ["atmosphere","大気","n","the whole mass of air that surrounds the Earth","U1"],
+ ["measurement","計測","n","the act of finding the size, quantity, or degree of something","U1"],
+ ["satellite","人工衛星","n","a machine sent into space that moves around a planet","U1"],
+ ["estimate","推定する","v","to roughly calculate or judge the value or extent","U1"],
+ ["vary","変化する・異なる","v","to be different in size, amount, degree, or nature","U1"],
+ ["simulate","シミュレーションをする","v","to create real-life conditions using computers or models","U1"],
+ ["wavelength","波長","n","the distance between two similar points on a wave of energy","U1"],
+ ["species","種","n","a group of similar animals or plants that can produce young","U1"],
+ ["sensitive","敏感な","adj","easily affected or damaged","U1"],
+ ["focus","焦点を当てる","v","to concentrate one's attention or effort","U1"],
+ ["seek","探す・求める","v","to try to find or obtain","U1"],
+ ["surface","表面・海面","n","the outside part or uppermost layer of something","U1"],
+ ["intense","強烈な","adj","very great in degree; very strong","U1"],
+ ["ignore","無視する","v","to pay no attention to something or someone","U2"],
+ ["fairly","かなり","adv","to a moderate or acceptable extent; moderately","U2"],
+ ["common","共通の・ありふれた","adj","happening often; not rare","U2"],
+ ["tune out","〜を無視する","p.v.","to stop paying attention to someone or something","U2"],
+ ["findings","発見","n","the results or conclusions reached through research","U2"],
+ ["scan","(fMRIで)スキャンする","v","to examine something closely or quickly to find information","U2"],
+ ["unfamiliar","馴染のない・見知らぬ","adj","not known or recognized; not often seen or heard","U2"],
+ ["nonsense","無意味な言葉","n","words or language that has no meaning","U2"],
+ ["allow","〜することを可能にする","v","to make it possible for someone to do something","U2"],
+ ["region","領域・地域","n","a particular area separate from other parts","U2"],
+ ["detect","検出する・感知する","v","to discover or notice something not easily seen","U2"],
+ ["reward","報酬","n","something given in return for good behavior or effort","U2"],
+ ["colleague","同僚","n","a person who works with others in the same profession","U2"],
+ ["respond","反応する","v","to react to something that has been said or done","U2"],
+ ["midst","最中・中間","n","the middle or central part of something","U2"],
+ ["puberty","思春期","n","the stage when a person's body starts to develop sexually","U2"],
+ ["decade","10年","n","a period of ten years","U2"],
+ ["transition","移行・変化","n","the process of changing from one state to another","U2"],
+ ["worthy","〜の価値がある","adj","having enough good qualities to be considered useful","U2"],
+ ["expand","拡大する","v","to become larger in size, scope, or importance","U2"],
+ ["reflection","反映","n","something that shows the effect or character of something else","U2"],
+ ["stress out","(ストレスで)疲れる","p.v.","to make someone feel very anxious, tense, or worried","U2"],
+ ["text","テキストメッセージ","n","a short message sent electronically to a phone","U2"],
+ ["adapt","適応する","v","to change in order to fit new conditions; to adjust","U2"],
+ ["mature","成熟する・成長する","v","to become fully developed in body and mind","U2"],
+ ["survival","生存・生き残ること","n","the state of continuing to live despite difficult conditions","U2"],
+ ["maternal","母親の","adj","relating to or characteristic of a mother","U2"],
+ ["carry out","成し遂げる・実施する","p.v.","to complete or perform a task or duty","U2"],
+ ["peer","仲間","n","a person equal to another in age, status, or ability","U2"],
+ ["frustrated","イライラした","adj","upset because of being unable to do something","U2"],
+];
+
+let known={}; try{known=JSON.parse(localStorage.getItem("vocab_known_u12")||"{}");}catch(e){known={};}
+function saveKnown(){try{localStorage.setItem("vocab_known_u12",JSON.stringify(known));}catch(e){}}
+function keyOf(w){return w[0]+"|"+w[4];}
+
+let filter="all", order=[], idx=0, view="card";
+function pool(){
+  if(filter==="all") return WORDS.map((_,i)=>i);
+  if(filter==="unknown") return WORDS.map((_,i)=>i).filter(i=>!known[keyOf(WORDS[i])]);
+  return WORDS.map((_,i)=>i).filter(i=>WORDS[i][4]===filter);
+}
+function rebuild(){ order=pool(); if(order.length===0)order=[0]; idx=0; }
+
+function setView(v){
+  view=v;
+  document.getElementById("tabCard").classList.toggle("on",v==="card");
+  document.getElementById("tabQuiz").classList.toggle("on",v==="quiz");
+  document.getElementById("cardView").style.display=v==="card"?"block":"none";
+  document.getElementById("quizView").style.display=v==="quiz"?"block":"none";
+  rebuild();
+  if(v==="card") renderCard(); else startQuiz();
+}
+function setFilter(f){
+  filter=f;
+  ["fAll","fU1","fU2","fUnknown"].forEach(id=>document.getElementById(id).classList.remove("on"));
+  document.getElementById({all:"fAll",U1:"fU1",U2:"fU2",unknown:"fUnknown"}[f]).classList.add("on");
+  rebuild();
+  if(view==="card") renderCard(); else startQuiz();
+}
+
+/* ---- Flashcards ---- */
+function renderCard(){
+  const w=WORDS[order[idx]];
+  const f=document.getElementById("flip");
+  f.classList.remove("flipped");
+  f.classList.toggle("isknown", !!known[keyOf(w)]);
+  document.getElementById("cardCounter").textContent=(idx+1)+" / "+order.length;
+  const up=w[4].toLowerCase();
+  document.getElementById("fpUnit").textContent=w[4]; document.getElementById("fpUnit").className="unitpill "+up;
+  document.getElementById("bpUnit").textContent=w[4]; document.getElementById("bpUnit").className="unitpill "+up;
+  document.getElementById("fpPos").textContent="["+w[2]+"]";
+  document.getElementById("fpWord").textContent=w[0];
+  document.getElementById("bpJp").textContent=w[1];
+  document.getElementById("bpDef").textContent=w[3];
+  const kb=document.getElementById("knowBtn");
+  if(known[keyOf(w)]){kb.classList.add("yes");kb.textContent="✓ 覚えた";}
+  else{kb.classList.remove("yes");kb.textContent="覚えた？";}
+}
+function flipCard(){ document.getElementById("flip").classList.toggle("flipped"); }
+function nextCard(){ idx=(idx+1)%order.length; renderCard(); }
+function prevCard(){ idx=(idx-1+order.length)%order.length; renderCard(); }
+function toggleKnown(e){
+  e.stopPropagation();
+  const w=WORDS[order[idx]], k=keyOf(w);
+  if(known[k]) delete known[k]; else known[k]=1;
+  saveKnown(); updateProg(); renderCard();
+  if(known[k]) setTimeout(()=>{ if(view==="card") nextCard(); },250);
+}
+function shuffleCards(){ for(let i=order.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[order[i],order[j]]=[order[j],order[i]];} idx=0; renderCard(); }
+function resetKnown(){ if(!confirm("「覚えた」を全部リセットする？"))return; known={}; saveKnown(); updateProg(); rebuild(); if(view==="card")renderCard();else startQuiz(); }
+
+function updateProg(){
+  const seen={}; let n=0;
+  WORDS.forEach(w=>{const k=keyOf(w); if(known[k]&&!seen[k]){seen[k]=1;}});
+  // count unique known among the 60 rows (colleague appears twice w/ diff unit keys -> counts 2, fine for 60)
+  n=WORDS.filter(w=>known[keyOf(w)]).length;
+  document.getElementById("knownN").textContent=n;
+  document.getElementById("knownBar").style.width=(n/WORDS.length*100)+"%";
+}
+
+/* ---- Quiz ---- */
+let qOrder=[], qi=0, qCorrect=0, qDone=0, qMode="def", qRetry=[];
+function norm(s){return (s||"").toLowerCase().trim().replace(/\s+/g," ").replace(/[.,;:!?]+$/,"");}
+function startQuiz(){
+  qOrder=pool().slice();
+  for(let i=qOrder.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[qOrder[i],qOrder[j]]=[qOrder[j],qOrder[i]];}
+  qi=0; qCorrect=0; qDone=0; qRetry=[];
+  document.getElementById("doneBanner").style.display="none";
+  document.getElementById("qCard").style.display="block";
+  showQ();
+}
+function showQ(){
+  if(qi>=qOrder.length){
+    if(qRetry.length){ qOrder=qRetry.slice(); qRetry=[]; qi=0; }
+    else { finishQuiz(); return; }
+  }
+  const w=WORDS[qOrder[qi]];
+  qMode = (qi%2===0)?"e2j":"j2e";
+  const mEl=document.getElementById("qMode"), pEl=document.getElementById("qPrompt"), sEl=document.getElementById("qSmall");
+  const inp=document.getElementById("qInput"), opts=document.getElementById("qOpts"), sb=document.getElementById("qSubmit");
+  document.getElementById("qFb").innerHTML="";
+  sEl.textContent="["+w[2]+"] ・ "+w[4];
+  delete opts.dataset.locked;
+  if(qMode==="e2j"){
+    mEl.textContent="英語 → 日本語";
+    pEl.className="qprompt"; pEl.textContent=w[0];
+    inp.style.display="none"; sb.style.display="none";
+    opts.style.display="grid";
+    const uniq=[...new Set(WORDS.filter(x=>x[1]!==w[1]).map(x=>x[1]))];
+    for(let i=uniq.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[uniq[i],uniq[j]]=[uniq[j],uniq[i]];}
+    let choices=[w[1], ...uniq.slice(0,3)];
+    for(let i=choices.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[choices[i],choices[j]]=[choices[j],choices[i]];}
+    opts.innerHTML=choices.map(c=>`<button class="qopt" onclick="pickQOpt(this,'${c.replace(/'/g,"\\'")}','${w[1].replace(/'/g,"\\'")}')">${c}</button>`).join("");
+  } else {
+    mEl.textContent="日本語 → 英語";
+    pEl.className="qprompt jp"; pEl.textContent=w[1];
+    opts.style.display="none"; opts.innerHTML="";
+    inp.style.display="block"; inp.value=""; inp.className="qin"; inp.disabled=false;
+    sb.style.display="block"; sb.textContent="答え合わせ"; sb.className="qsubmit"; sb.onclick=quizCheck;
+    inp.focus();
+  }
+  updateQHead();
+}
+function pickQOpt(btn, chosen, ans){
+  const opts=document.getElementById("qOpts");
+  if(opts.dataset.locked) return;
+  opts.dataset.locked="1";
+  const w=WORDS[qOrder[qi]];
+  const ok=chosen===ans;
+  qDone++;
+  [...opts.children].forEach(b=>{ b.disabled=true; if(b.textContent===ans) b.classList.add("ok"); });
+  if(!ok) btn.classList.add("ng");
+  const fb=document.getElementById("qFb");
+  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg();
+    fb.innerHTML=`<span class="v g">◎ 正解</span> <span class="corr">${w[0]}</span> <span class="jp">＝ ${w[1]}</span>`;
+  } else {
+    qRetry.push(qOrder[qi]);
+    fb.innerHTML=`<span class="v b">✕</span> 答え: <span class="corr">${w[0]}</span> <span class="jp">＝ ${w[1]}</span>`;
+  }
+  const sb=document.getElementById("qSubmit");
+  sb.style.display="block"; sb.textContent="次へ ›"; sb.className="qsubmit qnext"; sb.onclick=()=>{qi++;showQ();};
+  updateQHead();
+}
+function updateQHead(){
+  document.getElementById("qProgress").textContent=qCorrect+" 問正解";
+  const total=pool().length;
+  document.getElementById("qRemain").textContent="この回 残り "+Math.max(0,qOrder.length-qi)+(qRetry.length?(" +復習"+qRetry.length):"");
+}
+function quizCheck(){
+  const w=WORDS[qOrder[qi]], inp=document.getElementById("qInput");
+  if(inp.disabled) return;
+  const ok=norm(inp.value)===norm(w[0]);
+  inp.disabled=true; inp.classList.add(ok?"ok":"ng");
+  qDone++;
+  const fb=document.getElementById("qFb");
+  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg();
+    fb.innerHTML=`<span class="v g">◎ 正解</span> <span class="corr">${w[0]}</span>`;
+  } else {
+    qRetry.push(qOrder[qi]);
+    fb.innerHTML=`<span class="v b">✕</span> 答え: <span class="corr">${w[0]}</span> <span class="jp">（${w[1]}）</span>`;
+  }
+  const sb=document.getElementById("qSubmit");
+  sb.textContent="次へ ›"; sb.className="qsubmit qnext"; sb.onclick=()=>{qi++;showQ();};
+  updateQHead();
+}
+function quizSkip(){ qRetry.push(qOrder[qi]); qi++; showQ(); }
+function finishQuiz(){
+  document.getElementById("qCard").style.display="none";
+  document.getElementById("doneBanner").style.display="block";
+  document.getElementById("qProgress").textContent=qCorrect+" 問正解";
+  document.getElementById("qRemain").textContent="完了";
+}
+
+/* init */
+rebuild(); renderCard(); updateProg();
+</script>
+</body>
+</html>
