@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Step 3 — 文法 | 武藤英語</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root {
+  --bg:#0a0714; --bg2:#110c24; --card:#1a1136; --card2:#231650;
+  --line:#3d2a7a; --ink:#e8e0ff; --muted:#9b8cc4; --dim:#5e4d99;
+  --vi:#b08cff; --vi-d:#7c5ccc; --vi-glow:rgba(176,140,255,.22);
+  --amber:#f6b352; --rose:#f06b8e; --good:#5fe0a8; --bad:#f06b8e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Outfit","Noto Sans JP",sans-serif;
+  background:
+    radial-gradient(900px 500px at 75% -5%, rgba(176,140,255,.13), transparent 55%),
+    radial-gradient(700px 400px at 5% 10%, rgba(100,60,200,.08), transparent 50%),
+    var(--bg);
+  color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased;
+  min-height:100vh; padding-bottom:80px;
+}
+.wrap{max-width:860px;margin:0 auto;padding:0 18px}
+
+/* ---- Header ---- */
+.top-bar{padding:42px 0 26px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),transparent)}
+.eyebrow{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--vi);font-weight:600;margin-bottom:10px}
+h1{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(2rem,6vw,3rem);line-height:1.04}
+h1 .jp{font-family:"Noto Sans JP",sans-serif;font-weight:700}
+.sub{color:var(--muted);margin-top:10px;font-size:1rem;max-width:600px}
+.tags{display:flex;gap:8px;margin-top:16px;flex-wrap:wrap}
+.tag{font-size:.78rem;padding:5px 12px;border:1px solid var(--line);border-radius:99px;color:var(--muted);background:var(--card)}
+.tag b{color:var(--ink)}
+
+/* ---- Sticky Toolbar ---- */
+.toolbar{position:sticky;top:0;z-index:50;background:rgba(10,7,20,.88);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.toolbar .wrap{display:flex;align-items:center;gap:8px;padding:10px 18px;flex-wrap:wrap}
+.mode-btn{font-family:inherit;font-size:.9rem;font-weight:600;padding:7px 18px;border-radius:99px;border:1px solid var(--line);background:var(--card);color:var(--muted);cursor:pointer;transition:.15s}
+.mode-btn.active{background:var(--vi);border-color:var(--vi);color:#0a0714}
+.mode-btn:hover:not(.active){border-color:var(--vi);color:var(--vi)}
+.sep{color:var(--dim);font-size:.85rem;padding:0 2px}
+.fbtn{font-family:inherit;font-size:.78rem;padding:5px 12px;border-radius:99px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;transition:.15s}
+.fbtn.active{background:rgba(176,140,255,.14);border-color:var(--vi);color:var(--vi)}
+.fbtn:hover:not(.active){border-color:var(--vi-d);color:var(--vi)}
+.qz-prog{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:.88rem;color:var(--vi);display:none}
+
+/* ---- Card Grid ---- */
+.card-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(270px,1fr));gap:14px;margin-top:28px}
+.gc{background:var(--card);border:1px solid var(--line);border-radius:16px;min-height:170px;cursor:pointer;perspective:1200px;transition:box-shadow .2s,transform .15s}
+.gc:hover{transform:translateY(-2px);box-shadow:0 8px 30px var(--vi-glow)}
+.gc.known{border-color:var(--good);opacity:.6}
+.gc-inner{position:relative;width:100%;transform-style:preserve-3d;transition:transform .42s;min-height:170px}
+.gc.flipped .gc-inner{transform:rotateY(180deg)}
+.gc-front,.gc-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:20px 18px;border-radius:16px;display:flex;flex-direction:column}
+.gc-back{transform:rotateY(180deg);background:var(--card2);overflow-y:auto;max-height:340px}
+.gc-no{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--vi);margin-bottom:5px}
+.gc-title{font-family:"Fraunces",serif;font-size:1.22rem;font-weight:600}
+.gc-sub{color:var(--muted);font-size:.85rem;margin-top:4px;font-family:"Noto Sans JP",sans-serif}
+.gc-tap{margin-top:auto;font-size:.72rem;color:var(--dim)}
+.gc-rule{font-size:.88rem;color:var(--ink);margin-bottom:10px;font-family:"Noto Sans JP",sans-serif;line-height:1.65}
+.gc-ex{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--muted);background:var(--bg2);border-radius:8px;padding:8px 10px;margin-bottom:6px;line-height:1.55;border:1px solid var(--line)}
+.gc-jp{color:var(--amber);font-size:.74rem;margin-top:2px;font-family:"Noto Sans JP",sans-serif}
+.gc-tip{font-size:.78rem;color:var(--amber);margin-top:8px;font-family:"Noto Sans JP",sans-serif;line-height:1.55}
+.know-btn{margin-top:12px;align-self:flex-start;font-family:inherit;font-size:.78rem;font-weight:600;padding:5px 14px;border-radius:99px;border:1px solid var(--good);background:rgba(95,224,168,.1);color:var(--good);cursor:pointer;transition:.15s}
+.know-btn:hover{background:rgba(95,224,168,.22)}
+.known-badge{font-size:.72rem;color:var(--good);margin-top:6px}
+
+/* ---- Quiz ---- */
+#quiz-wrap{margin-top:28px;display:none}
+.prog-wrap{height:4px;background:var(--card2);border-radius:99px;overflow:hidden;margin-bottom:22px;max-width:640px;margin-left:auto;margin-right:auto}
+.prog-fill{height:100%;background:var(--vi);border-radius:99px;transition:width .35s}
+.qz-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 22px;max-width:640px;margin:0 auto}
+.qz-num{font-family:"JetBrains Mono",monospace;font-size:.75rem;color:var(--vi);margin-bottom:12px}
+.qz-q{font-size:1.03rem;line-height:1.7;margin-bottom:18px;font-family:"Noto Sans JP",sans-serif}
+.qz-opts{display:flex;flex-direction:column;gap:9px}
+.qz-opt{font-family:inherit;font-size:.94rem;color:var(--ink);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;cursor:pointer;transition:.14s;text-align:left}
+.qz-opt:hover:not(:disabled){border-color:var(--vi-d);transform:translateX(3px)}
+.qz-opt:disabled{cursor:default}
+.qz-opt.c{background:rgba(95,224,168,.15);border-color:var(--good);color:#cdfbe5}
+.qz-opt.w{background:rgba(240,107,142,.13);border-color:var(--bad);color:#ffd6e1}
+.qz-opt.rv{border-color:var(--good);color:#cdfbe5}
+.qz-fb{margin-top:14px;padding:12px 15px;border-radius:10px;font-size:.88rem;display:none;background:var(--bg2);border:1px solid var(--line)}
+.qz-fb.show{display:block}
+.verdict{font-weight:700}
+.verdict.g{color:var(--good)}
+.verdict.b{color:var(--bad)}
+.qz-note{color:var(--muted);margin-top:5px;font-family:"Noto Sans JP",sans-serif;font-size:.85rem;line-height:1.6}
+.qz-next{margin-top:14px;font-family:inherit;font-size:.94rem;font-weight:600;padding:11px 26px;border-radius:10px;border:none;background:var(--vi);color:#0a0714;cursor:pointer;transition:.15s;display:none}
+.qz-next:hover{background:#c8a8ff}
+
+/* ---- Result ---- */
+.qz-result{text-align:center;padding:44px 20px;display:none}
+.res-big{font-family:"Fraunces",serif;font-size:3.2rem;color:var(--vi)}
+.res-msg{color:var(--muted);margin-top:10px;font-size:1rem;font-family:"Noto Sans JP",sans-serif}
+.res-btns{display:flex;gap:10px;justify-content:center;margin-top:26px;flex-wrap:wrap}
+.btn-vi{font-family:inherit;font-size:.94rem;font-weight:600;padding:11px 22px;border-radius:10px;border:none;background:var(--vi);color:#0a0714;cursor:pointer;transition:.15s}
+.btn-vi:hover{background:#c8a8ff}
+.btn-ghost{font-family:inherit;font-size:.94rem;padding:11px 22px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;transition:.15s}
+.btn-ghost:hover{border-color:var(--vi);color:var(--vi)}
+
+.empty-msg{color:var(--dim);padding:48px 0;text-align:center;font-size:.95rem}
+
+@media(max-width:560px){
+  .card-grid{grid-template-columns:1fr}
+  .toolbar .wrap{gap:6px}
+  .gc-back{max-height:280px}
+}
+</style>
+</head>
+<body>
+
+<div class="top-bar">
+  <div class="wrap">
+    <div class="eyebrow">科学技術英語Ⅰ · Step 3</div>
+    <h1>武藤模試 <span class="jp">文法</span></h1>
+    <p class="sub">Unit 1 &amp; 2 — 試験に出る11の文法ポイント。カードで理解 → テストで全問正解まで。</p>
+    <div class="tags">
+      <span class="tag">Unit 1：<b>Artificial Light on the Sea</b></span>
+      <span class="tag">Unit 2：<b>Tuning Out Mom's Voice?</b></span>
+    </div>
+  </div>
+</div>
+
+<div class="toolbar">
+  <div class="wrap">
+    <button class="mode-btn active" id="btn-card" onclick="setMode('card')">📇 カード</button>
+    <button class="mode-btn" id="btn-quiz" onclick="setMode('quiz')">✏️ テスト</button>
+    <span class="sep">|</span>
+    <button class="fbtn active" data-f="all" onclick="setFilter(this)">すべて</button>
+    <button class="fbtn" data-f="U1" onclick="setFilter(this)">Unit 1</button>
+    <button class="fbtn" data-f="U2" onclick="setFilter(this)">Unit 2</button>
+    <button class="fbtn" data-f="mada" onclick="setFilter(this)">まだ</button>
+    <span class="qz-prog" id="qz-prog"></span>
+  </div>
+</div>
+
+<div class="wrap">
+  <!-- CARD MODE -->
+  <div id="card-wrap">
+    <div class="card-grid" id="card-grid"></div>
+  </div>
+
+  <!-- QUIZ MODE -->
+  <div id="quiz-wrap">
+    <div class="prog-wrap"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
+    <div class="qz-box" id="qz-box">
+      <div class="qz-num" id="qz-num"></div>
+      <div class="qz-q" id="qz-q"></div>
+      <div class="qz-opts" id="qz-opts"></div>
+      <div class="qz-fb" id="qz-fb"></div>
+      <button class="qz-next" id="qz-next" onclick="nextQ()">次へ →</button>
+    </div>
+    <div class="qz-result" id="qz-result">
+      <div class="res-big" id="res-big"></div>
+      <div class="res-msg" id="res-msg"></div>
+      <div class="res-btns">
+        <button class="btn-vi" id="btn-retry-wrong" onclick="retryWrong()" hidden>間違えた問題をやり直す</button>
+        <button class="btn-vi" onclick="startQuiz()">もう一度（全問）</button>
+        <button class="btn-ghost" onclick="setMode('card')">カードに戻る</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+/* ===== DATA ===== */
+const CARDS = [
+  {id:"inv1",unit:"U1",no:"01",
+   title:"倒置①",sub:"否定語が文頭 → 強調倒置",
+   rule:"否定語（Not / Never / Not even など）が文頭に出ると、後ろが〈助動詞 + S + V〉の語順になる（強調効果）。",
+   ex1:"Not even the sea is safe from the glare of humans' light at night.",
+   ex1jp:"夜、人工光のまぶしさから海でさえ安全ではない。",
+   tip:"通常語順：The sea is not even safe... → 否定語を前に出すと強調倒置が起きる。"},
+  {id:"inv2",unit:"U1",no:"02",
+   title:"倒置②",sub:"So + V + S ＝ 〜もまた同じだ",
+   rule:"「AもBと同じだ」＝ So + 助動詞/be動詞 + 主語。前文の動詞の種類に合わせて do / am / is / are / did ... を選ぶ。",
+   ex1:"So do offshore oil rigs and other structures.",
+   ex1jp:"沖合の石油掘削装置や他の構造物もまた（光の暈を投げかける）。",
+   ex2:"A: I like pasta. → B: So do I.  ／  A: I'm hungry. → B: So am I.",
+   tip:"do は代動詞（前の一般動詞の代わり）。be動詞の文なら am / is / are を使う。"},
+  {id:"partial",unit:"both",no:"03",
+   title:"部分否定",sub:"Not all ... ＝ すべてが〜なわけではない",
+   rule:"Not all / Not every / Not always ＝「すべてが〜なわけではない」（一部のみを否定）。No species... とは違う全否定。",
+   ex1:"Not all species will be equally sensitive.",
+   ex1jp:"すべての種が等しく敏感なわけではない（一部は敏感でない）。",
+   tip:"「No species」＝ 全否定（どの種も〜ない）。「Not all species」＝ 部分否定（一部が〜ない）。"},
+  {id:"indirect",unit:"both",no:"04",
+   title:"間接疑問文",sub:"疑問文を文中に埋め込む → S+V の語順",
+   rule:"疑問文を名詞節として動詞の目的語に組み込む。「?」が消え、〈疑問詞 + S + V〉の語順になる。助動詞 do/does/did も消える。",
+   ex1:"assess where this glow is strongest",
+   ex1jp:"Where is this glow strongest? → where this glow is strongest",
+   ex2:"know how far downward light travels  ／  I don't know who she is.",
+   tip:"直接疑問と間接疑問を比較する。Who is she? → I don't know who she is. ← 語順が逆転している。"},
+  {id:"of_adj",unit:"U2",no:"05",
+   title:"of + 抽象名詞 ＝ 形容詞",sub:"worthy of attention / of use ＝ useful",
+   rule:"〈be + of + 抽象名詞〉は形容詞的に働く（補語になる）。and は同品詞をつなぐため rewarding（形容詞）and ___ → ___ も形容詞相当が来る。",
+   ex1:"unfamiliar voices become more rewarding and worthy of attention",
+   ex1jp:"見知らぬ声はより充実感をもたらし、注意を払う価値を持つようになる。",
+   ex2:"This tool is of use.  ＝  This tool is useful.",
+   tip:"of use = useful / of importance = important / of value = valuable と変換できる。attentive は人を主語にする語なので不可。"},
+  {id:"as_since",unit:"U2",no:"06",
+   title:"接続詞 as ＝ 〜するにつれて",sub:"比例・進行の as（変化動詞が目印）",
+   rule:"as + S + V（変化を表す動詞）＝「〜するにつれて」。grow / mature / expand など変化・推移の動詞があれば「につれて」と判断できる。",
+   ex1:"As kids grow up, they expand their social connections way beyond their family.",
+   ex1jp:"子供たちが成長するにつれて、社会的なつながりを家族をはるかに超えて広げていく。",
+   ex2:"As we mature, our survival depends less and less on maternal support.",
+   tip:"「〜のとき」の as と区別する。変化・推移の動詞（grow up / mature / increase...）があれば「につれて」。"},
+  {id:"way",unit:"U2",no:"07",
+   title:"way ＝ はるかに（強調副詞）",sub:"way beyond / way above / way out",
+   rule:"way は比較表現・前置詞句の前に置いて「はるかに・ずっと」を表す強調副詞。比較級の前にも使える（way bigger）。",
+   ex1:"they expand their social connections way beyond their family",
+   ex1jp:"社会的なつながりをはるかに家族を超えて広げていく",
+   ex2:"The top of the mountain was way above the clouds.",
+   tip:"far beyond と同義だがカジュアルな印象。much / far / way はいずれも比較表現の強調に使える。"},
+  {id:"risk",unit:"U1",no:"08",
+   title:"risk + -ing ＝ 〜する恐れがある",sub:"動名詞のみ取る（risk to do は×）",
+   rule:"risk doing ＝「〜する危険を冒す / 〜してしまう恐れがある」。risk の後は必ず動名詞（-ing）。",
+   ex1:"that risks confusing or disrupting the behaviors of sea life",
+   ex1jp:"海の生物の行動を混乱・妨害させる恐れがある",
+   tip:"動名詞のみ取る動詞：enjoy / avoid / finish / mind / deny / consider / risk など。run a risk ＝ 危険を冒す（名詞用法）。"},
+  {id:"perf",unit:"U1",no:"09",
+   title:"過去完了 had + p.p.",sub:"過去の基準時点よりさらに前の出来事",
+   rule:"過去完了（had + 過去分詞）＝ 過去のある基準時点よりも前に完了していた出来事。2つの過去を時系列で区別するために使う。",
+   ex1:"Smyth and his colleagues started with a world atlas that had been created in 2016.",
+   ex1jp:"（2016年にすでに作成されていた）地図からスタートした",
+   tip:"タイムライン：2016年に地図が作成された ──→ その後 Smyth らが started（過去形）して使い始めた。"},
+  {id:"superl",unit:"U1",no:"10",
+   title:"最上級の the 省略",sub:"絶対的最上（固有の性質）はthe不要",
+   rule:"「1つのものが持つ固有の性質を述べる（絶対的）最上級」は the が不要。相対比較（of the five など）は the が必要。",
+   ex1:"Light pollution is strongest in the top meter.",
+   ex1jp:"光害は水面付近（上1m）が最も強い。（← the なし）",
+   ex2:"He is the tallest of the five.  →  the が必要（5人の中での相対比較）",
+   tip:"in this lake / in the world など1つの場所の中での固有の性質 → the 不要。of N / among N など複数と比較 → the 必要。"},
+  {id:"should",unit:"U2",no:"11",
+   title:"as it should be",sub:"当然そうあるべきだ",
+   rule:"as it should be ＝「当然そうあるべき / まさにそうあるべきだ」。should は「当然・当為」の意味（〜すべき / 〜のはず）。",
+   ex1:"That's exactly as it should be.",
+   ex1jp:"それはまさに当然のことだ。",
+   ex2:"Kids paid more attention to their close friends, as it should be.",
+   ex2jp:"子供たちは、当然のことながら、身近な友人たちにより多くの注意を払った。",
+   tip:"naturally（自然に）/ as expected（予想通り）と近いニュアンス。"},
+];
+
+const QUIZ = [
+  {gid:"inv1",unit:"U1",
+   q:"「Not even the sea is safe from the glare of humans' light.」で倒置が起きている理由は？",
+   opts:["「the sea」を強調するため","否定語 Not even が文頭に来て強調倒置が起きるため","safe は形容詞なので倒置が必要なため"],
+   ans:1,note:"否定語 Not / Never / Not even が文頭に出ると〈助動詞+S+V〉の語順になる（強調倒置）。"},
+  {gid:"inv2",unit:"U1",
+   q:"「A: I like pasta.」に続く B の返答として正しい形は？",
+   opts:["So I do.","So do I.","I do so."],
+   ans:1,note:"So + 動詞 + 主語 の語順。like は一般動詞（現在）なので do を使い「So do I.」"},
+  {gid:"inv2",unit:"U1",
+   q:"「A: I'm very hungry.」に続く B の返答として正しい形は？",
+   opts:["So I am.","So am I.","So do I."],
+   ans:1,note:"be動詞の文（am）が続くので「So am I.」。一般動詞なら So do I、be動詞なら So am/is/are I/she...。"},
+  {gid:"inv2",unit:"U1",
+   q:"「So do offshore oil rigs and other structures.」の意味に最も近いのは？",
+   opts:["沖合の石油掘削装置は光害とは無関係だ","沖合の石油掘削装置もまた光の暈を投げかける","沖合の石油掘削装置の構造は異なる"],
+   ans:1,note:"So do ... ＝「〜もまた同じことをする」。前文「Coastal cities cast haloes...」に続く倒置②。"},
+  {gid:"partial",unit:"both",
+   q:"「Not all species will be equally sensitive.」の意味として正しいのは？",
+   opts:["どの種も等しく敏感ではない（全部否定）","すべての種が等しく敏感なわけではない（一部を否定）","種はすべて同じように敏感だ"],
+   ans:1,note:"Not all ＝ 部分否定「すべてが〜なわけではない」。No species ＝ 全否定。"},
+  {gid:"indirect",unit:"both",
+   q:"「assess where this glow is strongest」に組み込まれている疑問文は？",
+   opts:["Where does this glow strongest?","Where is this glow strongest?","How strong this glow is?"],
+   ans:1,note:"間接疑問は〈疑問詞+S+V〉の語順。Where is this glow strongest? → where this glow is strongest"},
+  {gid:"indirect",unit:"both",
+   q:"次のうち間接疑問文として正しいのはどれ？（Who is she? を埋め込む）",
+   opts:["I don't know who is she.","I don't know who she is.","I don't know who she."],
+   ans:1,note:"間接疑問は疑問詞の後が〈S+V〉。who she is が正しい（who is she は直接疑問の語順）。"},
+  {gid:"of_adj",unit:"U2",
+   q:"「This tool is of use.」を形容詞で言い換えると？",
+   opts:["This tool is useable.","This tool is useful.","This tool is using."],
+   ans:1,note:"of use ＝ useful。of + 抽象名詞 は形容詞として働く（補語）。"},
+  {gid:"of_adj",unit:"U2",
+   q:"「rewarding and ___ of attention」の空欄に入るのは？（and は同品詞をつなぐ）",
+   opts:["attentive","worthy","attention"],
+   ans:1,note:"rewarding（形容詞）and ___ → ___ も形容詞相当。worthy of attention ＝ 注意を払う価値がある。attentive は人を主語にする語なので不可。"},
+  {gid:"as_since",unit:"U2",
+   q:"「As kids grow up, they expand their social connections...」の as の意味は？",
+   opts:["〜として（資格・立場）","〜するにつれて（比例・進行）","〜なので（理由）"],
+   ans:1,note:"変化を表す動詞 grow up と組み合わさっているので「〜するにつれて」。"},
+  {gid:"way",unit:"U2",
+   q:"「expand...way beyond their family」の way の品詞と意味は？",
+   opts:["名詞「方法・道」","強調の副詞「はるかに・ずっと」","接続詞「〜の方向へ」"],
+   ans:1,note:"way は比較表現の前で「はるかに」を表す副詞。way beyond ＝ はるかに〜を超えて。"},
+  {gid:"risk",unit:"U1",
+   q:"「risks confusing or disrupting the behaviors of sea life」の意味は？",
+   opts:["海の生物の行動を混乱させるために試みる","海の生物の行動を混乱・妨害させる恐れがある","海の生物の行動の混乱・妨害を避ける"],
+   ans:1,note:"risk doing ＝「〜する恐れがある・危険を冒す」。"},
+  {gid:"risk",unit:"U1",
+   q:"risk の後ろに来る正しい形は？",
+   opts:["risk to do","risk doing","risk that S + V"],
+   ans:1,note:"risk は動名詞（-ing）のみ目的語に取る。enjoy / avoid / finish / mind などと同様。"},
+  {gid:"perf",unit:"U1",
+   q:"「a world atlas that had been created in 2016」で過去完了を使う理由は？",
+   opts:["2016年は遠い昔だから","Smyth らが started した時点より前に地図が作成されていたから","受け身の文は必ず過去完了になるから"],
+   ans:1,note:"過去完了 ＝ 過去の基準点（started）よりさらに前の出来事。2016年作成 → その後 Smyth らが使い始めた。"},
+  {gid:"superl",unit:"U1",
+   q:"「Light pollution is strongest in the top meter.」に the がない理由は？",
+   opts:["口語なので省略される","1つのものの固有の性質（絶対的最上）を述べているから","in があるときは最上級に the をつけない"],
+   ans:1,note:"相対比較（of the five など）ではなく、そのもの自体の性質を述べる絶対的最上は the 不要。"},
+  {gid:"superl",unit:"U1",
+   q:"次のうち the が必要なのはどれか？",
+   opts:["Light pollution is strongest in the top meter.","He is tallest of the five.","This point is deepest in this lake."],
+   ans:1,note:"「of the five」は5人での相対比較 → the が必要（the tallest of the five）。"},
+  {gid:"should",unit:"U2",
+   q:"「Kids paid more attention to their close friends, as it should be.」の as it should be の意味は？",
+   opts:["残念ながら","意外にも","当然のことながら・まさにそうあるべき"],
+   ans:2,note:"as it should be ＝ naturally / as expected。should は「当然・当為」の意味。"},
+];
+
+/* ===== STATE ===== */
+let mode = "card";
+let filter = "all";
+let knownCards = {};
+let quizQueue = [];
+let qzIdx = 0;
+let wrongQ = [];
+
+try { knownCards = JSON.parse(localStorage.getItem("gram3_known") || "{}"); } catch(e){}
+function saveKnown(){ try{ localStorage.setItem("gram3_known", JSON.stringify(knownCards)); }catch(e){} }
+
+/* ===== FILTER ===== */
+function matchUnit(unit, f){
+  if(f === "all") return true;
+  if(f === "U1") return unit === "U1" || unit === "both";
+  if(f === "U2") return unit === "U2" || unit === "both";
+  return true;
+}
+function filteredCards(){
+  return CARDS.filter(c => {
+    if(filter === "mada") return !knownCards[c.id];
+    return matchUnit(c.unit, filter);
+  });
+}
+function filteredQuiz(){
+  return QUIZ.filter(q => {
+    if(filter === "mada"){
+      const c = CARDS.find(c => c.id === q.gid);
+      return c && !knownCards[c.id];
+    }
+    return matchUnit(q.unit, filter);
+  });
+}
+
+function setFilter(btn){
+  document.querySelectorAll(".fbtn").forEach(b => b.classList.remove("active"));
+  btn.classList.add("active");
+  filter = btn.dataset.f;
+  if(mode === "card") renderCards();
+  else startQuiz();
+}
+
+/* ===== MODE ===== */
+function setMode(m){
+  mode = m;
+  document.getElementById("btn-card").classList.toggle("active", m === "card");
+  document.getElementById("btn-quiz").classList.toggle("active", m === "quiz");
+  document.getElementById("card-wrap").style.display = m === "card" ? "" : "none";
+  document.getElementById("quiz-wrap").style.display = m === "quiz" ? "" : "none";
+  document.getElementById("qz-prog").style.display = m === "quiz" ? "" : "none";
+  if(m === "card") renderCards();
+  else startQuiz();
+}
+
+/* ===== CARDS ===== */
+function renderCards(){
+  const cards = filteredCards();
+  const grid = document.getElementById("card-grid");
+  if(cards.length === 0){
+    grid.innerHTML = `<div class="empty-msg">このフィルターに該当するカードはありません 🎉<br>全問「わかった」済みです！</div>`;
+    return;
+  }
+  grid.innerHTML = cards.map(c => {
+    const known = !!knownCards[c.id];
+    const ex2 = c.ex2
+      ? `<div class="gc-ex">${c.ex2}${c.ex2jp?`<div class="gc-jp">${c.ex2jp}</div>`:""}</div>` : "";
+    return `
+<div class="gc${known?" known":""}" id="gc-${c.id}" onclick="flipCard(event,'${c.id}')">
+  <div class="gc-inner">
+    <div class="gc-front">
+      <div class="gc-no">${c.no}</div>
+      <div class="gc-title">${c.title}</div>
+      <div class="gc-sub">${c.sub}</div>
+      ${known?`<div class="known-badge">✓ 習得済み</div>`:""}
+      <div class="gc-tap">タップで解説 →</div>
+    </div>
+    <div class="gc-back">
+      <div class="gc-rule">${c.rule}</div>
+      <div class="gc-ex">${c.ex1}<div class="gc-jp">${c.ex1jp}</div></div>
+      ${ex2}
+      <div class="gc-tip">💡 ${c.tip}</div>
+      <button class="know-btn" onclick="markKnown(event,'${c.id}')">${known?"✓ 習得済み":"わかった ✓"}</button>
+    </div>
+  </div>
+</div>`;
+  }).join("");
+}
+
+function flipCard(e, id){
+  const el = document.getElementById("gc-"+id);
+  if(!el) return;
+  el.classList.toggle("flipped");
+}
+function markKnown(e, id){
+  e.stopPropagation();
+  knownCards[id] = true;
+  saveKnown();
+  renderCards();
+}
+
+/* ===== QUIZ ===== */
+function shuffle(arr){
+  const a = [...arr];
+  for(let i = a.length-1; i > 0; i--){
+    const j = Math.floor(Math.random()*(i+1));
+    [a[i],a[j]] = [a[j],a[i]];
+  }
+  return a;
+}
+
+function startQuiz(subset){
+  const pool = subset || filteredQuiz();
+  document.getElementById("qz-box").style.display = "";
+  document.getElementById("qz-result").style.display = "none";
+  if(pool.length === 0){
+    document.getElementById("qz-box").style.display = "none";
+    document.getElementById("qz-result").style.display = "block";
+    document.getElementById("res-big").textContent = "問題なし";
+    document.getElementById("res-msg").textContent = "このフィルターに該当する問題がありません。";
+    document.getElementById("btn-retry-wrong").hidden = true;
+    return;
+  }
+  quizQueue = shuffle(pool);
+  qzIdx = 0;
+  wrongQ = [];
+  showQ();
+}
+
+function retryWrong(){
+  startQuiz([...new Set(wrongQ)]);
+}
+
+function showQ(){
+  const q = quizQueue[qzIdx];
+  const total = quizQueue.length;
+  document.getElementById("qz-num").textContent = `Q${qzIdx+1} / ${total}`;
+  document.getElementById("qz-q").textContent = q.q;
+  document.getElementById("qz-fb").className = "qz-fb";
+  document.getElementById("qz-fb").innerHTML = "";
+  document.getElementById("qz-next").style.display = "none";
+  document.getElementById("prog-fill").style.width = (qzIdx/total*100)+"%";
+  document.getElementById("qz-prog").textContent = `${qzIdx+1} / ${total}`;
+
+  // Shuffle options but track correct
+  const opts = q.opts.map((text,i) => ({text, correct: i === q.ans}));
+  const shuffled = shuffle(opts);
+  document.getElementById("qz-opts").innerHTML = shuffled.map((o,i) => {
+    const lab = String.fromCharCode(97+i);
+    return `<button class="qz-opt" data-correct="${o.correct}" onclick="pickAns(this)">${lab}. ${o.text}</button>`;
+  }).join("");
+}
+
+function pickAns(btn){
+  const q = quizQueue[qzIdx];
+  const opts = btn.closest(".qz-opts").querySelectorAll(".qz-opt");
+  opts.forEach(o => {
+    o.disabled = true;
+    if(o.dataset.correct === "true") o.classList.add(btn.dataset.correct === "true" ? "c" : "rv");
+  });
+  const ok = btn.dataset.correct === "true";
+  if(!ok){ btn.classList.add("w"); wrongQ.push(q); }
+  else btn.classList.add("c");
+
+  const fb = document.getElementById("qz-fb");
+  fb.innerHTML = `<span class="verdict ${ok?"g":"b"}">${ok?"◎ 正解！":"✕ 不正解"}</span><div class="qz-note">${q.note}</div>`;
+  fb.classList.add("show");
+  document.getElementById("qz-next").style.display = "";
+}
+
+function nextQ(){
+  qzIdx++;
+  if(qzIdx >= quizQueue.length) showResult();
+  else showQ();
+}
+
+function showResult(){
+  const total = quizQueue.length;
+  const uniqWrong = [...new Set(wrongQ)].length;
+  const correct = total - uniqWrong;
+  document.getElementById("qz-box").style.display = "none";
+  document.getElementById("qz-result").style.display = "block";
+  document.getElementById("prog-fill").style.width = "100%";
+  document.getElementById("qz-prog").textContent = "完了";
+  document.getElementById("res-big").textContent = `${correct} / ${total}`;
+  document.getElementById("res-msg").textContent =
+    uniqWrong === 0
+      ? "全問正解！完璧👏 「文法OK」と報告してStep 4へ進もう！"
+      : correct/total >= 0.8
+        ? `あと ${uniqWrong} 問。間違えた問題だけ復習して完璧に！`
+        : `${uniqWrong} 問間違えた。もう一度チャレンジ！`;
+  document.getElementById("btn-retry-wrong").hidden = uniqWrong === 0;
+  if(uniqWrong > 0) document.getElementById("btn-retry-wrong").textContent = `間違えた ${uniqWrong} 問をやり直す`;
+}
+
+/* ===== INIT ===== */
+renderCards();
+document.getElementById("quiz-wrap").style.display = "none";
+</script>
+</body>
+</html>
