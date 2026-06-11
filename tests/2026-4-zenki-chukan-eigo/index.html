@@ -497,10 +497,18 @@ function revealInput(key, ans){
   if(!state[key]||!state[key].done) mark(key,false);
 }
 
+function advanceFocus(inp){
+  const all=[...document.querySelectorAll('.q input[type="text"]')];
+  const i=all.indexOf(inp);
+  for(let j=i+1;j<all.length;j++){
+    if(!all[j].disabled){ all[j].focus(); all[j].scrollIntoView({behavior:'smooth',block:'center'}); return; }
+  }
+}
+
 function inputRow(key, ans, placeholder){
   return `<div class="inrow">
     <input type="text" id="in-${key}" placeholder="${placeholder||'英語で入力'}"
-      onkeydown="if(event.key==='Enter'){checkInput(this,'${key}','${ans.replace(/'/g,"\\'")}')}">
+      onkeydown="if(event.key==='Enter'){checkInput(this,'${key}','${ans.replace(/'/g,"\\'")}');advanceFocus(this);}">
     <button class="btn" onclick="checkInput(document.getElementById('in-${key}'),'${key}','${ans.replace(/'/g,"\\'")}')">答え合わせ</button>
     <button class="btn ghost" onclick="revealInput('${key}','${ans.replace(/'/g,"\\'")}')">答えを見る</button>
   </div><div class="fb" id="fb-${key}"></div>`;
