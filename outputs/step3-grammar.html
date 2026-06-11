@@ -57,7 +57,7 @@ h1 .jp{font-family:"Noto Sans JP",sans-serif;font-weight:700}
 .gc-inner{position:relative;width:100%;transform-style:preserve-3d;transition:transform .42s;min-height:170px}
 .gc.flipped .gc-inner{transform:rotateY(180deg)}
 .gc-front,.gc-back{position:absolute;inset:0;backface-visibility:hidden;-webkit-backface-visibility:hidden;padding:20px 18px;border-radius:16px;display:flex;flex-direction:column}
-.gc-back{transform:rotateY(180deg);background:var(--card2);overflow-y:auto;max-height:340px}
+.gc-back{transform:rotateY(180deg);background:var(--card2);overflow-y:auto}
 .gc-no{font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--vi);margin-bottom:5px}
 .gc-title{font-family:"Fraunces",serif;font-size:1.22rem;font-weight:600}
 .gc-sub{color:var(--muted);font-size:.85rem;margin-top:4px;font-family:"Noto Sans JP",sans-serif}
@@ -76,14 +76,40 @@ h1 .jp{font-family:"Noto Sans JP",sans-serif;font-weight:700}
 .prog-fill{height:100%;background:var(--vi);border-radius:99px;transition:width .35s}
 .qz-box{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:26px 22px;max-width:640px;margin:0 auto}
 .qz-num{font-family:"JetBrains Mono",monospace;font-size:.75rem;color:var(--vi);margin-bottom:12px}
+.qz-type{display:inline-block;font-size:.7rem;padding:2px 9px;border-radius:99px;margin-bottom:8px;font-weight:700;letter-spacing:.06em;font-family:"Outfit",sans-serif}
+.qz-type.mc{background:rgba(176,140,255,.15);color:var(--vi)}
+.qz-type.tf{background:rgba(95,224,168,.12);color:var(--good)}
+.qz-type.inp{background:rgba(246,179,82,.12);color:var(--amber)}
 .qz-q{font-size:1.03rem;line-height:1.7;margin-bottom:18px;font-family:"Noto Sans JP",sans-serif}
 .qz-opts{display:flex;flex-direction:column;gap:9px}
+
+/* MC options */
 .qz-opt{font-family:inherit;font-size:.94rem;color:var(--ink);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:11px 15px;cursor:pointer;transition:.14s;text-align:left}
 .qz-opt:hover:not(:disabled){border-color:var(--vi-d);transform:translateX(3px)}
 .qz-opt:disabled{cursor:default}
 .qz-opt.c{background:rgba(95,224,168,.15);border-color:var(--good);color:#cdfbe5}
 .qz-opt.w{background:rgba(240,107,142,.13);border-color:var(--bad);color:#ffd6e1}
 .qz-opt.rv{border-color:var(--good);color:#cdfbe5}
+
+/* T/F options */
+.tf-btns{display:flex;gap:12px}
+.tf-btn{flex:1;font-family:inherit;font-size:1.05rem;font-weight:700;padding:14px 10px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--ink);cursor:pointer;transition:.14s}
+.tf-btn:hover:not(:disabled){border-color:var(--vi-d);transform:translateY(-1px)}
+.tf-btn:disabled{cursor:default}
+.tf-btn.c{background:rgba(95,224,168,.15);border-color:var(--good);color:#cdfbe5}
+.tf-btn.w{background:rgba(240,107,142,.13);border-color:var(--bad);color:#ffd6e1}
+.tf-btn.rv{border-color:var(--good);color:var(--good)}
+
+/* Input (書き換え) */
+.qz-inp{width:100%;font-family:"JetBrains Mono",monospace;font-size:1rem;padding:12px 14px;border-radius:10px;border:1px solid var(--line);background:var(--card2);color:var(--ink);outline:none;transition:.14s;display:block;margin-bottom:10px}
+.qz-inp:focus{border-color:var(--vi);box-shadow:0 0 0 2px var(--vi-glow)}
+.qz-inp.c{border-color:var(--good);background:rgba(95,224,168,.08)}
+.qz-inp.w{border-color:var(--bad);background:rgba(240,107,142,.08)}
+.qz-submit{font-family:inherit;font-size:.94rem;font-weight:600;padding:10px 22px;border-radius:10px;border:none;background:var(--vi-d);color:#e8e0ff;cursor:pointer;transition:.15s}
+.qz-submit:hover:not(:disabled){background:var(--vi)}
+.qz-submit:disabled{opacity:.5;cursor:default}
+
+/* Feedback */
 .qz-fb{margin-top:14px;padding:12px 15px;border-radius:10px;font-size:.88rem;display:none;background:var(--bg2);border:1px solid var(--line)}
 .qz-fb.show{display:block}
 .verdict{font-weight:700}
@@ -102,13 +128,11 @@ h1 .jp{font-family:"Noto Sans JP",sans-serif;font-weight:700}
 .btn-vi:hover{background:#c8a8ff}
 .btn-ghost{font-family:inherit;font-size:.94rem;padding:11px 22px;border-radius:10px;border:1px solid var(--line);background:none;color:var(--muted);cursor:pointer;transition:.15s}
 .btn-ghost:hover{border-color:var(--vi);color:var(--vi)}
-
 .empty-msg{color:var(--dim);padding:48px 0;text-align:center;font-size:.95rem}
 
 @media(max-width:560px){
   .card-grid{grid-template-columns:1fr}
   .toolbar .wrap{gap:6px}
-  .gc-back{max-height:280px}
 }
 </style>
 </head>
@@ -140,12 +164,10 @@ h1 .jp{font-family:"Noto Sans JP",sans-serif;font-weight:700}
 </div>
 
 <div class="wrap">
-  <!-- CARD MODE -->
   <div id="card-wrap">
     <div class="card-grid" id="card-grid"></div>
   </div>
 
-  <!-- QUIZ MODE -->
   <div id="quiz-wrap">
     <div class="prog-wrap"><div class="prog-fill" id="prog-fill" style="width:0%"></div></div>
     <div class="qz-box" id="qz-box">
@@ -168,7 +190,7 @@ h1 .jp{font-family:"Noto Sans JP",sans-serif;font-weight:700}
 </div>
 
 <script>
-/* ===== DATA ===== */
+/* ===== CARDS DATA ===== */
 const CARDS = [
   {id:"inv1",unit:"U1",no:"01",
    title:"倒置①",sub:"否定語が文頭 → 強調倒置",
@@ -246,75 +268,123 @@ const CARDS = [
    tip:"naturally（自然に）/ as expected（予想通り）と近いニュアンス。"},
 ];
 
+/* ===== QUIZ DATA (選択MC / 正誤TF / 書き換えINP) ===== */
 const QUIZ = [
-  {gid:"inv1",unit:"U1",
+  /* ---- 選択 MC ---- */
+  {type:"mc",gid:"inv1",unit:"U1",
    q:"「Not even the sea is safe from the glare of humans' light.」で倒置が起きている理由は？",
    opts:["「the sea」を強調するため","否定語 Not even が文頭に来て強調倒置が起きるため","safe は形容詞なので倒置が必要なため"],
    ans:1,note:"否定語 Not / Never / Not even が文頭に出ると〈助動詞+S+V〉の語順になる（強調倒置）。"},
-  {gid:"inv2",unit:"U1",
+  {type:"mc",gid:"inv2",unit:"U1",
    q:"「A: I like pasta.」に続く B の返答として正しい形は？",
    opts:["So I do.","So do I.","I do so."],
    ans:1,note:"So + 動詞 + 主語 の語順。like は一般動詞（現在）なので do を使い「So do I.」"},
-  {gid:"inv2",unit:"U1",
+  {type:"mc",gid:"inv2",unit:"U1",
    q:"「A: I'm very hungry.」に続く B の返答として正しい形は？",
    opts:["So I am.","So am I.","So do I."],
    ans:1,note:"be動詞の文（am）が続くので「So am I.」。一般動詞なら So do I、be動詞なら So am/is/are I/she...。"},
-  {gid:"inv2",unit:"U1",
+  {type:"mc",gid:"inv2",unit:"U1",
    q:"「So do offshore oil rigs and other structures.」の意味に最も近いのは？",
    opts:["沖合の石油掘削装置は光害とは無関係だ","沖合の石油掘削装置もまた光の暈を投げかける","沖合の石油掘削装置の構造は異なる"],
    ans:1,note:"So do ... ＝「〜もまた同じことをする」。前文「Coastal cities cast haloes...」に続く倒置②。"},
-  {gid:"partial",unit:"both",
+  {type:"mc",gid:"partial",unit:"both",
    q:"「Not all species will be equally sensitive.」の意味として正しいのは？",
    opts:["どの種も等しく敏感ではない（全部否定）","すべての種が等しく敏感なわけではない（一部を否定）","種はすべて同じように敏感だ"],
    ans:1,note:"Not all ＝ 部分否定「すべてが〜なわけではない」。No species ＝ 全否定。"},
-  {gid:"indirect",unit:"both",
+  {type:"mc",gid:"indirect",unit:"both",
    q:"「assess where this glow is strongest」に組み込まれている疑問文は？",
    opts:["Where does this glow strongest?","Where is this glow strongest?","How strong this glow is?"],
    ans:1,note:"間接疑問は〈疑問詞+S+V〉の語順。Where is this glow strongest? → where this glow is strongest"},
-  {gid:"indirect",unit:"both",
+  {type:"mc",gid:"indirect",unit:"both",
    q:"次のうち間接疑問文として正しいのはどれ？（Who is she? を埋め込む）",
    opts:["I don't know who is she.","I don't know who she is.","I don't know who she."],
    ans:1,note:"間接疑問は疑問詞の後が〈S+V〉。who she is が正しい（who is she は直接疑問の語順）。"},
-  {gid:"of_adj",unit:"U2",
+  {type:"mc",gid:"of_adj",unit:"U2",
    q:"「This tool is of use.」を形容詞で言い換えると？",
    opts:["This tool is useable.","This tool is useful.","This tool is using."],
    ans:1,note:"of use ＝ useful。of + 抽象名詞 は形容詞として働く（補語）。"},
-  {gid:"of_adj",unit:"U2",
+  {type:"mc",gid:"of_adj",unit:"U2",
    q:"「rewarding and ___ of attention」の空欄に入るのは？（and は同品詞をつなぐ）",
    opts:["attentive","worthy","attention"],
    ans:1,note:"rewarding（形容詞）and ___ → ___ も形容詞相当。worthy of attention ＝ 注意を払う価値がある。attentive は人を主語にする語なので不可。"},
-  {gid:"as_since",unit:"U2",
+  {type:"mc",gid:"as_since",unit:"U2",
    q:"「As kids grow up, they expand their social connections...」の as の意味は？",
    opts:["〜として（資格・立場）","〜するにつれて（比例・進行）","〜なので（理由）"],
    ans:1,note:"変化を表す動詞 grow up と組み合わさっているので「〜するにつれて」。"},
-  {gid:"way",unit:"U2",
+  {type:"mc",gid:"way",unit:"U2",
    q:"「expand...way beyond their family」の way の品詞と意味は？",
    opts:["名詞「方法・道」","強調の副詞「はるかに・ずっと」","接続詞「〜の方向へ」"],
    ans:1,note:"way は比較表現の前で「はるかに」を表す副詞。way beyond ＝ はるかに〜を超えて。"},
-  {gid:"risk",unit:"U1",
+  {type:"mc",gid:"risk",unit:"U1",
    q:"「risks confusing or disrupting the behaviors of sea life」の意味は？",
    opts:["海の生物の行動を混乱させるために試みる","海の生物の行動を混乱・妨害させる恐れがある","海の生物の行動の混乱・妨害を避ける"],
    ans:1,note:"risk doing ＝「〜する恐れがある・危険を冒す」。"},
-  {gid:"risk",unit:"U1",
+  {type:"mc",gid:"risk",unit:"U1",
    q:"risk の後ろに来る正しい形は？",
    opts:["risk to do","risk doing","risk that S + V"],
    ans:1,note:"risk は動名詞（-ing）のみ目的語に取る。enjoy / avoid / finish / mind などと同様。"},
-  {gid:"perf",unit:"U1",
+  {type:"mc",gid:"perf",unit:"U1",
    q:"「a world atlas that had been created in 2016」で過去完了を使う理由は？",
    opts:["2016年は遠い昔だから","Smyth らが started した時点より前に地図が作成されていたから","受け身の文は必ず過去完了になるから"],
    ans:1,note:"過去完了 ＝ 過去の基準点（started）よりさらに前の出来事。2016年作成 → その後 Smyth らが使い始めた。"},
-  {gid:"superl",unit:"U1",
+  {type:"mc",gid:"superl",unit:"U1",
    q:"「Light pollution is strongest in the top meter.」に the がない理由は？",
    opts:["口語なので省略される","1つのものの固有の性質（絶対的最上）を述べているから","in があるときは最上級に the をつけない"],
    ans:1,note:"相対比較（of the five など）ではなく、そのもの自体の性質を述べる絶対的最上は the 不要。"},
-  {gid:"superl",unit:"U1",
+  {type:"mc",gid:"superl",unit:"U1",
    q:"次のうち the が必要なのはどれか？",
-   opts:["Light pollution is strongest in the top meter.","He is tallest of the five.","This point is deepest in this lake."],
+   opts:["Light pollution is strongest in the top meter.","He is the tallest of the five.","This point is deepest in this lake."],
    ans:1,note:"「of the five」は5人での相対比較 → the が必要（the tallest of the five）。"},
-  {gid:"should",unit:"U2",
+  {type:"mc",gid:"should",unit:"U2",
    q:"「Kids paid more attention to their close friends, as it should be.」の as it should be の意味は？",
    opts:["残念ながら","意外にも","当然のことながら・まさにそうあるべき"],
    ans:2,note:"as it should be ＝ naturally / as expected。should は「当然・当為」の意味。"},
+
+  /* ---- 正誤 T/F ---- */
+  {type:"tf",gid:"partial",unit:"both",
+   q:"「Not all species are sensitive」は「どの種も敏感でない」という全否定を意味する。",
+   ans:false,note:"Not all ＝ 部分否定（一部が〜ない）。「全否定」は No species are sensitive。"},
+  {type:"tf",gid:"risk",unit:"U1",
+   q:"「risk to confuse」は英語として正しい表現だ。",
+   ans:false,note:"risk は動名詞（-ing）のみ取る。正しくは「risk confusing」。"},
+  {type:"tf",gid:"of_adj",unit:"U2",
+   q:"「This tool is of use」は「This tool is useful」と同じ意味だ。",
+   ans:true,note:"of use ＝ useful。of + 抽象名詞 ＝ 形容詞 の典型例。"},
+  {type:"tf",gid:"superl",unit:"U1",
+   q:"「Light pollution is strongest in the top meter.」で the がないのは文法的に正しい。",
+   ans:true,note:"1つのものの固有の性質を述べる絶対的最上は the 不要。正しい文法。"},
+  {type:"tf",gid:"inv2",unit:"U1",
+   q:"「So do I」の do は代動詞（前の一般動詞の代わり）だ。",
+   ans:true,note:"do は代動詞で、前文の一般動詞の繰り返しを避けるために使う。"},
+  {type:"tf",gid:"as_since",unit:"U2",
+   q:"「As kids grow up」の as は「〜なので（理由）」の接続詞だ。",
+   ans:false,note:"grow up は変化動詞なので、ここの as は「〜するにつれて（比例・進行）」の意味。"},
+  {type:"tf",gid:"way",unit:"U2",
+   q:"「way beyond their family」の way は名詞（道・方法）を意味する。",
+   ans:false,note:"ここの way は「はるかに」を意味する強調副詞。名詞用法ではない。"},
+  {type:"tf",gid:"perf",unit:"U1",
+   q:"「had been created in 2016」の過去完了は、Smyth らが started した時点よりも前の出来事を表す。",
+   ans:true,note:"過去完了は「過去の基準点よりもさらに前」を示す。2016年作成 → その後 started。"},
+
+  /* ---- 書き換え INPUT ---- */
+  {type:"inp",gid:"inv2",unit:"U1",
+   q:"空欄を埋めよ。\nA: I was tired.  →  B: So ___ I.",
+   ans:"was",note:"be動詞（was）が前文にあるので、So のあとも was を使う。So was I."},
+  {type:"inp",gid:"inv2",unit:"U1",
+   q:"空欄を埋めよ。\nA: She liked pasta.  →  B: So ___ she.",
+   ans:"did",note:"liked は一般動詞の過去形。So の後は代動詞 did を使う。So did she."},
+  {type:"inp",gid:"of_adj",unit:"U2",
+   q:"空欄を埋めよ。（同じ意味になるよう）\nThis tool is useful.  ＝  This tool is of ___.",
+   ans:"use",note:"of + 抽象名詞 ＝ 形容詞。useful → of use。"},
+  {type:"inp",gid:"indirect",unit:"both",
+   q:"間接疑問文の空欄を埋めよ。\n直接疑問：Where is this glow strongest?\n→ assess where this glow ___ strongest",
+   ans:"is",note:"間接疑問は〈疑問詞+S+V〉の語順。where の後は this glow is strongest。"},
+  {type:"inp",gid:"risk",unit:"U1",
+   q:"( ) 内の語を正しい形（動名詞）に直せ。\nthat risks (confuse) the behaviors of sea life",
+   ans:"confusing",note:"risk は動名詞（-ing）のみ取る。risk confusing が正しい形。"},
+  {type:"inp",gid:"partial",unit:"both",
+   q:"部分否定を使わずに言い換えよ。（1語で）\n「Not all species are sensitive.」\n→「___ species are not sensitive.」",
+   ans:"Some",alts:["some"],note:"Not all ＝ Some ... not。「一部の種は敏感でない」が部分否定の意味。"},
 ];
 
 /* ===== STATE ===== */
@@ -385,7 +455,7 @@ function renderCards(){
       ? `<div class="gc-ex">${c.ex2}${c.ex2jp?`<div class="gc-jp">${c.ex2jp}</div>`:""}</div>` : "";
     return `
 <div class="gc${known?" known":""}" id="gc-${c.id}" onclick="flipCard(event,'${c.id}')">
-  <div class="gc-inner">
+  <div class="gc-inner" id="gci-${c.id}">
     <div class="gc-front">
       <div class="gc-no">${c.no}</div>
       <div class="gc-title">${c.title}</div>
@@ -393,7 +463,7 @@ function renderCards(){
       ${known?`<div class="known-badge">✓ 習得済み</div>`:""}
       <div class="gc-tap">タップで解説 →</div>
     </div>
-    <div class="gc-back">
+    <div class="gc-back" id="gcb-${c.id}">
       <div class="gc-rule">${c.rule}</div>
       <div class="gc-ex">${c.ex1}<div class="gc-jp">${c.ex1jp}</div></div>
       ${ex2}
@@ -408,8 +478,18 @@ function renderCards(){
 function flipCard(e, id){
   const el = document.getElementById("gc-"+id);
   if(!el) return;
-  el.classList.toggle("flipped");
+  const inner = document.getElementById("gci-"+id);
+  const back = document.getElementById("gcb-"+id);
+  if(el.classList.contains("flipped")){
+    el.classList.remove("flipped");
+    inner.style.height = "";
+  } else {
+    el.classList.add("flipped");
+    const h = back.scrollHeight;
+    if(h > 170) inner.style.height = h + "px";
+  }
 }
+
 function markKnown(e, id){
   e.stopPropagation();
   knownCards[id] = true;
@@ -425,6 +505,14 @@ function shuffle(arr){
     [a[i],a[j]] = [a[j],a[i]];
   }
   return a;
+}
+
+function norm(s){
+  return (s||"").toLowerCase().trim()
+    .replace(/['']/g,"'").replace(/[""]/g,'"')
+    .replace(/\s+/g," ")
+    .replace(/[.,;:!?]+$/,"")
+    .replace(/^[.,;:!?]+/,"");
 }
 
 function startQuiz(subset){
@@ -453,20 +541,46 @@ function showQ(){
   const q = quizQueue[qzIdx];
   const total = quizQueue.length;
   document.getElementById("qz-num").textContent = `Q${qzIdx+1} / ${total}`;
-  document.getElementById("qz-q").textContent = q.q;
   document.getElementById("qz-fb").className = "qz-fb";
   document.getElementById("qz-fb").innerHTML = "";
   document.getElementById("qz-next").style.display = "none";
   document.getElementById("prog-fill").style.width = (qzIdx/total*100)+"%";
   document.getElementById("qz-prog").textContent = `${qzIdx+1} / ${total}`;
 
-  // Shuffle options but track correct
-  const opts = q.opts.map((text,i) => ({text, correct: i === q.ans}));
-  const shuffled = shuffle(opts);
-  document.getElementById("qz-opts").innerHTML = shuffled.map((o,i) => {
-    const lab = String.fromCharCode(97+i);
-    return `<button class="qz-opt" data-correct="${o.correct}" onclick="pickAns(this)">${lab}. ${o.text}</button>`;
-  }).join("");
+  const type = q.type || "mc";
+  const labels = {mc:"選択", tf:"正誤", inp:"書き換え"};
+  const qText = q.q.replace(/\n/g,"<br>");
+  document.getElementById("qz-q").innerHTML =
+    `<div class="qz-type ${type}">${labels[type]}</div>${qText}`;
+
+  if(type === "mc"){
+    const shuffled = shuffle(q.opts.map((text,i)=>({text,correct:i===q.ans})));
+    document.getElementById("qz-opts").innerHTML = shuffled.map((o,i) => {
+      const lab = String.fromCharCode(97+i);
+      return `<button class="qz-opt" data-correct="${o.correct}" onclick="pickAns(this)">${lab}. ${o.text}</button>`;
+    }).join("");
+  } else if(type === "tf"){
+    document.getElementById("qz-opts").innerHTML = `
+      <div class="tf-btns">
+        <button class="tf-btn" data-correct="${q.ans===true}" onclick="pickTF(this)">◯ 正しい</button>
+        <button class="tf-btn" data-correct="${q.ans===false}" onclick="pickTF(this)">✕ 誤り</button>
+      </div>`;
+  } else {
+    document.getElementById("qz-opts").innerHTML = `
+      <input class="qz-inp" id="qz-input" type="text" placeholder="答えを入力…" autocomplete="off" autocorrect="off" autocapitalize="off" spellcheck="false">
+      <button class="qz-submit" onclick="checkInp()">確認</button>`;
+    setTimeout(()=>{
+      const inp = document.getElementById("qz-input");
+      if(inp) inp.addEventListener("keydown", e=>{ if(e.key==="Enter") checkInp(); });
+    }, 0);
+  }
+}
+
+function showFeedback(ok, note){
+  const fb = document.getElementById("qz-fb");
+  fb.innerHTML = `<span class="verdict ${ok?"g":"b"}">${ok?"◎ 正解！":"✕ 不正解"}</span><div class="qz-note">${note}</div>`;
+  fb.classList.add("show");
+  document.getElementById("qz-next").style.display = "";
 }
 
 function pickAns(btn){
@@ -479,11 +593,38 @@ function pickAns(btn){
   const ok = btn.dataset.correct === "true";
   if(!ok){ btn.classList.add("w"); wrongQ.push(q); }
   else btn.classList.add("c");
+  showFeedback(ok, q.note);
+}
 
-  const fb = document.getElementById("qz-fb");
-  fb.innerHTML = `<span class="verdict ${ok?"g":"b"}">${ok?"◎ 正解！":"✕ 不正解"}</span><div class="qz-note">${q.note}</div>`;
-  fb.classList.add("show");
-  document.getElementById("qz-next").style.display = "";
+function pickTF(btn){
+  const q = quizQueue[qzIdx];
+  btn.closest(".tf-btns").querySelectorAll(".tf-btn").forEach(b => {
+    b.disabled = true;
+    if(b.dataset.correct === "true") b.classList.add(btn.dataset.correct === "true" ? "c" : "rv");
+  });
+  const ok = btn.dataset.correct === "true";
+  if(!ok){ btn.classList.add("w"); wrongQ.push(q); }
+  else btn.classList.add("c");
+  showFeedback(ok, q.note);
+}
+
+function checkInp(){
+  const q = quizQueue[qzIdx];
+  const inp = document.getElementById("qz-input");
+  if(!inp || inp.disabled) return;
+  const val = norm(inp.value);
+  if(!val) return;
+  const correct = norm(q.ans);
+  const ok = val === correct || (q.alts && q.alts.some(a => val === norm(a)));
+  inp.disabled = true;
+  inp.classList.add(ok ? "c" : "w");
+  const sub = inp.nextElementSibling;
+  if(sub) sub.disabled = true;
+  const note = ok
+    ? q.note
+    : `正解：<span style="font-family:'JetBrains Mono',monospace;color:var(--good)">${q.ans}</span><br>${q.note}`;
+  if(!ok) wrongQ.push(q);
+  showFeedback(ok, note);
 }
 
 function nextQ(){
