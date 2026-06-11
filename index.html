@@ -9,10 +9,10 @@
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
 <style>
 :root{
-  --bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#1b2f4d;
+  --bg:#0a1626; --bg2:#0e1d33; --card:#15263f;
   --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c;
-  --teal:#46d6c4; --teal-d:#1f9e90;
-  --amber:#f6b352; --good:#5fe0a8;
+  --teal:#46d6c4;
+  --amber:#f6b352;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
@@ -154,12 +154,12 @@ function renderFilters() {
 
   document.getElementById("subject-filters").innerHTML =
     subjects.map(s =>
-      `<button class="fbtn${s === activeSubject ? " active" : ""}" onclick="setSubject('${s}')">${s}</button>`
+      `<button class="fbtn${s === activeSubject ? " active" : ""}" data-val="${s.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">${s}</button>`
     ).join("");
 
   document.getElementById("exam-filters").innerHTML =
     exams.map(e =>
-      `<button class="fbtn${e === activeExam ? " active" : ""}" onclick="setExam('${e}')">${e}</button>`
+      `<button class="fbtn${e === activeExam ? " active" : ""}" data-val="${e.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">${e}</button>`
     ).join("");
 }
 
@@ -214,6 +214,15 @@ function renderGroups() {
 
 function setSubject(s) { activeSubject = s; renderFilters(); renderGroups(); }
 function setExam(e) { activeExam = e; renderFilters(); renderGroups(); }
+
+document.getElementById("subject-filters").addEventListener("click", e => {
+  const btn = e.target.closest("[data-val]");
+  if (btn) setSubject(btn.dataset.val);
+});
+document.getElementById("exam-filters").addEventListener("click", e => {
+  const btn = e.target.closest("[data-val]");
+  if (btn) setExam(btn.dataset.val);
+});
 
 fetch("tests.json")
   .then(r => r.json())
