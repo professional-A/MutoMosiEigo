@@ -375,6 +375,30 @@ function finishQuiz(){
   document.getElementById("qRemain").textContent="完了";
 }
 
+/* keyboard */
+document.addEventListener("keydown", function(e){
+  const tag = document.activeElement.tagName;
+  if(view==="card"){
+    if(tag==="INPUT"||tag==="TEXTAREA") return;
+    if(e.key===" "||e.key==="Enter"){ e.preventDefault(); flipCard(); }
+    else if(e.key==="ArrowRight"){ e.preventDefault(); nextCard(); }
+    else if(e.key==="ArrowLeft"){ e.preventDefault(); prevCard(); }
+    else if(e.key==="k"||e.key==="K"){ e.preventDefault(); toggleKnown({stopPropagation:function(){}}); }
+    return;
+  }
+  // quiz mode
+  const next=document.getElementById("qNext");
+  const opts=document.getElementById("qOpts");
+  if(e.key==="Enter"){
+    if(next&&next.style.display!=="none"){ e.preventDefault(); next.click(); }
+    return;
+  }
+  if(opts&&!opts.dataset.locked){
+    const n=parseInt(e.key);
+    if(n>=1&&n<=5){ const b=opts.querySelectorAll(".qopt"); if(b[n-1]){e.preventDefault();b[n-1].click();} }
+  }
+});
+
 document.getElementById("totalN").textContent=PHRASES.length;
 rebuild(); renderCard(); updateProg();
 </script>

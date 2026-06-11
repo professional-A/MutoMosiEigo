@@ -424,6 +424,32 @@ function finishQuiz(){
   document.getElementById("qRemain").textContent="完了";
 }
 
+/* keyboard */
+document.addEventListener("keydown", function(e){
+  const tag = document.activeElement.tagName;
+  if(view==="card"){
+    if(tag==="INPUT"||tag==="TEXTAREA") return;
+    if(e.key===" "||e.key==="Enter"){ e.preventDefault(); flipCard(); }
+    else if(e.key==="ArrowRight"){ e.preventDefault(); nextCard(); }
+    else if(e.key==="ArrowLeft"){ e.preventDefault(); prevCard(); }
+    else if(e.key==="k"||e.key==="K"){ e.preventDefault(); toggleKnown({stopPropagation:function(){}}); }
+    return;
+  }
+  // quiz mode
+  const inp=document.getElementById("qInput");
+  const submit=document.getElementById("qSubmit");
+  if(e.key==="Enter"){
+    if(inp.style.display!=="none"&&!inp.disabled) return; // let onkeydown handle
+    if(submit&&submit.className.includes("qnext")){ e.preventDefault(); submit.click(); }
+    return;
+  }
+  const opts=document.getElementById("qOpts");
+  if(opts&&opts.style.display!=="none"&&!opts.dataset.locked){
+    const n=parseInt(e.key);
+    if(n>=1&&n<=4){ const b=opts.querySelectorAll(".qopt"); if(b[n-1]){e.preventDefault();b[n-1].click();} }
+  }
+});
+
 /* init */
 rebuild(); renderCard(); updateProg();
 </script>

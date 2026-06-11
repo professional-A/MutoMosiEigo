@@ -580,6 +580,20 @@ function resetAll(){
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
+/* keyboard: 数字/a-d で選択肢を選ぶ */
+document.addEventListener("keydown", function(e){
+  const focused = document.activeElement;
+  if(!focused) return;
+  const q = focused.closest(".q");
+  if(!q||q.dataset.locked) return;
+  const opts = q.querySelectorAll(".opt:not([disabled])");
+  if(!opts.length) return;
+  const n = parseInt(e.key);
+  if(n>=1&&n<=opts.length){ e.preventDefault(); opts[n-1].click(); return; }
+  const ci = e.key.toLowerCase().charCodeAt(0)-97;
+  if(ci>=0&&ci<opts.length){ e.preventDefault(); opts[ci].click(); }
+});
+
 render();
 </script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js");</script>
