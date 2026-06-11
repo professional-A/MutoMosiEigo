@@ -236,5 +236,6 @@ fetch("tests.json")
       `<div class="empty">模試データを読み込めませんでした。<br>tests.json が存在するか確認してください。</div>`;
   });
 </script>
+<script>if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");</script>
 </body>
 </html>
