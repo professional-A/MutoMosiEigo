@@ -38,7 +38,7 @@ h1.page-title{
 
 /* ===== SHEET ===== */
 .sheet{
-  width:257mm; background:white; color:#111;
+  width:200mm; background:white; color:#111;
   margin:0 auto; padding:4mm;
   box-shadow:0 4px 32px rgba(0,0,0,.5);
 }
@@ -110,7 +110,7 @@ tr:nth-child(even) td{background:#f5f7fa;}
 
 /* ========== 印刷用 ========== */
 @media print{
-  @page{size:A4; margin:5mm;}
+  @page{size:A4 portrait; margin:5mm;}
   body{background:white; color:#111; padding:0;}
   .print-btn,.print-hint,h1.page-title{display:none!important;}
   .sheet{
@@ -500,15 +500,22 @@ tr:nth-child(even) td{background:#f5f7fa;}
 </ul>
 </div>
 
-<div class="subsec">各溶接法 特徴詳細</div>
-<ul>
-  <li><span class="k">レーザー溶接：</span>HAZ最小・高速・精密・熱影響小</li>
-  <li><span class="k">電子ビーム溶接：</span>真空中・エネルギー密度最大</li>
-  <li><span class="k">ガス溶接：</span>可燃ガス+O₂、低熱量、薄板・補修向き</li>
-  <li><span class="k">スポット溶接：</span>重ね継手・自動車ボディ（圧接）</li>
-  <li><span class="k">エレクトロスラグ：</span>厚肉縦向き連続溶接</li>
-  <li><span class="k">マーシュドアーク：</span>深溶込み・高速水平溶接</li>
-</ul>
+<div class="subsec">各溶接法 比較 ★</div>
+<table>
+<tr><th class="tl">溶接法</th><th>熱源</th><th>シールド</th><th class="tl">特徴 ○メリット △デメリット</th></tr>
+<tr><td class="tl">ガス溶接</td><td>燃焼ガス</td><td>燃焼ガス</td><td class="tl">○設備簡単・電源不要 △自動化不可</td></tr>
+<tr><td class="tl">被覆アーク</td><td>アーク</td><td>フラックス</td><td class="tl">○設備簡単・屋外可 △自動化困難</td></tr>
+<tr><td class="tl">MAG</td><td>アーク</td><td>Ar+CO₂</td><td class="tl">○速度大・溶込大 鉄鋼向</td></tr>
+<tr><td class="tl">MIG</td><td>アーク</td><td>Ar(不活性)</td><td class="tl">○品質高 △Arガス高価 非鉄向</td></tr>
+<tr><td class="tl">TIG</td><td>アーク</td><td>Ar</td><td class="tl">○高品質・薄板向 W非消耗電極</td></tr>
+<tr><td class="tl">サブマージド</td><td>アーク</td><td>粒状ﾌﾗｯｸｽ</td><td class="tl">○熱効率高・深溶込→厚肉・造船</td></tr>
+<tr><td class="tl">エレクトロスラグ</td><td>ジュール熱</td><td>スラグ</td><td class="tl">○超厚肉1パス △冷却遅→組織粗</td></tr>
+<tr><td class="tl">レーザ</td><td>レーザビーム</td><td>不要</td><td class="tl">○深溶込・精密 △装置高価</td></tr>
+<tr><td class="tl">電子ビーム</td><td>電子ビーム</td><td>真空</td><td class="tl">○深溶込・薄板ひずみ小・活性金属可 △大型不可・装置高価</td></tr>
+<tr><td class="tl">スポット/シーム</td><td>ジュール熱</td><td>なし</td><td class="tl">○自動化◎ 重ね継手・自動車</td></tr>
+<tr><td class="tl">FSW</td><td>摩擦熱</td><td>なし</td><td class="tl">○固体接合・HAZ最小・欠陥少 △複雑形状困難</td></tr>
+<tr><td class="tl">ろう接</td><td>外部加熱</td><td>なし</td><td class="tl">○母材熱影響小・異種材料可 硬ろう>450℃</td></tr>
+</table>
 
 <div class="subsec">溶接継手の種類</div>
 <div class="fig">
@@ -684,9 +691,13 @@ tr:nth-child(even) td{background:#f5f7fa;}
   <li>スプリングバック→縦弾性係数E<b>大</b>ほど大きい</li>
   <li>ファインブランキング→逆力+反力+板押さえ同時</li>
   <li>MAG保護ガス→Ar+CO₂　MIG保護ガス→Arのみ</li>
-  <li>TIG→タングステン非消耗電極</li>
+  <li>TIG→タングステン非消耗電極（W）・品質高・薄板向</li>
   <li>MIG品質 &gt; MAG品質（CO₂混入なし↑）</li>
-  <li>FSW→固体状態接合→HAZ最小・溶接欠陥少</li>
+  <li>サブマージドアーク→粒状フラックス中・熱効率高・深溶込→厚肉・造船</li>
+  <li>エレクトロスラグ→ジュール熱・超厚肉1パス溶接・冷却遅→組織粗</li>
+  <li>電子ビーム→真空中・深溶込・薄板ひずみ小・活性金属可・大型不可</li>
+  <li>ろう接→硬ろう>450℃・軟ろう(はんだ)<450℃・母材熱影響小・異種材料可</li>
+  <li>FSW→固体状態接合→HAZ最小・溶接欠陥少（1991年英TWI開発）</li>
   <li>鋳鉄の収縮量は鋼より小さい（黒鉛晶出で膨張）</li>
   <li>肉厚薄い→結晶細かくなる→強度高い</li>
   <li>3Dプリンタで砂型成形可能</li>
