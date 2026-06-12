@@ -58,4 +58,25 @@
     "storageKey": "mutou_step4",
     "totalItems": 45
   }
+,
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "加工学",
+    "title": "加工学 ・ 確認テスト",
+    "path": "tests/2026-4-zenki-chukan-kakougaku-kakunin/",
+    "storageKey": "kakougaku_kakunin_v1",
+    "totalItems": 40
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "加工学",
+    "title": "加工学 ・ 中間試験風テスト",
+    "path": "tests/2026-4-zenki-chukan-kakougaku-chukan/",
+    "storageKey": "kakougaku_chukan_v1",
+    "totalItems": 18
+  }
 ]

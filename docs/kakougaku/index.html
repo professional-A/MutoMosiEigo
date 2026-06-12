@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>資料 — 加工学 | 武藤模試</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#1b2f4d;
+  --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c;
+  --teal:#46d6c4; --teal-d:#1f9e90; --amber:#f6b352; --rose:#f06b8e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Outfit","Noto Sans JP",sans-serif;
+  background:
+    radial-gradient(1100px 600px at 80% -8%,rgba(70,214,196,.10),transparent 55%),
+    radial-gradient(900px 500px at 5% 5%,rgba(246,179,82,.07),transparent 50%),
+    var(--bg);
+  color:var(--ink); line-height:1.6; min-height:100vh; padding-bottom:80px;
+}
+.wrap{max-width:920px;margin:0 auto;padding:0 18px}
+/* header */
+header{padding:40px 0 28px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),transparent)}
+.nav-back{display:inline-flex;align-items:center;gap:6px;font-size:.82rem;color:var(--muted);text-decoration:none;margin-bottom:16px;transition:.15s}
+.nav-back:hover{color:var(--teal)}
+.eyebrow{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:10px}
+h1{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(1.8rem,5vw,2.8rem);line-height:1.1}
+.sub{color:var(--muted);margin-top:10px;font-size:.95rem;max-width:560px}
+
+/* section title */
+.sec-label{
+  font-size:.72rem;letter-spacing:.28em;text-transform:uppercase;
+  color:var(--dim);font-weight:600;margin:36px 0 16px;
+  padding-bottom:8px;border-bottom:1px solid var(--line);
+}
+
+/* resource grid */
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(280px,1fr));gap:14px}
+
+/* resource card */
+.rcard{
+  background:var(--card);border:1px solid var(--line);border-radius:14px;
+  padding:22px;display:flex;flex-direction:column;gap:12px;
+  text-decoration:none;color:inherit;
+  transition:border-color .15s,transform .15s;
+}
+.rcard:hover{border-color:var(--teal);transform:translateY(-2px)}
+.rcard-icon{font-size:1.8rem;line-height:1}
+.rcard-title{font-size:1.05rem;font-weight:700;color:var(--ink)}
+.rcard-desc{font-size:.88rem;color:var(--muted);line-height:1.5}
+.rcard-meta{display:flex;gap:8px;flex-wrap:wrap}
+.badge{
+  font-size:.72rem;padding:3px 10px;border-radius:99px;
+  border:1px solid var(--line);color:var(--muted);background:var(--card2);
+}
+.badge.green{border-color:var(--teal-d);color:var(--teal);background:rgba(70,214,196,.08)}
+.badge.amber{border-color:#b87e1a;color:var(--amber);background:rgba(246,179,82,.08)}
+.rcard-action{
+  margin-top:4px;font-size:.82rem;color:var(--teal);
+  display:flex;align-items:center;gap:4px;
+}
+
+/* how-to box */
+.howto{
+  background:var(--card);border:1px solid var(--line);
+  border-left:3px solid var(--amber);border-radius:12px;
+  padding:16px 18px;margin-top:28px;font-size:.9rem;color:var(--muted);
+}
+.howto b{color:var(--amber)}
+.howto ol{margin:8px 0 0 18px;line-height:1.8}
+
+/* related tests */
+.test-link{
+  display:flex;align-items:center;gap:14px;
+  background:var(--card);border:1px solid var(--line);border-radius:12px;
+  padding:16px 18px;text-decoration:none;color:inherit;
+  transition:border-color .15s,transform .15s;margin-bottom:10px;
+}
+.test-link:hover{border-color:var(--teal);transform:translateY(-1px)}
+.test-link-icon{font-size:1.4rem;flex-shrink:0}
+.test-link-body{flex:1}
+.test-link-title{font-size:1rem;font-weight:600}
+.test-link-sub{font-size:.82rem;color:var(--muted)}
+.test-link-arrow{color:var(--teal);font-size:.9rem}
+
+footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim);font-size:.82rem;text-align:center}
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <a class="nav-back" href="../../index.html">← 武藤模試 トップへ</a>
+    <div class="eyebrow">Study Materials</div>
+    <h1>資料 — 加工学</h1>
+    <p class="sub">中間試験対策カンペ・参考資料。ブラウザで開いて印刷するだけで使える。</p>
+  </div>
+</header>
+
+<div class="wrap">
+
+  <div class="sec-label">カンペ・参考資料</div>
+  <div class="grid">
+
+    <!-- 手書きカンペ -->
+    <a class="rcard" href="cheatsheet.html" target="_blank">
+      <div class="rcard-icon">📋</div>
+      <div class="rcard-title">加工学 中間試験 カンペ</div>
+      <div class="rcard-desc">
+        A4両面・豆粒フォントの手書き用参照資料。鋳造・塑性加工・接合を隅から隅までカバー。
+        図・表・計算式・急所まとめ込み。
+      </div>
+      <div class="rcard-meta">
+        <span class="badge green">鋳造</span>
+        <span class="badge green">塑性加工</span>
+        <span class="badge green">接合</span>
+        <span class="badge amber">A4両面</span>
+        <span class="badge amber">印刷 → 手書き</span>
+      </div>
+      <div class="rcard-action">開いて印刷する →</div>
+    </a>
+
+  </div>
+
+  <div class="howto">
+    <b>📌 カンペの使い方</b>
+    <ol>
+      <li>「開いて印刷する」をクリック</li>
+      <li>ブラウザの印刷ダイアログ（<b>Ctrl+P</b>）を開く</li>
+      <li>「PDFとして保存」を選択 → A4・両面印刷に設定</li>
+      <li>印刷したPDFを見ながら <b>A4用紙1枚に手書きで書き写す</b></li>
+      <li>本番持込OK！</li>
+    </ol>
+  </div>
+
+  <div class="sec-label">関連テスト</div>
+
+  <a class="test-link" href="../../tests/2026-4-zenki-chukan-kakougaku-kakunin/">
+    <span class="test-link-icon">✏️</span>
+    <div class="test-link-body">
+      <div class="test-link-title">加工学 確認テスト</div>
+      <div class="test-link-sub">鋳造15問・塑性加工14問・接合11問 計40問 — 確認問題ベース＋追加問題</div>
+    </div>
+    <span class="test-link-arrow">開く →</span>
+  </a>
+
+  <a class="test-link" href="../../tests/2026-4-zenki-chukan-kakougaku-chukan/">
+    <span class="test-link-icon">📝</span>
+    <div class="test-link-body">
+      <div class="test-link-title">加工学 中間試験風テスト</div>
+      <div class="test-link-sub">大問3問・100点満点・タイマー付き — 参考試験形式に準拠</div>
+    </div>
+    <span class="test-link-arrow">開く →</span>
+  </a>
+
+</div>
+
+<footer>武藤模試 — 資料ページ ｜ 加工学 中間試験対策</footer>
+
+</body>
+</html>

@@ -1,0 +1,723 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加工学 確認テスト</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#1b2f4d;
+  --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c;
+  --teal:#46d6c4; --teal-d:#1f9e90;
+  --amber:#f6b352; --rose:#f06b8e; --good:#5fe0a8; --bad:#f06b8e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Outfit","Noto Sans JP",sans-serif;
+  background:radial-gradient(1100px 600px at 80% -8%,rgba(70,214,196,.10),transparent 55%),
+             radial-gradient(900px 500px at 5% 5%,rgba(246,179,82,.07),transparent 50%),
+             var(--bg);
+  color:var(--ink); line-height:1.6; padding-bottom:80px;
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px}
+header{padding:46px 0 30px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),transparent)}
+.eyebrow{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:10px}
+h1{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(2rem,6vw,3rem);line-height:1.04}
+.sub{color:var(--muted);margin-top:12px;font-size:1rem;max-width:600px}
+.scoreboard{position:sticky;top:0;z-index:50;background:rgba(10,22,38,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.scoreboard .wrap{display:flex;align-items:center;gap:14px;padding:11px 18px;flex-wrap:wrap}
+.scorenum{font-family:"JetBrains Mono",monospace;font-size:1.05rem;color:var(--teal);font-weight:500}
+.scorelbl{color:var(--muted);font-size:.85rem}
+.bar{flex:1;min-width:120px;height:7px;background:var(--card2);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal-d),var(--teal));border-radius:99px;transition:width .5s ease}
+.resetbtn{font-family:inherit;font-size:.78rem;color:var(--muted);background:none;border:1px solid var(--line);border-radius:8px;padding:5px 11px;cursor:pointer;transition:.2s}
+.resetbtn:hover{color:var(--ink);border-color:var(--teal-d)}
+nav.toc{display:flex;gap:8px;flex-wrap:wrap;padding:22px 0 6px}
+nav.toc a{font-size:.82rem;color:var(--muted);text-decoration:none;padding:7px 13px;border:1px solid var(--line);border-radius:99px;background:var(--card);transition:.2s;white-space:nowrap}
+nav.toc a:hover{color:var(--ink);border-color:var(--teal-d);transform:translateY(-1px)}
+section{margin-top:44px;scroll-margin-top:64px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.sec-no{font-family:"JetBrains Mono",monospace;font-size:.9rem;color:var(--teal);letter-spacing:.05em}
+.sec-head h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.5rem}
+.sec-desc{color:var(--muted);font-size:.92rem;margin-bottom:18px}
+.sec-score{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--muted);white-space:nowrap;align-self:center}
+.q{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px 18px 16px;margin-bottom:14px;transition:border-color .25s}
+.q.correct{border-color:var(--teal-d)}
+.q.wrong{border-color:var(--rose)}
+.q-top{display:flex;gap:12px;align-items:flex-start}
+.qn{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--teal);background:rgba(70,214,196,.1);border:1px solid var(--line);border-radius:7px;padding:3px 8px;flex-shrink:0;margin-top:2px;min-width:34px;text-align:center}
+.q-body{flex:1}
+.prompt{font-size:1.02rem;margin-bottom:4px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.opt{font-family:inherit;font-size:.95rem;color:var(--ink);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.16s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--teal-d);transform:translateY(-1px)}
+.opt:disabled{cursor:default}
+.opt.pick-correct{background:rgba(95,224,168,.16);border-color:var(--good);color:#cdfbe5}
+.opt.pick-wrong{background:rgba(240,107,142,.14);border-color:var(--bad);color:#ffd6e1}
+.opt.reveal{border-color:var(--good);color:#cdfbe5}
+.opt .lab{font-family:"JetBrains Mono",monospace;color:var(--teal);margin-right:7px;font-size:.85rem}
+/* multi-select opts */
+.opt.multi-selected{background:rgba(70,214,196,.18);border-color:var(--teal-d)}
+.multi-submit{margin-top:8px}
+/* sort */
+.sort-bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;padding:10px;background:var(--bg2);border:1px dashed var(--line);border-radius:10px;min-height:40px}
+.sort-slot{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.sort-item{font-family:inherit;font-size:.88rem;color:var(--ink);background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer;transition:.16s}
+.sort-item:hover{border-color:var(--teal-d)}
+.sort-item.placed{background:rgba(70,214,196,.1);border-color:var(--teal-d)}
+.sort-answer{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.sort-answer .slot{font-size:.85rem;padding:6px 10px;background:var(--bg2);border:1px dashed var(--line);border-radius:8px;color:var(--muted);min-height:34px;cursor:pointer}
+.sort-answer .slot.filled{color:var(--ink);border-color:var(--teal-d);background:rgba(70,214,196,.08)}
+/* input */
+.inrow{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.inrow input{flex:1;min-width:180px;font-family:inherit;font-size:.98rem;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 13px;outline:none;transition:.2s}
+.inrow input:focus{border-color:var(--teal-d)}
+.inrow input.ok{border-color:var(--good);background:rgba(95,224,168,.08)}
+.inrow input.ng{border-color:var(--bad);background:rgba(240,107,142,.07)}
+.btn{font-family:inherit;font-size:.9rem;font-weight:500;color:var(--bg);background:var(--teal);border:none;border-radius:10px;padding:10px 16px;cursor:pointer;transition:.2s}
+.btn:hover{background:#5fe6d6}
+.btn.ghost{background:none;color:var(--muted);border:1px solid var(--line)}
+.btn.ghost:hover{color:var(--ink);border-color:var(--teal-d)}
+.fb{margin-top:10px;font-size:.9rem;display:none}
+.fb.show{display:block}
+.fb .verdict{font-weight:600}
+.fb .verdict.g{color:var(--good)}
+.fb .verdict.b{color:var(--bad)}
+.note{color:var(--muted);margin-top:4px;font-size:.88rem}
+.note .ans{color:var(--teal);font-weight:600}
+.tip{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:10px;padding:12px 15px;margin-bottom:18px;font-size:.9rem;color:var(--muted)}
+.tip b{color:var(--amber)}
+footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim);font-size:.82rem;text-align:center}
+@media(max-width:560px){.q-top{flex-direction:column;gap:7px}}
+</style>
+</head>
+<body>
+
+<div class="scoreboard">
+  <div class="wrap">
+    <span class="scorenum" id="sNum">0 / 0</span>
+    <span class="scorelbl">正解</span>
+    <div class="bar"><i id="sBar"></i></div>
+    <button class="resetbtn" onclick="resetAll()">リセット</button>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">加工学 ・ 確認テスト</div>
+    <h1>加工学 確認テスト<br><span style="font-size:.55em;color:var(--teal)">鋳造 / 塑性加工 / 接合</span></h1>
+    <p class="sub">授業確認問題ベース＋追加問題。鋳造・塑性加工・接合（溶接）の全範囲をカバー。中間試験直前の総チェックに使おう。</p>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc" id="toc"></nav>
+<div class="tip" style="margin-top:18px">
+  <b>使い方：</b>選択式はタップで即判定。複数選択は全部選んでから「採点」ボタン。並べ替えは番号順に選んでいく。入力式はEnterか「採点」で判定。解説は判定後に表示。
+</div>
+<div id="app"></div>
+<footer>加工学 確認テスト ｜ 鋳造15問・塑性加工14問・接合11問 計40問</footer>
+</div>
+
+<script>
+const STORAGE_KEY = "kakougaku_kakunin_v1";
+
+/* =====================================================================
+   問題データ
+   type: "single" | "multi" | "sort" | "input"
+   single: opts[], ans (string)
+   multi:  opts[], ans (string[], すべて選択必須)
+   sort:   items[], ans (正順の string[])
+   input:  ans (string または string[]), hint
+===================================================================== */
+const SECTIONS = [
+
+// ──────────────────────────────────────────────
+{id:"s1", no:"01", title:"鋳造 概要・材料特性", qs:[
+
+{type:"single",
+ q:"鋳造が他の成形法より複雑な形状の製造に適している理由として最も適切なものを選べ",
+ opts:["融点が高いから","動粘度（動粘性係数）が大きいから","動粘度（動粘性係数）が小さいから","表面張力が大きいから","表面張力が小さいから"],
+ ans:"表面張力が小さいから",
+ note:"表面張力が小さい液体は複雑な鋳型の細部にも流れ込みやすい。"},
+
+{type:"single",
+ q:"砂の間にすきまのある砂型を型として使用できる理由として最も適切なものを選べ",
+ opts:["融点が高いから","動粘度が大きいから","動粘度が小さいから","表面張力が大きいから","表面張力が小さいから"],
+ ans:"表面張力が小さいから",
+ note:"表面張力が小さいため、すきまがある砂型でも溶湯が砂の外に漏れ出さずに鋳型を充填できる。"},
+
+{type:"multi",
+ q:"鋳造に用いる材料の性質として、融点が低いことによる利点を全て選べ",
+ opts:["砂型のみ使用できる","エネルギーをたくさん消費する","溶解が容易","金型が使用できる","作業環境が良い"],
+ ans:["溶解が容易","金型が使用できる"],
+ note:"融点が低いと金型（金属製の型）でも使用可能になり、溶解エネルギーも少なくて済む。"},
+
+{type:"single",
+ q:"鋳造において、鋳造品の組成（化学成分）を調べるために最適な方法を選べ",
+ opts:["鋳造品の表面を削って分析する","試験片を鋳造品と別に同じ溶湯で鋳造して分析する","溶湯から直接サンプリングして分析する","非破壊検査で分析する","目視で確認する"],
+ ans:"溶湯から直接サンプリングして分析する",
+ note:"化学成分は溶湯から直接分析するのが最も正確。製品を削る必要はない。"},
+
+{type:"single",
+ q:"鋳造品の強度を調べる際に正しい方法を選べ",
+ opts:["完成した鋳造品から切り出して試験する","同じ溶湯で製品とは別に試験片を鋳造し試験する","超音波探傷試験で強度を測定する","目視検査で強度を判断する","完成品のままで引張試験を行う"],
+ ans:"同じ溶湯で製品とは別に試験片を鋳造し試験する",
+ note:"鋳造品の強度試験は、製品と同じ溶湯で試験片を別途鋳造して試験するのが正しい方法。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s2", no:"02", title:"鋳型構造・引け巣・設計", qs:[
+
+{type:"single",
+ q:"次の鋳型断面図で、①〜③の番号に対応する部品の組み合わせとして正しいものを選べ（①＝上部縦管、②＝横管、③＝左上の縦管）",
+ opts:[
+   "①湯口 ②湯道 ③押湯",
+   "①押湯 ②湯道 ③湯口",
+   "①湯道 ②押湯 ③湯口",
+   "①湯口 ②押湯 ③湯道",
+ ],
+ ans:"①湯口 ②湯道 ③押湯",
+ note:"湯口(sprue)から注ぎ、湯道(runner)・堰(gate)を通り鋳物へ。押湯(riser)は凝固収縮を補う。"},
+
+{type:"sort",
+ q:"引け巣が発生するプロセスを正しい順番に並べよ",
+ items:[
+   "溶湯の温度が低下し、鋳造品の外周が凝固する",
+   "凝固収縮により鋳造品内部の溶湯が不足する",
+   "凝固隙間により溶湯が供給されず空洞ができる",
+ ],
+ ans:[
+   "溶湯の温度が低下し、鋳造品の外周が凝固する",
+   "凝固収縮により鋳造品内部の溶湯が不足する",
+   "凝固隙間により溶湯が供給されず空洞ができる",
+ ],
+ note:"外周から凝固→内部が収縮→押湯がないと空洞(引け巣)になる。"},
+
+{type:"single",
+ q:"切削加工前に内部の引け巣を調べるのに最も適した非破壊検査方法を選べ",
+ opts:["目視","超音波探傷試験","走査型電子顕微鏡","渦流探傷試験","浸透探傷試験"],
+ ans:"超音波探傷試験",
+ note:"内部欠陥には超音波探傷試験(UT)が最適。浸透探傷(PT)は表面のみ。渦流探傷(ECT)は表面近傍のみ。"},
+
+{type:"single",
+ q:"鋳造品に抜き勾配をつける理由を選べ",
+ opts:["溶湯の流動（湯流れ）を良くするため","溶湯が凝固しやすくなるため","砂型から模型を取り外しやすくするため","外観をよくするため","ひずみや割れを防ぐため"],
+ ans:"砂型から模型を取り外しやすくするため",
+ note:"抜き勾配がないと模型が砂型に引っかかって取り出せなくなる。"},
+
+{type:"single",
+ q:"鋳造品を設計する際、角のR（丸み）が必要な理由を説明せよ",
+ opts:["溶湯の流動（湯流れ）を良くするため","溶湯が凝固しやすくなるため","砂型から模型を取り外しやすくするため","外観をよくするため","ひずみや割れを防ぐため"],
+ ans:"ひずみや割れを防ぐため",
+ note:"角部は応力集中が起きやすくひずみや割れが生じやすい。Rをつけることで応力が分散される。"},
+
+{type:"single",
+ q:"八角柱状の部品を生砂型で鋳造する場合、最も適切な見切り面（鋳型の分かれ目）の位置はどれか",
+ opts:["最も断面積が小さい位置","最も細い部分の位置","最も広い断面積の位置","製品の中央位置","製品の上面"],
+ ans:"最も広い断面積の位置",
+ note:"見切り面は最も広い断面積の部分に設定すると模型を取り出しやすく、鋳造欠陥も減る。"},
+
+{type:"single",
+ q:"引け巣が発生した際の対策として最も適切なものを選べ",
+ opts:["もう一度鋳造してみる","肉厚を大きくする","押湯を取り付けるなど鋳造法案を見直す","溶かす温度を変えてみる"],
+ ans:"押湯を取り付けるなど鋳造法案を見直す",
+ note:"引け巣の根本的な対策は押湯(riser)の設置。押湯が凝固収縮分の溶湯を補充する。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s3", no:"03", title:"各種鋳造法・正誤問題", qs:[
+
+{type:"single",
+ q:"以下の各鋳造法と、その優れている点の組み合わせとして正しいものを選べ：「砂の再利用の容易さ」に最も優れているのはどれか",
+ opts:["遠心鋳造","Vプロセス","ロストワックス","生砂型","有機自硬性鋳型"],
+ ans:"Vプロセス",
+ note:"Vプロセスは真空を使って砂を固め、使用後は砂を容易に再利用できる。"},
+
+{type:"single",
+ q:"円管の鋳造に最も適した鋳造法を選べ",
+ opts:["遠心鋳造","Vプロセス","ロストワックス","ダイカスト","有機自硬性鋳型"],
+ ans:"遠心鋳造",
+ note:"遠心鋳造は回転させながら溶湯を流し込むため、円筒・円管状の製品に最適。"},
+
+{type:"single",
+ q:"耐熱超合金の複雑・高精度部品の製造に最も適した鋳造法を選べ",
+ opts:["遠心鋳造","Vプロセス","ロストワックス","ダイカスト","生砂型"],
+ ans:"ロストワックス",
+ note:"ロストワックス（インベストメント鋳造）はセラミックで高精度な型を作れ、耐熱超合金タービンブレード等に使用。"},
+
+{type:"multi",
+ q:"以下の説明で正しいものを全て選べ",
+ opts:[
+   "金型を用いた鋳造法では、種々の方法を用いて必ず圧力をかけて溶湯を充填しなければならない",
+   "鋳鉄は鋳鋼よりも凝固収縮が小さい。これは黒鉛が晶出するためである",
+   "鋳造品は肉厚が薄いと結晶が細かくなるため強度が高い",
+   "3Dプリンタで砂型の成形をすることはできない",
+ ],
+ ans:[
+   "鋳鉄は鋳鋼よりも凝固収縮が小さい。これは黒鉛が晶出するためである",
+   "鋳造品は肉厚が薄いと結晶が細かくなるため強度が高い",
+ ],
+ note:"金型鋳造では圧力をかけない重力鋳造もある。3Dプリンタは砂型成形に使用可能。黒鉛晶出と薄肉高強度は正しい。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s4", no:"04", title:"塑性加工 概要・熱間冷間", qs:[
+
+{type:"multi",
+ q:"塑性加工の特徴を全て選べ",
+ opts:[
+   "加工時間が長い","加工時間が短い","少量生産に適する","中空形状が得意",
+   "材料の無駄が少ない（歩留まりが良い）","量産に適する","加工により強度が向上する"
+ ],
+ ans:["加工時間が短い","材料の無駄が少ない（歩留まりが良い）","量産に適する","加工により強度が向上する"],
+ note:"塑性加工：短時間・量産向き・歩留まり良い・加工硬化で強度向上。中空形状は鋳造が得意。"},
+
+{type:"single",
+ q:"大きな変形ができる加工はどちらか",
+ opts:["熱間加工","冷間加工","どちらでもない"],
+ ans:"熱間加工",
+ note:"熱間加工では再結晶が起こるため加工硬化せず、大きな変形（塑性変形）が可能。"},
+
+{type:"single",
+ q:"寸法精度が高い加工はどちらか",
+ opts:["熱間加工","冷間加工","どちらでもない"],
+ ans:"冷間加工",
+ note:"冷間加工は室温で行うため熱膨張がなく寸法精度が高い。スプリングバックに注意。"},
+
+{type:"single",
+ q:"加工による強化（加工硬化）が起こる加工はどちらか",
+ opts:["熱間加工","冷間加工","どちらでもない"],
+ ans:"冷間加工",
+ note:"冷間加工では再結晶が起こらないため転位密度が増加し加工硬化（強化）が起こる。"},
+
+{type:"single",
+ q:"表面にスケール（酸化膜）ができる加工はどちらか",
+ opts:["熱間加工","冷間加工","どちらでもない"],
+ ans:"熱間加工",
+ note:"熱間加工は高温で行うため酸化が起こりスケール（酸化膜）が形成される。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s5", no:"05", title:"塑性加工 材料・圧延・計算", qs:[
+
+{type:"single",
+ q:"圧延においてロールの入口と出口の材料の速度はどちらが大きいか",
+ opts:["入口","出口","変わらない"],
+ ans:"出口",
+ note:"体積保存則より t₀v₀ = t₁v₁。圧延後は厚みが減るため速度は増加。v₁ > v₀。"},
+
+{type:"input",
+ q:"前問のように材料の速度が変化する理由を答えよ",
+ ans:["体積保存則","体積保存","質量保存","断面積が減るため速度が増加","板厚が薄くなるから"],
+ hint:"圧延前後で材料の体積は変化しない。"},
+
+{type:"input",
+ q:"厚さ5mmの軟鋼の板を直径100mmの円形にせん断で打ち抜く際の荷重を求めよ。軟鋼板のせん断抵抗を300MPaとする（単位をつけること）",
+ ans:["471239N","471kN","471,239N","471000N","470kN","471.2kN","471239 N","471 kN"],
+ hint:"P = τs × L × t。円形の切断長さL = π × d。MPa = N/mm²。"},
+
+{type:"single",
+ q:"長さ100mmの棒に引張の荷重を加えたところ、長さが105mmとなった。公称ひずみはいくらか",
+ opts:["0.0456","0.0488","0.0500","0.0521","0.456","0.488","0.500","0.521"],
+ ans:"0.0500",
+ note:"公称ひずみ e = ΔL/L₀ = (105-100)/100 = 5/100 = 0.05"},
+
+{type:"single",
+ q:"前問と同じ条件（L₀=100mm, L=105mm）で真ひずみはいくらか",
+ opts:["0.0456","0.0488","0.0500","0.0521","0.456","0.488","0.500","0.521"],
+ ans:"0.0488",
+ note:"真ひずみ ε = ln(L/L₀) = ln(105/100) = ln(1.05) ≈ 0.0488"},
+
+{type:"single",
+ q:"曲げ加工においてスプリングバックが大きくなるのはどのような材料か",
+ opts:["縦弾性係数(ヤング率)が大きい材料ほど大きい","縦弾性係数が小さい材料ほど大きい","降伏応力が低い材料ほど大きい","延性が高い材料ほど大きい"],
+ ans:"縦弾性係数(ヤング率)が大きい材料ほど大きい",
+ note:"スプリングバック量 ∝ Y/E。Eが大きいほど弾性回復量が大きくなる。"},
+
+{type:"input",
+ q:"塑性加工シミュレーションにおいて使われる降伏条件は何か（代表的なものを1つ答えよ）",
+ ans:["Von Mises","ミーゼス","von mises","Mises","トレスカ","Tresca","フォンミーゼス"],
+ hint:"Von Mises降伏条件とTresca降伏条件が代表的。シミュレーションではVon Misesが多用される。"},
+
+{type:"single",
+ q:"押出し(Extrusion)と引き抜き(Drawing)を比較して、主に熱間加工を行うのはどちらか",
+ opts:["押出し(Extrusion)","引き抜き(Drawing)","どちらでもない"],
+ ans:"押出し(Extrusion)",
+ note:"押出しは大きな変形を伴うため主に熱間で行う。引き抜きは寸法精度を重視するため冷間が主。"},
+
+{type:"single",
+ q:"押出し(Extrusion)と引き抜き(Drawing)を比較して、寸法精度が高いのはどちらか",
+ opts:["押出し(Extrusion)","引き抜き(Drawing)","どちらでもない"],
+ ans:"引き抜き(Drawing)",
+ note:"引き抜きは冷間加工が主で寸法精度が高い。針金・細管などの高精度製品に使用。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s6", no:"06", title:"接合（溶接）", qs:[
+
+{type:"single",
+ q:"MAG溶接の保護ガスとして正しいものを選べ",
+ opts:["Arのみ","CO₂のみ","Ar + CO₂","N₂","He"],
+ ans:"Ar + CO₂",
+ note:"MAG(Metal Active Gas)溶接はAr+CO₂(約80%Ar)を保護ガスに使用。炭素鋼向け。"},
+
+{type:"single",
+ q:"MIG溶接の保護ガスとして正しいものを選べ",
+ opts:["Arのみ","CO₂のみ","Ar + CO₂","N₂","フラックス"],
+ ans:"Arのみ",
+ note:"MIG(Metal Inert Gas)溶接はArのみを使用。不活性ガスのためスパッタが少なく品質が高い。Al・Cu等の非鉄金属に使用。"},
+
+{type:"single",
+ q:"MIG溶接とMAG溶接を比較したとき、溶接金属の品質が高いのはどちらか",
+ opts:["MIG溶接の方が高い","MAG溶接の方が高い","同等","どちらでもない"],
+ ans:"MIG溶接の方が高い",
+ note:"MIGはArのみ（不活性ガス）を使用するため酸化が起こらず品質が高い。MAGはCO₂が混入するため反応性がある。"},
+
+{type:"single",
+ q:"TIG溶接で使われる電極の種類を選べ",
+ opts:["消耗電極（溶接棒が溶ける）","タングステン非消耗電極","炭素電極","銅電極","鉄電極"],
+ ans:"タングステン非消耗電極",
+ note:"TIG(Tungsten Inert Gas)はタングステン電極が溶けない非消耗電極。別途フィラーワイヤを使用。"},
+
+{type:"single",
+ q:"摩擦攪拌溶接(FSW)の最大の特徴として正しいものを選べ",
+ opts:[
+   "アーク溶接より温度が高い",
+   "固体状態（融点以下）で接合するため溶接欠陥が少なくHAZが最小",
+   "ステンレス鋼に最も適している",
+   "水中での溶接が可能",
+   "高圧の保護ガスが必要",
+ ],
+ ans:"固体状態（融点以下）で接合するため溶接欠陥が少なくHAZが最小",
+ note:"FSWは摩擦熱で材料を軟化させ攪拌接合。融点以下での固体接合のため溶接欠陥が少なくHAZ最小。AlやMg合金に最適。"},
+
+{type:"single",
+ q:"溶接部のHAZ（熱影響部）とは何か",
+ opts:[
+   "溶接金属が固まった部分",
+   "溶融と凝固を繰り返した部分",
+   "溶接熱によって組織が変化したが溶融はしていない母材部分",
+   "保護ガスで覆われた領域",
+   "フラックスが残留した部分",
+ ],
+ ans:"溶接熱によって組織が変化したが溶融はしていない母材部分",
+ note:"HAZ(Heat Affected Zone)は溶接熱の影響を受けて組織変化が生じた部分。強度・靭性が低下することがある。"},
+
+{type:"single",
+ q:"溶接部の拘束と残留応力の関係として正しいものを選べ",
+ opts:[
+   "拘束が大きいほど残留応力が小さく変形も小さい",
+   "拘束が大きいほど残留応力が大きく変形が小さい",
+   "拘束が大きいほど残留応力が小さく変形が大きい",
+   "拘束と残留応力は無関係",
+ ],
+ ans:"拘束が大きいほど残留応力が大きく変形が小さい",
+ note:"拘束↑→変形できない→残留応力↑。拘束↓→変形できる→残留応力↓。"},
+
+{type:"multi",
+ q:"アーク溶接の種類と特徴について正しい説明を全て選べ",
+ opts:[
+   "MAG溶接はArのみを保護ガスとして使用する",
+   "TIG溶接はタングステン電極が溶けない非消耗電極を使う",
+   "被覆アーク溶接は屋外での補修溶接にも適している",
+   "MIG溶接は主に炭素鋼の溶接に使われる",
+   "アーク溶接の温度は5000〜6000°C程度である",
+ ],
+ ans:[
+   "TIG溶接はタングステン電極が溶けない非消耗電極を使う",
+   "被覆アーク溶接は屋外での補修溶接にも適している",
+   "アーク溶接の温度は5000〜6000°C程度である",
+ ],
+ note:"MAGはAr+CO₂。MIGが非鉄金属向けでMAGが炭素鋼向け。TIG非消耗・被覆アーク屋外・アーク温度5000〜6000°Cは正しい。"},
+
+{type:"single",
+ q:"溶接欠陥「アンダーカット」の主な原因を選べ",
+ opts:["電流が不足している","電流が過大","保護ガスが不足","溶接速度が遅すぎる","開先角度が小さすぎる"],
+ ans:"電流が過大",
+ note:"アンダーカットは溶接電流が大きすぎることで母材が過剰に溶けて生じる溝状の欠陥。"},
+
+{type:"single",
+ q:"レーザー溶接の最大の特徴を選べ",
+ opts:["コストが安い","熱影響部(HAZ)が最小で精密加工が可能","水中でも溶接可能","電極が不要","保護ガスが不要"],
+ ans:"熱影響部(HAZ)が最小で精密加工が可能",
+ note:"レーザー溶接はエネルギーを集中させて短時間で溶接するためHAZが最小。精密部品・電子部品の溶接に使用。"},
+
+]},
+
+];/* end SECTIONS */
+
+/* =====================================================================
+   STATE / STORAGE
+===================================================================== */
+let state = {};
+try{ state = JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}"); }catch(e){}
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+
+/* =====================================================================
+   SCORE
+===================================================================== */
+function computeScore(){
+  let done=0, total=0;
+  SECTIONS.forEach(sec=>{
+    sec.qs.forEach((q,qi)=>{
+      total++;
+      const k=`${sec.id}_${qi}`;
+      if(state[k]===1) done++;
+    });
+  });
+  return {done,total};
+}
+function updateScore(){
+  const {done,total}=computeScore();
+  document.getElementById("sNum").textContent=`${done} / ${total}`;
+  document.getElementById("sBar").style.width= total?`${done/total*100}%`:"0%";
+}
+function resetAll(){
+  if(!confirm("進捗をリセットしますか？")) return;
+  state={};
+  save();
+  location.reload();
+}
+
+/* =====================================================================
+   NORM (for input matching)
+===================================================================== */
+function norm(s){ return s.replace(/[　\s]/g,"").toLowerCase().replace(/[，,。．.、]/g,""); }
+function matchInput(val,answers){
+  const n=norm(val);
+  if(!Array.isArray(answers)) answers=[answers];
+  return answers.some(a=>norm(a)===n || n.includes(norm(a)) || norm(a).includes(n));
+}
+
+/* =====================================================================
+   RENDER
+===================================================================== */
+function renderAll(){
+  const app=document.getElementById("app");
+  const toc=document.getElementById("toc");
+  toc.innerHTML="";
+  app.innerHTML="";
+
+  SECTIONS.forEach(sec=>{
+    // TOC link
+    const a=document.createElement("a");
+    a.href=`#${sec.id}`; a.textContent=`${sec.no} ${sec.title}`;
+    toc.appendChild(a);
+
+    // Section
+    const el=document.createElement("section");
+    el.id=sec.id;
+
+    let secDone=0, secTotal=sec.qs.length;
+    sec.qs.forEach((q,qi)=>{
+      const k=`${sec.id}_${qi}`;
+      if(state[k]===1) secDone++;
+    });
+
+    el.innerHTML=`
+      <div class="sec-head">
+        <span class="sec-no">${sec.no}</span>
+        <h2>${sec.title}</h2>
+        <span class="sec-score" id="ss_${sec.id}">${secDone}/${secTotal}</span>
+      </div>`;
+
+    sec.qs.forEach((q,qi)=>{
+      const k=`${sec.id}_${qi}`;
+      const card=buildQuestion(q, qi, k, sec.id);
+      el.appendChild(card);
+    });
+
+    app.appendChild(el);
+  });
+
+  updateScore();
+}
+
+function buildQuestion(q, qi, key, secId){
+  const div=document.createElement("div");
+  div.className="q"+(state[key]===1?" correct":state[key]===-1?" wrong":"");
+  div.id=`q_${key}`;
+
+  const qn=qi+1;
+  let inner=`<div class="q-top"><span class="qn">Q${qn}</span><div class="q-body">
+    <div class="prompt">${q.q}</div>`;
+
+  if(q.type==="single"){
+    inner+=`<div class="opts">`;
+    q.opts.forEach((o,oi)=>{
+      let cls="opt";
+      if(state[key]!==undefined){
+        if(o===q.ans) cls+=" reveal";
+        if(state[key+"_pick"]===o && o!==q.ans) cls+=" pick-wrong";
+        if(state[key+"_pick"]===o && o===q.ans) cls+=" pick-correct";
+      }
+      const dis=state[key]!==undefined?"disabled":"";
+      inner+=`<button class="${cls}" ${dis} onclick="pickSingle('${key}','${secId}',this,'${escQ(o)}','${escQ(q.ans)}')">${labelChar(oi)} ${o}</button>`;
+    });
+    inner+=`</div>`;
+
+  }else if(q.type==="multi"){
+    inner+=`<div class="opts" id="mopts_${key}">`;
+    q.opts.forEach((o,oi)=>{
+      let cls="opt";
+      const sel=state[key+"_sel"] && state[key+"_sel"].includes(o);
+      if(sel) cls+=" multi-selected";
+      if(state[key]!==undefined){
+        if(q.ans.includes(o)) cls+=" reveal";
+        if(sel && !q.ans.includes(o)) cls+=" pick-wrong";
+        if(sel && q.ans.includes(o)) cls+=" pick-correct";
+      }
+      const dis=state[key]!==undefined?"disabled":"";
+      inner+=`<button class="${cls}" ${dis} onclick="toggleMulti('${key}','${escQ(o)}')">${labelChar(oi)} ${o}</button>`;
+    });
+    inner+=`</div>`;
+    if(state[key]===undefined){
+      inner+=`<div class="multi-submit"><button class="btn" onclick="submitMulti('${key}','${secId}',${JSON.stringify(q.opts)},${JSON.stringify(q.ans)})">採点</button></div>`;
+    }
+
+  }else if(q.type==="sort"){
+    const placed=state[key+"_placed"]||[];
+    inner+=`<div class="sort-bank" id="sbank_${key}">`;
+    q.items.forEach((item,ii)=>{
+      if(placed.includes(item)) return;
+      inner+=`<button class="sort-item" onclick="placeSortItem('${key}','${secId}',${JSON.stringify(q.items)},${JSON.stringify(q.ans)},'${escQ(item)}')">${item}</button>`;
+    });
+    inner+=`</div>`;
+    inner+=`<div class="sort-answer" id="sans_${key}">`;
+    q.items.forEach((_,ii)=>{
+      const filledWith=placed[ii]||"";
+      const slotCls="slot"+(filledWith?" filled":"");
+      inner+=`<div class="${slotCls}" onclick="removeSortItem('${key}',${ii})">${ii+1}. ${filledWith||"ここをタップして削除"}</div>`;
+    });
+    inner+=`</div>`;
+    if(placed.length===q.items.length && state[key]===undefined){
+      inner+=`<div class="multi-submit"><button class="btn" onclick="submitSort('${key}','${secId}',${JSON.stringify(q.ans)})">採点</button></div>`;
+    }
+
+  }else if(q.type==="input"){
+    const val=state[key+"_val"]||"";
+    const inputCls=state[key]===1?"ok":state[key]===-1?"ng":"";
+    const dis=state[key]!==undefined?"disabled":"";
+    inner+=`<div class="inrow">
+      <input id="inp_${key}" type="text" value="${val}" ${dis} class="${inputCls}" placeholder="答えを入力"
+        onkeydown="if(event.key==='Enter')submitInput('${key}','${secId}',${JSON.stringify(q.ans)})">
+      ${state[key]===undefined?`<button class="btn" onclick="submitInput('${key}','${secId}',${JSON.stringify(q.ans)})">採点</button>`:""}
+      ${state[key]!==undefined && state[key]!==1?`<button class="btn ghost" onclick="revealInput('${key}','${secId}',${JSON.stringify(q.ans)})">答えを見る</button>`:""}
+    </div>`;
+    if(q.hint && state[key]===undefined){
+      inner+=`<div class="note" style="margin-top:6px">💡 ヒント: ${q.hint}</div>`;
+    }
+  }
+
+  // feedback
+  const fbShow=state[key]!==undefined?"show":"";
+  const verdict=state[key]===1?"correct":"wrong";
+  const verdictLabel=state[key]===1?"✓ 正解":"✗ 不正解";
+  const verdictCls=state[key]===1?"g":"b";
+  inner+=`<div class="fb ${fbShow}" id="fb_${key}">
+    <span class="verdict ${verdictCls}">${verdictLabel}</span>
+    ${q.note?`<div class="note">${q.note}</div>`:""}
+  </div>`;
+
+  inner+=`</div></div>`;
+  div.innerHTML=inner;
+  return div;
+}
+
+function labelChar(i){ return String.fromCharCode(65+i)+"."; }
+function escQ(s){ return s.replace(/'/g,"\\'"); }
+
+/* =====================================================================
+   INTERACTIONS
+===================================================================== */
+function pickSingle(key,secId,btn,chosen,ans){
+  state[key]=chosen===ans?1:-1;
+  state[key+"_pick"]=chosen;
+  save(); refreshQ(key,secId);
+}
+
+function toggleMulti(key,opt){
+  if(!state[key+"_sel"]) state[key+"_sel"]=[];
+  const idx=state[key+"_sel"].indexOf(opt);
+  if(idx>-1) state[key+"_sel"].splice(idx,1);
+  else state[key+"_sel"].push(opt);
+  save(); refreshQ(key,key.split("_")[0]);
+}
+
+function submitMulti(key,secId,opts,ans){
+  const sel=state[key+"_sel"]||[];
+  const correct=sel.length===ans.length && ans.every(a=>sel.includes(a));
+  state[key]=correct?1:-1;
+  save(); refreshQ(key,secId);
+}
+
+function placeSortItem(key,secId,items,ans,item){
+  if(!state[key+"_placed"]) state[key+"_placed"]=[];
+  state[key+"_placed"].push(item);
+  save(); refreshQ(key,secId);
+}
+
+function removeSortItem(key,idx){
+  if(state[key]!==undefined) return;
+  if(!state[key+"_placed"]) return;
+  state[key+"_placed"].splice(idx,1);
+  save(); refreshQ(key,key.split("_")[0]);
+}
+
+function submitSort(key,secId,ans){
+  const placed=state[key+"_placed"]||[];
+  const correct=ans.every((a,i)=>placed[i]===a);
+  state[key]=correct?1:-1;
+  save(); refreshQ(key,secId);
+}
+
+function submitInput(key,secId,ans){
+  const val=document.getElementById("inp_"+key).value.trim();
+  state[key+"_val"]=val;
+  state[key]=matchInput(val,ans)?1:-1;
+  save(); refreshQ(key,secId);
+}
+
+function revealInput(key,secId,ans){
+  const ansDisplay=Array.isArray(ans)?ans[0]:ans;
+  state[key+"_val"]=ansDisplay;
+  state[key]=-1;
+  save(); refreshQ(key,secId);
+}
+
+function refreshQ(key,secId){
+  const parts=key.split("_");
+  const sIdx=SECTIONS.findIndex(s=>s.id===secId);
+  if(sIdx<0) return;
+  const sec=SECTIONS[sIdx];
+  const qi=parseInt(parts[1]);
+  const q=sec.qs[qi];
+  const old=document.getElementById("q_"+key);
+  if(!old) return;
+  const newCard=buildQuestion(q,qi,key,secId);
+  old.replaceWith(newCard);
+
+  // update section score
+  let done=0;
+  sec.qs.forEach((_,i)=>{ if(state[`${secId}_${i}`]===1) done++; });
+  const ss=document.getElementById("ss_"+secId);
+  if(ss) ss.textContent=`${done}/${sec.qs.length}`;
+
+  updateScore();
+}
+
+/* ===== INIT ===== */
+renderAll();
+</script>
+</body>
+</html>

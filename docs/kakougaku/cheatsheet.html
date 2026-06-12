@@ -1,0 +1,714 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<title>加工学 中間試験 カンペ</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
+
+/* ========== 画面表示用 ========== */
+:root{
+  --bg:#0a1626; --card:#15263f; --line:#27406a;
+  --ink:#e7eef7; --muted:#8aa1c0; --teal:#46d6c4;
+  --amber:#f6b352; --red:#f06b8e; --good:#5fe0a8;
+  --navy:#0d2144;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+body{
+  font-family:'Noto Sans JP',sans-serif;
+  background:var(--bg); color:var(--ink);
+  font-size:10px; line-height:1.45;
+  padding:16px;
+}
+h1.page-title{
+  font-size:18px; font-weight:900;
+  color:var(--teal); margin-bottom:8px;
+  text-align:center;
+}
+.print-hint{
+  text-align:center; font-size:12px; color:var(--muted);
+  margin-bottom:12px;
+}
+.print-btn{
+  display:block; margin:0 auto 16px;
+  background:var(--teal); color:#0a1626; font-weight:700;
+  border:none; border-radius:8px; padding:10px 24px;
+  font-size:14px; cursor:pointer; font-family:inherit;
+}
+
+/* ===== SHEET ===== */
+.sheet{
+  width:257mm; background:white; color:#111;
+  margin:0 auto; padding:4mm;
+  box-shadow:0 4px 32px rgba(0,0,0,.5);
+}
+.sheet-header{
+  background:#0d2144; color:white; text-align:center;
+  font-size:7.5pt; font-weight:700; padding:2px 4px;
+  margin-bottom:3px; border-radius:2px;
+}
+.cols{display:flex; gap:3mm;}
+.col{flex:1; min-width:0;}
+
+/* セクション見出し */
+.sec{
+  background:#0d2144; color:white;
+  font-size:7pt; font-weight:700; padding:1.5px 4px;
+  margin:4px 0 1.5px; border-radius:2px;
+}
+.subsec{
+  background:#1a6b60; color:white;
+  font-size:6.5pt; font-weight:700; padding:1px 3px;
+  margin:3px 0 1px; border-radius:1px;
+}
+
+/* テキスト */
+p, .row, li{font-size:6pt; line-height:1.4; margin:0;}
+ul{list-style:none; padding:0;}
+ul li::before{content:"· "; color:#1a9e8e; font-weight:700;}
+.kv{display:flex; gap:2px;}
+.kv .k{color:#d4891f; font-weight:700; white-space:nowrap; min-width:fit-content;}
+.formula-box{
+  background:#eef7ee; border:0.5px solid #2a8a4a; border-radius:2px;
+  padding:2px 3px; margin:1px 0;
+  font-size:5.8pt; font-family:monospace;
+}
+.formula-box .fl{display:flex; gap:3px; margin:0.5px 0;}
+.formula-box .fl .lbl{color:#c0392b; font-weight:700; white-space:nowrap;}
+.formula-box .fl .f{color:#0d2144; font-weight:700;}
+.tip-box{
+  background:#fff8e8; border:0.5px solid #d4891f; border-radius:2px;
+  padding:2px 3px; margin:1px 0; font-size:5.8pt;
+}
+.tip-box li::before{content:"★ "; color:#d4891f;}
+.note{color:#555; font-size:5.5pt; font-style:italic;}
+
+/* テーブル */
+table{
+  width:100%; border-collapse:collapse;
+  font-size:5.5pt; margin:1.5px 0;
+}
+th{background:#1a3a6b; color:white; padding:1.5px 2px; text-align:center; font-weight:700;}
+td{padding:1px 2px; text-align:center; border:0.3px solid #ccc;}
+tr:nth-child(even) td{background:#f5f7fa;}
+.tl{text-align:left;}
+
+/* 図 */
+.fig{
+  border:0.5px solid #1a6b60; border-radius:2px;
+  padding:2px; margin:1.5px 0; font-size:5.5pt;
+  background:#f0faf8;
+}
+.fig svg{display:block; width:100%;}
+
+/* page break */
+.page-break{
+  height:4mm; background:#e8e8e8; margin:4px 0;
+  display:flex; align-items:center; justify-content:center;
+  font-size:6pt; color:#666; font-weight:700; border-radius:1px;
+}
+
+/* ========== 印刷用 ========== */
+@media print{
+  @page{size:A4; margin:5mm;}
+  body{background:white; color:#111; padding:0;}
+  .print-btn,.print-hint,h1.page-title{display:none!important;}
+  .sheet{
+    width:100%; box-shadow:none; padding:0; margin:0;
+  }
+  .page-break{
+    height:0; background:none; border:none;
+    page-break-after:always; margin:0; display:block;
+  }
+  .page-break span{display:none;}
+  .sec{background:#0d2144!important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  .subsec{background:#1a6b60!important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  th{background:#1a3a6b!important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  .sheet-header{background:#0d2144!important; -webkit-print-color-adjust:exact; print-color-adjust:exact;}
+  tr:nth-child(even) td{background:#f5f7fa!important; print-color-adjust:exact;}
+  .formula-box{background:#eef7ee!important; print-color-adjust:exact;}
+  .tip-box{background:#fff8e8!important; print-color-adjust:exact;}
+  .fig{background:#f0faf8!important; print-color-adjust:exact;}
+}
+</style>
+</head>
+<body>
+
+<h1 class="page-title">加工学 中間試験 カンペ — 手書き参照用</h1>
+<p class="print-hint">ブラウザで開いて <strong>Ctrl+P → PDF保存</strong> → A4両面印刷してから手書きで写す</p>
+<button class="print-btn" onclick="window.print()">PDF として保存（Ctrl+P）</button>
+
+<div class="sheet">
+
+<!-- ============================= 表面 ============================= -->
+<div class="sheet-header">【表面】加工学 中間試験 カンペ ｜ 鋳造 / 塑性加工　　旭川高専 4年 持込可（手書きA4両面1枚）</div>
+
+<div class="cols">
+
+<!-- ======= 列1：鋳造 ======= -->
+<div class="col">
+<div class="sec">1. 鋳造 (Casting)</div>
+
+<div class="subsec">概要・特徴</div>
+<ul>
+  <li>溶融金属を鋳型に流込み凝固→製品</li>
+  <li>複雑形状・中空形状 得意</li>
+  <li>表面粗さ△　精度△　作業環境×</li>
+  <li><span class="k">融点↓の利点：</span>金型使用可・省エネ・溶解容易</li>
+</ul>
+
+<div class="subsec">鋳型各部名称</div>
+<div class="fig">
+<svg viewBox="0 0 200 90" xmlns="http://www.w3.org/2000/svg" style="height:60px">
+  <!-- 外枠 -->
+  <rect x="5" y="5" width="190" height="80" fill="#e8e0d0" stroke="#333" stroke-width="0.8"/>
+  <!-- 上型 -->
+  <rect x="10" y="8" width="180" height="30" fill="#b8d0e8" stroke="#555" stroke-width="0.5"/>
+  <text x="100" y="26" text-anchor="middle" font-size="8" fill="#333" font-weight="bold">上型 upper mold</text>
+  <!-- 下型 -->
+  <rect x="10" y="52" width="180" height="30" fill="#b8d0e8" stroke="#555" stroke-width="0.5"/>
+  <text x="100" y="70" text-anchor="middle" font-size="8" fill="#333" font-weight="bold">下型 lower mold</text>
+  <!-- 分割線 -->
+  <line x1="5" y1="41" x2="195" y2="41" stroke="red" stroke-width="0.8" stroke-dasharray="3,2"/>
+  <text x="140" y="39" font-size="7" fill="red">← 分割面</text>
+  <!-- 湯口 -->
+  <rect x="155" y="8" width="12" height="72" fill="#f0b060" stroke="#888" stroke-width="0.4"/>
+  <text x="152" y="7" font-size="6" fill="#c06000">湯口</text>
+  <text x="152" y="14" font-size="5.5" fill="#c06000">sprue</text>
+  <!-- 押湯 -->
+  <rect x="20" y="8" width="12" height="55" fill="#f0b060" stroke="#888" stroke-width="0.4"/>
+  <text x="17" y="7" font-size="6" fill="#c06000">押湯</text>
+  <text x="17" y="14" font-size="5.5" fill="#c06000">riser</text>
+  <!-- 湯道 -->
+  <rect x="32" y="36" width="92" height="10" fill="#f0b060" stroke="#888" stroke-width="0.4"/>
+  <text x="58" y="34" font-size="6" fill="#c06000">湯道 runner</text>
+  <!-- 堰 -->
+  <rect x="108" y="36" width="6" height="10" fill="#e08000" stroke="#888" stroke-width="0.4"/>
+  <text x="106" y="55" font-size="5.5" fill="#c06000">堰gate</text>
+  <!-- 鋳物 -->
+  <rect x="70" y="53" width="75" height="25" fill="#8fba8f" stroke="#555" stroke-width="0.4"/>
+  <text x="107" y="68" text-anchor="middle" font-size="7" fill="#2a6a2a">鋳物(製品)</text>
+</svg>
+</div>
+
+<div class="subsec">各種鋳造法比較</div>
+<table>
+<tr><th class="tl">鋳造法</th><th>砂再利</th><th>円管</th><th>精度</th><th>速度</th><th class="tl">特徴</th></tr>
+<tr><td class="tl">生砂型</td><td>◎</td><td>×</td><td>△</td><td>△</td><td class="tl">汎用・安価</td></tr>
+<tr><td class="tl">Vプロセス</td><td>◎</td><td>×</td><td>○</td><td>△</td><td class="tl">砂再利用◎</td></tr>
+<tr><td class="tl">ロストワックス</td><td>×</td><td>×</td><td>◎</td><td>×</td><td class="tl">耐熱超合金・精密</td></tr>
+<tr><td class="tl">有機自硬性</td><td>△</td><td>×</td><td>○</td><td>△</td><td class="tl">砂型強度◎</td></tr>
+<tr><td class="tl">遠心鋳造</td><td>×</td><td>◎</td><td>○</td><td>○</td><td class="tl">円管専用</td></tr>
+<tr><td class="tl">ダイカスト</td><td>×</td><td>×</td><td>◎</td><td>◎</td><td class="tl">高圧・量産</td></tr>
+<tr><td class="tl">フルモールド</td><td>○</td><td>×</td><td>○</td><td>○</td><td class="tl">3Dプリンタ型可</td></tr>
+</table>
+
+<div class="subsec">引け巣 (Shrinkage Cavity)</div>
+<ul>
+  <li><b>発生：</b>溶湯温度低下→外周凝固→内部溶湯不足→空洞</li>
+  <li><b>対策：</b>押湯(riser)取付け・肉厚均一化</li>
+  <li><b>内部検査：</b>超音波探傷試験（表面削らずOK）</li>
+</ul>
+
+<div class="subsec">鋳造設計ポイント</div>
+<ul>
+  <li><span class="k">抜き勾配：</span>砂型から模型を取外しやすくするため</li>
+  <li><span class="k">角のR(丸み)：</span>ひずみ・割れを防ぐため</li>
+  <li><span class="k">見切り面：</span>最も広い断面積の位置</li>
+  <li><span class="k">アンダーカット：</span>避ける（型が外れない）</li>
+</ul>
+
+<div class="subsec">鋳造品の検査</div>
+<ul>
+  <li>強度：同一溶湯で試験片を別途鋳造→引張試験</li>
+  <li>化学成分：溶湯から直接分析（製品不要）</li>
+  <li>内部欠陥(非破壊)：超音波探傷・放射線探傷</li>
+  <li>表面欠陥(非破壊)：浸透探傷(PT)・磁粉探傷(MT)</li>
+</ul>
+
+<div class="subsec">非破壊検査(NDT)まとめ</div>
+<table>
+<tr><th>方法</th><th>対象</th><th>原理</th></tr>
+<tr><td>超音波(UT)</td><td>内部</td><td>音波反射</td></tr>
+<tr><td>放射線(RT)</td><td>内部</td><td>X線透過</td></tr>
+<tr><td>渦流探傷(ECT)</td><td>表面近傍</td><td>電磁誘導</td></tr>
+<tr><td>浸透探傷(PT)</td><td>表面</td><td>毛細管現象</td></tr>
+<tr><td>磁粉探傷(MT)</td><td>表面</td><td>磁束漏洩</td></tr>
+</table>
+
+<div class="tip-box">
+<ul>
+  <li>砂型が使えるのは表面張力が<b>小さい</b>から（隙間を溶湯が通れる）</li>
+  <li>引け巣は押湯で対策・内部は超音波で検査</li>
+  <li>ロストワックス=耐熱超合金の高精度複雑部品</li>
+</ul>
+</div>
+</div><!-- /col1 -->
+
+<!-- ======= 列2：塑性加工基礎 ======= -->
+<div class="col">
+<div class="sec">2. 塑性加工 (Plastic Forming)</div>
+
+<div class="subsec">概要・特徴</div>
+<ul>
+  <li>固体のまま塑性変形で成形</li>
+  <li>材料の無駄少ない（歩留まり◎）</li>
+  <li>加工時間が短い・量産に適する</li>
+  <li><b>加工により強度が向上（加工硬化）</b></li>
+</ul>
+
+<div class="subsec">熱間 vs 冷間加工</div>
+<table>
+<tr><th class="tl">特性</th><th>熱間</th><th>冷間</th></tr>
+<tr><td class="tl">大きな変形</td><td>◎</td><td>×</td></tr>
+<tr><td class="tl">寸法精度</td><td>△</td><td>◎</td></tr>
+<tr><td class="tl">加工による強化</td><td>×</td><td>◎</td></tr>
+<tr><td class="tl">連続加工</td><td>◎</td><td>×</td></tr>
+<tr><td class="tl">表面スケール</td><td>あり</td><td>なし</td></tr>
+<tr><td class="tl">スプリングバック</td><td>小</td><td>大</td></tr>
+</table>
+
+<div class="subsec">材料特性要件</div>
+<table>
+<tr><th class="tl">特性</th><th>被加工材</th><th>金型</th></tr>
+<tr><td class="tl">塑性変形量</td><td>大◎</td><td>—</td></tr>
+<tr><td class="tl">加工硬化</td><td>小◎</td><td>—</td></tr>
+<tr><td class="tl">耐摩耗性</td><td>—</td><td>大◎</td></tr>
+<tr><td class="tl">耐熱性</td><td>—</td><td>高◎</td></tr>
+<tr><td class="tl">耐食性</td><td>—</td><td>高◎</td></tr>
+</table>
+
+<div class="subsec">圧延 (Rolling)</div>
+<div class="fig">
+<svg viewBox="0 0 200 65" xmlns="http://www.w3.org/2000/svg" style="height:50px">
+  <!-- 背景 -->
+  <rect x="1" y="1" width="198" height="63" fill="#f0faf5" stroke="#1a9e8e" stroke-width="0.5"/>
+  <!-- 上ロール -->
+  <circle cx="80" cy="18" r="14" fill="#8090a0" stroke="#333" stroke-width="0.5"/>
+  <circle cx="120" cy="18" r="14" fill="#8090a0" stroke="#333" stroke-width="0.5"/>
+  <!-- 下ロール -->
+  <circle cx="80" cy="47" r="14" fill="#8090a0" stroke="#333" stroke-width="0.5"/>
+  <circle cx="120" cy="47" r="14" fill="#8090a0" stroke="#333" stroke-width="0.5"/>
+  <!-- 材料 入口 -->
+  <rect x="4" y="27" width="38" height="11" fill="#d0a060" stroke="#888" stroke-width="0.4"/>
+  <!-- 材料 出口 -->
+  <rect x="158" y="29" width="38" height="7" fill="#d0a060" stroke="#888" stroke-width="0.4"/>
+  <!-- 矢印 -->
+  <polygon points="143,29 155,32.5 143,36" fill="#e03030"/>
+  <!-- ラベル -->
+  <text x="12" y="25" font-size="6" fill="#333">入口</text>
+  <text x="6" y="43" font-size="5.5" fill="#664400">v₀, t₀(厚)</text>
+  <text x="160" y="25" font-size="6" fill="#333">出口</text>
+  <text x="158" y="43" font-size="5.5" fill="#664400">v₁, t₁</text>
+  <text x="60" y="63" font-size="6.5" fill="#c00000" font-weight="bold">v₀t₀ = v₁t₁ → v₁ &gt; v₀ (体積保存)</text>
+</svg>
+</div>
+<ul>
+  <li><span class="k">バックアップロール：</span>ワークロールのたわみ防止</li>
+  <li>圧延で板・レール・管が製作可能</li>
+</ul>
+
+<div class="subsec">押出し vs 引き抜き</div>
+<table>
+<tr><th class="tl">特性</th><th>押出し Extrusion</th><th>引抜き Drawing</th></tr>
+<tr><td class="tl">寸法精度</td><td>△</td><td>◎</td></tr>
+<tr><td class="tl">変形量</td><td>大◎</td><td>小</td></tr>
+<tr><td class="tl">主な温度</td><td>熱間◎</td><td>冷間◎</td></tr>
+<tr><td class="tl">加工による強化</td><td>—</td><td>◎</td></tr>
+</table>
+
+<div class="subsec">曲げ加工・スプリングバック</div>
+<div class="fig">
+<svg viewBox="0 0 150 55" xmlns="http://www.w3.org/2000/svg" style="height:42px">
+  <rect x="1" y="1" width="148" height="53" fill="#f0f8ff" stroke="#4090c0" stroke-width="0.5"/>
+  <!-- 目標形状 (青) -->
+  <line x1="20" y1="45" x2="20" y2="10" stroke="#2060c0" stroke-width="1.5"/>
+  <line x1="20" y1="45" x2="65" y2="45" stroke="#2060c0" stroke-width="1.5"/>
+  <!-- 実際の戻り (赤破線) -->
+  <line x1="20" y1="10" x2="32" y2="14" stroke="red" stroke-width="1.2" stroke-dasharray="2,1.5"/>
+  <line x1="20" y1="45" x2="65" y2="45" stroke="red" stroke-width="1.2" stroke-dasharray="2,1.5"/>
+  <text x="33" y="10" font-size="6.5" fill="red">スプリングバック</text>
+  <text x="33" y="18" font-size="5.5" fill="red">（赤＝実際の戻り角）</text>
+  <text x="5" y="52" font-size="6" fill="#2060c0">青＝目標 / 縦弾性係数E大→バック大</text>
+</svg>
+</div>
+<ul>
+  <li>縦弾性係数E<b>大</b>の材料ほどスプリングバック<b>大</b></li>
+  <li>対策：過曲げ・底押し(ストライキング)</li>
+</ul>
+
+<div class="subsec">プレス加工まとめ</div>
+<table>
+<tr><th class="tl">加工</th><th class="tl">特徴・公式</th><th class="tl">用途</th></tr>
+<tr><td class="tl">せん断</td><td class="tl">P = τs×L×t</td><td class="tl">打抜き・切断</td></tr>
+<tr><td class="tl">深絞り</td><td class="tl">LDR = D₀/Dp</td><td class="tl">カップ形状</td></tr>
+<tr><td class="tl">ファインブランキング</td><td class="tl">端面精度◎</td><td class="tl">精密部品</td></tr>
+<tr><td class="tl">バルジ成形</td><td class="tl">内圧で膨らませ</td><td class="tl">中空品</td></tr>
+</table>
+
+<div class="tip-box">
+<ul>
+  <li>ファインブランキング：端面に逆力+反力+板押さえを同時付加</li>
+  <li>深絞りシワ防止→BHF↑、割れ防止→BHF↓</li>
+</ul>
+</div>
+
+<div class="subsec">結晶構造と加工性</div>
+<table>
+<tr><th>構造</th><th>金属例</th><th>延性</th><th>加工</th></tr>
+<tr><td>FCC</td><td>Al, Cu, Ni</td><td>高◎</td><td>冷間向</td></tr>
+<tr><td>BCC</td><td>Fe, W</td><td>中</td><td>熱/冷両用</td></tr>
+<tr><td>HCP</td><td>Ti, Mg</td><td>低</td><td>困難</td></tr>
+</table>
+</div><!-- /col2 -->
+
+<!-- ======= 列3：計算・解析 ======= -->
+<div class="col">
+<div class="sec">塑性加工 計算・解析</div>
+
+<div class="subsec">ひずみ計算</div>
+<div class="formula-box">
+<div class="fl"><span class="lbl">公称ひずみ e =</span><span class="f">ΔL/L₀ = (L-L₀)/L₀</span></div>
+<div class="fl"><span class="lbl">真ひずみ ε =</span><span class="f">ln(L/L₀) = ln(1+e)</span></div>
+<div class="fl"><span class="lbl">関係：</span><span class="f">ε &lt; e　（常に真ひずみ &lt; 公称）</span></div>
+</div>
+<div class="tip-box">
+<ul>
+  <li>L₀=100, L=105 → e=(5/100)=<b>0.05</b>, ε=ln(1.05)≈<b>0.0488</b></li>
+  <li>単位に注意：ひずみは無次元</li>
+</ul>
+</div>
+
+<div class="subsec">せん断加工荷重 P</div>
+<div class="formula-box">
+<div class="fl"><span class="lbl">P =</span><span class="f">τs × L × t</span></div>
+<div class="fl"><span class="lbl">τs=</span><span class="f">せん断抵抗[N/mm²=MPa]</span></div>
+<div class="fl"><span class="lbl">L=</span><span class="f">切断線長さ[mm]　t=板厚[mm]</span></div>
+</div>
+<div class="tip-box">
+<ul>
+  <li>円形d=100mm, t=5mm, τs=300MPa</li>
+  <li>L = π×100 = 314.2mm</li>
+  <li>P = 300 × 314.2 × 5 = <b>471,239 N ≒ 471 kN</b></li>
+</ul>
+</div>
+
+<div class="subsec">圧延 体積保存</div>
+<div class="formula-box">
+<div class="fl"><span class="lbl">V₀=V₁より</span><span class="f">t₀·w₀·v₀ = t₁·w₁·v₁</span></div>
+<div class="fl"><span class="lbl">板幅不変なら</span><span class="f">t₀·v₀ = t₁·v₁</span></div>
+<div class="fl"><span class="lbl">→</span><span class="f">v₁ = v₀·(t₀/t₁) &gt; v₀（出口速度↑）</span></div>
+</div>
+<div class="tip-box">
+<ul>
+  <li>入口t=10mm,v=1m/s, 出口t=5mm → v₁=<b>2m/s</b></li>
+</ul>
+</div>
+
+<div class="subsec">降伏条件</div>
+<div class="formula-box">
+<div class="fl"><span class="lbl">Tresca：</span><span class="f">σ₁ - σ₃ = Y</span></div>
+<div class="fl"><span class="lbl"></span><span class="f">（最大主応力-最小主応力=降伏応力）</span></div>
+<div class="fl"><span class="lbl">Von Mises：</span><span class="f">(σ₁-σ₂)²+(σ₂-σ₃)²+(σ₃-σ₁)² = 2Y²</span></div>
+<div class="fl"><span class="lbl">2軸(σ₃=0)：</span><span class="f">σ₁²-σ₁σ₂+σ₂² = Y²</span></div>
+<div class="fl"><span class="lbl">シミュレーション：</span><span class="f">主にVon Mises使用</span></div>
+</div>
+
+<div class="subsec">Near Net Shape / Net Shape</div>
+<ul>
+  <li><span class="k">Near Net Shape：</span>ほぼ完成形で素材を成形</li>
+  <li><span class="k">Net Shape：</span>後加工不要で完成形を製作</li>
+  <li>塑性加工・鋳造はNear/Net Shape向き</li>
+</ul>
+
+<div class="subsec">AM (Additive Manufacturing)</div>
+<ul>
+  <li>付加製造・3Dプリンタ</li>
+  <li>複雑形状・少量生産に適する</li>
+  <li>鋳型（砂型）もAMで成形可能</li>
+  <li>PBF(粉末床溶融結合)など方式多様</li>
+</ul>
+
+<div class="subsec">加工法の選び方 早見</div>
+<table>
+<tr><th class="tl">要求</th><th class="tl">推奨加工法</th></tr>
+<tr><td class="tl">複雑な中空形状</td><td class="tl">鋳造</td></tr>
+<tr><td class="tl">高精度・高強度</td><td class="tl">冷間塑性加工</td></tr>
+<tr><td class="tl">大変形・大きな素材</td><td class="tl">熱間押出し</td></tr>
+<tr><td class="tl">円管</td><td class="tl">遠心鋳造/押出し</td></tr>
+<tr><td class="tl">精密板打抜き</td><td class="tl">ファインブランキング</td></tr>
+<tr><td class="tl">耐熱複雑精密部品</td><td class="tl">ロストワックス鋳造</td></tr>
+<tr><td class="tl">量産・高速成形</td><td class="tl">ダイカスト/プレス</td></tr>
+</table>
+
+<div class="subsec">重要公式 まとめ</div>
+<div class="formula-box">
+<div class="fl"><span class="lbl">公称ひずみ</span><span class="f">e = ΔL/L₀</span></div>
+<div class="fl"><span class="lbl">真ひずみ</span><span class="f">ε = ln(L/L₀)</span></div>
+<div class="fl"><span class="lbl">せん断荷重</span><span class="f">P = τs·L·t [N]</span></div>
+<div class="fl"><span class="lbl">体積保存</span><span class="f">t₀w₀v₀ = t₁w₁v₁</span></div>
+<div class="fl"><span class="lbl">Tresca</span><span class="f">σ₁−σ₃ = Y</span></div>
+<div class="fl"><span class="lbl">Von Mises</span><span class="f">(σ₁−σ₂)²+(σ₂−σ₃)²+(σ₃−σ₁)²=2Y²</span></div>
+<div class="fl"><span class="lbl">LDR</span><span class="f">= D₀/Dp (深絞り限界)</span></div>
+</div>
+</div><!-- /col3 -->
+
+</div><!-- /cols 表面 -->
+
+<!-- ===== ページ区切り ===== -->
+<div class="page-break"><span>▼ 裏面 ▼</span></div>
+
+<!-- ============================= 裏面 ============================= -->
+<div class="sheet-header">【裏面】加工学 中間試験 カンペ ｜ 接合（溶接）/ 重要用語 英語対応</div>
+
+<div class="cols">
+
+<!-- ======= 列1：接合概要 ======= -->
+<div class="col">
+<div class="sec">3. 接合 (Joining / Welding)</div>
+
+<div class="subsec">接合の分類</div>
+<ul>
+  <li><span class="k">A) 機械的接合：</span>ボルト・ナット・リベット・プレスばめ（分解可）</li>
+  <li><span class="k">B) 化学的接合：</span>接着剤（異種材料OK）</li>
+  <li><span class="k">C) 冶金的接合：</span>溶接(welding)・ろう付け(brazing)</li>
+</ul>
+
+<div class="subsec">溶接の全体像</div>
+<table>
+<tr><th>分類</th><th>方式</th><th class="tl">代表例</th></tr>
+<tr><td>融接</td><td>溶融→凝固</td><td class="tl">アーク・ガス・レーザ・EB</td></tr>
+<tr><td>圧接</td><td>圧力(+熱)</td><td class="tl">スポット・FSW・抵抗</td></tr>
+<tr><td>ろう付</td><td>毛管現象</td><td class="tl">はんだ・ブレージング</td></tr>
+</table>
+
+<div class="subsec">アーク溶接 保護ガス比較 ★重要</div>
+<table>
+<tr><th>溶接法</th><th>保護ガス</th><th>電極</th><th class="tl">用途</th></tr>
+<tr><td><b>MAG</b></td><td>Ar+CO₂(80%)</td><td>消耗</td><td class="tl">炭素鋼・鉄鋼</td></tr>
+<tr><td><b>MIG</b></td><td>Ar のみ</td><td>消耗</td><td class="tl">Al・Cu等非鉄</td></tr>
+<tr><td><b>TIG</b></td><td>Ar</td><td>W非消耗</td><td class="tl">薄板・SUS</td></tr>
+<tr><td>プラズマ</td><td>Ar</td><td>W非消耗</td><td class="tl">精密・切断</td></tr>
+<tr><td>被覆アーク</td><td>フラックス</td><td>消耗</td><td class="tl">屋外・補修</td></tr>
+<tr><td>サブマージ</td><td>フラックス</td><td>消耗</td><td class="tl">厚板・造船</td></tr>
+</table>
+<div class="tip-box">
+<ul>
+  <li><b>MIG品質 &gt; MAG品質</b>（ArのみのほうがCO₂混入より高品質）</li>
+  <li>アーク温度：5000〜6000°C</li>
+  <li>TIG：タングステン非消耗電極＋別途フィラーワイヤ</li>
+</ul>
+</div>
+
+<div class="subsec">各溶接法 特徴詳細</div>
+<ul>
+  <li><span class="k">レーザー溶接：</span>HAZ最小・高速・精密・熱影響小</li>
+  <li><span class="k">電子ビーム溶接：</span>真空中・エネルギー密度最大</li>
+  <li><span class="k">ガス溶接：</span>可燃ガス+O₂、低熱量、薄板・補修向き</li>
+  <li><span class="k">スポット溶接：</span>重ね継手・自動車ボディ（圧接）</li>
+  <li><span class="k">エレクトロスラグ：</span>厚肉縦向き連続溶接</li>
+  <li><span class="k">マーシュドアーク：</span>深溶込み・高速水平溶接</li>
+</ul>
+
+<div class="subsec">溶接継手の種類</div>
+<div class="fig">
+<svg viewBox="0 0 200 55" xmlns="http://www.w3.org/2000/svg" style="height:42px">
+  <rect x="1" y="1" width="198" height="53" fill="#f8f8f0" stroke="#888" stroke-width="0.5"/>
+  <!-- 突合せ -->
+  <rect x="5" y="15" width="30" height="25" fill="#8090b0" stroke="#333" stroke-width="0.5"/>
+  <rect x="36" y="15" width="30" height="25" fill="#8090b0" stroke="#333" stroke-width="0.5"/>
+  <polygon points="35,15 37,10 35,10" fill="orange"/>
+  <text x="12" y="48" font-size="5.5" fill="#333">突合せ継手</text>
+  <!-- 重ね -->
+  <rect x="80" y="22" width="28" height="12" fill="#8090b0" stroke="#333" stroke-width="0.5"/>
+  <rect x="92" y="30" width="28" height="12" fill="#8090b0" stroke="#333" stroke-width="0.5"/>
+  <line x1="92" y1="30" x2="108" y2="34" stroke="orange" stroke-width="1.5"/>
+  <text x="82" y="50" font-size="5.5" fill="#333">重ね継手</text>
+  <!-- T継手 -->
+  <rect x="138" y="30" width="40" height="10" fill="#8090b0" stroke="#333" stroke-width="0.5"/>
+  <rect x="152" y="12" width="10" height="18" fill="#8090b0" stroke="#333" stroke-width="0.5"/>
+  <polygon points="152,30 162,30 157,28" fill="orange"/>
+  <text x="142" y="50" font-size="5.5" fill="#333">T継手</text>
+</svg>
+</div>
+<ul>
+  <li><span class="k">突合せ：</span>最も一般的・強度高</li>
+  <li><span class="k">重ね：</span>スポット溶接多用</li>
+  <li><span class="k">T継手：</span>フィレット溶接</li>
+</ul>
+</div><!-- /col1 -->
+
+<!-- ======= 列2：溶接部構造・FSW ======= -->
+<div class="col">
+<div class="sec">溶接部の構造・欠陥・変形</div>
+
+<div class="subsec">溶接部断面（HAZ図）</div>
+<div class="fig">
+<svg viewBox="0 0 210 80" xmlns="http://www.w3.org/2000/svg" style="height:60px">
+  <rect x="1" y="1" width="208" height="78" fill="#f5f5e8" stroke="#888" stroke-width="0.5"/>
+  <!-- 左母材 -->
+  <rect x="5" y="10" width="60" height="60" fill="#7090b0" stroke="#555" stroke-width="0.5"/>
+  <text x="10" y="45" font-size="7" fill="white" font-weight="bold">母材</text>
+  <text x="8" y="55" font-size="5.5" fill="white">Base metal</text>
+  <!-- 右母材 -->
+  <rect x="145" y="10" width="60" height="60" fill="#7090b0" stroke="#555" stroke-width="0.5"/>
+  <text x="150" y="45" font-size="7" fill="white" font-weight="bold">母材</text>
+  <!-- 左HAZ -->
+  <rect x="65" y="10" width="18" height="60" fill="#d0a060" stroke="#888" stroke-width="0.3" opacity="0.85"/>
+  <text x="63" y="8" font-size="6" fill="#c06000" font-weight="bold">HAZ</text>
+  <!-- 右HAZ -->
+  <rect x="127" y="10" width="18" height="60" fill="#d0a060" stroke="#888" stroke-width="0.3" opacity="0.85"/>
+  <text x="127" y="8" font-size="6" fill="#c06000" font-weight="bold">HAZ</text>
+  <!-- 溶接金属 -->
+  <path d="M83,10 Q105,2 127,10 L127,70 Q105,78 83,70 Z" fill="#f0802a" stroke="#c04000" stroke-width="0.5"/>
+  <text x="92" y="43" font-size="7" fill="white" font-weight="bold">溶接金属</text>
+  <text x="88" y="53" font-size="6" fill="white">Weld metal</text>
+  <!-- ラベル線 -->
+  <line x1="74" y1="72" x2="74" y2="78" stroke="#c06000" stroke-width="0.6"/>
+  <text x="55" y="78" font-size="5.5" fill="#c06000">熱影響部</text>
+  <text x="56" y="84" font-size="5.5" fill="#c06000">HAZ</text>
+</svg>
+</div>
+<ul>
+  <li><span class="k">HAZ（熱影響部）：</span>溶接熱で組織変化した母材部分</li>
+  <li>強度↓・靭性↓・硬さ変化が生じる</li>
+  <li>レーザー・FSWはHAZ最小</li>
+</ul>
+
+<div class="subsec">溶接欠陥</div>
+<table>
+<tr><th class="tl">欠陥名</th><th class="tl">原因</th><th class="tl">対策</th></tr>
+<tr><td class="tl">アンダーカット</td><td class="tl">電流過大</td><td class="tl">電流↓・速度↓</td></tr>
+<tr><td class="tl">ブローホール</td><td class="tl">ガス残留</td><td class="tl">ガス管理・乾燥</td></tr>
+<tr><td class="tl">高温割れ</td><td class="tl">急冷・不純物</td><td class="tl">予熱・成分管理</td></tr>
+<tr><td class="tl">溶込み不足</td><td class="tl">電流不足</td><td class="tl">電流↑・開先角↑</td></tr>
+<tr><td class="tl">オーバーラップ</td><td class="tl">電流過小</td><td class="tl">電流↑・角度調整</td></tr>
+</table>
+
+<div class="subsec">溶接変形・残留応力</div>
+<ul>
+  <li>加熱→膨張→冷却→収縮→変形・残留応力発生</li>
+  <li><span class="k">拘束↑：</span>残留応力↑　変形↓</li>
+  <li><span class="k">拘束↓：</span>残留応力↓　変形↑</li>
+  <li>焼なまし（応力除去焼鈍）で残留応力低減</li>
+</ul>
+
+<div class="subsec">FSW（摩擦攪拌溶接）★</div>
+<div class="fig">
+<svg viewBox="0 0 200 70" xmlns="http://www.w3.org/2000/svg" style="height:52px">
+  <rect x="1" y="1" width="198" height="68" fill="#eef5ee" stroke="#2a9e5e" stroke-width="0.5"/>
+  <!-- 板材 左 -->
+  <rect x="5" y="30" width="75" height="32" fill="#80b090" stroke="#555" stroke-width="0.5"/>
+  <text x="15" y="50" font-size="7" fill="white">Al板</text>
+  <!-- 板材 右 -->
+  <rect x="120" y="30" width="75" height="32" fill="#80b090" stroke="#555" stroke-width="0.5"/>
+  <text x="130" y="50" font-size="7" fill="white">Al板</text>
+  <!-- 接合ゾーン -->
+  <rect x="80" y="30" width="40" height="32" fill="#d0a060" stroke="#886010" stroke-width="0.5"/>
+  <text x="82" y="52" font-size="6" fill="white">攪拌</text>
+  <!-- ツール本体 -->
+  <rect x="90" y="1" width="20" height="15" fill="#606080" stroke="#333" stroke-width="0.5"/>
+  <!-- ツールピン -->
+  <polygon points="95,16 105,16 101,30 99,30" fill="#505060" stroke="#333" stroke-width="0.4"/>
+  <!-- 回転矢印 -->
+  <text x="112" y="12" font-size="8" fill="red">↺</text>
+  <text x="111" y="22" font-size="5.5" fill="red">回転</text>
+  <!-- 進行方向 -->
+  <polygon points="5,23 25,23 25,20 35,26.5 25,33 25,30 5,30" fill="#2060c0" opacity="0.7"/>
+  <text x="5" y="19" font-size="6" fill="#2060c0">← 進行方向</text>
+  <!-- ラベル -->
+  <text x="5" y="66" font-size="5.5" fill="#333">固体状態（融点以下）で接合 → 溶接欠陥少・HAZ最小</text>
+</svg>
+</div>
+<ul>
+  <li>回転ツールの摩擦熱→材料軟化→攪拌接合</li>
+  <li><b>固体状態（融点以下）で接合</b>→溶接欠陥少・HAZ最小</li>
+  <li>AlやMg合金に最適（航空・自動車）</li>
+  <li>3パス（3回）で溶融溶接と同等強度に達する</li>
+</ul>
+</div><!-- /col2 -->
+
+<!-- ======= 列3：用語・急所まとめ ======= -->
+<div class="col">
+<div class="sec">重要用語 英語対応 / 急所まとめ</div>
+
+<div class="subsec">重要用語 英語対応</div>
+<table>
+<tr><th class="tl">日本語</th><th class="tl">英語</th></tr>
+<tr><td class="tl">鋳造</td><td class="tl">Casting</td></tr>
+<tr><td class="tl">凝固</td><td class="tl">Solidification</td></tr>
+<tr><td class="tl">引け巣</td><td class="tl">Shrinkage cavity</td></tr>
+<tr><td class="tl">砂型</td><td class="tl">Sand mold / Green sand</td></tr>
+<tr><td class="tl">押湯</td><td class="tl">Riser / Feeder</td></tr>
+<tr><td class="tl">湯口</td><td class="tl">Sprue</td></tr>
+<tr><td class="tl">湯道</td><td class="tl">Runner</td></tr>
+<tr><td class="tl">堰</td><td class="tl">Gate</td></tr>
+<tr><td class="tl">上型</td><td class="tl">Cope / Upper mold</td></tr>
+<tr><td class="tl">下型</td><td class="tl">Drag / Lower mold</td></tr>
+<tr><td class="tl">抜き勾配</td><td class="tl">Draft</td></tr>
+<tr><td class="tl">塑性加工</td><td class="tl">Plastic forming</td></tr>
+<tr><td class="tl">圧延</td><td class="tl">Rolling</td></tr>
+<tr><td class="tl">押出し</td><td class="tl">Extrusion</td></tr>
+<tr><td class="tl">引き抜き</td><td class="tl">Drawing</td></tr>
+<tr><td class="tl">深絞り</td><td class="tl">Deep drawing</td></tr>
+<tr><td class="tl">ファインブランキング</td><td class="tl">Fine blanking</td></tr>
+<tr><td class="tl">スプリングバック</td><td class="tl">Springback</td></tr>
+<tr><td class="tl">公称ひずみ</td><td class="tl">Engineering strain</td></tr>
+<tr><td class="tl">真ひずみ</td><td class="tl">True strain</td></tr>
+<tr><td class="tl">加工硬化</td><td class="tl">Work hardening</td></tr>
+<tr><td class="tl">降伏応力</td><td class="tl">Yield stress (Y)</td></tr>
+<tr><td class="tl">接合</td><td class="tl">Joining</td></tr>
+<tr><td class="tl">溶接</td><td class="tl">Welding</td></tr>
+<tr><td class="tl">ろう付け</td><td class="tl">Brazing</td></tr>
+<tr><td class="tl">熱影響部</td><td class="tl">HAZ (Heat Affected Zone)</td></tr>
+<tr><td class="tl">摩擦攪拌溶接</td><td class="tl">FSW (Friction Stir Welding)</td></tr>
+<tr><td class="tl">超音波探傷</td><td class="tl">UT (Ultrasonic Testing)</td></tr>
+<tr><td class="tl">浸透探傷</td><td class="tl">PT (Penetrant Testing)</td></tr>
+<tr><td class="tl">渦流探傷</td><td class="tl">ECT (Eddy Current Testing)</td></tr>
+<tr><td class="tl">Near Net Shape</td><td class="tl">Near Net Shape</td></tr>
+</table>
+
+<div class="subsec">★ 試験の急所（確認問題から頻出）</div>
+<div class="tip-box">
+<ul>
+  <li>砂型：表面張力が<b>小さい</b>から使える（すきまに流れる）</li>
+  <li>融点↓の利点：金型可・省エネ・溶解容易</li>
+  <li>引け巣内部検査→<b>超音波探傷試験</b>（表面削不要）</li>
+  <li>抜き勾配→砂型から模型を取外しやすくするため</li>
+  <li>角のR(丸み)→ひずみ・割れを防ぐため</li>
+  <li>見切り面→最も広い断面積の位置を選ぶ</li>
+  <li>圧延出口速度 &gt; 入口速度（体積保存則）</li>
+  <li>バックアップロール→ワークロールのたわみ防止</li>
+  <li>引き抜き→高寸法精度・冷間加工・加工で強化</li>
+  <li>押出し→大変形可・主に熱間加工</li>
+  <li>スプリングバック→縦弾性係数E<b>大</b>ほど大きい</li>
+  <li>ファインブランキング→逆力+反力+板押さえ同時</li>
+  <li>MAG保護ガス→Ar+CO₂　MIG保護ガス→Arのみ</li>
+  <li>TIG→タングステン非消耗電極</li>
+  <li>MIG品質 &gt; MAG品質（CO₂混入なし↑）</li>
+  <li>FSW→固体状態接合→HAZ最小・溶接欠陥少</li>
+  <li>鋳鉄の収縮量は鋼より小さい（黒鉛晶出で膨張）</li>
+  <li>肉厚薄い→結晶細かくなる→強度高い</li>
+  <li>3Dプリンタで砂型成形可能</li>
+</ul>
+</div>
+
+<div class="subsec">計算問題 練習</div>
+<div class="tip-box">
+<ul>
+  <li><b>Q1</b> d=100mm円, t=5mm, τs=300MPa → P?<br>
+      P=300×(π×100)×5 = <b>471,239N≈471kN</b></li>
+  <li><b>Q2</b> L₀=100mm, L=105mm<br>
+      公称: e=5/100=<b>0.05</b><br>
+      真: ε=ln(1.05)=<b>0.0488</b></li>
+  <li><b>Q3</b> 入口t₀=10mm,v₀=1m/s, 出口t₁=5mm → v₁?<br>
+      v₁=v₀×(t₀/t₁)=1×(10/5)=<b>2m/s</b></li>
+</ul>
+</div>
+</div><!-- /col3 裏 -->
+
+</div><!-- /cols 裏面 -->
+</div><!-- /sheet -->
+
+</body>
+</html>
