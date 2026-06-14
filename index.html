@@ -505,13 +505,17 @@ function updateAuthBar() {
 }
 
 async function loginWithGoogle() {
-  const { data, error } = await supabaseClient.auth.signInWithOAuth({
-    provider: 'google',
-    options: { redirectTo: window.location.origin, skipBrowserRedirect: true }
-  });
-  if (error) { alert('ログインエラー: ' + error.message); return; }
-  if (data?.url) { window.location.href = data.url; return; }
-  alert('URLが取得できませんでした。Supabaseの設定を確認してください。');
+  try {
+    const { data, error } = await supabaseClient.auth.signInWithOAuth({
+      provider: 'google',
+      options: { redirectTo: window.location.origin, skipBrowserRedirect: true }
+    });
+    if (error) { alert('Supabaseエラー: ' + error.message); return; }
+    if (data?.url) { window.location.href = data.url; return; }
+    alert('URLが返ってきませんでした');
+  } catch(e) {
+    alert('例外発生: ' + e.message);
+  }
 }
 
 async function doLogout() {
