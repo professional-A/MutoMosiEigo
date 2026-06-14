@@ -7,6 +7,7 @@
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap" rel="stylesheet">
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
   --bg:#0a1626; --bg2:#0e1d33; --card:#15263f;
@@ -271,20 +272,6 @@ body{padding-top:38px}
   </div>
 </div>
 
-<!-- ログインモーダル -->
-<div class="modal-bg" id="modal-bg">
-  <div class="modal">
-    <h2 id="modal-title">ログイン</h2>
-    <input id="m-user" placeholder="ユーザー名" autocomplete="username" />
-    <input id="m-pass" type="password" placeholder="パスワード" autocomplete="current-password" />
-    <div class="modal-btns">
-      <button onclick="doLogin()" style="background:var(--teal);color:#0a1626">ログイン</button>
-      <button onclick="doRegister()" style="background:var(--card);color:var(--ink);border:1px solid var(--line)">新規登録</button>
-      <button onclick="closeModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
-    </div>
-    <div class="modal-msg" id="modal-msg"></div>
-  </div>
-</div>
 
 <header>
   <div class="wrap">
@@ -462,9 +449,15 @@ const AVATARS = [
   '🔥','💎','👑','⚡','🌙','☠️','🎭','🗿','🌊','🍄'
 ];
 
+// ── Supabase 初期化 ──────────────────────────────────────
+const SUPABASE_URL      = 'https://gwknnqceiozbmxrqjcae.supabase.co';
+const SUPABASE_ANON_KEY = 'sb_publishable_4MgSWSr8bbuUf5Vp_LSD6Q_SI-ciZ2B';
+const supabaseClient    = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
+
 // ── 認証 ──────────────────────────────────────────────
-let authToken  = localStorage.getItem('muto_token');
-let authUser   = localStorage.getItem('muto_user');
+let authToken  = null;
+let authUser   = null;
+let authEmail  = null;
 let authAvatar = localStorage.getItem('muto_avatar') || '🐸';
 let authFrame  = localStorage.getItem('muto_frame')  || 'default';
 let selectedAvatar = authAvatar;
@@ -497,76 +490,47 @@ function updateAuthBar() {
     btn.textContent = 'ログアウト';
     btn.classList.remove('primary');
     btn.onclick = doLogout;
-    document.getElementById('admin-btn').style.display = authUser === 'professional-A' ? 'inline-block' : 'none';
+    document.getElementById('admin-btn').style.display = authEmail === 'kabu6113450@gmail.com' ? 'inline-block' : 'none';
     loadRanking();
   } else {
     bar.textContent = 'ログインしていません';
     avEl.style.display = 'none';
-    btn.textContent = 'ログイン / 登録';
+    btn.textContent = 'Googleでログイン';
     btn.classList.add('primary');
-    btn.onclick = openModal;
+    btn.onclick = loginWithGoogle;
     document.getElementById('admin-btn').style.display = 'none';
     document.getElementById('ranking-content').innerHTML =
       '<p class="ranking-login-note">ログインするとランキングが表示されます</p>';
   }
 }
 
-function openModal()  { document.getElementById('modal-bg').classList.add('open'); document.getElementById('m-user').focus(); }
-function closeModal() { document.getElementById('modal-bg').classList.remove('open'); document.getElementById('modal-msg').textContent = ''; }
-
-function modalMsg(text, ok) {
-  const el = document.getElementById('modal-msg');
-  el.textContent = text;
-  el.style.color = ok ? 'var(--teal)' : '#f87171';
-}
-
-async function doRegister() {
-  const username = document.getElementById('m-user').value.trim();
-  const password = document.getElementById('m-pass').value;
-  if (!username || !password) return modalMsg('名前とパスワードを入力してね');
-  const res = await fetch('/api/register', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ username, password })
+async function loginWithGoogle() {
+  await supabaseClient.auth.signInWithOAuth({
+    provider: 'google',
+    options: { redirectTo: window.location.origin }
   });
-  const data = await res.json();
-  if (data.ok) modalMsg('登録できた！次はログインして', true);
-  else modalMsg(data.error);
 }
 
-async function doLogin() {
-  const username = document.getElementById('m-user').value.trim();
-  const password = document.getElementById('m-pass').value;
-  if (!username || !password) return modalMsg('名前とパスワードを入力してね');
-  const res = await fetch('/api/login', {
-    method: 'POST',
-    headers: {'Content-Type':'application/json'},
-    body: JSON.stringify({ username, password })
-  });
-  const data = await res.json();
-  if (data.token) {
-    authToken  = data.token;
-    authUser   = data.username;
-    authAvatar = data.avatar || '🐸';
-    authFrame  = data.frame  || 'default';
-    localStorage.setItem('muto_token',  authToken);
-    localStorage.setItem('muto_user',   authUser);
-    localStorage.setItem('muto_avatar', authAvatar);
-    localStorage.setItem('muto_frame',  authFrame);
-    closeModal();
-    updateAuthBar();
-  } else {
-    modalMsg(data.error);
-  }
-}
-
-function doLogout() {
-  authToken = null; authUser = null; authAvatar = '🐸'; authFrame = 'default';
-  localStorage.removeItem('muto_token');
-  localStorage.removeItem('muto_user');
+async function doLogout() {
+  await supabaseClient.auth.signOut();
+  authToken = null; authUser = null; authEmail = null;
+  authAvatar = '🐸'; authFrame = 'default';
   localStorage.removeItem('muto_avatar');
   localStorage.removeItem('muto_frame');
   updateAuthBar();
+}
+
+async function syncUser(token) {
+  const res = await fetch('/api/sync-user', { method: 'POST', headers: { 'Authorization': token } });
+  const data = await res.json();
+  if (data.username) {
+    authUser   = data.username;
+    authEmail  = data.email;
+    authAvatar = data.avatar || '🐸';
+    authFrame  = data.frame  || 'default';
+    localStorage.setItem('muto_avatar', authAvatar);
+    localStorage.setItem('muto_frame',  authFrame);
+  }
 }
 
 // ── アバター選択 ─────────────────────────────────────────
@@ -725,7 +689,24 @@ document.addEventListener('click', e => {
   }
 });
 
-updateAuthBar();
+// ── Supabase Auth 初期化 ─────────────────────────────────
+supabaseClient.auth.onAuthStateChange(async (event, session) => {
+  if (session) {
+    authToken = session.access_token;
+    await syncUser(authToken);
+  } else {
+    authToken = null; authUser = null; authEmail = null;
+  }
+  updateAuthBar();
+});
+
+supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
+  if (session) {
+    authToken = session.access_token;
+    await syncUser(authToken);
+  }
+  updateAuthBar();
+});
 </script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");</script>
 </body>
