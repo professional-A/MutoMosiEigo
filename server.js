@@ -7,7 +7,7 @@ const app = express();
 const db = new Database('data.db');
 
 app.use(express.json());
-app.use(express.static('public'));
+app.use(express.static('.'));
 
 // テーブル作成（初回起動時のみ）
 db.exec(`
