@@ -505,11 +505,13 @@ function updateAuthBar() {
 }
 
 async function loginWithGoogle() {
-  const { error } = await supabaseClient.auth.signInWithOAuth({
+  const { data, error } = await supabaseClient.auth.signInWithOAuth({
     provider: 'google',
-    options: { redirectTo: window.location.origin }
+    options: { redirectTo: window.location.origin, skipBrowserRedirect: true }
   });
-  if (error) alert('ログインエラー: ' + error.message);
+  if (error) { alert('ログインエラー: ' + error.message); return; }
+  if (data?.url) { window.location.href = data.url; return; }
+  alert('URLが取得できませんでした。Supabaseの設定を確認してください。');
 }
 
 async function doLogout() {
