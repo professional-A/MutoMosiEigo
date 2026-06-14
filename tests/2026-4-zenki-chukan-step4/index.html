@@ -305,7 +305,7 @@ function norm(s){
     .replace(/[.,;:!?]+$/,"")
     .replace(/^[.,;:!?]+/,"");
 }
-function mark(key,ok){ state[key]={correct:ok,done:true}; save(); updateScore(); }
+function mark(key,ok){ state[key]={correct:ok,done:true}; save(); updateScore(); if(ok&&window.addPoints)addPoints(300); }
 
 function updateScore(){
   const allKeys=[...document.querySelectorAll("[data-key]")].map(e=>e.dataset.key);
@@ -530,6 +530,8 @@ document.addEventListener("keydown",function(e){
 
 render();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/points.js"></script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js");</script>
 </body>
 </html>

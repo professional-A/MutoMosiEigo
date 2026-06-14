@@ -33,6 +33,8 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS frame       TEXT DEFAULT 'default'`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at  TEXT DEFAULT ''`).catch(()=>{});
   await pool.query(`ALTER TABLE users ALTER COLUMN password DROP NOT NULL`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS points     INTEGER DEFAULT 0`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TEXT DEFAULT ''`).catch(()=>{});
 }
 
 // 認証ミドルウェア
@@ -47,7 +49,7 @@ async function auth(req, res, next) {
   next();
 }
 
-// Googleログイン後にユーザー情報を同期
+// Googleログイン後にユーザー情報を同期 + 毎日ログインボーナス
 app.post('/api/sync-user', async (req, res) => {
   const token = req.headers['authorization'];
   if (!token) return res.status(401).json({ error: '認証エラー' });
@@ -66,7 +68,18 @@ app.post('/api/sync-user', async (req, res) => {
   }
   const { rows: r } = await pool.query('SELECT * FROM users WHERE supabase_id = $1', [user.id]);
   const u = r[0];
-  res.json({ username: u.username, avatar: u.avatar, frame: u.frame, email: u.email });
+
+  // 毎日ログインボーナス（1000pt）
+  const today = new Date().toISOString().slice(0, 10);
+  let loginBonus = 0;
+  if (u.last_login !== today) {
+    await pool.query('UPDATE users SET points = points + 1000, last_login = $1 WHERE id = $2', [today, u.id]);
+    loginBonus = 1000;
+  }
+
+  const { rows: r2 } = await pool.query('SELECT * FROM users WHERE id = $1', [u.id]);
+  const u2 = r2[0];
+  res.json({ username: u2.username, avatar: u2.avatar, frame: u2.frame, email: u2.email, points: u2.points, loginBonus });
 });
 
 // アバター・フレーム更新
@@ -76,6 +89,15 @@ app.put('/api/avatar', auth, async (req, res) => {
   const name = username?.trim() || req.user.username;
   await pool.query('UPDATE users SET avatar = $1, frame = $2, username = $3 WHERE id = $4', [avatar, frame || 'default', name, req.user.id]);
   res.json({ ok: true });
+});
+
+// ポイント加算（問題正解）
+app.post('/api/points', auth, async (req, res) => {
+  const { amount } = req.body;
+  if (!amount || amount <= 0) return res.status(400).json({ error: '不正なポイント' });
+  await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, req.user.id]);
+  const { rows } = await pool.query('SELECT points FROM users WHERE id = $1', [req.user.id]);
+  res.json({ ok: true, points: rows[0].points });
 });
 
 // スコア保存

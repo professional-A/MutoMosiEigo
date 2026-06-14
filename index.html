@@ -464,6 +464,7 @@ let authUser   = null;
 let authEmail  = null;
 let authAvatar = localStorage.getItem('muto_avatar') || '🐸';
 let authFrame  = localStorage.getItem('muto_frame')  || 'default';
+let authPoints = 0;
 let selectedAvatar = authAvatar;
 let selectedFrame  = authFrame;
 
@@ -487,7 +488,7 @@ function updateAuthBar() {
   const btn  = document.getElementById('auth-open-btn');
   const avEl = document.getElementById('auth-avatar');
   if (authToken) {
-    bar.innerHTML = `<strong>${authUser}</strong> さん`;
+    bar.innerHTML = `<strong>${authUser}</strong> <span style="color:var(--teal);font-size:.85rem">${authPoints.toLocaleString()}pt</span>`;
     avEl.textContent = authAvatar;
     avEl.style.display = 'inline-flex';
     applyFrame(avEl, authFrame);
@@ -506,6 +507,14 @@ function updateAuthBar() {
     document.getElementById('ranking-content').innerHTML =
       '<p class="ranking-login-note">ログインするとランキングが表示されます</p>';
   }
+}
+
+function showPointToast(msg) {
+  const t = document.createElement('div');
+  t.textContent = msg;
+  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#46d6c4;color:#0a1626;font-weight:700;padding:10px 20px;border-radius:99px;font-size:1rem;z-index:9999;pointer-events:none;transition:opacity .4s';
+  document.body.appendChild(t);
+  setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2500);
 }
 
 async function loginWithGoogle() {
@@ -547,8 +556,10 @@ async function syncUser(token) {
       authEmail  = data.email;
       authAvatar = data.avatar || '🐸';
       authFrame  = data.frame  || 'default';
+      authPoints = data.points || 0;
       localStorage.setItem('muto_avatar', authAvatar);
       localStorage.setItem('muto_frame',  authFrame);
+      if (data.loginBonus) showPointToast(`ログインボーナス +${data.loginBonus.toLocaleString()}pt`);
     }
   } catch (e) {
     try {

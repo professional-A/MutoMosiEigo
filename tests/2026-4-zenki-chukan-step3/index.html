@@ -441,7 +441,7 @@ function pickMC(btn){
   const q=qItems[qi];
   [...optsEl.querySelectorAll(".qopt")].forEach(b=>{b.disabled=true;if(b.dataset.correct==="true")b.classList.add(btn.dataset.correct==="true"?"ok":"rv");});
   const ok=btn.dataset.correct==="true";btn.classList.add(ok?"ok":"ng");
-  if(!ok)qRetry.push(q);else qCorrect++;
+  if(!ok)qRetry.push(q);else{qCorrect++;if(window.addPoints)addPoints(300);}
   showFb(ok,q.note);
 }
 function pickTF(btn){
@@ -449,7 +449,7 @@ function pickTF(btn){
   const q=qItems[qi];
   [...optsEl.querySelectorAll(".tf-btn")].forEach(b=>{b.disabled=true;if(b.dataset.correct==="true")b.classList.add(btn.dataset.correct==="true"?"ok":"rv");});
   const ok=btn.dataset.correct==="true";btn.classList.add(ok?"ok":"ng");
-  if(!ok)qRetry.push(q);else qCorrect++;
+  if(!ok)qRetry.push(q);else{qCorrect++;if(window.addPoints)addPoints(300);}
   showFb(ok,q.note);
 }
 function checkInp(){
@@ -457,7 +457,7 @@ function checkInp(){
   if(!inp||inp.disabled)return;const val=norm(inp.value);if(!val)return;
   const ok=val===norm(q.ans)||(q.alts&&q.alts.some(a=>val===norm(a)));
   inp.disabled=true;document.getElementById("qSubmit").disabled=true;inp.classList.add(ok?"ok":"ng");
-  if(!ok)qRetry.push(q);else qCorrect++;
+  if(!ok)qRetry.push(q);else{qCorrect++;if(window.addPoints)addPoints(300);}
   const fb=document.getElementById("qFb");
   fb.innerHTML=ok
     ?`<span class="v g">◎ 正解</span><span class="note">${q.note}</span>`
@@ -482,6 +482,8 @@ function finishQuiz(){
 
 rebuild();renderCard();updateProg();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/points.js"></script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js");</script>
 </body>
 </html>

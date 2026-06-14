@@ -355,7 +355,7 @@ function pick(btn, ok, ansText, corrShow, extra){
   if(!ok) btn.classList.add("ng");
   const fb=document.getElementById("qFb");
   if(ok){
-    qCorrect++;
+    qCorrect++; if(window.addPoints) addPoints(300);
     if(it.t==="m"){ known[keyOf(PHRASES[it.i])]=1; saveKnown(); updateProg(); }
     fb.innerHTML=`<span class="v g">◎ 正解</span> <span class="corr">${corrShow}</span>`+(it.t==="c"?`<span class="jp">${extra}</span>`:"");
   } else {
@@ -404,6 +404,8 @@ document.addEventListener("keydown", function(e){
 document.getElementById("totalN").textContent=PHRASES.length;
 rebuild(); renderCard(); updateProg();
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/points.js"></script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js");</script>
 </body>
 </html>
