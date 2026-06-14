@@ -7,7 +7,6 @@ const app = express();
 const db = new Database('data.db');
 
 app.use(express.json());
-app.use(express.static('.'));
 
 // テーブル作成（初回起動時のみ）
 db.exec(`
@@ -88,6 +87,9 @@ app.get('/api/ranking', (req, res) => {
   `).all();
   res.json(ranking);
 });
+
+// 静的ファイルはAPIルートの後に配置
+app.use(express.static('.'));
 
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => console.log(`サーバー起動中 → http://localhost:${PORT}`));
