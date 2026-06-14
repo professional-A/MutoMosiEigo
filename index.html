@@ -106,9 +106,85 @@ h1{
 
 /* Hidden */
 [hidden]{display:none!important}
+
+/* Auth bar */
+.auth-bar{
+  position:fixed;top:0;left:0;right:0;z-index:100;
+  background:rgba(10,22,38,.92);backdrop-filter:blur(8px);
+  border-bottom:1px solid var(--line);
+  padding:8px 18px;display:flex;align-items:center;justify-content:flex-end;gap:10px;
+  font-size:.82rem;
+}
+.auth-bar span{color:var(--muted)}
+.auth-bar strong{color:var(--teal)}
+.auth-btn{
+  font-size:.8rem;padding:4px 14px;border-radius:99px;border:1px solid var(--line);
+  background:var(--card);color:var(--muted);cursor:pointer;font-family:inherit;transition:.15s;
+}
+.auth-btn:hover{border-color:var(--teal);color:var(--teal)}
+.auth-btn.primary{background:var(--teal);color:#0a1626;border-color:var(--teal);font-weight:600}
+body{padding-top:38px}
+
+/* Modal */
+.modal-bg{
+  display:none;position:fixed;inset:0;z-index:200;
+  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
+  align-items:center;justify-content:center;
+}
+.modal-bg.open{display:flex}
+.modal{
+  background:var(--bg2);border:1px solid var(--line);border-radius:16px;
+  padding:28px;width:min(360px,90vw);
+}
+.modal h2{font-size:1.1rem;margin-bottom:16px}
+.modal input{
+  display:block;width:100%;padding:9px 12px;margin-bottom:10px;
+  background:var(--bg);border:1px solid var(--line);border-radius:8px;
+  color:var(--ink);font-family:inherit;font-size:.9rem;
+}
+.modal input:focus{outline:none;border-color:var(--teal)}
+.modal-btns{display:flex;gap:8px;margin-top:4px}
+.modal-btns button{flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600}
+.modal-msg{font-size:.82rem;margin-top:10px;min-height:1.2em}
+
+/* Ranking */
+.ranking-section{margin-top:48px;padding-top:32px;border-top:1px solid var(--line)}
+.ranking-section h2{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:16px}
+.ranking-table{width:100%;border-collapse:collapse}
+.ranking-table th,.ranking-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:.88rem}
+.ranking-table th{color:var(--dim);font-weight:600;font-size:.75rem;letter-spacing:.1em}
+.ranking-table tr:last-child td{border-bottom:none}
+.rank-num{color:var(--dim);font-weight:700;width:40px}
+.rank-num.top{color:var(--amber)}
+.rank-name{color:var(--ink);font-weight:600}
+.rank-score{color:var(--teal);font-weight:700}
+.rank-pct{color:var(--muted);font-size:.8rem}
+.ranking-login-note{color:var(--dim);font-size:.85rem;padding:20px 0}
 </style>
 </head>
 <body>
+
+<!-- ログインバー（画面上部固定） -->
+<div class="auth-bar" id="auth-bar">
+  <span id="auth-status">ログインしていません</span>
+  <button class="auth-btn primary" id="auth-open-btn" onclick="openModal()">ログイン / 登録</button>
+</div>
+
+<!-- ログインモーダル -->
+<div class="modal-bg" id="modal-bg">
+  <div class="modal">
+    <h2 id="modal-title">ログイン</h2>
+    <input id="m-user" placeholder="ユーザー名" autocomplete="username" />
+    <input id="m-pass" type="password" placeholder="パスワード" autocomplete="current-password" />
+    <div class="modal-btns">
+      <button onclick="doLogin()" style="background:var(--teal);color:#0a1626">ログイン</button>
+      <button onclick="doRegister()" style="background:var(--card);color:var(--ink);border:1px solid var(--line)">新規登録</button>
+      <button onclick="closeModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+    <div class="modal-msg" id="modal-msg"></div>
+  </div>
+</div>
+
 <header>
   <div class="wrap">
     <div class="eyebrow">Study Portal</div>
@@ -162,6 +238,12 @@ h1{
     </div>
   </div>
   <div id="groups"></div>
+
+  <!-- ランキング -->
+  <div class="ranking-section">
+    <h2>みんなの進捗ランキング</h2>
+    <div id="ranking-content"><p class="ranking-login-note">ログインするとランキングが表示されます</p></div>
+  </div>
 </div>
 
 <script>
@@ -268,6 +350,112 @@ fetch("tests.json")
     document.getElementById("groups").innerHTML =
       `<div class="empty">模試データを読み込めませんでした。<br>tests.json が存在するか確認してください。</div>`;
   });
+</script>
+<script>
+// ── 認証 ──────────────────────────────────────────────
+let authToken = localStorage.getItem('muto_token');
+let authUser  = localStorage.getItem('muto_user');
+
+function updateAuthBar() {
+  const bar = document.getElementById('auth-status');
+  const btn = document.getElementById('auth-open-btn');
+  if (authToken) {
+    bar.innerHTML = `<strong>${authUser}</strong> さん`;
+    btn.textContent = 'ログアウト';
+    btn.classList.remove('primary');
+    btn.onclick = doLogout;
+    loadRanking();
+  } else {
+    bar.textContent = 'ログインしていません';
+    btn.textContent = 'ログイン / 登録';
+    btn.classList.add('primary');
+    btn.onclick = openModal;
+    document.getElementById('ranking-content').innerHTML =
+      '<p class="ranking-login-note">ログインするとランキングが表示されます</p>';
+  }
+}
+
+function openModal()  { document.getElementById('modal-bg').classList.add('open'); document.getElementById('m-user').focus(); }
+function closeModal() { document.getElementById('modal-bg').classList.remove('open'); document.getElementById('modal-msg').textContent = ''; }
+
+function modalMsg(text, ok) {
+  const el = document.getElementById('modal-msg');
+  el.textContent = text;
+  el.style.color = ok ? 'var(--teal)' : '#f87171';
+}
+
+async function doRegister() {
+  const username = document.getElementById('m-user').value.trim();
+  const password = document.getElementById('m-pass').value;
+  if (!username || !password) return modalMsg('名前とパスワードを入力してね');
+  const res = await fetch('/api/register', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ username, password })
+  });
+  const data = await res.json();
+  if (data.ok) modalMsg('登録できた！次はログインして', true);
+  else modalMsg(data.error);
+}
+
+async function doLogin() {
+  const username = document.getElementById('m-user').value.trim();
+  const password = document.getElementById('m-pass').value;
+  if (!username || !password) return modalMsg('名前とパスワードを入力してね');
+  const res = await fetch('/api/login', {
+    method: 'POST',
+    headers: {'Content-Type':'application/json'},
+    body: JSON.stringify({ username, password })
+  });
+  const data = await res.json();
+  if (data.token) {
+    authToken = data.token;
+    authUser  = data.username;
+    localStorage.setItem('muto_token', authToken);
+    localStorage.setItem('muto_user',  authUser);
+    closeModal();
+    updateAuthBar();
+  } else {
+    modalMsg(data.error);
+  }
+}
+
+function doLogout() {
+  authToken = null; authUser = null;
+  localStorage.removeItem('muto_token');
+  localStorage.removeItem('muto_user');
+  updateAuthBar();
+}
+
+// ── ランキング ───────────────────────────────────────────
+async function loadRanking() {
+  const res  = await fetch('/api/ranking');
+  const data = await res.json();
+  const el   = document.getElementById('ranking-content');
+  if (!data.length) {
+    el.innerHTML = '<p class="ranking-login-note">まだ誰もスコアを登録していません</p>';
+    return;
+  }
+  el.innerHTML = `<table class="ranking-table">
+    <thead><tr><th>順位</th><th>名前</th><th>スコア</th><th>達成率</th></tr></thead>
+    <tbody>${data.map((r, i) => {
+      const pct = r.total ? Math.round(r.score / r.total * 100) : 0;
+      return `<tr>
+        <td class="rank-num${i < 3 ? ' top' : ''}">${i + 1}</td>
+        <td class="rank-name">${r.username}${r.username === authUser ? ' 👈' : ''}</td>
+        <td class="rank-score">${r.score} / ${r.total}</td>
+        <td class="rank-pct">${pct}%</td>
+      </tr>`;
+    }).join('')}</tbody>
+  </table>`;
+}
+
+// モーダル外クリックで閉じる
+document.getElementById('modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeModal();
+});
+
+updateAuthBar();
 </script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");</script>
 </body>
