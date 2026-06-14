@@ -658,10 +658,6 @@ async function loadRanking() {
   </table>`;
 }
 
-// モーダル外クリックで閉じる
-document.getElementById('modal-bg').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeModal();
-});
 
 // ── 管理者 ──────────────────────────────────────────────
 async function openAdminModal() {
