@@ -521,15 +521,33 @@ async function doLogout() {
 }
 
 async function syncUser(token) {
-  const res = await fetch('/api/sync-user', { method: 'POST', headers: { 'Authorization': token } });
-  const data = await res.json();
-  if (data.username) {
-    authUser   = data.username;
-    authEmail  = data.email;
-    authAvatar = data.avatar || '🐸';
-    authFrame  = data.frame  || 'default';
-    localStorage.setItem('muto_avatar', authAvatar);
-    localStorage.setItem('muto_frame',  authFrame);
+  try {
+    const controller = new AbortController();
+    const timeout = setTimeout(() => controller.abort(), 8000);
+    const res = await fetch('/api/sync-user', {
+      method: 'POST',
+      headers: { 'Authorization': token },
+      signal: controller.signal
+    });
+    clearTimeout(timeout);
+    const data = await res.json();
+    if (data.username) {
+      authUser   = data.username;
+      authEmail  = data.email;
+      authAvatar = data.avatar || '🐸';
+      authFrame  = data.frame  || 'default';
+      localStorage.setItem('muto_avatar', authAvatar);
+      localStorage.setItem('muto_frame',  authFrame);
+    }
+  } catch (e) {
+    // サーバーが起動中 or スリープ中でも、Supabaseのセッション情報でログイン状態を維持
+    const { data: { user } } = await supabaseClient.auth.getUser();
+    if (user) {
+      authUser  = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'ユーザー';
+      authEmail = user.email || '';
+      authAvatar = localStorage.getItem('muto_avatar') || '🐸';
+      authFrame  = localStorage.getItem('muto_frame')  || 'default';
+    }
   }
 }
 
