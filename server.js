@@ -31,7 +31,10 @@ async function initDB() {
     );
   `);
 }
-initDB();
+initDB().then(async () => {
+  // 既存テーブルへの列追加（なければ追加）
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS frame TEXT DEFAULT 'default'`).catch(()=>{});
+});
 
 // 登録
 app.post('/api/register', async (req, res) => {
