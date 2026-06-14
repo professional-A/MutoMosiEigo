@@ -162,13 +162,29 @@ body{padding-top:38px}
 .ranking-login-note{color:var(--dim);font-size:.85rem;padding:20px 0}
 
 /* Avatar */
-.avatar{display:inline-flex;align-items:center;justify-content:center;font-size:1.2rem;width:28px;height:28px;border-radius:50%;background:var(--bg2);border:1px solid var(--line);cursor:pointer;flex-shrink:0}
-.avatar:hover{border-color:var(--teal)}
-.avatar-lg{font-size:2.4rem;width:56px;height:56px;border:2px solid var(--teal);margin:0 auto 12px}
-.avatar-grid{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;max-height:200px;overflow-y:auto}
-.avatar-opt{font-size:1.5rem;width:40px;height:40px;border-radius:50%;border:2px solid transparent;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.avatar{display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;width:38px;height:38px;border-radius:50%;background:var(--bg2);border:2px solid var(--line);cursor:pointer;flex-shrink:0;transition:.15s}
+.avatar:hover{transform:scale(1.1)}
+.avatar-lg{font-size:2.8rem;width:68px;height:68px;margin:0 auto 16px}
+.avatar-grid{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;max-height:180px;overflow-y:auto}
+.avatar-opt{font-size:1.5rem;width:42px;height:42px;border-radius:50%;border:2px solid transparent;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
 .avatar-opt:hover{border-color:var(--teal)}
 .avatar-opt.selected{border-color:var(--teal);background:var(--bg2)}
+
+/* Frames */
+.frame-section{margin-top:14px}
+.frame-section h3{font-size:.78rem;color:var(--dim);letter-spacing:.1em;margin-bottom:8px}
+.frame-grid{display:flex;flex-wrap:wrap;gap:8px}
+.frame-opt{width:42px;height:42px;border-radius:50%;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:.15s;position:relative}
+.frame-opt.selected::after{content:'✓';position:absolute;bottom:-4px;right:-4px;font-size:.6rem;background:var(--teal);color:#0a1626;border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center}
+
+/* フレームスタイル定義 */
+.frame-default{border:2px solid var(--line)}
+.frame-silver {border:2px solid #a0a0a0;box-shadow:0 0 6px #a0a0a060}
+.frame-gold   {border:2px solid #f6b352;box-shadow:0 0 8px #f6b35260}
+.frame-teal   {border:2px solid #46d6c4;box-shadow:0 0 8px #46d6c460}
+.frame-red    {border:2px solid #f87171;box-shadow:0 0 8px #f8717160}
+.frame-purple {border:2px solid #a78bfa;box-shadow:0 0 8px #a78bfa60}
+.frame-rainbow{border:3px solid transparent;background:linear-gradient(var(--bg2),var(--bg2)) padding-box,linear-gradient(135deg,#f87171,#f6b352,#46d6c4,#a78bfa) border-box}
 </style>
 </head>
 <body>
@@ -186,6 +202,10 @@ body{padding-top:38px}
     <h2>アイコンを選ぶ</h2>
     <div class="avatar avatar-lg" id="avatar-preview">🐸</div>
     <div class="avatar-grid" id="avatar-grid"></div>
+    <div class="frame-section">
+      <h3>フレームを選ぶ</h3>
+      <div class="frame-grid" id="frame-grid"></div>
+    </div>
     <div class="modal-btns">
       <button onclick="saveAvatar()" style="background:var(--teal);color:#0a1626">保存</button>
       <button onclick="closeAvatarModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
@@ -389,16 +409,34 @@ const AVATARS = [
 let authToken  = localStorage.getItem('muto_token');
 let authUser   = localStorage.getItem('muto_user');
 let authAvatar = localStorage.getItem('muto_avatar') || '🐸';
+let authFrame  = localStorage.getItem('muto_frame')  || 'default';
 let selectedAvatar = authAvatar;
+let selectedFrame  = authFrame;
+
+const FRAMES = [
+  { id: 'default', label: '⬜', name: 'なし' },
+  { id: 'silver',  label: '⬜', name: 'シルバー' },
+  { id: 'gold',    label: '⬜', name: 'ゴールド' },
+  { id: 'teal',    label: '⬜', name: 'ティール' },
+  { id: 'red',     label: '⬜', name: 'レッド' },
+  { id: 'purple',  label: '⬜', name: 'パープル' },
+  { id: 'rainbow', label: '⬜', name: 'レインボー' },
+];
+
+function applyFrame(el, frame) {
+  el.className = el.className.replace(/frame-\S+/g, '').trim();
+  el.classList.add('avatar', `frame-${frame || 'default'}`);
+}
 
 function updateAuthBar() {
-  const bar    = document.getElementById('auth-status');
-  const btn    = document.getElementById('auth-open-btn');
-  const avEl   = document.getElementById('auth-avatar');
+  const bar  = document.getElementById('auth-status');
+  const btn  = document.getElementById('auth-open-btn');
+  const avEl = document.getElementById('auth-avatar');
   if (authToken) {
     bar.innerHTML = `<strong>${authUser}</strong> さん`;
     avEl.textContent = authAvatar;
     avEl.style.display = 'inline-flex';
+    applyFrame(avEl, authFrame);
     btn.textContent = 'ログアウト';
     btn.classList.remove('primary');
     btn.onclick = doLogout;
@@ -451,9 +489,11 @@ async function doLogin() {
     authToken  = data.token;
     authUser   = data.username;
     authAvatar = data.avatar || '🐸';
+    authFrame  = data.frame  || 'default';
     localStorage.setItem('muto_token',  authToken);
     localStorage.setItem('muto_user',   authUser);
     localStorage.setItem('muto_avatar', authAvatar);
+    localStorage.setItem('muto_frame',  authFrame);
     closeModal();
     updateAuthBar();
   } else {
@@ -462,22 +502,46 @@ async function doLogin() {
 }
 
 function doLogout() {
-  authToken = null; authUser = null; authAvatar = '🐸';
+  authToken = null; authUser = null; authAvatar = '🐸'; authFrame = 'default';
   localStorage.removeItem('muto_token');
   localStorage.removeItem('muto_user');
   localStorage.removeItem('muto_avatar');
+  localStorage.removeItem('muto_frame');
   updateAuthBar();
 }
 
 // ── アバター選択 ─────────────────────────────────────────
 function openAvatarModal() {
   selectedAvatar = authAvatar;
-  document.getElementById('avatar-preview').textContent = selectedAvatar;
-  const grid = document.getElementById('avatar-grid');
-  grid.innerHTML = AVATARS.map(e =>
+  selectedFrame  = authFrame;
+  const prev = document.getElementById('avatar-preview');
+  prev.textContent = selectedAvatar;
+  applyFrame(prev, selectedFrame);
+
+  document.getElementById('avatar-grid').innerHTML = AVATARS.map(e =>
     `<div class="avatar-opt${e === selectedAvatar ? ' selected' : ''}" onclick="selectAvatar('${e}')">${e}</div>`
   ).join('');
+
+  renderFrameGrid();
   document.getElementById('avatar-modal-bg').classList.add('open');
+}
+
+function renderFrameGrid() {
+  const el = document.getElementById('frame-grid');
+  if (!el) return;
+  el.innerHTML = FRAMES.map(f =>
+    `<div class="frame-opt frame-${f.id}${f.id === selectedFrame ? ' selected' : ''}"
+      onclick="selectFrame('${f.id}')" title="${f.name}">
+      <span style="font-size:1.1rem">😀</span>
+    </div>`
+  ).join('');
+}
+
+function selectFrame(id) {
+  selectedFrame = id;
+  const prev = document.getElementById('avatar-preview');
+  applyFrame(prev, id);
+  renderFrameGrid();
 }
 
 function closeAvatarModal() {
@@ -497,13 +561,17 @@ async function saveAvatar() {
   const res = await fetch('/api/avatar', {
     method: 'PUT',
     headers: {'Content-Type':'application/json','Authorization':authToken},
-    body: JSON.stringify({ avatar: selectedAvatar })
+    body: JSON.stringify({ avatar: selectedAvatar, frame: selectedFrame })
   });
   const data = await res.json();
   if (data.ok) {
     authAvatar = selectedAvatar;
+    authFrame  = selectedFrame;
     localStorage.setItem('muto_avatar', authAvatar);
-    document.getElementById('auth-avatar').textContent = authAvatar;
+    localStorage.setItem('muto_frame',  authFrame);
+    const avEl = document.getElementById('auth-avatar');
+    avEl.textContent = authAvatar;
+    applyFrame(avEl, authFrame);
     const el = document.getElementById('avatar-msg');
     el.textContent = '保存した！'; el.style.color = 'var(--teal)';
     setTimeout(closeAvatarModal, 800);
@@ -531,7 +599,7 @@ async function loadRanking() {
       const isMe = r.username === authUser;
       return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
         <td class="rank-num${i < 3 ? ' top' : ''}">${i + 1}</td>
-        <td class="rank-name"><span style="margin-right:6px">${r.avatar || '🐸'}</span>${r.username}${isMe ? ' 👈' : ''}</td>
+        <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:28px;height:28px;font-size:1rem;margin-right:8px;vertical-align:middle">${r.avatar||'🐸'}</span>${r.username}${isMe ? ' 👈' : ''}</td>
         <td class="rank-score">${r.score} / ${r.total}</td>
         <td class="rank-pct">${pct}%</td>
       </tr>`;

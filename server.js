@@ -19,7 +19,8 @@ async function initDB() {
       username TEXT UNIQUE NOT NULL,
       password TEXT NOT NULL,
       token    TEXT,
-      avatar   TEXT DEFAULT '🐸'
+      avatar   TEXT DEFAULT '🐸',
+      frame    TEXT DEFAULT 'default'
     );
     CREATE TABLE IF NOT EXISTS scores (
       id         SERIAL PRIMARY KEY,
@@ -56,7 +57,7 @@ app.post('/api/login', async (req, res) => {
   }
   const token = crypto.randomBytes(32).toString('hex');
   await pool.query('UPDATE users SET token = $1 WHERE id = $2', [token, user.id]);
-  res.json({ token, username: user.username, avatar: user.avatar || '🐸' });
+  res.json({ token, username: user.username, avatar: user.avatar || '🐸', frame: user.frame || 'default' });
 });
 
 // 認証チェック
@@ -69,11 +70,12 @@ async function auth(req, res, next) {
   next();
 }
 
-// アバター更新
+// アバター・フレーム更新
 app.put('/api/avatar', auth, async (req, res) => {
-  const { avatar } = req.body;
+  const { avatar, frame } = req.body;
   if (!avatar) return res.status(400).json({ error: 'アバターが必要です' });
-  await pool.query('UPDATE users SET avatar = $1 WHERE id = $2', [avatar, req.user.id]);
+  await pool.query('UPDATE users SET avatar = $1, frame = $2 WHERE id = $3',
+    [avatar, frame || 'default', req.user.id]);
   res.json({ ok: true });
 });
 
@@ -95,7 +97,7 @@ app.post('/api/score', auth, async (req, res) => {
 // ランキング取得
 app.get('/api/ranking', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT u.username, u.avatar, s.score, s.total, s.updated_at
+    SELECT u.username, u.avatar, u.frame, s.score, s.total, s.updated_at
     FROM scores s
     JOIN users u ON s.user_id = u.id
     ORDER BY s.score DESC
