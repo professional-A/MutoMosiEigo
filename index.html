@@ -258,6 +258,10 @@ body{padding-top:38px}
 <div class="modal-bg" id="avatar-modal-bg">
   <div class="modal">
     <h2>アイコンを選ぶ</h2>
+    <div style="margin-bottom:12px">
+      <label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:4px">プレイヤーネーム</label>
+      <input id="username-input" type="text" maxlength="20" style="width:100%;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text);font-family:inherit;font-size:.95rem">
+    </div>
     <div class="avatar avatar-lg" id="avatar-preview">🐸</div>
     <div class="avatar-grid" id="avatar-grid"></div>
     <div class="frame-section">
@@ -565,6 +569,7 @@ async function syncUser(token) {
 function openAvatarModal() {
   selectedAvatar = authAvatar;
   selectedFrame  = authFrame;
+  document.getElementById('username-input').value = authUser || '';
   const prev = document.getElementById('avatar-preview');
   prev.textContent = selectedAvatar;
   applyFrame(prev, selectedFrame);
@@ -609,20 +614,24 @@ function selectAvatar(emoji) {
 }
 
 async function saveAvatar() {
+  const newName = document.getElementById('username-input').value.trim();
+  if (!newName) { const el = document.getElementById('avatar-msg'); el.textContent = '名前を入力してください'; el.style.color = 'red'; return; }
   const res = await fetch('/api/avatar', {
     method: 'PUT',
     headers: {'Content-Type':'application/json','Authorization':authToken},
-    body: JSON.stringify({ avatar: selectedAvatar, frame: selectedFrame })
+    body: JSON.stringify({ avatar: selectedAvatar, frame: selectedFrame, username: newName })
   });
   const data = await res.json();
   if (data.ok) {
     authAvatar = selectedAvatar;
     authFrame  = selectedFrame;
+    authUser   = newName;
     localStorage.setItem('muto_avatar', authAvatar);
     localStorage.setItem('muto_frame',  authFrame);
     const avEl = document.getElementById('auth-avatar');
     avEl.textContent = authAvatar;
     applyFrame(avEl, authFrame);
+    updateAuthBar();
     const el = document.getElementById('avatar-msg');
     el.textContent = '保存した！'; el.style.color = 'var(--teal)';
     setTimeout(closeAvatarModal, 800);

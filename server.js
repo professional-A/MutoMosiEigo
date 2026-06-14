@@ -70,9 +70,10 @@ app.post('/api/sync-user', async (req, res) => {
 
 // アバター・フレーム更新
 app.put('/api/avatar', auth, async (req, res) => {
-  const { avatar, frame } = req.body;
+  const { avatar, frame, username } = req.body;
   if (!avatar) return res.status(400).json({ error: 'アバターが必要です' });
-  await pool.query('UPDATE users SET avatar = $1, frame = $2 WHERE id = $3', [avatar, frame || 'default', req.user.id]);
+  const name = username?.trim() || req.user.username;
+  await pool.query('UPDATE users SET avatar = $1, frame = $2, username = $3 WHERE id = $4', [avatar, frame || 'default', name, req.user.id]);
   res.json({ ok: true });
 });
 
