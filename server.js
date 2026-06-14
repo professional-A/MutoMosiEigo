@@ -11,7 +11,7 @@ const pool = new Pool({
 
 app.use(express.json());
 
-// テーブル作成（初回起動時のみ）
+// テーブル作成＆マイグレーション
 async function initDB() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
@@ -30,11 +30,10 @@ async function initDB() {
       updated_at TEXT NOT NULL
     );
   `);
-}
-initDB().then(async () => {
   // 既存テーブルへの列追加（なければ追加）
-  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS frame TEXT DEFAULT 'default'`).catch(()=>{});
-});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar TEXT DEFAULT '🐸'`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS frame  TEXT DEFAULT 'default'`).catch(()=>{});
+}
 
 // 登録
 app.post('/api/register', async (req, res) => {
@@ -112,4 +111,6 @@ app.get('/api/ranking', async (req, res) => {
 app.use(express.static('.'));
 
 const PORT = process.env.PORT || 3000;
-app.listen(PORT, () => console.log(`サーバー起動中 → http://localhost:${PORT}`));
+initDB().then(() => {
+  app.listen(PORT, () => console.log(`サーバー起動中 → http://localhost:${PORT}`));
+});
