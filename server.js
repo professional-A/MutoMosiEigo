@@ -15,12 +15,13 @@ app.use(express.json());
 async function initDB() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS users (
-      id       SERIAL PRIMARY KEY,
-      username TEXT UNIQUE NOT NULL,
-      password TEXT NOT NULL,
-      token    TEXT,
-      avatar   TEXT DEFAULT '🐸',
-      frame    TEXT DEFAULT 'default'
+      id         SERIAL PRIMARY KEY,
+      username   TEXT UNIQUE NOT NULL,
+      password   TEXT NOT NULL,
+      token      TEXT,
+      avatar     TEXT DEFAULT '🐸',
+      frame      TEXT DEFAULT 'default',
+      created_at TEXT DEFAULT ''
     );
     CREATE TABLE IF NOT EXISTS scores (
       id         SERIAL PRIMARY KEY,
@@ -31,8 +32,9 @@ async function initDB() {
     );
   `);
   // 既存テーブルへの列追加（なければ追加）
-  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar TEXT DEFAULT '🐸'`).catch(()=>{});
-  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS frame  TEXT DEFAULT 'default'`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar      TEXT DEFAULT '🐸'`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS frame       TEXT DEFAULT 'default'`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at  TEXT DEFAULT ''`).catch(()=>{});
 }
 
 // 登録
@@ -42,7 +44,8 @@ app.post('/api/register', async (req, res) => {
 
   const hash = bcrypt.hashSync(password, 10);
   try {
-    await pool.query('INSERT INTO users (username, password) VALUES ($1, $2)', [username, hash]);
+    await pool.query('INSERT INTO users (username, password, created_at) VALUES ($1, $2, $3)',
+      [username, hash, new Date().toISOString()]);
     res.json({ ok: true });
   } catch {
     res.status(400).json({ error: 'その名前はすでに使われています' });
@@ -94,6 +97,19 @@ app.post('/api/score', auth, async (req, res) => {
       [req.user.id, score, total, now]);
   }
   res.json({ ok: true });
+});
+
+// 管理者：ユーザー一覧
+app.get('/api/admin/users', auth, async (req, res) => {
+  if (req.user.username !== 'professional-A') return res.status(403).json({ error: '権限がありません' });
+  const { rows } = await pool.query(`
+    SELECT u.id, u.username, u.avatar, u.frame, u.created_at,
+           s.score, s.total
+    FROM users u
+    LEFT JOIN scores s ON s.user_id = u.id
+    ORDER BY u.id ASC
+  `);
+  res.json(rows);
 });
 
 // ランキング取得

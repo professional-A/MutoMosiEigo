@@ -223,6 +223,7 @@ body{padding-top:38px}
     </button>
   </div>
   <span id="auth-status">ログインしていません</span>
+  <button class="auth-btn" id="admin-btn" style="display:none" onclick="openAdminModal()">管理</button>
   <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
   <button class="auth-btn primary" id="auth-open-btn" onclick="openModal()">ログイン / 登録</button>
 </div>
@@ -237,6 +238,17 @@ body{padding-top:38px}
       英語テスト返却後にアンケートを実施します。<br>
       事前に新規登録をお願いします！<br>
       登録後はアイコンやフレームもカスタマイズできます。
+    </div>
+  </div>
+</div>
+
+<!-- 管理者モーダル -->
+<div class="modal-bg" id="admin-modal-bg">
+  <div class="modal" style="width:min(520px,95vw)">
+    <h2>登録ユーザー一覧</h2>
+    <div id="admin-content" style="margin-top:12px;font-size:.85rem"></div>
+    <div class="modal-btns" style="margin-top:16px">
+      <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
 </div>
@@ -485,6 +497,7 @@ function updateAuthBar() {
     btn.textContent = 'ログアウト';
     btn.classList.remove('primary');
     btn.onclick = doLogout;
+    document.getElementById('admin-btn').style.display = authUser === 'professional-A' ? 'inline-block' : 'none';
     loadRanking();
   } else {
     bar.textContent = 'ログインしていません';
@@ -492,6 +505,7 @@ function updateAuthBar() {
     btn.textContent = 'ログイン / 登録';
     btn.classList.add('primary');
     btn.onclick = openModal;
+    document.getElementById('admin-btn').style.display = 'none';
     document.getElementById('ranking-content').innerHTML =
       '<p class="ranking-login-note">ログインするとランキングが表示されます</p>';
   }
@@ -655,6 +669,38 @@ async function loadRanking() {
 // モーダル外クリックで閉じる
 document.getElementById('modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeModal();
+});
+
+// ── 管理者 ──────────────────────────────────────────────
+async function openAdminModal() {
+  document.getElementById('admin-modal-bg').classList.add('open');
+  const el = document.getElementById('admin-content');
+  el.innerHTML = '読み込み中...';
+  const res  = await fetch('/api/admin/users', { headers: { 'Authorization': authToken } });
+  const data = await res.json();
+  if (!Array.isArray(data)) { el.innerHTML = 'エラー'; return; }
+  el.innerHTML = `
+    <p style="color:var(--muted);margin-bottom:10px">登録人数：<strong style="color:var(--teal)">${data.length}人</strong></p>
+    <table class="ranking-table">
+      <thead><tr><th>#</th><th>名前</th><th>スコア</th><th>登録日</th></tr></thead>
+      <tbody>${data.map((u, i) => `
+        <tr>
+          <td class="rank-num">${i + 1}</td>
+          <td class="rank-name">
+            <span class="avatar frame-${u.frame||'default'}" style="width:24px;height:24px;font-size:.9rem;margin-right:6px;vertical-align:middle">${u.avatar||'🐸'}</span>
+            ${u.username}
+          </td>
+          <td class="rank-score">${u.score != null ? `${u.score} / ${u.total}` : '—'}</td>
+          <td style="color:var(--dim);font-size:.78rem">${u.created_at ? u.created_at.slice(0,10) : '—'}</td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+function closeAdminModal() {
+  document.getElementById('admin-modal-bg').classList.remove('open');
+}
+document.getElementById('admin-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeAdminModal();
 });
 
 // ── お知らせ ────────────────────────────────────────────
