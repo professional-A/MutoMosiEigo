@@ -160,6 +160,15 @@ body{padding-top:38px}
 .rank-score{color:var(--teal);font-weight:700}
 .rank-pct{color:var(--muted);font-size:.8rem}
 .ranking-login-note{color:var(--dim);font-size:.85rem;padding:20px 0}
+
+/* Avatar */
+.avatar{display:inline-flex;align-items:center;justify-content:center;font-size:1.2rem;width:28px;height:28px;border-radius:50%;background:var(--bg2);border:1px solid var(--line);cursor:pointer;flex-shrink:0}
+.avatar:hover{border-color:var(--teal)}
+.avatar-lg{font-size:2.4rem;width:56px;height:56px;border:2px solid var(--teal);margin:0 auto 12px}
+.avatar-grid{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;max-height:200px;overflow-y:auto}
+.avatar-opt{font-size:1.5rem;width:40px;height:40px;border-radius:50%;border:2px solid transparent;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
+.avatar-opt:hover{border-color:var(--teal)}
+.avatar-opt.selected{border-color:var(--teal);background:var(--bg2)}
 </style>
 </head>
 <body>
@@ -167,7 +176,22 @@ body{padding-top:38px}
 <!-- ログインバー（画面上部固定） -->
 <div class="auth-bar" id="auth-bar">
   <span id="auth-status">ログインしていません</span>
+  <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
   <button class="auth-btn primary" id="auth-open-btn" onclick="openModal()">ログイン / 登録</button>
+</div>
+
+<!-- アバター選択モーダル -->
+<div class="modal-bg" id="avatar-modal-bg">
+  <div class="modal">
+    <h2>アイコンを選ぶ</h2>
+    <div class="avatar avatar-lg" id="avatar-preview">🐸</div>
+    <div class="avatar-grid" id="avatar-grid"></div>
+    <div class="modal-btns">
+      <button onclick="saveAvatar()" style="background:var(--teal);color:#0a1626">保存</button>
+      <button onclick="closeAvatarModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+    <div class="modal-msg" id="avatar-msg"></div>
+  </div>
 </div>
 
 <!-- ログインモーダル -->
@@ -352,21 +376,36 @@ fetch("tests.json")
   });
 </script>
 <script>
+// ── 絵文字アイコン一覧 ──────────────────────────────────
+const AVATARS = [
+  '🐸','🐙','🦑','🪲','🦠','🧟','👁️','🫠','🤡','💀',
+  '👾','🫀','🧠','🪳','🦷','🐛','🫁','🤢','🕷️','🦂',
+  '🐊','🐀','🧌','👽','🫦','🦴','🩸','🧛','🧜','🧝',
+  '🎃','🪄','🌑','🌪️','🫧','🕯️','🪦','🩻','🧿','🫐',
+  '🔥','💎','👑','⚡','🌙','☠️','🎭','🗿','🌊','🍄'
+];
+
 // ── 認証 ──────────────────────────────────────────────
-let authToken = localStorage.getItem('muto_token');
-let authUser  = localStorage.getItem('muto_user');
+let authToken  = localStorage.getItem('muto_token');
+let authUser   = localStorage.getItem('muto_user');
+let authAvatar = localStorage.getItem('muto_avatar') || '🐸';
+let selectedAvatar = authAvatar;
 
 function updateAuthBar() {
-  const bar = document.getElementById('auth-status');
-  const btn = document.getElementById('auth-open-btn');
+  const bar    = document.getElementById('auth-status');
+  const btn    = document.getElementById('auth-open-btn');
+  const avEl   = document.getElementById('auth-avatar');
   if (authToken) {
     bar.innerHTML = `<strong>${authUser}</strong> さん`;
+    avEl.textContent = authAvatar;
+    avEl.style.display = 'inline-flex';
     btn.textContent = 'ログアウト';
     btn.classList.remove('primary');
     btn.onclick = doLogout;
     loadRanking();
   } else {
     bar.textContent = 'ログインしていません';
+    avEl.style.display = 'none';
     btn.textContent = 'ログイン / 登録';
     btn.classList.add('primary');
     btn.onclick = openModal;
@@ -409,10 +448,12 @@ async function doLogin() {
   });
   const data = await res.json();
   if (data.token) {
-    authToken = data.token;
-    authUser  = data.username;
-    localStorage.setItem('muto_token', authToken);
-    localStorage.setItem('muto_user',  authUser);
+    authToken  = data.token;
+    authUser   = data.username;
+    authAvatar = data.avatar || '🐸';
+    localStorage.setItem('muto_token',  authToken);
+    localStorage.setItem('muto_user',   authUser);
+    localStorage.setItem('muto_avatar', authAvatar);
     closeModal();
     updateAuthBar();
   } else {
@@ -421,11 +462,58 @@ async function doLogin() {
 }
 
 function doLogout() {
-  authToken = null; authUser = null;
+  authToken = null; authUser = null; authAvatar = '🐸';
   localStorage.removeItem('muto_token');
   localStorage.removeItem('muto_user');
+  localStorage.removeItem('muto_avatar');
   updateAuthBar();
 }
+
+// ── アバター選択 ─────────────────────────────────────────
+function openAvatarModal() {
+  selectedAvatar = authAvatar;
+  document.getElementById('avatar-preview').textContent = selectedAvatar;
+  const grid = document.getElementById('avatar-grid');
+  grid.innerHTML = AVATARS.map(e =>
+    `<div class="avatar-opt${e === selectedAvatar ? ' selected' : ''}" onclick="selectAvatar('${e}')">${e}</div>`
+  ).join('');
+  document.getElementById('avatar-modal-bg').classList.add('open');
+}
+
+function closeAvatarModal() {
+  document.getElementById('avatar-modal-bg').classList.remove('open');
+  document.getElementById('avatar-msg').textContent = '';
+}
+
+function selectAvatar(emoji) {
+  selectedAvatar = emoji;
+  document.getElementById('avatar-preview').textContent = emoji;
+  document.querySelectorAll('.avatar-opt').forEach(el => {
+    el.classList.toggle('selected', el.textContent === emoji);
+  });
+}
+
+async function saveAvatar() {
+  const res = await fetch('/api/avatar', {
+    method: 'PUT',
+    headers: {'Content-Type':'application/json','Authorization':authToken},
+    body: JSON.stringify({ avatar: selectedAvatar })
+  });
+  const data = await res.json();
+  if (data.ok) {
+    authAvatar = selectedAvatar;
+    localStorage.setItem('muto_avatar', authAvatar);
+    document.getElementById('auth-avatar').textContent = authAvatar;
+    const el = document.getElementById('avatar-msg');
+    el.textContent = '保存した！'; el.style.color = 'var(--teal)';
+    setTimeout(closeAvatarModal, 800);
+    loadRanking();
+  }
+}
+
+document.getElementById('avatar-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeAvatarModal();
+});
 
 // ── ランキング ───────────────────────────────────────────
 async function loadRanking() {
@@ -440,9 +528,10 @@ async function loadRanking() {
     <thead><tr><th>順位</th><th>名前</th><th>スコア</th><th>達成率</th></tr></thead>
     <tbody>${data.map((r, i) => {
       const pct = r.total ? Math.round(r.score / r.total * 100) : 0;
-      return `<tr>
+      const isMe = r.username === authUser;
+      return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
         <td class="rank-num${i < 3 ? ' top' : ''}">${i + 1}</td>
-        <td class="rank-name">${r.username}${r.username === authUser ? ' 👈' : ''}</td>
+        <td class="rank-name"><span style="margin-right:6px">${r.avatar || '🐸'}</span>${r.username}${isMe ? ' 👈' : ''}</td>
         <td class="rank-score">${r.score} / ${r.total}</td>
         <td class="rank-pct">${pct}%</td>
       </tr>`;

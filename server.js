@@ -14,7 +14,8 @@ db.exec(`
     id       INTEGER PRIMARY KEY AUTOINCREMENT,
     username TEXT UNIQUE NOT NULL,
     password TEXT NOT NULL,
-    token    TEXT
+    token    TEXT,
+    avatar   TEXT DEFAULT '🐸'
   );
   CREATE TABLE IF NOT EXISTS scores (
     id         INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -25,6 +26,8 @@ db.exec(`
     FOREIGN KEY (user_id) REFERENCES users(id)
   );
 `);
+// 既存DBへの列追加（列がなければ追加）
+try { db.exec(`ALTER TABLE users ADD COLUMN avatar TEXT DEFAULT '🐸'`); } catch {}
 
 // 登録
 app.post('/api/register', (req, res) => {
@@ -49,7 +52,7 @@ app.post('/api/login', (req, res) => {
   }
   const token = crypto.randomBytes(32).toString('hex');
   db.prepare('UPDATE users SET token = ? WHERE id = ?').run(token, user.id);
-  res.json({ token, username: user.username });
+  res.json({ token, username: user.username, avatar: user.avatar || '🐸' });
 });
 
 // 認証チェック（APIに付ける鍵）
@@ -77,10 +80,18 @@ app.post('/api/score', auth, (req, res) => {
   res.json({ ok: true });
 });
 
+// アバター更新
+app.put('/api/avatar', auth, (req, res) => {
+  const { avatar } = req.body;
+  if (!avatar) return res.status(400).json({ error: 'アバターが必要です' });
+  db.prepare('UPDATE users SET avatar = ? WHERE id = ?').run(avatar, req.user.id);
+  res.json({ ok: true });
+});
+
 // ランキング取得
 app.get('/api/ranking', (req, res) => {
   const ranking = db.prepare(`
-    SELECT u.username, s.score, s.total, s.updated_at
+    SELECT u.username, u.avatar, s.score, s.total, s.updated_at
     FROM scores s
     JOIN users u ON s.user_id = u.id
     ORDER BY s.score DESC
