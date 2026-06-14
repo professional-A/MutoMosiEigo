@@ -540,13 +540,16 @@ async function syncUser(token) {
       localStorage.setItem('muto_frame',  authFrame);
     }
   } catch (e) {
-    // サーバーが起動中 or スリープ中でも、Supabaseのセッション情報でログイン状態を維持
-    const { data: { user } } = await supabaseClient.auth.getUser();
-    if (user) {
-      authUser  = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'ユーザー';
-      authEmail = user.email || '';
-      authAvatar = localStorage.getItem('muto_avatar') || '🐸';
-      authFrame  = localStorage.getItem('muto_frame')  || 'default';
+    try {
+      const { data: { user } } = await supabaseClient.auth.getUser();
+      if (user) {
+        authUser  = user.user_metadata?.full_name || user.user_metadata?.name || user.email?.split('@')[0] || 'ユーザー';
+        authEmail = user.email || '';
+        authAvatar = localStorage.getItem('muto_avatar') || '🐸';
+        authFrame  = localStorage.getItem('muto_frame')  || 'default';
+      }
+    } catch (e2) {
+      // Supabaseも落ちてる場合は諦めてログアウト状態にする
     }
   }
 }
