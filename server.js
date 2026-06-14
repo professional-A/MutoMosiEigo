@@ -123,15 +123,35 @@ app.get('/api/ranking', async (req, res) => {
   res.json(rows);
 });
 
+// メンバー一覧（ポイント順、ログイン不要）
+app.get('/api/members', async (req, res) => {
+  const { rows } = await pool.query(`
+    SELECT username, avatar, frame, points, last_login
+    FROM users
+    ORDER BY points DESC
+  `);
+  res.json(rows);
+});
+
 // 管理者：ユーザー一覧
 app.get('/api/admin/users', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { rows } = await pool.query(`
-    SELECT u.id, u.username, u.email, u.avatar, u.frame, u.created_at, s.score, s.total
+    SELECT u.id, u.username, u.email, u.avatar, u.frame, u.created_at, u.points, s.score, s.total
     FROM users u LEFT JOIN scores s ON s.user_id = u.id
-    ORDER BY u.id ASC
+    ORDER BY u.points DESC
   `);
   res.json(rows);
+});
+
+// 管理者：ポイント付与
+app.post('/api/admin/grant-points', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { userId, amount } = req.body;
+  if (!userId || !amount) return res.status(400).json({ error: '不正なリクエスト' });
+  await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, userId]);
+  const { rows } = await pool.query('SELECT points FROM users WHERE id = $1', [userId]);
+  res.json({ ok: true, points: rows[0].points });
 });
 
 app.use(express.static('.'));

@@ -225,6 +225,7 @@ body{padding-top:38px}
   </div>
   <span id="auth-status">ログインしていません</span>
   <button class="auth-btn" id="admin-btn" style="display:none" onclick="openAdminModal()">管理</button>
+  <button class="auth-btn" id="members-btn" style="display:none" onclick="openMembersModal()">メンバー</button>
   <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
   <button class="auth-btn primary" id="auth-open-btn" onclick="loginWithGoogle()">Googleでログイン</button>
 </div>
@@ -250,6 +251,17 @@ body{padding-top:38px}
     <div id="admin-content" style="margin-top:12px;font-size:.85rem"></div>
     <div class="modal-btns" style="margin-top:16px">
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- メンバー一覧モーダル -->
+<div class="modal-bg" id="members-modal-bg">
+  <div class="modal" style="width:min(480px,95vw)">
+    <h2>メンバー一覧</h2>
+    <div id="members-content" style="margin-top:12px;font-size:.85rem"></div>
+    <div class="modal-btns" style="margin-top:16px">
+      <button onclick="closeMembersModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
 </div>
@@ -496,6 +508,7 @@ function updateAuthBar() {
     btn.classList.remove('primary');
     btn.onclick = doLogout;
     document.getElementById('admin-btn').style.display = authEmail === 'kabu6113450@gmail.com' ? 'inline-block' : 'none';
+    document.getElementById('members-btn').style.display = 'inline-block';
     loadRanking();
   } else {
     bar.textContent = 'ログインしていません';
@@ -504,6 +517,7 @@ function updateAuthBar() {
     btn.classList.add('primary');
     btn.onclick = loginWithGoogle;
     document.getElementById('admin-btn').style.display = 'none';
+    document.getElementById('members-btn').style.display = 'none';
     document.getElementById('ranking-content').innerHTML =
       '<p class="ranking-login-note">ログインするとランキングが表示されます</p>';
   }
@@ -682,6 +696,9 @@ async function loadRanking() {
 // ── 管理者 ──────────────────────────────────────────────
 async function openAdminModal() {
   document.getElementById('admin-modal-bg').classList.add('open');
+  await reloadAdminContent();
+}
+async function reloadAdminContent() {
   const el = document.getElementById('admin-content');
   el.innerHTML = '読み込み中...';
   const res  = await fetch('/api/admin/users', { headers: { 'Authorization': authToken } });
@@ -690,7 +707,53 @@ async function openAdminModal() {
   el.innerHTML = `
     <p style="color:var(--muted);margin-bottom:10px">登録人数：<strong style="color:var(--teal)">${data.length}人</strong></p>
     <table class="ranking-table">
-      <thead><tr><th>#</th><th>名前</th><th>スコア</th><th>登録日</th></tr></thead>
+      <thead><tr><th>#</th><th>名前</th><th>ポイント</th><th>付与</th></tr></thead>
+      <tbody>${data.map((u, i) => `
+        <tr>
+          <td class="rank-num">${i + 1}</td>
+          <td class="rank-name">
+            <span class="avatar frame-${u.frame||'default'}" style="width:24px;height:24px;font-size:.9rem;margin-right:6px;vertical-align:middle">${u.avatar||'🐸'}</span>
+            ${u.username}<br><span style="color:var(--dim);font-size:.72rem">${u.email||''}</span>
+          </td>
+          <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
+          <td>
+            <div style="display:flex;gap:4px;align-items:center">
+              <input type="number" id="grant-amt-${u.id}" value="500" min="1" style="width:64px;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:.78rem">
+              <button onclick="grantPoints(${u.id})" style="padding:3px 8px;border-radius:6px;border:none;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-size:.78rem">付与</button>
+            </div>
+          </td>
+        </tr>`).join('')}
+      </tbody>
+    </table>`;
+}
+async function grantPoints(userId) {
+  const amt = parseInt(document.getElementById(`grant-amt-${userId}`).value);
+  if (!amt || amt < 1) return;
+  const res = await fetch('/api/admin/grant-points', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+    body: JSON.stringify({ userId, amount: amt })
+  });
+  const data = await res.json();
+  if (data.ok) { showPointToast(`+${amt.toLocaleString()}pt 付与完了`); await reloadAdminContent(); }
+}
+function closeAdminModal() {
+  document.getElementById('admin-modal-bg').classList.remove('open');
+}
+document.getElementById('admin-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeAdminModal();
+});
+
+async function openMembersModal() {
+  document.getElementById('members-modal-bg').classList.add('open');
+  const el = document.getElementById('members-content');
+  el.innerHTML = '読み込み中...';
+  const res  = await fetch('/api/members');
+  const data = await res.json();
+  if (!Array.isArray(data)) { el.innerHTML = 'エラー'; return; }
+  el.innerHTML = `
+    <table class="ranking-table">
+      <thead><tr><th>#</th><th>名前</th><th>ポイント</th></tr></thead>
       <tbody>${data.map((u, i) => `
         <tr>
           <td class="rank-num">${i + 1}</td>
@@ -698,17 +761,16 @@ async function openAdminModal() {
             <span class="avatar frame-${u.frame||'default'}" style="width:24px;height:24px;font-size:.9rem;margin-right:6px;vertical-align:middle">${u.avatar||'🐸'}</span>
             ${u.username}
           </td>
-          <td class="rank-score">${u.score != null ? `${u.score} / ${u.total}` : '—'}</td>
-          <td style="color:var(--dim);font-size:.78rem">${u.created_at ? u.created_at.slice(0,10) : '—'}</td>
+          <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
         </tr>`).join('')}
       </tbody>
     </table>`;
 }
-function closeAdminModal() {
-  document.getElementById('admin-modal-bg').classList.remove('open');
+function closeMembersModal() {
+  document.getElementById('members-modal-bg').classList.remove('open');
 }
-document.getElementById('admin-modal-bg').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeAdminModal();
+document.getElementById('members-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeMembersModal();
 });
 
 // ── お知らせ ────────────────────────────────────────────
