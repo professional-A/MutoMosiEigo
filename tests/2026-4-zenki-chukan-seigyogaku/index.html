@@ -1,0 +1,1122 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>制御工学Ⅰ 中間対策テスト</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<style>
+:root{
+  --bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#1b2f4d;
+  --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c;
+  --teal:#46d6c4; --teal-d:#1f9e90;
+  --amber:#f6b352; --rose:#f06b8e; --good:#5fe0a8; --bad:#f06b8e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Outfit","Noto Sans JP",sans-serif;
+  background:radial-gradient(1100px 600px at 80% -8%,rgba(70,214,196,.10),transparent 55%),
+             radial-gradient(900px 500px at 5% 5%,rgba(246,179,82,.07),transparent 50%),
+             var(--bg);
+  color:var(--ink); line-height:1.6; padding-bottom:80px;
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px}
+header{padding:46px 0 30px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),transparent)}
+.eyebrow{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:10px}
+h1{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(2rem,6vw,3rem);line-height:1.04}
+.sub{color:var(--muted);margin-top:12px;font-size:1rem;max-width:600px}
+.scoreboard{position:sticky;top:0;z-index:50;background:rgba(10,22,38,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.scoreboard .wrap{display:flex;align-items:center;gap:14px;padding:11px 18px;flex-wrap:wrap}
+.scorenum{font-family:"JetBrains Mono",monospace;font-size:1.05rem;color:var(--teal);font-weight:500}
+.scorelbl{color:var(--muted);font-size:.85rem}
+.bar{flex:1;min-width:120px;height:7px;background:var(--card2);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal-d),var(--teal));border-radius:99px;transition:width .5s ease}
+.resetbtn{font-family:inherit;font-size:.78rem;color:var(--muted);background:none;border:1px solid var(--line);border-radius:8px;padding:5px 11px;cursor:pointer;transition:.2s}
+.resetbtn:hover{color:var(--ink);border-color:var(--teal-d)}
+nav.toc{display:flex;gap:8px;flex-wrap:wrap;padding:22px 0 6px}
+nav.toc a{font-size:.82rem;color:var(--muted);text-decoration:none;padding:7px 13px;border:1px solid var(--line);border-radius:99px;background:var(--card);transition:.2s;white-space:nowrap}
+nav.toc a:hover{color:var(--ink);border-color:var(--teal-d);transform:translateY(-1px)}
+section{margin-top:44px;scroll-margin-top:64px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.sec-no{font-family:"JetBrains Mono",monospace;font-size:.9rem;color:var(--teal);letter-spacing:.05em}
+.sec-head h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.5rem}
+.sec-desc{color:var(--muted);font-size:.92rem;margin-bottom:18px}
+.sec-score{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--muted);white-space:nowrap;align-self:center}
+.q{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px 18px 16px;margin-bottom:14px;transition:border-color .25s}
+.q.correct{border-color:var(--teal-d)}
+.q.wrong{border-color:var(--rose)}
+.q-top{display:flex;gap:12px;align-items:flex-start}
+.qn{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--teal);background:rgba(70,214,196,.1);border:1px solid var(--line);border-radius:7px;padding:3px 8px;flex-shrink:0;margin-top:2px;min-width:34px;text-align:center}
+.q-body{flex:1}
+.prompt{font-size:1.02rem;margin-bottom:4px}
+.opts{display:flex;flex-wrap:wrap;gap:8px;margin-top:11px}
+.opt{font-family:inherit;font-size:.95rem;color:var(--ink);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:9px 14px;cursor:pointer;transition:.16s;text-align:left}
+.opt:hover:not(:disabled){border-color:var(--teal-d);transform:translateY(-1px)}
+.opt:disabled{cursor:default}
+.opt.pick-correct{background:rgba(95,224,168,.16);border-color:var(--good);color:#cdfbe5}
+.opt.pick-wrong{background:rgba(240,107,142,.14);border-color:var(--bad);color:#ffd6e1}
+.opt.reveal{border-color:var(--good);color:#cdfbe5}
+.opt .lab{font-family:"JetBrains Mono",monospace;color:var(--teal);margin-right:7px;font-size:.85rem}
+.opt.multi-selected{background:rgba(70,214,196,.18);border-color:var(--teal-d)}
+.multi-submit{margin-top:8px}
+.sort-bank{display:flex;flex-wrap:wrap;gap:8px;margin-top:8px;padding:10px;background:var(--bg2);border:1px dashed var(--line);border-radius:10px;min-height:40px}
+.sort-slot{display:flex;flex-direction:column;gap:6px;margin-top:8px}
+.sort-item{font-family:inherit;font-size:.88rem;color:var(--ink);background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:7px 12px;cursor:pointer;transition:.16s}
+.sort-item:hover{border-color:var(--teal-d)}
+.sort-item.placed{background:rgba(70,214,196,.1);border-color:var(--teal-d)}
+.sort-answer{display:flex;flex-direction:column;gap:4px;margin-top:8px}
+.sort-answer .slot{font-size:.85rem;padding:6px 10px;background:var(--bg2);border:1px dashed var(--line);border-radius:8px;color:var(--muted);min-height:34px;cursor:pointer}
+.sort-answer .slot.filled{color:var(--ink);border-color:var(--teal-d);background:rgba(70,214,196,.08)}
+.inrow{display:flex;gap:8px;margin-top:11px;flex-wrap:wrap}
+.inrow input{flex:1;min-width:180px;font-family:inherit;font-size:.98rem;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:10px 13px;outline:none;transition:.2s}
+.inrow input:focus{border-color:var(--teal-d)}
+.inrow input.ok{border-color:var(--good);background:rgba(95,224,168,.08)}
+.inrow input.ng{border-color:var(--bad);background:rgba(240,107,142,.07)}
+.btn{font-family:inherit;font-size:.9rem;font-weight:500;color:var(--bg);background:var(--teal);border:none;border-radius:10px;padding:10px 16px;cursor:pointer;transition:.2s}
+.btn:hover{background:#5fe6d6}
+.btn.ghost{background:none;color:var(--muted);border:1px solid var(--line)}
+.btn.ghost:hover{color:var(--ink);border-color:var(--teal-d)}
+.fb{margin-top:10px;font-size:.9rem;display:none}
+.fb.show{display:block}
+.fb .verdict{font-weight:600}
+.fb .verdict.g{color:var(--good)}
+.fb .verdict.b{color:var(--bad)}
+.note{color:var(--muted);margin-top:4px;font-size:.88rem}
+.note .ans{color:var(--teal);font-weight:600}
+.tip{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:10px;padding:12px 15px;margin-bottom:18px;font-size:.9rem;color:var(--muted)}
+.tip b{color:var(--amber)}
+footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim);font-size:.82rem;text-align:center}
+.katex{font-size:1.04em}
+.opt .katex,.prompt .katex{color:inherit}
+@media(max-width:560px){.q-top{flex-direction:column;gap:7px}}
+</style>
+</head>
+<body>
+
+<div class="scoreboard">
+  <div class="wrap">
+    <span class="scorenum" id="sNum">0 / 0</span>
+    <span class="scorelbl">正解</span>
+    <div class="bar"><i id="sBar"></i></div>
+    <button class="resetbtn" onclick="resetAll()">リセット</button>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">制御工学Ⅰ ・ 前期中間 対策テスト</div>
+    <h1>制御工学Ⅰ 模試<br><span style="font-size:.5em;color:var(--teal)">序論 / ブロック線図 / ラプラス変換</span></h1>
+    <p class="sub">2025年度 前期中間試験の出題範囲（第1〜5回講義）に対応した自習テスト。制御の定義・システム・ブロック線図・制御系の分類・等価変換・複素数・ラプラス変換まで全範囲をカバー。試験直前の総チェックに。</p>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc" id="toc"></nav>
+<div class="tip" style="margin-top:18px">
+  <b>使い方：</b>選択式はタップで即判定。複数選択は全部選んでから「採点」ボタン。並べ替えは順番に選んでいく。入力式はEnterか「採点」で判定。解説は判定後に表示。数式はKaTeXで表示。
+</div>
+<div id="app"></div>
+<footer>制御工学Ⅰ 前期中間 対策テスト ｜ 全11セクション・計74問</footer>
+</div>
+
+<script>
+const STORAGE_KEY = "seigyo1_chukan_v1";
+
+/* =====================================================================
+   問題データ
+   type: "single" | "multi" | "sort" | "input"
+   single: opts[], ans (string)
+   multi:  opts[], ans (string[], すべて選択必須)
+   sort:   items[], ans (正順の string[])
+   input:  ans (string または string[]), hint
+   数式は KaTeX 記法（$...$ で囲む）で記述。
+===================================================================== */
+const SECTIONS = [
+
+// ──────────────────────────────────────────────
+{id:"s1", no:"01", title:"序論：制御・自動化・ロボット", qs:[
+
+{type:"single",
+ q:"「制御」を説明したものとして最も適切なものを選べ",
+ opts:[
+   "システムを構成する要素を分解して個別に分析すること",
+   "システムの状態をある目的に沿って適切に変化させるための手段",
+   "外乱を完全に取り除くための技術",
+   "目標値を時間とともに変化させること",
+ ],
+ ans:"システムの状態をある目的に沿って適切に変化させるための手段",
+ note:"制御＝「目的の動作をさせるために各要素を上手く連携させる技術」「システムの状態をある目的に沿って適切に変化させるための手段」。"},
+
+{type:"single",
+ q:"「自動制御」を説明したものとして最も適切なものを選べ",
+ opts:[
+   "人間が常に監視しながら手動で目標値に合わせる技術",
+   "ある量を目標値と一致させるために、量を検出して比較し、訂正動作を自動的に実行する技術",
+   "あらかじめ決めた順序で機械を動かすだけの技術",
+   "システムの構造を数式モデルで明らかにする技術",
+ ],
+ ans:"ある量を目標値と一致させるために、量を検出して比較し、訂正動作を自動的に実行する技術",
+ note:"自動制御＝物体・プロセス等のある量を目標値と一致させるため、量を検出し目標値と比較し、それに応じて訂正動作を自動的に実行する技術。"},
+
+{type:"multi",
+ q:"オートメーション（自動化）に関する略語の説明として正しいものを全て選べ",
+ opts:[
+   "FA は Factory Automation（工場の自動化）",
+   "HA は Home Automation（家庭の自動化）",
+   "OA は Office Automation（事務の自動化）",
+   "RPA は Robot Process Automation",
+   "FA は Fast Automation（高速自動化）",
+ ],
+ ans:[
+   "FA は Factory Automation（工場の自動化）",
+   "HA は Home Automation（家庭の自動化）",
+   "OA は Office Automation（事務の自動化）",
+   "RPA は Robot Process Automation",
+ ],
+ note:"FA=Factory、HA=Home、OA=Office、RPA=Robot Process Automation。オートメーションは人間の労働・制御・管理をおおむね除去する高度な自動生産方式。"},
+
+{type:"single",
+ q:"アシモフの「ロボット三原則」の第1条として正しいものを選べ",
+ opts:[
+   "ロボットは人間に危害を加えてはならず、また危険を見過ごすことで人間に危害を及ぼしてはならない",
+   "ロボットは人間が与える命令に服従しなければならない",
+   "ロボットは自己（自分）をまもらなければならない",
+   "ロボットは他のロボットと協調しなければならない",
+ ],
+ ans:"ロボットは人間に危害を加えてはならず、また危険を見過ごすことで人間に危害を及ぼしてはならない",
+ note:"第1条=危害（人間に危害を加えない／危険を見過ごさない）、第2条=服従（命令に従う、ただし第1条に反する場合を除く）、第3条=自己保存（第1・2条に反しない限り自己を守る）。"},
+
+{type:"single",
+ q:"大規模企業向けFA（Factory Automation）の従来からの一般的な利点（メリット）に該当しないものを選べ",
+ opts:["大量生産","生産速度の向上","品質の向上と均一化","多品種少量生産","労働者の削減（省力化）"],
+ ans:"多品種少量生産",
+ note:"従来型FAの利点は大量生産・速度向上・品質均一化・省力化。多品種少量生産は近年のフレキシブル生産の特長で、従来型FAのメリットには該当しない。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s2", no:"02", title:"システムとブロック線図", qs:[
+
+{type:"single",
+ q:"「システム（系）」を説明したものとして最も適切なものを選べ",
+ opts:[
+   "種々の機能を有する幾つかの要素が、何らかの相互作用で結ばれている集合体",
+   "一つの機能だけを持つ単独の部品",
+   "入力と出力の関係を持たない静的な装置",
+   "外部から完全に独立した閉じた箱",
+ ],
+ ans:"種々の機能を有する幾つかの要素が、何らかの相互作用で結ばれている集合体",
+ note:"システム（系）＝種々の機能を有する幾つかの要素が相互作用で結ばれている集合（体）。その一部となっているものをサブシステム（副系）という。"},
+
+{type:"single",
+ q:"「ブロック線図」を説明したものとして最も適切なものを選べ",
+ opts:[
+   "システムの外観を写実的に描いた図",
+   "システムに生じる相互作用の因果関係を、原因（入力）－結果（出力）の関係から方向付けをして表した線図",
+   "部品の寸法を正確に表した設計図",
+   "電気回路の配線をそのまま描いた回路図",
+ ],
+ ans:"システムに生じる相互作用の因果関係を、原因（入力）－結果（出力）の関係から方向付けをして表した線図",
+ note:"ブロック線図は因果関係（入力→出力）を方向付けして表す。制御系における各要素の関係を表すのに用いられる。"},
+
+{type:"single",
+ q:"ブロック線図において「引き出し点（信号の分岐点）」を表す記号として正しいものを選べ",
+ opts:["□（四角の枠）","●（黒丸）","○（白丸）","→（矢印）"],
+ ans:"●（黒丸）",
+ note:"引き出し点（分岐点）は●（黒丸）。加え合わせ点は○（白丸）。要素は□、信号は→（矢印）で表す。"},
+
+{type:"single",
+ q:"ブロック線図において「加え合わせ点（信号の加減算）」を表す記号として正しいものを選べ",
+ opts:["□（四角の枠）","●（黒丸）","○（白丸、±符号付き）","→（矢印）"],
+ ans:"○（白丸、±符号付き）",
+ note:"加え合わせ点は○（白丸）に±符号をつけて表す。引き出し点（●黒丸）と混同しないこと。"},
+
+{type:"multi",
+ q:"ブロック線図の構成要素として正しいものを全て選べ",
+ opts:["要素（□）","信号（→ 矢印）","引き出し点（●）","加え合わせ点（○）","座標軸（縦軸・横軸）"],
+ ans:["要素（□）","信号（→ 矢印）","引き出し点（●）","加え合わせ点（○）"],
+ note:"構成要素は、要素（□）・信号（→）・引き出し点（●）・加え合わせ点（○）の4つ。"},
+
+{type:"single",
+ q:"引き出し点から信号が2つに分かれている場合の説明として正しいものを選べ",
+ opts:[
+   "分岐すると信号の値は半分になる",
+   "分岐すると信号の値は2倍になる",
+   "引き出し点の前後で信号の値は変わらない",
+   "分岐した側の信号は0になる",
+ ],
+ ans:"引き出し点の前後で信号の値は変わらない",
+ note:"引き出し点は同じ信号を分岐させるだけなので、前後および分岐先の信号の値はすべて等しい（変わらない）。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s3", no:"03", title:"システムの性質・制御系の特性", qs:[
+
+{type:"single",
+ q:"「制御工学」の講義で取り扱うシステムの性質に該当しないものを選べ",
+ opts:["線形性","静特性","時不変性","因果性"],
+ ans:"静特性",
+ note:"システムの性質は 因果性・時不変性・線形性 の3つ。静特性は「制御系の特性の把握」で扱う用語であり、システムの性質には該当しない。"},
+
+{type:"single",
+ q:"システムの「因果性（Causality）」の説明として正しいものを選べ",
+ opts:[
+   "原因より先に結果が生じない性質",
+   "システムの性質が時間原点の選び方に無関係である性質",
+   "重ね合わせの原理が成立する性質",
+   "外乱に対して強い性質",
+ ],
+ ans:"原因より先に結果が生じない性質",
+ note:"因果性＝原因より先に結果が生じない性質。"},
+
+{type:"single",
+ q:"システムの「時不変性（Time Invariant）」の説明として正しいものを選べ",
+ opts:[
+   "原因より先に結果が生じない性質",
+   "システムの性質が時間原点の選び方に無関係（時間でずれても変わらない）である性質",
+   "重ね合わせの原理が成立する性質",
+   "入出力が時間関数に依存しない性質",
+ ],
+ ans:"システムの性質が時間原点の選び方に無関係（時間でずれても変わらない）である性質",
+ note:"時不変性＝システムの性質が時間原点の選び方に無関係（時間でずれても変わらない）性質。"},
+
+{type:"single",
+ q:"システムの「線形性（Linearity）」の説明として正しいものを選べ",
+ opts:[
+   "原因より先に結果が生じない性質",
+   "時間原点の選び方に無関係である性質",
+   "重ね合わせの原理が成立する性質",
+   "外部から内部状況を把握できる性質",
+ ],
+ ans:"重ね合わせの原理が成立する性質",
+ note:"線形性＝重ね合わせの原理が成立する性質。"},
+
+{type:"single",
+ q:"「線形化（Linearization）」の説明として最も適切なものを選べ",
+ opts:[
+   "非線形な性質を、本質的な性質を失うことなく範囲を限定（狭く）して線形に扱う処理",
+   "線形なシステムをわざと非線形に変える処理",
+   "システムをすべて1次方程式に置き換えて精度を上げる処理",
+   "外乱をすべて無視する処理",
+ ],
+ ans:"非線形な性質を、本質的な性質を失うことなく範囲を限定（狭く）して線形に扱う処理",
+ note:"線形化＝非線形特性を、本質的な性質を失うことなく範囲を限定して線形（線形として扱う）にする処理。"},
+
+{type:"single",
+ q:"制御系としてのシステムの「最良の動作」であることを意味する用語を選べ",
+ opts:["同定","可制御","可観測","規範","ロバスト（堅牢）"],
+ ans:"規範",
+ note:"規範＝制御系としてのシステムの最良な動作であることを表す特性。"},
+
+{type:"single",
+ q:"「可制御」の説明として正しいものを選べ",
+ opts:[
+   "制御系が入力操作により制御し得るか否かの特性",
+   "制御系の状態を外部状況のみから把握し得るか否かの特性",
+   "システムの構成を明らかにすること",
+   "外乱や検出誤差に対して強い特性",
+ ],
+ ans:"制御系が入力操作により制御し得るか否かの特性",
+ note:"可制御＝制御系が入力操作により制御し得るか否かの特性。"},
+
+{type:"single",
+ q:"「可観測」の説明として正しいものを選べ",
+ opts:[
+   "制御系が入力操作により制御し得るか否かの特性",
+   "制御系の状態を外部状況のみから内部状況を把握し得るか否かの特性",
+   "システムのパラメータを精確に明らかにすること",
+   "目標値に対して定常偏差が0になる特性",
+ ],
+ ans:"制御系の状態を外部状況のみから内部状況を把握し得るか否かの特性",
+ note:"可観測＝制御系の状態を、外部状況のみから内部状況を把握し得るか否かの特性。"},
+
+{type:"single",
+ q:"「同定」の説明として正しいものを選べ",
+ opts:[
+   "システムの構成を明らかにして、入出力関係やパラメータの関係を精確に明らかにし、数式モデルを推定・構築する手法",
+   "外乱を完全に除去する手法",
+   "制御系の最良の動作を表す特性",
+   "重ね合わせの原理が成立する性質",
+ ],
+ ans:"システムの構成を明らかにして、入出力関係やパラメータの関係を精確に明らかにし、数式モデルを推定・構築する手法",
+ note:"同定＝システムの構成・入出力関係・パラメータの関係を精確に明らかにし、数式モデル（伝達関数や状態空間モデル）を推定・構築する手法。"},
+
+{type:"single",
+ q:"「ロバスト（堅牢）」の説明として正しいものを選べ",
+ opts:[
+   "外乱や検出誤差に対して強い（影響を受けにくい）特性",
+   "原因より先に結果が生じない性質",
+   "入力操作により制御し得る特性",
+   "時間関数に依存しない入出力の関係",
+ ],
+ ans:"外乱や検出誤差に対して強い（影響を受けにくい）特性",
+ note:"ロバスト（堅牢）＝システムが外乱や検出誤差に対して強い特性。"},
+
+{type:"single",
+ q:"「静特性」と「動特性」の説明の組み合わせとして正しいものを選べ",
+ opts:[
+   "静特性＝時間関数に依存しない入出力の関係、動特性＝時間関数としての入出力の関係",
+   "静特性＝時間関数としての入出力の関係、動特性＝時間に依存しない入出力の関係",
+   "静特性も動特性も同じ意味である",
+   "静特性＝外乱に強い特性、動特性＝外乱に弱い特性",
+ ],
+ ans:"静特性＝時間関数に依存しない入出力の関係、動特性＝時間関数としての入出力の関係",
+ note:"静特性＝ある制御要素に対する時間関数に依存しない入出力の関係。動特性＝時間関数としての入出力の関係。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s4", no:"04", title:"制御系の分類", qs:[
+
+{type:"single",
+ q:"制御量（出力側）が「位置・方位・姿勢」である制御系の分類はどれか",
+ opts:["サーボ機構（サーボ系）","プロセス制御","自動調整","シーケンス制御"],
+ ans:"サーボ機構（サーボ系）",
+ note:"サーボ機構＝制御量が位置・方位・姿勢である制御系。追従制御（追値制御）の代表。"},
+
+{type:"single",
+ q:"制御量（出力側）が「温度・圧力・流量・液位」である制御系の分類はどれか",
+ opts:["サーボ機構","プロセス制御","自動調整","プログラム制御"],
+ ans:"プロセス制御",
+ note:"プロセス制御＝制御量が温度・圧力・流量・液位などの工業プロセス量である制御系。"},
+
+{type:"single",
+ q:"制御量（出力側）が「電圧・電流・周波数・回転速度」などを一定に保つ制御系の分類はどれか",
+ opts:["サーボ機構","プロセス制御","自動調整","プログラム制御"],
+ ans:"自動調整",
+ note:"自動調整＝電圧・電流・周波数・回転速度などの電気的量を一定に保つ制御系。制御量（出力側）による分類の一つ。"},
+
+{type:"single",
+ q:"目標値（入力側）があらかじめ定めた時間的スケジュールに従って変化する制御の分類はどれか",
+ opts:["定値制御","追従制御","プログラム制御","シーケンス制御"],
+ ans:"プログラム制御",
+ note:"プログラム制御＝目標値があらかじめ定めた時間的スケジュールに従って変化する制御（目標値による分類）。"},
+
+{type:"single",
+ q:"目標値（入力側）が一定で、それに制御量を一致させる制御の分類はどれか",
+ opts:["定値制御","追従制御","プログラム制御","シーケンス制御"],
+ ans:"定値制御",
+ note:"定値制御＝目標値が一定の制御。プロセス制御や自動調整の大部分が定値制御。"},
+
+{type:"single",
+ q:"目標値が任意に変化し、それに制御量を追従させる制御の分類はどれか",
+ opts:["定値制御","追従制御（追値制御）","プログラム制御","シーケンス制御"],
+ ans:"追従制御（追値制御）",
+ note:"追従制御（追値制御）＝目標値が任意に変化し、それに追従する制御。サーボ機構（サーボ系）の大部分。"},
+
+{type:"single",
+ q:"あらかじめ定められた順序や条件に従って動作を進めていく制御の分類はどれか",
+ opts:["フィードバック制御","シーケンス制御","フィードフォワード制御","プロセス制御"],
+ ans:"シーケンス制御",
+ note:"シーケンス制御＝あらかじめ定められた順序・条件に従って制御の各段階を進めていく制御（信号の特性・構成による分類）。"},
+
+{type:"single",
+ q:"操作部を動かす動力を、制御対象の出力など外部から与える分類はどれか",
+ opts:["自力制御","他力制御","開ループ制御","正帰還制御"],
+ ans:"他力制御",
+ note:"操作部を動かす動力源による分類：自力制御（自分の出力で操作部を動かす）と他力制御（外部から動力を与える）。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s5", no:"05", title:"開ループ・閉ループ・フィードバック", qs:[
+
+{type:"single",
+ q:"結果（出力）が入力としての原因に影響を与えない制御方式はどれか",
+ opts:[
+   "開ループ制御（オープンループ制御）",
+   "閉ループ制御（フィードバック制御）",
+   "ネガティブ・フィードバック制御",
+   "ポジティブ・フィードバック制御",
+ ],
+ ans:"開ループ制御（オープンループ制御）",
+ note:"開ループ制御＝結果が原因に影響を与えない方式（原因→結果のみ）。"},
+
+{type:"single",
+ q:"結果（出力）を入力としての原因に戻して影響を与える制御方式はどれか",
+ opts:[
+   "開ループ制御（オープンループ制御）",
+   "閉ループ制御（フィードバック制御）",
+   "フィードフォワード制御",
+   "シーケンス制御",
+ ],
+ ans:"閉ループ制御（フィードバック制御）",
+ note:"閉ループ制御（フィードバック制御）＝結果を原因に戻す方式（原因→結果→原因…）。"},
+
+{type:"single",
+ q:"出力を入力側に戻し、目標値と比較して偏差を小さくするように働くフィードバックはどれか",
+ opts:[
+   "ネガティブ・フィードバック（負帰還）",
+   "ポジティブ・フィードバック（正帰還）",
+   "フィードフォワード",
+   "オープンループ",
+ ],
+ ans:"ネガティブ・フィードバック（負帰還）",
+ note:"信号の符号による分類：ネガティブ・フィードバック（負帰還）＝出力を打ち消す方向に戻し偏差を縮める。ポジティブ・フィードバック（正帰還）＝強める方向。"},
+
+{type:"single",
+ q:"フィードバック信号の符号で、出力を「強める方向」に戻す制御系の分類はどれか",
+ opts:[
+   "ネガティブ・フィードバック制御系（負帰還制御系）",
+   "ポジティブ・フィードバック制御系（正帰還制御系）",
+   "フィードフォワード制御系",
+   "開ループ制御系",
+ ],
+ ans:"ポジティブ・フィードバック制御系（正帰還制御系）",
+ note:"正帰還（ポジティブ・フィードバック）＝フィードバック信号が出力を強める方向に働く。"},
+
+{type:"multi",
+ q:"閉ループ（フィードバック）制御の特徴として正しいものを全て選べ",
+ opts:[
+   "制御量を検出して目標値と比較する検出部が必要である",
+   "外乱の影響を抑制できる",
+   "目標値と制御量の偏差を小さくするように働く",
+   "出力を一切検出しないで制御する",
+ ],
+ ans:[
+   "制御量を検出して目標値と比較する検出部が必要である",
+   "外乱の影響を抑制できる",
+   "目標値と制御量の偏差を小さくするように働く",
+ ],
+ note:"フィードバック制御は検出部で出力を測り目標値と比較、偏差を縮め外乱を抑制する。出力を検出しないのは開ループ制御。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s6", no:"06", title:"各種変換の関係（z・フーリエ・ラプラス）", qs:[
+
+{type:"single",
+ q:"「z変換」の説明として正しいものを選べ",
+ opts:[
+   "ラプラス変換を離散化させた変換で、システム解析に用いられる",
+   "フーリエ変換を離散化させた変換で、周波数解析に用いられる",
+   "離散フーリエ変換を高速化させた変換",
+   "フーリエ変換に減衰項を導入した変換",
+ ],
+ ans:"ラプラス変換を離散化させた変換で、システム解析に用いられる",
+ note:"z変換＝ラプラス変換を離散化させた変換。離散時間システムの解析に用いられる。"},
+
+{type:"single",
+ q:"「離散フーリエ変換（DFT）」の説明として正しいものを選べ",
+ opts:[
+   "ラプラス変換を離散化させた変換",
+   "フーリエ変換を離散化させた変換で、周波数解析に用いられる",
+   "フーリエ級数を高速化させた変換",
+   "フーリエ変換に減衰項を導入した変換",
+ ],
+ ans:"フーリエ変換を離散化させた変換で、周波数解析に用いられる",
+ note:"DFT＝フーリエ変換を離散化させた変換。周波数解析に用いられる。"},
+
+{type:"single",
+ q:"「高速フーリエ変換（FFT）」の説明として正しいものを選べ",
+ opts:[
+   "ラプラス変換を離散化させた変換",
+   "離散フーリエ変換（DFT）を高速化させた変換で、周波数解析に用いられる",
+   "フーリエ変換に減衰項を導入した変換",
+   "周期波形に対応するように拡張した変換",
+ ],
+ ans:"離散フーリエ変換（DFT）を高速化させた変換で、周波数解析に用いられる",
+ note:"FFT＝離散フーリエ変換（DFT）を高速化させた計算アルゴリズム。周波数解析に用いられる。"},
+
+{type:"single",
+ q:"ラプラス変換は、フーリエ変換に対して何を導入して拡張した変換か",
+ opts:["減衰項 $\\sigma$","虚数単位 $j$","周期 $T$","ゲイン $K$"],
+ ans:"減衰項 $\\sigma$",
+ note:"ラプラス変換は、フーリエ変換に対して減衰項 $\\sigma$ を導入し、システム解析に用いられるよう拡張した変換。$s=\\sigma+j\\omega$（$\\sigma$＝減衰項、$\\omega$＝周波数特性）。"},
+
+{type:"single",
+ q:"フーリエ級数とフーリエ変換の関係として正しいものを選べ",
+ opts:[
+   "フーリエ級数は非周期（孤立）波形、フーリエ変換は周期波形に用いる",
+   "フーリエ級数は周期波形に用い、非周期（孤立）波形に対応できるように拡張したものがフーリエ変換である",
+   "フーリエ級数とフーリエ変換は全く同じものである",
+   "フーリエ変換はラプラス変換を離散化したものである",
+ ],
+ ans:"フーリエ級数は周期波形に用い、非周期（孤立）波形に対応できるように拡張したものがフーリエ変換である",
+ note:"フーリエ級数＝周期波形用。これを非周期（孤立）波形に対応できるよう拡張したのがフーリエ変換。級数と変換、周期と非周期を逆にした記述は誤り。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s7", no:"07", title:"複素数・s平面", qs:[
+
+{type:"single",
+ q:"虚数単位 $j$ の定義として正しいものを選べ",
+ opts:["$j=\\sqrt{-1},\\ j^2=-1$","$j=\\sqrt{2}$","$j^2=1$","$j=0$"],
+ ans:"$j=\\sqrt{-1},\\ j^2=-1$",
+ note:"虚数単位 $j=\\sqrt{-1}$、$j^2=-1$（数学では $i$ と書く）。複素数は $a+jb$（$a,b$ は実数）で表す。"},
+
+{type:"single",
+ q:"複素数 $a+jb$ の絶対値（大きさ）として正しいものを選べ",
+ opts:["$\\sqrt{a^2+b^2}$","$a+b$","$a^2+b^2$","$\\sqrt{a+b}$"],
+ ans:"$\\sqrt{a^2+b^2}$",
+ note:"複素平面（ガウス平面）上で、複素数 $a+jb$ の絶対値（大きさ）は $\\sqrt{a^2+b^2}$、偏角（位相）は $\\tan^{-1}\\!\\frac{b}{a}$。"},
+
+{type:"input",
+ q:"複素数 $3+j4$ の絶対値（大きさ）を求めよ",
+ ans:["5","5.0"],
+ hint:"$|a+jb|=\\sqrt{a^2+b^2}$。$\\sqrt{3^2+4^2}=\\sqrt{25}$。"},
+
+{type:"single",
+ q:"s平面で $s=\\sigma+j\\omega$ と表すとき、実部 $\\sigma$ が表すものはどれか",
+ opts:["減衰項","周波数特性","絶対値","偏角"],
+ ans:"減衰項",
+ note:"$s=\\sigma+j\\omega$。実部 $\\sigma$＝減衰項、虚部の方向（$j\\omega$ 軸）＝周波数特性。"},
+
+{type:"single",
+ q:"度数法 $180^\\circ$ を弧度法で表すと何 $[\\mathrm{rad}]$ か",
+ opts:["$\\pi\\ [\\mathrm{rad}]$","$2\\pi\\ [\\mathrm{rad}]$","$\\dfrac{\\pi}{2}\\ [\\mathrm{rad}]$","$90\\ [\\mathrm{rad}]$"],
+ ans:"$\\pi\\ [\\mathrm{rad}]$",
+ note:"$180^\\circ=\\pi\\ [\\mathrm{rad}]$。変換は $180^\\circ=\\pi\\ [\\mathrm{rad}]$ を用いる。"},
+
+{type:"single",
+ q:"$1\\ [\\mathrm{rad}]$ は度数法でおよそ何度か",
+ opts:["約 $57.3^\\circ$","約 $28.6^\\circ$","約 $3.14^\\circ$","約 $90^\\circ$"],
+ ans:"約 $57.3^\\circ$",
+ note:"$1\\ [\\mathrm{rad}]\\times\\dfrac{180}{\\pi}\\approx 57.3^\\circ$。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s8", no:"08", title:"基本信号（δ・u・r）", qs:[
+
+{type:"single",
+ q:"単位インパルス関数（ディラックのデルタ関数）$\\delta(t)$ の特徴として正しいものを選べ",
+ opts:[
+   "時刻0で幅0・高さ$\\infty$であり、両側で積分すると1になる",
+   "すべての時刻で値が1である",
+   "$t\\ge 0$ で $t$ に等しい関数である",
+   "時刻0で値が0である",
+ ],
+ ans:"時刻0で幅0・高さ$\\infty$であり、両側で積分すると1になる",
+ note:"ディラックのデルタ関数 $\\delta(t)$＝時刻0で幅0・高さ$\\infty$、両側積分 $\\displaystyle\\int_{-\\infty}^{\\infty}\\delta(t)\\,dt=1$ になる超関数（単位インパルス関数）。"},
+
+{type:"single",
+ q:"単位ステップ関数 $u(t)$ を時間積分して得られる関数はどれか",
+ opts:[
+   "デルタ関数 $\\delta(t)$",
+   "単位ステップ関数 $u(t)$",
+   "単位ランプ関数 $r(t)$",
+   "正弦波 $\\sin t$",
+ ],
+ ans:"単位ランプ関数 $r(t)$",
+ note:"$\\delta(t)\\ \\xrightarrow{\\text{積分}}\\ u(t)\\ \\xrightarrow{\\text{積分}}\\ r(t)$。逆に微分すると $r\\to u\\to\\delta$。$u(t)$ を積分すると $r(t)$（単位ランプ）。"},
+
+{type:"single",
+ q:"単位ステップ関数 $u(t)$ に関する説明として正しくないものを選べ",
+ opts:[
+   "ラプラス変換すると $\\dfrac{1}{s}$ である",
+   "デルタ関数を微分して得られる",
+   "$t>0$ の領域で微分すると 0 である",
+   "単位ステップ関数である",
+ ],
+ ans:"デルタ関数を微分して得られる",
+ note:"$u(t)$ はデルタ関数を「積分」して得られる（$\\delta=\\dfrac{du}{dt}$ なので $u$ は $\\delta$ の積分）。「微分して得られる」は誤り。$L[u]=\\dfrac{1}{s}$、$t>0$ では $u=1$ で微分は0、これらは正しい。"},
+
+{type:"single",
+ q:"単位ランプ関数 $r(t)$ の定義として正しいものを選べ",
+ opts:[
+   "$t\\ge 0$ で $t$、$t<0$ で 0（すなわち $r(t)=t\\,u(t)$）",
+   "すべての時刻で1",
+   "時刻0で$\\infty$、それ以外で0",
+   "$t\\ge 0$ で1、$t<0$ で0",
+ ],
+ ans:"$t\\ge 0$ で $t$、$t<0$ で 0（すなわち $r(t)=t\\,u(t)$）",
+ note:"単位ランプ関数 $r(t)=t\\,u(t)$（$t\\ge 0$ で $t$、$t<0$ で 0）。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s9", no:"09", title:"ラプラス変換（定義・変換対・定理）", qs:[
+
+{type:"single",
+ q:"ラプラス変換の定義式として正しいものを選べ",
+ opts:[
+   "$F(s)=\\displaystyle\\int_{0}^{\\infty} f(t)\\,e^{-st}\\,dt$",
+   "$F(s)=\\displaystyle\\int_{0}^{\\infty} f(t)\\,e^{st}\\,dt$",
+   "$F(s)=\\displaystyle\\int_{-\\infty}^{\\infty} f(t)\\,e^{-j\\omega t}\\,dt$",
+   "$F(s)=\\dfrac{d}{dt}f(t)$",
+ ],
+ ans:"$F(s)=\\displaystyle\\int_{0}^{\\infty} f(t)\\,e^{-st}\\,dt$",
+ note:"ラプラス変換の定義：$F(s)=L[f(t)]=\\displaystyle\\int_{0}^{\\infty} f(t)e^{-st}\\,dt$（$s$ はラプラス演算子で、計算上は定数として扱う）。"},
+
+{type:"single",
+ q:"単位インパルス関数のラプラス変換 $L[\\delta(t)]$ はどれか",
+ opts:["$1$","$\\dfrac{1}{s}$","$\\dfrac{1}{s^2}$","$s$"],
+ ans:"$1$",
+ note:"$L[\\delta(t)]=1$。"},
+
+{type:"single",
+ q:"単位ステップ関数のラプラス変換 $L[u(t)]$ はどれか",
+ opts:["$1$","$\\dfrac{1}{s}$","$\\dfrac{1}{s^2}$","$s$"],
+ ans:"$\\dfrac{1}{s}$",
+ note:"$L[u(t)]=\\dfrac{1}{s}$。"},
+
+{type:"single",
+ q:"単位ランプ関数（$r(t)=t$）のラプラス変換 $L[t]$ はどれか",
+ opts:["$\\dfrac{1}{s}$","$\\dfrac{1}{s^2}$","$s^2$","$1$"],
+ ans:"$\\dfrac{1}{s^2}$",
+ note:"$L[t]=\\dfrac{1}{s^2}$。$\\delta\\to u\\to r$ と積分が進むごとに $s$ で割られる（$1\\to\\dfrac{1}{s}\\to\\dfrac{1}{s^2}$）。"},
+
+{type:"single",
+ q:"指数関数のラプラス変換 $L[e^{-at}]$ はどれか",
+ opts:["$\\dfrac{1}{s+a}$","$\\dfrac{1}{s-a}$","$\\dfrac{a}{s^2+a^2}$","$\\dfrac{s}{s^2+a^2}$"],
+ ans:"$\\dfrac{1}{s+a}$",
+ note:"$L[e^{-at}]=\\dfrac{1}{s+a}$。"},
+
+{type:"single",
+ q:"正弦波のラプラス変換 $L[\\sin(at)]$ はどれか",
+ opts:["$\\dfrac{a}{s^2+a^2}$","$\\dfrac{s}{s^2+a^2}$","$\\dfrac{1}{s+a}$","$\\dfrac{a}{s^2-a^2}$"],
+ ans:"$\\dfrac{a}{s^2+a^2}$",
+ note:"$L[\\sin(at)]=\\dfrac{a}{s^2+a^2}$。制御工学では因果性を前提とするので $\\sin(at)$ は $\\sin(at)\\,u(t)$ を意味する。"},
+
+{type:"single",
+ q:"余弦波のラプラス変換 $L[\\cos(at)]$ はどれか",
+ opts:["$\\dfrac{a}{s^2+a^2}$","$\\dfrac{s}{s^2+a^2}$","$\\dfrac{1}{s+a}$","$\\dfrac{s}{s^2-a^2}$"],
+ ans:"$\\dfrac{s}{s^2+a^2}$",
+ note:"$L[\\cos(at)]=\\dfrac{s}{s^2+a^2}$。"},
+
+{type:"single",
+ q:"「時間推移（時間遅れ）」の定理を表しているものを選べ",
+ opts:[
+   "$\\displaystyle\\lim_{t\\to\\infty}f(t)=\\lim_{s\\to 0}sF(s)$",
+   "$\\displaystyle\\lim_{t\\to 0}f(t)=\\lim_{s\\to\\infty}sF(s)$",
+   "$L[f(t-a)]=e^{-as}F(s)$",
+   "$L[f_1(t)\\cdot f_2(t)]=F_1(s)\\cdot F_2(s)$",
+ ],
+ ans:"$L[f(t-a)]=e^{-as}F(s)$",
+ note:"時間推移（時間遅れ）の定理：$L[f(t-a)]=e^{-as}F(s)$。時間軸の $a$ の遅れが $e^{-as}$ になる。"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s10", no:"10", title:"ラプラス変換・逆変換の計算", qs:[
+
+{type:"input",
+ q:"$a\\cdot r(t)$（$a\\times$単位ランプ関数, $r(t)=t$）をラプラス変換せよ",
+ ans:["a/s^2","a/s²","a/(s^2)","a/(s*s)","a/ss"],
+ hint:"$L[t]=\\dfrac{1}{s^2}$。定数倍 $a$ は線形性よりそのまま前に出る。（入力例: a/s^2）"},
+
+{type:"input",
+ q:"$e^{-at}$ をラプラス変換せよ",
+ ans:["1/(s+a)","1/(a+s)","1/(s＋a)"],
+ hint:"指数関数の基本変換対。$L[e^{-at}]=\\dfrac{1}{s+a}$。（入力例: 1/(s+a)）"},
+
+{type:"single",
+ q:"$f(t)=\\dfrac{u(t)}{3}$（単位ステップ関数の $\\frac{1}{3}$ 倍）のラプラス変換はどれか",
+ opts:["$\\dfrac{1}{3s}$","$\\dfrac{3}{s}$","$\\dfrac{s}{3}$","$\\dfrac{1}{3s^2}$"],
+ ans:"$\\dfrac{1}{3s}$",
+ note:"$L[u(t)]=\\dfrac{1}{s}$。定数倍 $\\dfrac{1}{3}$ をかけて $\\dfrac{1}{3s}$。"},
+
+{type:"single",
+ q:"$F(s)=\\dfrac{16}{s^2+16}$ のラプラス逆変換はどれか",
+ opts:["$4\\sin(4t)$","$16\\sin(4t)$","$\\sin(16t)$","$4\\cos(4t)$"],
+ ans:"$4\\sin(4t)$",
+ note:"$\\dfrac{a}{s^2+a^2}=L[\\sin(at)]$。$a=4$ のとき $\\dfrac{4}{s^2+16}=L[\\sin 4t]$。$\\dfrac{16}{s^2+16}=4\\cdot\\dfrac{4}{s^2+16}=4\\sin(4t)$。"},
+
+{type:"single",
+ q:"$F(s)=\\dfrac{s}{s^2+9}$ のラプラス逆変換はどれか",
+ opts:["$\\cos(3t)$","$\\sin(3t)$","$3\\cos(3t)$","$\\cos(9t)$"],
+ ans:"$\\cos(3t)$",
+ note:"$\\dfrac{s}{s^2+a^2}=L[\\cos(at)]$。$a=3$ なので $\\dfrac{s}{s^2+9}=\\cos(3t)$。"},
+
+{type:"input",
+ q:"$L^{-1}\\!\\left[\\dfrac{1}{s+2}\\right]$ を求めよ（時間関数 $f(t)$ を答えよ）",
+ ans:["e^(-2t)","e^-2t","exp(-2t)","ε^(-2t)"],
+ hint:"$\\dfrac{1}{s+a}=L[e^{-at}]$ の逆。$a=2$。（入力例: e^(-2t)）"},
+
+]},
+
+// ──────────────────────────────────────────────
+{id:"s11", no:"11", title:"ブロック線図の等価変換・合成伝達関数", qs:[
+
+{type:"single",
+ q:"2つの要素 $G_1, G_2$ を縦続（直列）結合したときの合成伝達関数はどれか",
+ opts:["$G_1 G_2$","$G_1+G_2$","$\\dfrac{G_1}{G_2}$","$\\dfrac{G_1}{1+G_2}$"],
+ ans:"$G_1 G_2$",
+ note:"縦続（直列）結合の合成伝達関数は積 $G_1 G_2$。"},
+
+{type:"single",
+ q:"2つの要素 $G_1, G_2$ を並列結合（同符号で加算）したときの合成伝達関数はどれか",
+ opts:["$G_1 G_2$","$G_1+G_2$","$\\dfrac{G_1}{G_2}$","$\\dfrac{G_1}{1+G_2}$"],
+ ans:"$G_1+G_2$",
+ note:"並列結合の合成伝達関数は和 $G_1+G_2$（符号により $G_1-G_2$）。"},
+
+{type:"single",
+ q:"前向き要素 $G$、フィードバック要素 $H$ のネガティブ・フィードバック（負帰還）結合の合成伝達関数はどれか",
+ opts:["$\\dfrac{G}{1+GH}$","$\\dfrac{G}{1-GH}$","$\\dfrac{GH}{1+G}$","$\\dfrac{1}{1+GH}$"],
+ ans:"$\\dfrac{G}{1+GH}$",
+ note:"負帰還結合：$\\dfrac{G}{1+GH}$。一巡伝達関数 $GH$ が分母の $1$ に加わる。"},
+
+{type:"single",
+ q:"前向き要素 $G$、フィードバック要素 $H$ のポジティブ・フィードバック（正帰還）結合の合成伝達関数はどれか",
+ opts:["$\\dfrac{G}{1+GH}$","$\\dfrac{G}{1-GH}$","$\\dfrac{GH}{1+G}$","$\\dfrac{1}{1-GH}$"],
+ ans:"$\\dfrac{G}{1-GH}$",
+ note:"正帰還結合：$\\dfrac{G}{1-GH}$。負帰還の分母の符号が反転する。"},
+
+{type:"single",
+ q:"前向き要素が $G$ の直結（$H=1$、ユニティ）ネガティブ・フィードバック制御系の合成伝達関数はどれか",
+ opts:["$\\dfrac{1}{1+G}$","$\\dfrac{G}{1+G}$","$\\dfrac{G}{1-G}$","$\\dfrac{1}{G}$"],
+ ans:"$\\dfrac{G}{1+G}$",
+ note:"直結（$H=1$）の負帰還：$\\dfrac{G}{1+G\\cdot 1}=\\dfrac{G}{1+G}$。よくある誤答 $\\dfrac{1}{1+G}$ に注意。"},
+
+{type:"single",
+ q:"ブロック線図を等価変換するときの原則として正しいものを選べ",
+ opts:[
+   "変換表に載っている形以外は一切変換できない",
+   "変換前後で信号の値（伝達特性）が等しくなれば、変換表にない形でも変換してよい",
+   "変換のたびに信号の値は変化してよい",
+   "加え合わせ点は移動できない",
+ ],
+ ans:"変換前後で信号の値（伝達特性）が等しくなれば、変換表にない形でも変換してよい",
+ note:"等価変換＝変形（簡単化）の前後で値（伝達特性）が等しければよい。変換表に無くても、前後が等価であれば変換可能。"},
+
+{type:"single",
+ q:"ブロック線図を等価変換して1つにまとめた伝達関数の呼び名として正しくないものを選べ",
+ opts:["合成伝達関数","閉ループ伝達関数","一巡伝達関数","総合（統合）伝達関数"],
+ ans:"一巡伝達関数",
+ note:"まとめた伝達関数は 合成／総合／統合伝達関数（＝閉ループ伝達関数・フィードバック伝達関数）。一巡伝達関数は開ループ伝達関数（$GH$）のことで別物。"},
+
+{type:"input",
+ q:"前向き経路 $G$、フィードバック経路 $H$ が一巡したときの伝達関数を「一巡伝達関数（開ループ伝達関数）」という。その式を $G$ と $H$ で表せ",
+ ans:["GH","G*H","G・H","HG","G\\cdot H"],
+ hint:"ループを一周したときの積。（入力例: GH）"},
+
+{type:"single",
+ q:"前向き経路に $G_1$ と $G_2$ が並列（和）に接続され、その出力を $G_3$ と $G_4$ の並列（和）でネガティブ・フィードバックした系の合成伝達関数はどれか",
+ opts:[
+   "$\\dfrac{G_1+G_2}{1+(G_1+G_2)(G_3+G_4)}$",
+   "$\\dfrac{G_1 G_2}{1+G_1 G_2 G_3 G_4}$",
+   "$(G_1+G_2)(G_3+G_4)$",
+   "$\\dfrac{G_1+G_2}{1-(G_1+G_2)(G_3+G_4)}$",
+ ],
+ ans:"$\\dfrac{G_1+G_2}{1+(G_1+G_2)(G_3+G_4)}$",
+ note:"前向き＝$G_1+G_2$（並列）、帰還＝$G_3+G_4$（並列）、負帰還なので $\\dfrac{G}{1+GH}=\\dfrac{G_1+G_2}{1+(G_1+G_2)(G_3+G_4)}$。"},
+
+{type:"sort",
+ q:"フィードバック制御系の一般的なブロック線図で、目標値から制御量に至る「前向き経路」に現れる要素を、目標値側から順に並べよ",
+ items:["基準入力要素","調節部","操作部","制御対象"],
+ ans:["基準入力要素","調節部","操作部","制御対象"],
+ note:"目標値→[基準入力要素]→基準入力→○（制御偏差）→[調節部]→[操作部]→操作量→[制御対象]→制御量。検出部はフィードバック経路に入る。"},
+
+]},
+
+];/* end SECTIONS */
+
+/* =====================================================================
+   STATE / STORAGE
+===================================================================== */
+let state = {};
+try{ state = JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}"); }catch(e){}
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); if(window.progressSave) progressSave(STORAGE_KEY, state); }
+
+/* lookup helper（key = "<secId>_<qi>"） */
+function getQ(secId,key){
+  const sec=SECTIONS.find(s=>s.id===secId);
+  if(!sec) return null;
+  const qi=parseInt(key.split("_")[1]);
+  return sec.qs[qi];
+}
+
+/* =====================================================================
+   KaTeX 数式描画
+===================================================================== */
+window.KATEX_OPTS={delimiters:[
+  {left:"$$",right:"$$",display:true},
+  {left:"$",right:"$",display:false},
+  {left:"\\(",right:"\\)",display:false},
+  {left:"\\[",right:"\\]",display:true}
+],throwOnError:false};
+function typeset(el){ if(window.renderMathInElement && el){ try{ renderMathInElement(el, window.KATEX_OPTS); }catch(e){} } }
+
+/* =====================================================================
+   SCORE
+===================================================================== */
+function computeScore(){
+  let done=0, total=0;
+  SECTIONS.forEach(sec=>{
+    sec.qs.forEach((q,qi)=>{
+      total++;
+      const k=`${sec.id}_${qi}`;
+      if(state[k]===1) done++;
+    });
+  });
+  return {done,total};
+}
+function updateScore(){
+  const {done,total}=computeScore();
+  document.getElementById("sNum").textContent=`${done} / ${total}`;
+  document.getElementById("sBar").style.width= total?`${done/total*100}%`:"0%";
+}
+function resetAll(){
+  if(!confirm("進捗をリセットしますか？")) return;
+  state={};
+  save();
+  location.reload();
+}
+
+/* =====================================================================
+   NORM (for input matching)
+===================================================================== */
+function norm(s){ return s.replace(/[　\s]/g,"").toLowerCase().replace(/[，,。．.、]/g,""); }
+function matchInput(val,answers){
+  const n=norm(val);
+  if(!Array.isArray(answers)) answers=[answers];
+  return answers.some(a=>norm(a)===n || n.includes(norm(a)) || norm(a).includes(n));
+}
+
+/* =====================================================================
+   RENDER
+===================================================================== */
+function renderAll(){
+  const app=document.getElementById("app");
+  const toc=document.getElementById("toc");
+  toc.innerHTML="";
+  app.innerHTML="";
+
+  SECTIONS.forEach(sec=>{
+    const a=document.createElement("a");
+    a.href=`#${sec.id}`; a.textContent=`${sec.no} ${sec.title}`;
+    toc.appendChild(a);
+
+    const el=document.createElement("section");
+    el.id=sec.id;
+
+    let secDone=0, secTotal=sec.qs.length;
+    sec.qs.forEach((q,qi)=>{
+      const k=`${sec.id}_${qi}`;
+      if(state[k]===1) secDone++;
+    });
+
+    el.innerHTML=`
+      <div class="sec-head">
+        <span class="sec-no">${sec.no}</span>
+        <h2>${sec.title}</h2>
+        <span class="sec-score" id="ss_${sec.id}">${secDone}/${secTotal}</span>
+      </div>`;
+
+    sec.qs.forEach((q,qi)=>{
+      const k=`${sec.id}_${qi}`;
+      const card=buildQuestion(q, qi, k, sec.id);
+      el.appendChild(card);
+    });
+
+    app.appendChild(el);
+  });
+
+  updateScore();
+  typeset(app);
+}
+
+function buildQuestion(q, qi, key, secId){
+  const div=document.createElement("div");
+  div.className="q"+(state[key]===1?" correct":state[key]===-1?" wrong":"");
+  div.id=`q_${key}`;
+
+  const qn=qi+1;
+  let inner=`<div class="q-top"><span class="qn">Q${qn}</span><div class="q-body">
+    <div class="prompt">${q.q}</div>`;
+
+  if(q.type==="single"){
+    inner+=`<div class="opts">`;
+    q.opts.forEach((o,oi)=>{
+      let cls="opt";
+      if(state[key]!==undefined){
+        if(o===q.ans) cls+=" reveal";
+        if(state[key+"_pick"]===o && o!==q.ans) cls+=" pick-wrong";
+        if(state[key+"_pick"]===o && o===q.ans) cls+=" pick-correct";
+      }
+      const dis=state[key]!==undefined?"disabled":"";
+      inner+=`<button class="${cls}" ${dis} onclick="pickSingle('${key}','${secId}',${oi})"><span class="lab">${labelChar(oi)}</span>${o}</button>`;
+    });
+    inner+=`</div>`;
+
+  }else if(q.type==="multi"){
+    inner+=`<div class="opts" id="mopts_${key}">`;
+    q.opts.forEach((o,oi)=>{
+      let cls="opt";
+      const sel=state[key+"_sel"] && state[key+"_sel"].includes(o);
+      if(sel) cls+=" multi-selected";
+      if(state[key]!==undefined){
+        if(q.ans.includes(o)) cls+=" reveal";
+        if(sel && !q.ans.includes(o)) cls+=" pick-wrong";
+        if(sel && q.ans.includes(o)) cls+=" pick-correct";
+      }
+      const dis=state[key]!==undefined?"disabled":"";
+      inner+=`<button class="${cls}" ${dis} onclick="toggleMulti('${key}','${secId}',${oi})"><span class="lab">${labelChar(oi)}</span>${o}</button>`;
+    });
+    inner+=`</div>`;
+    if(state[key]===undefined){
+      inner+=`<div class="multi-submit"><button class="btn" onclick="submitMulti('${key}','${secId}')">採点</button></div>`;
+    }
+
+  }else if(q.type==="sort"){
+    const placed=state[key+"_placed"]||[];
+    inner+=`<div class="sort-bank" id="sbank_${key}">`;
+    q.items.forEach((item,ii)=>{
+      if(placed.includes(item)) return;
+      inner+=`<button class="sort-item" onclick="placeSortItem('${key}','${secId}',${ii})">${item}</button>`;
+    });
+    inner+=`</div>`;
+    inner+=`<div class="sort-answer" id="sans_${key}">`;
+    q.items.forEach((_,ii)=>{
+      const filledWith=placed[ii]||"";
+      const slotCls="slot"+(filledWith?" filled":"");
+      inner+=`<div class="${slotCls}" onclick="removeSortItem('${key}','${secId}',${ii})">${ii+1}. ${filledWith||"ここをタップして削除"}</div>`;
+    });
+    inner+=`</div>`;
+    if(placed.length===q.items.length && state[key]===undefined){
+      inner+=`<div class="multi-submit"><button class="btn" onclick="submitSort('${key}','${secId}')">採点</button></div>`;
+    }
+
+  }else if(q.type==="input"){
+    const val=state[key+"_val"]||"";
+    const inputCls=state[key]===1?"ok":state[key]===-1?"ng":"";
+    const dis=state[key]!==undefined?"disabled":"";
+    inner+=`<div class="inrow">
+      <input id="inp_${key}" type="text" value="${val.replace(/"/g,'&quot;')}" ${dis} class="${inputCls}" placeholder="答えを入力"
+        onkeydown="if(event.key==='Enter')submitInput('${key}','${secId}')">
+      ${state[key]===undefined?`<button class="btn" onclick="submitInput('${key}','${secId}')">採点</button>`:""}
+      ${state[key]!==undefined && state[key]!==1?`<button class="btn ghost" onclick="revealInput('${key}','${secId}')">答えを見る</button>`:""}
+    </div>`;
+    if(q.hint && state[key]===undefined){
+      inner+=`<div class="note" style="margin-top:6px">💡 ヒント: ${q.hint}</div>`;
+    }
+  }
+
+  const fbShow=state[key]!==undefined?"show":"";
+  const verdictLabel=state[key]===1?"✓ 正解":"✗ 不正解";
+  const verdictCls=state[key]===1?"g":"b";
+  inner+=`<div class="fb ${fbShow}" id="fb_${key}">
+    <span class="verdict ${verdictCls}">${verdictLabel}</span>
+    ${q.note?`<div class="note">${q.note}</div>`:""}
+  </div>`;
+
+  inner+=`</div></div>`;
+  div.innerHTML=inner;
+  return div;
+}
+
+function labelChar(i){ return String.fromCharCode(65+i)+"."; }
+
+/* =====================================================================
+   INTERACTIONS（選択肢はインデックスで受け渡し → 数式LaTeXが壊れない）
+===================================================================== */
+function pickSingle(key,secId,oi){
+  const q=getQ(secId,key); if(!q) return;
+  const chosen=q.opts[oi], ans=q.ans;
+  if(state[key]===undefined && chosen===ans && window.addPoints) addPoints(100);
+  state[key]=chosen===ans?1:-1;
+  state[key+"_pick"]=chosen;
+  save(); refreshQ(key,secId);
+}
+
+function toggleMulti(key,secId,oi){
+  const q=getQ(secId,key); if(!q) return;
+  const opt=q.opts[oi];
+  if(!state[key+"_sel"]) state[key+"_sel"]=[];
+  const idx=state[key+"_sel"].indexOf(opt);
+  if(idx>-1) state[key+"_sel"].splice(idx,1);
+  else state[key+"_sel"].push(opt);
+  save(); refreshQ(key,secId);
+}
+
+function submitMulti(key,secId){
+  const q=getQ(secId,key); if(!q) return;
+  const sel=state[key+"_sel"]||[]; const ans=q.ans;
+  const correct=sel.length===ans.length && ans.every(a=>sel.includes(a));
+  if(state[key]===undefined && correct && window.addPoints) addPoints(100);
+  state[key]=correct?1:-1;
+  save(); refreshQ(key,secId);
+}
+
+function placeSortItem(key,secId,ii){
+  const q=getQ(secId,key); if(!q) return;
+  if(state[key]!==undefined) return;
+  const item=q.items[ii];
+  if(!state[key+"_placed"]) state[key+"_placed"]=[];
+  if(state[key+"_placed"].includes(item)) return;
+  state[key+"_placed"].push(item);
+  save(); refreshQ(key,secId);
+}
+
+function removeSortItem(key,secId,idx){
+  if(state[key]!==undefined) return;
+  if(!state[key+"_placed"]) return;
+  state[key+"_placed"].splice(idx,1);
+  save(); refreshQ(key,secId);
+}
+
+function submitSort(key,secId){
+  const q=getQ(secId,key); if(!q) return;
+  const ans=q.ans;
+  const placed=state[key+"_placed"]||[];
+  const correct=ans.every((a,i)=>placed[i]===a);
+  if(state[key]===undefined && correct && window.addPoints) addPoints(100);
+  state[key]=correct?1:-1;
+  save(); refreshQ(key,secId);
+}
+
+function submitInput(key,secId){
+  const q=getQ(secId,key); if(!q) return;
+  const ans=q.ans;
+  const val=document.getElementById("inp_"+key).value.trim();
+  state[key+"_val"]=val;
+  const correct=matchInput(val,ans);
+  if(state[key]===undefined && correct && window.addPoints) addPoints(100);
+  state[key]=correct?1:-1;
+  save(); refreshQ(key,secId);
+}
+
+function revealInput(key,secId){
+  const q=getQ(secId,key); if(!q) return;
+  const ans=q.ans;
+  const ansDisplay=Array.isArray(ans)?ans[0]:ans;
+  state[key+"_val"]=ansDisplay;
+  state[key]=-1;
+  save(); refreshQ(key,secId);
+}
+
+function refreshQ(key,secId){
+  const sec=SECTIONS.find(s=>s.id===secId);
+  if(!sec) return;
+  const qi=parseInt(key.split("_")[1]);
+  const q=sec.qs[qi];
+  const old=document.getElementById("q_"+key);
+  if(!old) return;
+  const newCard=buildQuestion(q,qi,key,secId);
+  old.replaceWith(newCard);
+  typeset(newCard);
+
+  let done=0;
+  sec.qs.forEach((_,i)=>{ if(state[`${secId}_${i}`]===1) done++; });
+  const ss=document.getElementById("ss_"+secId);
+  if(ss) ss.textContent=`${done}/${sec.qs.length}`;
+
+  updateScore();
+}
+
+/* ===== INIT ===== */
+renderAll();
+window._quizSync = async function() {
+  const s = await progressLoad(STORAGE_KEY);
+  if (!s || !Object.keys(s).length) return;
+  let chg = false;
+  for (const k in s) { if (s[k] && !state[k]) { state[k] = s[k]; chg = true; } }
+  if (chg) { save(); renderAll(); }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/points.js"></script>
+<script src="../../js/progress.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
+<script>window.addEventListener("load",function(){ typeset(document.getElementById("app")); });</script>
+<a href="../../" style="position:fixed;bottom:20px;left:16px;background:rgba(10,22,38,.9);border:1px solid #27406a;color:#8aa1c0;text-decoration:none;padding:8px 14px;border-radius:99px;font-size:.82rem;z-index:200;backdrop-filter:blur(4px)">← トップへ</a>
+</body>
+</html>

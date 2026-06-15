@@ -109,4 +109,15 @@
     "storageKey": "kakougaku_setugou_v1",
     "totalItems": 16
   }
+,
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "制御工学Ⅰ",
+    "title": "制御工学Ⅰ ・ 中間対策テスト",
+    "path": "tests/2026-4-zenki-chukan-seigyogaku/",
+    "storageKey": "seigyo1_chukan_v1",
+    "totalItems": 74
+  }
 ]
