@@ -159,7 +159,7 @@ app.get('/api/ranking', async (req, res) => {
 // メンバー一覧（ポイント順、ログイン不要）
 app.get('/api/members', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, points, last_login
+    SELECT username, avatar, frame, points, last_login, test_pred, test_bet
     FROM users
     ORDER BY points DESC
   `);
@@ -170,7 +170,8 @@ app.get('/api/members', async (req, res) => {
 app.get('/api/admin/users', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { rows } = await pool.query(`
-    SELECT u.id, u.username, u.email, u.avatar, u.frame, u.created_at, u.points, s.score, s.total
+    SELECT u.id, u.username, u.email, u.avatar, u.frame, u.created_at, u.points, s.score, s.total,
+           u.test_pred, u.test_bet
     FROM users u LEFT JOIN scores s ON s.user_id = u.id
     ORDER BY u.points DESC
   `);

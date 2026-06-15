@@ -1110,7 +1110,7 @@ async function reloadAdminContent() {
   el.innerHTML = `
     <p style="color:var(--muted);margin-bottom:10px">登録人数：<strong style="color:var(--teal)">${data.length}人</strong></p>
     <table class="ranking-table">
-      <thead><tr><th>#</th><th>名前</th><th>ポイント</th><th>付与</th></tr></thead>
+      <thead><tr><th>#</th><th>名前</th><th>ポイント</th><th>予測</th><th>賭け金</th><th>付与</th></tr></thead>
       <tbody>${data.map((u, i) => `
         <tr>
           <td class="rank-num">${i + 1}</td>
@@ -1119,6 +1119,8 @@ async function reloadAdminContent() {
             ${u.username}<br><span style="color:var(--dim);font-size:.72rem">${u.email||''}</span>
           </td>
           <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
+          <td style="text-align:center;color:var(--teal)">${u.test_pred != null ? u.test_pred+'点' : '―'}</td>
+          <td style="text-align:center;color:var(--amber)">${u.test_bet != null ? u.test_bet.toLocaleString()+'pt' : '―'}</td>
           <td>
             <div style="display:flex;gap:4px;align-items:center">
               <input type="number" id="grant-amt-${u.id}" value="500" min="1" style="width:64px;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:.78rem">
@@ -1171,7 +1173,7 @@ async function openMembersModal() {
   const data = await res.json();
   if (!Array.isArray(data)) { el.innerHTML = 'エラー'; return; }
   el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
-      <thead><tr><th>#</th><th>名前</th><th>ポイント</th></tr></thead>
+      <thead><tr><th>#</th><th>名前</th><th>ポイント</th><th>予測</th><th>賭け金</th></tr></thead>
       <tbody>${data.map((u, i) => `
         <tr>
           <td class="rank-num">${i + 1}</td>
@@ -1180,6 +1182,8 @@ async function openMembersModal() {
             ${u.username}
           </td>
           <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
+          <td style="text-align:center;color:var(--teal)">${u.test_pred != null ? u.test_pred+'点' : '―'}</td>
+          <td style="text-align:center;color:var(--amber)">${u.test_bet != null ? u.test_bet.toLocaleString()+'pt' : '―'}</td>
         </tr>`).join('')}
       </tbody>
     </table></div>`;
