@@ -58,6 +58,8 @@ async function initDB() {
       UNIQUE(user_id, quiz_key)
     )
   `).catch(()=>{});
+  // 福澤まさみ以外のワーストフレームをリセット（一回限り）
+  await pool.query(`UPDATE users SET frame='default' WHERE frame='worst' AND username != '福澤まさみ'`).catch(()=>{});
 }
 
 // 認証ミドルウェア（Supabase JWT または カスタムセッショントークン）
