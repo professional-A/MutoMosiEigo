@@ -149,6 +149,11 @@ h1{
 .notif-item-title{font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:4px}
 .notif-item-body{font-size:.82rem;color:var(--muted);line-height:1.5}
 .notif-new .notif-item-title::before{content:'NEW ';color:var(--teal);font-size:.7rem;font-weight:700}
+.ticker-wrap{overflow:hidden;background:rgba(70,214,196,.07);border-top:1px solid rgba(70,214,196,.2);border-bottom:1px solid rgba(70,214,196,.2);height:28px;display:flex;align-items:center}
+.ticker-track{display:flex;white-space:nowrap;animation:ticker-scroll 22s linear infinite}
+.ticker-track:hover{animation-play-state:paused}
+.ticker-item{font-size:.78rem;color:var(--teal);font-weight:600;padding:0 60px;letter-spacing:.02em}
+@keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .auth-bar span{color:var(--muted)}
 .auth-bar strong{color:var(--teal)}
 .auth-btn{
@@ -261,11 +266,6 @@ body{padding-top:38px}
 <!-- お知らせパネル -->
 <div class="notif-panel" id="notif-panel">
   <div class="notif-header">お知らせ</div>
-  <div class="notif-item" id="notif-leader" style="background:linear-gradient(135deg,rgba(70,214,196,.08),rgba(246,179,82,.06));border-left:3px solid var(--teal)">
-    <div class="notif-item-date">LIVE</div>
-    <div class="notif-item-title" id="notif-leader-title" style="color:var(--teal)">読み込み中...</div>
-    <div class="notif-item-body" id="notif-leader-body"></div>
-  </div>
   <div class="notif-item notif-new">
     <div class="notif-item-date">2026-06-15</div>
     <div class="notif-item-title">テスト予測イベント：締め切り前なら変更OK！</div>
@@ -462,6 +462,10 @@ body{padding-top:38px}
   </div>
 </div>
 
+
+<div class="ticker-wrap" id="ticker-wrap" style="display:none">
+  <div class="ticker-track" id="ticker-track"></div>
+</div>
 
 <header>
   <div class="wrap">
@@ -1224,26 +1228,30 @@ document.getElementById('members-modal-bg').addEventListener('click', e => {
 // ── お知らせ ────────────────────────────────────────────
 const NOTIF_KEY = 'muto_notif_read_3';
 const LEADER_MSGS = [
-  name => `現在 ${name} が1位独走中！追いつけるか？🔥`,
-  name => `${name} がぶっちぎりのトップ！このままでいいの？💀`,
-  name => `${name} が首位をキープ中。誰か止めてくれ😇`,
-  name => `ランキング1位は ${name}！差を縮めろ🏃`,
-  name => `${name} に勝ちたければ問題解け！今すぐ！⚡`,
+  (name, pt) => `🔥 現在 ${name} が1位独走中！（${pt.toLocaleString()}pt）　追いつけるか？`,
+  (name, pt) => `💀 ${name} がぶっちぎりのトップ（${pt.toLocaleString()}pt）　このままでいいの？`,
+  (name, pt) => `😇 ${name} が首位キープ中（${pt.toLocaleString()}pt）　誰か止めてくれ`,
+  (name, pt) => `🏃 ランキング1位は ${name}（${pt.toLocaleString()}pt）　差を縮めろ！`,
+  (name, pt) => `⚡ ${name} に勝ちたければ問題解け！（現在 ${pt.toLocaleString()}pt 差）`,
 ];
-async function loadLeaderNotif() {
+async function loadTicker() {
   try {
     const res = await fetch('/api/members');
     const data = await res.json();
     if (!Array.isArray(data) || !data[0]) return;
     const leader = data[0];
-    const msg = LEADER_MSGS[Math.floor(Math.random() * LEADER_MSGS.length)](leader.username);
-    document.getElementById('notif-leader-title').textContent = msg;
-    document.getElementById('notif-leader-body').textContent = `${leader.username}: ${(leader.points||0).toLocaleString()}pt`;
-  } catch(e) {
-    document.getElementById('notif-leader').style.display = 'none';
-  }
+    const pt = leader.points || 0;
+    const msgFn = LEADER_MSGS[Math.floor(Math.random() * LEADER_MSGS.length)];
+    const text = msgFn(leader.username, pt);
+    const wrap = document.getElementById('ticker-wrap');
+    const track = document.getElementById('ticker-track');
+    // テキストを2回繰り返してシームレスループ
+    const item = `<span class="ticker-item">${text}</span>`;
+    track.innerHTML = item.repeat(6);
+    wrap.style.display = 'flex';
+  } catch(e) {}
 }
-loadLeaderNotif();
+loadTicker();
 
 function toggleNotif() {
   const panel = document.getElementById('notif-panel');
