@@ -149,10 +149,9 @@ h1{
 .notif-item-title{font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:4px}
 .notif-item-body{font-size:.82rem;color:var(--muted);line-height:1.5}
 .notif-new .notif-item-title::before{content:'NEW ';color:var(--teal);font-size:.7rem;font-weight:700}
-.ticker-wrap{overflow:hidden;background:rgba(70,214,196,.07);border-top:1px solid rgba(70,214,196,.2);border-bottom:1px solid rgba(70,214,196,.2);height:28px;display:flex;align-items:center}
+.ticker-wrap{position:fixed;top:38px;left:0;right:0;z-index:99;overflow:hidden;background:rgba(10,22,38,.95);backdrop-filter:blur(6px);border-bottom:1px solid rgba(70,214,196,.25);height:26px;display:flex;align-items:center}
 .ticker-track{display:flex;white-space:nowrap;animation:ticker-scroll 22s linear infinite}
-.ticker-track:hover{animation-play-state:paused}
-.ticker-item{font-size:.78rem;color:var(--teal);font-weight:600;padding:0 60px;letter-spacing:.02em}
+.ticker-item{font-size:.76rem;color:var(--teal);font-weight:600;padding:0 60px;letter-spacing:.02em}
 @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 .auth-bar span{color:var(--muted)}
 .auth-bar strong{color:var(--teal)}
@@ -162,7 +161,7 @@ h1{
 }
 .auth-btn:hover{border-color:var(--teal);color:var(--teal)}
 .auth-btn.primary{background:var(--teal);color:#0a1626;border-color:var(--teal);font-weight:600}
-body{padding-top:38px}
+body{padding-top:64px}
 
 /* Modal */
 .modal-bg{
