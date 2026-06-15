@@ -282,16 +282,22 @@ body{padding-top:38px}
 <div class="modal-bg" id="test-modal-bg">
   <div class="modal" style="width:min(480px,95vw)">
     <h2>📋 英語テスト 点数予測イベント</h2>
-    <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px">予測受付：〜6/16(月) 9:00 AM ／ ポイント = max(0, 10000 − 誤差² × 10)</p>
+    <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px">予測受付：〜6/16(月) 9:00 AM ／ みんなの賭け金プールを 1/誤差² の比率で配分</p>
 
     <!-- フェーズ1: 予測未入力 -->
     <div id="test-phase-predict" style="display:none">
-      <p style="margin-bottom:10px;font-size:.92rem">テストが返ってくる前に予測点数を入力してね！</p>
-      <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
+      <p style="margin-bottom:10px;font-size:.92rem">テストが返ってくる前に予測点数と賭け金を入力してね！</p>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
         <input id="pred-input" type="number" min="0" max="100" placeholder="0〜100"
           style="width:100px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-size:1.1rem;font-family:inherit">
         <span style="color:var(--muted)">点 / 100点</span>
       </div>
+      <div style="display:flex;gap:8px;align-items:center;margin-bottom:4px">
+        <input id="bet-input" type="number" min="1" placeholder="賭け金"
+          style="width:100px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-size:1.1rem;font-family:inherit">
+        <span style="color:var(--muted)">pt</span>
+      </div>
+      <p style="font-size:.78rem;color:var(--dim);margin-bottom:12px">所持pt: <span id="bet-points-display">―</span>pt ／ 賭け金は即時ポイントから引かれます</p>
       <button onclick="submitPrediction()" style="padding:9px 24px;border:none;border-radius:8px;background:var(--teal);color:#0a1626;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer">予測を送信</button>
     </div>
 
@@ -314,8 +320,9 @@ body{padding-top:38px}
           <div><div style="font-size:.72rem;color:var(--dim);margin-bottom:2px">予測</div><div style="font-size:1.4rem;font-weight:700;color:var(--muted)" id="done-pred"></div></div>
           <div><div style="font-size:.72rem;color:var(--dim);margin-bottom:2px">実際</div><div style="font-size:1.4rem;font-weight:700;color:var(--ink)" id="done-score"></div></div>
           <div><div style="font-size:.72rem;color:var(--dim);margin-bottom:2px">誤差</div><div style="font-size:1.4rem;font-weight:700;color:var(--amber)" id="done-error"></div></div>
-          <div><div style="font-size:.72rem;color:var(--dim);margin-bottom:2px">獲得ポイント</div><div style="font-size:1.4rem;font-weight:700;color:var(--teal)" id="done-pts"></div></div>
+          <div><div style="font-size:.72rem;color:var(--dim);margin-bottom:2px">賭け金</div><div style="font-size:1.4rem;font-weight:700;color:var(--teal)" id="done-bet"></div></div>
         </div>
+        <p style="font-size:.78rem;color:var(--dim);margin-top:10px;margin-bottom:0">配分は管理者が実行後に反映されます</p>
       </div>
     </div>
 
@@ -323,7 +330,8 @@ body{padding-top:38px}
 
     <!-- ワースト順位表 -->
     <div id="test-results-wrap" style="margin-top:14px;display:none">
-      <h3 style="font-size:.9rem;color:var(--muted);margin-bottom:8px;letter-spacing:.1em">🏆 ワースト順位表（低い順）</h3>
+      <h3 style="font-size:.9rem;color:var(--muted);margin-bottom:4px;letter-spacing:.1em">🏆 ワースト順位表（低い順）</h3>
+      <p id="test-pool-total" style="font-size:.82rem;color:var(--teal);margin-bottom:8px"></p>
       <div id="test-results-table"></div>
     </div>
 
@@ -376,6 +384,7 @@ body{padding-top:38px}
     <div id="admin-content" style="margin-top:12px;font-size:.85rem"></div>
     <div class="modal-btns" style="margin-top:16px">
       <button onclick="awardWorstBanner()" style="background:#ff3333;color:#fff;border:none;font-weight:700">🤡 ワーストバナー付与</button>
+      <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 プール配分実行</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
@@ -728,9 +737,8 @@ function showTestPhase(data) {
     document.getElementById('done-pred').textContent  = data.test_pred ?? '未入力';
     document.getElementById('done-score').textContent = data.test_score + '点';
     const err = data.test_pred != null ? Math.abs(data.test_pred - data.test_score) : '-';
-    const pts = data.test_pred != null ? Math.max(0, 10000 - err * err * 10) : 0;
     document.getElementById('done-error').textContent = err === '-' ? '-' : '±' + err + '点';
-    document.getElementById('done-pts').textContent   = '+' + (typeof pts === 'number' ? pts.toLocaleString() : '-') + 'pt';
+    document.getElementById('done-bet').textContent   = data.test_bet != null ? data.test_bet.toLocaleString() + 'pt' : '―';
   } else if (data.test_pred !== null && data.test_pred !== undefined) {
     // フェーズ2: 予測済み・得点未入力
     document.getElementById('test-phase-score').style.display = 'block';
@@ -742,6 +750,7 @@ function showTestPhase(data) {
       document.getElementById('test-msg').style.color = 'var(--muted)';
     } else {
       document.getElementById('test-phase-predict').style.display = 'block';
+      document.getElementById('bet-points-display').textContent = authPoints.toLocaleString();
     }
   }
 }
@@ -750,12 +759,17 @@ async function loadTestResults() {
   const wrap = document.getElementById('test-results-wrap');
   const tbl  = document.getElementById('test-results-table');
   try {
-    const res  = await fetch('/api/test/results', { headers: { 'Authorization': authToken } });
-    const data = await res.json();
+    const [resR, resP] = await Promise.all([
+      fetch('/api/test/results', { headers: { 'Authorization': authToken } }),
+      fetch('/api/test/pool')
+    ]);
+    const data = await resR.json();
+    const poolData = await resP.json();
     if (!Array.isArray(data) || !data.length) { wrap.style.display = 'none'; return; }
     wrap.style.display = 'block';
+    document.getElementById('test-pool-total').textContent = `💰 プール合計: ${(poolData.total || 0).toLocaleString()}pt`;
     tbl.innerHTML = `<div class="table-scroll"><table class="ranking-table">
-      <thead><tr><th>ワースト</th><th>名前</th><th>予測</th><th>実際</th><th>誤差</th></tr></thead>
+      <thead><tr><th>ワースト</th><th>名前</th><th>予測</th><th>実際</th><th>誤差</th><th>賭け金</th></tr></thead>
       <tbody>${data.map(r => {
         const isMe = r.username === authUser;
         const err  = r.test_pred != null ? Math.abs(r.test_pred - r.test_score) : '-';
@@ -765,6 +779,7 @@ async function loadTestResults() {
           <td style="text-align:center">${r.test_pred ?? '―'}</td>
           <td style="text-align:center;font-weight:600">${r.test_score}</td>
           <td style="text-align:center;color:${err<=5?'var(--teal)':err<=15?'var(--amber)':'#f87171'}">±${err}</td>
+          <td style="text-align:center;color:var(--teal)">${r.test_bet != null ? r.test_bet.toLocaleString()+'pt' : '―'}</td>
         </tr>`;
       }).join('')}</tbody>
     </table></div>`;
@@ -772,14 +787,18 @@ async function loadTestResults() {
 }
 
 async function submitPrediction() {
-  const val  = parseInt(document.getElementById('pred-input').value);
+  const pred = parseInt(document.getElementById('pred-input').value);
+  const bet  = parseInt(document.getElementById('bet-input').value);
   const msg  = document.getElementById('test-msg');
-  if (isNaN(val) || val < 0 || val > 100) { msg.style.color='red'; msg.textContent='0〜100で入力してください'; return; }
+  if (isNaN(pred) || pred < 0 || pred > 100) { msg.style.color='red'; msg.textContent='予測は0〜100で入力してください'; return; }
+  if (isNaN(bet) || bet < 1) { msg.style.color='red'; msg.textContent='賭け金は1pt以上にしてください'; return; }
   if (new Date() > PRED_DEADLINE) { msg.style.color='red'; msg.textContent='受付終了しました'; return; }
   msg.style.color='var(--muted)'; msg.textContent='送信中...';
-  const res  = await fetch('/api/test/predict', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({prediction:val}) });
+  const res  = await fetch('/api/test/predict', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({prediction:pred, bet}) });
   const data = await res.json();
   if (data.error) { msg.style.color='red'; msg.textContent=data.error; return; }
+  authPoints = data.points;
+  updateAuthBar();
   msg.textContent=''; await loadTestState();
 }
 
@@ -791,9 +810,8 @@ async function submitScore() {
   const res  = await fetch('/api/test/score', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({score:val}) });
   const data = await res.json();
   if (data.error) { msg.style.color='red'; msg.textContent=data.error; return; }
-  authPoints = data.points || authPoints;
+  authPoints = data.points ?? authPoints;
   updateAuthBar();
-  if (data.bonusPoints > 0) showPointToast(`予測ボーナス +${data.bonusPoints.toLocaleString()}pt`);
   msg.textContent=''; await loadTestState();
 }
 
@@ -1087,6 +1105,14 @@ async function awardWorstBanner() {
   const data = await res.json();
   if (data.ok) alert(`${data.username} に🤡ワーストバナーを付与しました！`);
   else alert(data.error || 'エラー');
+}
+async function distributePool() {
+  if (!confirm('プールを配分しますか？この操作は取り消せません。')) return;
+  const res  = await fetch('/api/admin/distribute-pool', { method:'POST', headers:{'Authorization':authToken} });
+  const data = await res.json();
+  if (!data.ok) { alert(data.error || 'エラー'); return; }
+  const lines = data.payouts.map(p => `${p.username}: +${p.amount.toLocaleString()}pt`).join('\n');
+  alert(`配分完了！ プール合計: ${data.totalPool.toLocaleString()}pt\n\n${lines}`);
 }
 document.getElementById('admin-modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeAdminModal();

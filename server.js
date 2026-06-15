@@ -47,6 +47,7 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS session_token TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_pred  INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_score INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_bet   INTEGER`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
       id         SERIAL PRIMARY KEY,
@@ -233,16 +234,26 @@ app.post('/api/login', async (req, res) => {
 const PRED_DEADLINE = new Date('2026-06-16T00:00:00Z'); // JST 9:00 AM
 
 app.get('/api/test/me', auth, async (req, res) => {
-  res.json({ test_pred: req.user.test_pred, test_score: req.user.test_score });
+  res.json({ test_pred: req.user.test_pred, test_score: req.user.test_score, test_bet: req.user.test_bet });
+});
+
+// プールの現在合計を返す（ログイン不要）
+app.get('/api/test/pool', async (req, res) => {
+  const { rows } = await pool.query('SELECT COALESCE(SUM(test_bet),0) AS total FROM users WHERE test_bet IS NOT NULL');
+  res.json({ total: Number(rows[0].total) });
 });
 
 app.post('/api/test/predict', auth, async (req, res) => {
   if (new Date() > PRED_DEADLINE) return res.status(400).json({ error: '予測の受付は終了しました（6/16 9:00 AM）' });
-  if (req.user.test_score != null) return res.status(400).json({ error: '得点登録済みのため変更できません' });
-  const { prediction } = req.body;
-  if (prediction == null || prediction < 0 || prediction > 100) return res.status(400).json({ error: '0〜100で入力してください' });
-  await pool.query('UPDATE users SET test_pred=$1 WHERE id=$2', [prediction, req.user.id]);
-  res.json({ ok: true });
+  if (req.user.test_pred != null) return res.status(400).json({ error: '予測は一度しか登録できません' });
+  const { prediction, bet } = req.body;
+  if (prediction == null || prediction < 0 || prediction > 100) return res.status(400).json({ error: '予測は0〜100で入力してください' });
+  const betAmt = parseInt(bet, 10);
+  if (!betAmt || betAmt < 1) return res.status(400).json({ error: '賭け金は1pt以上にしてください' });
+  if (betAmt > req.user.points) return res.status(400).json({ error: 'ポイントが足りません' });
+  await pool.query('UPDATE users SET test_pred=$1, test_bet=$2, points=points-$3 WHERE id=$4', [prediction, betAmt, betAmt, req.user.id]);
+  const { rows } = await pool.query('SELECT points FROM users WHERE id=$1', [req.user.id]);
+  res.json({ ok: true, points: rows[0].points });
 });
 
 app.post('/api/test/score', auth, async (req, res) => {
@@ -250,16 +261,14 @@ app.post('/api/test/score', auth, async (req, res) => {
   if (req.user.test_score != null) return res.status(400).json({ error: '得点はすでに登録済みです' });
   const { score } = req.body;
   if (score == null || score < 0 || score > 100) return res.status(400).json({ error: '0〜100で入力してください' });
-  const err    = Math.abs(req.user.test_pred - score);
-  const bonus  = Math.max(0, 10000 - err * err * 10);
-  await pool.query('UPDATE users SET test_score=$1, points=points+$2 WHERE id=$3', [score, bonus, req.user.id]);
+  await pool.query('UPDATE users SET test_score=$1 WHERE id=$2', [score, req.user.id]);
   const { rows } = await pool.query('SELECT points FROM users WHERE id=$1', [req.user.id]);
-  res.json({ ok: true, bonusPoints: bonus, points: rows[0].points });
+  res.json({ ok: true, points: rows[0].points });
 });
 
 app.get('/api/test/results', auth, async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, test_pred, test_score,
+    SELECT username, avatar, frame, test_pred, test_score, test_bet,
            DENSE_RANK() OVER (ORDER BY test_score ASC) AS worst_rank
     FROM users WHERE test_score IS NOT NULL
     ORDER BY test_score ASC
@@ -273,6 +282,52 @@ app.post('/api/admin/award-worst', auth, async (req, res) => {
   if (!rows[0]) return res.status(400).json({ error: 'まだ得点が登録されていません' });
   await pool.query("UPDATE users SET frame='worst' WHERE id=$1", [rows[0].id]);
   res.json({ ok: true, username: rows[0].username });
+});
+
+// プール配分：1/誤差² の比率でポイントを配分
+app.post('/api/admin/distribute-pool', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  // 予測・得点・賭け金が揃ったユーザーのみ
+  const { rows: participants } = await pool.query(
+    'SELECT id, username, test_pred, test_score, test_bet FROM users WHERE test_pred IS NOT NULL AND test_score IS NOT NULL AND test_bet IS NOT NULL'
+  );
+  if (!participants.length) return res.status(400).json({ error: '対象者がいません' });
+
+  const { rows: poolRow } = await pool.query('SELECT COALESCE(SUM(test_bet),0) AS total FROM users WHERE test_bet IS NOT NULL');
+  const totalPool = Number(poolRow[0].total);
+
+  // 誤差0（完全的中）の人を探す
+  const perfect = participants.filter(p => Math.abs(p.test_pred - p.test_score) === 0);
+
+  let payouts; // [{id, username, amount}]
+
+  if (perfect.length > 0) {
+    // 完全的中組で均等分配、あまりは最初の人へ
+    const share = Math.floor(totalPool / perfect.length);
+    const remainder = totalPool - share * perfect.length;
+    payouts = perfect.map((p, i) => ({ id: p.id, username: p.username, amount: share + (i === 0 ? remainder : 0) }));
+  } else {
+    // weight_i = 1 / err²、浮動小数で計算
+    const withWeight = participants.map(p => {
+      const err = Math.abs(p.test_pred - p.test_score);
+      return { ...p, weight: 1 / (err * err) };
+    });
+    const weightSum = withWeight.reduce((s, p) => s + p.weight, 0);
+    // floor 配分
+    const floored = withWeight.map(p => ({ ...p, share: Math.floor(totalPool * p.weight / weightSum) }));
+    const distributed = floored.reduce((s, p) => s + p.share, 0);
+    const remainder = totalPool - distributed;
+    // あまりは weight が最大の人へ
+    const maxIdx = floored.reduce((mi, p, i, a) => p.weight > a[mi].weight ? i : mi, 0);
+    floored[maxIdx].share += remainder;
+    payouts = floored.map(p => ({ id: p.id, username: p.username, amount: p.share }));
+  }
+
+  // ポイントを付与
+  for (const p of payouts) {
+    await pool.query('UPDATE users SET points=points+$1 WHERE id=$2', [p.amount, p.id]);
+  }
+  res.json({ ok: true, totalPool, payouts });
 });
 
 // クイズ進捗を取得
