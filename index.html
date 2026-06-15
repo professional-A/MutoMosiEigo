@@ -113,14 +113,16 @@ h1{
   position:fixed;top:0;left:0;right:0;z-index:100;
   background:rgba(10,22,38,.92);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);
-  padding:6px 12px;display:flex;align-items:center;gap:6px;
-  font-size:.82rem;flex-wrap:wrap;
+  padding:6px 10px;display:flex;align-items:center;gap:6px;
+  font-size:.82rem;overflow-x:auto;flex-wrap:nowrap;
+  -webkit-overflow-scrolling:touch;
 }
-.auth-bar-left{margin-right:auto;display:flex;align-items:center;gap:6px}
+.auth-bar-left{margin-right:auto;display:flex;align-items:center;gap:6px;flex-shrink:0}
+.auth-btn{white-space:nowrap;flex-shrink:0}
 @media(max-width:480px){
-  .auth-bar{padding:5px 10px;gap:5px;font-size:.75rem}
+  .auth-bar{padding:5px 8px;gap:5px;font-size:.75rem}
   .auth-btn{font-size:.72rem;padding:3px 10px}
-  #auth-status{font-size:.75rem;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+  #auth-status{font-size:.75rem;white-space:nowrap}
 }
 
 /* お知らせ */
