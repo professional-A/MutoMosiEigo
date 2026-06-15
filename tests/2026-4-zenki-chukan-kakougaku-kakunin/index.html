@@ -641,6 +641,7 @@ function escQ(s){ return s.replace(/'/g,"\\'"); }
    INTERACTIONS
 ===================================================================== */
 function pickSingle(key,secId,btn,chosen,ans){
+  if(state[key]===undefined && chosen===ans && window.addPoints) addPoints(100);
   state[key]=chosen===ans?1:-1;
   state[key+"_pick"]=chosen;
   save(); refreshQ(key,secId);
@@ -727,6 +728,7 @@ window._quizSync = async function() {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/points.js"></script>
 <script src="../../js/progress.js"></script>
 <a href="../../" style="position:fixed;bottom:20px;left:16px;background:rgba(10,22,38,.9);border:1px solid #27406a;color:#8aa1c0;text-decoration:none;padding:8px 14px;border-radius:99px;font-size:.82rem;z-index:200;backdrop-filter:blur(4px)">← トップへ</a>
 </body>

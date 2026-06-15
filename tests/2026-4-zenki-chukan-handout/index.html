@@ -355,6 +355,7 @@ try{ state = JSON.parse(localStorage.getItem("mutou_handout_u12")||"{}"); }catch
 function save(){ try{ localStorage.setItem("mutou_handout_u12", JSON.stringify(state)); }catch(e){} if(window.progressSave) progressSave("mutou_handout_u12", state); }
 
 function mark(key, ok){
+  if(!state[key] && ok && window.addPoints) addPoints(100);
   state[key] = {correct:ok, done:true};
   save(); updateScore();
 }
@@ -468,6 +469,7 @@ window._quizSync = async function() {
 };
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/points.js"></script>
 <script src="../../js/progress.js"></script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js");</script>
 <a href="../../" style="position:fixed;bottom:20px;left:16px;background:rgba(10,22,38,.9);border:1px solid #27406a;color:#8aa1c0;text-decoration:none;padding:8px 14px;border-radius:99px;font-size:.82rem;z-index:200;backdrop-filter:blur(4px)">← トップへ</a>

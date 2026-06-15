@@ -280,6 +280,15 @@ app.get('/api/test/results', auth, async (req, res) => {
 });
 
 
+// ポイント1位にバカフレーム付与
+app.post('/api/admin/award-baka', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { rows } = await pool.query('SELECT id, username FROM users ORDER BY points DESC LIMIT 1');
+  if (!rows[0]) return res.status(400).json({ error: 'ユーザーが見つかりません' });
+  await pool.query("UPDATE users SET frame='baka' WHERE id=$1", [rows[0].id]);
+  res.json({ ok: true, username: rows[0].username });
+});
+
 // プール配分：1/誤差² の比率でポイントを配分
 app.post('/api/admin/distribute-pool', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
