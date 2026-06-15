@@ -808,22 +808,24 @@ document.addEventListener('click', e => {
 });
 
 // ── Supabase Auth 初期化 ─────────────────────────────────
-supabaseClient.auth.onAuthStateChange(async (event, session) => {
-  if (session) {
-    authToken = session.access_token;
-    await syncUser(authToken);
-  } else {
-    authToken = null; authUser = null; authEmail = null;
-  }
-  updateAuthBar();
-});
-
+// getSessionで初期状態を取得（ボーナスなし）、onAuthStateChangeでログイン/ログアウトを検知
 supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
   if (session) {
     authToken = session.access_token;
     await syncUser(authToken);
   }
   updateAuthBar();
+
+  supabaseClient.auth.onAuthStateChange(async (event, session) => {
+    if (event === 'SIGNED_IN' && session) {
+      authToken = session.access_token;
+      await syncUser(authToken);
+    } else if (event === 'SIGNED_OUT') {
+      authToken = null; authUser = null; authEmail = null;
+      authPoints = 0;
+    }
+    updateAuthBar();
+  });
 });
 </script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");</script>
