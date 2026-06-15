@@ -177,8 +177,18 @@ body{padding-top:38px}
   color:var(--ink);font-family:inherit;font-size:.9rem;
 }
 .modal input:focus{outline:none;border-color:var(--teal)}
-.modal-btns{display:flex;gap:8px;margin-top:4px}
-.modal-btns button{flex:1;padding:9px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600}
+.modal-btns{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
+.modal-btns button{flex:1 1 auto;min-width:80px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600}
+.admin-card{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--card)}
+.admin-card-top{display:flex;align-items:center;gap:8px}
+.admin-card-name{font-weight:600;font-size:.9rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-card-email{font-size:.7rem;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-card-stats{display:flex;gap:10px;flex-wrap:wrap}
+.admin-stat{background:var(--card2);border-radius:6px;padding:4px 10px;font-size:.78rem}
+.admin-stat span{color:var(--teal);font-weight:700}
+.admin-card-grant{display:flex;gap:6px;align-items:center}
+.admin-card-grant input{flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:.9rem;font-family:inherit;min-width:0}
+.admin-card-grant button{padding:8px 14px;border-radius:8px;border:none;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-size:.88rem;white-space:nowrap}
 .modal-msg{font-size:.82rem;margin-top:10px;min-height:1.2em}
 
 /* Ranking */
@@ -400,12 +410,12 @@ body{padding-top:38px}
 
 <!-- 管理者モーダル -->
 <div class="modal-bg" id="admin-modal-bg">
-  <div class="modal" style="width:min(520px,95vw)">
-    <h2>登録ユーザー一覧</h2>
-    <div id="admin-content" style="margin-top:12px;font-size:.85rem"></div>
-    <div class="modal-btns" style="margin-top:16px">
-<button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 プール配分実行</button>
-      <button onclick="awardBakaFrame()" style="background:#ff00ff;color:#fff;border:none;font-weight:700">🌟 バカフレーム付与</button>
+  <div class="modal" style="width:min(480px,95vw);max-height:90vh;display:flex;flex-direction:column;padding:20px 16px">
+    <h2 style="flex-shrink:0">登録ユーザー一覧 <span id="admin-count" style="font-size:.8rem;color:var(--muted);font-weight:400"></span></h2>
+    <div id="admin-content" style="flex:1;overflow-y:auto;min-height:0;padding-right:2px"></div>
+    <div class="modal-btns" style="margin-top:12px;flex-shrink:0">
+      <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 配分</button>
+      <button onclick="awardBakaFrame()" style="background:#ff00ff;color:#fff;border:none;font-weight:700">🌟 バカ付与</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
@@ -1103,34 +1113,30 @@ async function openAdminModal() {
 }
 async function reloadAdminContent() {
   const el = document.getElementById('admin-content');
-  el.innerHTML = '読み込み中...';
+  el.innerHTML = '<p style="color:var(--muted);padding:12px 0">読み込み中...</p>';
   const res  = await fetch('/api/admin/users', { headers: { 'Authorization': authToken } });
   const data = await res.json();
-  if (!Array.isArray(data)) { el.innerHTML = 'エラー'; return; }
-  el.innerHTML = `
-    <p style="color:var(--muted);margin-bottom:10px">登録人数：<strong style="color:var(--teal)">${data.length}人</strong></p>
-    <table class="ranking-table">
-      <thead><tr><th>#</th><th>名前</th><th>ポイント</th><th>予測</th><th>賭け金</th><th>付与</th></tr></thead>
-      <tbody>${data.map((u, i) => `
-        <tr>
-          <td class="rank-num">${i + 1}</td>
-          <td class="rank-name">
-            <span class="avatar frame-${u.frame||'default'}" style="width:24px;height:24px;font-size:.9rem;margin-right:6px;vertical-align:middle">${u.avatar||'🐸'}</span>
-            ${u.username}<br><span style="color:var(--dim);font-size:.72rem">${u.email||''}</span>
-          </td>
-          <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
-          <td style="text-align:center;color:var(--teal)">${u.test_pred != null ? u.test_pred+'点' : '―'}</td>
-          <td style="text-align:center;color:var(--amber)">${u.test_bet != null ? u.test_bet.toLocaleString()+'pt' : '―'}</td>
-          <td>
-            <div style="display:flex;gap:4px;align-items:center">
-              <input type="number" id="grant-amt-${u.id}" value="500" min="1" style="width:64px;padding:3px 6px;border-radius:6px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-size:.78rem">
-              <button onclick="grantPoints(${u.id})" style="padding:3px 8px;border-radius:6px;border:none;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-size:.78rem">付与</button>
-            </div>
-          </td>
-        </tr>`).join('')}
-      </tbody>
-    </table>`;
-  el.innerHTML = `<p style="color:var(--muted);margin-bottom:10px">登録人数：<strong style="color:var(--teal)">${data.length}人</strong></p><div class="table-scroll">` + el.innerHTML + `</div>`;
+  if (!Array.isArray(data)) { el.innerHTML = '<p style="color:red">エラー</p>'; return; }
+  document.getElementById('admin-count').textContent = `${data.length}人`;
+  el.innerHTML = data.map((u, i) => `
+    <div class="admin-card">
+      <div class="admin-card-top">
+        <span class="avatar frame-${u.frame||'default'}" style="width:32px;height:32px;font-size:1.1rem;flex-shrink:0">${u.avatar||'🐸'}</span>
+        <div style="min-width:0">
+          <div class="admin-card-name">${i+1}. ${u.username}</div>
+          <div class="admin-card-email">${u.email||'（IDログイン）'}</div>
+        </div>
+      </div>
+      <div class="admin-card-stats">
+        <div class="admin-stat">💰 <span>${(u.points||0).toLocaleString()}</span>pt</div>
+        <div class="admin-stat">予測 <span>${u.test_pred != null ? u.test_pred+'点' : '―'}</span></div>
+        <div class="admin-stat">賭け金 <span>${u.test_bet != null ? u.test_bet.toLocaleString()+'pt' : '―'}</span></div>
+      </div>
+      <div class="admin-card-grant">
+        <input type="number" id="grant-amt-${u.id}" value="500" min="1" placeholder="pt">
+        <button onclick="grantPoints(${u.id})">付与</button>
+      </div>
+    </div>`).join('');
 }
 async function grantPoints(userId) {
   const amt = parseInt(document.getElementById(`grant-amt-${userId}`).value);
