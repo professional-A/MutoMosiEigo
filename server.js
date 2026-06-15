@@ -45,6 +45,8 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_salt TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS session_token TEXT`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_pred  INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_score INTEGER`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
       id         SERIAL PRIMARY KEY,
@@ -225,6 +227,52 @@ app.post('/api/login', async (req, res) => {
   const { rows: r } = await pool.query('SELECT * FROM users WHERE id=$1', [u.id]);
   const u2 = r[0];
   res.json({ token, username: u2.username, avatar: u2.avatar, frame: u2.frame, points: u2.points, loginBonus });
+});
+
+// ── テストイベント ──────────────────────────────────────
+const PRED_DEADLINE = new Date('2026-06-16T00:00:00Z'); // JST 9:00 AM
+
+app.get('/api/test/me', auth, async (req, res) => {
+  res.json({ test_pred: req.user.test_pred, test_score: req.user.test_score });
+});
+
+app.post('/api/test/predict', auth, async (req, res) => {
+  if (new Date() > PRED_DEADLINE) return res.status(400).json({ error: '予測の受付は終了しました（6/16 9:00 AM）' });
+  if (req.user.test_score != null) return res.status(400).json({ error: '得点登録済みのため変更できません' });
+  const { prediction } = req.body;
+  if (prediction == null || prediction < 0 || prediction > 100) return res.status(400).json({ error: '0〜100で入力してください' });
+  await pool.query('UPDATE users SET test_pred=$1 WHERE id=$2', [prediction, req.user.id]);
+  res.json({ ok: true });
+});
+
+app.post('/api/test/score', auth, async (req, res) => {
+  if (req.user.test_pred == null) return res.status(400).json({ error: '先に予測を入力してください' });
+  if (req.user.test_score != null) return res.status(400).json({ error: '得点はすでに登録済みです' });
+  const { score } = req.body;
+  if (score == null || score < 0 || score > 100) return res.status(400).json({ error: '0〜100で入力してください' });
+  const err    = Math.abs(req.user.test_pred - score);
+  const bonus  = Math.max(0, 10000 - err * err * 10);
+  await pool.query('UPDATE users SET test_score=$1, points=points+$2 WHERE id=$3', [score, bonus, req.user.id]);
+  const { rows } = await pool.query('SELECT points FROM users WHERE id=$1', [req.user.id]);
+  res.json({ ok: true, bonusPoints: bonus, points: rows[0].points });
+});
+
+app.get('/api/test/results', auth, async (req, res) => {
+  const { rows } = await pool.query(`
+    SELECT username, avatar, frame, test_pred, test_score,
+           DENSE_RANK() OVER (ORDER BY test_score ASC) AS worst_rank
+    FROM users WHERE test_score IS NOT NULL
+    ORDER BY test_score ASC
+  `);
+  res.json(rows);
+});
+
+app.post('/api/admin/award-worst', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { rows } = await pool.query('SELECT id, username FROM users WHERE test_score IS NOT NULL ORDER BY test_score ASC LIMIT 1');
+  if (!rows[0]) return res.status(400).json({ error: 'まだ得点が登録されていません' });
+  await pool.query("UPDATE users SET frame='worst' WHERE id=$1", [rows[0].id]);
+  res.json({ ok: true, username: rows[0].username });
 });
 
 // クイズ進捗を取得
