@@ -6,6 +6,8 @@ const crypto = require('crypto');
 function genSalt()  { return crypto.randomBytes(16).toString('hex'); }
 function genToken() { return crypto.randomBytes(32).toString('hex'); }
 function hashPw(pw, salt) { return crypto.pbkdf2Sync(pw, salt, 100000, 64, 'sha512').toString('hex'); }
+// JST 5:00 AM でリセット（UTC+4h オフセットで計算）
+function bonusDay() { return new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString().slice(0, 10); }
 
 const app = express();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
@@ -97,7 +99,7 @@ app.post('/api/sync-user', async (req, res) => {
   const u = r[0];
 
   // 毎日ログインボーナス（1000pt）
-  const today = new Date().toISOString().slice(0, 10);
+  const today = bonusDay();
   let loginBonus = 0;
   if (u.last_login !== today) {
     await pool.query('UPDATE users SET points = points + 1000, last_login = $1 WHERE id = $2', [today, u.id]);
@@ -190,7 +192,7 @@ app.post('/api/register', async (req, res) => {
   const salt  = genSalt();
   const hash  = hashPw(password, salt);
   const token = genToken();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = bonusDay();
 
   await pool.query(
     'INSERT INTO users (username, password_hash, password_salt, session_token, points, last_login, created_at) VALUES ($1,$2,$3,$4,1000,$5,$6)',
@@ -213,7 +215,7 @@ app.post('/api/login', async (req, res) => {
   if (hashPw(password, u.password_salt) !== u.password_hash) return res.status(401).json({ error: 'ユーザー名かパスワードが違います' });
 
   const token = genToken();
-  const today = new Date().toISOString().slice(0, 10);
+  const today = bonusDay();
   let loginBonus = 0;
   if (u.last_login !== today) {
     await pool.query('UPDATE users SET points=points+1000, last_login=$1 WHERE id=$2', [today, u.id]);

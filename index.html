@@ -248,6 +248,15 @@ body{padding-top:38px}
   <div class="notif-header">お知らせ</div>
   <div class="notif-item notif-new">
     <div class="notif-item-date">2026-06-15</div>
+    <div class="notif-item-title">IDログイン復活！ドシドシ登録してね</div>
+    <div class="notif-item-body">
+      Googleアカウントなしでも登録できるようになりました🎉<br>
+      上の「IDでログイン」から新規登録できます。<br>
+      毎日朝5時にログインボーナス<strong style="color:var(--teal)">+1,000pt</strong>、問題1問正解で<strong style="color:var(--teal)">+100pt</strong>！
+    </div>
+  </div>
+  <div class="notif-item">
+    <div class="notif-item-date">2026-06-15</div>
     <div class="notif-item-title">事前登録者に3,000ポイント付与</div>
     <div class="notif-item-body">
       夜更かししてる悪い子ちゃん全員に<br>
@@ -935,7 +944,7 @@ document.getElementById('members-modal-bg').addEventListener('click', e => {
 });
 
 // ── お知らせ ────────────────────────────────────────────
-const NOTIF_KEY = 'muto_notif_read';
+const NOTIF_KEY = 'muto_notif_read_2';
 function toggleNotif() {
   const panel = document.getElementById('notif-panel');
   panel.classList.toggle('open');
