@@ -272,21 +272,13 @@ app.post('/api/test/score', auth, async (req, res) => {
 
 app.get('/api/test/results', auth, async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, test_pred, test_score, test_bet,
-           DENSE_RANK() OVER (ORDER BY test_score ASC) AS worst_rank
+    SELECT username, avatar, frame, test_pred, test_score, test_bet
     FROM users WHERE test_score IS NOT NULL
     ORDER BY test_score ASC
   `);
   res.json(rows);
 });
 
-app.post('/api/admin/award-worst', auth, async (req, res) => {
-  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  const { rows } = await pool.query('SELECT id, username FROM users WHERE test_score IS NOT NULL ORDER BY test_score ASC LIMIT 1');
-  if (!rows[0]) return res.status(400).json({ error: 'まだ得点が登録されていません' });
-  await pool.query("UPDATE users SET frame='worst' WHERE id=$1", [rows[0].id]);
-  res.json({ ok: true, username: rows[0].username });
-});
 
 // プール配分：1/誤差² の比率でポイントを配分
 app.post('/api/admin/distribute-pool', auth, async (req, res) => {

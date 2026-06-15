@@ -224,8 +224,6 @@ body{padding-top:38px}
 .frame-red    {border:2px solid #f87171;box-shadow:0 0 8px #f8717160}
 .frame-purple {border:2px solid #a78bfa;box-shadow:0 0 8px #a78bfa60}
 .frame-rainbow{border:3px solid transparent;background:linear-gradient(var(--bg2),var(--bg2)) padding-box,linear-gradient(135deg,#f87171,#f6b352,#46d6c4,#a78bfa) border-box}
-.frame-worst  {border:3px dashed #ff3333;box-shadow:0 0 0 1px #ff6600,0 0 14px rgba(255,50,50,.8);animation:worst-flash 1s infinite}
-@keyframes worst-flash{0%,100%{box-shadow:0 0 0 1px #ff3333,0 0 14px rgba(255,50,50,.8);border-color:#ff3333}50%{box-shadow:0 0 0 1px #ff6600,0 0 22px rgba(255,102,0,.9);border-color:#ffcc00}}
 </style>
 </head>
 <body>
@@ -351,7 +349,7 @@ body{padding-top:38px}
 
     <!-- ワースト順位表 -->
     <div id="test-results-wrap" style="margin-top:14px;display:none">
-      <h3 style="font-size:.9rem;color:var(--muted);margin-bottom:4px;letter-spacing:.1em">🏆 ワースト順位表（低い順）</h3>
+      <h3 style="font-size:.9rem;color:var(--muted);margin-bottom:4px;letter-spacing:.1em">📋 得点一覧（低い順）</h3>
       <p id="test-pool-total" style="font-size:.82rem;color:var(--teal);margin-bottom:8px"></p>
       <div id="test-results-table"></div>
     </div>
@@ -404,8 +402,7 @@ body{padding-top:38px}
     <h2>登録ユーザー一覧</h2>
     <div id="admin-content" style="margin-top:12px;font-size:.85rem"></div>
     <div class="modal-btns" style="margin-top:16px">
-      <button onclick="awardWorstBanner()" style="background:#ff3333;color:#fff;border:none;font-weight:700">🤡 ワーストバナー付与</button>
-      <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 プール配分実行</button>
+<button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 プール配分実行</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
@@ -644,7 +641,6 @@ const FRAMES = [
   { id: 'red',     label: '⬜', name: 'レッド' },
   { id: 'purple',  label: '⬜', name: 'パープル' },
   { id: 'rainbow', label: '⬜', name: 'レインボー' },
-  { id: 'worst',   label: '🤡', name: 'ワースト記念' },
 ];
 
 function applyFrame(el, frame) {
@@ -798,13 +794,13 @@ async function loadTestResults() {
     wrap.style.display = 'block';
     document.getElementById('test-pool-total').textContent = `💰 プール合計: ${(poolData.total || 0).toLocaleString()}pt`;
     tbl.innerHTML = `<div class="table-scroll"><table class="ranking-table">
-      <thead><tr><th>ワースト</th><th>名前</th><th>予測</th><th>実際</th><th>誤差</th><th>賭け金</th></tr></thead>
-      <tbody>${data.map(r => {
+      <thead><tr><th>#</th><th>名前</th><th>予測</th><th>実際</th><th>誤差</th><th>賭け金</th></tr></thead>
+      <tbody>${data.map((r, i) => {
         const isMe = r.username === authUser;
         const err  = r.test_pred != null ? Math.abs(r.test_pred - r.test_score) : '-';
         return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
-          <td class="rank-num${parseInt(r.worst_rank) === 1 ? ' top' : ''}" style="color:${parseInt(r.worst_rank)===1?'#ff3333':'inherit'}">${r.worst_rank}位</td>
-          <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:22px;height:22px;font-size:.85rem;margin-right:6px;vertical-align:middle">${r.avatar||'🐸'}</span>${r.username}${isMe?' 👈':''}${parseInt(r.worst_rank)===1?' 🤡':''}</td>
+          <td class="rank-num">${i + 1}</td>
+          <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:22px;height:22px;font-size:.85rem;margin-right:6px;vertical-align:middle">${r.avatar||'🐸'}</span>${r.username}${isMe?' 👈':''}</td>
           <td style="text-align:center">${r.test_pred ?? '―'}</td>
           <td style="text-align:center;font-weight:600">${r.test_score}</td>
           <td style="text-align:center;color:${err<=5?'var(--teal)':err<=15?'var(--amber)':'#f87171'}">±${err}</td>
@@ -1145,13 +1141,6 @@ async function grantPoints(userId) {
 }
 function closeAdminModal() {
   document.getElementById('admin-modal-bg').classList.remove('open');
-}
-async function awardWorstBanner() {
-  if (!confirm('最下位の人に🤡ワーストバナーを付与しますか？')) return;
-  const res  = await fetch('/api/admin/award-worst', { method:'POST', headers:{'Authorization':authToken} });
-  const data = await res.json();
-  if (data.ok) alert(`${data.username} に🤡ワーストバナーを付与しました！`);
-  else alert(data.error || 'エラー');
 }
 async function distributePool() {
   if (!confirm('プールを配分しますか？この操作は取り消せません。')) return;
