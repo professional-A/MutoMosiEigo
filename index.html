@@ -239,6 +239,7 @@ body{padding-top:38px}
   <button class="auth-btn" id="admin-btn" style="display:none" onclick="openAdminModal()">管理</button>
   <button class="auth-btn" id="members-btn" style="display:none" onclick="openMembersModal()">メンバー</button>
   <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
+  <button class="auth-btn" id="pw-open-btn" onclick="openLoginModal()">IDでログイン</button>
   <button class="auth-btn primary" id="auth-open-btn" onclick="loginWithGoogle()">Googleでログイン</button>
 </div>
 
@@ -261,6 +262,42 @@ body{padding-top:38px}
       英語テスト返却後にアンケートを実施します。<br>
       事前に新規登録をお願いします！<br>
       登録後はアイコンやフレームもカスタマイズできます。
+    </div>
+  </div>
+</div>
+
+<!-- ログイン/登録モーダル -->
+<div class="modal-bg" id="login-modal-bg">
+  <div class="modal" style="width:min(360px,95vw)">
+    <h2>ログイン / 新規登録</h2>
+    <div style="display:flex;gap:0;margin-bottom:16px;border:1px solid var(--line);border-radius:8px;overflow:hidden">
+      <button id="tab-login" onclick="showLoginTab('login')" style="flex:1;padding:7px;border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;background:var(--teal);color:#0a1626;transition:.15s">ログイン</button>
+      <button id="tab-register" onclick="showLoginTab('register')" style="flex:1;padding:7px;border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;background:var(--card);color:var(--muted);transition:.15s">新規登録</button>
+    </div>
+    <div id="login-form">
+      <div style="margin-bottom:10px"><label style="font-size:.78rem;color:var(--muted);display:block;margin-bottom:4px">ユーザー名</label>
+        <input id="pw-username" type="text" maxlength="20" placeholder="ユーザー名" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.95rem">
+      </div>
+      <div style="margin-bottom:12px"><label style="font-size:.78rem;color:var(--muted);display:block;margin-bottom:4px">パスワード</label>
+        <input id="pw-password" type="password" placeholder="パスワード" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.95rem">
+      </div>
+      <button onclick="doPasswordLogin()" style="width:100%;padding:9px;border:none;border-radius:8px;background:var(--teal);color:#0a1626;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer">ログイン</button>
+    </div>
+    <div id="register-form" style="display:none">
+      <div style="margin-bottom:10px"><label style="font-size:.78rem;color:var(--muted);display:block;margin-bottom:4px">ユーザー名（2〜20文字）</label>
+        <input id="reg-username" type="text" maxlength="20" placeholder="ユーザー名" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.95rem">
+      </div>
+      <div style="margin-bottom:10px"><label style="font-size:.78rem;color:var(--muted);display:block;margin-bottom:4px">パスワード（4文字以上）</label>
+        <input id="reg-password" type="password" placeholder="パスワード" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.95rem">
+      </div>
+      <div style="margin-bottom:12px"><label style="font-size:.78rem;color:var(--muted);display:block;margin-bottom:4px">パスワード確認</label>
+        <input id="reg-password2" type="password" placeholder="もう一度入力" style="width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.95rem">
+      </div>
+      <button onclick="doRegister()" style="width:100%;padding:9px;border:none;border-radius:8px;background:var(--teal);color:#0a1626;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer">登録する</button>
+    </div>
+    <div id="login-msg" style="margin-top:10px;font-size:.85rem;min-height:1.2em"></div>
+    <div class="modal-btns" style="margin-top:10px">
+      <button onclick="closeLoginModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
 </div>
@@ -517,9 +554,10 @@ function applyFrame(el, frame) {
 }
 
 function updateAuthBar() {
-  const bar  = document.getElementById('auth-status');
-  const btn  = document.getElementById('auth-open-btn');
-  const avEl = document.getElementById('auth-avatar');
+  const bar   = document.getElementById('auth-status');
+  const btn   = document.getElementById('auth-open-btn');
+  const pwBtn = document.getElementById('pw-open-btn');
+  const avEl  = document.getElementById('auth-avatar');
   if (authToken) {
     bar.innerHTML = `<strong>${authUser}</strong> <span style="color:var(--teal);font-size:.85rem">${authPoints.toLocaleString()}pt</span>`;
     avEl.textContent = authAvatar;
@@ -528,6 +566,7 @@ function updateAuthBar() {
     btn.textContent = 'ログアウト';
     btn.classList.remove('primary');
     btn.onclick = doLogout;
+    pwBtn.style.display = 'none';
     document.getElementById('admin-btn').style.display = authEmail === 'kabu6113450@gmail.com' ? 'inline-block' : 'none';
     document.getElementById('members-btn').style.display = 'inline-block';
     loadRanking();
@@ -537,6 +576,7 @@ function updateAuthBar() {
     btn.textContent = 'Googleでログイン';
     btn.classList.add('primary');
     btn.onclick = loginWithGoogle;
+    pwBtn.style.display = 'inline-block';
     document.getElementById('admin-btn').style.display = 'none';
     document.getElementById('members-btn').style.display = 'none';
     document.getElementById('ranking-content').innerHTML =
@@ -568,11 +608,110 @@ async function loginWithGoogle() {
 
 async function doLogout() {
   await supabaseClient.auth.signOut();
-  authToken = null; authUser = null; authEmail = null;
-  authAvatar = '🐸'; authFrame = 'default';
+  localStorage.removeItem('muto_session');
+  localStorage.removeItem('muto_user');
+  localStorage.removeItem('muto_points');
   localStorage.removeItem('muto_avatar');
   localStorage.removeItem('muto_frame');
+  authToken = null; authUser = null; authEmail = null;
+  authAvatar = '🐸'; authFrame = 'default'; authPoints = 0;
   updateAuthBar();
+}
+
+// ── パスワードログイン ────────────────────────────────────
+function openLoginModal() {
+  document.getElementById('login-modal-bg').classList.add('open');
+  showLoginTab('login');
+}
+function closeLoginModal() {
+  document.getElementById('login-modal-bg').classList.remove('open');
+  document.getElementById('login-msg').textContent = '';
+}
+function showLoginTab(tab) {
+  document.getElementById('login-form').style.display    = tab === 'login'    ? 'block' : 'none';
+  document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+  const tl = document.getElementById('tab-login'), tr = document.getElementById('tab-register');
+  tl.style.background = tab === 'login'    ? 'var(--teal)' : 'var(--card)';
+  tl.style.color      = tab === 'login'    ? '#0a1626'     : 'var(--muted)';
+  tr.style.background = tab === 'register' ? 'var(--teal)' : 'var(--card)';
+  tr.style.color      = tab === 'register' ? '#0a1626'     : 'var(--muted)';
+  document.getElementById('login-msg').textContent = '';
+}
+document.getElementById('login-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeLoginModal();
+});
+
+function applyPasswordLogin(data) {
+  authToken  = data.token;
+  authUser   = data.username;
+  authEmail  = '';
+  authAvatar = data.avatar || '🐸';
+  authFrame  = data.frame  || 'default';
+  authPoints = data.points || 0;
+  localStorage.setItem('muto_session', data.token);
+  localStorage.setItem('muto_user',    data.username);
+  localStorage.setItem('muto_avatar',  authAvatar);
+  localStorage.setItem('muto_frame',   authFrame);
+  localStorage.setItem('muto_points',  String(authPoints));
+  if (data.loginBonus) showPointToast(`ログインボーナス +${data.loginBonus.toLocaleString()}pt`);
+  closeLoginModal();
+  updateAuthBar();
+}
+async function doPasswordLogin() {
+  const username = document.getElementById('pw-username').value.trim();
+  const password = document.getElementById('pw-password').value;
+  const msgEl    = document.getElementById('login-msg');
+  if (!username || !password) { msgEl.style.color = 'red'; msgEl.textContent = 'ユーザー名とパスワードを入力してください'; return; }
+  msgEl.style.color = 'var(--muted)'; msgEl.textContent = 'ログイン中...';
+  try {
+    const res  = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username, password }) });
+    const data = await res.json();
+    if (data.error) { msgEl.style.color = 'red'; msgEl.textContent = data.error; return; }
+    applyPasswordLogin(data);
+  } catch(e) { msgEl.style.color = 'red'; msgEl.textContent = 'エラーが発生しました'; }
+}
+async function doRegister() {
+  const username  = document.getElementById('reg-username').value.trim();
+  const password  = document.getElementById('reg-password').value;
+  const password2 = document.getElementById('reg-password2').value;
+  const msgEl     = document.getElementById('login-msg');
+  if (!username || !password) { msgEl.style.color = 'red'; msgEl.textContent = 'ユーザー名とパスワードを入力してください'; return; }
+  if (password !== password2) { msgEl.style.color = 'red'; msgEl.textContent = 'パスワードが一致しません'; return; }
+  msgEl.style.color = 'var(--muted)'; msgEl.textContent = '登録中...';
+  try {
+    const res  = await fetch('/api/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username, password }) });
+    const data = await res.json();
+    if (data.error) { msgEl.style.color = 'red'; msgEl.textContent = data.error; return; }
+    applyPasswordLogin(data);
+  } catch(e) { msgEl.style.color = 'red'; msgEl.textContent = 'エラーが発生しました'; }
+}
+
+async function syncPasswordUser(token) {
+  try {
+    const controller = new AbortController();
+    const timeout    = setTimeout(() => controller.abort(), 8000);
+    const res  = await fetch('/api/me', { headers: { 'Authorization': token }, signal: controller.signal });
+    clearTimeout(timeout);
+    const data = await res.json();
+    if (data.username) {
+      authUser   = data.username;
+      authEmail  = data.email || '';
+      authAvatar = data.avatar || '🐸';
+      authFrame  = data.frame  || 'default';
+      authPoints = data.points || 0;
+      localStorage.setItem('muto_avatar',  authAvatar);
+      localStorage.setItem('muto_frame',   authFrame);
+      localStorage.setItem('muto_points',  String(authPoints));
+    } else {
+      localStorage.removeItem('muto_session');
+      authToken = null;
+    }
+  } catch(e) {
+    authUser   = localStorage.getItem('muto_user')   || 'ユーザー';
+    authAvatar = localStorage.getItem('muto_avatar') || '🐸';
+    authFrame  = localStorage.getItem('muto_frame')  || 'default';
+    authPoints = parseInt(localStorage.getItem('muto_points') || '0');
+  }
 }
 
 async function syncUser(token) {
@@ -700,11 +839,12 @@ async function loadRanking() {
   }
   el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
     <thead><tr><th>順位</th><th>名前</th><th>スコア</th><th>達成率</th></tr></thead>
-    <tbody>${data.map((r, i) => {
-      const pct = r.total ? Math.round(r.score / r.total * 100) : 0;
+    <tbody>${data.map(r => {
+      const pct  = r.total ? Math.round(r.score / r.total * 100) : 0;
+      const rank = parseInt(r.rank);
       const isMe = r.username === authUser;
       return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
-        <td class="rank-num${i < 3 ? ' top' : ''}">${i + 1}</td>
+        <td class="rank-num${rank <= 3 ? ' top' : ''}">${rank}</td>
         <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:28px;height:28px;font-size:1rem;margin-right:8px;vertical-align:middle">${r.avatar||'🐸'}</span>${r.username}${isMe ? ' 👈' : ''}</td>
         <td class="rank-score">${r.score} / ${r.total}</td>
         <td class="rank-pct">${pct}%</td>
@@ -817,11 +957,16 @@ document.addEventListener('click', e => {
 });
 
 // ── Supabase Auth 初期化 ─────────────────────────────────
-// getSessionで初期状態を取得（ボーナスなし）、onAuthStateChangeでログイン/ログアウトを検知
 supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
   if (session) {
     authToken = session.access_token;
     await syncUser(authToken);
+  } else {
+    const customToken = localStorage.getItem('muto_session');
+    if (customToken) {
+      authToken = customToken;
+      await syncPasswordUser(customToken);
+    }
   }
   updateAuthBar();
 
@@ -830,8 +975,9 @@ supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
       authToken = session.access_token;
       await syncUser(authToken);
     } else if (event === 'SIGNED_OUT') {
-      authToken = null; authUser = null; authEmail = null;
-      authPoints = 0;
+      if (!localStorage.getItem('muto_session')) {
+        authToken = null; authUser = null; authEmail = null; authPoints = 0;
+      }
     }
     updateAuthBar();
   });

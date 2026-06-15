@@ -7,6 +7,8 @@
 
   async function getToken() {
     if (_token) return _token;
+    const custom = localStorage.getItem('muto_session');
+    if (custom) { _token = custom; return _token; }
     try {
       if (!window.supabase) return null;
       const client = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);

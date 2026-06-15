@@ -1,6 +1,11 @@
 const express = require('express');
 const { Pool } = require('pg');
 const { createClient } = require('@supabase/supabase-js');
+const crypto = require('crypto');
+
+function genSalt()  { return crypto.randomBytes(16).toString('hex'); }
+function genToken() { return crypto.randomBytes(32).toString('hex'); }
+function hashPw(pw, salt) { return crypto.pbkdf2Sync(pw, salt, 100000, 64, 'sha512').toString('hex'); }
 
 const app = express();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
@@ -33,8 +38,11 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS frame       TEXT DEFAULT 'default'`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at  TEXT DEFAULT ''`).catch(()=>{});
   await pool.query(`ALTER TABLE users ALTER COLUMN password DROP NOT NULL`).catch(()=>{});
-  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS points     INTEGER DEFAULT 0`).catch(()=>{});
-  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TEXT DEFAULT ''`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS points        INTEGER DEFAULT 0`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login   TEXT DEFAULT ''`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_salt TEXT`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS session_token TEXT`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
       id         SERIAL PRIMARY KEY,
@@ -47,16 +55,25 @@ async function initDB() {
   `).catch(()=>{});
 }
 
-// 認証ミドルウェア
+// 認証ミドルウェア（Supabase JWT または カスタムセッショントークン）
 async function auth(req, res, next) {
   const token = req.headers['authorization'];
   if (!token) return res.status(401).json({ error: 'ログインが必要です' });
-  const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
-  if (error || !user) return res.status(401).json({ error: 'トークンが無効です' });
-  const { rows } = await pool.query('SELECT * FROM users WHERE supabase_id = $1', [user.id]);
-  if (!rows[0]) return res.status(401).json({ error: 'ユーザーが見つかりません' });
-  req.user = rows[0];
-  next();
+
+  // Supabase JWT を試す
+  try {
+    const { data: { user }, error } = await supabaseAdmin.auth.getUser(token);
+    if (!error && user) {
+      const { rows } = await pool.query('SELECT * FROM users WHERE supabase_id = $1', [user.id]);
+      if (rows[0]) { req.user = rows[0]; return next(); }
+    }
+  } catch(e) {}
+
+  // カスタムセッショントークンを試す
+  const { rows } = await pool.query('SELECT * FROM users WHERE session_token = $1', [token]);
+  if (rows[0]) { req.user = rows[0]; return next(); }
+
+  return res.status(401).json({ error: 'トークンが無効です' });
 }
 
 // Googleログイン後にユーザー情報を同期 + 毎日ログインボーナス
@@ -123,10 +140,11 @@ app.post('/api/score', auth, async (req, res) => {
   res.json({ ok: true });
 });
 
-// ランキング
+// ランキング（同スコアは同順位）
 app.get('/api/ranking', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT u.username, u.avatar, u.frame, s.score, s.total, s.updated_at
+    SELECT u.username, u.avatar, u.frame, s.score, s.total, s.updated_at,
+           DENSE_RANK() OVER (ORDER BY s.score DESC) AS rank
     FROM scores s JOIN users u ON s.user_id = u.id
     ORDER BY s.score DESC
   `);
@@ -152,6 +170,59 @@ app.get('/api/admin/users', auth, async (req, res) => {
     ORDER BY u.points DESC
   `);
   res.json(rows);
+});
+
+// 自分の情報を取得（パスワードユーザーの再ログイン用）
+app.get('/api/me', auth, async (req, res) => {
+  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: req.user.points });
+});
+
+// パスワード登録
+app.post('/api/register', async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ error: 'ユーザー名とパスワードが必要です' });
+  if (username.length < 2 || username.length > 20) return res.status(400).json({ error: 'ユーザー名は2〜20文字で' });
+  if (password.length < 4) return res.status(400).json({ error: 'パスワードは4文字以上で' });
+
+  const { rows: ex } = await pool.query('SELECT id FROM users WHERE username=$1 AND supabase_id IS NULL', [username]);
+  if (ex.length > 0) return res.status(400).json({ error: 'このユーザー名はすでに使われています' });
+
+  const salt  = genSalt();
+  const hash  = hashPw(password, salt);
+  const token = genToken();
+  const today = new Date().toISOString().slice(0, 10);
+
+  await pool.query(
+    'INSERT INTO users (username, password_hash, password_salt, session_token, points, last_login, created_at) VALUES ($1,$2,$3,$4,1000,$5,$6)',
+    [username, hash, salt, token, today, new Date().toISOString()]
+  );
+  const { rows } = await pool.query('SELECT * FROM users WHERE session_token=$1', [token]);
+  const u = rows[0];
+  res.json({ token, username: u.username, avatar: u.avatar, frame: u.frame, points: u.points, loginBonus: 1000 });
+});
+
+// パスワードログイン
+app.post('/api/login', async (req, res) => {
+  const { username, password } = req.body;
+  if (!username || !password) return res.status(400).json({ error: 'ユーザー名とパスワードが必要です' });
+
+  const { rows } = await pool.query('SELECT * FROM users WHERE username=$1 AND password_hash IS NOT NULL', [username]);
+  if (!rows[0]) return res.status(401).json({ error: 'ユーザー名かパスワードが違います' });
+
+  const u = rows[0];
+  if (hashPw(password, u.password_salt) !== u.password_hash) return res.status(401).json({ error: 'ユーザー名かパスワードが違います' });
+
+  const token = genToken();
+  const today = new Date().toISOString().slice(0, 10);
+  let loginBonus = 0;
+  if (u.last_login !== today) {
+    await pool.query('UPDATE users SET points=points+1000, last_login=$1 WHERE id=$2', [today, u.id]);
+    loginBonus = 1000;
+  }
+  await pool.query('UPDATE users SET session_token=$1 WHERE id=$2', [token, u.id]);
+  const { rows: r } = await pool.query('SELECT * FROM users WHERE id=$1', [u.id]);
+  const u2 = r[0];
+  res.json({ token, username: u2.username, avatar: u2.avatar, frame: u2.frame, points: u2.points, loginBonus });
 });
 
 // クイズ進捗を取得
