@@ -249,7 +249,7 @@ app.post('/api/test/predict', auth, async (req, res) => {
   const { prediction, bet } = req.body;
   if (prediction == null || prediction < 0 || prediction > 100) return res.status(400).json({ error: '予測は0〜100で入力してください' });
   const betAmt = parseInt(bet, 10);
-  if (!betAmt || betAmt < 1) return res.status(400).json({ error: '賭け金は1pt以上にしてください' });
+  if (!betAmt || betAmt < 100) return res.status(400).json({ error: '賭け金は100pt以上にしてください' });
   // 旧賭け金を返金してから新賭け金を引く
   const oldBet = req.user.test_bet || 0;
   const netChange = betAmt - oldBet; // 正=追加引き落とし、負=返金

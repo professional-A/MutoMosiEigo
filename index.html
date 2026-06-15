@@ -820,7 +820,7 @@ async function submitPrediction() {
   const bet  = parseInt(document.getElementById('bet-input').value);
   const msg  = document.getElementById('test-msg');
   if (isNaN(pred) || pred < 0 || pred > 100) { msg.style.color='red'; msg.textContent='予測は0〜100で入力してください'; return; }
-  if (isNaN(bet) || bet < 1) { msg.style.color='red'; msg.textContent='賭け金は1pt以上にしてください'; return; }
+  if (isNaN(bet) || bet < 100) { msg.style.color='red'; msg.textContent='賭け金は100pt以上にしてください'; return; }
   if (new Date() > PRED_DEADLINE) { msg.style.color='red'; msg.textContent='受付終了しました'; return; }
   msg.style.color='var(--muted)'; msg.textContent='送信中...';
   const res  = await fetch('/api/test/predict', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({prediction:pred, bet}) });
@@ -836,7 +836,7 @@ async function submitPredictionChange() {
   const bet  = parseInt(document.getElementById('bet-input2').value);
   const msg  = document.getElementById('test-msg');
   if (isNaN(pred) || pred < 0 || pred > 100) { msg.style.color='red'; msg.textContent='予測は0〜100で入力してください'; return; }
-  if (isNaN(bet) || bet < 1) { msg.style.color='red'; msg.textContent='賭け金は1pt以上にしてください'; return; }
+  if (isNaN(bet) || bet < 100) { msg.style.color='red'; msg.textContent='賭け金は100pt以上にしてください'; return; }
   msg.style.color='var(--muted)'; msg.textContent='変更中...';
   const res  = await fetch('/api/test/predict', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({prediction:pred, bet}) });
   const data = await res.json();
