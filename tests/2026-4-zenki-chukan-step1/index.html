@@ -386,7 +386,7 @@ function pickQOpt(btn, chosen, ans){
   [...opts.children].forEach(b=>{ b.disabled=true; if(b.textContent===ans) b.classList.add("ok"); });
   if(!ok) btn.classList.add("ng");
   const fb=document.getElementById("qFb");
-  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg(); if(window.addPoints) addPoints(300);
+  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg(); if(window.addPoints) addPoints(100);
     fb.innerHTML=`<span class="v g">◎ 正解</span> <span class="corr">${w[0]}</span> <span class="jp">＝ ${w[1]}</span>`;
   } else {
     qRetry.push(qOrder[qi]);
@@ -408,7 +408,7 @@ function quizCheck(){
   inp.disabled=true; inp.classList.add(ok?"ok":"ng");
   qDone++;
   const fb=document.getElementById("qFb");
-  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg(); if(window.addPoints) addPoints(300);
+  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg(); if(window.addPoints) addPoints(100);
     fb.innerHTML=`<span class="v g">◎ 正解</span> <span class="corr">${w[0]}</span>`;
   } else {
     qRetry.push(qOrder[qi]);

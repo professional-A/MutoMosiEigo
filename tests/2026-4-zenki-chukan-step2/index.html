@@ -355,7 +355,7 @@ function pick(btn, ok, ansText, corrShow, extra){
   if(!ok) btn.classList.add("ng");
   const fb=document.getElementById("qFb");
   if(ok){
-    qCorrect++; if(window.addPoints) addPoints(300);
+    qCorrect++; if(window.addPoints) addPoints(100);
     if(it.t==="m"){ known[keyOf(PHRASES[it.i])]=1; saveKnown(); updateProg(); }
     fb.innerHTML=`<span class="v g">◎ 正解</span> <span class="corr">${corrShow}</span>`+(it.t==="c"?`<span class="jp">${extra}</span>`:"");
   } else {
