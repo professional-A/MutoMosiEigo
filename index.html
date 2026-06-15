@@ -1162,10 +1162,16 @@ async function distributePool() {
 }
 async function awardBakaFrame() {
   if (!confirm('ポイント1位の人にバカフレームを付与しますか？')) return;
-  const res  = await fetch('/api/admin/award-baka', { method:'POST', headers:{'Authorization':authToken} });
-  const data = await res.json();
-  if (data.ok) alert(`${data.username} にバカフレームを付与しました`);
-  else alert(data.error || 'エラー');
+  try {
+    const res  = await fetch('/api/admin/award-baka', { method:'POST', headers:{'Authorization':authToken} });
+    const data = await res.json();
+    if (data.ok) {
+      alert(`✅ ${data.username} にバカフレームを付与しました`);
+      await reloadAdminContent();
+    } else {
+      alert(`❌ エラー (${res.status}): ${data.error || JSON.stringify(data)}`);
+    }
+  } catch(e) { alert('❌ 通信エラー: ' + e.message); }
 }
 document.getElementById('admin-modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeAdminModal();
