@@ -8,6 +8,7 @@ function genToken() { return crypto.randomBytes(32).toString('hex'); }
 function hashPw(pw, salt) { return crypto.pbkdf2Sync(pw, salt, 100000, 64, 'sha512').toString('hex'); }
 // JST 5:00 AM でリセット（UTC+4h オフセットで計算）
 function bonusDay() { return new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString().slice(0, 10); }
+function dp(u) { return (u.points || 0) + (u.test_bet || 0); } // 表示ポイント（賭け中含む）
 
 const app = express();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
@@ -113,7 +114,7 @@ app.post('/api/sync-user', async (req, res) => {
 
   const { rows: r2 } = await pool.query('SELECT * FROM users WHERE id = $1', [u.id]);
   const u2 = r2[0];
-  res.json({ username: u2.username, avatar: u2.avatar, frame: u2.frame, email: u2.email, points: u2.points, loginBonus });
+  res.json({ username: u2.username, avatar: u2.avatar, frame: u2.frame, email: u2.email, points: dp(u2), loginBonus });
 });
 
 // アバター・フレーム更新
@@ -130,8 +131,8 @@ app.post('/api/points', auth, async (req, res) => {
   const { amount } = req.body;
   if (!amount || amount <= 0) return res.status(400).json({ error: '不正なポイント' });
   await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, req.user.id]);
-  const { rows } = await pool.query('SELECT points FROM users WHERE id = $1', [req.user.id]);
-  res.json({ ok: true, points: rows[0].points });
+  const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id = $1', [req.user.id]);
+  res.json({ ok: true, points: dp(rows[0]) });
 });
 
 // スコア保存
@@ -161,9 +162,9 @@ app.get('/api/ranking', async (req, res) => {
 // メンバー一覧（ポイント順、ログイン不要）
 app.get('/api/members', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, points, last_login, test_pred, test_bet
+    SELECT username, avatar, frame, points + COALESCE(test_bet,0) AS points, last_login, test_pred, test_bet
     FROM users
-    ORDER BY points DESC
+    ORDER BY points + COALESCE(test_bet,0) DESC
   `);
   res.json(rows);
 });
@@ -172,17 +173,18 @@ app.get('/api/members', async (req, res) => {
 app.get('/api/admin/users', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { rows } = await pool.query(`
-    SELECT u.id, u.username, u.email, u.avatar, u.frame, u.created_at, u.points, s.score, s.total,
+    SELECT u.id, u.username, u.email, u.avatar, u.frame, u.created_at,
+           u.points + COALESCE(u.test_bet,0) AS points, s.score, s.total,
            u.test_pred, u.test_bet
     FROM users u LEFT JOIN scores s ON s.user_id = u.id
-    ORDER BY u.points DESC
+    ORDER BY u.points + COALESCE(u.test_bet,0) DESC
   `);
   res.json(rows);
 });
 
 // 自分の情報を取得（パスワードユーザーの再ログイン用）
 app.get('/api/me', auth, async (req, res) => {
-  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: req.user.points });
+  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: dp(req.user) });
 });
 
 // パスワード登録
@@ -206,7 +208,7 @@ app.post('/api/register', async (req, res) => {
   );
   const { rows } = await pool.query('SELECT * FROM users WHERE session_token=$1', [token]);
   const u = rows[0];
-  res.json({ token, username: u.username, avatar: u.avatar, frame: u.frame, points: u.points, loginBonus: 1000 });
+  res.json({ token, username: u.username, avatar: u.avatar, frame: u.frame, points: dp(u), loginBonus: 1000 });
 });
 
 // パスワードログイン
@@ -230,7 +232,7 @@ app.post('/api/login', async (req, res) => {
   await pool.query('UPDATE users SET session_token=$1 WHERE id=$2', [token, u.id]);
   const { rows: r } = await pool.query('SELECT * FROM users WHERE id=$1', [u.id]);
   const u2 = r[0];
-  res.json({ token, username: u2.username, avatar: u2.avatar, frame: u2.frame, points: u2.points, loginBonus });
+  res.json({ token, username: u2.username, avatar: u2.avatar, frame: u2.frame, points: dp(u2), loginBonus });
 });
 
 // ── テストイベント ──────────────────────────────────────
@@ -259,7 +261,7 @@ app.post('/api/test/predict', auth, async (req, res) => {
   const newPoints = req.user.points - netChange;
   if (newPoints < 0) return res.status(400).json({ error: 'ポイントが足りません' });
   await pool.query('UPDATE users SET test_pred=$1, test_bet=$2, points=$3 WHERE id=$4', [prediction, betAmt, newPoints, req.user.id]);
-  res.json({ ok: true, points: newPoints });
+  res.json({ ok: true, points: newPoints + betAmt }); // 表示は賭け中含む
 });
 
 app.post('/api/test/score', auth, async (req, res) => {
@@ -268,8 +270,8 @@ app.post('/api/test/score', auth, async (req, res) => {
   const { score } = req.body;
   if (score == null || score < 0 || score > 100) return res.status(400).json({ error: '0〜100で入力してください' });
   await pool.query('UPDATE users SET test_score=$1 WHERE id=$2', [score, req.user.id]);
-  const { rows } = await pool.query('SELECT points FROM users WHERE id=$1', [req.user.id]);
-  res.json({ ok: true, points: rows[0].points });
+  const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id=$1', [req.user.id]);
+  res.json({ ok: true, points: dp(rows[0]) });
 });
 
 app.get('/api/test/results', auth, async (req, res) => {
@@ -376,8 +378,8 @@ app.post('/api/admin/grant-points', auth, async (req, res) => {
   const { userId, amount } = req.body;
   if (!userId || amount === undefined || amount === null) return res.status(400).json({ error: '不正なリクエスト' });
   await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, userId]);
-  const { rows } = await pool.query('SELECT points FROM users WHERE id = $1', [userId]);
-  res.json({ ok: true, points: rows[0].points });
+  const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id = $1', [userId]);
+  res.json({ ok: true, points: dp(rows[0]) });
 });
 
 app.use(express.static('.'));
