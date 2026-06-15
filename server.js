@@ -280,12 +280,21 @@ app.get('/api/test/results', auth, async (req, res) => {
 });
 
 
-// ポイント1位にバカフレーム付与
-app.post('/api/admin/award-baka', auth, async (req, res) => {
+// ポイント1位にワーストフレーム付与
+app.post('/api/admin/award-worst', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { rows } = await pool.query('SELECT id, username FROM users ORDER BY points DESC LIMIT 1');
   if (!rows[0]) return res.status(400).json({ error: 'ユーザーが見つかりません' });
   await pool.query("UPDATE users SET frame='worst' WHERE id=$1", [rows[0].id]);
+  res.json({ ok: true, username: rows[0].username });
+});
+
+// テスト最下位にバカフレーム付与
+app.post('/api/admin/award-baka', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { rows } = await pool.query('SELECT id, username FROM users WHERE test_score IS NOT NULL ORDER BY test_score ASC LIMIT 1');
+  if (!rows[0]) return res.status(400).json({ error: 'まだ得点が登録されていません' });
+  await pool.query("UPDATE users SET frame='baka' WHERE id=$1", [rows[0].id]);
   res.json({ ok: true, username: rows[0].username });
 });
 
