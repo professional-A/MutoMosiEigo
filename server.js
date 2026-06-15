@@ -245,15 +245,18 @@ app.get('/api/test/pool', async (req, res) => {
 
 app.post('/api/test/predict', auth, async (req, res) => {
   if (new Date() > PRED_DEADLINE) return res.status(400).json({ error: '予測の受付は終了しました（6/16 9:00 AM）' });
-  if (req.user.test_pred != null) return res.status(400).json({ error: '予測は一度しか登録できません' });
+  if (req.user.test_score != null) return res.status(400).json({ error: '得点登録済みのため変更できません' });
   const { prediction, bet } = req.body;
   if (prediction == null || prediction < 0 || prediction > 100) return res.status(400).json({ error: '予測は0〜100で入力してください' });
   const betAmt = parseInt(bet, 10);
   if (!betAmt || betAmt < 1) return res.status(400).json({ error: '賭け金は1pt以上にしてください' });
-  if (betAmt > req.user.points) return res.status(400).json({ error: 'ポイントが足りません' });
-  await pool.query('UPDATE users SET test_pred=$1, test_bet=$2, points=points-$3 WHERE id=$4', [prediction, betAmt, betAmt, req.user.id]);
-  const { rows } = await pool.query('SELECT points FROM users WHERE id=$1', [req.user.id]);
-  res.json({ ok: true, points: rows[0].points });
+  // 旧賭け金を返金してから新賭け金を引く
+  const oldBet = req.user.test_bet || 0;
+  const netChange = betAmt - oldBet; // 正=追加引き落とし、負=返金
+  const newPoints = req.user.points - netChange;
+  if (newPoints < 0) return res.status(400).json({ error: 'ポイントが足りません' });
+  await pool.query('UPDATE users SET test_pred=$1, test_bet=$2, points=$3 WHERE id=$4', [prediction, betAmt, newPoints, req.user.id]);
+  res.json({ ok: true, points: newPoints });
 });
 
 app.post('/api/test/score', auth, async (req, res) => {

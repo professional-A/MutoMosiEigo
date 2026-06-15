@@ -251,6 +251,14 @@ body{padding-top:38px}
   <div class="notif-header">お知らせ</div>
   <div class="notif-item notif-new">
     <div class="notif-item-date">2026-06-15</div>
+    <div class="notif-item-title">テスト予測イベント：締め切り前なら変更OK！</div>
+    <div class="notif-item-body">
+      英語テスト点数予測の賭け金・予測点数を<strong style="color:var(--teal)">6/16(月) 9:00 AM まで何度でも変更</strong>できます。<br>
+      「📋テスト」ボタンから変更してね！
+    </div>
+  </div>
+  <div class="notif-item">
+    <div class="notif-item-date">2026-06-15</div>
     <div class="notif-item-title">IDログイン復活！ドシドシ登録してね</div>
     <div class="notif-item-body">
       Googleアカウントなしでも登録できるようになりました🎉<br>
@@ -301,9 +309,22 @@ body{padding-top:38px}
       <button onclick="submitPrediction()" style="padding:9px 24px;border:none;border-radius:8px;background:var(--teal);color:#0a1626;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer">予測を送信</button>
     </div>
 
-    <!-- フェーズ2: 予測済み・得点未入力 -->
+    <!-- フェーズ2: 予測済み・得点未入力（締め切り前は予測変更可） -->
     <div id="test-phase-score" style="display:none">
-      <p style="margin-bottom:6px;font-size:.92rem">予測済み：<strong id="test-pred-display" style="color:var(--teal);font-size:1.1rem"></strong> 点</p>
+      <div id="test-phase-change" style="display:none;margin-bottom:14px;padding:10px 12px;background:var(--card2);border:1px solid var(--line);border-radius:10px">
+        <p style="font-size:.82rem;color:var(--teal);font-weight:600;margin-bottom:8px">📝 予測・賭け金を変更（締め切り前のみ）</p>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:6px">
+          <input id="pred-input2" type="number" min="0" max="100" placeholder="0〜100"
+            style="width:90px;padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:1rem;font-family:inherit">
+          <span style="color:var(--muted);font-size:.9rem">点</span>
+          <input id="bet-input2" type="number" min="1" placeholder="賭け金"
+            style="width:90px;padding:7px 9px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:1rem;font-family:inherit">
+          <span style="color:var(--muted);font-size:.9rem">pt</span>
+        </div>
+        <p style="font-size:.75rem;color:var(--dim);margin-bottom:8px">所持pt: <span id="bet-points-display2">―</span>pt</p>
+        <button onclick="submitPredictionChange()" style="padding:7px 18px;border:none;border-radius:8px;background:var(--teal);color:#0a1626;font-family:inherit;font-size:.88rem;font-weight:700;cursor:pointer">変更を保存</button>
+      </div>
+      <p style="margin-bottom:6px;font-size:.92rem">予測：<strong id="test-pred-display" style="color:var(--teal);font-size:1.1rem"></strong> 点　賭け金：<strong id="test-bet-display" style="color:var(--teal)"></strong> pt</p>
       <p style="margin-bottom:10px;font-size:.85rem;color:var(--muted)">テスト返却後、実際の点数を入力してね</p>
       <div style="display:flex;gap:8px;align-items:center;margin-bottom:12px">
         <input id="score-input" type="number" min="0" max="100" placeholder="0〜100"
@@ -743,6 +764,14 @@ function showTestPhase(data) {
     // フェーズ2: 予測済み・得点未入力
     document.getElementById('test-phase-score').style.display = 'block';
     document.getElementById('test-pred-display').textContent  = data.test_pred;
+    document.getElementById('test-bet-display').textContent   = data.test_bet != null ? data.test_bet.toLocaleString() : '―';
+    if (!past) {
+      const changeBox = document.getElementById('test-phase-change');
+      changeBox.style.display = 'block';
+      document.getElementById('pred-input2').value = data.test_pred;
+      document.getElementById('bet-input2').value  = data.test_bet ?? '';
+      document.getElementById('bet-points-display2').textContent = authPoints.toLocaleString();
+    }
   } else {
     // フェーズ1: 予測未入力
     if (past) {
@@ -800,6 +829,22 @@ async function submitPrediction() {
   authPoints = data.points;
   updateAuthBar();
   msg.textContent=''; await loadTestState();
+}
+
+async function submitPredictionChange() {
+  const pred = parseInt(document.getElementById('pred-input2').value);
+  const bet  = parseInt(document.getElementById('bet-input2').value);
+  const msg  = document.getElementById('test-msg');
+  if (isNaN(pred) || pred < 0 || pred > 100) { msg.style.color='red'; msg.textContent='予測は0〜100で入力してください'; return; }
+  if (isNaN(bet) || bet < 1) { msg.style.color='red'; msg.textContent='賭け金は1pt以上にしてください'; return; }
+  msg.style.color='var(--muted)'; msg.textContent='変更中...';
+  const res  = await fetch('/api/test/predict', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({prediction:pred, bet}) });
+  const data = await res.json();
+  if (data.error) { msg.style.color='red'; msg.textContent=data.error; return; }
+  authPoints = data.points;
+  updateAuthBar();
+  msg.style.color='var(--teal)'; msg.textContent='変更しました！';
+  await loadTestState();
 }
 
 async function submitScore() {
@@ -1147,7 +1192,7 @@ document.getElementById('members-modal-bg').addEventListener('click', e => {
 });
 
 // ── お知らせ ────────────────────────────────────────────
-const NOTIF_KEY = 'muto_notif_read_2';
+const NOTIF_KEY = 'muto_notif_read_3';
 function toggleNotif() {
   const panel = document.getElementById('notif-panel');
   panel.classList.toggle('open');
