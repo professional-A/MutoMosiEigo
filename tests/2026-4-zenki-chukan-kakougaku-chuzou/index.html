@@ -222,7 +222,7 @@ const SECTIONS = [
 
 let state = {};
 try{ state = JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}"); }catch(e){}
-function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); }
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); if(window.progressSave) progressSave(STORAGE_KEY, state); }
 
 function computeScore(){
   let done=0, total=0;
@@ -321,6 +321,15 @@ function refreshQ(key,secId){
 }
 
 renderAll();
+window._quizSync = async function() {
+  const s = await progressLoad(STORAGE_KEY);
+  if (!s || !Object.keys(s).length) return;
+  let chg = false;
+  for (const k in s) { if (s[k] && !state[k]) { state[k] = s[k]; chg = true; } }
+  if (chg) { save(); renderAll(); }
+};
 </script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/progress.js"></script>
 </body>
 </html>

@@ -263,7 +263,7 @@ const WORDS=[
 ];
 
 let known={}; try{known=JSON.parse(localStorage.getItem("vocab_known_u12")||"{}");}catch(e){known={};}
-function saveKnown(){try{localStorage.setItem("vocab_known_u12",JSON.stringify(known));}catch(e){}}
+function saveKnown(){try{localStorage.setItem("vocab_known_u12",JSON.stringify(known));}catch(e){} if(window.progressSave) progressSave("vocab_known_u12", known); }
 function keyOf(w){return w[0]+"|"+w[4];}
 
 let filter="all", order=[], idx=0, view="card";
@@ -454,9 +454,17 @@ document.addEventListener("keydown", function(e){
 
 /* init */
 rebuild(); renderCard(); updateProg();
+window._quizSync = async function() {
+  const s = await progressLoad("vocab_known_u12");
+  if (!s || !Object.keys(s).length) return;
+  let chg = false;
+  for (const k in s) { if (s[k] && !known[k]) { known[k] = s[k]; chg = true; } }
+  if (chg) { saveKnown(); updateProg(); rebuild(); renderCard(); }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../../js/points.js"></script>
+<script src="../../js/progress.js"></script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js");</script>
 </body>
 </html>

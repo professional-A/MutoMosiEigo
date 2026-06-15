@@ -414,7 +414,7 @@ const SECTIONS = [
 
 let state = {}; // key -> {correct:bool, done:bool}
 try{ state = JSON.parse(localStorage.getItem("mutou_u12")||"{}"); }catch(e){ state={}; }
-function save(){ try{ localStorage.setItem("mutou_u12", JSON.stringify(state)); }catch(e){} }
+function save(){ try{ localStorage.setItem("mutou_u12", JSON.stringify(state)); }catch(e){} if(window.progressSave) progressSave("mutou_u12", state); }
 
 function norm(s){
   return (s||"").toLowerCase().trim()
@@ -679,9 +679,17 @@ document.addEventListener("keydown", function(e){
 });
 
 render();
+window._quizSync = async function() {
+  const s = await progressLoad("mutou_u12");
+  if (!s || !Object.keys(s).length) return;
+  let chg = false;
+  for (const k in s) { if (s[k] && !state[k]) { state[k] = s[k]; chg = true; } }
+  if (chg) { save(); render(); updateScore(); }
+};
 </script>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="../../js/points.js"></script>
+<script src="../../js/progress.js"></script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("../../sw.js");</script>
 </body>
 </html>

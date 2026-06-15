@@ -35,6 +35,16 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ALTER COLUMN password DROP NOT NULL`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS points     INTEGER DEFAULT 0`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login TEXT DEFAULT ''`).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS quiz_progress (
+      id         SERIAL PRIMARY KEY,
+      user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      quiz_key   TEXT NOT NULL,
+      state_json TEXT NOT NULL DEFAULT '{}',
+      updated_at TIMESTAMPTZ DEFAULT NOW(),
+      UNIQUE(user_id, quiz_key)
+    )
+  `).catch(()=>{});
 }
 
 // 認証ミドルウェア
@@ -142,6 +152,30 @@ app.get('/api/admin/users', auth, async (req, res) => {
     ORDER BY u.points DESC
   `);
   res.json(rows);
+});
+
+// クイズ進捗を取得
+app.get('/api/progress/:quizKey', auth, async (req, res) => {
+  const { quizKey } = req.params;
+  const { rows } = await pool.query(
+    'SELECT state_json FROM quiz_progress WHERE user_id=$1 AND quiz_key=$2',
+    [req.user.id, quizKey]
+  );
+  res.json({ state: rows[0] ? JSON.parse(rows[0].state_json) : {} });
+});
+
+// クイズ進捗を保存
+app.put('/api/progress/:quizKey', auth, async (req, res) => {
+  const { quizKey } = req.params;
+  const { state } = req.body;
+  if (!state || typeof state !== 'object') return res.status(400).json({ error: '不正なデータ' });
+  await pool.query(
+    `INSERT INTO quiz_progress (user_id, quiz_key, state_json, updated_at)
+     VALUES ($1, $2, $3, NOW())
+     ON CONFLICT (user_id, quiz_key) DO UPDATE SET state_json=$3, updated_at=NOW()`,
+    [req.user.id, quizKey, JSON.stringify(state)]
+  );
+  res.json({ ok: true });
 });
 
 // 管理者：ポイント付与
