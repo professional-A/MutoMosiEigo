@@ -148,7 +148,7 @@ app.get('/api/admin/users', auth, async (req, res) => {
 app.post('/api/admin/grant-points', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { userId, amount } = req.body;
-  if (!userId || !amount) return res.status(400).json({ error: '不正なリクエスト' });
+  if (!userId || amount === undefined || amount === null) return res.status(400).json({ error: '不正なリクエスト' });
   await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, userId]);
   const { rows } = await pool.query('SELECT points FROM users WHERE id = $1', [userId]);
   res.json({ ok: true, points: rows[0].points });

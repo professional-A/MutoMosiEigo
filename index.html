@@ -741,7 +741,7 @@ async function reloadAdminContent() {
 }
 async function grantPoints(userId) {
   const amt = parseInt(document.getElementById(`grant-amt-${userId}`).value);
-  if (!amt || amt < 1) return;
+  if (isNaN(amt) || amt === 0) return;
   const res = await fetch('/api/admin/grant-points', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
