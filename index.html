@@ -113,10 +113,15 @@ h1{
   position:fixed;top:0;left:0;right:0;z-index:100;
   background:rgba(10,22,38,.92);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);
-  padding:8px 18px;display:flex;align-items:center;gap:10px;
-  font-size:.82rem;
+  padding:6px 12px;display:flex;align-items:center;gap:6px;
+  font-size:.82rem;flex-wrap:wrap;
 }
-.auth-bar-left{margin-right:auto;display:flex;align-items:center;gap:8px}
+.auth-bar-left{margin-right:auto;display:flex;align-items:center;gap:6px}
+@media(max-width:480px){
+  .auth-bar{padding:5px 10px;gap:5px;font-size:.75rem}
+  .auth-btn{font-size:.72rem;padding:3px 10px}
+  #auth-status{font-size:.75rem;max-width:120px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+}
 
 /* お知らせ */
 .notif-btn{
@@ -177,16 +182,21 @@ body{padding-top:38px}
 /* Ranking */
 .ranking-section{margin-top:48px;padding-top:32px;border-top:1px solid var(--line)}
 .ranking-section h2{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:16px}
-.ranking-table{width:100%;border-collapse:collapse}
-.ranking-table th,.ranking-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:.88rem}
+.table-scroll{overflow-x:auto;-webkit-overflow-scrolling:touch}
+.ranking-table{width:100%;border-collapse:collapse;min-width:320px}
+.ranking-table th,.ranking-table td{padding:10px 14px;text-align:left;border-bottom:1px solid var(--line);font-size:.88rem;white-space:nowrap}
 .ranking-table th{color:var(--dim);font-weight:600;font-size:.75rem;letter-spacing:.1em}
 .ranking-table tr:last-child td{border-bottom:none}
-.rank-num{color:var(--dim);font-weight:700;width:40px}
+.rank-num{color:var(--dim);font-weight:700;width:32px}
 .rank-num.top{color:var(--amber)}
-.rank-name{color:var(--ink);font-weight:600}
+.rank-name{color:var(--ink);font-weight:600;white-space:normal;min-width:80px}
 .rank-score{color:var(--teal);font-weight:700}
 .rank-pct{color:var(--muted);font-size:.8rem}
 .ranking-login-note{color:var(--dim);font-size:.85rem;padding:20px 0}
+@media(max-width:480px){
+  .ranking-table th,.ranking-table td{padding:8px 10px;font-size:.82rem}
+  .modal{padding:20px 16px}
+}
 
 /* Avatar */
 .avatar{display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;width:38px;height:38px;border-radius:50%;background:var(--bg2);border:2px solid var(--line);cursor:pointer;flex-shrink:0;transition:.15s}
@@ -677,7 +687,7 @@ async function loadRanking() {
     el.innerHTML = '<p class="ranking-login-note">まだ誰もスコアを登録していません</p>';
     return;
   }
-  el.innerHTML = `<table class="ranking-table">
+  el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
     <thead><tr><th>順位</th><th>名前</th><th>スコア</th><th>達成率</th></tr></thead>
     <tbody>${data.map((r, i) => {
       const pct = r.total ? Math.round(r.score / r.total * 100) : 0;
@@ -689,7 +699,7 @@ async function loadRanking() {
         <td class="rank-pct">${pct}%</td>
       </tr>`;
     }).join('')}</tbody>
-  </table>`;
+  </table></div>`;
 }
 
 
@@ -725,6 +735,7 @@ async function reloadAdminContent() {
         </tr>`).join('')}
       </tbody>
     </table>`;
+  el.innerHTML = `<p style="color:var(--muted);margin-bottom:10px">登録人数：<strong style="color:var(--teal)">${data.length}人</strong></p><div class="table-scroll">` + el.innerHTML + `</div>`;
 }
 async function grantPoints(userId) {
   const amt = parseInt(document.getElementById(`grant-amt-${userId}`).value);
@@ -751,8 +762,7 @@ async function openMembersModal() {
   const res  = await fetch('/api/members');
   const data = await res.json();
   if (!Array.isArray(data)) { el.innerHTML = 'エラー'; return; }
-  el.innerHTML = `
-    <table class="ranking-table">
+  el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
       <thead><tr><th>#</th><th>名前</th><th>ポイント</th></tr></thead>
       <tbody>${data.map((u, i) => `
         <tr>
@@ -764,7 +774,7 @@ async function openMembersModal() {
           <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
         </tr>`).join('')}
       </tbody>
-    </table>`;
+    </table></div>`;
 }
 function closeMembersModal() {
   document.getElementById('members-modal-bg').classList.remove('open');
