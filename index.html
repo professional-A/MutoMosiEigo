@@ -272,13 +272,15 @@ h1{
   <div class="notif-header">お知らせ</div>
   <div class="notif-item notif-new">
     <div class="notif-item-date">2026-06-16</div>
-    <div class="notif-item-title">配分の計算式について</div>
+    <div class="notif-item-title">賭けポイントの配分ルール</div>
     <div class="notif-item-body">
-      予測点数が近いほど多くもらえます！<br>
-      <strong style="color:var(--teal)">完全的中者がいる場合</strong>：プールを均等分配<br>
-      <strong style="color:var(--teal)">いない場合</strong>：誤差が小さいほど有利な重み付きで配分<br>
-      <span style="font-size:.85em;color:var(--dim)">配分額 ∝ 1 ÷ (予測誤差)²</span><br>
-      例）誤差1点 vs 誤差5点 → 25倍の差がつく
+      全員の賭け金がプールされ、<strong style="color:var(--teal)">予測が近い人ほど多くもらえます</strong>。<br><br>
+      🎯 <strong>完全的中した人がいる場合</strong><br>
+      　→ 的中者で山分け<br><br>
+      📊 <strong>誰も的中しなかった場合</strong><br>
+      　→ 誤差が小さいほど多く配分<br>
+      　（誤差2点の人は誤差10点の人の<strong style="color:var(--teal)">25倍</strong>もらえる）<br><br>
+      <span style="font-size:.85em;color:var(--dim)">※ 予測していない人は配分対象外</span>
     </div>
   </div>
   <div class="notif-item">
