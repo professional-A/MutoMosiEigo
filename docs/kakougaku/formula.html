@@ -1,0 +1,221 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加工学 公式集</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Yu Gothic','Meiryo',sans-serif;background:#0d1117;color:#e6edf3;font-size:14px;line-height:1.7;padding:14px}
+h1{text-align:center;font-size:20px;color:#58a6ff;padding:10px;border-bottom:2px solid #58a6ff;margin-bottom:14px}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+@media(max-width:700px){.grid{grid-template-columns:1fr}}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:12px 14px}
+.card h2{font-size:13px;color:#58a6ff;border-bottom:1px solid #30363d;padding-bottom:5px;margin-bottom:8px}
+.f{background:#0d1117;border:1px solid #30363d;border-radius:5px;padding:6px 10px;margin:5px 0;font-family:'Consolas','Courier New',monospace;font-size:13px}
+.f .name{font-size:10px;color:#8b949e;font-family:'Yu Gothic','Meiryo',sans-serif;display:block;margin-bottom:1px}
+.f .eq{color:#e6edf3}
+.f .eq b{color:#79c0ff}
+.f .eq .r{color:#f85149}
+.f .eq .g{color:#3fb950}
+.f .eq .y{color:#d29922}
+.note{font-size:11px;color:#8b949e;margin-top:2px;font-family:'Yu Gothic','Meiryo',sans-serif}
+.imp{border-left:3px solid #f85149}
+.imp .eq{color:#ffa198}
+ul{padding-left:14px;margin:4px 0}
+li{font-size:12px;color:#8b949e;margin:1px 0}
+li b{color:#e6edf3}
+</style>
+</head>
+<body>
+<h1>⚙️ 加工学 公式集</h1>
+
+<div class="grid">
+
+<!-- 塑性加工 基本 -->
+<div class="card">
+<h2>⚒ 塑性加工 — ひずみ・変形</h2>
+
+<div class="f">
+  <span class="name">真ひずみ（対数ひずみ）</span>
+  <span class="eq"><b>ε = ln(l / l₀) = ln(A₀ / A)</b></span>
+  <div class="note">l:変形後長さ, l₀:元の長さ, A:断面積</div>
+</div>
+
+<div class="f">
+  <span class="name">工学ひずみ（公称ひずみ）との関係</span>
+  <span class="eq">e = (l − l₀) / l₀　→　<b>ε = ln(1 + e)</b></span>
+  <div class="note">大変形では常に ε &lt; e（真ひずみの方が小さい）</div>
+</div>
+
+<div class="f">
+  <span class="name">体積一定条件</span>
+  <span class="eq"><b>ε₁ + ε₂ + ε₃ = 0</b></span>
+  <div class="note">3方向の真ひずみの和はゼロ</div>
+</div>
+
+<div class="f">
+  <span class="name">圧延・引抜きの体積保存（流量一定）</span>
+  <span class="eq"><b>V₀ A₀ = Vr Ar = V₁ A₁</b></span>
+  <div class="note">V:速度, A:断面積（どの断面でも流量は等しい）</div>
+</div>
+
+<div class="f">
+  <span class="name">加工硬化則（n乗硬化則）</span>
+  <span class="eq"><b>σ = C · εⁿ</b></span>
+  <div class="note">C:強度係数, n:加工硬化指数（n大→成形性◎・ネッキング起きにくい）</div>
+</div>
+
+<div class="f">
+  <span class="name">r値（ランクフォード値・塑性ひずみ比）</span>
+  <span class="eq"><b>r = ε幅 / ε厚</b></span>
+  <div class="note">r &gt; 1 → 板厚より幅が変形 → 深絞り性◎　/ 平均 r̄ 大 → LDR 大</div>
+</div>
+</div>
+
+<!-- スプリングバック・プレス -->
+<div class="card">
+<h2>⚒ 塑性加工 — プレス・成形</h2>
+
+<div class="f imp">
+  <span class="name">スプリングバック（超頻出）</span>
+  <span class="eq r"><b>スプリングバック ∝ σy / E</b></span>
+  <div class="note">E（縦弾性係数）小 → 大　/ σy（降伏応力）大 → 大</div>
+  <div class="note">ハイテン（高張力鋼）は σy 大 → スプリングバック問題</div>
+</div>
+
+<div class="f">
+  <span class="name">せん断力</span>
+  <span class="eq"><b>P = k · τ · l · t</b></span>
+  <div class="note">k:補正係数（0.7〜1.0）, τ:せん断強さ[MPa], l:切断周長[mm], t:板厚[mm]</div>
+</div>
+
+<div class="f">
+  <span class="name">LDR（限界絞り比）</span>
+  <span class="eq"><b>LDR = D₀ / d₁ ≈ 2.0 〜 2.2</b></span>
+  <div class="note">D₀:ブランク径, d₁:ポンチ径　/ これ以上絞ると破断</div>
+</div>
+
+<div class="f">
+  <span class="name">クリアランス（せん断加工）</span>
+  <span class="eq"><b>c = (5 〜 10%) × t</b></span>
+  <div class="note">c:片側クリアランス, t:板厚 / 適正値で平滑断面・バリ最小</div>
+</div>
+
+<div class="f">
+  <span class="name">焼きばめの膨張量</span>
+  <span class="eq"><b>Δd = α · d · ΔT</b></span>
+  <div class="note">α:線膨張係数, d:内径, ΔT:加熱温度差 / Δd &gt; しめしろ となる温度を選択</div>
+</div>
+</div>
+
+<!-- 降伏条件 -->
+<div class="card">
+<h2>⚒ 塑性加工 — 降伏条件</h2>
+
+<div class="f">
+  <span class="name">トレスカの降伏条件</span>
+  <span class="eq"><b>τmax = (σ₁ − σ₃) / 2 = σy / 2</b></span>
+  <div class="note">最大せん断応力が σy/2 に達したとき降伏 / 計算が簡単</div>
+</div>
+
+<div class="f">
+  <span class="name">ミーゼスの降伏条件</span>
+  <span class="eq"><b>(σ₁−σ₂)² + (σ₂−σ₃)² + (σ₃−σ₁)² = 2σy²</b></span>
+  <div class="note">ひずみエネルギーが一定値で降伏 / 実験値に近い（ミーゼスの方が正確）</div>
+</div>
+
+<div class="f">
+  <span class="name">二軸引張（σ₁=σ₂=σ, σ₃=0）の比較</span>
+  <span class="eq">トレスカ: <b>σy = σ₁</b>　　ミーゼス: <b>σy = σ₁</b>（同じ）</span>
+</div>
+
+<div class="f">
+  <span class="name">純せん断（σ₁=τ, σ₂=0, σ₃=−τ）</span>
+  <span class="eq">トレスカ: <b>τy = σy / 2</b>　　ミーゼス: <b>τy = σy / √3</b></span>
+  <div class="note">ミーゼスはトレスカより約15%大きい降伏応力を予測</div>
+</div>
+</div>
+
+<!-- 溶接・接合 -->
+<div class="card">
+<h2>🔗 接合 — 溶接の公式</h2>
+
+<div class="f">
+  <span class="name">ジュール熱（抵抗溶接・エレクトロスラグの基本）</span>
+  <span class="eq"><b>Q = I² R t</b></span>
+  <div class="note">I:電流[A], R:抵抗[Ω], t:時間[s] / スポット溶接・エレクトロスラグに適用</div>
+</div>
+
+<div class="f">
+  <span class="name">入熱量（アーク溶接）</span>
+  <span class="eq"><b>Q = (V · I) / v　[J/mm]</b></span>
+  <div class="note">V:アーク電圧[V], I:電流[A], v:溶接速度[mm/s]</div>
+  <div class="note">Q大 → HAZ拡大・変形大 / Q小 → 溶込み不良リスク</div>
+</div>
+
+<div class="f imp">
+  <span class="name">隅肉溶接の応力</span>
+  <span class="eq r"><b>σ = P / (0.7h · l)</b></span>
+  <div class="note">P:荷重[N], h:脚長[mm], l:溶接長[mm] / のど厚 a = 0.7h</div>
+</div>
+
+<div class="f">
+  <span class="name">のど厚（隅肉溶接）</span>
+  <span class="eq"><b>a = 0.7 h</b>　（h:脚長）</span>
+  <div class="note">等辺隅肉溶接の場合 / 有効のど断面 = a × l</div>
+</div>
+
+<div class="f">
+  <span class="name">PWHT（溶接後熱処理）条件</span>
+  <span class="eq"><b>550 〜 650℃ × (板厚25mm あたり 1時間)</b></span>
+  <div class="note">残留応力低減・HAZ靱性回復・水素逸散が目的</div>
+</div>
+</div>
+
+<!-- 数値まとめ -->
+<div class="card" style="grid-column:1/-1">
+<h2>📌 覚える数値・条件一覧</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px">
+
+<div>
+<b style="color:#58a6ff;font-size:12px">鋳造</b>
+<ul>
+<li>ダイカスト圧力：<b>数十〜数百 MPa</b></li>
+<li>低圧鋳造圧力：<b>0.05〜0.15 MPa</b></li>
+<li>Al 動粘度 ν：<b>0.2 cSt（最小）</b></li>
+<li>鋳鉄 表面張力 T：<b>≈1.87 N/m（最大）</b></li>
+<li>Al 再結晶温度：<b>約 150℃</b></li>
+<li>Fe 再結晶温度：<b>約 450〜600℃</b></li>
+</ul>
+</div>
+
+<div>
+<b style="color:#58a6ff;font-size:12px">塑性加工</b>
+<ul>
+<li>LDR（深絞り限界）：<b>≈ 2.0〜2.2</b></li>
+<li>クリアランス：<b>板厚の 5〜10%</b></li>
+<li>n値（高成形性）：<b>0.2〜0.5</b></li>
+<li>r値（深絞り性）：<b>r &gt; 1 で◎</b></li>
+<li>スプリングバック：<b>∝ σy / E</b></li>
+</ul>
+</div>
+
+<div>
+<b style="color:#58a6ff;font-size:12px">接合</b>
+<ul>
+<li>硬ろう融点：<b>≥ 450℃</b>（銀・銅ろう）</li>
+<li>軟ろう融点：<b>&lt; 450℃</b>（はんだ）</li>
+<li>PWHT温度：<b>550〜650℃</b></li>
+<li>隅肉のど厚：<b>a = 0.7h</b></li>
+<li>FSW開発：<b>1991年 英国 TWI</b></li>
+<li>スポット電流：<b>数千〜数万 A</b></li>
+</ul>
+</div>
+
+</div>
+</div>
+
+</div>
+</body>
+</html>
