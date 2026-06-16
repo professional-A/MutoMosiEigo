@@ -1524,7 +1524,9 @@ async function initSurveyBanner() {
   try {
     const res  = await fetch('/api/survey/me', { headers: { 'Authorization': authToken } });
     const data = await res.json();
-    if (!data.submitted) {
+    if (data.submitted) {
+      document.getElementById('survey-done-banner').style.display = 'block';
+    } else {
       document.getElementById('survey-banner').style.display = 'flex';
     }
   } catch(e) {}
