@@ -804,7 +804,7 @@ function showTestPhase(data) {
     document.getElementById('done-pred').textContent  = data.test_pred ?? '未入力';
     document.getElementById('done-score').textContent = data.test_score + '点';
     const err = data.test_pred != null ? Math.abs(data.test_pred - data.test_score) : '-';
-    document.getElementById('done-error').textContent = err === '-' ? '-' : '±' + err + '点';
+    document.getElementById('done-error').textContent = err === '-' ? '-' : err + '点';
     document.getElementById('done-bet').textContent   = data.test_bet != null ? data.test_bet.toLocaleString() + 'pt' : '―';
   } else if (data.test_pred !== null && data.test_pred !== undefined) {
     // フェーズ2: 予測済み・得点未入力
@@ -853,7 +853,7 @@ async function loadTestResults() {
           <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:22px;height:22px;font-size:.85rem;margin-right:6px;vertical-align:middle">${r.avatar||'🐸'}</span>${r.username}${isMe?' 👈':''}</td>
           <td style="text-align:center">${r.test_pred ?? '―'}</td>
           <td style="text-align:center;font-weight:600">${r.test_score}</td>
-          <td style="text-align:center;color:${err<=5?'var(--teal)':err<=15?'var(--amber)':'#f87171'}">±${err}</td>
+          <td style="text-align:center;color:${err<=5?'var(--teal)':err<=15?'var(--amber)':'#f87171'}">${err}</td>
           <td style="text-align:center;color:var(--teal)">${r.test_bet != null ? r.test_bet.toLocaleString()+'pt' : '―'}</td>
         </tr>`;
       }).join('')}</tbody>
