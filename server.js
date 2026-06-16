@@ -53,6 +53,7 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_score INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_bet   INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS prev_frame TEXT DEFAULT 'default'`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS unlocked_avatars TEXT DEFAULT '[]'`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
       id         SERIAL PRIMARY KEY,
@@ -165,7 +166,7 @@ app.post('/api/sync-user', async (req, res) => {
 
   const { rows: r2 } = await pool.query('SELECT * FROM users WHERE id = $1', [u.id]);
   const u2 = r2[0];
-  res.json({ username: u2.username, avatar: u2.avatar, frame: u2.frame, email: u2.email, points: dp(u2), loginBonus });
+  res.json({ username: u2.username, avatar: u2.avatar, frame: u2.frame, email: u2.email, points: dp(u2), loginBonus, unlockedAvatars: JSON.parse(u2.unlocked_avatars || '[]') });
 });
 
 // アバター・フレーム更新
@@ -289,7 +290,7 @@ app.post('/api/register', async (req, res) => {
   );
   const { rows } = await pool.query('SELECT * FROM users WHERE session_token=$1', [token]);
   const u = rows[0];
-  res.json({ token, username: u.username, avatar: u.avatar, frame: u.frame, points: dp(u), loginBonus: 1000 });
+  res.json({ token, username: u.username, avatar: u.avatar, frame: u.frame, points: dp(u), loginBonus: 1000, unlockedAvatars: JSON.parse(u.unlocked_avatars || '[]') });
 });
 
 // パスワードログイン
@@ -313,7 +314,7 @@ app.post('/api/login', async (req, res) => {
   await pool.query('UPDATE users SET session_token=$1 WHERE id=$2', [token, u.id]);
   const { rows: r } = await pool.query('SELECT * FROM users WHERE id=$1', [u.id]);
   const u2 = r[0];
-  res.json({ token, username: u2.username, avatar: u2.avatar, frame: u2.frame, points: dp(u2), loginBonus });
+  res.json({ token, username: u2.username, avatar: u2.avatar, frame: u2.frame, points: dp(u2), loginBonus, unlockedAvatars: JSON.parse(u2.unlocked_avatars || '[]') });
 });
 
 // ── テストイベント ──────────────────────────────────────
@@ -446,9 +447,13 @@ app.post('/api/survey', auth, async (req, res) => {
       'INSERT INTO survey_responses (user_id, answers) VALUES ($1, $2)',
       [req.user.id, JSON.stringify(answers)]
     );
-    await pool.query("UPDATE users SET avatar='😼' WHERE id=$1", [req.user.id]);
-    const { rows } = await pool.query('SELECT points, test_bet, avatar FROM users WHERE id=$1', [req.user.id]);
-    res.json({ ok: true, avatar: rows[0].avatar });
+    // 😼をインベントリに追加してアバターにも設定
+    const { rows: ua } = await pool.query('SELECT unlocked_avatars FROM users WHERE id=$1', [req.user.id]);
+    const inv = JSON.parse(ua[0]?.unlocked_avatars || '[]');
+    if (!inv.includes('😼')) inv.push('😼');
+    await pool.query("UPDATE users SET avatar='😼', unlocked_avatars=$1 WHERE id=$2", [JSON.stringify(inv), req.user.id]);
+    const { rows } = await pool.query('SELECT points, test_bet, avatar, unlocked_avatars FROM users WHERE id=$1', [req.user.id]);
+    res.json({ ok: true, avatar: rows[0].avatar, unlockedAvatars: JSON.parse(rows[0].unlocked_avatars || '[]') });
   } catch(e) {
     res.status(500).json({ error: 'サーバーエラー' });
   }

@@ -837,6 +837,7 @@ let authEmail  = null;
 let authAvatar = localStorage.getItem('muto_avatar') || '🐸';
 let authFrame  = localStorage.getItem('muto_frame')  || 'default';
 let authPoints = 0;
+let authUnlockedAvatars = JSON.parse(localStorage.getItem('muto_unlocked_avatars') || '[]');
 let selectedAvatar = authAvatar;
 let selectedFrame  = authFrame;
 
@@ -1119,11 +1120,13 @@ function applyPasswordLogin(data) {
   authAvatar = data.avatar || '🐸';
   authFrame  = data.frame  || 'default';
   authPoints = data.points || 0;
-  localStorage.setItem('muto_session', data.token);
-  localStorage.setItem('muto_user',    data.username);
-  localStorage.setItem('muto_avatar',  authAvatar);
-  localStorage.setItem('muto_frame',   authFrame);
-  localStorage.setItem('muto_points',  String(authPoints));
+  authUnlockedAvatars = data.unlockedAvatars || [];
+  localStorage.setItem('muto_session',           data.token);
+  localStorage.setItem('muto_user',              data.username);
+  localStorage.setItem('muto_avatar',            authAvatar);
+  localStorage.setItem('muto_frame',             authFrame);
+  localStorage.setItem('muto_points',            String(authPoints));
+  localStorage.setItem('muto_unlocked_avatars',  JSON.stringify(authUnlockedAvatars));
   if (data.loginBonus) showPointToast(`ログインボーナス +${data.loginBonus.toLocaleString()}pt`);
   closeLoginModal();
   updateAuthBar();
@@ -1168,12 +1171,14 @@ async function syncPasswordUser(token) {
     if (data.username) {
       authUser   = data.username;
       authEmail  = data.email || '';
-      authAvatar = data.avatar || '🐸';
-      authFrame  = data.frame  || 'default';
-      authPoints = data.points || 0;
-      localStorage.setItem('muto_avatar',  authAvatar);
-      localStorage.setItem('muto_frame',   authFrame);
-      localStorage.setItem('muto_points',  String(authPoints));
+      authAvatar          = data.avatar || '🐸';
+      authFrame           = data.frame  || 'default';
+      authPoints          = data.points || 0;
+      authUnlockedAvatars = data.unlockedAvatars || [];
+      localStorage.setItem('muto_avatar',           authAvatar);
+      localStorage.setItem('muto_frame',            authFrame);
+      localStorage.setItem('muto_points',           String(authPoints));
+      localStorage.setItem('muto_unlocked_avatars', JSON.stringify(authUnlockedAvatars));
     } else {
       localStorage.removeItem('muto_session');
       authToken = null;
@@ -1250,7 +1255,13 @@ function openAvatarModal() {
   prev.textContent = selectedAvatar;
   applyFrame(prev, selectedFrame);
 
-  document.getElementById('avatar-grid').innerHTML = AVATARS.map(e =>
+  const special = authUnlockedAvatars.filter(e => !AVATARS.includes(e));
+  const specialHtml = special.length ? `
+    <div style="width:100%;font-size:.72rem;color:var(--teal);letter-spacing:.1em;font-weight:600;margin:8px 0 4px">⭐ アンロック済み</div>
+    ${special.map(e => `<div class="avatar-opt${e === selectedAvatar ? ' selected' : ''}" onclick="selectAvatar('${e}')" title="アンロック済み" style="border-color:var(--amber)">${e}</div>`).join('')}
+    <div style="width:100%;font-size:.72rem;color:var(--dim);letter-spacing:.1em;font-weight:600;margin:8px 0 4px">通常</div>
+  ` : '';
+  document.getElementById('avatar-grid').innerHTML = specialHtml + AVATARS.map(e =>
     `<div class="avatar-opt${e === selectedAvatar ? ' selected' : ''}" onclick="selectAvatar('${e}')">${e}</div>`
   ).join('');
 
@@ -1610,6 +1621,10 @@ async function submitSurvey() {
     const data = await res.json();
     if (!data.ok) { msg.style.color='red'; msg.textContent=data.error||'エラーが発生しました'; return; }
     authAvatar = data.avatar;
+    if (data.unlockedAvatars) {
+      authUnlockedAvatars = data.unlockedAvatars;
+      localStorage.setItem('muto_unlocked_avatars', JSON.stringify(authUnlockedAvatars));
+    }
     localStorage.setItem('muto_avatar', authAvatar);
     updateAuthBar();
     unlockScroll();
