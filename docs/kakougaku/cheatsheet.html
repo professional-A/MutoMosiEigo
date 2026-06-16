@@ -2,711 +2,700 @@
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
-<title>加工学 中間試験 カンペ</title>
+<title>加工学カンペ 2026前期中間</title>
 <style>
-@import url('https://fonts.googleapis.com/css2?family=Noto+Sans+JP:wght@400;700;900&display=swap');
-
-:root{
-  --bg:#0a1626; --card:#15263f; --line:#27406a;
-  --ink:#e7eef7; --muted:#8aa1c0; --teal:#46d6c4;
-  --amber:#f6b352; --red:#f06b8e; --good:#5fe0a8;
+* { margin:0; padding:0; box-sizing:border-box; }
+body { font-family:'Yu Gothic','Meiryo',sans-serif; font-size:9px; background:#f0f0f0; }
+.sheet {
+  width:200mm; margin:5mm auto; background:#fff;
+  padding:4mm 5mm; page-break-after:always;
+  border:1px solid #ccc;
 }
-*{box-sizing:border-box;margin:0;padding:0}
-body{
-  font-family:'Noto Sans JP',sans-serif;
-  background:var(--bg); color:var(--ink);
-  font-size:9px; line-height:1.4;
-  padding:12px;
-}
-h1.page-title{font-size:16px;font-weight:900;color:var(--teal);margin-bottom:6px;text-align:center}
-.print-hint{text-align:center;font-size:11px;color:var(--muted);margin-bottom:10px}
-.print-btn{display:block;margin:0 auto 14px;background:var(--teal);color:#0a1626;font-weight:700;border:none;border-radius:8px;padding:8px 20px;font-size:13px;cursor:pointer;font-family:inherit}
-
-.sheet{width:200mm;background:white;color:#111;margin:0 auto;padding:3mm;box-shadow:0 4px 32px rgba(0,0,0,.5)}
-.sheet-header{background:#0d2144;color:white;text-align:center;font-size:6.5pt;font-weight:700;padding:1.5px 3px;margin-bottom:2px;border-radius:2px}
-.cols{display:flex;gap:2mm}
-.col{flex:1;min-width:0}
-
-.sec{background:#0d2144;color:white;font-size:6pt;font-weight:700;padding:1px 3px;margin:3px 0 1px;border-radius:2px}
-.subsec{background:#1a6b60;color:white;font-size:5.5pt;font-weight:700;padding:0.8px 2.5px;margin:2px 0 0.8px;border-radius:1px}
-
-p,.row,li{font-size:5pt;line-height:1.35;margin:0}
-ul{list-style:none;padding:0}
-ul li::before{content:"· ";color:#1a9e8e;font-weight:700}
-.kv{display:flex;gap:2px}
-.kv .k{color:#d4891f;font-weight:700;white-space:nowrap;min-width:fit-content}
-.formula-box{background:#eef7ee;border:0.4px solid #2a8a4a;border-radius:2px;padding:1.5px 2.5px;margin:0.8px 0;font-size:4.8pt;font-family:monospace}
-.formula-box .fl{display:flex;gap:2px;margin:0.3px 0}
-.formula-box .fl .lbl{color:#c0392b;font-weight:700;white-space:nowrap}
-.formula-box .fl .f{color:#0d2144;font-weight:700}
-.tip-box{background:#fff8e8;border:0.4px solid #d4891f;border-radius:2px;padding:1.5px 2.5px;margin:0.8px 0;font-size:4.8pt}
-.tip-box li::before{content:"★ ";color:#d4891f}
-.note{color:#555;font-size:4.6pt;font-style:italic}
-.red{color:#c00}
-.grn{color:#080}
-.blu{color:#006}
-
-table{width:100%;border-collapse:collapse;font-size:4.6pt;margin:1px 0}
-th{background:#1a3a6b;color:white;padding:1px 1.5px;text-align:center;font-weight:700}
-td{padding:0.7px 1.5px;text-align:center;border:0.25px solid #ccc}
-tr:nth-child(even) td{background:#f5f7fa}
-.tl{text-align:left}
-
-.fig{border:0.4px solid #1a6b60;border-radius:2px;padding:1.5px;margin:1px 0;font-size:4.8pt;background:#f0faf8}
-.fig svg{display:block;width:100%}
-
-.page-break{height:3mm;background:#e8e8e8;margin:3px 0;display:flex;align-items:center;justify-content:center;font-size:5.5pt;color:#666;font-weight:700;border-radius:1px}
-
-@media print{
-  @page{size:A4 portrait;margin:5mm}
-  body{background:white;color:#111;padding:0}
-  .print-btn,.print-hint,h1.page-title{display:none!important}
-  .sheet{width:100%;box-shadow:none;padding:0;margin:0}
-  .page-break{height:0;background:none;border:none;page-break-after:always;margin:0;display:block}
-  .page-break span{display:none}
-  .sec{background:#0d2144!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .subsec{background:#1a6b60!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  th{background:#1a3a6b!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  .sheet-header{background:#0d2144!important;-webkit-print-color-adjust:exact;print-color-adjust:exact}
-  tr:nth-child(even) td{background:#f5f7fa!important;print-color-adjust:exact}
-  .formula-box{background:#eef7ee!important;print-color-adjust:exact}
-  .tip-box{background:#fff8e8!important;print-color-adjust:exact}
-  .fig{background:#f0faf8!important;print-color-adjust:exact}
-}
+h1 { font-size:11px; text-align:center; border-bottom:2px solid #000; margin-bottom:3px; padding-bottom:1px; }
+h2 { font-size:10px; background:#222; color:#fff; padding:1px 3px; margin:3px 0 1px; }
+h3 { font-size:9px; background:#666; color:#fff; padding:0px 2px; margin:2px 0 1px; display:inline-block; }
+.cols { display:flex; gap:3mm; }
+.col { flex:1; }
+ul { padding-left:8px; margin:1px 0; }
+ul li { margin:0; line-height:1.4; }
+p { margin:1px 0; line-height:1.4; }
+b { color:#000; }
+.red { color:#c00; font-weight:bold; }
+.blue { color:#00c; font-weight:bold; }
+table { border-collapse:collapse; width:100%; font-size:8px; margin:1px 0; }
+th,td { border:1px solid #999; padding:0 2px; line-height:1.4; }
+th { background:#ddd; }
+.box { border:1px solid #999; padding:1px 3px; margin:1px 0; }
+.imp { background:#ffe; border-left:3px solid #f80; padding-left:3px; margin:1px 0; }
+.formula { font-family:monospace; background:#f5f5f5; padding:0 2px; }
+hr { border:none; border-top:1px dashed #aaa; margin:2px 0; }
 </style>
 </head>
 <body>
 
-<h1 class="page-title">加工学 中間試験 カンペ — 手書き参照用</h1>
-<p class="print-hint">ブラウザで開いて <strong>Ctrl+P → PDF保存</strong> → A4両面印刷してから手書きで写す</p>
-<button class="print-btn" onclick="window.print()">PDF として保存（Ctrl+P）</button>
-
+<!-- ========== PAGE 1: 鋳造 ========== -->
 <div class="sheet">
-
-<!-- ===== 表面 ===== -->
-<div class="sheet-header">【表面】加工学 中間試験 カンペ ｜ 鋳造 / 塑性加工　　旭川高専 4年 持込可（手書きA4両面1枚）</div>
+<h1>加工学カンペ 2026前期中間｜鋳造編</h1>
 <div class="cols">
-
-<!-- ======= 列1：鋳造 ======= -->
 <div class="col">
-<div class="sec">1. 鋳造 (Casting)</div>
 
-<div class="subsec">概要・特徴・溶湯性質</div>
+<h2>■ 鋳造概要</h2>
 <ul>
-  <li>溶融金属→鋳型→凝固→製品</li>
-  <li>複雑形状・中空形状 得意 / 精度△ 表面粗さ△</li>
-  <li><span class="k">融点↓の利点：</span>金型使用可・省エネ・溶解容易</li>
-  <li><span class="k">複雑形状に適す理由：</span>表面張力<b>小</b>→細部まで溶湯流入</li>
-  <li><span class="k">砂型に溶湯侵入しない理由：</span>表面張力<b>大</b>→砂の隙間に入らない</li>
-  <li><span class="k">動粘度：</span>流動性に影響（小→充填容易）</li>
+<li><b>鋳造</b>＝溶融金属を型に流し込み凝固させて成形</li>
+<li>砂型・金型・特殊鋳型の3種</li>
+<li><b>Near Net Shape</b>（ほぼ最終形状）→後加工少</li>
+<li>複雑形状・大型品に適す / Additive Manufacturingとも組合せ可</li>
 </ul>
 
-<div class="subsec">凝固メカニズム</div>
-<ul>
-  <li>外周から冷却→核生成→デンドライト（樹枝状）成長</li>
-  <li><span class="k">デンドライト間偏析：</span>合金元素が固液界面に濃縮→成分不均一</li>
-  <li><span class="k">共晶（eutectic）：</span>2成分が同時凝固→共晶点で凝固温度一定</li>
-  <li><span class="k">包晶（peritectic）：</span>固相+液相→別の固相へ変態</li>
-  <li><span class="k">一方向凝固：</span>タービンブレード向け→デンドライトを一方向に揃える</li>
-  <li>肉厚薄い→冷却速度大→結晶粒細か→強度高</li>
-</ul>
-
-<div class="subsec">鋳型各部名称</div>
-<div class="fig">
-<svg viewBox="0 0 200 85" xmlns="http://www.w3.org/2000/svg" style="height:58px">
-  <rect x="5" y="4" width="190" height="77" fill="#e8e0d0" stroke="#333" stroke-width="0.7"/>
-  <rect x="10" y="7" width="180" height="28" fill="#b8d0e8" stroke="#555" stroke-width="0.4"/>
-  <text x="100" y="24" text-anchor="middle" font-size="7.5" fill="#333" font-weight="bold">上型 cope</text>
-  <rect x="10" y="48" width="180" height="28" fill="#b8d0e8" stroke="#555" stroke-width="0.4"/>
-  <text x="100" y="65" text-anchor="middle" font-size="7.5" fill="#333" font-weight="bold">下型 drag</text>
-  <line x1="5" y1="38" x2="195" y2="38" stroke="red" stroke-width="0.7" stroke-dasharray="3,2"/>
-  <text x="130" y="36" font-size="6" fill="red">分割面 parting</text>
-  <rect x="158" y="7" width="10" height="68" fill="#f0b060" stroke="#888" stroke-width="0.3"/>
-  <text x="154" y="6" font-size="5.5" fill="#c06000">湯口</text><text x="153" y="12" font-size="4.5" fill="#c06000">sprue</text>
-  <rect x="22" y="7" width="10" height="50" fill="#f0b060" stroke="#888" stroke-width="0.3"/>
-  <text x="18" y="6" font-size="5.5" fill="#c06000">押湯</text><text x="19" y="12" font-size="4.5" fill="#c06000">riser</text>
-  <rect x="32" y="34" width="88" height="8" fill="#f0b060" stroke="#888" stroke-width="0.3"/>
-  <text x="55" y="32" font-size="5.5" fill="#c06000">湯道 runner</text>
-  <rect x="106" y="34" width="5" height="8" fill="#e08000" stroke="#888" stroke-width="0.3"/>
-  <text x="103" y="52" font-size="5" fill="#c06000">堰gate</text>
-  <rect x="72" y="50" width="72" height="22" fill="#8fba8f" stroke="#555" stroke-width="0.3"/>
-  <text x="108" y="63" text-anchor="middle" font-size="6.5" fill="#2a6a2a">鋳物(製品)</text>
-</svg>
+<h2>■ 鋳造材料選定条件（超重要）</h2>
+<div class="imp">
+①<b>流動性</b>：動粘度ν<b>小</b>→流れやすい→<b>複雑形状充填可</b><br>
+②<b>表面張力T大</b>→砂の隙間に<b>入らない</b>（砂型向き）<br>
+③<b>凝固収縮少</b>→引け巣少<br>
+④割れが生じない（収縮応力に耐える）
+</div>
+<div class="imp">
+<b>溶湯特性表：</b>
+<table>
+<tr><th>材料</th><th>ν[cSt]</th><th>T[N/m]</th><th>流れ</th></tr>
+<tr><td>鋳鉄</td><td>0.7(大)</td><td>≈1.87(大)</td><td>流れにくい・砂型向き</td></tr>
+<tr><td>銅</td><td>0.4</td><td>1.36</td><td>中間</td></tr>
+<tr><td>Al</td><td>0.2(小)</td><td>0.91(小)</td><td><b>流れやすい→複雑形状◎</b></td></tr>
+</table>
+・Alは<span class="red">ν小→流れやすい→複雑形状充填に適す</span><br>
+・鋳鉄は<span class="red">T大→砂の隙間に侵入しない→砂型に適す</span>
 </div>
 
-<div class="subsec">鋳鉄の種類★</div>
-<table>
-<tr><th class="tl">種類</th><th>黒鉛形状</th><th>引張</th><th>延性</th><th class="tl">特徴</th></tr>
-<tr><td class="tl">白鋳鉄</td><td>なし(Fe₃C)</td><td>低</td><td>×</td><td class="tl">硬・脆・耐摩耗</td></tr>
-<tr><td class="tl">ねずみ（FC）</td><td>片状</td><td>中</td><td>小</td><td class="tl">減衰能高・圧縮◎</td></tr>
-<tr><td class="tl">球状黒鉛（FCD）</td><td>球状(Mg添加)</td><td>高</td><td>◎</td><td class="tl">ダクタイル・靭性◎</td></tr>
-<tr><td class="tl">蠕状（CV）</td><td>蠕状</td><td>中高</td><td>中</td><td class="tl">FC+FCD中間</td></tr>
-<tr><td class="tl">可鍛鋳鉄</td><td>塊状</td><td>中</td><td>○</td><td class="tl">白鋳鉄を焼なまし</td></tr>
-</table>
-<ul><li>鋳鉄収縮：黒鉛晶出で膨張→収縮量は鋼より<b>小</b></li></ul>
-
-<div class="subsec">各種鋳造法比較</div>
-<table>
-<tr><th class="tl">鋳造法</th><th>砂再利</th><th>精度</th><th>速度</th><th class="tl">特徴</th></tr>
-<tr><td class="tl">生砂型</td><td>◎</td><td>△</td><td>△</td><td class="tl">汎用・最安価</td></tr>
-<tr><td class="tl">Vプロセス</td><td>◎</td><td>○</td><td>△</td><td class="tl">真空保持・バインダー不要</td></tr>
-<tr><td class="tl">有機自硬性</td><td>△</td><td>○</td><td>△</td><td class="tl">フラン樹脂・常温自硬化</td></tr>
-<tr><td class="tl">シェルモールド</td><td>×</td><td>○</td><td>○</td><td class="tl">フェノール樹脂コート砂</td></tr>
-<tr><td class="tl">ロストワックス</td><td>×</td><td>◎</td><td>×</td><td class="tl">耐熱超合金・複雑精密</td></tr>
-<tr><td class="tl">フルモールド</td><td>○</td><td>○</td><td>○</td><td class="tl">発泡スチロール模型・消失</td></tr>
-<tr><td class="tl">遠心鋳造</td><td>×</td><td>○</td><td>○</td><td class="tl">管状専用・中子不要</td></tr>
-<tr><td class="tl">ダイカスト</td><td>×</td><td>◎</td><td>◎</td><td class="tl">高圧・量産・Al/Zn合金</td></tr>
-<tr><td class="tl">低圧鋳造</td><td>×</td><td>○</td><td>○</td><td class="tl">底部加圧充填・Al車輪</td></tr>
-</table>
+<h2>■ 砂型鋳造（各法の特徴）</h2>
+<h3>生砂型</h3>
 <ul>
-  <li><span class="k">ダイカスト詳細：</span>コールドチャンバー（Al）/ ホットチャンバー（Zn）</li>
-  <li><span class="k">ロストワックス：</span>ワックス模型→セラミックシェル→加熱除去→鋳込</li>
+<li>砂＋ベントナイト（粘土）＋水で固める・繰返し使用可</li>
+<li>○コスト最低　×表面粗さ大・精度低</li>
+<li>大型品向き・ベント（穴）でガス抜き</li>
+</ul>
+<h3>自硬性砂型</h3>
+<ul>
+<li>砂＋樹脂（フラン・フェノール等）＋硬化剤→常温硬化</li>
+<li>○中〜大型・精度◎　×再使用困難・コスト中</li>
+</ul>
+<h3>シェルモールド</h3>
+<ul>
+<li>加熱金属型に樹脂コーティング砂を吹付→薄い殻型</li>
+<li>○表面良・精度高・中〜小型　×型費高・大型不可</li>
+</ul>
+<h3>フルモールド法（消失型鋳造）</h3>
+<ul>
+<li>発泡スチロール模型を砂中に埋め→溶湯が模型を消失させ成形</li>
+<li>○アンダーカット可・中子不要・大型◎（100t maxも可）</li>
+<li>×ガス発生多・表面粗さ中</li>
+</ul>
+<h3>Vプロセス</h3>
+<ul>
+<li>砂をプラスチックフィルムで密封し真空で保持</li>
+<li>○結合剤不要・表面良・繰返し可　×設備大型</li>
+</ul>
+<h3>ロストワックス（インベストメント）鋳造</h3>
+<ul>
+<li>ロウ模型→セラミックシェル形成→加熱でロウ除去→鋳造</li>
+<li>○最高精度・最良表面・複雑形状◎　×小型のみ・高コスト</li>
 </ul>
 
-<div class="subsec">鋳造欠陥の分類★</div>
-<table>
-<tr><th>分類</th><th class="tl">欠陥名</th><th class="tl">原因</th><th class="tl">対策</th></tr>
-<tr><td>ガス欠陥</td><td class="tl">ブローホール（球状）</td><td class="tl">ガス残留</td><td class="tl">脱ガス・乾燥</td></tr>
-<tr><td>ガス欠陥</td><td class="tl">ピンホール（針穴）</td><td class="tl">水素溶解</td><td class="tl">低水素雰囲気</td></tr>
-<tr><td>収縮欠陥</td><td class="tl">引け巣（macro）</td><td class="tl">凝固収縮</td><td class="tl">押湯・肉厚均一</td></tr>
-<tr><td>収縮欠陥</td><td class="tl">ミクロ引け</td><td class="tl">デンドライト間</td><td class="tl">指向性凝固</td></tr>
-<tr><td>鋳込欠陥</td><td class="tl">湯回り不良</td><td class="tl">温度低・粘度高</td><td class="tl">予熱・湯温↑</td></tr>
-<tr><td>鋳込欠陥</td><td class="tl">湯境（cold shut）</td><td class="tl">2流が低温で合流</td><td class="tl">ゲート位置変更</td></tr>
-<tr><td>型欠陥</td><td class="tl">砂かみ</td><td class="tl">砂型崩壊</td><td class="tl">型強度↑</td></tr>
-<tr><td>型欠陥</td><td class="tl">鋳ばり（バリ）</td><td class="tl">型の隙間侵入</td><td class="tl">型締め圧↑</td></tr>
-</table>
-
-<div class="subsec">鋳造設計・検査</div>
-<ul>
-  <li><span class="k">抜き勾配（draft）：</span>1〜3°、砂型から模型取出し</li>
-  <li><span class="k">角のR（丸み）：</span>応力集中緩和→割れ・ひずみ防止</li>
-  <li><span class="k">見切り面：</span>最も広い断面積（最大投影面）位置</li>
-  <li><span class="k">肉厚均一化：</span>不均一→引け巣・残留応力の原因</li>
-  <li><span class="k">アンダーカット：</span>避ける（型が外れない）</li>
-  <li><span class="k">強度試験：</span>同一溶湯で試験片別途鋳造→引張試験</li>
-  <li><span class="k">内部欠陥：</span>超音波（UT）・放射線（RT）</li>
-  <li><span class="k">表面欠陥：</span>浸透（PT）・磁粉（MT）</li>
-</ul>
-</div><!-- /col1 -->
-
-<!-- ======= 列2：塑性加工基礎 ======= -->
+</div>
 <div class="col">
-<div class="sec">2. 塑性加工 (Plastic Forming)</div>
 
-<div class="subsec">概要・特徴</div>
+<h2>■ 金型鋳造</h2>
+<h3>重力金型鋳造</h3>
 <ul>
-  <li>固体のまま塑性変形で成形→歩留まり◎</li>
-  <li>加工硬化で強度向上、量産に適す</li>
-  <li><span class="k">被加工材：</span>塑性変形量<b>大</b>・加工硬化<b>小</b></li>
-  <li><span class="k">金型材：</span>耐摩耗性・耐熱性・耐食性 高</li>
+<li>重力で溶湯を金型に流し込む・砂型より精度◎</li>
+<li>×アンダーカット不可（中子必要）</li>
+</ul>
+<h3>ダイカスト（Die Casting）</h3>
+<ul>
+<li>高圧（数十〜数百MPa）で金型に圧入充填</li>
+<li>○高精度・高速・薄肉可・大量生産◎（アルミ自動車部品等）</li>
+<li>×ガス巻込み（ブローホール）→熱処理困難</li>
+<li><b>コールドチャンバー型</b>：射出シリンダーが炉外→高融点合金（Al・Cu）向き</li>
+<li><b>ホットチャンバー型</b>：射出シリンダーが溶湯炉内→低融点合金（Zn・Pb）専用・高速</li>
+</ul>
+<h3>低圧鋳造</h3>
+<ul>
+<li>炉に0.05〜0.15MPaかけ溶湯を押し上げ充填</li>
+<li>○引け巣少・精度中・Al製品向き</li>
+</ul>
+<h3>遠心鋳造</h3>
+<ul>
+<li>回転型に溶湯を流し遠心力で充填凝固</li>
+<li>○<b>円筒・管・パイプ専用</b>・内側に中子不要</li>
+<li>○外側から凝固→引け巣少・組織緻密</li>
+<li>×円筒形状のみ</li>
 </ul>
 
-<div class="subsec">加工硬化メカニズム★</div>
-<ul>
-  <li>塑性変形→転位（dislocation）密度増加</li>
-  <li>転位同士が絡み合い→移動困難→降伏応力↑</li>
-  <li><span class="k">結果：</span>強度・硬さ↑ / 延性・靭性↓</li>
-  <li><span class="k">冪乗硬化則：</span>σ = C × ε<sup>n</sup></li>
-  <li><span class="k">n値（加工硬化指数）：</span>大→均一変形→深絞り向き</li>
-  <li><span class="k">焼なまし（annealing）：</span>再加熱→転位消滅→軟化・延性回復</li>
-</ul>
-
-<div class="subsec">再結晶</div>
-<ul>
-  <li>再結晶温度 ≈ 0.4×融点（K）、鉄は約450℃</li>
-  <li>加工後に再結晶温度以上加熱→転位消滅・新結晶粒生成</li>
-  <li>熱間加工：加工中に再結晶→変形抵抗低・大変形可</li>
-  <li>冷間加工：再結晶なし→加工硬化蓄積</li>
-  <li>加工度大+加熱温度高→再結晶粒径 小（強度高）</li>
-</ul>
-
-<div class="subsec">n値とr値★</div>
-<ul>
-  <li><span class="k">n値（加工硬化指数）：</span>σ=Cεⁿ のn。大→均一変形→深絞り割れにくい</li>
-  <li><span class="k">r値（ランクフォード値）：</span>r=ε幅/ε厚。板厚方向変形抵抗の指標</li>
-  <li>r値大→板厚方向に変形しにくい→深絞り限界↑（フランジ変形しやすい）</li>
-  <li>r値の面内異方性→耳割れの原因（Δr = (r₀+r₉₀-2r₄₅)/2）</li>
-</ul>
-
-<div class="subsec">熱間 vs 冷間加工</div>
+<h2>■ 鋳造欠陥</h2>
 <table>
-<tr><th class="tl">特性</th><th>熱間(≥再結晶温度)</th><th>冷間(室温付近)</th></tr>
-<tr><td class="tl">大きな変形</td><td>◎（再結晶→転位消滅）</td><td>×（加工硬化蓄積）</td></tr>
-<tr><td class="tl">寸法精度</td><td>△（熱膨張・酸化）</td><td>◎</td></tr>
-<tr><td class="tl">加工硬化（強化）</td><td>×（回復で消える）</td><td>◎</td></tr>
-<tr><td class="tl">連続・長尺加工</td><td>◎</td><td>△</td></tr>
-<tr><td class="tl">表面スケール</td><td>あり（酸化皮膜）</td><td>なし</td></tr>
-<tr><td class="tl">スプリングバック</td><td>小</td><td>大（弾性回復大）</td></tr>
-<tr><td class="tl">潤滑</td><td>黒鉛・ガラス</td><td>油・乾性皮膜</td></tr>
+<tr><th>欠陥</th><th>原因</th><th>対策</th></tr>
+<tr><td><b>引け巣</b></td><td>凝固収縮・押し湯不足</td><td>押し湯設置・凝固順序制御・シミュレーション</td></tr>
+<tr><td><b>ブローホール</b><br>(ガスホール)</td><td>溶湯中ガス・型の水分・巻込み</td><td>脱ガス処理・型乾燥・低速充填</td></tr>
+<tr><td><b>湯回り不良</b></td><td>流動性低・温度低・速度遅</td><td>溶湯温度↑・湯道設計改善</td></tr>
+<tr><td><b>割れ</b></td><td>凝固収縮応力・急冷</td><td>徐冷・角R（フィレット）設ける</td></tr>
+<tr><td><b>砂かみ</b></td><td>砂型崩壊・流速大</td><td>型強度↑・ゲート設計改善</td></tr>
 </table>
 
-<div class="subsec">結晶構造と加工性</div>
-<table>
-<tr><th>構造</th><th>例</th><th>すべり系</th><th>延性</th><th>加工</th></tr>
-<tr><td>FCC</td><td>Al,Cu,Ni,Au</td><td>12系</td><td>高◎</td><td>冷間向</td></tr>
-<tr><td>BCC</td><td>Fe,W,Mo</td><td>48系</td><td>中</td><td>熱/冷両用</td></tr>
-<tr><td>HCP</td><td>Ti,Mg,Zn</td><td>3系</td><td>低</td><td>熱間要</td></tr>
-</table>
-
-<div class="subsec">圧延 (Rolling)</div>
-<div class="fig">
-<svg viewBox="0 0 200 62" xmlns="http://www.w3.org/2000/svg" style="height:46px">
-  <rect x="1" y="1" width="198" height="60" fill="#f0faf5" stroke="#1a9e8e" stroke-width="0.4"/>
-  <circle cx="78" cy="17" r="13" fill="#8090a0" stroke="#333" stroke-width="0.4"/>
-  <circle cx="118" cy="17" r="13" fill="#8090a0" stroke="#333" stroke-width="0.4"/>
-  <circle cx="78" cy="45" r="13" fill="#8090a0" stroke="#333" stroke-width="0.4"/>
-  <circle cx="118" cy="45" r="13" fill="#8090a0" stroke="#333" stroke-width="0.4"/>
-  <rect x="4" y="25" width="35" height="11" fill="#d0a060" stroke="#888" stroke-width="0.3"/>
-  <rect x="161" y="27" width="35" height="7" fill="#d0a060" stroke="#888" stroke-width="0.3"/>
-  <polygon points="146,27 158,30.5 146,34" fill="#e03030"/>
-  <text x="6" y="24" font-size="5.5" fill="#333">入口 t₀,v₀</text>
-  <text x="162" y="24" font-size="5.5" fill="#333">出口 t₁,v₁</text>
-  <text x="50" y="60" font-size="5.5" fill="#c00000" font-weight="bold">t₀v₀=t₁v₁ → v₁&gt;v₀（体積保存）</text>
-</svg>
-</div>
+<h2>■ 鋳型設計ポイント</h2>
 <ul>
-  <li><span class="k">バックアップロール：</span>ワークロールのたわみ防止（4段圧延機）</li>
-  <li>板・レール・管・棒・形鋼を製作</li>
-  <li>前進スリップ：出口材料速度＞ロール表面速度</li>
+<li><b>見切り面</b>：型の分割面→なるべく1平面に</li>
+<li><b>抜き勾配</b>：型から抜けるよう1°以上の傾き</li>
+<li><b>角R（フィレット）</b>：応力集中防止・割れ防止</li>
+<li><b>肉厚均一</b>：局所的引け巣防止</li>
+<li><b>アンダーカット</b>：そのままでは抜けない形状→中子or消失型</li>
 </ul>
 
-<div class="subsec">鍛造 (Forging)</div>
+<h2>■ 鋳造品検査</h2>
 <table>
-<tr><th class="tl">種類</th><th class="tl">特徴</th><th class="tl">用途</th></tr>
-<tr><td class="tl">自由鍛造</td><td class="tl">汎用工具・大変形・金型不要</td><td class="tl">大型品・少量</td></tr>
-<tr><td class="tl">型鍛造</td><td class="tl">上下型で正確な形状・精度◎</td><td class="tl">クランク・歯車量産</td></tr>
-<tr><td class="tl">冷間鍛造</td><td class="tl">高精度・表面粗さ◎・加工硬化</td><td class="tl">ボルト・小物</td></tr>
-<tr><td class="tl">液圧鍛造</td><td class="tl">油圧プレスで全方向圧縮</td><td class="tl">複雑内部形状</td></tr>
-</table>
-<ul><li>鍛流線（fiber flow）→鍛造品は鋳造品より強度・靭性高</li></ul>
-
-<div class="subsec">押出し vs 引き抜き</div>
-<table>
-<tr><th class="tl">特性</th><th>押出し Extrusion</th><th>引抜き Drawing</th></tr>
-<tr><td class="tl">力の方向</td><td>後方から押す</td><td>前方へ引く</td></tr>
-<tr><td class="tl">変形量</td><td>大◎</td><td>小</td></tr>
-<tr><td class="tl">主な温度</td><td>熱間◎</td><td>冷間◎</td></tr>
-<tr><td class="tl">寸法精度</td><td>△</td><td>◎（ダイス形状転写）</td></tr>
-<tr><td class="tl">加工による強化</td><td>－</td><td>◎（加工硬化）</td></tr>
+<tr><th>検査法</th><th>対象欠陥</th></tr>
+<tr><td>発光分光分析</td><td>化学組成確認</td></tr>
+<tr><td>RT（放射線透過）</td><td>内部欠陥（引け巣・ブローホール）</td></tr>
+<tr><td>UT（超音波探傷）</td><td>内部欠陥・厚さ測定</td></tr>
+<tr><td>PT（浸透探傷）</td><td>表面開口欠陥</td></tr>
+<tr><td>目視・寸法測定</td><td>外観・形状確認</td></tr>
 </table>
 
-<div class="subsec">曲げ加工・スプリングバック</div>
+<h2>■ シミュレーション活用</h2>
 <ul>
-  <li>スプリングバック：弾性回復による形状戻り</li>
-  <li><span class="k">縦弾性係数E大</span> → スプリングバック<b>大</b></li>
-  <li><span class="k">降伏応力大</span> → スプリングバック大</li>
-  <li><span class="k">対策：</span>過曲げ・底押し（ストライキング）・校正</li>
+<li>凝固解析→<b>引け巣予測</b>・押し湯位置最適化</li>
+<li>流動解析→<b>湯回り・ブローホール予測</b></li>
+<li>ブローホール：ガス逃げ場なし→閉じ込め→ポロシティ</li>
 </ul>
 
-<div class="subsec">プレス加工まとめ</div>
+<h2>■ 鋳造法まとめ比較</h2>
 <table>
-<tr><th class="tl">加工</th><th class="tl">原理・公式</th><th class="tl">特徴</th></tr>
-<tr><td class="tl">せん断</td><td class="tl">P=τs×L×t</td><td class="tl">打抜き・切断</td></tr>
-<tr><td class="tl">深絞り</td><td class="tl">LDR=D₀/Dp</td><td class="tl">カップ→シワ/割れトレードオフ</td></tr>
-<tr><td class="tl">ファインブランキング</td><td class="tl">板押+逆力+反力</td><td class="tl">全面せん断面・精度◎</td></tr>
-<tr><td class="tl">バルジ成形</td><td class="tl">内圧で膨らませ</td><td class="tl">中空部品</td></tr>
-<tr><td class="tl">ハイドロフォーミング</td><td class="tl">液圧で成形</td><td class="tl">管材複雑形状</td></tr>
-</table>
-<div class="tip-box"><ul>
-  <li>深絞りBHF↑→しわ防止 / BHF↓→割れ防止（トレードオフ）</li>
-  <li>ファインブランキング：ダイクリアランス≈0、板押さえに鋸歯状突起</li>
-</ul></div>
-</div><!-- /col2 -->
-
-<!-- ======= 列3：計算・解析 ======= -->
-<div class="col">
-<div class="sec">塑性加工 計算・解析</div>
-
-<div class="subsec">ひずみ計算★</div>
-<div class="formula-box">
-<div class="fl"><span class="lbl">公称ひずみ e =</span><span class="f">ΔL/L₀ = (L-L₀)/L₀</span></div>
-<div class="fl"><span class="lbl">真ひずみ ε =</span><span class="f">ln(L/L₀) = ln(1+e)</span></div>
-<div class="fl"><span class="lbl">関係：</span><span class="f">ε &lt; e（常に真ひずみ &lt; 公称）</span></div>
-<div class="fl"><span class="lbl">体積ひずみ：</span><span class="f">ε₁+ε₂+ε₃ = 0（非圧縮性）</span></div>
-</div>
-<div class="tip-box"><ul>
-  <li>L₀=100, L=150 → e=0.5, ε=ln(1.5)≈<b>0.405</b></li>
-  <li>L₀=100, L=105 → e=0.05, ε=ln(1.05)≈<b>0.0488</b></li>
-</ul></div>
-
-<div class="subsec">せん断加工荷重★</div>
-<div class="formula-box">
-<div class="fl"><span class="lbl">P =</span><span class="f">τs × L × t [N]</span></div>
-<div class="fl"><span class="lbl">τs =</span><span class="f">せん断抵抗[MPa=N/mm²]</span></div>
-<div class="fl"><span class="lbl">L =</span><span class="f">切断線長さ[mm] / t=板厚[mm]</span></div>
-</div>
-<div class="tip-box"><ul>
-  <li>円形d=100mm, t=5mm, τs=300MPa</li>
-  <li>L=π×100=314.2mm</li>
-  <li>P=300×314.2×5=<b>471,239N≈471kN</b></li>
-</ul></div>
-
-<div class="subsec">圧延 体積保存★</div>
-<div class="formula-box">
-<div class="fl"><span class="lbl">幅不変なら</span><span class="f">t₀·v₀ = t₁·v₁</span></div>
-<div class="fl"><span class="lbl">→</span><span class="f">v₁ = v₀·(t₀/t₁) &gt; v₀</span></div>
-<div class="fl"><span class="lbl">一般：</span><span class="f">t₀·w₀·v₀ = t₁·w₁·v₁</span></div>
-</div>
-<div class="tip-box"><ul>
-  <li>t₀=10,v₀=2m/s, t₁=5mm → v₁=2×(10/5)=<b>4m/s</b></li>
-  <li>t₀=10,v₀=1m/s, t₁=5mm → v₁=<b>2m/s</b></li>
-</ul></div>
-
-<div class="subsec">降伏条件★</div>
-<div class="formula-box">
-<div class="fl"><span class="lbl">Tresca：</span><span class="f">σ₁ - σ₃ = Y</span></div>
-<div class="fl"><span class="lbl"></span><span class="f">（最大－最小主応力＝降伏応力）</span></div>
-<div class="fl"><span class="lbl">Von Mises：</span><span class="f">(σ₁-σ₂)²+(σ₂-σ₃)²+(σ₃-σ₁)² = 2Y²</span></div>
-<div class="fl"><span class="lbl">2軸(σ₃=0)：</span><span class="f">σ₁²-σ₁σ₂+σ₂² = Y²</span></div>
-<div class="fl"><span class="lbl">シミュレーション：</span><span class="f">主にVon Mises使用</span></div>
-</div>
-<ul><li>Tresca：安全側（降伏しやすい）/ VM：実験値に近い</li></ul>
-
-<div class="subsec">深絞り指標</div>
-<div class="formula-box">
-<div class="fl"><span class="lbl">LDR =</span><span class="f">D₀/Dp (限界絞り比, 大→深絞り性◎)</span></div>
-<div class="fl"><span class="lbl">n値大：</span><span class="f">均一変形→割れにくい</span></div>
-<div class="fl"><span class="lbl">r値大：</span><span class="f">板厚変形抵抗大→LDR↑</span></div>
-</div>
-
-<div class="subsec">重要公式 まとめ</div>
-<div class="formula-box">
-<div class="fl"><span class="lbl">公称ひずみ</span><span class="f">e = ΔL/L₀</span></div>
-<div class="fl"><span class="lbl">真ひずみ</span><span class="f">ε = ln(L/L₀) = ln(1+e)</span></div>
-<div class="fl"><span class="lbl">せん断荷重</span><span class="f">P = τs·L·t [N]</span></div>
-<div class="fl"><span class="lbl">体積保存</span><span class="f">t₀w₀v₀ = t₁w₁v₁</span></div>
-<div class="fl"><span class="lbl">Tresca</span><span class="f">σ₁−σ₃ = Y</span></div>
-<div class="fl"><span class="lbl">Von Mises</span><span class="f">(σ₁−σ₂)²+(σ₂−σ₃)²+(σ₃−σ₁)²=2Y²</span></div>
-<div class="fl"><span class="lbl">LDR</span><span class="f">= D₀/Dp</span></div>
-<div class="fl"><span class="lbl">σ=Cεⁿ</span><span class="f">（冪乗硬化則）</span></div>
-</div>
-
-<div class="subsec">Near Net Shape / Net Shape</div>
-<ul>
-  <li><span class="k">Near Net Shape：</span>ほぼ完成形で素材成形→後加工少</li>
-  <li><span class="k">Net Shape：</span>後加工不要で完成形→鋳造・塑性加工向き</li>
-  <li>切削（除去加工）はNearでない→歩留まり×</li>
-</ul>
-
-<div class="subsec">AM (Additive Manufacturing)</div>
-<ul>
-  <li>付加製造・3Dプリンタ系</li>
-  <li>複雑形状・少量生産・型不要</li>
-  <li><span class="k">PBF：</span>粉末床溶融結合（SLS・DMLS）</li>
-  <li><span class="k">FDM：</span>熱溶解積層</li>
-  <li>砂型もAMで成形可（フルモールド鋳造と組合せ）</li>
-</ul>
-
-<div class="subsec">加工法 早見</div>
-<table>
-<tr><th class="tl">要求</th><th class="tl">推奨加工法</th></tr>
-<tr><td class="tl">複雑な中空形状</td><td class="tl">鋳造</td></tr>
-<tr><td class="tl">高精度・高強度板材</td><td class="tl">冷間圧延・引き抜き</td></tr>
-<tr><td class="tl">大変形・大型素材</td><td class="tl">熱間押出し・鍛造</td></tr>
-<tr><td class="tl">円管・シリンダー</td><td class="tl">遠心鋳造/押出し</td></tr>
-<tr><td class="tl">精密板打抜き</td><td class="tl">ファインブランキング</td></tr>
-<tr><td class="tl">耐熱複雑精密部品</td><td class="tl">ロストワックス鋳造</td></tr>
-<tr><td class="tl">量産・高速成形</td><td class="tl">ダイカスト/プレス</td></tr>
-<tr><td class="tl">少量試作・複雑形状</td><td class="tl">AM (3Dプリンタ)</td></tr>
+<tr><th>種別</th><th>精度</th><th>表面</th><th>量産</th><th>大型</th><th>特殊</th></tr>
+<tr><td>生砂型</td><td>低</td><td>粗</td><td>中</td><td>◎</td><td>-</td></tr>
+<tr><td>シェル</td><td>高</td><td>良</td><td>高</td><td>×</td><td>-</td></tr>
+<tr><td>フルモールド</td><td>中</td><td>中</td><td>低</td><td>◎</td><td>アンダーカット可</td></tr>
+<tr><td>ロストワックス</td><td>最高</td><td>最良</td><td>低</td><td>×</td><td>複雑◎</td></tr>
+<tr><td>ダイカスト</td><td>高</td><td>良</td><td>最高</td><td>×</td><td>薄肉可</td></tr>
+<tr><td>低圧</td><td>中</td><td>良</td><td>中</td><td>中</td><td>引け巣少</td></tr>
+<tr><td>遠心</td><td>中</td><td>中</td><td>中</td><td>○</td><td>円筒のみ</td></tr>
 </table>
 
-<div class="subsec">計算練習</div>
-<div class="tip-box"><ul>
-  <li><b>Q1</b> d=100mm円,t=5mm,τs=300MPa → P=300×π×100×5=<b>471kN</b></li>
-  <li><b>Q2</b> L₀=100,L=105 → e=0.05, ε≈<b>0.0488</b></li>
-  <li><b>Q3</b> t₀=10,v₀=1, t₁=5 → v₁=<b>2m/s</b></li>
-  <li><b>Q4</b> L₀=100,L=200 → e=1.0, ε=ln2≈<b>0.693</b></li>
-</ul></div>
-</div><!-- /col3 -->
+</div>
+</div>
+</div>
 
-</div><!-- /cols 表面 -->
-
-<!-- ===== ページ区切り ===== -->
-<div class="page-break"><span>▼ 裏面 ▼</span></div>
-
-<!-- ===== 裏面 ===== -->
-<div class="sheet-header">【裏面】加工学 中間試験 カンペ ｜ 接合（溶接）/ HAZ・欠陥・変形 / 重要用語・急所まとめ</div>
+<!-- ========== PAGE 2: 塑性加工 ========== -->
+<div class="sheet">
+<h1>加工学カンペ 2026前期中間｜塑性加工編</h1>
 <div class="cols">
-
-<!-- ======= 裏面列1：接合概要・溶接法 ======= -->
 <div class="col">
-<div class="sec">3. 接合 (Joining / Welding)</div>
 
-<div class="subsec">接合の分類</div>
+<h2>■ 塑性加工概要</h2>
 <ul>
-  <li><span class="k">A) 機械的接合（分解可）：</span>ボルト・ナット・リベット・プレスばめ・キー</li>
-  <li><span class="k">B) 化学的接合：</span>接着剤（異種材料OK・面で接合・荷重分散）</li>
-  <li><span class="k">C) 冶金的接合：</span>溶接（welding）・ろう付け（brazing/soldering）</li>
+<li>材料を<b>降伏点以上</b>の力で変形→永久ひずみ（塑性変形）</li>
+<li>○材料の無駄少・加工硬化で強度↑・大量生産◎・Near Net Shape</li>
+<li>×複雑形状難・残留応力・スプリングバック</li>
 </ul>
 
-<div class="subsec">機械的接合 詳細</div>
+<h2>■ 加工温度区分</h2>
 <table>
-<tr><th class="tl">方法</th><th>分解</th><th class="tl">特徴・用途</th></tr>
-<tr><td class="tl">ボルト・ナット</td><td>○</td><td class="tl">汎用・締結・トルク管理必要</td></tr>
-<tr><td class="tl">リベット</td><td>×</td><td class="tl">航空機構造・軽量・信頼性高</td></tr>
-<tr><td class="tl">プレスばめ（圧入）</td><td>困難</td><td class="tl">しめしろで摩擦力→軸受固定</td></tr>
-<tr><td class="tl">キー・スプライン</td><td>○</td><td class="tl">トルク伝達・軸と嵌合部品</td></tr>
-<tr><td class="tl">スナップフィット</td><td>○</td><td class="tl">樹脂部品の弾性係合</td></tr>
+<tr><th>区分</th><th>温度</th><th>特徴</th></tr>
+<tr><td><b>熱間加工</b></td><td>再結晶温度以上</td><td>変形抵抗小・加工硬化なし（再結晶で回復）・酸化スケール発生</td></tr>
+<tr><td><b>冷間加工</b></td><td>再結晶温度以下（常温）</td><td>高精度・高表面品質・加工硬化大・残留応力大</td></tr>
+<tr><td><b>温間加工</b></td><td>再結晶温度前後</td><td>両者の中間・Mg・Ti等向き</td></tr>
 </table>
-
-<div class="subsec">溶接の3分類★</div>
-<table>
-<tr><th>分類</th><th>接合原理</th><th class="tl">代表例</th></tr>
-<tr><td>融接</td><td>溶融→凝固</td><td class="tl">アーク・ガス・レーザ・EB</td></tr>
-<tr><td>圧接</td><td>圧力(+熱)</td><td class="tl">スポット・FSW・超音波溶接</td></tr>
-<tr><td>ろう付</td><td>毛管現象</td><td class="tl">硬ろう・はんだ（軟ろう）</td></tr>
-</table>
-
-<div class="subsec">アーク溶接 保護ガス比較★</div>
-<table>
-<tr><th>溶接法</th><th>保護ガス</th><th>電極</th><th class="tl">用途・特徴</th></tr>
-<tr><td><b>MAG</b></td><td>Ar+CO₂(20%)</td><td>消耗</td><td class="tl">鉄鋼・速度大・溶込大</td></tr>
-<tr><td><b>MIG</b></td><td>Arのみ(不活性)</td><td>消耗</td><td class="tl">非鉄(Al・Cu)・品質高</td></tr>
-<tr><td><b>TIG</b></td><td>Ar</td><td>W非消耗</td><td class="tl">薄板・SUS・高品質</td></tr>
-<tr><td>プラズマ</td><td>Ar</td><td>W非消耗</td><td class="tl">精密・切断</td></tr>
-<tr><td>CO₂</td><td>CO₂のみ</td><td>消耗</td><td class="tl">安価・鉄鋼</td></tr>
-<tr><td>被覆アーク</td><td>フラックス</td><td>消耗</td><td class="tl">屋外・補修・簡便</td></tr>
-<tr><td>サブマージ</td><td>粒状フラックス</td><td>消耗</td><td class="tl">厚肉・造船・自動</td></tr>
-</table>
-<div class="tip-box"><ul>
-  <li><b>MIG品質 &gt; MAG</b>（CO₂なし→酸化なし→清浄溶融池）</li>
-  <li>TIG：W非消耗電極＋別途フィラーワイヤ追加</li>
-  <li>アーク温度：5000〜6000°C</li>
-</ul></div>
-
-<div class="subsec">各種溶接法比較★</div>
-<table>
-<tr><th class="tl">溶接法</th><th>熱源</th><th class="tl">特徴 ○メリット △デメリット</th></tr>
-<tr><td class="tl">ガス溶接</td><td>燃焼ガス</td><td class="tl">○設備簡単・電源不要 △自動化不可・遅い</td></tr>
-<tr><td class="tl">被覆アーク</td><td>アーク</td><td class="tl">○屋外可・設備簡単 △自動化困難</td></tr>
-<tr><td class="tl">MAG</td><td>アーク</td><td class="tl">○速度大・溶込大・鉄鋼向 △CO₂で品質やや低</td></tr>
-<tr><td class="tl">MIG</td><td>アーク</td><td class="tl">○品質高・非鉄向 △Arガス高価</td></tr>
-<tr><td class="tl">TIG</td><td>アーク</td><td class="tl">○高品質・薄板向 △速度遅</td></tr>
-<tr><td class="tl">サブマージド</td><td>アーク</td><td class="tl">○熱効率◎・深溶込→厚肉・造船・直線</td></tr>
-<tr><td class="tl">エレクトロスラグ</td><td>ジュール熱</td><td class="tl">○超厚肉1パス △冷却遅→組織粗</td></tr>
-<tr><td class="tl">レーザ</td><td>レーザビーム</td><td class="tl">○深溶込・精密・高速 △装置高価</td></tr>
-<tr><td class="tl">電子ビーム(EB)</td><td>電子ビーム</td><td class="tl">○深溶込・薄板ひずみ小・活性金属可 △真空要・大型不可</td></tr>
-<tr><td class="tl">スポット/シーム</td><td>ジュール熱</td><td class="tl">○自動化◎・重ね継手 △突合せ不可</td></tr>
-<tr><td class="tl">FSW</td><td>摩擦熱</td><td class="tl">○固体接合・HAZ最小・欠陥少 △複雑形状・厚板困難</td></tr>
-<tr><td class="tl">ろう接</td><td>外部加熱</td><td class="tl">○母材熱影響小・異種材料可 硬ろう&gt;450℃</td></tr>
-</table>
-
-<div class="subsec">溶接継手の種類</div>
 <ul>
-  <li><span class="k">突合せ継手：</span>最も一般的・強度高・完全溶込みが必要</li>
-  <li><span class="k">重ね継手：</span>スポット溶接多用・重なり部分の応力集中</li>
-  <li><span class="k">T継手：</span>フィレット溶接・構造部材に多用</li>
-  <li><span class="k">角継手：</span>直角に接合・箱形構造</li>
-  <li><span class="k">へり継手：</span>薄板・端部の接合</li>
+<li>Al再結晶温度：約150℃　Fe系：約450〜600℃　Ti：高温</li>
+<li><b>FCC</b>（Al・Cu・Au・Ni）：延性高・加工しやすい・すべり系多</li>
+<li><b>BCC</b>（Fe・Cr・Mo・W）：延性中・低温で脆性破壊注意</li>
+<li><b>HCP</b>（Mg・Zn・Ti・Co）：延性低・すべり系少→温間加工が必要</li>
 </ul>
-</div><!-- /裏col1 -->
 
-<!-- ======= 裏面列2：HAZ・欠陥・変形・FSW ======= -->
+<h2>■ 主な塑性加工法</h2>
+<h3>圧延（Rolling）</h3>
+<ul>
+<li>2本以上のロール間で板・棒・線を延伸</li>
+<li>体積一定：V₀A₀ = VrAr（入側流速×断面積 = ロール周速×断面積 = 出側）</li>
+<li>板圧延・形鋼・線材圧延など広く使用</li>
+</ul>
+
+<h3>押出し（Extrusion）</h3>
+<ul>
+<li>ダイ孔から材料を押し出して断面形状を変える</li>
+<li>前方押出し（材料→ダイ方向）・後方押出し（ポンチ逆方向）</li>
+<li>○複雑断面形状◎・長尺製品・Al形材</li>
+</ul>
+
+<h3>引抜き（Drawing）</h3>
+<ul>
+<li>ダイ孔に材料を引き抜いて細く長くする</li>
+<li>○細線・パイプ・棒の精密加工　×加工度に限界（引張破断）</li>
+</ul>
+
+<h3>転造（Thread Rolling）</h3>
+<ul>
+<li>ダイを材料に押し当て転がしてネジ・歯車を成形</li>
+<li>○材料省略（切削なし）・加工硬化→疲労強度↑・高速量産</li>
+</ul>
+
+<h3>鍛造（Forging）</h3>
+<ul>
+<li>型（金型）で材料を叩いたり押して成形</li>
+<li>○<b>ファイバーフロー</b>（流れ線）整列→疲労強度最高</li>
+<li>自由鍛造・型鍛造・冷間鍛造（Near Net Shape）</li>
+</ul>
+
+<h2>■ プレス機の種類</h2>
+<table>
+<tr><th>種類</th><th>特徴</th></tr>
+<tr><td>クランクプレス（機械式）</td><td>高速・量産◎・ストローク固定・不意停止困難</td></tr>
+<tr><td>油圧プレス</td><td>大荷重・低速・ストローク可変・行程途中で停止可</td></tr>
+<tr><td>サーボプレス</td><td>速度・位置自由設定・精度最高・省エネ・高価</td></tr>
+</table>
+
+<h2>■ せん断加工（Shearing）</h2>
+<ul>
+<li>材料をせん断力で切断（打抜き・切断・トリミング等）</li>
+<li><b>クリアランス</b>：上下刃の隙間＝板厚の5〜10%が適正</li>
+<li>クリアランス大→ダレ大・破断面大・バリ大</li>
+<li>クリアランス小→平滑せん断面↑・工具摩耗↑</li>
+</ul>
+<div class="box">
+<b>せん断力：</b> P = k × τ × l × t<br>
+（k:補正係数, τ:せん断強さ[MPa], l:切断周長[mm], t:板厚[mm]）
+</div>
+
+<h3>ファインブランキング</h3>
+<ul>
+<li>Vリング（板押え）＋超小クリアランス＋カウンターパンチ</li>
+<li>○全断面が平滑せん断面→高精度抜き◎（歯車・精密部品）</li>
+</ul>
+
+</div>
 <div class="col">
-<div class="sec">溶接部の構造・欠陥・変形</div>
 
-<div class="subsec">溶接部断面（HAZ）</div>
-<div class="fig">
-<svg viewBox="0 0 210 75" xmlns="http://www.w3.org/2000/svg" style="height:55px">
-  <rect x="1" y="1" width="208" height="73" fill="#f5f5e8" stroke="#888" stroke-width="0.4"/>
-  <rect x="5" y="8" width="58" height="58" fill="#7090b0" stroke="#555" stroke-width="0.4"/>
-  <text x="10" y="42" font-size="6.5" fill="white" font-weight="bold">母材</text>
-  <text x="8" y="52" font-size="5" fill="white">Base metal</text>
-  <rect x="147" y="8" width="58" height="58" fill="#7090b0" stroke="#555" stroke-width="0.4"/>
-  <text x="152" y="42" font-size="6.5" fill="white" font-weight="bold">母材</text>
-  <rect x="63" y="8" width="17" height="58" fill="#d0a060" stroke="#888" stroke-width="0.25" opacity="0.85"/>
-  <text x="61" y="7" font-size="5.5" fill="#c06000" font-weight="bold">HAZ</text>
-  <rect x="130" y="8" width="17" height="58" fill="#d0a060" stroke="#888" stroke-width="0.25" opacity="0.85"/>
-  <text x="130" y="7" font-size="5.5" fill="#c06000" font-weight="bold">HAZ</text>
-  <path d="M80,8 Q105,1 130,8 L130,66 Q105,73 80,66 Z" fill="#f0802a" stroke="#c04000" stroke-width="0.4"/>
-  <text x="90" y="40" font-size="6.5" fill="white" font-weight="bold">溶接金属</text>
-  <text x="88" y="50" font-size="5" fill="white">Weld metal</text>
-</svg>
-</div>
-
-<div class="subsec">HAZ 相変態と予熱★</div>
+<h2>■ 曲げ加工（Bending）</h2>
 <ul>
-  <li>溶接熱→HAZがオーステナイト化→急冷→マルテンサイト変態</li>
-  <li>マルテンサイト化→<b>硬化・延性↓・低温割れ（水素割れ）</b></li>
-  <li><span class="k">炭素当量 Ceq（★要記憶）：</span></li>
+<li>V曲げ・L曲げ・U曲げ・ロール曲げ・ヘミング</li>
 </ul>
-<div class="formula-box">
-<div class="fl"><span class="lbl">Ceq =</span><span class="f">C + Mn/6 + Si/24 + Ni/40 + Cr/5 + Mo/4 + V/14</span></div>
-<div class="fl"><span class="lbl">Ceq &gt; 0.44</span><span class="f"> → 予熱必要（50〜200℃）</span></div>
-<div class="fl"><span class="lbl">目的：</span><span class="f">冷却速度↓→マルテンサイト変態抑制→割れ防止</span></div>
+<div class="imp">
+<b>スプリングバック（超重要）</b><br>
+曲げ後に弾性回復→目標角度より戻る現象<br>
+<b class="red">スプリングバック ∝ σy / E</b><br>
+→ <b class="red">E（縦弾性係数）が小さい → スプリングバック大</b><br>
+→ <b class="red">σy（降伏応力）が大きい → スプリングバック大</b><br>
+→ ハイテン（高張力鋼）は σy 大→スプリングバック問題大<br>
+→ 対策：オーバーベンド・ボトミング・形状補正・サーボ制御
 </div>
+
+<h2>■ 深絞り（Deep Drawing）</h2>
 <ul>
-  <li>低温割れ：溶接後数時間〜24時間後に発生することあり</li>
-  <li>予熱+後熱処理（SR焼なまし）で残留応力も低減</li>
-  <li>レーザ・FSWはHAZ最小（熱影響が狭い）</li>
+<li>平板からカップ形状を成形</li>
+<li><b>LDR（限界絞り比）</b>= D₀/d₁ ≈ 2.0〜2.2</li>
+<li><b>ブランクホルダー（しわ押え）</b>：フランジのしわ防止</li>
+<li><b>ネッキング（くびれ）</b>：引張応力集中→破断</li>
+<li>バックアップ：ダイ肩R大・潤滑・材料延性高→LDR↑</li>
 </ul>
 
-<div class="subsec">熱入力Q★</div>
-<div class="formula-box">
-<div class="fl"><span class="lbl">Q =</span><span class="f">（I×V×60）/ (v×1000) [kJ/mm]</span></div>
-<div class="fl"><span class="lbl">I：</span><span class="f">電流[A] V：電圧[V] v：溶接速度[mm/min]</span></div>
-<div class="fl"><span class="lbl">Q大：</span><span class="f">HAZ広・入熱大・冷却遅→溶接歪大</span></div>
-<div class="fl"><span class="lbl">Q小：</span><span class="f">HAZ狭・急冷→割れリスク↑（高Ceq材）</span></div>
+<h2>■ しごき加工（Ironing）</h2>
+<ul>
+<li>深絞り後の側壁を薄くする加工（アルミ缶・缶詰）</li>
+<li>○均一板厚・寸法精度↑</li>
+</ul>
+
+<h2>■ 降伏条件・塑性力学</h2>
+<div class="box">
+<b>トレスカ条件：</b><br>
+τmax = (σ1 - σ3)/2 = σy/2<br>
+→ 最大せん断応力が一定値(σy/2)で降伏<br>
+<br>
+<b>ミーゼス条件（Von Mises）：</b><br>
+(σ1-σ2)² + (σ2-σ3)² + (σ3-σ1)² = 2σy²<br>
+→ ひずみエネルギーが一定値で降伏<br>
+→ <b>ミーゼスの方が実験値に近い</b><br>
+→ 等二軸引張：σ1=σ2、σ3=0 → ミーゼス: σy = σ1<br>
+トレスカ: σy = σ1（同じ）
 </div>
 
-<div class="subsec">溶接欠陥</div>
+<h2>■ 真ひずみ（対数ひずみ）</h2>
+<div class="box">
+<b class="formula">ε = ln(l/l₀) = ln(A₀/A)</b><br>
+体積一定：l₀A₀ = lA<br>
+工学ひずみ e = (l-l₀)/l₀ との違い：大変形では真ひずみ使用<br>
+ε₁ + ε₂ + ε₃ = 0（体積一定条件）
+</div>
+
+<h2>■ 加工硬化</h2>
+<ul>
+<li>塑性変形→転位密度↑→材料が硬くなる</li>
+<li>冷間加工で顕著・熱間加工では再結晶で回復</li>
+<li>引張強さ・硬さ↑、延性↓</li>
+</ul>
+
+<h2>■ n値・r値（成形性指標）</h2>
+<div class="box">
+<b>n値（加工硬化指数）：</b> σ = C × εⁿ<br>
+→ n大（0.2〜0.5）：加工硬化しやすい→くびれにくい→深絞り◎<br>
+→ n小（0.05〜0.1）：加工硬化少→局部的くびれ→成形性×<br>
+<br>
+<b>r値（ランクフォード値・塑性ひずみ比）：</b> r = ε幅/ε厚<br>
+→ r &gt; 1：板厚方向より幅方向に変形しやすい→深絞り性◎<br>
+→ r &lt; 1：板厚が減りやすい→深絞り時にネッキング発生<br>
+→ 平均r値（r̄）大 → LDR大→限界絞り比向上
+</div>
+
+<h2>■ 主要材料と特徴</h2>
 <table>
-<tr><th class="tl">欠陥名</th><th class="tl">原因</th><th class="tl">検出法</th><th class="tl">対策</th></tr>
-<tr><td class="tl">アンダーカット</td><td class="tl">電流過大・速度過大</td><td class="tl">目視・MT</td><td class="tl">電流↓速度↓</td></tr>
-<tr><td class="tl">ブローホール</td><td class="tl">ガス残留（水分・油）</td><td class="tl">RT・UT</td><td class="tl">乾燥・脱脂</td></tr>
-<tr><td class="tl">高温割れ</td><td class="tl">不純物（S,P）・急冷</td><td class="tl">PT・MT</td><td class="tl">成分管理・予熱</td></tr>
-<tr><td class="tl">低温割れ</td><td class="tl">水素・マルテンサイト</td><td class="tl">MT・UT</td><td class="tl">予熱・後熱</td></tr>
-<tr><td class="tl">融合不良</td><td class="tl">電流不足・速度過大</td><td class="tl">RT・UT</td><td class="tl">電流↑開先角↑</td></tr>
-<tr><td class="tl">溶込み不足</td><td class="tl">電流小・ルート狭</td><td class="tl">RT</td><td class="tl">電流↑ルート拡大</td></tr>
-<tr><td class="tl">オーバーラップ</td><td class="tl">電流過小</td><td class="tl">目視</td><td class="tl">電流↑角度調整</td></tr>
-<tr><td class="tl">クレータ</td><td class="tl">溶接終端処理不良</td><td class="tl">目視</td><td class="tl">クレータ処理</td></tr>
+<tr><th>材料</th><th>塑性加工での特徴</th></tr>
+<tr><td>低炭素鋼(SPCC)</td><td>延性高・深絞り◎・自動車外板</td></tr>
+<tr><td>ハイテン(高張力鋼)</td><td>強度高・軽量化・スプリングバック問題</td></tr>
+<tr><td>アルミ合金(Al)</td><td>軽量・FCC・深絞り可・スクラップ問題</td></tr>
+<tr><td>Ti合金</td><td>HCP・加工困難→温間or熱間・航空宇宙</td></tr>
+<tr><td>Mg合金</td><td>HCP・最軽量金属・温間加工必要</td></tr>
+<tr><td>工具鋼(SKD/SKH)</td><td>耐摩耗・プレス型材料</td></tr>
 </table>
 
-<div class="subsec">溶接変形4形態★</div>
+<h2>■ 塑性加工 重要数値まとめ</h2>
 <table>
-<tr><th>変形形態</th><th class="tl">内容</th></tr>
-<tr><td>①縦収縮</td><td class="tl">溶接線方向の収縮・短縮</td></tr>
-<tr><td>②横収縮</td><td class="tl">溶接線と直交方向の収縮</td></tr>
-<tr><td>③回転変形</td><td class="tl">溶接進行に伴う継手の開き・閉じ</td></tr>
-<tr><td>④角変形</td><td class="tl">板が溶接線に向かって傾く（V字変形）</td></tr>
+<tr><th>項目</th><th>数値・内容</th></tr>
+<tr><td>LDR（限界絞り比）</td><td>約2.0〜2.2</td></tr>
+<tr><td>クリアランス</td><td>板厚の5〜10%</td></tr>
+<tr><td>Al再結晶温度</td><td>約150℃</td></tr>
+<tr><td>Fe再結晶温度</td><td>約450〜600℃</td></tr>
+<tr><td>スプリングバック</td><td>∝ σy/E（E小→大、σy大→大）</td></tr>
 </table>
-<ul>
-  <li><span class="k">拘束↑：</span>残留応力↑ / 変形↓</li>
-  <li><span class="k">拘束↓：</span>残留応力↓ / 変形↑</li>
-  <li><span class="k">低減策：</span>逆ひずみ付与・溶接順序・SR焼なまし・振動</li>
-</ul>
 
-<div class="subsec">FSW（摩擦攪拌溶接）★</div>
-<div class="fig">
-<svg viewBox="0 0 200 65" xmlns="http://www.w3.org/2000/svg" style="height:48px">
-  <rect x="1" y="1" width="198" height="63" fill="#eef5ee" stroke="#2a9e5e" stroke-width="0.4"/>
-  <rect x="5" y="28" width="72" height="30" fill="#80b090" stroke="#555" stroke-width="0.4"/>
-  <text x="15" y="48" font-size="6.5" fill="white">Al板</text>
-  <rect x="123" y="28" width="72" height="30" fill="#80b090" stroke="#555" stroke-width="0.4"/>
-  <text x="133" y="48" font-size="6.5" fill="white">Al板</text>
-  <rect x="77" y="28" width="46" height="30" fill="#d0a060" stroke="#886010" stroke-width="0.4"/>
-  <text x="82" y="50" font-size="5.5" fill="white">攪拌ゾーン</text>
-  <rect x="90" y="1" width="20" height="13" fill="#606080" stroke="#333" stroke-width="0.4"/>
-  <polygon points="94,14 106,14 102,28 98,28" fill="#505060" stroke="#333" stroke-width="0.3"/>
-  <text x="112" y="10" font-size="7.5" fill="red">↺</text>
-  <text x="111" y="20" font-size="5" fill="red">回転</text>
-  <polygon points="5,21 22,21 22,18 30,24 22,30 22,27 5,27" fill="#2060c0" opacity="0.7"/>
-  <text x="5" y="17" font-size="5.5" fill="#2060c0">← 進行方向</text>
-  <text x="4" y="62" font-size="5" fill="#333">固体状態（融点以下）で接合 → HAZ最小・欠陥少・スパッタなし</text>
-</svg>
 </div>
-<ul>
-  <li>開発：1991年英国TWI</li>
-  <li>適用：Al・Mg合金（航空・鉄道・造船・自動車）</li>
-  <li>メリット：①溶融欠陥なし②HAZ最小③残留応力小④省エネ</li>
-  <li>デメリット：①複雑形状不可②ツール穴（終端）③ツール消耗</li>
-  <li>3パスで融接と同等強度に達する</li>
-</ul>
+</div>
+</div>
 
-<div class="subsec">疲労強度と継手効率</div>
-<ul>
-  <li><span class="k">余盛（ビード盛り）：</span>断面急変→応力集中→疲労強度↓</li>
-  <li><span class="k">アンダーカット：</span>断面積減少→疲労破壊起点</li>
-  <li><span class="k">継手効率：</span>溶接継手強度/母材強度。完全溶込み突合せで最高</li>
-  <li>溶接部の残留引張応力は疲労強度を低下させる</li>
-  <li>ショットピーニングで表面圧縮残留応力→疲労強度向上</li>
-</ul>
-</div><!-- /裏col2 -->
-
-<!-- ======= 裏面列3：用語・NDT・急所まとめ ======= -->
+<!-- ========== PAGE 3: 接合 ========== -->
+<div class="sheet">
+<h1>加工学カンペ 2026前期中間｜接合編</h1>
+<div class="cols">
 <div class="col">
-<div class="sec">重要用語 英語対応 / NDT / 急所まとめ</div>
 
-<div class="subsec">重要用語 英語対応</div>
-<table>
-<tr><th class="tl">日本語</th><th class="tl">英語</th></tr>
-<tr><td class="tl">鋳造</td><td class="tl">Casting</td></tr>
-<tr><td class="tl">凝固</td><td class="tl">Solidification</td></tr>
-<tr><td class="tl">引け巣</td><td class="tl">Shrinkage cavity</td></tr>
-<tr><td class="tl">押湯</td><td class="tl">Riser / Feeder</td></tr>
-<tr><td class="tl">湯口/湯道/堰</td><td class="tl">Sprue / Runner / Gate</td></tr>
-<tr><td class="tl">上型/下型</td><td class="tl">Cope / Drag</td></tr>
-<tr><td class="tl">抜き勾配</td><td class="tl">Draft</td></tr>
-<tr><td class="tl">遠心鋳造</td><td class="tl">Centrifugal casting</td></tr>
-<tr><td class="tl">ダイカスト</td><td class="tl">Die casting</td></tr>
-<tr><td class="tl">塑性加工</td><td class="tl">Plastic forming</td></tr>
-<tr><td class="tl">圧延</td><td class="tl">Rolling</td></tr>
-<tr><td class="tl">押出し</td><td class="tl">Extrusion</td></tr>
-<tr><td class="tl">引き抜き</td><td class="tl">Drawing</td></tr>
-<tr><td class="tl">深絞り</td><td class="tl">Deep drawing</td></tr>
-<tr><td class="tl">ファインブランキング</td><td class="tl">Fine blanking</td></tr>
-<tr><td class="tl">スプリングバック</td><td class="tl">Springback</td></tr>
-<tr><td class="tl">加工硬化</td><td class="tl">Work hardening</td></tr>
-<tr><td class="tl">再結晶</td><td class="tl">Recrystallization</td></tr>
-<tr><td class="tl">転位</td><td class="tl">Dislocation</td></tr>
-<tr><td class="tl">公称/真ひずみ</td><td class="tl">Engineering / True strain</td></tr>
-<tr><td class="tl">降伏応力</td><td class="tl">Yield stress (Y)</td></tr>
-<tr><td class="tl">接合</td><td class="tl">Joining</td></tr>
-<tr><td class="tl">溶接</td><td class="tl">Welding</td></tr>
-<tr><td class="tl">融接/圧接/ろう付</td><td class="tl">Fusion/Pressure weld/Brazing</td></tr>
-<tr><td class="tl">熱影響部</td><td class="tl">HAZ (Heat Affected Zone)</td></tr>
-<tr><td class="tl">摩擦攪拌溶接</td><td class="tl">FSW (Friction Stir Welding)</td></tr>
-<tr><td class="tl">炭素当量</td><td class="tl">Carbon equivalent (Ceq)</td></tr>
-<tr><td class="tl">マルテンサイト</td><td class="tl">Martensite</td></tr>
-<tr><td class="tl">残留応力</td><td class="tl">Residual stress</td></tr>
-<tr><td class="tl">Near Net Shape</td><td class="tl">Near Net Shape</td></tr>
-</table>
+<h2>■ 接合の分類</h2>
+<div class="box">
+<b>機械的接合（Mechanical bonding）</b><br>
+→ ボルト・ナット / リベット / SPR / 焼きばめ / 巻き締め / 接着<br>
+<br>
+<b>冶金的接合（Metallurgical bonding）</b><br>
+→ <b>融接</b>（溶融して接合）：アーク溶接・ガス溶接・レーザー等<br>
+→ <b>圧接</b>（加圧して固相接合）：スポット・FSW・アプセット等<br>
+→ <b>ろう付け</b>（ろう材で接合）
+</div>
 
-<div class="subsec">非破壊検査(NDT) 詳細比較★</div>
-<table>
-<tr><th>方法</th><th>対象</th><th>原理</th><th class="tl">適用・注意</th></tr>
-<tr><td>超音波(UT)</td><td>内部</td><td>音波反射</td><td class="tl">引け巣・割れ・肉厚測定。垂直/斜角</td></tr>
-<tr><td>放射線(RT)</td><td>内部</td><td>X線/γ線透過</td><td class="tl">ブローホール・スラグ。記録残る。遮蔽必要</td></tr>
-<tr><td>浸透(PT)</td><td>表面開口</td><td>毛管現象</td><td class="tl">非磁性体OK。割れ・ピンホール</td></tr>
-<tr><td>磁粉(MT)</td><td>表面近傍</td><td>磁束漏洩</td><td class="tl">磁性体のみ。表面割れ検出</td></tr>
-<tr><td>渦流(ECT)</td><td>表面近傍</td><td>電磁誘導</td><td class="tl">非鉄金属OK。管の自動検査向き</td></tr>
-<tr><td>AE法</td><td>内部</td><td>弾性波検出</td><td class="tl">亀裂進展のリアルタイム監視</td></tr>
-</table>
-<ul><li>内部欠陥→UT・RT / 表面欠陥→PT（非磁性）・MT（磁性）</li></ul>
-
-<div class="subsec">ろう接 詳細★</div>
+<h3>リベット接合</h3>
 <ul>
-  <li><span class="k">硬ろう（Brazing）：</span>&gt;450℃ / Agろう・Cuろう・Alろう</li>
-  <li><span class="k">軟ろう（Soldering）：</span>&lt;450℃ / Sn-Ag-Cu（無鉛）・Pb-Sn（有鉛）</li>
-  <li><span class="k">フラックス：</span>酸化膜除去・ぬれ性向上（必須）</li>
-  <li><span class="k">毛管現象：</span>接合隙間 0.05〜0.25mm が最適</li>
-  <li><span class="k">特徴：</span>母材溶融なし・異種材料可・精密部品向き</li>
-  <li><span class="k">用途：</span>電子基板はんだ付・銅管継手・超硬工具台金・タービン冷却穴</li>
+<li>金属棒を孔に通し先端をかしめる→永久接合</li>
+<li>○構造物・航空機外板（昔）</li>
+</ul>
+<h3>SPR（Self Piercing Rivet）</h3>
+<ul>
+<li>孔なしで打ち抜きながらかしめ接合</li>
+<li>○<b>異種材接合（Al+鋼板）◎</b>・自動車ボディ</li>
+</ul>
+<h3>焼きばめ</h3>
+<ul>
+<li>外側を加熱膨張→軸に嵌め→冷却収縮で固定</li>
+<li>○高強度・ギヤ・ベアリング固定</li>
+</ul>
+<h3>巻き締め（Seaming）</h3>
+<ul>
+<li>板端部を折り曲げて噛み合わせ（缶詰フタ）</li>
 </ul>
 
-<div class="subsec">★ 試験の急所（頻出まとめ）</div>
-<div class="tip-box"><ul>
-  <li><b>砂型：</b>表面張力が<b>小さい</b>から複雑形状OK / 砂の隙間は<b>大きい</b>ので入らない</li>
-  <li><b>融点↓の利点：</b>金型可・省エネ・溶解容易（強度向上ではない！）</li>
-  <li><b>引け巣：</b>凝固収縮→内部空洞 / 対策：押湯 / 検査：超音波UT</li>
-  <li><b>抜き勾配：</b>砂型から模型を取り出しやすくするため</li>
-  <li><b>角のR：</b>応力集中緩和→ひずみ・割れ防止</li>
-  <li><b>見切り面：</b>最も広い断面積（最大投影面積）位置</li>
-  <li><b>強度試験：</b>同一溶湯から試験片別途鋳造→引張試験</li>
-  <li><b>遠心鋳造：</b>中子なしで円管→遠心力で内空形成</li>
-  <li><b>ロストワックス：</b>耐熱超合金精密部品・タービンブレード</li>
-  <li><b>加工硬化：</b>転位密度増加→移動困難→強度↑延性↓</li>
-  <li><b>冷間vs熱間：</b>冷間=精度◎強化◎ / 熱間=大変形◎連続可</li>
-  <li><b>スプリングバック：</b>縦弾性係数E大ほど大きい</li>
-  <li><b>圧延v₁：</b>t₀v₀=t₁v₁ → 出口速度大（体積保存）</li>
-  <li><b>ファインブランキング：</b>逆力+反力+板押さえ同時→全面せん断面</li>
-  <li><b>MAG：</b>Ar+CO₂ 鉄鋼向 / <b>MIG：</b>Arのみ 非鉄向 / MIG品質&gt;MAG</li>
-  <li><b>TIG：</b>タングステン非消耗電極（W）・高品質・薄板・SUS向き</li>
-  <li><b>サブマージド：</b>粒状フラックス中・深溶込・熱効率◎・厚板・造船</li>
-  <li><b>EB溶接：</b>真空中・深溶込・薄板ひずみ小・活性金属可・大型不可</li>
-  <li><b>HAZ：</b>溶融しない組織変化領域 / 鋼→マルテンサイト化→硬化</li>
-  <li><b>予熱の目的：</b>Ceq高い鋼のマルテンサイト変態抑制→低温割れ防止</li>
-  <li><b>Ceq：</b>C+Mn/6+Si/24+Ni/40+Cr/5+Mo/4+V/14 / &gt;0.44で予熱必要</li>
-  <li><b>溶接残留応力：</b>局所加熱膨張→圧縮塑性変形→冷却収縮→引張残留応力</li>
-  <li><b>溶接変形4形態：</b>縦収縮・横収縮・回転変形・角変形</li>
-  <li><b>FSW：</b>1991英TWI・固体状態・HAZ最小・Al/Mg合金</li>
-  <li><b>ろう接：</b>硬ろう&gt;450℃・軟ろう&lt;450℃・母材溶融なし・異種材可</li>
-  <li><b>内部NDT：</b>UT（音波）・RT（X線） / 表面NDT：PT（毛管）・MT（磁束）</li>
-</ul></div>
-</div><!-- /裏col3 -->
+<h2>■ 溶接部の名称（超重要）</h2>
+<div class="imp">
+・<b>ビード（Bead）</b>：溶接金属が凝固した部分<br>
+・<b>ボンド（Bond）</b>：溶接金属と母材の境界面<br>
+・<b>HAZ（熱影響部 Heat Affected Zone）</b>：溶融しないが熱で組織・性質が変化した部分<br>
+→ HAZは硬さ変化・靱性低下→破断しやすい領域
+</div>
 
-</div><!-- /cols 裏面 -->
-</div><!-- /sheet -->
+<h2>■ 各種溶接法</h2>
+<h3>ガス溶接</h3>
+<ul>
+<li>燃料：アセチレンガス炎（〜3500℃）で溶融接合</li>
+<li>○設備安価・可搬性高・現場作業可</li>
+<li>×大気遮蔽なし→酸化・低速・ひずみ大</li>
+</ul>
+
+<h3>被覆アーク溶接（SMAW）</h3>
+<ul>
+<li>熱源：アーク放電　溶接棒：被覆剤（スラグでガスシールド）</li>
+<li>○設備安価・現場◎・オールポジション</li>
+<li>×低速・スラグ除去必要・溶接棒交換ロス</li>
+</ul>
+
+<h3>MAG溶接（Metal Active Gas）</h3>
+<ul>
+<li>シールドガス：<b>Ar + CO₂（約80:20）</b></li>
+<li>ワイヤ電極自動供給・連続溶接</li>
+<li>○高速・自動化◎・<b>鉄系</b>向き　×Al不可</li>
+</ul>
+
+<h3>MIG溶接（Metal Inert Gas）</h3>
+<ul>
+<li>シールドガス：<b>Ar（不活性）</b></li>
+<li>○<b>Al・ステンレス・非鉄金属</b>向き</li>
+</ul>
+
+<h3>TIG溶接（Tungsten Inert Gas）</h3>
+<ul>
+<li>タングステン電極（非消耗）＋Arガスシールド</li>
+<li>溶加棒は別途供給（または不要）</li>
+<li>○薄板精密・美麗ビード・全材質可</li>
+<li>×低速（MIG &gt; MAG &gt; TIG の順で速度低下）</li>
+</ul>
+
+<h3>サブマージドアーク溶接（SAW）</h3>
+<ul>
+<li>粉末フラックス中でアーク→大気を完全遮蔽</li>
+<li>○超高入熱・<b>厚板◎</b>・船舶・橋梁・高品質</li>
+<li>×下向き溶接のみ・設備大型・現場不可</li>
+</ul>
+
+</div>
+<div class="col">
+
+<h3>エレクトロスラグ溶接</h3>
+<ul>
+<li>溶融スラグ中のジュール熱でワイヤ溶融</li>
+<li>母材・当て金で冷却凝固・<b>下から上に順次溶接</b></li>
+<li>○<b>超厚板を1パス（1回）で溶接</b>・電極数1〜数十本</li>
+<li>△冷却が遅い→組織粗大化</li>
+</ul>
+
+<h3>レーザー溶接</h3>
+<ul>
+<li>CO₂レーザー・YAGレーザー・半導体レーザー</li>
+<li>薄板：表面加熱で溶融</li>
+<li>厚板：<b>キーホール（孔）</b>の周囲を溶融して接合</li>
+<li>○<b>溶け込み深さ大・HAZ小・高速</b></li>
+<li>×装置高価　・銅は吸収率高→接合容易・Alは反射率高→接合しにくい</li>
+</ul>
+
+<h3>電子ビーム溶接</h3>
+<ul>
+<li>電子ビームで母材溶融・<b>真空チャンバー内で接合</b></li>
+<li>○接合部に熱集中・薄板でもひずみ小・溶け込み大</li>
+<li>○<b>活性金属（Ti等）可</b>　×大型部品不可・装置高価</li>
+</ul>
+
+<h2>■ 抵抗溶接（圧接）</h2>
+<h3>スポット溶接（Spot Welding）</h3>
+<ul>
+<li>電極で挟み大電流→ジュール熱で界面を溶融＋加圧</li>
+<li>○高速・自動化◎・<b>自動車ボディ</b>（1台あたり数千〜数万点）</li>
+<li>×点接合・外観に痕が残る</li>
+</ul>
+<h3>シーム溶接</h3>
+<ul>
+<li>ローラー電極で直線的に連続スポット溶接</li>
+<li>重ねた板→シーム / 突き合わせた板→バットシーム</li>
+</ul>
+<h3>アプセット溶接</h3>
+<ul>
+<li>棒状材料を突き合わせ加圧＋ジュール熱→小径線材向き</li>
+</ul>
+<h3>フラッシュ溶接</h3>
+<ul>
+<li>界面でアーク→表面を溶融→加圧接合・アプセットより大径向き</li>
+</ul>
+
+<h2>■ ろう付け（Brazing/Soldering）</h2>
+<ul>
+<li>溶かした低融点ろう材で接合面を一体化</li>
+<li>○母材への熱影響小　○異種材料・複雑形状接合可</li>
+<li><b>硬ろう（Brazing）</b>：融点450℃以上（銀ろう・銅ろう等）</li>
+<li><b>軟ろう（Soldering）</b>：融点450℃以下（はんだ）→電子部品</li>
+<li>フラックス：酸化膜除去→ぬれ性向上</li>
+</ul>
+
+<h2>■ 摩擦攪拌接合（FSW）</h2>
+<div class="imp">
+回転ツール（プローブ）を母材に押し込み摩擦熱で軟化→攪拌一体化<br>
+<b>固相接合（溶融なし）</b>→熱ひずみ・材質変化<b>小</b>・欠陥少<br>
+○Al・Mg等◎　○700系新幹線大型床材（1300W×5000L）<br>
+△複雑形状不可　△接合材固定必要<br>
+1991年英TWI開発→国内もTWIライセンスで使用
+</div>
+
+<h2>■ 溶接欠陥・変形・検査</h2>
+<table>
+<tr><th>欠陥</th><th>原因・内容</th></tr>
+<tr><td>ポロシティ</td><td>溶接金属中のガス孔→強度低下</td></tr>
+<tr><td>割れ（クラック）</td><td>熱応力・収縮・水素脆化</td></tr>
+<tr><td>アンダーカット</td><td>母材が掘れた溝（電流過大）</td></tr>
+<tr><td>溶込み不良</td><td>母材が溶けていない→強度不足</td></tr>
+<tr><td>変形（ひずみ）</td><td>加熱冷却による収縮→設計余裕必要</td></tr>
+</table>
+<p><b>検査法：</b>RT・UT→内部欠陥 / PT（浸透）・MT（磁粉）・ECT（渦電流）→表面欠陥</p>
+
+<h2>■ 溶接法比較表</h2>
+<table>
+<tr><th>溶接法</th><th>熱源</th><th>大気遮蔽</th><th>溶接棒(溶加材)</th></tr>
+<tr><td>ガス溶接</td><td>アセチレン</td><td>無し</td><td>別途</td></tr>
+<tr><td>被覆アーク(SMAW)</td><td>アーク放電</td><td>被覆ガス化</td><td>CO₂ガス(被覆)</td></tr>
+<tr><td>MAG</td><td>アーク放電</td><td>Ar+CO₂</td><td>電極ワイヤ</td></tr>
+<tr><td>MIG</td><td>アーク放電</td><td>不活性Ar</td><td>電極ワイヤ</td></tr>
+<tr><td>TIG</td><td>アーク放電</td><td>不活性Ar</td><td>別途(または不要)</td></tr>
+<tr><td>サブマージド</td><td>アーク放電</td><td>フラックス</td><td>ワイヤ</td></tr>
+<tr><td>エレクトロスラグ</td><td>ジュール熱</td><td>スラグ</td><td>電極ワイヤ</td></tr>
+<tr><td>プラズマアーク</td><td>アーク放電</td><td>不活性Ar等</td><td>別途</td></tr>
+<tr><td>レーザー</td><td>レーザー</td><td>不要</td><td>不要</td></tr>
+<tr><td>電子ビーム</td><td>電子ビーム</td><td>真空中</td><td>不要</td></tr>
+<tr><td>抵抗(スポット等)</td><td>ジュール熱</td><td>無し</td><td>無し</td></tr>
+<tr><td>アプセット</td><td>ジュール熱</td><td>無し</td><td>無し</td></tr>
+<tr><td>フラッシュ</td><td>アーク放電</td><td>無し</td><td>無し</td></tr>
+<tr><td>ろう付け</td><td>外部加熱</td><td>無し</td><td>ろう</td></tr>
+<tr><td>FSW</td><td>摩擦熱</td><td>無し</td><td>無し</td></tr>
+</table>
+
+</div>
+</div>
+</div>
+
+<!-- ========== PAGE 4: 総合まとめ ========== -->
+<div class="sheet">
+<h1>加工学カンペ 2026前期中間｜総合まとめ・公式集</h1>
+<div class="cols">
+<div class="col">
+
+<h2>■ 3大加工法 比較</h2>
+<table>
+<tr><th>項目</th><th>鋳造</th><th>塑性加工</th><th>溶接接合</th></tr>
+<tr><td>原理</td><td>溶融→凝固</td><td>塑性変形</td><td>金属結合</td></tr>
+<tr><td>複雑形状</td><td>◎（3次元）</td><td>△（絞り限界）</td><td>○（組合せ）</td></tr>
+<tr><td>材料歩留</td><td>△（押し湯ロス）</td><td>◎（切削なし）</td><td>○</td></tr>
+<tr><td>強度</td><td>△（気孔等）</td><td>○（加工硬化）</td><td>○〜◎</td></tr>
+<tr><td>大量生産</td><td>◎（ダイカスト）</td><td>◎（プレス）</td><td>△〜○</td></tr>
+</table>
+
+<h2>■ 重要公式・数値まとめ</h2>
+<div class="box">
+<b>せん断力：</b> P = k × τ × l × t<br>
+（k:補正係数, τ:せん断強さ, l:切断周長, t:板厚）<br>
+<br>
+<b>真ひずみ：</b> ε = ln(l/l₀) = ln(A₀/A)<br>
+体積一定：ε₁ + ε₂ + ε₃ = 0　※常に ε &lt; e（公称ひずみ）<br>
+<br>
+<b class="red">スプリングバック ∝ σy / E</b><br>
+→ E小 or σy大 → スプリングバック大<br>
+<br>
+<b>LDR（限界絞り比）：</b> D₀/d₁ ≈ 2.0〜2.2<br>
+<br>
+<b>加工硬化則：</b> σ = C × εⁿ（n値大→成形性◎）<br>
+<b>r値：</b> r = ε幅/ε厚（r &gt; 1 → 深絞り性◎）<br>
+<br>
+<b>トレスカ：</b> τmax = (σ1-σ3)/2 = σy/2<br>
+<br>
+<b>ミーゼス：</b> (σ1-σ2)²+(σ2-σ3)²+(σ3-σ1)² = 2σy²<br>
+（ミーゼスの方が実験値に近い）<br>
+<br>
+<b>圧延体積保存：</b> V₀ × A₀ = Vr × Ar（ロール周速×断面積）<br>
+<br>
+<b>隅肉溶接：</b> σ = P / (0.7h × l)<br>
+（h:脚長, l:溶接長, のど厚 = 0.7h）<br>
+<br>
+<b>PWHT（溶接後熱処理）：</b> 550〜650℃ × 板厚25mmあたり1時間→残留応力低減・靱性回復
+</div>
+
+<h2>■ 加工法選択指針</h2>
+<table>
+<tr><th>要求</th><th>推奨加工法</th></tr>
+<tr><td>複雑3次元形状</td><td>鋳造（ロストワックス・ダイカスト）</td></tr>
+<tr><td>薄板量産</td><td>プレス（深絞り・せん断）</td></tr>
+<tr><td>高疲労強度</td><td>鍛造（ファイバーフロー）</td></tr>
+<tr><td>大型構造物</td><td>溶接（SAW・エレクトロスラグ）</td></tr>
+<tr><td>精密小型</td><td>ロストワックス・TIG溶接</td></tr>
+<tr><td>異種材接合</td><td>SPR・FSW・ろう付け・接着</td></tr>
+<tr><td>活性金属（Ti）</td><td>電子ビーム・TIG溶接</td></tr>
+<tr><td>Al薄板接合</td><td>FSW・MIG・TIG</td></tr>
+<tr><td>超厚板溶接</td><td>SAW・エレクトロスラグ</td></tr>
+</table>
+
+<h2>■ 検査法まとめ（内部 vs 表面）</h2>
+<table>
+<tr><th>検査法</th><th>内/表</th><th>対象</th></tr>
+<tr><td>RT（放射線透過）</td><td>内部</td><td>引け巣・気孔・割れ</td></tr>
+<tr><td>UT（超音波探傷）</td><td>内部</td><td>内部欠陥・板厚測定</td></tr>
+<tr><td>PT（浸透探傷）</td><td>表面</td><td>表面開口欠陥・非磁性体可</td></tr>
+<tr><td>MT（磁粉探傷）</td><td>表面</td><td>表面・近表面・磁性体のみ</td></tr>
+<tr><td>ECT（渦電流）</td><td>表面</td><td>表面・導電体</td></tr>
+<tr><td>発光分光分析</td><td>組成</td><td>化学成分確認</td></tr>
+</table>
+
+</div>
+<div class="col">
+
+<h2>■ 鋳造 キーワード一覧</h2>
+<ul>
+<li>流動性：ν(動粘度)<b>小</b>→流れやすい→複雑形状充填</li>
+<li>表面張力T<b>大</b>→砂の隙間に入らない（砂型○）</li>
+<li>Al：ν小→複雑形状◎ / 鋳鉄：T大→砂型◎</li>
+<li>引け巣→押し湯・凝固順序制御・シミュレーション</li>
+<li>ブローホール→脱ガス・乾燥・低速充填</li>
+<li>ダイカスト→高圧充填・薄肉可・ガス混入注意</li>
+<li>ロストワックス→最高精度・小型精密</li>
+<li>遠心鋳造→円筒・管・外側から凝固→緻密</li>
+<li>フルモールド→消失型・アンダーカット可・大型</li>
+<li>Near Net Shape→後加工最小化</li>
+<li>抜き勾配・見切り面・角R・肉厚均一→型設計基本</li>
+</ul>
+
+<h2>■ 塑性加工 キーワード一覧</h2>
+<ul>
+<li>熱間：再結晶温度以上・変形抵抗小・スケール</li>
+<li>冷間：精度高・加工硬化大・残留応力</li>
+<li><b class="red">スプリングバック∝σy/E → E小・σy大で大</b></li>
+<li>ハイテン→スプリングバック問題大</li>
+<li>LDR≈2.0〜2.2（深絞り限界）</li>
+<li>クリアランス→板厚の5〜10%</li>
+<li>ファインブランキング→Vリング＋超小クリアランス</li>
+<li>転造→ネジ・歯車・材料省略・疲労強度↑</li>
+<li>鍛造→ファイバーフロー整列→疲労強度最高</li>
+<li>トレスカ：τmax=σy/2 / ミーゼス：実験値に近い</li>
+<li>真ひずみ：ε=ln(l/l₀)</li>
+<li>FCC(Al・Cu)延性高 / BCC(Fe)中 / HCP(Mg・Ti)低</li>
+</ul>
+
+<h2>■ 接合 キーワード一覧</h2>
+<ul>
+<li>HAZ（熱影響部）→溶融しないが組織・性質変化</li>
+<li>ビード：溶接金属凝固部 / ボンド：母材との境界</li>
+<li>MAG：Ar+CO₂→鉄系◎ / MIG：Ar→非鉄◎</li>
+<li>TIG：W非消耗電極・薄板精密・全材質可</li>
+<li>SAW：フラックス中アーク→厚板◎</li>
+<li>エレクトロスラグ：ジュール熱→超厚板1パス</li>
+<li>電子ビーム：真空中・Ti等活性金属可</li>
+<li>レーザー：キーホール→深溶込・HAZ小</li>
+<li>FSW：固相接合・Al/Mg◎・熱ひずみ小・1991年</li>
+<li>スポット：ジュール熱・自動車ボディ点接合</li>
+<li>硬ろう≥450℃（銀ろう・銅ろう）/ 軟ろう&lt;450℃（はんだ）</li>
+<li>RT・UT→内部 / PT・MT・ECT→表面</li>
+<li>SPR→異種材（Al+鋼板）・孔なし接合</li>
+</ul>
+
+<h2>■ 覚えておく数値</h2>
+<table>
+<tr><th>項目</th><th>数値</th></tr>
+<tr><td>ダイカスト圧力</td><td>数十〜数百MPa</td></tr>
+<tr><td>低圧鋳造圧力</td><td>0.05〜0.15MPa</td></tr>
+<tr><td>硬ろう</td><td>≥450℃</td></tr>
+<tr><td>軟ろう</td><td>&lt;450℃</td></tr>
+<tr><td>LDR</td><td>≈2.0〜2.2</td></tr>
+<tr><td>クリアランス</td><td>板厚5〜10%</td></tr>
+<tr><td>Al再結晶</td><td>約150℃</td></tr>
+<tr><td>Fe再結晶</td><td>約450〜600℃</td></tr>
+<tr><td>FSW開発</td><td>1991年英TWI</td></tr>
+<tr><td>エレクトロスラグ電極</td><td>1〜数十本</td></tr>
+<tr><td>新幹線床材FSW</td><td>700系・1300W×5000L</td></tr>
+</table>
+
+</div>
+</div>
+</div>
 
 </body>
 </html>

@@ -1,0 +1,565 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加工学 塑性加工 応用問題</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#1b2f4d;
+  --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c;
+  --teal:#46d6c4; --teal-d:#1f9e90;
+  --amber:#f6b352; --rose:#f06b8e; --good:#5fe0a8; --bad:#f06b8e;
+}
+*{box-sizing:border-box;margin:0;padding:0}
+html{scroll-behavior:smooth}
+body{
+  font-family:"Outfit","Noto Sans JP",sans-serif;
+  background:radial-gradient(1100px 600px at 80% -8%,rgba(70,214,196,.10),transparent 55%),
+             radial-gradient(900px 500px at 5% 5%,rgba(246,179,82,.07),transparent 50%),
+             var(--bg);
+  color:var(--ink); line-height:1.6; padding-bottom:80px;
+}
+.wrap{max-width:880px;margin:0 auto;padding:0 18px}
+header{padding:46px 0 30px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),transparent)}
+.eyebrow{font-size:.72rem;letter-spacing:.34em;text-transform:uppercase;color:var(--teal);font-weight:600;margin-bottom:10px}
+h1{font-family:"Fraunces",serif;font-weight:600;font-size:clamp(2rem,6vw,3rem);line-height:1.04}
+.sub{color:var(--muted);margin-top:12px;font-size:1rem;max-width:600px}
+.scoreboard{position:sticky;top:0;z-index:50;background:rgba(10,22,38,.82);backdrop-filter:blur(12px);border-bottom:1px solid var(--line)}
+.scoreboard .wrap{display:flex;align-items:center;gap:14px;padding:11px 18px;flex-wrap:wrap}
+.scorenum{font-family:"JetBrains Mono",monospace;font-size:1.05rem;color:var(--teal);font-weight:500}
+.scorelbl{color:var(--muted);font-size:.85rem}
+.bar{flex:1;min-width:120px;height:7px;background:var(--card2);border-radius:99px;overflow:hidden}
+.bar>i{display:block;height:100%;width:0;background:linear-gradient(90deg,var(--teal-d),var(--teal));border-radius:99px;transition:width .5s ease}
+.resetbtn{font-family:inherit;font-size:.78rem;color:var(--muted);background:none;border:1px solid var(--line);border-radius:8px;padding:5px 11px;cursor:pointer;transition:.2s}
+.resetbtn:hover{color:var(--ink);border-color:var(--teal-d)}
+nav.toc{display:flex;gap:8px;flex-wrap:wrap;padding:22px 0 6px}
+nav.toc a{font-size:.82rem;color:var(--muted);text-decoration:none;padding:7px 13px;border:1px solid var(--line);border-radius:99px;background:var(--card);transition:.2s;white-space:nowrap}
+nav.toc a:hover{color:var(--ink);border-color:var(--teal-d);transform:translateY(-1px)}
+section{margin-top:44px;scroll-margin-top:64px}
+.sec-head{display:flex;align-items:baseline;gap:14px;margin-bottom:6px}
+.sec-no{font-family:"JetBrains Mono",monospace;font-size:.9rem;color:var(--teal);letter-spacing:.05em}
+.sec-head h2{font-family:"Fraunces",serif;font-weight:600;font-size:1.5rem}
+.sec-score{margin-left:auto;font-family:"JetBrains Mono",monospace;font-size:.82rem;color:var(--muted);white-space:nowrap;align-self:center}
+.q{background:var(--card);border:1px solid var(--line);border-radius:15px;padding:18px 18px 16px;margin-bottom:14px;transition:border-color .25s}
+.q.correct{border-color:var(--teal-d)}
+.q.wrong{border-color:var(--rose)}
+.q-top{display:flex;gap:12px;align-items:flex-start}
+.qn{font-family:"JetBrains Mono",monospace;font-size:.78rem;color:var(--teal);background:rgba(70,214,196,.1);border:1px solid var(--line);border-radius:7px;padding:3px 8px;flex-shrink:0;margin-top:2px;min-width:34px;text-align:center}
+.q-body{flex:1}
+.prompt{font-size:1.02rem;margin-bottom:4px}
+.opts{display:flex;flex-direction:column;gap:8px;margin-top:11px}
+.opt{font-family:inherit;font-size:.9rem;color:var(--ink);background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:10px 14px;cursor:pointer;transition:.16s;text-align:left;line-height:1.5}
+.opt:hover:not(:disabled){border-color:var(--teal-d);transform:translateY(-1px)}
+.opt:disabled{cursor:default}
+.opt.pick-correct{background:rgba(95,224,168,.16);border-color:var(--good);color:#cdfbe5}
+.opt.pick-wrong{background:rgba(240,107,142,.14);border-color:var(--bad);color:#ffd6e1}
+.opt.reveal{border-color:var(--good);color:#cdfbe5}
+.fb{margin-top:10px;font-size:.9rem;display:none}
+.fb.show{display:block}
+.fb .verdict{font-weight:600}
+.fb .verdict.g{color:var(--good)}
+.fb .verdict.b{color:var(--bad)}
+.note{color:var(--muted);margin-top:4px;font-size:.88rem}
+.tip{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--amber);border-radius:10px;padding:12px 15px;margin-bottom:18px;font-size:.9rem;color:var(--muted)}
+.tip b{color:var(--amber)}
+footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim);font-size:.82rem;text-align:center}
+@media(max-width:560px){.q-top{flex-direction:column;gap:7px}}
+</style>
+</head>
+<body>
+
+<div class="scoreboard">
+  <div class="wrap">
+    <span class="scorenum" id="sNum">0 / 0</span>
+    <span class="scorelbl">正解</span>
+    <div class="bar"><i id="sBar"></i></div>
+    <button class="resetbtn" onclick="resetAll()">リセット</button>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <div class="eyebrow">加工学 ・ 応用問題</div>
+    <h1>塑性加工 応用問題<br><span style="font-size:.55em;color:var(--teal)">原理・熱間冷間 / 各種加工法の仕組み / 計算・解析</span></h1>
+    <p class="sub">「なぜ」「どのように」を問う応用問題全30問。加工硬化・スプリングバック・各加工法の原理を深く理解しよう。</p>
+  </div>
+</header>
+
+<div class="wrap">
+<nav class="toc" id="toc"></nav>
+<div class="tip" style="margin-top:18px">
+  <b>使い方：</b>選択肢は長文。「正しい説明」を選ぶ。解説で仕組みを深く理解しよう。
+</div>
+<div id="app"></div>
+<footer>加工学 塑性加工 応用問題 ｜ 原理・熱間冷間10問・各種加工法10問・計算・解析10問 計30問</footer>
+</div>
+
+<script>
+const STORAGE_KEY = "kakougaku_sosei_oyo_v1";
+
+const SECTIONS = [
+
+{id:"s1", no:"01", title:"塑性加工の原理・熱間と冷間の仕組み", qs:[
+
+{type:"single",
+ q:"冷間加工で材料が硬化（加工硬化）するメカニズムとして正しいものを選べ",
+ opts:[
+   "塑性変形により転位（dislocation）の密度が急増し、転位同士が絡み合って動けなくなるため降伏応力が上昇する。強度・硬さが増す代わりに延性が低下するのが加工硬化の本質",
+   "冷間加工で材料が急冷されマルテンサイト変態が起き、鉄炭化物が析出して硬化する",
+   "低温では原子間結合力が強くなり格子全体の抵抗が増して強度が上がる",
+   "冷間では再結晶が起きず結晶粒が成長するため、大きな結晶粒が強度を高める"
+ ],
+ ans:"塑性変形により転位（dislocation）の密度が急増し、転位同士が絡み合って動けなくなるため降伏応力が上昇する。強度・硬さが増す代わりに延性が低下するのが加工硬化の本質",
+ note:"加工硬化メカニズム：塑性変形→転位増殖（密度：未加工10⁶/cm²→加工後10¹²/cm²）→転位間の弾性的相互作用・絡み合い→移動困難→降伏応力上昇。焼なまし（annealing）で転位消滅・再結晶→軟化回復。"},
+
+{type:"single",
+ q:"熱間加工で大変形が可能な理由として正しいものを選べ",
+ opts:[
+   "再結晶温度以上で加工すると転位が生成しても即座に回復・再結晶で消滅するため変形抵抗が低く保たれ、大変形が連続して可能になる",
+   "高温では金属が半溶融状態に近くなり液体のように流動して変形できる",
+   "熱間では金型も加熱されるため密着性が高まり材料が自由に変形できる",
+   "高温ではすべり面の数が増加しFCC・BCC・HCP全ての構造で等方的に変形できる"
+ ],
+ ans:"再結晶温度以上で加工すると転位が生成しても即座に回復・再結晶で消滅するため変形抵抗が低く保たれ、大変形が連続して可能になる",
+ note:"熱間加工の原理：T > T_再結晶（≒0.3〜0.5 Tm）で加工→転位生成と同時に回復・再結晶→転位密度低く保たれる→変形抵抗が常に低い→大変形可能。一方で寸法精度低下・スケール生成がデメリット。"},
+
+{type:"single",
+ q:"冷間加工後に焼なまし（annealing）を行う理由として正しいものを選べ",
+ opts:[
+   "加工硬化で蓄積した転位エネルギーを熱で解放させ再結晶させることで材料を軟化・延性を回復させて次の加工工程を可能にする",
+   "焼なましで炭素が析出して硬化し更なる強度向上が得られる",
+   "焼なましで酸化膜を除去して表面品質を改善する",
+   "焼なましで残留ガスを除去して内部欠陥をなくす"
+ ],
+ ans:"加工硬化で蓄積した転位エネルギーを熱で解放させ再結晶させることで材料を軟化・延性を回復させて次の加工工程を可能にする",
+ note:"焼なまし工程：加熱（T > T_再結晶）→保持（回復・再結晶）→徐冷（新しい粒成長）。転位密度が下がり軟化。多段階塑性加工（冷間圧延・深絞り）では加工と焼なましを繰り返して必要な変形量を得る。"},
+
+{type:"single",
+ q:"FCC（面心立方格子）構造がBCCやHCPより冷間加工に向いている理由として正しいものを選べ",
+ opts:[
+   "FCC構造はすべり系が12系と多く全方向に変形しやすいため延性・じん性が高く冷間大変形が可能。HCPはすべり系が3系のみと少なく特定方向にしか変形できず冷間加工が困難",
+   "FCC構造は原子が最密充填で原子間結合が弱いため力を加えると容易に変形できる",
+   "FCC構造は体心より原子数が多いため空孔が多く転位が移動しやすい",
+   "FCC構造は再結晶温度が低いため室温でも自然に再結晶が起き軟化状態が保たれる"
+ ],
+ ans:"FCC構造はすべり系が12系と多く全方向に変形しやすいため延性・じん性が高く冷間大変形が可能。HCPはすべり系が3系のみと少なく特定方向にしか変形できず冷間加工が困難",
+ note:"すべり系の数：FCC（Al・Cu・Ni・Au）=12系→延性大・加工性◎。BCC（Fe・W・Mo）=48系（理論）だが実際は滑り面不明確で変形挙動複雑→低温で脆性。HCP（Mg・Ti・Zn）=3系→常温で加工困難（Mgは150℃以上で加工）。"},
+
+{type:"single",
+ q:"塑性加工が切削加工より材料歩留まりが高い理由と加工硬化の利点を正しく説明しているものを選べ",
+ opts:[
+   "塑性加工は材料を除去せず変形させるのでほぼ全量が製品になる（歩留まり◎）。さらに加工硬化で成形後に強度が向上し、鍛流線（fiber flow）の形成で異方性強化も得られるため一石三鳥の加工法",
+   "塑性加工は切削より高速なため同じ機械で多くの製品が作れ、材料ロスはほぼ同じ",
+   "塑性加工では材料の不純物が加工中に分離されて純度が上がり強度が向上する",
+   "塑性加工では熱処理と同等の効果が得られ材料費の削減と強度向上が同時に達成できる"
+ ],
+ ans:"塑性加工は材料を除去せず変形させるのでほぼ全量が製品になる（歩留まり◎）。さらに加工硬化で成形後に強度が向上し、鍛流線（fiber flow）の形成で異方性強化も得られるため一石三鳥の加工法",
+ note:"塑性加工の3大利点：①高歩留まり（ニアネットシェイプ）②加工硬化による強化③鍛流線（金属繊維の流れ）による異方性強化。対比：切削（除去加工）は歩留まり低いが精度◎。鋳造は複雑形状◎だが強度は塑性加工品より劣る。"},
+
+{type:"single",
+ q:"鍛造品が鋳造品より疲労強度・靭性に優れる理由として正しいものを選べ",
+ opts:[
+   "鍛造の塑性変形で鋳造時の引け巣・気孔が圧着消滅し、結晶粒が細かくなり（加工硬化・再結晶微細化）、金属繊維流れ（鍛流線）が形成されるため疲労・衝撃に強くなる",
+   "鍛造では高温処理と急冷が組み合わされマルテンサイト組織が形成され硬化する",
+   "鍛造型の材質が転写されて製品表面が硬化する",
+   "鍛造後に必ず浸炭・窒化処理を行うため表面が硬化する"
+ ],
+ ans:"鍛造の塑性変形で鋳造時の引け巣・気孔が圧着消滅し、結晶粒が細かくなり（加工硬化・再結晶微細化）、金属繊維流れ（鍛流線）が形成されるため疲労・衝撃に強くなる",
+ note:"鍛流線（Fiber flow）：金属の結晶粒が変形方向に並んだ線維状組織。製品形状に沿った鍛流線を設計することで応力の集中方向と直角に繊維が走り疲労強度・靭性が大幅向上。クランクシャフト・航空機部品に活用。"},
+
+{type:"single",
+ q:"再結晶温度が材料によって異なる理由として正しいものを選べ",
+ opts:[
+   "再結晶温度は概ね融点（絶対温度）の0.3〜0.5倍。融点が高い材料ほど原子間結合が強く原子拡散に必要なエネルギーが大きいため再結晶温度が高くなる",
+   "再結晶温度は材料の硬さに比例し硬い材料ほど再結晶温度が高い",
+   "再結晶温度は常に200℃で材料によらず一定",
+   "再結晶温度は加工率（加工量）によって決まり材料の種類とは無関係"
+ ],
+ ans:"再結晶温度は概ね融点（絶対温度）の0.3〜0.5倍。融点が高い材料ほど原子間結合が強く原子拡散に必要なエネルギーが大きいため再結晶温度が高くなる",
+ note:"再結晶温度の目安（融点Tm[K]の30〜50%）：Fe≒450℃（Tm=1538℃）・Al≒150℃（Tm=660℃）・W≒1200℃（Tm=3422℃）・Pb≒-3℃（Tm=327℃、常温でも再結晶）。加工率が大きいほど再結晶温度は下がる。"},
+
+{type:"single",
+ q:"超塑性（superplasticity）が起きる条件と利点として正しいものを選べ",
+ opts:[
+   "特定の温度・ひずみ速度条件下で非常に微細な結晶粒を持つ材料が数百〜千%以上の大変形を破断なしに達成する現象。低圧力でも複雑形状の成形が可能になる",
+   "超塑性は低温・高ひずみ速度条件で起き、材料が液体のように流動して大変形できる",
+   "超塑性は加工硬化が極めて大きい材料で起き、硬化により断面収縮が均一になる",
+   "超塑性はFCC構造のみで発現し他の結晶構造では不可能"
+ ],
+ ans:"特定の温度・ひずみ速度条件下で非常に微細な結晶粒を持つ材料が数百〜千%以上の大変形を破断なしに達成する現象。低圧力でも複雑形状の成形が可能になる",
+ note:"超塑性の条件：①微細結晶粒（<10μm）②高温（T > 0.5Tm）③低ひずみ速度（10⁻⁴〜10⁻²/s）。変形機構：粒界すべり。用途：SPF（Superplastic Forming）でチタン・アルミの複雑形状部品（航空機）を1工程で成形。"},
+
+{type:"single",
+ q:"転造（thread rolling）がねじ切削より優れている具体的な理由として正しいものを選べ",
+ opts:[
+   "ダイスで丸棒表面を塑性変形してねじ山を成形するため：①材料の除去なしで歩留まり◎②ねじ山に圧縮残留応力が付与されて疲労強度向上③加工硬化で硬化④鍛流線が連続して靭性向上⑤高速で量産可能",
+   "転造は加熱なしに室温で実施できるため設備コストが低い",
+   "転造ダイスは非常に安価なため工具コストが切削タップより大幅に低い",
+   "転造は内ねじにも使用でき汎用性が高い"
+ ],
+ ans:"ダイスで丸棒表面を塑性変形してねじ山を成形するため：①材料の除去なしで歩留まり◎②ねじ山に圧縮残留応力が付与されて疲労強度向上③加工硬化で硬化④鍛流線が連続して靭性向上⑤高速で量産可能",
+ note:"転造 vs ねじ切削：転造はボルトの疲労強度が切削品の1.5〜2倍（圧縮残留応力の効果）。転造ダイスは高価だが工具寿命が長く量産でコスト優位。転造で作れるのは外ねじのみ（内ねじはタップ切削またはねじ立て転造が必要）。"},
+
+{type:"single",
+ q:"型鍛造（closed-die forging）と自由鍛造（open-die forging）の使い分けとして正しいものを選べ",
+ opts:[
+   "型鍛造は精密な上下一対の型で材料を閉じ込めて成形するため精度◎・量産向き。自由鍛造は平ダイスや简単な工具で叩き変形させ大型品・複雑変形・少量品に向く",
+   "型鍛造は冷間のみ、自由鍛造は熱間のみで行う",
+   "型鍛造は複雑断面のアルミ押出しに使い自由鍛造は圧延ロールで行う",
+   "型鍛造は切削加工の前工程として粗形材を作り自由鍛造は最終製品を直接製造する"
+ ],
+ ans:"型鍛造は精密な上下一対の型で材料を閉じ込めて成形するため精度◎・量産向き。自由鍛造は平ダイスや简単な工具で叩き変形させ大型品・複雑変形・少量品に向く",
+ note:"型鍛造例：自動車コンロッド・クランクシャフト・歯車（量産・精度重視）。自由鍛造例：大型発電機シャフト・造船用クランク（大型・少量）。型鍛造のバリ（フラッシュ）はトリミングで除去。"},
+
+]},
+
+{id:"s2", no:"02", title:"各種加工法の仕組みと選択", qs:[
+
+{type:"single",
+ q:"圧延で出口速度が入口速度より大きくなり前進スリップが生じる理由として正しいものを選べ",
+ opts:[
+   "体積保存則（t₀v₀ = t₁v₁、幅一定）により板が薄くなると速度が上がる。出口付近では材料速度＞ロール表面速度（前進スリップ）、入口付近では材料速度＜ロール表面速度（後退スリップ）となる",
+   "ロールが逆方向に回転して材料を引き寄せるため出口で加速される",
+   "板の温度が出口で下がるため熱収縮により速度が上がる",
+   "バックアップロールがワークロールを圧縮して材料に速度を与える"
+ ],
+ ans:"体積保存則（t₀v₀ = t₁v₁、幅一定）により板が薄くなると速度が上がる。出口付近では材料速度＞ロール表面速度（前進スリップ）、入口付近では材料速度＜ロール速度（後退スリップ）となる",
+ note:"圧延の速度関係：入口→後退スリップ域（材料遅い）→中立点（材料=ロール速度）→前進スリップ域（材料速い）→出口。中立点では摩擦方向が逆転。前進スリップ率s=(v₁-vR)/vR（vR：ロール速度）。"},
+
+{type:"single",
+ q:"4段圧延機でバックアップロールを設ける具体的な効果として正しいものを選べ",
+ opts:[
+   "大きな圧延荷重でワークロールが撓むと板の中央部が薄くなる板厚不均一（クラウン）が生じる。バックアップロールがワークロールを支えて撓みを防ぎ、均一板厚が実現できる",
+   "バックアップロールは材料を加熱して軟化させ圧延荷重を下げる",
+   "バックアップロールは板材の表面を研磨して表面粗さを改善する",
+   "バックアップロールは圧延速度を上げて生産性を向上させる役割"
+ ],
+ ans:"大きな圧延荷重でワークロールが撓むと板の中央部が薄くなる板厚不均一（クラウン）が生じる。バックアップロールがワークロールを支えて撓みを防ぎ、均一板厚が実現できる",
+ note:"4段圧延機：小径ワークロール（接触面積小→圧延荷重小）＋大径バックアップロール（撓み防止）の組み合わせ。さらに6段・クラスターミルは薄板高精度圧延に使用。板クラウン制御技術（CVC・PC圧延）も重要。"},
+
+{type:"single",
+ q:"押出し加工（extrusion）で複雑断面のアルミニウムサッシが製造できる理由として正しいものを選べ",
+ opts:[
+   "ダイス穴の断面形状がそのまま押し出された製品断面に転写されるため、ダイスの穴形状を変えるだけで任意の複雑断面プロファイルが得られる。アルミは熱間で変形抵抗が小さくポーテッドダイスで中空断面も可能",
+   "押出し後に引張力でさらに伸ばすことで複雑断面が得られる",
+   "複数のダイスを使いながら材料を少しずつ変形させて複雑断面にする",
+   "高圧流体で材料を複雑な型に押し込んで断面形状を得る"
+ ],
+ ans:"ダイス穴の断面形状がそのまま押し出された製品断面に転写されるため、ダイスの穴形状を変えるだけで任意の複雑断面プロファイルが得られる。アルミは熱間で変形抵抗が小さくポーテッドダイスで中空断面も可能",
+ note:"押出しの特徴：①複雑断面プロファイルが容易②初期費用（ダイス代）は安い③熱間主体（Al：450〜500℃、Cu：650〜900℃）④長尺材の製造。ポーテッドダイス（分割型）で中空断面（角パイプ・複雑中空）も製造可能。"},
+
+{type:"single",
+ q:"引き抜き加工（drawing）で高い寸法精度が実現できる仕組みとして正しいものを選べ",
+ opts:[
+   "材料が断面形状を決める硬質超硬ダイス（WC製）の穴を強制的に通過する際、ダイス穴の形状が断面に直接転写される。冷間加工で弾性回復（スプリングバック）が小さくダイス寸法に対して安定した精度が得られる",
+   "引き抜き後に水冷して急速収縮させることで寸法が安定する",
+   "電気化学的エッチングで余肉を溶解して寸法精度を高める",
+   "引き抜き後にローラーで真円に矯正して精度を高める"
+ ],
+ ans:"材料が断面形状を決める硬質超硬ダイス（WC製）の穴を強制的に通過する際、ダイス穴の形状が断面に直接転写される。冷間加工で弾性回復（スプリングバック）が小さくダイス寸法に対して安定した精度が得られる",
+ note:"引き抜き工程：潤滑（石灰・ソーダ石灰）→ダイス（ベル→アプローチ→ベアリング→バック）→引き抜き。ベアリング部の長さ・角度が精度・表面粗さ・加工力に影響。多段引き抜きで極細線（0.01mm程度）の製造も可能。"},
+
+{type:"single",
+ q:"曲げ加工でスプリングバックが大きくなる材料・形状条件として正しいものを選べ",
+ opts:[
+   "スプリングバック ∝ σ_y × R / (E × t)。降伏応力σ_y大（ハイテン鋼）・曲げ半径R大・縦弾性係数E小・板厚t小の条件でスプリングバックが大きくなる",
+   "スプリングバックはEが大きいほど大きく、延性が高い材料ほど大きい",
+   "板厚が大きく曲げ半径が小さいほどスプリングバックが大きくなる",
+   "スプリングバックは塑性変形量が大きいほど大きくなる"
+ ],
+ ans:"スプリングバック ∝ σ_y × R / (E × t)。降伏応力σ_y大（ハイテン鋼）・曲げ半径R大・縦弾性係数E小・板厚t小の条件でスプリングバックが大きくなる",
+ note:"スプリングバック対策：①過曲げ（overbending）：スプリングバック分を多めに曲げる②底押し（ストライキング）：底部で強圧して圧縮残留応力を付与③ネガティブスプリングバック（過曲げ）設計。ハイテン鋼はσ_y大でスプリングバック量の制御が特に重要。"},
+
+{type:"single",
+ q:"深絞り加工でフランジ部にしわが発生する原因と防止法として正しいものを選べ",
+ opts:[
+   "フランジ部は円周方向（圧縮）と半径方向（引張）の2軸応力状態。圧縮応力で座屈（しわ）が生じやすい。ブランクホルダー（板押さえ）でフランジを上下から押さえて座屈を抑制する",
+   "フランジ部は引張応力のみを受け材料が伸びすぎてしわになる",
+   "ダイの縁（Rコーナー）で材料が折れ曲がるため側壁にしわが生じる",
+   "ブランク径が小さすぎると材料が不足してしわが発生する"
+ ],
+ ans:"フランジ部は円周方向（圧縮）と半径方向（引張）の2軸応力状態。圧縮応力で座屈（しわ）が生じやすい。ブランクホルダー（板押さえ）でフランジを上下から押さえて座屈を抑制する",
+ note:"深絞りの5変形領域：①フランジ部（圧縮+引張）②ダイ肩部（曲げ+引張）③側壁部（純引張）④パンチ肩部（曲げ）⑤底部（引張）。BHF（ブランクホルダー力）を上げすぎると側壁が割れる→しわ・割れのトレードオフを最適BHFで制御。"},
+
+{type:"single",
+ q:"しごき加工（ironing）が深絞り後工程として必要な理由として正しいものを選べ",
+ opts:[
+   "深絞りだけでは側壁の肉厚が均一にならない。しごき加工でパンチとダイの隙間（クリアランス<板厚）に側壁を通して薄く均一に伸ばすことで深い容器を製造できる。2ピース飲料缶はこの組み合わせで製造",
+   "しごき加工は表面の酸化膜を機械的に除去して光沢を出すための研磨工程",
+   "しごき加工は底部の肉厚を増やして容器の底剛性を高める",
+   "しごき加工は深絞りで生じたしわを平らにするための整形工程"
+ ],
+ ans:"深絞りだけでは側壁の肉厚が均一にならない。しごき加工でパンチとダイの隙間（クリアランス<板厚）に側壁を通して薄く均一に伸ばすことで深い容器を製造できる。2ピース飲料缶はこの組み合わせで製造",
+ note:"2ピース缶（DI缶）製造工程：アルミ板打ち抜き→深絞り（カップ形成）→再深絞り→しごき（ironing）×2〜3回→側壁薄肉化・高さ増加→トリミング→蓋巻き締め。1枚のアルミ板から胴部を一体成形。"},
+
+{type:"single",
+ q:"再絞り（re-drawing）が必要な理由として正しいものを選べ",
+ opts:[
+   "一度の深絞りで達成できる絞り比（D₀/dp）の限界は1.8〜2.2程度。それ以上の深い容器は1回では割れるため、中間工程のカップを複数回再絞りして段階的に高さを増やす",
+   "再絞りは最初の深絞りで生じたひずみを除去するための焼なまし代替工程",
+   "再絞りはブランクの径を大きくして材料を補充する工程",
+   "再絞りはしごき加工と同じ工程で呼び方が異なるだけ"
+ ],
+ ans:"一度の深絞りで達成できる絞り比（D₀/dp）の限界は1.8〜2.2程度。それ以上の深い容器は1回では割れるため、中間工程のカップを複数回再絞りして段階的に高さを増やす",
+ note:"再絞り比は0.7〜0.85程度（各工程で10〜30%径を縮小）。加工硬化が蓄積するため中間焼なましが必要な場合も。3段再絞りで絞り比3〜4程度まで対応可能。"},
+
+{type:"single",
+ q:"ファインブランキング（fine blanking）で通常打抜きより端面精度が高い理由として正しいものを選べ",
+ opts:[
+   "通常打抜きでは大きなクリアランスで材料が引きちぎられ破断面が全面の2/3を占める。ファインブランキングは板押さえ・逆力・反力を同時付加し超小クリアランス（板厚の0.5%以下）でせん断すると材料全体が塑性変形→全面せん断面が得られる",
+   "ファインブランキングは材料を加熱軟化させてから打ち抜くため端面が滑らか",
+   "高速でパンチを駆動すると材料が弾性的に変形せず端面が平滑になる",
+   "ファインブランキング専用の超硬合金パンチが鋭利な端面を残す"
+ ],
+ ans:"通常打抜きでは大きなクリアランスで材料が引きちぎられ破断面が全面の2/3を占める。ファインブランキングは板押さえ・逆力・反力を同時付加し超小クリアランス（板厚の0.5%以下）でせん断すると材料全体が塑性変形→全面せん断面が得られる",
+ note:"端面構成比：通常打抜き→だれ（10%）+せん断面（30%）+破断面（60%）。ファインブランキング→全面ほぼせん断面。用途：変速機ギア・シートベルト部品・精密カム（後工程の削り不要）。プレス力は通常打抜きの3〜5倍必要。"},
+
+{type:"single",
+ q:"電磁成形（electromagnetic forming）が金属板の高速成形に使われる理由として正しいものを選べ",
+ opts:[
+   "コイルに大電流パルスを流すと強力な電磁力が導電性金属板に誘導電流を流し反発力（ローレンツ力）で金属板を型に高速押し付ける。工具が非接触のため摩擦なく成形でき、高速変形で成形限界が向上する",
+   "電磁場が金属を加熱軟化させ成形を容易にする高温加工法",
+   "電磁力でパンチを高速駆動して通常プレスの100倍の加工速度を実現する",
+   "超伝導コイルの磁場で金属粉末を型に吸引して固化させる粉末成形法"
+ ],
+ ans:"コイルに大電流パルスを流すと強力な電磁力が導電性金属板に誘導電流を流し反発力（ローレンツ力）で金属板を型に高速押し付ける。工具が非接触のため摩擦なく成形でき、高速変形で成形限界が向上する",
+ note:"電磁成形（EMF）：エネルギー蓄積コンデンサ→瞬間放電→コイル→磁場→誘導電流→ローレンツ力。特徴：①非接触（摩擦なし）②高速（100〜300m/s）③成形限界が静的成形より大きい④スプリングバックが小さい。Al・Cu等の導電性材料向き。"},
+
+]},
+
+{id:"s3", no:"03", title:"計算・降伏条件・解析の理解", qs:[
+
+{type:"single",
+ q:"公称ひずみeと真ひずみεの値の大小関係とその理由として正しいものを選べ",
+ opts:[
+   "常に真ひずみε < 公称ひずみe（同じ変形量）。公称はΔL/L₀で基準長L₀一定だが、真ひずみは瞬間の長さで積分（ln(L/L₀)）するため変形が進むほど基準が伸び、同じΔLに対する増分ひずみが小さくなる",
+   "変形量が小さい時はε > e、大きい時はε < eで変化する",
+   "真ひずみは常に公称ひずみの2倍になる",
+   "εとeは別の物理量を表しており大小比較に意味はない"
+ ],
+ ans:"常に真ひずみε < 公称ひずみe（同じ変形量）。公称はΔL/L₀で基準長L₀一定だが、真ひずみは瞬間の長さで積分（ln(L/L₀)）するため変形が進むほど基準が伸び、同じΔLに対する増分ひずみが小さくなる",
+ note:"e=(L-L₀)/L₀、ε=ln(L/L₀)=ln(1+e)。ln(1+e) < e（e>0の時）。例：e=1（100%伸び）のとき ε=ln(2)≒0.693。大変形では差が大きくなる。真ひずみは加算性がある（ε₁+ε₂+ε₃=全ひずみ）。"},
+
+{type:"single",
+ q:"トレスカ（Tresca）とミーゼス（von Mises）降伏条件の使い分けとして正しいものを選べ",
+ opts:[
+   "トレスカ（σ₁-σ₃=Y）は最大せん断応力が基準でシンプルな保守的設計向き。ミーゼス（偏差応力第2不変量J₂）は全主応力差を考慮し実験値と良く合うためFEMシミュレーション・降伏解析に広く使用",
+   "トレスカはFCC材料、ミーゼスはBCC材料にのみ適用できる",
+   "トレスカは冷間加工、ミーゼスは熱間加工の降伏条件として使い分ける",
+   "トレスカは2次元（平面応力）、ミーゼスは3次元応力状態にのみ適用できる"
+ ],
+ ans:"トレスカ（σ₁-σ₃=Y）は最大せん断応力が基準でシンプルな保守的設計向き。ミーゼス（偏差応力第2不変量J₂）は全主応力差を考慮し実験値と良く合うためFEMシミュレーション・降伏解析に広く使用",
+ note:"両者の比較：純せん断でトレスカの降伏τ=Y/2、ミーゼスのτ=Y/√3≒0.577Y。ミーゼスがトレスカより約15%高い降伏せん断応力→トレスカは保守的（安全側）。等二軸引張ではトレスカ=ミーゼス。"},
+
+{type:"single",
+ q:"せん断加工（打抜き）の端面に生じる「だれ・せん断面・破断面・バリ」の順序と原因として正しいものを選べ",
+ opts:[
+   "パンチ押し込み初期に弾性変形→降伏でだれ（材料が引き込まれ角が丸くなる）→塑性せん断でせん断面→限界を超えて破断が伝播して破断面（粗い面）→最後にパンチ側にバリが残る",
+   "パンチ側がバリ→破断面→せん断面→だれの順でダイス側から発生する",
+   "全面が均一にせん断されてだれや破断面は生じず、クリアランスが大きいと全面せん断面になる",
+   "だれはダイス肩部の摩耗による欠けで、せん断面はパンチ側、破断面はダイス側に生じる"
+ ],
+ ans:"パンチ押し込み初期に弾性変形→降伏でだれ（材料が引き込まれ角が丸くなる）→塑性せん断でせん断面→限界を超えて破断が伝播して破断面（粗い面）→最後にパンチ側にバリが残る",
+ note:"端面4要素：①だれ（rollover）：入口の丸み②せん断面（burnished zone）：光沢ある平滑面③破断面（fractured zone）：粗い破面④バリ（burr）：出口の突起。クリアランス大→破断面割合増・バリ大。ファインブランキングで①②④を最小化。"},
+
+{type:"single",
+ q:"圧延の「圧下量」「圧下率」「体積保存則を使った出口速度計算」をまとめて説明しているものを選べ",
+ opts:[
+   "圧下量Δt=t₀-t₁[mm]、圧下率r=(t₀-t₁)/t₀×100[%]。体積保存（幅b一定）：b×t₀×v₀=b×t₁×v₁ より v₁=v₀×(t₀/t₁)。例：t₀=8mm→t₁=4mm、v₀=1m/s → r=50%、v₁=2m/s",
+   "圧下率はパス数の逆数で計算し、出口速度は圧下率に比例する",
+   "圧下量を板厚で割ると圧下率で、出口速度はロール周速と同じになる",
+   "体積保存則は熱間のみ成立し冷間では熱膨張で誤差が生じる"
+ ],
+ ans:"圧下量Δt=t₀-t₁[mm]、圧下率r=(t₀-t₁)/t₀×100[%]。体積保存（幅b一定）：b×t₀×v₀=b×t₁×v₁ より v₁=v₀×(t₀/t₁)。例：t₀=8mm→t₁=4mm、v₀=1m/s → r=50%、v₁=2m/s",
+ note:"圧延計算まとめ：①圧下量・圧下率で削減量を表す②体積保存で入出口の速度比が板厚比の逆数③接触弧長L=√(R×Δt)（R：ロール半径）④圧延荷重P=k×b×L（k：変形抵抗）。"},
+
+{type:"single",
+ q:"FEM（有限要素法）による塑性加工シミュレーションで残留応力・残留ひずみを予測する意義として正しいものを選べ",
+ opts:[
+   "加工後の残留応力（引張/圧縮）を予測することで疲労破壊・応力腐食・スプリングバック量を事前評価できる。また残留ひずみ分布から次工程での追加変形量・焼なまし条件の設計にも活用できる",
+   "残留応力は最終製品の使用中にのみ発生するため加工シミュレーションでは考慮不要",
+   "FEMは変形形状のみを計算し応力・ひずみは別途試験で測定する",
+   "残留応力は常に圧縮で有益なため設計上問題にならない"
+ ],
+ ans:"加工後の残留応力（引張/圧縮）を予測することで疲労破壊・応力腐食・スプリングバック量を事前評価できる。また残留ひずみ分布から次工程での追加変形量・焼なまし条件の設計にも活用できる",
+ note:"残留応力の影響：引張残留応力→疲労破壊加速・応力腐食割れ（SCC）促進・スプリングバック大。圧縮残留応力→疲労強度向上（ショットピーニング・転造で意図的に付与）。FEMで分布予測→設計最適化。"},
+
+{type:"single",
+ q:"真応力-真ひずみ曲線における加工硬化指数n（n値）の意味と大きいときの特性として正しいものを選べ",
+ opts:[
+   "n値（σ=Cεⁿ）は加工硬化の傾きを表す指数。n大→均一伸びが大きく（ネッキングが遅れる）成形性が高い。深絞り・張り出し成形では高いn値が求められる。高強度鋼はn値が低く成形が難しい",
+   "n値が大きいほど材料が早く降伏して成形荷重が小さくなる",
+   "n値は材料の破断伸びと同じ値で、n大の材料は延性が高い",
+   "n値は成形速度の指標で大きいほど高速成形に向く"
+ ],
+ ans:"n値（σ=Cεⁿ）は加工硬化指数で加工硬化の傾きを表す。n大→均一伸びが大きく（ネッキングが遅れる）成形性が高い。深絞り・張り出し成形では高いn値が求められる。高強度鋼はn値が低く成形が難しい",
+ note:"成形性の指標：n値（加工硬化指数）=張り出し成形性、r値（ランクフォード値=幅ひずみ/厚さひずみ）=深絞り成形性。軟鋼板：n≒0.22・r≒1.8。高強度鋼（DP鋼）：n≒0.15・r≒0.9程度（成形性は軟鋼より低下）。"},
+
+{type:"single",
+ q:"加工限界線図（FLD）の縦軸・横軸が表すものと活用方法として正しいものを選べ",
+ opts:[
+   "縦軸：板厚方向（主）ひずみε₁（=最大主ひずみ）、横軸：板面内副ひずみε₂（板幅方向）。FEMや実験でのひずみを主ひずみ空間にプロットし、FLC（成形限界曲線）以下なら安全、以上なら割れと判定する",
+   "縦軸：引張応力、横軸：圧縮応力。応力空間での降伏条件と成形限界を示す",
+   "縦軸：成形速度、横軸：材料温度。温度と速度で成形可否を判断する",
+   "縦軸：板厚、横軸：成形後の長さ。板厚変化から成形限界を推定する"
+ ],
+ ans:"縦軸：板厚方向（主）ひずみε₁（=最大主ひずみ）、横軸：板面内副ひずみε₂（板幅方向）。FEMや実験でのひずみを主ひずみ空間にプロットし、FLC（成形限界曲線）以下なら安全、以上なら割れと判定する",
+ note:"FLD（Forming Limit Diagram）：Keeler（1965）・Goodwin（1968）が開発。応力状態別（二軸引張・平面ひずみ・単軸引張）の限界ひずみを一枚の図に表示。FEMシミュレーション結果を重ねて成形可否・しわ・割れ・増肉を可視化。"},
+
+{type:"single",
+ q:"せん断荷重P=τs×L×tにおいて、円形穴（d=80mm）・板厚t=4mm・せん断抵抗τs=320MPaで打ち抜く際の荷重として正しいものを選べ",
+ opts:[
+   "約 322 kN","約 100 kN","約 1,286 kN","約 64 kN","約 161 kN"
+ ],
+ ans:"約 322 kN",
+ note:"切断線長さ L = π × d = π × 80 ≒ 251.3mm。P = τs × L × t = 320 × 251.3 × 4 = 321,664N ≒ 322kN。せん断抵抗τsは引張強さσBの約60〜80%が目安（τs ≒ 0.7σB）。"},
+
+{type:"single",
+ q:"塑性加工での「摩擦」の役割として正しいものを選べ",
+ opts:[
+   "摩擦は材料の流動を制御し変形を伝達するため有益な場合（鍛造・圧延）と有害な場合（深絞り・引き抜き）がある。圧延では摩擦力（咬み込み力）が材料を引き込み、引き抜きでは摩擦が荷重を増加させるため潤滑が重要",
+   "摩擦は常に有害でゼロに近いほど良い加工が得られる",
+   "摩擦が大きいと加工速度が上がり生産性が向上する",
+   "摩擦は材料の硬さを上げる効果があり積極的に利用すべき"
+ ],
+ ans:"摩擦は材料の流動を制御し変形を伝達するため有益な場合（鍛造・圧延）と有害な場合（深絞り・引き抜き）がある。圧延では摩擦力（咬み込み力）が材料を引き込み、引き抜きでは摩擦が荷重を増加させるため潤滑が重要",
+ note:"摩擦の役割：①圧延：摩擦がないと咬み込み不可（咬み込み条件：μ>tan(θ)）②鍛造：型との摩擦が材料流動を規制③深絞り：フランジ・ダイ肩部の摩擦が割れを促進→潤滑が重要④引き抜き：ダイスとの摩擦が引き抜き力を増加。"},
+
+{type:"single",
+ q:"板成形における「異方性（anisotropy）」と「r値（ランクフォード値）」の意味として正しいものを選べ",
+ opts:[
+   "r値は引張試験での幅ひずみと板厚ひずみの比（r=εw/εt）。r>1なら板厚方向より幅方向に変形しにくく（板厚が保たれ）深絞り性が高い。圧延で集合組織（テクスチャ）が生じるため面内でr値が方向により異なる（面内異方性）",
+   "r値は引張強さと降伏強さの比で大きいほど延性が高い",
+   "r値が大きいほど加工硬化が起きやすく強度が増す",
+   "r値は板の表面粗さを表す指標で小さいほど鏡面に近い"
+ ],
+ ans:"r値は引張試験での幅ひずみと板厚ひずみの比（r=εw/εt）。r>1なら板厚方向より幅方向に変形しにくく（板厚が保たれ）深絞り性が高い。圧延で集合組織（テクスチャ）が生じるため面内でr値が方向により異なる（面内異方性）",
+ note:"深絞り用鋼板のr̄値（平均r値）：軟鋼（SPCC）r̄≒1.5〜2.0。IF鋼（極低炭素鋼）r̄≒2.0〜2.5（高深絞り性）。面内異方性Δr=(r₀+r₉₀-2r₄₅)/2が大きいと耳（earing）が発生→トリミング量増加。"},
+
+]}
+
+];/* end SECTIONS */
+
+let state = {};
+try{ state = JSON.parse(localStorage.getItem(STORAGE_KEY)||"{}"); }catch(e){}
+function save(){ localStorage.setItem(STORAGE_KEY, JSON.stringify(state)); if(window.progressSave) progressSave(STORAGE_KEY, state); }
+
+function computeScore(){
+  let done=0, total=0;
+  SECTIONS.forEach(sec=>{ sec.qs.forEach((q,qi)=>{ total++; if(state[`${sec.id}_${qi}`]===1) done++; }); });
+  return {done,total};
+}
+function updateScore(){
+  const {done,total}=computeScore();
+  document.getElementById("sNum").textContent=`${done} / ${total}`;
+  document.getElementById("sBar").style.width= total?`${done/total*100}%`:"0%";
+}
+async function resetAll(){
+  if(!confirm("進捗をリセットしますか？")) return;
+  state={};
+  localStorage.setItem(STORAGE_KEY, "{}");
+  localStorage.setItem(STORAGE_KEY + '_reset', '1');
+  if(window.progressSaveNow) progressSaveNow(STORAGE_KEY, {});
+  location.reload();
+}
+
+function renderAll(){
+  const app=document.getElementById("app");
+  const toc=document.getElementById("toc");
+  toc.innerHTML=""; app.innerHTML="";
+  SECTIONS.forEach(sec=>{
+    const a=document.createElement("a");
+    a.href=`#${sec.id}`; a.textContent=`${sec.no} ${sec.title}`;
+    toc.appendChild(a);
+    const el=document.createElement("section");
+    el.id=sec.id;
+    let secDone=0;
+    sec.qs.forEach((_,qi)=>{ if(state[`${sec.id}_${qi}`]===1) secDone++; });
+    el.innerHTML=`<div class="sec-head"><span class="sec-no">${sec.no}</span><h2>${sec.title}</h2><span class="sec-score" id="ss_${sec.id}">${secDone}/${sec.qs.length}</span></div>`;
+    sec.qs.forEach((q,qi)=>{ el.appendChild(buildQuestion(q,qi,`${sec.id}_${qi}`,sec.id)); });
+    app.appendChild(el);
+  });
+  updateScore();
+}
+
+function buildQuestion(q,qi,key,secId){
+  const div=document.createElement("div");
+  div.className="q"+(state[key]===1?" correct":state[key]===-1?" wrong":"");
+  div.id=`q_${key}`;
+  const qn=qi+1;
+  let inner=`<div class="q-top"><span class="qn">Q${qn}</span><div class="q-body"><div class="prompt">${q.q}</div>`;
+  if(q.type==="single"){
+    inner+=`<div class="opts">`;
+    q.opts.forEach((o,oi)=>{
+      let cls="opt";
+      if(state[key]!==undefined){
+        if(o===q.ans) cls+=" reveal";
+        if(state[key+"_pick"]===o && o!==q.ans) cls+=" pick-wrong";
+        if(state[key+"_pick"]===o && o===q.ans) cls+=" pick-correct";
+      }
+      const dis=state[key]!==undefined?"disabled":"";
+      inner+=`<button class="${cls}" ${dis} onclick="pickSingle('${key}','${secId}',this,'${escQ(o)}','${escQ(q.ans)}')">${labelChar(oi)} ${o}</button>`;
+    });
+    inner+=`</div>`;
+  }
+  const fbShow=state[key]!==undefined?"show":"";
+  const verdictLabel=state[key]===1?"✓ 正解":"✗ 不正解";
+  const verdictCls=state[key]===1?"g":"b";
+  inner+=`<div class="fb ${fbShow}" id="fb_${key}"><span class="verdict ${verdictCls}">${verdictLabel}</span>${q.note?`<div class="note">${q.note}</div>`:""}</div>`;
+  inner+=`</div></div>`;
+  div.innerHTML=inner;
+  return div;
+}
+
+function labelChar(i){ return String.fromCharCode(65+i)+"."; }
+function escQ(s){ return s.replace(/\\/g,"\\\\").replace(/'/g,"\\'"); }
+
+function pickSingle(key,secId,btn,chosen,ans){
+  const ok=chosen===ans;
+  if(window.addPoints) ok ? addPoints(100, STORAGE_KEY, key) : addPoints(0, STORAGE_KEY, key, false);
+  state[key]=ok?1:-1;
+  state[key+"_pick"]=chosen;
+  save(); refreshQ(key,secId);
+}
+
+function refreshQ(key,secId){
+  const sIdx=SECTIONS.findIndex(s=>s.id===secId);
+  if(sIdx<0) return;
+  const sec=SECTIONS[sIdx];
+  const parts=key.split("_");
+  const qi=parseInt(parts[1]);
+  const q=sec.qs[qi];
+  const old=document.getElementById("q_"+key);
+  if(!old) return;
+  const newCard=buildQuestion(q,qi,key,secId);
+  old.replaceWith(newCard);
+  let done=0;
+  sec.qs.forEach((_,i)=>{ if(state[`${secId}_${i}`]===1) done++; });
+  const ss=document.getElementById("ss_"+secId);
+  if(ss) ss.textContent=`${done}/${sec.qs.length}`;
+  updateScore();
+}
+
+renderAll();
+window._quizSync = async function() {
+  if(localStorage.getItem(STORAGE_KEY + '_reset')){
+    localStorage.removeItem(STORAGE_KEY + '_reset');
+    return;
+  }
+  const s = await progressLoad(STORAGE_KEY);
+  if (!s || !Object.keys(s).length) return;
+  let chg = false;
+  for (const k in s) { if (s[k] && !state[k]) { state[k] = s[k]; chg = true; } }
+  if (chg) { save(); renderAll(); }
+};
+</script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="../../js/points.js"></script>
+<script src="../../js/progress.js"></script>
+<a href="../../" style="position:fixed;bottom:20px;left:16px;background:rgba(10,22,38,.9);border:1px solid #27406a;color:#8aa1c0;text-decoration:none;padding:8px 14px;border-radius:99px;font-size:.82rem;z-index:200;backdrop-filter:blur(4px)">← トップへ</a>
+</body>
+</html>

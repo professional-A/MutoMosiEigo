@@ -87,7 +87,17 @@
     "title": "加工学 ・ 鋳造 確認テスト",
     "path": "tests/2026-4-zenki-chukan-kakougaku-chuzou/",
     "storageKey": "kakougaku_chuzou_v1",
-    "totalItems": 21
+    "totalItems": 30
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "加工学",
+    "title": "加工学 ・ 鋳造 応用問題",
+    "path": "tests/2026-4-zenki-chukan-kakougaku-chuzou-oyo/",
+    "storageKey": "kakougaku_chuzou_oyo_v1",
+    "totalItems": 30
   },
   {
     "year": 2026,
@@ -97,7 +107,17 @@
     "title": "加工学 ・ 塑性加工 確認テスト",
     "path": "tests/2026-4-zenki-chukan-kakougaku-sosei/",
     "storageKey": "kakougaku_sosei_v1",
-    "totalItems": 21
+    "totalItems": 30
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "加工学",
+    "title": "加工学 ・ 塑性加工 応用問題",
+    "path": "tests/2026-4-zenki-chukan-kakougaku-sosei-oyo/",
+    "storageKey": "kakougaku_sosei_oyo_v1",
+    "totalItems": 30
   },
   {
     "year": 2026,
@@ -107,7 +127,17 @@
     "title": "加工学 ・ 接合 確認テスト",
     "path": "tests/2026-4-zenki-chukan-kakougaku-setugou/",
     "storageKey": "kakougaku_setugou_v1",
-    "totalItems": 21
+    "totalItems": 30
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "加工学",
+    "title": "加工学 ・ 接合 応用問題",
+    "path": "tests/2026-4-zenki-chukan-kakougaku-setugou-oyo/",
+    "storageKey": "kakougaku_setugou_oyo_v1",
+    "totalItems": 30
   }
 ,
   {
