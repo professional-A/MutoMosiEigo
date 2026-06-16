@@ -10,6 +10,8 @@ function hashPw(pw, salt) { return crypto.pbkdf2Sync(pw, salt, 100000, 64, 'sha5
 function bonusDay() { return new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString().slice(0, 10); }
 function dp(u) { return (u.points || 0) + (u.test_bet || 0); } // 表示ポイント（賭け中含む）
 
+let siteLocked = false; // 管理者によるアクセス制限フラグ
+
 const app = express();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
 const supabaseAdmin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
@@ -57,6 +59,20 @@ async function initDB() {
       state_json TEXT NOT NULL DEFAULT '{}',
       updated_at TIMESTAMPTZ DEFAULT NOW(),
       UNIQUE(user_id, quiz_key)
+    )
+  `).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS quiz_answers (
+      user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      answer_key TEXT NOT NULL,
+      awarded_at TIMESTAMPTZ DEFAULT NOW(),
+      PRIMARY KEY (user_id, answer_key)
+    )
+  `).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS settings (
+      key   TEXT PRIMARY KEY,
+      value TEXT NOT NULL
     )
   `).catch(()=>{});
   // 福澤まさみ以外のワーストフレームをリセット（一回限り）
@@ -126,13 +142,41 @@ app.put('/api/avatar', auth, async (req, res) => {
   res.json({ ok: true });
 });
 
-// ポイント加算（問題正解）
+// ポイント加算（問題正解）— サーバー側重複防止
 app.post('/api/points', auth, async (req, res) => {
-  const { amount } = req.body;
-  if (!amount || amount <= 0) return res.status(400).json({ error: '不正なポイント' });
-  await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, req.user.id]);
+  if (siteLocked) return res.status(423).json({ error: 'サイトがロック中のためポイントを加算できません' });
+  const { amount, quizKey, questionKey, correct } = req.body;
+
+  // quizKey/questionKey なし: シンプル加算（レガシー）
+  if (!quizKey || !questionKey) {
+    if (!Number.isInteger(amount) || amount <= 0 || amount > 200) return res.status(400).json({ error: '不正なポイント' });
+    await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, req.user.id]);
+    const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id = $1', [req.user.id]);
+    return res.json({ ok: true, points: dp(rows[0]), delta: amount });
+  }
+
+  // dedup モード: 初回正解+100 / 復習正解+20 / 復習不正解-50 / 初回不正解=0
+  const answerKey = `${quizKey}:${questionKey}`;
+  const { rows: ex } = await pool.query(
+    'SELECT 1 FROM quiz_answers WHERE user_id=$1 AND answer_key=$2', [req.user.id, answerKey]
+  );
+  const isRepeat = ex.length > 0;
+
+  let delta = 0;
+  if (!isRepeat) {
+    if (correct !== false) {
+      await pool.query('INSERT INTO quiz_answers (user_id, answer_key) VALUES ($1, $2) ON CONFLICT DO NOTHING', [req.user.id, answerKey]);
+      delta = Number.isInteger(amount) && amount > 0 && amount <= 200 ? amount : 100;
+    }
+  } else {
+    delta = correct !== false ? 20 : 0;
+  }
+
+  if (delta !== 0) {
+    await pool.query('UPDATE users SET points = GREATEST(0, points + $1) WHERE id = $2', [delta, req.user.id]);
+  }
   const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id = $1', [req.user.id]);
-  res.json({ ok: true, points: dp(rows[0]) });
+  res.json({ ok: true, points: dp(rows[0]), delta });
 });
 
 // スコア保存
@@ -162,7 +206,8 @@ app.get('/api/ranking', async (req, res) => {
 // メンバー一覧（ポイント順、ログイン不要）
 app.get('/api/members', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, points + COALESCE(test_bet,0) AS points, last_login, test_pred, test_bet
+    SELECT username, avatar, frame, points + COALESCE(test_bet,0) AS points, last_login, test_pred, test_bet,
+           DENSE_RANK() OVER (ORDER BY points + COALESCE(test_bet,0) DESC) AS rank
     FROM users
     ORDER BY points + COALESCE(test_bet,0) DESC
   `);
@@ -345,7 +390,19 @@ app.post('/api/admin/distribute-pool', auth, async (req, res) => {
   for (const p of payouts) {
     await pool.query('UPDATE users SET points=points+$1 WHERE id=$2', [p.amount, p.id]);
   }
+  // 賭け金をリセット（配分後は test_bet を表示ポイントに二重計上しない）
+  await pool.query('UPDATE users SET test_bet=NULL WHERE test_bet IS NOT NULL');
   res.json({ ok: true, totalPool, payouts });
+});
+
+// 特定ユーザーの得点をリセット（管理者のみ）
+app.post('/api/admin/reset-test-score', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { username } = req.body;
+  if (!username) return res.status(400).json({ error: 'ユーザー名が必要です' });
+  const { rows } = await pool.query('UPDATE users SET test_score=NULL WHERE username=$1 RETURNING id, username', [username]);
+  if (!rows[0]) return res.status(404).json({ error: 'ユーザーが見つかりません' });
+  res.json({ ok: true, username: rows[0].username });
 });
 
 // クイズ進捗を取得
@@ -376,13 +433,48 @@ app.put('/api/progress/:quizKey', auth, async (req, res) => {
 app.post('/api/admin/grant-points', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { userId, amount } = req.body;
-  if (!userId || amount === undefined || amount === null) return res.status(400).json({ error: '不正なリクエスト' });
+  if (!userId || !Number.isInteger(amount)) return res.status(400).json({ error: '不正なリクエスト（整数のptを指定）' });
   await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, userId]);
   const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id = $1', [userId]);
   res.json({ ok: true, points: dp(rows[0]) });
 });
 
+// 管理者：全プレイヤー一斉ポイント配布
+app.post('/api/admin/grant-all', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { amount } = req.body;
+  if (!Number.isInteger(amount) || amount <= 0 || amount > 10000) return res.status(400).json({ error: '不正なポイント数（1〜10000）' });
+  const { rows } = await pool.query('UPDATE users SET points = points + $1 RETURNING id, username', [amount]);
+  res.json({ ok: true, count: rows.length, amount });
+});
+
+// サイトステータス（公開）
+app.get('/api/site-status', async (req, res) => {
+  res.json({ locked: siteLocked });
+});
+
+// 管理者：サイトロック
+app.post('/api/admin/lock', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  siteLocked = true;
+  await pool.query("INSERT INTO settings (key, value) VALUES ('site_locked','true') ON CONFLICT (key) DO UPDATE SET value='true'");
+  res.json({ ok: true });
+});
+
+// 管理者：サイトロック解除
+app.post('/api/admin/unlock', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  siteLocked = false;
+  await pool.query("INSERT INTO settings (key, value) VALUES ('site_locked','false') ON CONFLICT (key) DO UPDATE SET value='false'");
+  res.json({ ok: true });
+});
+
 app.use(express.static('.'));
 
 const PORT = process.env.PORT || 3000;
-initDB().then(() => app.listen(PORT, () => console.log(`サーバー起動中 → http://localhost:${PORT}`)));
+initDB().then(async () => {
+  // DB からロック状態を復元
+  const { rows } = await pool.query("SELECT value FROM settings WHERE key='site_locked'").catch(() => ({ rows: [] }));
+  siteLocked = rows[0]?.value === 'true';
+  app.listen(PORT, () => console.log(`サーバー起動中 → http://localhost:${PORT}`));
+});

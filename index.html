@@ -109,8 +109,8 @@ h1{
 [hidden]{display:none!important}
 
 /* Auth bar */
+#header-stack{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;flex-direction:column}
 .auth-bar{
-  position:fixed;top:0;left:0;right:0;z-index:100;
   background:rgba(10,22,38,.92);backdrop-filter:blur(8px);
   border-bottom:1px solid var(--line);
   padding:6px 10px;display:flex;align-items:center;gap:6px;
@@ -149,7 +149,7 @@ h1{
 .notif-item-title{font-size:.9rem;font-weight:600;color:var(--ink);margin-bottom:4px}
 .notif-item-body{font-size:.82rem;color:var(--muted);line-height:1.5}
 .notif-new .notif-item-title::before{content:'NEW ';color:var(--teal);font-size:.7rem;font-weight:700}
-.ticker-wrap{position:fixed;top:38px;left:0;right:0;z-index:99;overflow:hidden;background:rgba(10,22,38,.95);backdrop-filter:blur(6px);border-bottom:1px solid rgba(70,214,196,.25);height:26px;display:flex;align-items:center}
+.ticker-wrap{overflow:hidden;background:rgba(10,22,38,.95);backdrop-filter:blur(6px);border-bottom:1px solid rgba(70,214,196,.25);height:26px;display:flex;align-items:center}
 .ticker-track{display:flex;white-space:nowrap;animation:ticker-scroll 22s linear infinite}
 .ticker-item{font-size:.76rem;color:var(--teal);font-weight:600;padding:0 60px;letter-spacing:.02em}
 @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
@@ -161,7 +161,7 @@ h1{
 }
 .auth-btn:hover{border-color:var(--teal);color:var(--teal)}
 .auth-btn.primary{background:var(--teal);color:#0a1626;border-color:var(--teal);font-weight:600}
-body{padding-top:64px}
+
 
 /* Modal */
 .modal-bg{
@@ -246,7 +246,8 @@ body{padding-top:64px}
 </head>
 <body>
 
-<!-- ログインバー（画面上部固定） -->
+<!-- ヘッダースタック（auth-bar + ticker を一括fixed） -->
+<div id="header-stack">
 <div class="auth-bar" id="auth-bar">
   <div class="auth-bar-left">
     <button class="notif-btn" onclick="toggleNotif()" title="お知らせ">
@@ -260,6 +261,10 @@ body{padding-top:64px}
   <button class="auth-btn" id="test-btn" style="display:none" onclick="openTestModal()">📋テスト</button>
   <button class="auth-btn" id="pw-open-btn" onclick="openLoginModal()">IDでログイン</button>
   <button class="auth-btn primary" id="auth-open-btn" onclick="loginWithGoogle()">Googleでログイン</button>
+</div>
+<div class="ticker-wrap" id="ticker-wrap" style="display:none">
+  <div class="ticker-track" id="ticker-track"></div>
+</div>
 </div>
 
 <!-- お知らせパネル -->
@@ -419,7 +424,9 @@ body{padding-top:64px}
   <div class="modal" style="width:min(480px,95vw);max-height:90vh;display:flex;flex-direction:column;padding:20px 16px">
     <h2 style="flex-shrink:0">登録ユーザー一覧 <span id="admin-count" style="font-size:.8rem;color:var(--muted);font-weight:400"></span></h2>
     <div id="admin-content" style="flex:1;overflow-y:auto;min-height:0;padding-right:2px"></div>
-    <div class="modal-btns" style="margin-top:12px;flex-shrink:0">
+    <div class="modal-btns" style="margin-top:12px;flex-shrink:0;flex-wrap:wrap;gap:8px">
+      <button id="lock-btn" onclick="toggleSiteLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🔒 アクセス制限</button>
+      <button onclick="grantAll()" style="background:#7c3aed;color:#fff;border:none;font-weight:700">🎁 全員配布</button>
       <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 配分</button>
       <button onclick="awardWorstFrame()" style="background:#ff3333;color:#fff;border:none;font-weight:700">🔴 1位に付与</button>
       <button onclick="awardBakaFrame()" style="background:#ff00ff;color:#fff;border:none;font-weight:700">🌟 テスト最下位に付与</button>
@@ -459,11 +466,6 @@ body{padding-top:64px}
     </div>
     <div class="modal-msg" id="avatar-msg"></div>
   </div>
-</div>
-
-
-<div class="ticker-wrap" id="ticker-wrap" style="display:none">
-  <div class="ticker-track" id="ticker-track"></div>
 </div>
 
 <header>
@@ -647,6 +649,8 @@ const SUPABASE_URL      = 'https://gwknnqceiozbmxrqjcae.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_4MgSWSr8bbuUf5Vp_LSD6Q_SI-ciZ2B';
 const supabaseClient    = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
+function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+
 // ── 認証 ──────────────────────────────────────────────
 let authToken  = null;
 let authUser   = null;
@@ -680,7 +684,7 @@ function updateAuthBar() {
   const pwBtn = document.getElementById('pw-open-btn');
   const avEl  = document.getElementById('auth-avatar');
   if (authToken) {
-    bar.innerHTML = `<strong>${authUser}</strong> <span style="color:var(--teal);font-size:.85rem">${authPoints.toLocaleString()}pt</span>`;
+    bar.innerHTML = `<strong>${esc(authUser)}</strong> <span style="color:var(--teal);font-size:.85rem">${authPoints.toLocaleString()}pt</span>`;
     avEl.textContent = authAvatar;
     avEl.style.display = 'inline-flex';
     applyFrame(avEl, authFrame);
@@ -705,6 +709,12 @@ function updateAuthBar() {
     document.getElementById('ranking-content').innerHTML =
       '<p class="ranking-login-note">ログインするとランキングが表示されます</p>';
   }
+  requestAnimationFrame(syncLayout);
+}
+
+function syncLayout() {
+  const h = document.getElementById('header-stack').getBoundingClientRect().height;
+  document.body.style.paddingTop = h + 'px';
 }
 
 function showPointToast(msg) {
@@ -1109,7 +1119,7 @@ async function loadRanking() {
       const isMe = r.username === authUser;
       return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
         <td class="rank-num${rank <= 3 ? ' top' : ''}">${rank}</td>
-        <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:28px;height:28px;font-size:1rem;margin-right:8px;vertical-align:middle">${r.avatar||'🐸'}</span>${r.username}${isMe ? ' 👈' : ''}</td>
+        <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:28px;height:28px;font-size:1rem;margin-right:8px;vertical-align:middle">${r.avatar||'🐸'}</span>${esc(r.username)}${isMe ? ' 👈' : ''}</td>
         <td class="rank-score">${r.score} / ${r.total}</td>
         <td class="rank-pct">${pct}%</td>
       </tr>`;
@@ -1121,7 +1131,7 @@ async function loadRanking() {
 // ── 管理者 ──────────────────────────────────────────────
 async function openAdminModal() {
   document.getElementById('admin-modal-bg').classList.add('open');
-  await reloadAdminContent();
+  await Promise.all([reloadAdminContent(), updateLockBtn()]);
 }
 async function reloadAdminContent() {
   const el = document.getElementById('admin-content');
@@ -1135,8 +1145,8 @@ async function reloadAdminContent() {
       <div class="admin-card-top">
         <span class="avatar frame-${u.frame||'default'}" style="width:32px;height:32px;font-size:1.1rem;flex-shrink:0">${u.avatar||'🐸'}</span>
         <div style="min-width:0">
-          <div class="admin-card-name">${i+1}. ${u.username}</div>
-          <div class="admin-card-email">${u.email||'（IDログイン）'}</div>
+          <div class="admin-card-name">${i+1}. ${esc(u.username)}</div>
+          <div class="admin-card-email">${esc(u.email||'（IDログイン）')}</div>
         </div>
       </div>
       <div class="admin-card-stats">
@@ -1181,6 +1191,26 @@ async function awardWorstFrame() {
     else alert(`❌ エラー (${res.status}): ${data.error || JSON.stringify(data)}`);
   } catch(e) { alert('❌ 通信エラー: ' + e.message); }
 }
+async function grantAll() {
+  const input = prompt('全プレイヤーに配布するポイント数を入力');
+  const amount = parseInt(input);
+  if (!amount || isNaN(amount) || amount <= 0) return;
+  if (!confirm(`全プレイヤーに ${amount.toLocaleString()}pt を配布しますか？`)) return;
+  try {
+    const res = await fetch('/api/admin/grant-all', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ amount })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      alert(`✅ ${data.count}人に ${amount.toLocaleString()}pt を配布しました`);
+      await reloadAdminContent();
+    } else {
+      alert('❌ エラー: ' + (data.error || 'unknown'));
+    }
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
 async function awardBakaFrame() {
   if (!confirm('テスト最下位の人に🌟バカフレームを付与しますか？')) return;
   try {
@@ -1190,6 +1220,31 @@ async function awardBakaFrame() {
     else alert(`❌ エラー (${res.status}): ${data.error || JSON.stringify(data)}`);
   } catch(e) { alert('❌ 通信エラー: ' + e.message); }
 }
+
+let _siteLocked = false;
+async function updateLockBtn() {
+  try {
+    const res = await fetch('/api/site-status');
+    const data = await res.json();
+    _siteLocked = data.locked;
+  } catch(e) {}
+  const btn = document.getElementById('lock-btn');
+  if (!btn) return;
+  btn.textContent = _siteLocked ? '🔓 制限解除' : '🔒 アクセス制限';
+  btn.style.background = _siteLocked ? '#16a34a' : '#dc2626';
+}
+async function toggleSiteLock() {
+  const endpoint = _siteLocked ? '/api/admin/unlock' : '/api/admin/lock';
+  const label    = _siteLocked ? '制限を解除' : 'アクセスを制限（管理者以外のクイズページを遮断）';
+  if (!confirm(`${label}しますか？`)) return;
+  try {
+    const res  = await fetch(endpoint, { method:'POST', headers:{'Authorization':authToken} });
+    const data = await res.json();
+    if (data.ok) await updateLockBtn();
+    else alert('エラー: ' + (data.error || 'unknown'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
 document.getElementById('admin-modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeAdminModal();
 });
@@ -1205,10 +1260,10 @@ async function openMembersModal() {
       <thead><tr><th>#</th><th>名前</th><th>ポイント</th><th>予測</th><th>賭け金</th></tr></thead>
       <tbody>${data.map((u, i) => `
         <tr>
-          <td class="rank-num">${i + 1}</td>
+          <td class="rank-num${Number(u.rank)<=3?' top':''}">${u.rank}</td>
           <td class="rank-name">
             <span class="avatar frame-${u.frame||'default'}" style="width:24px;height:24px;font-size:.9rem;margin-right:6px;vertical-align:middle">${u.avatar||'🐸'}</span>
-            ${u.username}
+            ${esc(u.username)}
           </td>
           <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
           <td style="text-align:center;color:var(--teal)">${u.test_pred != null ? u.test_pred+'点' : '―'}</td>
@@ -1241,16 +1296,20 @@ async function loadTicker() {
     const leader = data[0];
     const pt = leader.points || 0;
     const msgFn = LEADER_MSGS[Math.floor(Math.random() * LEADER_MSGS.length)];
-    const text = msgFn(leader.username, pt);
+    const text = msgFn(esc(leader.username), pt);
     const wrap = document.getElementById('ticker-wrap');
     const track = document.getElementById('ticker-track');
     // テキストを2回繰り返してシームレスループ
     const item = `<span class="ticker-item">${text}</span>`;
     track.innerHTML = item.repeat(6);
     wrap.style.display = 'flex';
+    requestAnimationFrame(syncLayout);
   } catch(e) {}
 }
 loadTicker();
+window.addEventListener('resize', syncLayout);
+requestAnimationFrame(syncLayout);
+new ResizeObserver(syncLayout).observe(document.getElementById('header-stack'));
 
 function toggleNotif() {
   const panel = document.getElementById('notif-panel');
