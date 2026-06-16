@@ -386,10 +386,11 @@ function pickQOpt(btn, chosen, ans){
   [...opts.children].forEach(b=>{ b.disabled=true; if(b.textContent===ans) b.classList.add("ok"); });
   if(!ok) btn.classList.add("ng");
   const fb=document.getElementById("qFb");
-  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg(); if(window.addPoints) addPoints(100);
+  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg(); if(window.addPoints) addPoints(100, 'vocab_known_u12', keyOf(w));
     fb.innerHTML=`<span class="v g">◎ 正解</span> <span class="corr">${w[0]}</span> <span class="jp">＝ ${w[1]}</span>`;
   } else {
     qRetry.push(qOrder[qi]);
+    if(window.addPoints) addPoints(0, 'vocab_known_u12', keyOf(w), false);
     fb.innerHTML=`<span class="v b">✕</span> 答え: <span class="corr">${w[0]}</span> <span class="jp">＝ ${w[1]}</span>`;
   }
   const sb=document.getElementById("qSubmit");
@@ -408,10 +409,11 @@ function quizCheck(){
   inp.disabled=true; inp.classList.add(ok?"ok":"ng");
   qDone++;
   const fb=document.getElementById("qFb");
-  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg(); if(window.addPoints) addPoints(100);
+  if(ok){ qCorrect++; known[keyOf(w)]=1; saveKnown(); updateProg(); if(window.addPoints) addPoints(100, 'vocab_known_u12', keyOf(w));
     fb.innerHTML=`<span class="v g">◎ 正解</span> <span class="corr">${w[0]}</span>`;
   } else {
     qRetry.push(qOrder[qi]);
+    if(window.addPoints) addPoints(0, 'vocab_known_u12', keyOf(w), false);
     fb.innerHTML=`<span class="v b">✕</span> 答え: <span class="corr">${w[0]}</span> <span class="jp">（${w[1]}）</span>`;
   }
   const sb=document.getElementById("qSubmit");

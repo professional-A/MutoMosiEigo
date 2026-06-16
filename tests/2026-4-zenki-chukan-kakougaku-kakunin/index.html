@@ -117,7 +117,7 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:v
 <div class="wrap">
 <nav class="toc" id="toc"></nav>
 <div class="tip" style="margin-top:18px">
-  <b>使い方：</b>選択式はタップで即判定。複数選択は全部選んでから「採点」ボタン。並べ替えは番号順に選んでいく。入力式はEnterか「採点」で判定。解説は判定後に表示。
+  <b>使い方：</b>選択肢をタップで即判定。解説は判定後に表示。
 </div>
 <div id="app"></div>
 <footer>加工学 確認テスト ｜ 鋳造15問・塑性加工14問・接合11問 計40問</footer>
@@ -151,11 +151,11 @@ const SECTIONS = [
  ans:"表面張力が小さいから",
  note:"表面張力が小さいため、すきまがある砂型でも溶湯が砂の外に漏れ出さずに鋳型を充填できる。"},
 
-{type:"multi",
- q:"鋳造に用いる材料の性質として、融点が低いことによる利点を全て選べ",
- opts:["砂型のみ使用できる","エネルギーをたくさん消費する","溶解が容易","金型が使用できる","作業環境が良い"],
- ans:["溶解が容易","金型が使用できる"],
- note:"融点が低いと金型（金属製の型）でも使用可能になり、溶解エネルギーも少なくて済む。"},
+{type:"single",
+ q:"鋳造に用いる材料の融点が低いことによる利点として正しいものを選べ",
+ opts:["砂型しか使用できなくなる","エネルギーを多く消費する","溶解が容易になる","作業環境が悪化する","冷却時間が長くなる"],
+ ans:"溶解が容易になる",
+ note:"融点が低いと溶解エネルギーが少なくて済み溶解が容易。また金型も使用可能になる。"},
 
 {type:"single",
  q:"鋳造において、鋳造品の組成（化学成分）を調べるために最適な方法を選べ",
@@ -185,18 +185,15 @@ const SECTIONS = [
  ans:"①湯口 ②湯道 ③押湯",
  note:"湯口(sprue)から注ぎ、湯道(runner)・堰(gate)を通り鋳物へ。押湯(riser)は凝固収縮を補う。"},
 
-{type:"sort",
- q:"引け巣が発生するプロセスを正しい順番に並べよ",
- items:[
-   "溶湯の温度が低下し、鋳造品の外周が凝固する",
-   "凝固収縮により鋳造品内部の溶湯が不足する",
-   "凝固隙間により溶湯が供給されず空洞ができる",
+{type:"single",
+ q:"引け巣が発生するプロセスの正しい順番を選べ",
+ opts:[
+   "①外周凝固 → ②内部溶湯不足 → ③空洞形成",
+   "①内部溶湯不足 → ②外周凝固 → ③空洞形成",
+   "①空洞形成 → ②外周凝固 → ③内部溶湯不足",
+   "①外周凝固 → ②空洞形成 → ③内部溶湯不足",
  ],
- ans:[
-   "溶湯の温度が低下し、鋳造品の外周が凝固する",
-   "凝固収縮により鋳造品内部の溶湯が不足する",
-   "凝固隙間により溶湯が供給されず空洞ができる",
- ],
+ ans:"①外周凝固 → ②内部溶湯不足 → ③空洞形成",
  note:"外周から凝固→内部が収縮→押湯がないと空洞(引け巣)になる。"},
 
 {type:"single",
@@ -252,32 +249,29 @@ const SECTIONS = [
  ans:"ロストワックス",
  note:"ロストワックス（インベストメント鋳造）はセラミックで高精度な型を作れ、耐熱超合金タービンブレード等に使用。"},
 
-{type:"multi",
- q:"以下の説明で正しいものを全て選べ",
+{type:"single",
+ q:"以下の説明のうち、正しいものを選べ",
  opts:[
-   "金型を用いた鋳造法では、種々の方法を用いて必ず圧力をかけて溶湯を充填しなければならない",
+   "金型を用いた鋳造法では必ず圧力をかけて溶湯を充填しなければならない",
    "鋳鉄は鋳鋼よりも凝固収縮が小さい。これは黒鉛が晶出するためである",
-   "鋳造品は肉厚が薄いと結晶が細かくなるため強度が高い",
+   "鋳造品は肉厚が厚いほど結晶が細かくなり強度が高い",
    "3Dプリンタで砂型の成形をすることはできない",
  ],
- ans:[
-   "鋳鉄は鋳鋼よりも凝固収縮が小さい。これは黒鉛が晶出するためである",
-   "鋳造品は肉厚が薄いと結晶が細かくなるため強度が高い",
- ],
- note:"金型鋳造では圧力をかけない重力鋳造もある。3Dプリンタは砂型成形に使用可能。黒鉛晶出と薄肉高強度は正しい。"},
+ ans:"鋳鉄は鋳鋼よりも凝固収縮が小さい。これは黒鉛が晶出するためである",
+ note:"金型鋳造では重力鋳造もある。3Dプリンタは砂型成形に使用可能。肉厚が薄いと結晶が細かくなる。"},
 
 ]},
 
 // ──────────────────────────────────────────────
 {id:"s4", no:"04", title:"塑性加工 概要・熱間冷間", qs:[
 
-{type:"multi",
- q:"塑性加工の特徴を全て選べ",
+{type:"single",
+ q:"塑性加工の特徴として正しいものを選べ",
  opts:[
-   "加工時間が長い","加工時間が短い","少量生産に適する","中空形状が得意",
-   "材料の無駄が少ない（歩留まりが良い）","量産に適する","加工により強度が向上する"
+   "加工時間が長い","少量生産に適する","中空形状が得意",
+   "材料の無駄が少ない（歩留まりが良い）","加工により強度が低下する"
  ],
- ans:["加工時間が短い","材料の無駄が少ない（歩留まりが良い）","量産に適する","加工により強度が向上する"],
+ ans:"材料の無駄が少ない（歩留まりが良い）",
  note:"塑性加工：短時間・量産向き・歩留まり良い・加工硬化で強度向上。中空形状は鋳造が得意。"},
 
 {type:"single",
@@ -315,15 +309,17 @@ const SECTIONS = [
  ans:"出口",
  note:"体積保存則より t₀v₀ = t₁v₁。圧延後は厚みが減るため速度は増加。v₁ > v₀。"},
 
-{type:"input",
- q:"前問のように材料の速度が変化する理由を答えよ",
- ans:["体積保存則","体積保存","質量保存","断面積が減るため速度が増加","板厚が薄くなるから"],
- hint:"圧延前後で材料の体積は変化しない。"},
+{type:"single",
+ q:"前問のように圧延で材料の速度が変化する理由として正しいものを選べ",
+ opts:["体積保存則（圧延前後で体積は変わらない）","材料が延びるため自然に速くなる","ロールの回転数が出口側で増加するため","温度上昇により材料が膨張するため"],
+ ans:"体積保存則（圧延前後で体積は変わらない）",
+ note:"体積保存則：t₀×w₀×v₀ = t₁×w₁×v₁。板厚が減るため速度が増加する。"},
 
-{type:"input",
- q:"厚さ5mmの軟鋼の板を直径100mmの円形にせん断で打ち抜く際の荷重を求めよ。軟鋼板のせん断抵抗を300MPaとする（単位をつけること）",
- ans:["471239N","471kN","471,239N","471000N","470kN","471.2kN","471239 N","471 kN"],
- hint:"P = τs × L × t。円形の切断長さL = π × d。MPa = N/mm²。"},
+{type:"single",
+ q:"厚さ5mmの軟鋼板を直径100mmの円形にせん断で打ち抜く荷重はいくらか（せん断抵抗300MPa）",
+ opts:["約471kN","約314kN","約236kN","約942kN"],
+ ans:"約471kN",
+ note:"P = τ × L × t = 300N/mm² × (π×100mm) × 5mm ≈ 471,239N ≈ 471kN"},
 
 {type:"single",
  q:"長さ100mmの棒に引張の荷重を加えたところ、長さが105mmとなった。公称ひずみはいくらか",
@@ -343,10 +339,11 @@ const SECTIONS = [
  ans:"縦弾性係数(ヤング率)が大きい材料ほど大きい",
  note:"スプリングバック量 ∝ Y/E。Eが大きいほど弾性回復量が大きくなる。"},
 
-{type:"input",
- q:"塑性加工シミュレーションにおいて使われる降伏条件は何か（代表的なものを1つ答えよ）",
- ans:["Von Mises","ミーゼス","von mises","Mises","トレスカ","Tresca","フォンミーゼス"],
- hint:"Von Mises降伏条件とTresca降伏条件が代表的。シミュレーションではVon Misesが多用される。"},
+{type:"single",
+ q:"塑性加工シミュレーションで主に使われる降伏条件を選べ",
+ opts:["Von Mises降伏条件","Tresca降伏条件","フックの法則","ニュートンの粘性法則"],
+ ans:"Von Mises降伏条件",
+ note:"Von Mises降伏条件とTresca降伏条件が代表的。シミュレーションではVon Misesが多用される。"},
 
 {type:"single",
  q:"押出し(Extrusion)と引き抜き(Drawing)を比較して、主に熱間加工を行うのはどちらか",
@@ -424,21 +421,16 @@ const SECTIONS = [
  ans:"拘束が大きいほど残留応力が大きく変形が小さい",
  note:"拘束↑→変形できない→残留応力↑。拘束↓→変形できる→残留応力↓。"},
 
-{type:"multi",
- q:"アーク溶接の種類と特徴について正しい説明を全て選べ",
+{type:"single",
+ q:"アーク溶接について正しいものを選べ",
  opts:[
    "MAG溶接はArのみを保護ガスとして使用する",
    "TIG溶接はタングステン電極が溶けない非消耗電極を使う",
-   "被覆アーク溶接は屋外での補修溶接にも適している",
    "MIG溶接は主に炭素鋼の溶接に使われる",
-   "アーク溶接の温度は5000〜6000°C程度である",
+   "アーク溶接の温度は1000〜2000°C程度である",
  ],
- ans:[
-   "TIG溶接はタングステン電極が溶けない非消耗電極を使う",
-   "被覆アーク溶接は屋外での補修溶接にも適している",
-   "アーク溶接の温度は5000〜6000°C程度である",
- ],
- note:"MAGはAr+CO₂。MIGが非鉄金属向けでMAGが炭素鋼向け。TIG非消耗・被覆アーク屋外・アーク温度5000〜6000°Cは正しい。"},
+ ans:"TIG溶接はタングステン電極が溶けない非消耗電極を使う",
+ note:"MAGはAr+CO₂。MIGが非鉄金属向けでMAGが炭素鋼向け。アーク温度は5000〜6000°C。"},
 
 {type:"single",
  q:"溶接欠陥「アンダーカット」の主な原因を選べ",
@@ -482,10 +474,12 @@ function updateScore(){
   document.getElementById("sNum").textContent=`${done} / ${total}`;
   document.getElementById("sBar").style.width= total?`${done/total*100}%`:"0%";
 }
-function resetAll(){
+async function resetAll(){
   if(!confirm("進捗をリセットしますか？")) return;
   state={};
-  save();
+  localStorage.setItem(STORAGE_KEY, "{}");
+  localStorage.setItem(STORAGE_KEY + '_reset', '1');
+  if(window.progressSaveNow) progressSaveNow(STORAGE_KEY, {});
   location.reload();
 }
 
@@ -582,7 +576,7 @@ function buildQuestion(q, qi, key, secId){
     });
     inner+=`</div>`;
     if(state[key]===undefined){
-      inner+=`<div class="multi-submit"><button class="btn" onclick="submitMulti('${key}','${secId}',${JSON.stringify(q.opts)},${JSON.stringify(q.ans)})">採点</button></div>`;
+      inner+=`<div class="multi-submit"><button class="btn" onclick="submitMulti('${key}','${secId}',${jsonAttr(q.opts)},${jsonAttr(q.ans)})">採点</button></div>`;
     }
 
   }else if(q.type==="sort"){
@@ -590,7 +584,7 @@ function buildQuestion(q, qi, key, secId){
     inner+=`<div class="sort-bank" id="sbank_${key}">`;
     q.items.forEach((item,ii)=>{
       if(placed.includes(item)) return;
-      inner+=`<button class="sort-item" onclick="placeSortItem('${key}','${secId}',${JSON.stringify(q.items)},${JSON.stringify(q.ans)},'${escQ(item)}')">${item}</button>`;
+      inner+=`<button class="sort-item" onclick="placeSortItem('${key}','${secId}',${jsonAttr(q.items)},${jsonAttr(q.ans)},'${escQ(item)}')">${item}</button>`;
     });
     inner+=`</div>`;
     inner+=`<div class="sort-answer" id="sans_${key}">`;
@@ -601,7 +595,7 @@ function buildQuestion(q, qi, key, secId){
     });
     inner+=`</div>`;
     if(placed.length===q.items.length && state[key]===undefined){
-      inner+=`<div class="multi-submit"><button class="btn" onclick="submitSort('${key}','${secId}',${JSON.stringify(q.ans)})">採点</button></div>`;
+      inner+=`<div class="multi-submit"><button class="btn" onclick="submitSort('${key}','${secId}',${jsonAttr(q.ans)})">採点</button></div>`;
     }
 
   }else if(q.type==="input"){
@@ -610,9 +604,9 @@ function buildQuestion(q, qi, key, secId){
     const dis=state[key]!==undefined?"disabled":"";
     inner+=`<div class="inrow">
       <input id="inp_${key}" type="text" value="${val}" ${dis} class="${inputCls}" placeholder="答えを入力"
-        onkeydown="if(event.key==='Enter')submitInput('${key}','${secId}',${JSON.stringify(q.ans)})">
-      ${state[key]===undefined?`<button class="btn" onclick="submitInput('${key}','${secId}',${JSON.stringify(q.ans)})">採点</button>`:""}
-      ${state[key]!==undefined && state[key]!==1?`<button class="btn ghost" onclick="revealInput('${key}','${secId}',${JSON.stringify(q.ans)})">答えを見る</button>`:""}
+        onkeydown="if(event.key==='Enter')submitInput('${key}','${secId}',${jsonAttr(q.ans)})">
+      ${state[key]===undefined?`<button class="btn" onclick="submitInput('${key}','${secId}',${jsonAttr(q.ans)})">採点</button>`:""}
+      ${state[key]!==undefined && state[key]!==1?`<button class="btn ghost" onclick="revealInput('${key}','${secId}',${jsonAttr(q.ans)})">答えを見る</button>`:""}
     </div>`;
     if(q.hint && state[key]===undefined){
       inner+=`<div class="note" style="margin-top:6px">💡 ヒント: ${q.hint}</div>`;
@@ -636,13 +630,15 @@ function buildQuestion(q, qi, key, secId){
 
 function labelChar(i){ return String.fromCharCode(65+i)+"."; }
 function escQ(s){ return s.replace(/'/g,"\\'"); }
+function jsonAttr(obj){ return JSON.stringify(obj).replace(/"/g,'&quot;'); }
 
 /* =====================================================================
    INTERACTIONS
 ===================================================================== */
 function pickSingle(key,secId,btn,chosen,ans){
-  if(state[key]===undefined && chosen===ans && window.addPoints) addPoints(100);
-  state[key]=chosen===ans?1:-1;
+  const ok=chosen===ans;
+  if(window.addPoints) ok ? addPoints(100, STORAGE_KEY, key) : addPoints(0, STORAGE_KEY, key, false);
+  state[key]=ok?1:-1;
   state[key+"_pick"]=chosen;
   save(); refreshQ(key,secId);
 }
@@ -658,6 +654,7 @@ function toggleMulti(key,opt){
 function submitMulti(key,secId,opts,ans){
   const sel=state[key+"_sel"]||[];
   const correct=sel.length===ans.length && ans.every(a=>sel.includes(a));
+  if(window.addPoints) correct ? addPoints(100, STORAGE_KEY, key) : addPoints(0, STORAGE_KEY, key, false);
   state[key]=correct?1:-1;
   save(); refreshQ(key,secId);
 }
@@ -678,6 +675,7 @@ function removeSortItem(key,idx){
 function submitSort(key,secId,ans){
   const placed=state[key+"_placed"]||[];
   const correct=ans.every((a,i)=>placed[i]===a);
+  if(window.addPoints) correct ? addPoints(100, STORAGE_KEY, key) : addPoints(0, STORAGE_KEY, key, false);
   state[key]=correct?1:-1;
   save(); refreshQ(key,secId);
 }
@@ -685,7 +683,9 @@ function submitSort(key,secId,ans){
 function submitInput(key,secId,ans){
   const val=document.getElementById("inp_"+key).value.trim();
   state[key+"_val"]=val;
-  state[key]=matchInput(val,ans)?1:-1;
+  const correct=matchInput(val,ans);
+  if(window.addPoints) correct ? addPoints(100, STORAGE_KEY, key) : addPoints(0, STORAGE_KEY, key, false);
+  state[key]=correct?1:-1;
   save(); refreshQ(key,secId);
 }
 
@@ -720,6 +720,10 @@ function refreshQ(key,secId){
 /* ===== INIT ===== */
 renderAll();
 window._quizSync = async function() {
+  if(localStorage.getItem(STORAGE_KEY + '_reset')){
+    localStorage.removeItem(STORAGE_KEY + '_reset');
+    return;
+  }
   const s = await progressLoad(STORAGE_KEY);
   if (!s || !Object.keys(s).length) return;
   let chg = false;

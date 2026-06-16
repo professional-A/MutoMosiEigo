@@ -426,7 +426,7 @@ function norm(s){
 
 function mark(key, ok){
   state[key] = {correct:ok, done:true};
-  save(); updateScore(); if(ok&&window.addPoints)addPoints(100);
+  save(); updateScore(); if(window.addPoints) ok ? addPoints(100, 'mutou_u12', key) : addPoints(0, 'mutou_u12', key, false);
 }
 
 function updateScore(){

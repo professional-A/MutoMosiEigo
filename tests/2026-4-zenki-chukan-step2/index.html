@@ -355,11 +355,12 @@ function pick(btn, ok, ansText, corrShow, extra){
   if(!ok) btn.classList.add("ng");
   const fb=document.getElementById("qFb");
   if(ok){
-    qCorrect++; if(window.addPoints) addPoints(100);
+    qCorrect++; if(window.addPoints) addPoints(100, 'idiom_known_u12', String(it.i));
     if(it.t==="m"){ known[keyOf(PHRASES[it.i])]=1; saveKnown(); updateProg(); }
     fb.innerHTML=`<span class="v g">◎ 正解</span> <span class="corr">${corrShow}</span>`+(it.t==="c"?`<span class="jp">${extra}</span>`:"");
   } else {
     qRetry.push(it);
+    if(window.addPoints) addPoints(0, 'idiom_known_u12', String(it.i), false);
     fb.innerHTML=`<span class="v b">✕</span> 答え: <span class="corr">${corrShow}</span>`+(it.t==="c"?`<span class="jp">${extra}</span>`:`<span class="jp">＝ ${ansText}</span>`);
   }
   const next=document.getElementById("qNext");

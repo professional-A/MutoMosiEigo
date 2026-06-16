@@ -355,9 +355,8 @@ try{ state = JSON.parse(localStorage.getItem("mutou_handout_u12")||"{}"); }catch
 function save(){ try{ localStorage.setItem("mutou_handout_u12", JSON.stringify(state)); }catch(e){} if(window.progressSave) progressSave("mutou_handout_u12", state); }
 
 function mark(key, ok){
-  if(!state[key] && ok && window.addPoints) addPoints(100);
   state[key] = {correct:ok, done:true};
-  save(); updateScore();
+  save(); updateScore(); if(window.addPoints) ok ? addPoints(100, 'mutou_handout_u12', key) : addPoints(0, 'mutou_handout_u12', key, false);
 }
 
 function updateScore(){
