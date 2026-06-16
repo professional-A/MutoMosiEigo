@@ -84,8 +84,10 @@ async function initDB() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `).catch(()=>{});
-  // 福澤まさみ以外のワーストフレームをリセット（一回限り）
+  // 福澤まさみ以外のワーストフレームをリセット
   await pool.query(`UPDATE users SET frame='default' WHERE frame='worst' AND username != '福澤まさみ'`).catch(()=>{});
+  // 田中謙佑に誤付与されたワーストを修正してrainbowに
+  await pool.query(`UPDATE users SET frame='rainbow' WHERE username='田中謙佑' AND frame IN ('worst','default')`).catch(()=>{});
 }
 
 // 認証ミドルウェア（Supabase JWT または カスタムセッショントークン）
@@ -340,7 +342,7 @@ app.get('/api/test/results', auth, async (req, res) => {
 // ポイント1位にワーストフレーム付与
 app.post('/api/admin/award-worst', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  const { rows } = await pool.query('SELECT id, username FROM users ORDER BY points DESC LIMIT 1');
+  const { rows } = await pool.query('SELECT id, username FROM users ORDER BY points + COALESCE(test_bet,0) DESC LIMIT 1');
   if (!rows[0]) return res.status(400).json({ error: 'ユーザーが見つかりません' });
   await pool.query("UPDATE users SET frame='worst' WHERE id=$1", [rows[0].id]);
   res.json({ ok: true, username: rows[0].username });
