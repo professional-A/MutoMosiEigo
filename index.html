@@ -179,12 +179,16 @@ h1{
 .modal-bg{
   display:none;position:fixed;inset:0;z-index:200;
   background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
-  align-items:center;justify-content:center;
+  align-items:flex-start;justify-content:center;
+  overflow-y:auto;-webkit-overflow-scrolling:touch;
+  padding:20px 0;
 }
 .modal-bg.open{display:flex}
 .modal{
   background:var(--bg2);border:1px solid var(--line);border-radius:16px;
   padding:28px;width:min(360px,90vw);
+  position:relative;margin:auto;flex-shrink:0;
+  overscroll-behavior:contain;
 }
 .modal h2{font-size:1.1rem;margin-bottom:16px}
 .modal input{
@@ -345,6 +349,7 @@ h1{
 <!-- テストイベントモーダル -->
 <div class="modal-bg" id="test-modal-bg">
   <div class="modal" style="width:min(480px,95vw)">
+    <button onclick="closeTestModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
     <h2>📋 英語テスト 点数予測イベント</h2>
     <p style="font-size:.8rem;color:var(--muted);margin-bottom:14px">予測受付：〜6/16(月) 9:00 AM ／ みんなの賭け金プールを 1/誤差² の比率で配分</p>
 
@@ -484,6 +489,7 @@ h1{
 <!-- メンバー一覧モーダル -->
 <div class="modal-bg" id="members-modal-bg">
   <div class="modal" style="width:min(480px,95vw)">
+    <button onclick="closeMembersModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
     <h2>メンバー一覧</h2>
     <div id="members-content" style="margin-top:12px;font-size:.85rem"></div>
     <div class="modal-btns" style="margin-top:16px">
@@ -1216,10 +1222,23 @@ async function syncUser(token) {
   }
 }
 
-// ── スクロールロック ─────────────────────────────────────
+// ── スクロールロック（iOS対応）────────────────────────────
 let _scrollLockCount = 0;
-function lockScroll()   { _scrollLockCount++; document.body.style.overflow = 'hidden'; }
-function unlockScroll() { _scrollLockCount = Math.max(0, _scrollLockCount - 1); if (_scrollLockCount === 0) document.body.style.overflow = ''; }
+let _scrollY = 0;
+function lockScroll() {
+  if (++_scrollLockCount > 1) return;
+  _scrollY = window.scrollY;
+  document.body.style.cssText += `;position:fixed;top:-${_scrollY}px;left:0;right:0;overflow:hidden`;
+}
+function unlockScroll() {
+  if (--_scrollLockCount > 0) return;
+  document.body.style.position = '';
+  document.body.style.top      = '';
+  document.body.style.left     = '';
+  document.body.style.right    = '';
+  document.body.style.overflow = '';
+  window.scrollTo(0, _scrollY);
+}
 
 // ── アバター選択 ─────────────────────────────────────────
 function openAvatarModal() {
