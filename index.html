@@ -982,8 +982,8 @@ function showTestPhase(data) {
   } else {
     // フェーズ1: 予測未入力
     if (past) {
-      document.getElementById('test-msg').textContent = '予測の受付は終了しました（6/16 9:00 AM）';
-      document.getElementById('test-msg').style.color = 'var(--muted)';
+      // 締め切り後でも得点入力は可能
+      document.getElementById('test-phase-score').style.display = 'block';
     } else {
       document.getElementById('test-phase-predict').style.display = 'block';
       document.getElementById('bet-points-display').textContent = authPoints.toLocaleString();
