@@ -90,6 +90,8 @@ async function initDB() {
   await pool.query(`UPDATE users SET frame='default' WHERE frame='worst' AND username != '福澤まさみ'`).catch(()=>{});
   // 田中謙佑に誤付与されたワーストを修正してrainbowに
   await pool.query(`UPDATE users SET frame='rainbow' WHERE username='田中謙佑' AND frame IN ('worst','default')`).catch(()=>{});
+  // avatar='😼'の人のunlocked_avatarsに😼を追加（既存ユーザー移行）
+  await pool.query(`UPDATE users SET unlocked_avatars='["😼"]' WHERE avatar='😼' AND (unlocked_avatars='[]' OR unlocked_avatars IS NULL)`).catch(()=>{});
 }
 
 // 1位に worst フレームを自動付与・外れたら prev_frame に戻す

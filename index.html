@@ -1169,12 +1169,12 @@ async function syncPasswordUser(token) {
     clearTimeout(timeout);
     const data = await res.json();
     if (data.username) {
-      authUser   = data.username;
-      authEmail  = data.email || '';
+      authUser            = data.username;
+      authEmail           = data.email || '';
       authAvatar          = data.avatar || '🐸';
       authFrame           = data.frame  || 'default';
       authPoints          = data.points || 0;
-      authUnlockedAvatars = data.unlockedAvatars || [];
+      authUnlockedAvatars = data.unlockedAvatars || (data.avatar === '😼' ? ['😼'] : []);
       localStorage.setItem('muto_avatar',           authAvatar);
       localStorage.setItem('muto_frame',            authFrame);
       localStorage.setItem('muto_points',           String(authPoints));
@@ -1205,11 +1205,13 @@ async function syncUser(token) {
     if (data.username) {
       authUser   = data.username;
       authEmail  = data.email;
-      authAvatar = data.avatar || '🐸';
-      authFrame  = data.frame  || 'default';
-      authPoints = data.points || 0;
-      localStorage.setItem('muto_avatar', authAvatar);
-      localStorage.setItem('muto_frame',  authFrame);
+      authAvatar          = data.avatar || '🐸';
+      authFrame           = data.frame  || 'default';
+      authPoints          = data.points || 0;
+      authUnlockedAvatars = data.unlockedAvatars || [];
+      localStorage.setItem('muto_avatar',           authAvatar);
+      localStorage.setItem('muto_frame',            authFrame);
+      localStorage.setItem('muto_unlocked_avatars', JSON.stringify(authUnlockedAvatars));
       if (data.loginBonus) showPointToast(`ログインボーナス +${data.loginBonus.toLocaleString()}pt`);
     }
   } catch (e) {
