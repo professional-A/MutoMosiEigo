@@ -310,7 +310,6 @@ app.post('/api/test/predict', auth, async (req, res) => {
 });
 
 app.post('/api/test/score', auth, async (req, res) => {
-  if (req.user.test_pred == null) return res.status(400).json({ error: '先に予測を入力してください' });
   if (req.user.test_score != null) return res.status(400).json({ error: '得点はすでに登録済みです' });
   const { score } = req.body;
   if (score == null || score < 0 || score > 100) return res.status(400).json({ error: '0〜100で入力してください' });
