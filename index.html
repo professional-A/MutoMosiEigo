@@ -625,7 +625,7 @@ h1{
     <div id="survey-msg" style="font-size:.85rem;min-height:1.2em;margin:6px 0"></div>
     <div class="modal-btns">
       <button onclick="submitSurvey()" style="background:var(--teal);color:#0a1626;font-weight:700">回答して 😼 をもらう</button>
-      <button onclick="document.getElementById('survey-modal-bg').classList.remove('open')" style="background:transparent;color:var(--dim);border:1px solid var(--line)">あとで</button>
+      <button onclick="unlockScroll();document.getElementById('survey-modal-bg').classList.remove('open')" style="background:transparent;color:var(--dim);border:1px solid var(--line)">あとで</button>
     </div>
   </div>
 </div>
@@ -928,11 +928,13 @@ async function doLogout() {
 const PRED_DEADLINE = new Date('2026-06-16T00:00:00Z'); // JST 9:00 AM
 
 async function openTestModal() {
+  lockScroll();
   document.getElementById('test-modal-bg').classList.add('open');
   document.getElementById('test-msg').textContent = '';
   await loadTestState();
 }
 function closeTestModal() {
+  unlockScroll();
   document.getElementById('test-modal-bg').classList.remove('open');
 }
 document.getElementById('test-modal-bg').addEventListener('click', e => {
@@ -1081,10 +1083,12 @@ async function submitScoreEdit() {
 
 // ── パスワードログイン ────────────────────────────────────
 function openLoginModal() {
+  lockScroll();
   document.getElementById('login-modal-bg').classList.add('open');
   showLoginTab('login');
 }
 function closeLoginModal() {
+  unlockScroll();
   document.getElementById('login-modal-bg').classList.remove('open');
   document.getElementById('login-msg').textContent = '';
 }
@@ -1212,8 +1216,14 @@ async function syncUser(token) {
   }
 }
 
+// ── スクロールロック ─────────────────────────────────────
+let _scrollLockCount = 0;
+function lockScroll()   { _scrollLockCount++; document.body.style.overflow = 'hidden'; }
+function unlockScroll() { _scrollLockCount = Math.max(0, _scrollLockCount - 1); if (_scrollLockCount === 0) document.body.style.overflow = ''; }
+
 // ── アバター選択 ─────────────────────────────────────────
 function openAvatarModal() {
+  lockScroll();
   selectedAvatar = authAvatar;
   selectedFrame  = authFrame;
   document.getElementById('username-input').value = authUser || '';
@@ -1248,6 +1258,7 @@ function selectFrame(id) {
 }
 
 function closeAvatarModal() {
+  unlockScroll();
   document.getElementById('avatar-modal-bg').classList.remove('open');
   document.getElementById('avatar-msg').textContent = '';
 }
@@ -1318,6 +1329,7 @@ async function loadRanking() {
 
 // ── 管理者 ──────────────────────────────────────────────
 async function openAdminModal() {
+  lockScroll();
   document.getElementById('admin-modal-bg').classList.add('open');
   await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn()]);
 }
@@ -1360,6 +1372,7 @@ async function grantPoints(userId) {
   if (data.ok) { showPointToast(`+${amt.toLocaleString()}pt 付与完了`); await reloadAdminContent(); }
 }
 function closeAdminModal() {
+  unlockScroll();
   document.getElementById('admin-modal-bg').classList.remove('open');
 }
 async function distributePool() {
@@ -1490,6 +1503,7 @@ document.getElementById('admin-modal-bg').addEventListener('click', e => {
 });
 
 async function openMembersModal() {
+  lockScroll();
   document.getElementById('members-modal-bg').classList.add('open');
   const el = document.getElementById('members-content');
   el.innerHTML = '読み込み中...';
@@ -1513,6 +1527,7 @@ async function openMembersModal() {
     </table></div>`;
 }
 function closeMembersModal() {
+  unlockScroll();
   document.getElementById('members-modal-bg').classList.remove('open');
 }
 document.getElementById('members-modal-bg').addEventListener('click', e => {
@@ -1541,6 +1556,7 @@ async function openSurveyModal() {
       return;
     }
   }
+  lockScroll();
   document.getElementById('survey-modal-bg').classList.add('open');
 }
 async function submitSurvey() {
@@ -1577,6 +1593,7 @@ async function submitSurvey() {
     authAvatar = data.avatar;
     localStorage.setItem('muto_avatar', authAvatar);
     updateAuthBar();
+    unlockScroll();
     document.getElementById('survey-modal-bg').classList.remove('open');
     document.getElementById('survey-banner').style.display = 'none';
     setTimeout(() => alert('😼 ひろとアイコンをゲットしました！'), 100);
@@ -1619,8 +1636,11 @@ function toggleNotif() {
   const panel = document.getElementById('notif-panel');
   panel.classList.toggle('open');
   if (panel.classList.contains('open')) {
+    lockScroll();
     localStorage.setItem(NOTIF_KEY, '1');
     document.getElementById('notif-badge').style.display = 'none';
+  } else {
+    unlockScroll();
   }
 }
 // 既読なら初期表示でバッジ非表示

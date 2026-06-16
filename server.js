@@ -52,6 +52,7 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_pred  INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_score INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_bet   INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS prev_frame TEXT DEFAULT 'default'`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
       id         SERIAL PRIMARY KEY,
@@ -88,6 +89,29 @@ async function initDB() {
   await pool.query(`UPDATE users SET frame='default' WHERE frame='worst' AND username != '福澤まさみ'`).catch(()=>{});
   // 田中謙佑に誤付与されたワーストを修正してrainbowに
   await pool.query(`UPDATE users SET frame='rainbow' WHERE username='田中謙佑' AND frame IN ('worst','default')`).catch(()=>{});
+}
+
+// 1位に worst フレームを自動付与・外れたら prev_frame に戻す
+async function syncWorstFrame() {
+  try {
+    const { rows: top } = await pool.query(
+      'SELECT id FROM users ORDER BY points + COALESCE(test_bet,0) DESC LIMIT 1'
+    );
+    if (!top[0]) return;
+    const topId = top[0].id;
+    // 旧1位（worst持ち）からフレームを戻す
+    const { rows: old } = await pool.query(
+      "SELECT id, prev_frame FROM users WHERE frame='worst' AND id != $1", [topId]
+    );
+    for (const u of old) {
+      await pool.query('UPDATE users SET frame=$1 WHERE id=$2', [u.prev_frame || 'default', u.id]);
+    }
+    // 新1位が worst でなければ prev_frame を保存してから worst を付与
+    const { rows: cur } = await pool.query('SELECT frame FROM users WHERE id=$1', [topId]);
+    if (cur[0] && cur[0].frame !== 'worst') {
+      await pool.query('UPDATE users SET prev_frame=frame, frame=\'worst\' WHERE id=$1', [topId]);
+    }
+  } catch(e) {}
 }
 
 // 認証ミドルウェア（Supabase JWT または カスタムセッショントークン）
@@ -188,6 +212,7 @@ app.post('/api/points', auth, async (req, res) => {
   }
   const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id = $1', [req.user.id]);
   res.json({ ok: true, points: dp(rows[0]), delta });
+  if (delta !== 0) syncWorstFrame();
 });
 
 // スコア保存
@@ -339,13 +364,12 @@ app.get('/api/test/results', auth, async (req, res) => {
 });
 
 
-// ポイント1位にワーストフレーム付与
+// ポイント1位にワーストフレーム付与（手動トリガー）
 app.post('/api/admin/award-worst', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  const { rows } = await pool.query('SELECT id, username FROM users ORDER BY points + COALESCE(test_bet,0) DESC LIMIT 1');
-  if (!rows[0]) return res.status(400).json({ error: 'ユーザーが見つかりません' });
-  await pool.query("UPDATE users SET frame='worst' WHERE id=$1", [rows[0].id]);
-  res.json({ ok: true, username: rows[0].username });
+  await syncWorstFrame();
+  const { rows } = await pool.query("SELECT username FROM users WHERE frame='worst' LIMIT 1");
+  res.json({ ok: true, username: rows[0]?.username });
 });
 
 // テスト最下位にバカフレーム付与
@@ -492,6 +516,7 @@ app.post('/api/admin/grant-all', auth, async (req, res) => {
   if (!Number.isInteger(amount) || amount <= 0 || amount > 10000) return res.status(400).json({ error: '不正なポイント数（1〜10000）' });
   const { rows } = await pool.query('UPDATE users SET points = points + $1 RETURNING id, username', [amount]);
   res.json({ ok: true, count: rows.length, amount });
+  syncWorstFrame();
 });
 
 // サイトステータス（公開）
