@@ -87,7 +87,7 @@
     "title": "加工学 ・ 鋳造 確認テスト",
     "path": "tests/2026-4-zenki-chukan-kakougaku-chuzou/",
     "storageKey": "kakougaku_chuzou_v1",
-    "totalItems": 16
+    "totalItems": 21
   },
   {
     "year": 2026,
@@ -97,7 +97,7 @@
     "title": "加工学 ・ 塑性加工 確認テスト",
     "path": "tests/2026-4-zenki-chukan-kakougaku-sosei/",
     "storageKey": "kakougaku_sosei_v1",
-    "totalItems": 16
+    "totalItems": 21
   },
   {
     "year": 2026,
@@ -107,7 +107,7 @@
     "title": "加工学 ・ 接合 確認テスト",
     "path": "tests/2026-4-zenki-chukan-kakougaku-setugou/",
     "storageKey": "kakougaku_setugou_v1",
-    "totalItems": 16
+    "totalItems": 21
   }
 ,
   {
