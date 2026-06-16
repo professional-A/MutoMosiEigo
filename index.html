@@ -288,6 +288,15 @@ h1{
   <div class="notif-header">お知らせ</div>
   <div class="notif-item notif-new">
     <div class="notif-item-date">2026-06-16</div>
+    <div class="notif-item-title">🔴 テスト最下位バカフレーム付与！</div>
+    <div class="notif-item-body">
+      今回のテスト最下位は <strong style="color:#f87171">honari</strong> でした！<br>
+      おめでとう（？）バカフレームをプレゼント🎁<br>
+      次回こそ返上できるか…？
+    </div>
+  </div>
+  <div class="notif-item notif-new">
+    <div class="notif-item-date">2026-06-16</div>
     <div class="notif-item-title">📝 アンケート実施中！</div>
     <div class="notif-item-body">
       英語テストお疲れさまでした！<br>
@@ -1016,8 +1025,10 @@ async function loadTestResults() {
       <tbody>${data.map((r, i) => {
         const isMe = r.username === authUser;
         const err  = r.test_pred != null ? Math.abs(r.test_pred - r.test_score) : '-';
+        const rank = i === 0 ? 1 : (r.test_score === data[i-1].test_score ? data[i-1]._rank : i + 1);
+        r._rank = rank;
         return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
-          <td class="rank-num">${i + 1}</td>
+          <td class="rank-num">${rank}</td>
           <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:22px;height:22px;font-size:.85rem;margin-right:6px;vertical-align:middle">${r.avatar||'🐸'}</span>${r.username}${isMe?' 👈':''}</td>
           <td style="text-align:center">${r.test_pred ?? '―'}</td>
           <td style="text-align:center;font-weight:600">${r.test_score}</td>
