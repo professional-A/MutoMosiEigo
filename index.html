@@ -472,6 +472,7 @@ h1{
       <button id="score-lock-btn" onclick="toggleScoreLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">✏️ 得点入力締め切り</button>
       <button onclick="grantAll()" style="background:#7c3aed;color:#fff;border:none;font-weight:700">🎁 全員配布</button>
       <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 配分</button>
+      <button onclick="viewSurveyResults()" style="background:#0ea5e9;color:#fff;border:none;font-weight:700">📊 アンケート結果</button>
       <button onclick="awardWorstFrame()" style="background:#ff3333;color:#fff;border:none;font-weight:700">🔴 1位に付与</button>
       <button onclick="awardBakaFrame()" style="background:#ff00ff;color:#fff;border:none;font-weight:700">🌟 テスト最下位に付与</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
@@ -1376,6 +1377,35 @@ async function awardWorstFrame() {
     if (data.ok) { alert(`✅ ${data.username} にワーストフレームを付与しました`); await reloadAdminContent(); }
     else alert(`❌ エラー (${res.status}): ${data.error || JSON.stringify(data)}`);
   } catch(e) { alert('❌ 通信エラー: ' + e.message); }
+}
+async function viewSurveyResults() {
+  try {
+    const res  = await fetch('/api/admin/survey', { headers: { 'Authorization': authToken } });
+    const data = await res.json();
+    if (!Array.isArray(data)) { alert('エラー: ' + (data.error || 'unknown')); return; }
+    if (!data.length) { alert('まだ回答がありません'); return; }
+    const qLabels = {
+      sq1:'Q1.クリアしたセクション', sq2:'Q2.主に使ったセクション',
+      sq3:'Q3.役立ち度', sq4:'Q4.自信度', sq5:'Q5.テスト難易度',
+      sq6:'Q6.難易度比較', sq7:'Q7.勉強時間', sq8:'Q8.他の勉強法',
+      sq8_other:'Q8.その他(自由)', sq9:'Q9.自由記述'
+    };
+    const rows = data.map(r => {
+      const a = r.answers;
+      const cells = Object.entries(qLabels).map(([k, label]) => {
+        const v = a[k];
+        return `<td style="padding:4px 8px;border:1px solid var(--line);font-size:.78rem;max-width:160px;white-space:pre-wrap;word-break:break-all">${Array.isArray(v) ? v.join(', ') : (v ?? '―')}</td>`;
+      }).join('');
+      return `<tr><td style="padding:4px 8px;border:1px solid var(--line);font-weight:600;white-space:nowrap">${r.username}</td><td style="padding:4px 8px;border:1px solid var(--line);text-align:center">${r.test_score ?? '―'}</td>${cells}</tr>`;
+    }).join('');
+    const headers = ['名前','得点',...Object.values(qLabels)].map(h => `<th style="padding:4px 8px;border:1px solid var(--line);background:var(--card2);font-size:.75rem;white-space:nowrap">${h}</th>`).join('');
+    const w = window.open('', '_blank');
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>アンケート結果 (${data.length}件)</title>
+    <style>body{font-family:sans-serif;padding:16px;background:#0a1626;color:#e2e8f0}table{border-collapse:collapse}h2{margin-bottom:12px}</style></head>
+    <body><h2>📊 アンケート結果（${data.length}件）</h2>
+    <div style="overflow-x:auto"><table><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table></div></body></html>`);
+    w.document.close();
+  } catch(e) { alert('通信エラー: ' + e.message); }
 }
 async function grantAll() {
   const input = prompt('全プレイヤーに配布するポイント数を入力');
