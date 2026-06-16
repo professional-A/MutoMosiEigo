@@ -509,12 +509,14 @@ h1{
     <p style="font-size:.82rem;color:var(--muted);margin-bottom:18px">回答してくれた人に <strong style="color:var(--teal)">😼 ひろとアイコン</strong> をプレゼント！</p>
 
     <div class="survey-q">
-      <label class="survey-label">Q1. 武藤模試を何回くらい使いましたか？</label>
+      <label class="survey-label">Q1. どのセクションまでクリアしましたか？（複数選択可）</label>
       <div class="survey-opts">
-        <label><input type="radio" name="sq1" value="0"> 使わなかった</label>
-        <label><input type="radio" name="sq1" value="1-2"> 1〜2回</label>
-        <label><input type="radio" name="sq1" value="3-5"> 3〜5回</label>
-        <label><input type="radio" name="sq1" value="6+"> 6回以上</label>
+        <label><input type="checkbox" name="sq1" value="語彙Unit1"> 語彙 Unit 1</label>
+        <label><input type="checkbox" name="sq1" value="語彙Unit2"> 語彙 Unit 2</label>
+        <label><input type="checkbox" name="sq1" value="文法"> 文法・語句選択</label>
+        <label><input type="checkbox" name="sq1" value="ハンドアウト"> ハンドアウト</label>
+        <label><input type="checkbox" name="sq1" value="英語模試"> 英語模試</label>
+        <label><input type="checkbox" name="sq1" value="使わなかった"> 使わなかった</label>
       </div>
     </div>
 
@@ -525,7 +527,6 @@ h1{
         <label><input type="checkbox" name="sq2" value="語彙Unit2"> 語彙 Unit 2</label>
         <label><input type="checkbox" name="sq2" value="文法"> 文法・語句選択</label>
         <label><input type="checkbox" name="sq2" value="ハンドアウト"> ハンドアウト</label>
-        <label><input type="checkbox" name="sq2" value="加工学"> 加工学テスト</label>
         <label><input type="checkbox" name="sq2" value="英語模試"> 英語模試</label>
         <label><input type="checkbox" name="sq2" value="使わなかった"> 使わなかった</label>
       </div>
@@ -598,6 +599,8 @@ h1{
         <label><input type="checkbox" name="sq8" value="過去問"> 過去問を解いた</label>
         <label><input type="checkbox" name="sq8" value="特になし"> 特になし</label>
       </div>
+      <input id="sq8-other" type="text" placeholder="その他（自由記述）"
+        style="margin-top:8px;width:100%;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.85rem;box-sizing:border-box">
     </div>
 
     <div class="survey-q">
@@ -1495,19 +1498,22 @@ async function submitSurvey() {
   const answers = {};
 
   // ラジオ
-  ['sq1','sq3','sq4','sq5','sq6','sq7'].forEach(name => {
+  ['sq3','sq4','sq5','sq6','sq7'].forEach(name => {
     const el = document.querySelector(`input[name="${name}"]:checked`);
     answers[name] = el ? el.value : null;
   });
   // チェックボックス
-  ['sq2','sq8'].forEach(name => {
+  ['sq1','sq2','sq8'].forEach(name => {
     answers[name] = [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(el => el.value);
   });
+  // Q8自由記述
+  const sq8other = document.getElementById('sq8-other').value.trim();
+  if (sq8other) answers.sq8_other = sq8other;
   // 自由記述
   answers.sq9 = document.getElementById('survey-free').value.trim();
 
   // Q1は必須チェック
-  if (!answers.sq1) { msg.style.color='red'; msg.textContent='Q1は回答してください'; return; }
+  if (!answers.sq1.length) { msg.style.color='red'; msg.textContent='Q1は回答してください'; return; }
 
   msg.style.color='var(--muted)'; msg.textContent='送信中...';
   try {
