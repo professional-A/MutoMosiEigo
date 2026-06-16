@@ -414,8 +414,10 @@ app.post('/api/survey', auth, async (req, res) => {
   const { answers } = req.body;
   if (!answers || typeof answers !== 'object') return res.status(400).json({ error: '回答データが不正です' });
   try {
+    const { rows: ex } = await pool.query('SELECT id FROM survey_responses WHERE user_id=$1', [req.user.id]);
+    if (ex.length > 0) return res.status(409).json({ error: '回答済みです' });
     await pool.query(
-      'INSERT INTO survey_responses (user_id, answers) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET answers=$2, created_at=NOW()',
+      'INSERT INTO survey_responses (user_id, answers) VALUES ($1, $2)',
       [req.user.id, JSON.stringify(answers)]
     );
     await pool.query("UPDATE users SET avatar='😼' WHERE id=$1", [req.user.id]);

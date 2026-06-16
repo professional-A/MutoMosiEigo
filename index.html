@@ -1531,7 +1531,15 @@ async function initSurveyBanner() {
     }
   } catch(e) {}
 }
-function openSurveyModal() {
+async function openSurveyModal() {
+  if (authToken) {
+    const res  = await fetch('/api/survey/me', { headers: { 'Authorization': authToken } });
+    const data = await res.json();
+    if (data.submitted) {
+      alert('すでに回答済みです😼');
+      return;
+    }
+  }
   document.getElementById('survey-modal-bg').classList.add('open');
 }
 async function submitSurvey() {
