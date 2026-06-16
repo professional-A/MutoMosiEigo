@@ -268,7 +268,7 @@ app.get('/api/admin/users', auth, async (req, res) => {
 
 // 自分の情報を取得（パスワードユーザーの再ログイン用）
 app.get('/api/me', auth, async (req, res) => {
-  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: dp(req.user) });
+  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: dp(req.user), unlockedAvatars: JSON.parse(req.user.unlocked_avatars || '[]') });
 });
 
 // パスワード登録
