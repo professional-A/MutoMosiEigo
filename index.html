@@ -1524,9 +1524,7 @@ async function initSurveyBanner() {
   try {
     const res  = await fetch('/api/survey/me', { headers: { 'Authorization': authToken } });
     const data = await res.json();
-    if (data.submitted) {
-      document.getElementById('survey-done-banner').style.display = 'block';
-    } else {
+    if (!data.submitted) {
       document.getElementById('survey-banner').style.display = 'flex';
     }
   } catch(e) {}
@@ -1578,7 +1576,6 @@ async function submitSurvey() {
     updateAuthBar();
     document.getElementById('survey-modal-bg').classList.remove('open');
     document.getElementById('survey-banner').style.display = 'none';
-    document.getElementById('survey-done-banner').style.display = 'block';
     setTimeout(() => alert('😼 ひろとアイコンをゲットしました！'), 100);
   } catch(e) { msg.style.color='red'; msg.textContent='通信エラー: ' + e.message; }
 }
