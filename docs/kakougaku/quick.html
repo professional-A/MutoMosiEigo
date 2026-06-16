@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>加工学 超速カンペ</title>
+<style>
+*{margin:0;padding:0;box-sizing:border-box}
+body{font-family:'Yu Gothic','Meiryo',sans-serif;background:#0d1117;color:#e6edf3;font-size:14px;line-height:1.6;padding:12px}
+h1{text-align:center;font-size:20px;color:#58a6ff;padding:10px;border-bottom:2px solid #58a6ff;margin-bottom:12px}
+.grid{display:grid;grid-template-columns:1fr 1fr 1fr;gap:10px}
+@media(max-width:900px){.grid{grid-template-columns:1fr 1fr}}
+@media(max-width:600px){.grid{grid-template-columns:1fr}}
+.card{background:#161b22;border:1px solid #30363d;border-radius:8px;padding:10px}
+.card.red{border-left:4px solid #f85149}
+.card.orange{border-left:4px solid #d29922}
+.card.green{border-left:4px solid #3fb950}
+.card.blue{border-left:4px solid #58a6ff}
+.card h2{font-size:13px;margin-bottom:6px;padding-bottom:4px;border-bottom:1px solid #30363d}
+.card.red h2{color:#f85149}
+.card.orange h2{color:#d29922}
+.card.green h2{color:#3fb950}
+.card.blue h2{color:#58a6ff}
+ul{padding-left:14px;margin:2px 0}
+li{margin:2px 0;font-size:12.5px}
+b{color:#f0f6fc}
+.r{color:#f85149;font-weight:bold}
+.g{color:#3fb950;font-weight:bold}
+.y{color:#d29922;font-weight:bold}
+.bl{color:#79c0ff;font-weight:bold}
+table{width:100%;border-collapse:collapse;font-size:11px;margin-top:4px}
+th,td{border:1px solid #30363d;padding:2px 5px}
+th{background:#21262d;color:#8b949e}
+.badge{display:inline-block;font-size:10px;padding:1px 5px;border-radius:3px;font-weight:bold;margin-right:3px}
+.S{background:#f85149;color:#fff}
+.A{background:#d29922;color:#fff}
+.tag{font-size:10px;color:#8b949e}
+.formula{background:#21262d;border:1px solid #30363d;border-radius:4px;padding:3px 8px;margin:3px 0;font-family:monospace;font-size:12px}
+</style>
+</head>
+<body>
+<h1>⚡ 加工学 超速カンペ — 試験直前30分版</h1>
+
+<div class="grid">
+
+<!-- === 鋳造 ① === -->
+<div class="card red">
+<h2><span class="badge S">S</span>🏭 鋳造：溶湯特性（超頻出）</h2>
+<div class="formula">Alはν小 → 流れやすい → 複雑形状◎</div>
+<div class="formula">鋳鉄はT大 → 砂の隙間に入らない → 砂型◎</div>
+<table>
+<tr><th>材料</th><th>ν(動粘度)</th><th>T(表面張力)</th></tr>
+<tr><td>鋳鉄</td><td class="r">0.7(大)</td><td class="r">≈1.87(大)</td></tr>
+<tr><td>銅</td><td>0.4</td><td>1.36</td></tr>
+<tr><td><b class="g">Al</b></td><td class="g">0.2(小)</td><td class="g">0.91(小)</td></tr>
+</table>
+<ul>
+<li><b>ν小</b>＝流れやすい＝<span class="g">複雑形状充填○</span></li>
+<li><b>T大</b>＝砂の隙間に<span class="r">入らない</span>＝砂型向き</li>
+</ul>
+</div>
+
+<!-- === 鋳造 ② === -->
+<div class="card red">
+<h2><span class="badge S">S</span>🏭 鋳造欠陥と対策</h2>
+<table>
+<tr><th>欠陥</th><th>原因</th><th>対策</th></tr>
+<tr><td class="r">引け巣</td><td>凝固収縮・押し湯不足</td><td><b>押し湯</b>設置</td></tr>
+<tr><td class="r">ブローホール</td><td>ガス・水分巻込み</td><td><b>脱ガス・乾燥</b></td></tr>
+<tr><td class="r">湯回り不良</td><td>流動性低・温度低</td><td><b>温度↑</b>・湯道改善</td></tr>
+<tr><td>割れ</td><td>収縮応力・急冷</td><td><b>徐冷・角R</b></td></tr>
+</table>
+</div>
+
+<!-- === 鋳造 ③ === -->
+<div class="card orange">
+<h2><span class="badge S">S</span>🏭 鋳造法比較</h2>
+<table>
+<tr><th>方法</th><th>精度</th><th>大型</th><th>特徴</th></tr>
+<tr><td>生砂型</td><td>低</td><td class="g">◎</td><td>最安価・繰返し可</td></tr>
+<tr><td>シェル</td><td>高</td><td class="r">×</td><td>表面良</td></tr>
+<tr><td>フルモールド</td><td>中</td><td class="g">◎</td><td><b>消失型</b>・アンダーカット可</td></tr>
+<tr><td class="y">ロストワックス</td><td class="g">最高</td><td class="r">×</td><td>最精密・小型</td></tr>
+<tr><td class="y">ダイカスト</td><td>高</td><td class="r">×</td><td>高圧・大量生産・ガス混入注意</td></tr>
+<tr><td>低圧</td><td>中</td><td>中</td><td>0.05〜0.15MPa・引け巣少</td></tr>
+<tr><td class="y">遠心</td><td>中</td><td>○</td><td><b>円筒・管のみ</b>・外から凝固</td></tr>
+</table>
+<ul style="margin-top:4px">
+<li>ダイカスト：コールドチャンバー（Al・Cu）/ ホットチャンバー（Zn）</li>
+<li>見切り面・<b>抜き勾配</b>・<b>角R</b>・肉厚均一 = 型設計4原則</li>
+</ul>
+</div>
+
+<!-- === 塑性 ① === -->
+<div class="card red">
+<h2><span class="badge S">S</span>⚒ スプリングバック（超頻出）</h2>
+<div class="formula" style="background:#3d1a1a;border-color:#f85149">スプリングバック ∝ σy / E</div>
+<ul>
+<li><span class="r">E（縦弾性係数）が小さい → スプリングバック大</span></li>
+<li><span class="r">σy（降伏応力）が大きい → スプリングバック大</span></li>
+<li>ハイテン（高張力鋼）→ σy大 → <span class="r">問題大</span></li>
+<li>対策：オーバーベンド・ボトミング・サーボプレス</li>
+</ul>
+<div class="formula">真ひずみ ε = ln(l/l₀)　　体積一定：ε₁+ε₂+ε₃=0</div>
+<div class="formula">トレスカ：τmax = σy/2　　ミーゼス：実験値に近い</div>
+</div>
+
+<!-- === 塑性 ② === -->
+<div class="card orange">
+<h2><span class="badge S">S</span>⚒ 加工温度区分</h2>
+<table>
+<tr><th>区分</th><th>温度</th><th>特徴</th></tr>
+<tr><td class="r">熱間</td><td>再結晶<b>以上</b></td><td>変形抵抗小・加工硬化なし・スケール</td></tr>
+<tr><td class="y">温間</td><td>前後</td><td>中間・Mg/Ti向き</td></tr>
+<tr><td class="g">冷間</td><td>再結晶<b>以下</b></td><td>高精度・加工硬化大・残留応力</td></tr>
+</table>
+<ul style="margin-top:4px">
+<li>Al再結晶≈150℃　Fe再結晶≈450〜600℃</li>
+<li><b>FCC</b>（Al・Cu）延性大◎　<b>HCP</b>（Mg・Ti）延性小→温間必要</li>
+</ul>
+<hr style="border-color:#30363d;margin:5px 0">
+<b>主な加工法：</b>
+<ul>
+<li>圧延：V₀A₀=VrAr（体積保存）</li>
+<li>鍛造：ファイバーフロー→<span class="g">疲労強度最高</span></li>
+<li>転造：ネジ・歯車・加工硬化→疲労強度↑・材料ロスなし</li>
+<li>深絞り：LDR=D₀/d₁≈2.0〜2.2　しわ押えで割れ防止</li>
+<li>せん断：クリアランス=板厚の5〜10%</li>
+</ul>
+</div>
+
+<!-- === 接合 ① === -->
+<div class="card red">
+<h2><span class="badge S">S</span>🔗 溶接部の名称（超頻出）</h2>
+<table>
+<tr><th>名称</th><th>説明</th></tr>
+<tr><td class="r">ビード</td><td>溶接金属が凝固した部分</td></tr>
+<tr><td class="r">ボンド</td><td>溶接金属と母材の境界</td></tr>
+<tr><td class="r">HAZ</td><td>溶融しないが熱で組織変化した部分 → 破断起点</td></tr>
+</table>
+<hr style="border-color:#30363d;margin:5px 0">
+<b>接合の分類：</b>
+<ul>
+<li>機械的：ボルト・リベット・<b class="y">SPR</b>（異種材・孔なし）・焼きばめ</li>
+<li>冶金的（融接）：アーク・ガス・レーザー等</li>
+<li>冶金的（圧接）：スポット・FSW</li>
+<li>ろう付け：母材<b>溶かさない</b>→熱影響小・異種材可</li>
+</ul>
+</div>
+
+<!-- === 接合 ② === -->
+<div class="card red">
+<h2><span class="badge S">S</span>🔗 溶接法比較（超頻出）</h2>
+<table>
+<tr><th>方法</th><th>シールド</th><th>用途</th></tr>
+<tr><td class="y">MAG</td><td class="r">Ar+CO₂</td><td><b class="r">鉄系</b>・高速・自動化</td></tr>
+<tr><td class="y">MIG</td><td class="g">Ar</td><td><b class="g">Al・非鉄</b>・ステン</td></tr>
+<tr><td class="y">TIG</td><td class="g">Ar・W非消耗電極</td><td>薄板精密・全材質・低速</td></tr>
+<tr><td>被覆アーク</td><td>被覆（スラグ）</td><td>現場・安価</td></tr>
+<tr><td>SAW</td><td>フラックス（粉末）</td><td><b>厚板◎</b>・船・橋</td></tr>
+<tr><td>エレクトロスラグ</td><td>スラグ（ジュール熱）</td><td><b>超厚板1パス</b>↑向き</td></tr>
+<tr><td>レーザー</td><td>不要</td><td>キーホール・深溶込・HAZ小</td></tr>
+<tr><td>電子ビーム</td><td><b>真空中</b></td><td>Ti等活性金属・精密</td></tr>
+<tr><td>スポット</td><td>なし（ジュール熱）</td><td>自動車ボディ・点接合</td></tr>
+</table>
+</div>
+
+<!-- === 接合 ③ FSW === -->
+<div class="card orange">
+<h2><span class="badge A">A</span>🔗 FSW・ろう付け・検査</h2>
+<b>FSW（摩擦攪拌接合）</b>
+<ul>
+<li>回転ツールの摩擦熱で<span class="bl">固相（溶融なし）</span>接合</li>
+<li>○ <span class="g">熱ひずみ小・欠陥少・Al/Mg◎</span></li>
+<li>700系新幹線床材・自動車・造船</li>
+<li>1991年英国TWI開発</li>
+</ul>
+<hr style="border-color:#30363d;margin:5px 0">
+<b>ろう付け</b>
+<ul>
+<li>母材<b>溶かさず</b>ろう材で接合</li>
+<li><span class="r">硬ろう</span>：融点 <b>≥ 450℃</b>（銀ろう・銅ろう）</li>
+<li><span class="g">軟ろう</span>：融点 <b>&lt; 450℃</b>（はんだ）→電子部品</li>
+</ul>
+<hr style="border-color:#30363d;margin:5px 0">
+<b>非破壊検査</b>
+<table>
+<tr><th>検査</th><th>内/表</th><th>ポイント</th></tr>
+<tr><td>RT（放射線）</td><td class="y">内部</td><td>引け巣・ブローホール</td></tr>
+<tr><td>UT（超音波）</td><td class="y">内部</td><td>厚板・現場可</td></tr>
+<tr><td>PT（浸透）</td><td class="g">表面</td><td><b>非磁性体もOK</b></td></tr>
+<tr><td>MT（磁粉）</td><td class="g">表面</td><td><b>磁性体のみ</b>（Al不可）</td></tr>
+<tr><td>ECT（渦電流）</td><td class="g">表面</td><td>導電体・高速</td></tr>
+</table>
+</div>
+
+<!-- === 欠陥・変形 === -->
+<div class="card orange">
+<h2><span class="badge A">A</span>🔗 溶接欠陥と変形</h2>
+<table>
+<tr><th>欠陥</th><th>原因・ポイント</th></tr>
+<tr><td class="r">ポロシティ</td><td>ガス孔（H₂・CO）→脱ガス・乾燥</td></tr>
+<tr><td class="r">低温割れ</td><td>水素＋マルテンサイト→予熱・後熱（PWHT）</td></tr>
+<tr><td>アンダーカット</td><td>電流過大→母材が溝状に</td></tr>
+<tr><td>溶込み不良</td><td>入熱不足→強度大幅低下</td></tr>
+</table>
+<ul style="margin-top:4px">
+<li><b>変形メカニズム</b>：加熱→膨張しようとする→拘束→塑性変形→冷却収縮→残留応力・変形</li>
+<li><b>PWHT</b>：550〜650℃→残留応力低減・靱性回復・H₂逸散</li>
+<li><b>引張残留応力</b>→疲労亀裂進展→ショットピーニングで圧縮化</li>
+</ul>
+</div>
+
+<!-- === まとめ === -->
+<div class="card blue" style="grid-column:1/-1">
+<h2>⚡ 30秒まとめ — 絶対に覚える10項目</h2>
+<div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:6px;margin-top:6px">
+<div><span class="badge S">S</span> <b class="r">Al=ν小→複雑形状</b> / 鋳鉄=T大→砂型</div>
+<div><span class="badge S">S</span> 引け巣→<b>押し湯</b> / ブローホール→<b>脱ガス</b></div>
+<div><span class="badge S">S</span> ロストワックス=最高精度 / 遠心=円筒のみ</div>
+<div><span class="badge S">S</span> <b class="r">スプリングバック∝σy/E → E小で大きい</b></div>
+<div><span class="badge S">S</span> 熱間=再結晶以上 / 冷間=以下 / 鍛造=疲労強度最高</div>
+<div><span class="badge S">S</span> HAZ=溶融しないが組織変化→破断起点</div>
+<div><span class="badge S">S</span> <b class="r">MAG=Ar+CO₂→鉄系</b> / <b class="g">MIG=Ar→非鉄</b></div>
+<div><span class="badge S">S</span> TIG=W非消耗・Ar・薄板精密</div>
+<div><span class="badge A">A</span> FSW=固相・Al◎・熱ひずみ小 / 硬ろう≥450℃ / 軟ろう&lt;450℃</div>
+<div><span class="badge A">A</span> RT・UT=内部欠陥 / PT=表面・非磁性OK / MT=表面・磁性体のみ</div>
+</div>
+</div>
+
+</div>
+</body>
+</html>
