@@ -379,6 +379,15 @@ h1{
         </div>
         <p style="font-size:.78rem;color:var(--dim);margin-top:10px;margin-bottom:0">配分は管理者が実行後に反映されます</p>
       </div>
+      <div id="done-edit-wrap" style="margin-top:8px">
+        <p style="font-size:.82rem;color:var(--muted);margin-bottom:8px">入力を間違えた場合は修正できます（締め切り前のみ）</p>
+        <div style="display:flex;gap:8px;align-items:center;margin-bottom:10px">
+          <input id="score-input-edit" type="number" min="0" max="100" placeholder="0〜100"
+            style="width:100px;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-size:1.1rem;font-family:inherit">
+          <span style="color:var(--muted)">点 / 100点</span>
+        </div>
+        <button onclick="submitScoreEdit()" style="padding:8px 20px;border:none;border-radius:8px;background:var(--amber);color:#0a1626;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer">修正する</button>
+      </div>
     </div>
 
     <div id="test-msg" style="margin:8px 0;font-size:.85rem;min-height:1.2em"></div>
@@ -904,6 +913,20 @@ async function submitScore() {
   authPoints = data.points ?? authPoints;
   updateAuthBar();
   msg.textContent=''; await loadTestState();
+}
+
+async function submitScoreEdit() {
+  const val  = parseInt(document.getElementById('score-input-edit').value);
+  const msg  = document.getElementById('test-msg');
+  if (isNaN(val) || val < 0 || val > 100) { msg.style.color='red'; msg.textContent='0〜100で入力してください'; return; }
+  msg.style.color='var(--muted)'; msg.textContent='修正中...';
+  const res  = await fetch('/api/test/score', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({score:val}) });
+  const data = await res.json();
+  if (data.error) { msg.style.color='red'; msg.textContent=data.error; return; }
+  authPoints = data.points ?? authPoints;
+  updateAuthBar();
+  msg.style.color='var(--teal)'; msg.textContent='修正しました！';
+  await loadTestState();
 }
 
 // ── パスワードログイン ────────────────────────────────────
