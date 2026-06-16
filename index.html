@@ -439,6 +439,7 @@ h1{
     <div id="admin-content" style="flex:1;overflow-y:auto;min-height:0;padding-right:2px"></div>
     <div class="modal-btns" style="margin-top:12px;flex-shrink:0;flex-wrap:wrap;gap:8px">
       <button id="lock-btn" onclick="toggleSiteLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🔒 アクセス制限</button>
+      <button id="score-lock-btn" onclick="toggleScoreLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">✏️ 得点入力締め切り</button>
       <button onclick="grantAll()" style="background:#7c3aed;color:#fff;border:none;font-weight:700">🎁 全員配布</button>
       <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 配分</button>
       <button onclick="awardWorstFrame()" style="background:#ff3333;color:#fff;border:none;font-weight:700">🔴 1位に付与</button>
@@ -1144,7 +1145,7 @@ async function loadRanking() {
 // ── 管理者 ──────────────────────────────────────────────
 async function openAdminModal() {
   document.getElementById('admin-modal-bg').classList.add('open');
-  await Promise.all([reloadAdminContent(), updateLockBtn()]);
+  await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn()]);
 }
 async function reloadAdminContent() {
   const el = document.getElementById('admin-content');
@@ -1254,6 +1255,29 @@ async function toggleSiteLock() {
     const res  = await fetch(endpoint, { method:'POST', headers:{'Authorization':authToken} });
     const data = await res.json();
     if (data.ok) await updateLockBtn();
+    else alert('エラー: ' + (data.error || 'unknown'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+let _scoreLocked = false;
+async function updateScoreLockBtn() {
+  try {
+    const res = await fetch('/api/score-status');
+    const data = await res.json();
+    _scoreLocked = data.locked;
+  } catch(e) {}
+  const btn = document.getElementById('score-lock-btn');
+  if (!btn) return;
+  btn.textContent = _scoreLocked ? '✏️ 得点入力を再開' : '✏️ 得点入力締め切り';
+  btn.style.background = _scoreLocked ? '#16a34a' : '#dc2626';
+}
+async function toggleScoreLock() {
+  const endpoint = _scoreLocked ? '/api/admin/unlock-score' : '/api/admin/lock-score';
+  const label    = _scoreLocked ? '得点入力を再開' : '得点入力を締め切り（配分直前に押す）';
+  if (!confirm(`${label}しますか？`)) return;
+  try {
+    const res  = await fetch(endpoint, { method:'POST', headers:{'Authorization':authToken} });
+    const data = await res.json();
+    if (data.ok) await updateScoreLockBtn();
     else alert('エラー: ' + (data.error || 'unknown'));
   } catch(e) { alert('通信エラー: ' + e.message); }
 }

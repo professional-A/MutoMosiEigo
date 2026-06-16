@@ -11,6 +11,7 @@ function bonusDay() { return new Date(Date.now() + 4 * 60 * 60 * 1000).toISOStri
 function dp(u) { return (u.points || 0) + (u.test_bet || 0); } // 表示ポイント（賭け中含む）
 
 let siteLocked = false; // 管理者によるアクセス制限フラグ
+let scoreInputLocked = false; // 得点入力締め切りフラグ
 
 const app = express();
 const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
@@ -310,7 +311,7 @@ app.post('/api/test/predict', auth, async (req, res) => {
 });
 
 app.post('/api/test/score', auth, async (req, res) => {
-  if (req.user.test_score != null) return res.status(400).json({ error: '得点はすでに登録済みです' });
+  if (scoreInputLocked) return res.status(423).json({ error: '得点入力は締め切られました' });
   const { score } = req.body;
   if (score == null || score < 0 || score > 100) return res.status(400).json({ error: '0〜100で入力してください' });
   await pool.query('UPDATE users SET test_score=$1 WHERE id=$2', [score, req.user.id]);
@@ -452,6 +453,27 @@ app.get('/api/site-status', async (req, res) => {
   res.json({ locked: siteLocked });
 });
 
+// 得点入力ステータス（公開）
+app.get('/api/score-status', async (req, res) => {
+  res.json({ locked: scoreInputLocked });
+});
+
+// 管理者：得点入力締め切り
+app.post('/api/admin/lock-score', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  scoreInputLocked = true;
+  await pool.query("INSERT INTO settings (key, value) VALUES ('score_locked','true') ON CONFLICT (key) DO UPDATE SET value='true'");
+  res.json({ ok: true });
+});
+
+// 管理者：得点入力締め切り解除
+app.post('/api/admin/unlock-score', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  scoreInputLocked = false;
+  await pool.query("INSERT INTO settings (key, value) VALUES ('score_locked','false') ON CONFLICT (key) DO UPDATE SET value='false'");
+  res.json({ ok: true });
+});
+
 // 管理者：サイトロック
 app.post('/api/admin/lock', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
@@ -475,5 +497,7 @@ initDB().then(async () => {
   // DB からロック状態を復元
   const { rows } = await pool.query("SELECT value FROM settings WHERE key='site_locked'").catch(() => ({ rows: [] }));
   siteLocked = rows[0]?.value === 'true';
+  const { rows: sr } = await pool.query("SELECT value FROM settings WHERE key='score_locked'").catch(() => ({ rows: [] }));
+  scoreInputLocked = sr[0]?.value === 'true';
   app.listen(PORT, () => console.log(`サーバー起動中 → http://localhost:${PORT}`));
 });
