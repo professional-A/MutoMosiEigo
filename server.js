@@ -76,6 +76,14 @@ async function initDB() {
       value TEXT NOT NULL
     )
   `).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS survey_responses (
+      id         SERIAL PRIMARY KEY,
+      user_id    INTEGER NOT NULL UNIQUE REFERENCES users(id) ON DELETE CASCADE,
+      answers    JSONB NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `).catch(()=>{});
   // 福澤まさみ以外のワーストフレームをリセット（一回限り）
   await pool.query(`UPDATE users SET frame='default' WHERE frame='worst' AND username != '福澤まさみ'`).catch(()=>{});
 }
@@ -393,6 +401,40 @@ app.post('/api/admin/distribute-pool', auth, async (req, res) => {
   // 賭け金をリセット（配分後は test_bet を表示ポイントに二重計上しない）
   await pool.query('UPDATE users SET test_bet=NULL WHERE test_bet IS NOT NULL');
   res.json({ ok: true, totalPool, payouts });
+});
+
+// アンケート回答済み確認
+app.get('/api/survey/me', auth, async (req, res) => {
+  const { rows } = await pool.query('SELECT id FROM survey_responses WHERE user_id=$1', [req.user.id]);
+  res.json({ submitted: rows.length > 0 });
+});
+
+// アンケート送信
+app.post('/api/survey', auth, async (req, res) => {
+  const { answers } = req.body;
+  if (!answers || typeof answers !== 'object') return res.status(400).json({ error: '回答データが不正です' });
+  try {
+    await pool.query(
+      'INSERT INTO survey_responses (user_id, answers) VALUES ($1, $2) ON CONFLICT (user_id) DO UPDATE SET answers=$2, created_at=NOW()',
+      [req.user.id, JSON.stringify(answers)]
+    );
+    await pool.query("UPDATE users SET avatar='😼' WHERE id=$1", [req.user.id]);
+    const { rows } = await pool.query('SELECT points, test_bet, avatar FROM users WHERE id=$1', [req.user.id]);
+    res.json({ ok: true, avatar: rows[0].avatar });
+  } catch(e) {
+    res.status(500).json({ error: 'サーバーエラー' });
+  }
+});
+
+// 管理者：アンケート結果一覧
+app.get('/api/admin/survey', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { rows } = await pool.query(`
+    SELECT u.username, u.test_score, s.answers, s.created_at
+    FROM survey_responses s JOIN users u ON u.id = s.user_id
+    ORDER BY s.created_at ASC
+  `);
+  res.json(rows);
 });
 
 // 特定ユーザーの得点をリセット（管理者のみ）

@@ -125,6 +125,17 @@ h1{
   #auth-status{font-size:.75rem;white-space:nowrap}
 }
 
+/* アンケート */
+.survey-q{margin-bottom:18px}
+.survey-label{display:block;font-size:.88rem;font-weight:600;color:var(--ink);margin-bottom:8px}
+.survey-opts{display:flex;flex-direction:column;gap:6px}
+.survey-opts label{display:flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted);cursor:pointer}
+.survey-opts label:hover{color:var(--ink)}
+.survey-opts input[type=radio],.survey-opts input[type=checkbox]{accent-color:var(--teal);width:15px;height:15px;flex-shrink:0}
+.survey-scale{flex-direction:row;align-items:center;flex-wrap:wrap;gap:4px}
+.survey-scale label{flex-direction:column;gap:2px;align-items:center;min-width:32px}
+.scale-edge{font-size:.72rem;color:var(--dim);white-space:nowrap}
+
 /* お知らせ */
 .notif-btn{
   position:relative;background:none;border:none;cursor:pointer;
@@ -491,6 +502,118 @@ h1{
   </div>
 </div>
 
+<!-- アンケートモーダル -->
+<div class="modal-bg" id="survey-modal-bg">
+  <div class="modal" style="width:min(560px,95vw);max-height:90vh;overflow-y:auto">
+    <h2>📝 英語テスト アンケート</h2>
+    <p style="font-size:.82rem;color:var(--muted);margin-bottom:18px">回答してくれた人に <strong style="color:var(--teal)">😼 ひろとアイコン</strong> をプレゼント！</p>
+
+    <div class="survey-q">
+      <label class="survey-label">Q1. 武藤模試を何回くらい使いましたか？</label>
+      <div class="survey-opts">
+        <label><input type="radio" name="sq1" value="0"> 使わなかった</label>
+        <label><input type="radio" name="sq1" value="1-2"> 1〜2回</label>
+        <label><input type="radio" name="sq1" value="3-5"> 3〜5回</label>
+        <label><input type="radio" name="sq1" value="6+"> 6回以上</label>
+      </div>
+    </div>
+
+    <div class="survey-q">
+      <label class="survey-label">Q2. 主に使ったセクションは？（複数選択可）</label>
+      <div class="survey-opts">
+        <label><input type="checkbox" name="sq2" value="語彙Unit1"> 語彙 Unit 1</label>
+        <label><input type="checkbox" name="sq2" value="語彙Unit2"> 語彙 Unit 2</label>
+        <label><input type="checkbox" name="sq2" value="文法"> 文法・語句選択</label>
+        <label><input type="checkbox" name="sq2" value="ハンドアウト"> ハンドアウト</label>
+        <label><input type="checkbox" name="sq2" value="加工学"> 加工学テスト</label>
+        <label><input type="checkbox" name="sq2" value="英語模試"> 英語模試</label>
+        <label><input type="checkbox" name="sq2" value="使わなかった"> 使わなかった</label>
+      </div>
+    </div>
+
+    <div class="survey-q">
+      <label class="survey-label">Q3. 武藤模試はテスト勉強に役立ちましたか？</label>
+      <div class="survey-opts survey-scale">
+        <span class="scale-edge">全く役立たなかった</span>
+        <label><input type="radio" name="sq3" value="1"> 1</label>
+        <label><input type="radio" name="sq3" value="2"> 2</label>
+        <label><input type="radio" name="sq3" value="3"> 3</label>
+        <label><input type="radio" name="sq3" value="4"> 4</label>
+        <label><input type="radio" name="sq3" value="5"> 5</label>
+        <span class="scale-edge">とても役立った</span>
+      </div>
+    </div>
+
+    <div class="survey-q">
+      <label class="survey-label">Q4. 武藤模試を使って自信はつきましたか？</label>
+      <div class="survey-opts survey-scale">
+        <span class="scale-edge">全くつかなかった</span>
+        <label><input type="radio" name="sq4" value="1"> 1</label>
+        <label><input type="radio" name="sq4" value="2"> 2</label>
+        <label><input type="radio" name="sq4" value="3"> 3</label>
+        <label><input type="radio" name="sq4" value="4"> 4</label>
+        <label><input type="radio" name="sq4" value="5"> 5</label>
+        <span class="scale-edge">とても自信がついた</span>
+      </div>
+    </div>
+
+    <div class="survey-q">
+      <label class="survey-label">Q5. 実際のテストはどのくらい難しかったですか？</label>
+      <div class="survey-opts survey-scale">
+        <span class="scale-edge">とても簡単</span>
+        <label><input type="radio" name="sq5" value="1"> 1</label>
+        <label><input type="radio" name="sq5" value="2"> 2</label>
+        <label><input type="radio" name="sq5" value="3"> 3</label>
+        <label><input type="radio" name="sq5" value="4"> 4</label>
+        <label><input type="radio" name="sq5" value="5"> 5</label>
+        <span class="scale-edge">とても難しかった</span>
+      </div>
+    </div>
+
+    <div class="survey-q">
+      <label class="survey-label">Q6. 武藤模試と実際のテストの難易度を比べると？</label>
+      <div class="survey-opts">
+        <label><input type="radio" name="sq6" value="模試の方が難しい"> 武藤模試の方が難しかった</label>
+        <label><input type="radio" name="sq6" value="同じくらい"> 同じくらいだった</label>
+        <label><input type="radio" name="sq6" value="本番の方が難しい"> 実際のテストの方が難しかった</label>
+      </div>
+    </div>
+
+    <div class="survey-q">
+      <label class="survey-label">Q7. テスト前の総勉強時間はどのくらいでしたか？（武藤模試含む）</label>
+      <div class="survey-opts">
+        <label><input type="radio" name="sq7" value="30分未満"> 30分未満</label>
+        <label><input type="radio" name="sq7" value="30分-1時間"> 30分〜1時間</label>
+        <label><input type="radio" name="sq7" value="1-3時間"> 1〜3時間</label>
+        <label><input type="radio" name="sq7" value="3時間以上"> 3時間以上</label>
+      </div>
+    </div>
+
+    <div class="survey-q">
+      <label class="survey-label">Q8. 武藤模試以外に使った勉強方法は？（複数選択可）</label>
+      <div class="survey-opts">
+        <label><input type="checkbox" name="sq8" value="教科書"> 教科書を読み直した</label>
+        <label><input type="checkbox" name="sq8" value="ノート"> ノートを見直した</label>
+        <label><input type="checkbox" name="sq8" value="友達と勉強"> 友達と一緒に勉強した</label>
+        <label><input type="checkbox" name="sq8" value="過去問"> 過去問を解いた</label>
+        <label><input type="checkbox" name="sq8" value="特になし"> 特になし</label>
+      </div>
+    </div>
+
+    <div class="survey-q">
+      <label class="survey-label">Q9. 感想・改善してほしい点など（自由記述）</label>
+      <textarea id="survey-free" rows="3" placeholder="なんでも書いてね！"
+        style="width:100%;padding:9px 11px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.88rem;resize:vertical;box-sizing:border-box"></textarea>
+    </div>
+
+    <div id="survey-msg" style="font-size:.85rem;min-height:1.2em;margin:6px 0"></div>
+    <div class="modal-btns">
+      <button onclick="submitSurvey()" style="background:var(--teal);color:#0a1626;font-weight:700">回答して 😼 をもらう</button>
+      <button onclick="document.getElementById('survey-modal-bg').classList.remove('open')" style="background:transparent;color:var(--dim);border:1px solid var(--line)">あとで</button>
+    </div>
+  </div>
+</div>
+
 <header>
   <div class="wrap">
     <div class="eyebrow">Study Portal</div>
@@ -508,6 +631,17 @@ h1{
       " onmouseover="this.style.background='rgba(70,214,196,.22)'" onmouseout="this.style.background='rgba(70,214,196,.12)'">
         📋 資料 — 加工学
       </a>
+    </div>
+
+    <div id="survey-banner" style="display:none;margin-top:20px;background:linear-gradient(135deg,rgba(70,214,196,.12),rgba(246,179,82,.10));border:1px solid var(--teal);border-radius:14px;padding:14px 18px;display:flex;align-items:center;gap:14px;flex-wrap:wrap">
+      <div style="flex:1;min-width:180px">
+        <div style="font-size:.95rem;font-weight:700;color:var(--ink);margin-bottom:3px">📝 英語テスト アンケート</div>
+        <div style="font-size:.8rem;color:var(--muted)">回答で <strong style="color:var(--teal)">😼 ひろとアイコン</strong> プレゼント！</div>
+      </div>
+      <button onclick="openSurveyModal()" style="padding:9px 22px;border:none;border-radius:99px;background:var(--teal);color:#0a1626;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;white-space:nowrap">回答する →</button>
+    </div>
+    <div id="survey-done-banner" style="display:none;margin-top:20px;background:rgba(70,214,196,.08);border:1px solid var(--line);border-radius:14px;padding:12px 18px;font-size:.85rem;color:var(--muted)">
+      😼 アンケート回答済み！ひろとアイコンをゲットしました
     </div>
 
     <details style="margin-top:20px" id="contact-details">
@@ -967,6 +1101,7 @@ function applyPasswordLogin(data) {
   if (data.loginBonus) showPointToast(`ログインボーナス +${data.loginBonus.toLocaleString()}pt`);
   closeLoginModal();
   updateAuthBar();
+  initSurveyBanner();
 }
 async function doPasswordLogin() {
   const username = document.getElementById('pw-username').value.trim();
@@ -1339,6 +1474,60 @@ document.getElementById('members-modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeMembersModal();
 });
 
+// ── アンケート ───────────────────────────────────────────
+async function initSurveyBanner() {
+  if (!authToken) return;
+  try {
+    const res  = await fetch('/api/survey/me', { headers: { 'Authorization': authToken } });
+    const data = await res.json();
+    if (data.submitted) {
+      document.getElementById('survey-done-banner').style.display = 'block';
+    } else {
+      document.getElementById('survey-banner').style.display = 'flex';
+    }
+  } catch(e) {}
+}
+function openSurveyModal() {
+  document.getElementById('survey-modal-bg').classList.add('open');
+}
+async function submitSurvey() {
+  const msg = document.getElementById('survey-msg');
+  const answers = {};
+
+  // ラジオ
+  ['sq1','sq3','sq4','sq5','sq6','sq7'].forEach(name => {
+    const el = document.querySelector(`input[name="${name}"]:checked`);
+    answers[name] = el ? el.value : null;
+  });
+  // チェックボックス
+  ['sq2','sq8'].forEach(name => {
+    answers[name] = [...document.querySelectorAll(`input[name="${name}"]:checked`)].map(el => el.value);
+  });
+  // 自由記述
+  answers.sq9 = document.getElementById('survey-free').value.trim();
+
+  // Q1は必須チェック
+  if (!answers.sq1) { msg.style.color='red'; msg.textContent='Q1は回答してください'; return; }
+
+  msg.style.color='var(--muted)'; msg.textContent='送信中...';
+  try {
+    const res  = await fetch('/api/survey', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ answers })
+    });
+    const data = await res.json();
+    if (!data.ok) { msg.style.color='red'; msg.textContent=data.error||'エラーが発生しました'; return; }
+    authAvatar = data.avatar;
+    localStorage.setItem('muto_avatar', authAvatar);
+    updateAuthBar();
+    document.getElementById('survey-modal-bg').classList.remove('open');
+    document.getElementById('survey-banner').style.display = 'none';
+    document.getElementById('survey-done-banner').style.display = 'block';
+    setTimeout(() => alert('😼 ひろとアイコンをゲットしました！'), 100);
+  } catch(e) { msg.style.color='red'; msg.textContent='通信エラー: ' + e.message; }
+}
+
 // ── お知らせ ────────────────────────────────────────────
 const NOTIF_KEY = 'muto_notif_read_3';
 const LEADER_MSGS = [
@@ -1404,11 +1593,13 @@ supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
     }
   }
   updateAuthBar();
+  initSurveyBanner();
 
   supabaseClient.auth.onAuthStateChange(async (event, session) => {
     if (event === 'SIGNED_IN' && session) {
       authToken = session.access_token;
       await syncUser(authToken);
+      initSurveyBanner();
     } else if (event === 'SIGNED_OUT') {
       if (!localStorage.getItem('muto_session')) {
         authToken = null; authUser = null; authEmail = null; authPoints = 0;
