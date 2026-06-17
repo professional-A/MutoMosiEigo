@@ -170,5 +170,16 @@
     "path": "tests/2026-4-zenki-chukan-seigyogaku-block-laplace/",
     "storageKey": "seigyo_block_laplace_v2",
     "totalItems": 45
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "制御工学Ⅰ",
+    "title": "制御工学Ⅰ ・ まとめノート",
+    "path": "tests/2026-4-zenki-chukan-seigyogaku-summary/",
+    "storageKey": null,
+    "totalItems": 0,
+    "type": "summary"
   }
 ]

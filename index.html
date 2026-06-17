@@ -876,6 +876,7 @@ function renderGroups() {
 
   document.getElementById("groups").innerHTML = sortedKeys.map(key => {
     const cards = groupMap.get(key).map(t => {
+      const isSummary = t.type === "summary";
       const { done, total } = getProgress(t.storageKey, t.totalItems);
       const pct = total ? Math.round(done / total * 100) : 0;
       const untouched = done === 0;
@@ -883,12 +884,17 @@ function renderGroups() {
         <a class="card" href="${t.path}">
           <div class="card-exam">${t.year}年度 ${t.grade}年 ${t.exam}</div>
           <div class="card-subject">${t.title || t.subject}</div>
+          ${isSummary ? `
+          <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%;background:linear-gradient(90deg,#46d6c4,#1f9e90)"></div></div>
+          <div class="progress-text" style="color:#46d6c4">📖 まとめ・参照用</div>
+          ` : `
           <div class="progress-bar-wrap">
             <div class="progress-bar" style="width:${pct}%"></div>
           </div>
           <div class="progress-text${untouched ? " untouched" : ""}">
             ${untouched ? "未着手" : `${done} / ${total} 問`}
           </div>
+          `}
           <div class="card-arrow">開く →</div>
         </a>`;
     }).join("");
