@@ -1730,6 +1730,7 @@ function closeScoresModal() {
 document.getElementById('scores-modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeScoresModal();
 });
+let _scSort = { key: '_avg', dir: 1 };
 async function loadScores() {
   const el = document.getElementById('scores-content');
   try {
@@ -1743,57 +1744,96 @@ async function loadScores() {
       r._avg = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
     });
 
-    // 平均点の低い順にソート、未入力は末尾
-    const sorted = [...data].sort((a, b) => {
+    // 平均順位は常に固定（# 列用）
+    const avgSorted = [...data].sort((a, b) => {
       if (a._avg == null && b._avg == null) return 0;
       if (a._avg == null) return 1;
       if (b._avg == null) return -1;
       return a._avg - b._avg;
     });
+    let rnk = 0, prevA = null;
+    const avgRankMap = {};
+    avgSorted.forEach((r, i) => {
+      if (r._avg == null) { avgRankMap[r.username] = null; return; }
+      if (r._avg !== prevA) { rnk = i + 1; prevA = r._avg; }
+      avgRankMap[r.username] = rnk;
+    });
 
-    // 平均順位（同点同順位）
-    let rank = 0, prevAvg = null;
-    sorted.forEach((r, i) => {
-      if (r._avg == null) { r._rank = null; return; }
-      if (r._avg !== prevAvg) { rank = i + 1; prevAvg = r._avg; }
-      r._rank = rank;
+    // 選択キーでソート、未入力は末尾
+    const sorted = [...data].sort((a, b) => {
+      const k = _scSort.key;
+      const av = a[k], bv = b[k];
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      return (av - bv) * _scSort.dir;
     });
 
     const sc = v => v != null
       ? `<span style="font-weight:700;color:var(--teal)">${v}</span>`
       : `<span style="color:var(--dim);font-size:.8rem">―</span>`;
 
+    const th = (key, label, extraStyle='') => {
+      const active = _scSort.key === key;
+      const arr = active ? (_scSort.dir === 1 ? ' ↑' : ' ↓') : '';
+      const col = active ? ';color:var(--amber)' : '';
+      return `<th style="text-align:center;cursor:pointer;user-select:none${col}${extraStyle}" onclick="sortScores('${key}')">${label}${arr}</th>`;
+    };
+
+    const rows = sorted.map(r => {
+      const isMe = r.username === authUser;
+      const isMitts = r.username === 'ミッツ';
+      const ar = avgRankMap[r.username];
+      const rankTd = ar != null
+        ? `<td class="rank-num${ar <= 3 ? ' top' : ''}">${ar}</td>`
+        : `<td class="rank-num" style="color:var(--dim)">―</td>`;
+      const avgTd = r._avg != null
+        ? `<td style="text-align:center;font-weight:700;color:var(--amber)">${Math.round(r._avg * 10) / 10}</td>`
+        : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`;
+      const styles = [];
+      if (isMe) styles.push('background:rgba(70,214,196,.06)');
+      if (isMitts) styles.push('border-bottom:3px solid rgba(239,68,68,.85)');
+      const rowAttr = styles.length ? ` style="${styles.join(';')}"` : '';
+      const row = `<tr${rowAttr}>
+        ${rankTd}
+        <td class="rank-name">
+          <span class="avatar frame-${r.frame||'default'}" style="width:20px;height:20px;font-size:.78rem;margin-right:5px;vertical-align:middle">${r.avatar||'🐸'}</span>
+          <span>${esc(tu(r.username))}${isMe ? ' 👈' : ''}</span>
+        </td>
+        <td style="text-align:center">${sc(r.test_score)}</td>
+        <td style="text-align:center">${sc(r.ouri_score)}</td>
+        <td style="text-align:center">${sc(r.math_score)}</td>
+        ${avgTd}
+      </tr>`;
+      if (isMitts) {
+        return row + `<tr><td colspan="6" style="padding:0;line-height:0;border:none">
+          <div style="display:flex;align-items:center;gap:6px;padding:2px 8px 3px;background:rgba(239,68,68,.06)">
+            <div style="flex:1;height:1px;background:rgba(239,68,68,.35)"></div>
+            <span style="font-size:.6rem;color:rgba(239,68,68,.8);font-weight:700;letter-spacing:.08em;white-space:nowrap">⬆ ここから終わってる</span>
+            <div style="flex:1;height:1px;background:rgba(239,68,68,.35)"></div>
+          </div>
+        </td></tr>`;
+      }
+      return row;
+    }).join('');
+
     el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
       <thead><tr>
         <th>#</th>
         <th>名前</th>
-        <th style="text-align:center">📘 英語</th>
-        <th style="text-align:center">⚡ 応用物理</th>
-        <th style="text-align:center">📐 応用数学</th>
-        <th style="text-align:center;color:var(--amber)">平均</th>
+        ${th('test_score', '📘 英語')}
+        ${th('ouri_score', '⚡ 応用物理')}
+        ${th('math_score', '📐 応用数学')}
+        ${th('_avg', '平均')}
       </tr></thead>
-      <tbody>${sorted.map(r => {
-        const isMe = r.username === authUser;
-        const rankTd = r._rank != null
-          ? `<td class="rank-num${r._rank <= 3 ? ' top' : ''}">${r._rank}</td>`
-          : `<td class="rank-num" style="color:var(--dim)">―</td>`;
-        const avgTd = r._avg != null
-          ? `<td style="text-align:center;font-weight:700;color:var(--amber)">${Math.round(r._avg * 10) / 10}</td>`
-          : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`;
-        return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
-          ${rankTd}
-          <td class="rank-name">
-            <span class="avatar frame-${r.frame||'default'}" style="width:20px;height:20px;font-size:.78rem;margin-right:5px;vertical-align:middle">${r.avatar||'🐸'}</span>
-            <span>${esc(tu(r.username))}${isMe ? ' 👈' : ''}</span>
-          </td>
-          <td style="text-align:center">${sc(r.test_score)}</td>
-          <td style="text-align:center">${sc(r.ouri_score)}</td>
-          <td style="text-align:center">${sc(r.math_score)}</td>
-          ${avgTd}
-        </tr>`;
-      }).join('')}</tbody>
+      <tbody>${rows}</tbody>
     </table></div>`;
   } catch(e) { el.innerHTML = '<p style="color:var(--muted)">読み込みエラー</p>'; }
+}
+function sortScores(key) {
+  if (_scSort.key === key) _scSort.dir *= -1;
+  else { _scSort.key = key; _scSort.dir = 1; }
+  loadScores();
 }
 
 async function _submitScore(label, endpoint) {
