@@ -233,7 +233,7 @@ h1{
 /* 称号バッジ */
 .shogou{
   display:inline-block;position:relative;overflow:hidden;
-  font-size:.6rem;font-weight:800;letter-spacing:.13em;white-space:nowrap;
+  font-size:.68rem;font-weight:800;letter-spacing:.13em;white-space:nowrap;
   padding:2px 10px;margin-top:3px;border-radius:4px;
   border:1px solid rgba(251,191,36,.7);
   background:linear-gradient(110deg,rgba(120,80,10,.55) 0%,rgba(251,191,36,.28) 40%,rgba(255,220,80,.18) 55%,rgba(251,191,36,.28) 70%,rgba(120,80,10,.55) 100%);
@@ -253,48 +253,48 @@ h1{
   100%{transform:translateX(200%)}
 }
 /* 個人称号スタイル */
-/* 田中謙佑 "ちょおちょおちょお" は既存.shogouと同じ金箔シマー */
-.title-tanaka{background:linear-gradient(110deg,rgba(120,80,10,.55) 0%,rgba(251,191,36,.28) 40%,rgba(255,220,80,.18) 55%,rgba(251,191,36,.28) 70%,rgba(120,80,10,.55) 100%);border-color:rgba(251,191,36,.7);color:#fde68a;text-shadow:0 0 10px rgba(251,191,36,1),0 0 3px rgba(255,255,180,.6);box-shadow:0 0 8px rgba(251,191,36,.35)}
-/* 高橋ヒロト "ほりきた" — 氷の結晶・冷たい青白い輝き */
-.title-hiroto{background:linear-gradient(110deg,#0c1a3a,#1d4ed8,#93c5fd 50%,#1d4ed8,#0c1a3a);border-color:rgba(147,197,253,.6);color:#e0f2fe;text-shadow:0 0 8px rgba(147,197,253,.9),0 0 2px #fff;animation:hiroto-ice 2.5s ease-in-out infinite}
+/* 田中謙佑 "ちょおちょおちょお" — 金箔シマー・印章型 ✦ */
+.title-tanaka{background:linear-gradient(110deg,rgba(120,80,10,.55) 0%,rgba(251,191,36,.28) 40%,rgba(255,220,80,.18) 55%,rgba(251,191,36,.28) 70%,rgba(120,80,10,.55) 100%);border-color:rgba(251,191,36,.7);color:#fde68a;text-shadow:0 0 10px rgba(251,191,36,1),0 0 3px rgba(255,255,180,.6);box-shadow:0 0 8px rgba(251,191,36,.35);border-radius:2px}
+/* 高橋ヒロト "ほりきた" — 氷の結晶・平行四辺形スラント ❄ */
+.title-hiroto{background:linear-gradient(110deg,#0c1a3a,#1d4ed8,#93c5fd 50%,#1d4ed8,#0c1a3a);border-color:rgba(147,197,253,.6);color:#e0f2fe;text-shadow:0 0 8px rgba(147,197,253,.9),0 0 2px #fff;animation:hiroto-ice 2.5s ease-in-out infinite;border-radius:0;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)}
 .title-hiroto::before{display:none}
 @keyframes hiroto-ice{0%,100%{box-shadow:0 0 6px rgba(59,130,246,.5),0 0 14px rgba(147,197,253,.2);filter:brightness(1)}50%{box-shadow:0 0 16px rgba(147,197,253,.9),0 0 32px rgba(59,130,246,.4);filter:brightness(1.25)}}
-/* はせがわ "女さん" — ピンクハートスパーク */
-.title-hasegawa{background:linear-gradient(110deg,#831843,#be185d,#f472b6 50%,#be185d,#831843);border-color:rgba(244,114,182,.6);color:#fce7f3;text-shadow:0 0 8px rgba(249,168,212,1);animation:hasegawa-spark 1.1s ease-in-out infinite alternate}
+/* はせがわ "女さん" — ピンクスパーク・ピル型 ♡ */
+.title-hasegawa{background:linear-gradient(110deg,#831843,#be185d,#f472b6 50%,#be185d,#831843);border-color:rgba(244,114,182,.6);color:#fce7f3;text-shadow:0 0 8px rgba(249,168,212,1);animation:hasegawa-spark 1.1s ease-in-out infinite alternate;border-radius:50px}
 .title-hasegawa::before{display:none}
 @keyframes hasegawa-spark{0%{box-shadow:0 0 5px #db2777,0 0 10px rgba(244,114,182,.3);transform:scale(1)}100%{box-shadow:0 0 14px #f472b6,0 0 28px rgba(249,168,212,.55),0 0 42px rgba(251,207,232,.2);transform:scale(1.04)}}
-/* professional-A "AIマスター" — サイバーグリッチ */
-.title-pro{background:#000;border-color:#00ffcc;color:#00ffcc;font-family:monospace;letter-spacing:.15em;text-shadow:0 0 6px #00ffcc,0 0 16px rgba(0,255,204,.4);animation:pro-glitch 3.2s steps(1) infinite}
+/* professional-A "AIマスター" — サイバーグリッチ・直角 ▸ */
+.title-pro{background:#000;border-color:#00ffcc;color:#00ffcc;font-family:monospace;letter-spacing:.15em;text-shadow:0 0 6px #00ffcc,0 0 16px rgba(0,255,204,.4);animation:pro-glitch 3.2s steps(1) infinite;border-radius:0}
 .title-pro::before{display:none}
 @keyframes pro-glitch{0%,85%,100%{text-shadow:0 0 6px #00ffcc;transform:translate(0)}86%{transform:translateX(-2px);text-shadow:-2px 0 #ff0066,2px 0 #00ffcc;filter:hue-rotate(20deg)}88%{transform:translateX(2px);text-shadow:2px 0 #ff0066,-2px 0 #00ffcc;filter:hue-rotate(-20deg)}90%{transform:translate(0);text-shadow:0 0 6px #00ffcc;filter:none}}
-/* 荒らし乙 "ほんまごめん" — 震える謝罪の赤 */
-.title-arashi{background:linear-gradient(110deg,#7f1d1d,#dc2626,#ef4444 50%,#dc2626,#7f1d1d);border-color:rgba(239,68,68,.7);color:#fff;text-shadow:0 0 6px rgba(255,100,100,.8);animation:arashi-shake .09s linear infinite}
+/* 荒らし乙 "ほんまごめん" — 震え謝罪・不均等角丸 ⚠ */
+.title-arashi{background:linear-gradient(110deg,#7f1d1d,#dc2626,#ef4444 50%,#dc2626,#7f1d1d);border-color:rgba(239,68,68,.7);color:#fff;text-shadow:0 0 6px rgba(255,100,100,.8);animation:arashi-shake .09s linear infinite;border-radius:2px 12px 2px 12px}
 .title-arashi::before{display:none}
 @keyframes arashi-shake{0%{transform:translate(0,0) rotate(0deg)}20%{transform:translate(-1px,1px) rotate(-.3deg)}40%{transform:translate(1px,-1px) rotate(.4deg)}60%{transform:translate(-1px,-1px) rotate(.2deg)}80%{transform:translate(1px,1px) rotate(-.3deg)}100%{transform:translate(0,0) rotate(0deg)}}
-/* ꙮꙮꙮꙮꙮꙮꙮꙮ "俺は〇〇をい〇めたい" — 闇の脈動 */
-.title-eye{background:linear-gradient(110deg,#000,#3b0000,#1a0000);border-color:rgba(220,38,38,.45);color:#ff3333;font-weight:900;letter-spacing:.04em;text-shadow:0 0 8px #ff0000,0 0 20px rgba(200,0,0,.5);animation:eye-pulse 1.6s ease-in-out infinite}
+/* ꙮꙮꙮꙮꙮꙮꙮꙮ "俺は〇〇をい〇めたい" — 闇脈動・角切りシェイプ ☠ */
+.title-eye{background:linear-gradient(110deg,#000,#3b0000,#1a0000);border-color:rgba(220,38,38,.45);color:#ff3333;font-weight:900;letter-spacing:.04em;text-shadow:0 0 8px #ff0000,0 0 20px rgba(200,0,0,.5);animation:eye-pulse 1.6s ease-in-out infinite;border-radius:0;clip-path:polygon(0 0,100% 0,100% 100%,14px 100%,0 calc(100% - 8px))}
 .title-eye::before{display:none}
 @keyframes eye-pulse{0%,100%{box-shadow:0 0 4px #dc2626,inset 0 0 3px rgba(180,0,0,.2)}50%{box-shadow:0 0 20px #ff0000,0 0 40px rgba(220,38,38,.45),inset 0 0 10px rgba(200,0,0,.35)}}
-/* 波多野裏技 "ハンタウイルス" — バイオハザード毒緑 */
-.title-hatano{background:linear-gradient(110deg,#052e16,#16a34a,#4ade80 50%,#16a34a,#052e16);border-color:rgba(74,222,128,.6);color:#dcfce7;text-shadow:0 0 8px rgba(74,222,128,.9),0 0 2px rgba(200,255,200,.4);animation:hatano-bio .9s ease-in-out infinite alternate}
+/* 波多野裏技 "ハンタウイルス" — バイオハザード・対角角丸 ☣ */
+.title-hatano{background:linear-gradient(110deg,#052e16,#16a34a,#4ade80 50%,#16a34a,#052e16);border-color:rgba(74,222,128,.6);color:#dcfce7;text-shadow:0 0 8px rgba(74,222,128,.9),0 0 2px rgba(200,255,200,.4);animation:hatano-bio .9s ease-in-out infinite alternate;border-radius:0 10px 0 10px}
 .title-hatano::before{display:none}
 @keyframes hatano-bio{0%{box-shadow:0 0 6px rgba(74,222,128,.4),0 0 2px #4ade80;filter:saturate(1)}100%{box-shadow:0 0 20px rgba(74,222,128,.95),0 0 36px rgba(34,197,94,.45),inset 0 0 6px rgba(74,222,128,.15);filter:saturate(1.5)}}
-/* honari "じゃあいいよぉもう" — ふてくされた淡紫フェード */
-.title-honari{background:linear-gradient(110deg,#2e1065,#4c1d95,#7c3aed 50%,#4c1d95,#2e1065);border-color:rgba(124,58,237,.45);color:#c4b5fd;text-shadow:0 0 6px rgba(167,139,250,.7);animation:honari-sulk 4.5s ease-in-out infinite}
+/* honari "じゃあいいよぉもう" — ふてくされ淡紫・逆対角角丸 … */
+.title-honari{background:linear-gradient(110deg,#2e1065,#4c1d95,#7c3aed 50%,#4c1d95,#2e1065);border-color:rgba(124,58,237,.45);color:#c4b5fd;text-shadow:0 0 6px rgba(167,139,250,.7);animation:honari-sulk 4.5s ease-in-out infinite;border-radius:12px 2px 12px 2px}
 .title-honari::before{display:none}
 @keyframes honari-sulk{0%,100%{opacity:.45;transform:translateX(4px)}25%{opacity:.9;transform:translateX(-3px)}55%{opacity:.55;transform:translateX(2px)}80%{opacity:.85;transform:translateX(-1px)}}
-/* ミッツ "そもそもそんなこと言ってるけど、" — スクロールテキスト */
-.title-mitts{background:linear-gradient(110deg,#1c1917,#44403c,#78716c 50%,#44403c,#1c1917);border-color:rgba(120,113,108,.5);color:#e7e5e4;text-shadow:0 0 4px rgba(231,229,228,.3);max-width:82px;padding-left:4px;padding-right:4px;vertical-align:middle}
+/* ミッツ "そもそもそんなこと言ってるけど、" — スクロール・薄角 » */
+.title-mitts{background:linear-gradient(110deg,#1c1917,#44403c,#78716c 50%,#44403c,#1c1917);border-color:rgba(120,113,108,.5);color:#e7e5e4;text-shadow:0 0 4px rgba(231,229,228,.3);max-width:82px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:3px}
 .title-mitts::before{display:none}
 .ti-scroll{display:inline-block;animation:mitts-scroll 7s linear infinite;white-space:nowrap;padding-right:16px}
 @keyframes mitts-scroll{0%{transform:translateX(82px)}100%{transform:translateX(-100%)}}
-/* 川上晃弥 "すかしっぺ" — 臭い黄緑ぷよぷよ */
-.title-kawakami{background:linear-gradient(110deg,#1a2e05,#4d7c0f,#a3e635 50%,#4d7c0f,#1a2e05);border-color:rgba(163,230,53,.5);color:#ecfccb;text-shadow:0 0 6px rgba(163,230,53,.7);animation:kawakami-fart 2.2s ease-in-out infinite}
+/* 川上晃弥 "ママぁ～" — 黄緑ぷよぷよ・波型角丸 〜 */
+.title-kawakami{background:linear-gradient(110deg,#1a2e05,#4d7c0f,#a3e635 50%,#4d7c0f,#1a2e05);border-color:rgba(163,230,53,.5);color:#ecfccb;text-shadow:0 0 6px rgba(163,230,53,.7);animation:kawakami-fart 2.2s ease-in-out infinite;border-radius:0 16px 0 16px}
 .title-kawakami::before{display:none}
 @keyframes kawakami-fart{0%,100%{transform:skewX(0deg) scaleY(1);filter:blur(0px)}15%{transform:skewX(-1.5deg) scaleY(1.04)}30%{transform:skewX(2deg) scaleY(.96);filter:blur(.4px)}50%{transform:skewX(-1deg) scaleY(1.03)}70%{transform:skewX(1.5deg) scaleY(.97)}85%{transform:skewX(-.5deg) scaleY(1.01)}}
 
-/* よしよしぎゅー "ひざまくら" — あったか琥珀ほわほわ */
-.title-yoshi{background:linear-gradient(110deg,#78350f,#c2701f,#fcd9a0 50%,#c2701f,#78350f);border-color:rgba(251,191,96,.55);color:#fff7e6;text-shadow:0 0 8px rgba(253,186,116,.9),0 0 3px rgba(255,237,213,.6);animation:yoshi-warm 3.5s ease-in-out infinite}
+/* よしよしぎゅー "ひざまくら" — あったか琥珀・ふんわり大丸角 ☁ */
+.title-yoshi{background:linear-gradient(110deg,#78350f,#c2701f,#fcd9a0 50%,#c2701f,#78350f);border-color:rgba(251,191,96,.55);color:#fff7e6;text-shadow:0 0 8px rgba(253,186,116,.9),0 0 3px rgba(255,237,213,.6);animation:yoshi-warm 3.5s ease-in-out infinite;border-radius:18px}
 .title-yoshi::before{display:none}
 @keyframes yoshi-warm{0%,100%{box-shadow:0 0 6px rgba(251,146,60,.35),0 0 12px rgba(253,186,116,.15);opacity:.88}50%{box-shadow:0 0 14px rgba(251,146,60,.65),0 0 26px rgba(253,186,116,.3),inset 0 0 5px rgba(255,220,150,.12);opacity:1}}
 
@@ -953,9 +953,16 @@ function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').rep
 function tu(s){ const str = s ? String(s) : ''; return str.length > 10 ? str.slice(0,10)+'…' : str; }
 function titleBadge(u){
   const cls = u.title_class || '';
+  const syms = {
+    'title-tanaka':'✦','title-hiroto':'❄','title-hasegawa':'♡',
+    'title-pro':'▸','title-arashi':'⚠','title-eye':'☠',
+    'title-hatano':'☣','title-honari':'…','title-mitts':'»',
+    'title-kawakami':'〜','title-yoshi':'☁'
+  };
+  const sym = syms[cls] || '◆';
   const inner = cls === 'title-mitts'
-    ? `<span class="ti-scroll">◆ ${esc(u.title)}</span>`
-    : `◆ ${esc(u.title)}`;
+    ? `<span class="ti-scroll">${sym} ${esc(u.title)}</span>`
+    : `${sym} ${esc(u.title)}`;
   return `<span class="shogou${cls?' '+cls:''}">${inner}</span>`;
 }
 
