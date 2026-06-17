@@ -94,7 +94,7 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:v
   <div class="wrap">
     <div class="eyebrow">制御工学Ⅰ ・ 前期中間 対策テスト</div>
     <h1>ブロック線図等価変換<br><span style="font-size:.5em;color:var(--teal)">＆ ラプラス変換 全問テスト</span></h1>
-    <p class="sub">表3.2「ブロック線図の等価変換」10種全変換 ＋ 表3.2「ラプラス変換対応表」14ペア全対応を完全網羅した選択問題。変換の種類・等価変換後の要素・ラプラス変換ペアを確実に定着させよう。</p>
+    <p class="sub">表3.2「ブロック線図の等価変換」10種全変換 ＋ 表3.2「ラプラス変換対応表」(1)〜(10)（(8)除く）9ペアを網羅した選択問題。変換の種類・等価変換後の要素・ラプラス変換ペアを確実に定着させよう。</p>
   </div>
 </header>
 
@@ -104,11 +104,11 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:v
   <b>使い方：</b>選択肢をタップ／クリックすると即時判定。解説は判定後に表示される。数式は KaTeX でレンダリングされる。
 </div>
 <div id="app"></div>
-<footer>制御工学Ⅰ 前期中間 ブロック線図等価変換・ラプラス変換 全問テスト ｜ 全4セクション・計55問</footer>
+<footer>制御工学Ⅰ 前期中間 ブロック線図等価変換・ラプラス変換テスト ｜ 全4セクション・計45問</footer>
 </div>
 
 <script>
-const STORAGE_KEY = "seigyo_block_laplace_v1";
+const STORAGE_KEY = "seigyo_block_laplace_v2";
 
 /* =====================================================================
    問題データ
@@ -435,7 +435,7 @@ const SECTIONS = [
 ]},
 
 // ──────────────────────────────────────────────
-{id:"s3", no:"03", title:"ラプラス変換 f(t) → F(s)（全14ペア）", qs:[
+{id:"s3", no:"03", title:"ラプラス変換 f(t) → F(s)（(1)〜(10)・(8)除く）", qs:[
 
 {type:"single",
  q:"インパルス関数（デルタ関数）$\\delta(t)$ のラプラス変換 $F(s)=\\mathcal{L}[\\delta(t)]$ はどれか【表3.2 対応(1)】",
@@ -480,12 +480,6 @@ const SECTIONS = [
  note:"$\\mathcal{L}\\!\\left[\\dfrac{t^{n-1}}{(n-1)!}e^{-\\alpha t}u(t)\\right]=\\dfrac{1}{(s+\\alpha)^n}$。"},
 
 {type:"single",
- q:"$\\dfrac{1}{\\beta-\\alpha}(e^{-\\alpha t}-e^{-\\beta t})u(t)$ のラプラス変換はどれか【表3.2 対応(8)】",
- opts:["$\\dfrac{1}{(s+\\alpha)(s+\\beta)}$","$\\dfrac{1}{(s-\\alpha)(s-\\beta)}$","$\\dfrac{\\beta-\\alpha}{(s+\\alpha)(s+\\beta)}$","$\\dfrac{1}{(s+\\alpha)^2}$"],
- ans:"$\\dfrac{1}{(s+\\alpha)(s+\\beta)}$",
- note:"$\\mathcal{L}\\!\\left[\\dfrac{e^{-\\alpha t}-e^{-\\beta t}}{\\beta-\\alpha}u(t)\\right]=\\dfrac{1}{(s+\\alpha)(s+\\beta)}$（部分分数展開の逆として覚える）。"},
-
-{type:"single",
  q:"$\\sin\\omega t\\,u(t)$ のラプラス変換はどれか【表3.2 対応(9)】",
  opts:["$\\dfrac{\\omega}{s^2+\\omega^2}$","$\\dfrac{s}{s^2+\\omega^2}$","$\\dfrac{\\omega}{s^2-\\omega^2}$","$\\dfrac{1}{s^2+\\omega^2}$"],
  ans:"$\\dfrac{\\omega}{s^2+\\omega^2}$",
@@ -497,54 +491,10 @@ const SECTIONS = [
  ans:"$\\dfrac{s}{s^2+\\omega^2}$",
  note:"$\\mathcal{L}[\\cos\\omega t\\,u(t)]=\\dfrac{s}{s^2+\\omega^2}$。分子は $s$（$\\sin$ の分子 $\\omega$ と区別）。"},
 
-{type:"single",
- q:"$\\sin(\\omega t+\\theta)u(t)$ のラプラス変換はどれか【表3.2 対応(11)】",
- opts:[
-   "$\\dfrac{s\\sin\\theta+\\omega\\cos\\theta}{s^2+\\omega^2}$",
-   "$\\dfrac{s\\cos\\theta-\\omega\\sin\\theta}{s^2+\\omega^2}$",
-   "$\\dfrac{\\omega}{s^2+\\omega^2}e^{-s\\theta}$",
-   "$\\dfrac{s+\\theta}{s^2+\\omega^2}$",
- ],
- ans:"$\\dfrac{s\\sin\\theta+\\omega\\cos\\theta}{s^2+\\omega^2}$",
- note:"加法定理で展開：$\\sin(\\omega t+\\theta)=\\sin\\theta\\cos\\omega t+\\cos\\theta\\sin\\omega t$。ラプラス変換すると $\\dfrac{s\\sin\\theta+\\omega\\cos\\theta}{s^2+\\omega^2}$。"},
-
-{type:"single",
- q:"$\\cos(\\omega t+\\theta)u(t)$ のラプラス変換はどれか【表3.2 対応(12)】",
- opts:[
-   "$\\dfrac{s\\sin\\theta+\\omega\\cos\\theta}{s^2+\\omega^2}$",
-   "$\\dfrac{s\\cos\\theta-\\omega\\sin\\theta}{s^2+\\omega^2}$",
-   "$\\dfrac{s}{s^2+\\omega^2}e^{-s\\theta}$",
-   "$\\dfrac{s-\\theta}{s^2+\\omega^2}$",
- ],
- ans:"$\\dfrac{s\\cos\\theta-\\omega\\sin\\theta}{s^2+\\omega^2}$",
- note:"加法定理：$\\cos(\\omega t+\\theta)=\\cos\\theta\\cos\\omega t-\\sin\\theta\\sin\\omega t$。ラプラス変換：$\\dfrac{s\\cos\\theta-\\omega\\sin\\theta}{s^2+\\omega^2}$。"},
-
-{type:"single",
- q:"$e^{-\\alpha t}\\sin\\omega t\\,u(t)$ のラプラス変換はどれか【表3.2 対応(13)】",
- opts:[
-   "$\\dfrac{\\omega}{(s+\\alpha)^2+\\omega^2}$",
-   "$\\dfrac{s+\\alpha}{(s+\\alpha)^2+\\omega^2}$",
-   "$\\dfrac{\\omega}{s^2+\\omega^2}$",
-   "$\\dfrac{\\omega}{(s+\\alpha)^2-\\omega^2}$",
- ],
- ans:"$\\dfrac{\\omega}{(s+\\alpha)^2+\\omega^2}$",
- note:"$\\mathcal{L}[e^{-\\alpha t}\\sin\\omega t\\,u(t)]=\\dfrac{\\omega}{(s+\\alpha)^2+\\omega^2}$。周波数推移定理：$s^2+\\omega^2$ の $s$ を $s+\\alpha$ で置換。"},
-
-{type:"single",
- q:"$e^{-\\alpha t}\\cos\\omega t\\,u(t)$ のラプラス変換はどれか【表3.2 対応(14)】",
- opts:[
-   "$\\dfrac{\\omega}{(s+\\alpha)^2+\\omega^2}$",
-   "$\\dfrac{s+\\alpha}{(s+\\alpha)^2+\\omega^2}$",
-   "$\\dfrac{s}{(s+\\alpha)^2+\\omega^2}$",
-   "$\\dfrac{s+\\alpha}{s^2+\\omega^2}$",
- ],
- ans:"$\\dfrac{s+\\alpha}{(s+\\alpha)^2+\\omega^2}$",
- note:"$\\mathcal{L}[e^{-\\alpha t}\\cos\\omega t\\,u(t)]=\\dfrac{s+\\alpha}{(s+\\alpha)^2+\\omega^2}$。周波数推移定理：$s$ を $s+\\alpha$ で置換。"},
-
 ]},
 
 // ──────────────────────────────────────────────
-{id:"s4", no:"04", title:"逆ラプラス変換 F(s) → f(t)（全14ペア）", qs:[
+{id:"s4", no:"04", title:"逆ラプラス変換 F(s) → f(t)（(1)〜(10)・(8)除く）", qs:[
 
 {type:"single",
  q:"$F(s)=1$ の逆ラプラス変換 $f(t)=\\mathcal{L}^{-1}[1]$ はどれか【表3.2 対応(1)】",
@@ -589,17 +539,6 @@ const SECTIONS = [
  note:"$\\mathcal{L}^{-1}\\!\\left[\\dfrac{1}{(s+\\alpha)^n}\\right]=\\dfrac{t^{n-1}}{(n-1)!}e^{-\\alpha t}u(t)$。"},
 
 {type:"single",
- q:"$F(s)=\\dfrac{1}{(s+\\alpha)(s+\\beta)}$ の逆ラプラス変換はどれか【表3.2 対応(8)】",
- opts:[
-   "$\\dfrac{e^{-\\alpha t}-e^{-\\beta t}}{\\beta-\\alpha}u(t)$",
-   "$e^{-\\alpha t}\\cdot e^{-\\beta t}u(t)$",
-   "$(e^{-\\alpha t}+e^{-\\beta t})u(t)$",
-   "$\\dfrac{1-e^{-(\\alpha+\\beta)t}}{\\alpha\\beta}u(t)$",
- ],
- ans:"$\\dfrac{e^{-\\alpha t}-e^{-\\beta t}}{\\beta-\\alpha}u(t)$",
- note:"部分分数展開：$\\dfrac{1}{(s+\\alpha)(s+\\beta)}=\\dfrac{1/(\\beta-\\alpha)}{s+\\alpha}-\\dfrac{1/(\\beta-\\alpha)}{s+\\beta}$ → $\\dfrac{e^{-\\alpha t}-e^{-\\beta t}}{\\beta-\\alpha}u(t)$。"},
-
-{type:"single",
  q:"$F(s)=\\dfrac{\\omega}{s^2+\\omega^2}$ の逆ラプラス変換はどれか【表3.2 対応(9)】",
  opts:["$\\sin\\omega t\\,u(t)$","$\\cos\\omega t\\,u(t)$","$\\omega\\sin\\omega t\\,u(t)$","$e^{-\\omega t}u(t)$"],
  ans:"$\\sin\\omega t\\,u(t)$",
@@ -610,50 +549,6 @@ const SECTIONS = [
  opts:["$\\sin\\omega t\\,u(t)$","$\\cos\\omega t\\,u(t)$","$\\omega\\cos\\omega t\\,u(t)$","$t\\cos\\omega t\\,u(t)$"],
  ans:"$\\cos\\omega t\\,u(t)$",
  note:"$\\mathcal{L}^{-1}\\!\\left[\\dfrac{s}{s^2+\\omega^2}\\right]=\\cos\\omega t\\,u(t)$。"},
-
-{type:"single",
- q:"$F(s)=\\dfrac{s\\sin\\theta+\\omega\\cos\\theta}{s^2+\\omega^2}$ の逆ラプラス変換はどれか【表3.2 対応(11)】",
- opts:[
-   "$\\sin(\\omega t+\\theta)u(t)$",
-   "$\\cos(\\omega t+\\theta)u(t)$",
-   "$\\sin\\omega t\\cdot\\cos\\theta\\,u(t)$",
-   "$\\theta\\sin\\omega t\\,u(t)$",
- ],
- ans:"$\\sin(\\omega t+\\theta)u(t)$",
- note:"$\\mathcal{L}^{-1}\\!\\left[\\dfrac{s\\sin\\theta+\\omega\\cos\\theta}{s^2+\\omega^2}\\right]=\\sin(\\omega t+\\theta)u(t)$。"},
-
-{type:"single",
- q:"$F(s)=\\dfrac{s\\cos\\theta-\\omega\\sin\\theta}{s^2+\\omega^2}$ の逆ラプラス変換はどれか【表3.2 対応(12)】",
- opts:[
-   "$\\sin(\\omega t+\\theta)u(t)$",
-   "$\\cos(\\omega t+\\theta)u(t)$",
-   "$\\cos\\omega t\\cdot\\cos\\theta\\,u(t)$",
-   "$-\\omega\\sin\\theta\\cdot u(t)$",
- ],
- ans:"$\\cos(\\omega t+\\theta)u(t)$",
- note:"$\\mathcal{L}^{-1}\\!\\left[\\dfrac{s\\cos\\theta-\\omega\\sin\\theta}{s^2+\\omega^2}\\right]=\\cos(\\omega t+\\theta)u(t)$。"},
-
-{type:"single",
- q:"$F(s)=\\dfrac{\\omega}{(s+\\alpha)^2+\\omega^2}$ の逆ラプラス変換はどれか【表3.2 対応(13)】",
- opts:[
-   "$e^{-\\alpha t}\\sin\\omega t\\,u(t)$",
-   "$e^{-\\alpha t}\\cos\\omega t\\,u(t)$",
-   "$\\sin\\omega t\\,u(t)$",
-   "$e^{-\\alpha t}u(t)$",
- ],
- ans:"$e^{-\\alpha t}\\sin\\omega t\\,u(t)$",
- note:"$\\mathcal{L}^{-1}\\!\\left[\\dfrac{\\omega}{(s+\\alpha)^2+\\omega^2}\\right]=e^{-\\alpha t}\\sin\\omega t\\,u(t)$。$(s+\\alpha)^2$ が分母 → $e^{-\\alpha t}$ を伴う正弦。"},
-
-{type:"single",
- q:"$F(s)=\\dfrac{s+\\alpha}{(s+\\alpha)^2+\\omega^2}$ の逆ラプラス変換はどれか【表3.2 対応(14)】",
- opts:[
-   "$e^{-\\alpha t}\\sin\\omega t\\,u(t)$",
-   "$e^{-\\alpha t}\\cos\\omega t\\,u(t)$",
-   "$\\cos\\omega t\\,u(t)$",
-   "$\\alpha e^{-\\alpha t}u(t)$",
- ],
- ans:"$e^{-\\alpha t}\\cos\\omega t\\,u(t)$",
- note:"$\\mathcal{L}^{-1}\\!\\left[\\dfrac{s+\\alpha}{(s+\\alpha)^2+\\omega^2}\\right]=e^{-\\alpha t}\\cos\\omega t\\,u(t)$。分子が $(s+\\alpha)$ → 指数減衰余弦。"},
 
 ]},
 

@@ -168,7 +168,7 @@
     "subject": "制御工学Ⅰ",
     "title": "制御工学Ⅰ ・ ブロック線図等価変換＆ラプラス変換 全問",
     "path": "tests/2026-4-zenki-chukan-seigyogaku-block-laplace/",
-    "storageKey": "seigyo_block_laplace_v1",
-    "totalItems": 55
+    "storageKey": "seigyo_block_laplace_v2",
+    "totalItems": 45
   }
 ]
