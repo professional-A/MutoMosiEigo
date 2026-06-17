@@ -55,10 +55,22 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS prev_frame TEXT DEFAULT 'default'`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS unlocked_avatars TEXT DEFAULT '[]'`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS title TEXT DEFAULT 'ちょおちょおちょお'`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS title_class TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ouri_score INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS math_score INTEGER`).catch(()=>{});
-  await pool.query(`UPDATE users SET title='ちょおちょおちょお' WHERE title IS NULL`).catch(()=>{});
   await pool.query(`UPDATE users SET username='荒らし乙' WHERE username LIKE '%﷽%'`).catch(()=>{});
+  // 個人称号を設定
+  await pool.query(`UPDATE users SET title='ちょおちょおちょお', title_class='title-tanaka'  WHERE username='田中謙佑'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='ほりきた',           title_class='title-hiroto'   WHERE username='高橋ヒロト'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='女さん',             title_class='title-hasegawa' WHERE username='はせがわ'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='AIマスター',         title_class='title-pro'      WHERE username='professional-A'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='ほんまごめん',       title_class='title-arashi'   WHERE username='荒らし乙'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='俺は〇〇をい〇めたい', title_class='title-eye'   WHERE username LIKE '%ꙮ%'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='ハンタウイルス',     title_class='title-hatano'   WHERE username='波多野裏技'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='じゃあいいよぉもう', title_class='title-honari'  WHERE username='honari'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='そもそもそんなこと言ってるけど、', title_class='title-mitts' WHERE username='ミッツ'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='すかしっぺ',         title_class='title-kawakami' WHERE username='川上晃弥'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title=NULL, title_class=NULL WHERE username IN ('honari2','seijuro_dummy','SHIMESABA')`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
       id         SERIAL PRIMARY KEY,
@@ -250,7 +262,7 @@ app.get('/api/ranking', async (req, res) => {
 // メンバー一覧（ポイント順、ログイン不要）
 app.get('/api/members', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, title, points + COALESCE(test_bet,0) AS points, last_login, test_pred, test_bet, test_score,
+    SELECT username, avatar, frame, title, title_class, points + COALESCE(test_bet,0) AS points, last_login, test_pred, test_bet, test_score,
            DENSE_RANK() OVER (ORDER BY points + COALESCE(test_bet,0) DESC) AS rank
     FROM users
     ORDER BY points + COALESCE(test_bet,0) DESC
