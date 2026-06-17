@@ -339,11 +339,11 @@ const SECTIONS = [
   },
   {
     id:"s5", no:"05",
-    title:"問4：ラプラス変換（定義・計算）（4問）",
-    desc:"2025年度中間試験 問4（10点×2=20点）を選択式で再現",
+    title:"問4：ラプラス変換（定義・計算）（6問）",
+    desc:"2025年度中間試験 問4（10点×2=20点）。問4(1) $f(t)=a\\cdot r(t)$・問4(2) $f(t)=e^{-\\alpha t}$ を定義式から途中計算を経て求める",
     data:[
       {
-        q:"ラプラス変換の定義式（片側ラプラス変換）として正しいのはどれか。",
+        q:"【問4(1)(i)】ラプラス変換の定義式（片側ラプラス変換）として正しいのはどれか。",
         opts:[
           "① $F(s)=\\displaystyle\\int_{-\\infty}^{\\infty} f(t)e^{-st}\\,dt$",
           "② $F(s)=\\displaystyle\\int_0^{\\infty} f(t)e^{st}\\,dt$",
@@ -354,44 +354,71 @@ const SECTIONS = [
         note:"片側ラプラス変換の定義：$F(s)=\\int_0^\\infty f(t)e^{-st}dt$。積分範囲は $[0,\\infty)$、核関数は $e^{-st}$（マイナス符号）。"
       },
       {
-        q:"$f(t)=a\\cdot r(t)$（$a$ は定数、$r(t)=t\\cdot u(t)$ は単位ランプ関数）をラプラス変換の定義式から計算した結果として正しいのはどれか。",
+        q:"【問4(1)(ii)】$f(t)=a\\cdot r(t)=at$ を定義式に代入し、部分積分（$u=at,\\;dv=e^{-st}dt$）を適用した途中式として正しいのはどれか。",
+        opts:[
+          "① $\\left[at\\cdot\\left(-\\dfrac{e^{-st}}{s}\\right)\\right]_0^\\infty + \\dfrac{a}{s}\\displaystyle\\int_0^\\infty e^{-st}\\,dt$",
+          "② $\\left[at\\cdot\\left(-\\dfrac{e^{st}}{s}\\right)\\right]_0^\\infty + \\dfrac{a}{s}\\displaystyle\\int_0^\\infty e^{st}\\,dt$",
+          "③ $\\left[at\\cdot e^{-st}\\right]_0^\\infty - a\\displaystyle\\int_0^\\infty e^{-st}\\,dt$",
+          "④ $\\dfrac{a}{s}\\left[t\\cdot e^{-st}\\right]_0^\\infty$"
+        ],
+        ans:0,
+        note:"部分積分：$u=at\\Rightarrow du=a\\,dt$、$dv=e^{-st}dt\\Rightarrow v=-e^{-st}/s$。$[uv]_0^\\infty-\\int v\\,du=\\left[-ate^{-st}/s\\right]_0^\\infty+(a/s)\\int_0^\\infty e^{-st}dt$。"
+      },
+      {
+        q:"【問4(1)(iii)】$f(t)=a\\cdot r(t)$ のラプラス変換の最終結果 $F(s)$ として正しいのはどれか。",
         opts:["① $\\dfrac{a}{s}$","② $a\\cdot s$","③ $\\dfrac{1}{as^2}$","④ $\\dfrac{a}{s^2}$"],
         ans:3,
-        note:"$\\displaystyle\\int_0^\\infty at\\,e^{-st}dt$。部分積分より $a\\left[-\\dfrac{t}{s}e^{-st}\\right]_0^\\infty + a\\displaystyle\\int_0^\\infty\\dfrac{e^{-st}}{s}dt = \\dfrac{a}{s^2}$。"
+        note:"$\\left[-ate^{-st}/s\\right]_0^\\infty=0$（上限は $e^{-st}$ 優勢、下限は $a\\cdot 0=0$）。残り：$(a/s)\\cdot[-e^{-st}/s]_0^\\infty=(a/s)\\cdot(1/s)=a/s^2$。"
       },
       {
-        q:"$f(t) = e^{-\\alpha t}\\,u(t)$（$\\alpha > 0$）のラプラス変換 $F(s)$ はどれか。",
+        q:"【問4(2)(i)】$f(t)=e^{-\\alpha t}\\,u(t)$ を定義式に代入し指数を整理した積分式として正しいのはどれか。",
+        opts:[
+          "① $\\displaystyle\\int_0^\\infty e^{(s+\\alpha)t}\\,dt$",
+          "② $\\displaystyle\\int_0^\\infty e^{-(s-\\alpha)t}\\,dt$",
+          "③ $\\displaystyle\\int_0^\\infty e^{-(s+\\alpha)t}\\,dt$",
+          "④ $\\displaystyle\\int_0^\\infty e^{-\\alpha t}\\,dt$"
+        ],
+        ans:2,
+        note:"$\\int_0^\\infty e^{-\\alpha t}\\cdot e^{-st}dt=\\int_0^\\infty e^{-(s+\\alpha)t}dt$。指数法則：$-\\alpha t-st=-(s+\\alpha)t$。"
+      },
+      {
+        q:"【問4(2)(ii)】$\\displaystyle\\int_0^\\infty e^{-(s+\\alpha)t}\\,dt$ を計算した途中式（定積分の評価式）として正しいのはどれか。",
+        opts:[
+          "① $\\left[-\\dfrac{e^{-(s+\\alpha)t}}{s+\\alpha}\\right]_0^\\infty$",
+          "② $\\left[\\dfrac{e^{-(s+\\alpha)t}}{s+\\alpha}\\right]_0^\\infty$",
+          "③ $\\left[-\\dfrac{e^{(s+\\alpha)t}}{s+\\alpha}\\right]_0^\\infty$",
+          "④ $\\left[-(s+\\alpha)e^{-(s+\\alpha)t}\\right]_0^\\infty$"
+        ],
+        ans:0,
+        note:"$\\int e^{-(s+\\alpha)t}dt=-\\dfrac{e^{-(s+\\alpha)t}}{s+\\alpha}+C$（不定積分）。定積分の評価式は $\\left[-\\dfrac{e^{-(s+\\alpha)t}}{s+\\alpha}\\right]_0^\\infty$。"
+      },
+      {
+        q:"【問4(2)(iii)】$f(t)=e^{-\\alpha t}\\,u(t)$ のラプラス変換の最終結果 $F(s)$ として正しいのはどれか。（$s+\\alpha>0$ とする）",
         opts:["① $\\dfrac{1}{s-\\alpha}$","② $\\dfrac{\\alpha}{(s+\\alpha)^2}$","③ $\\dfrac{1}{s+\\alpha}$","④ $\\dfrac{s}{s^2+\\alpha^2}$"],
         ans:2,
-        note:"$\\displaystyle\\int_0^\\infty e^{-\\alpha t}e^{-st}dt=\\int_0^\\infty e^{-(s+\\alpha)t}dt=\\left[-\\dfrac{e^{-(s+\\alpha)t}}{s+\\alpha}\\right]_0^\\infty=\\dfrac{1}{s+\\alpha}$（$s+\\alpha>0$）。"
-      },
-      {
-        q:"$f(t)=e^{-\\alpha t}$ をラプラス変換の定義式で計算する途中の積分 $\\displaystyle\\int_0^\\infty e^{-(s+\\alpha)t}\\,dt$ の正しい結果はどれか。",
-        opts:["① $-(s+\\alpha)$","② $\\dfrac{1}{s+\\alpha}$","③ $e^{-(s+\\alpha)}$","④ $-\\dfrac{1}{s+\\alpha}$"],
-        ans:1,
-        note:"$\\left[-\\dfrac{e^{-(s+\\alpha)t}}{s+\\alpha}\\right]_0^\\infty$：$t\\to\\infty$ で $0$（$s+\\alpha>0$なら）、$t=0$ で $-\\dfrac{1}{s+\\alpha}$。差をとると $0-\\left(-\\dfrac{1}{s+\\alpha}\\right)=\\dfrac{1}{s+\\alpha}$。"
+        note:"$\\left[-\\dfrac{e^{-(s+\\alpha)t}}{s+\\alpha}\\right]_0^\\infty=0-\\left(-\\dfrac{1}{s+\\alpha}\\right)=\\dfrac{1}{s+\\alpha}$。上限 $t\\to\\infty$ で $e^{-\\infty}=0$、下限 $t=0$ で $e^0=1$。"
       }
     ]
   },
   {
     id:"s6", no:"06",
-    title:"問5：ブロック線図の等価変換（5問）",
-    desc:"2025年度中間試験 問5（8+12=20点）を選択式で再現",
+    title:"問5：ブロック線図の等価変換（6問）",
+    desc:"2025年度中間試験 問5（8+12=20点）を選択式で再現。各ステップを小問として出題",
     data:[
       {
-        q:"問5（1）のブロック線図において、$G_1$ と $G_2$ が並列接続されているとき、この部分の合成伝達関数はどれか。",
+        q:"【問5(1)(i)】問5（1）のブロック線図において $G_1$ と $G_2$ が並列接続されているとき、この部分の合成伝達関数はどれか。",
         opts:["① $G_1 \\cdot G_2$","② $\\dfrac{G_1}{G_2}$","③ $G_1 + G_2$","④ $\\dfrac{G_1+G_2}{2}$"],
         ans:2,
-        note:"並列接続の合成伝達関数は各ブロックの伝達関数の「和」。$G_1+G_2$。（直列は積）"
+        note:"並列接続の合成伝達関数は各ブロックの「和」。$G_1+G_2$。（直列は積）"
       },
       {
-        q:"問5（1）で $(G_1+G_2)$・$G_3$・$G_4$ が順に直列接続されているとき、前向き伝達関数はどれか。",
+        q:"【問5(1)(ii)】問5（1）で $(G_1+G_2)$・$G_3$・$G_4$ が順に直列接続されているとき、前向き伝達関数はどれか。",
         opts:["① $G_1G_2G_3G_4$","② $(G_1+G_2)G_3G_4$","③ $G_1+G_2+G_3+G_4$","④ $\\dfrac{G_1+G_2}{G_3G_4}$"],
         ans:1,
-        note:"直列接続の合成伝達関数は各ブロックの伝達関数の「積」。$(G_1+G_2)\\cdot G_3\\cdot G_4$。"
+        note:"直列接続の合成伝達関数は各ブロックの「積」。$(G_1+G_2)\\cdot G_3\\cdot G_4$。"
       },
       {
-        q:"問5（1）の閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。（前向き伝達関数 $(G_1+G_2)G_3G_4$、直結ネガティブフィードバック）",
+        q:"【問5(1)(iii)】問5（1）の閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。（前向き $(G_1+G_2)G_3G_4$、直結ネガティブフィードバック）",
         opts:[
           "① $\\dfrac{G_3G_4}{1+(G_1+G_2)G_3G_4}$",
           "② $(G_1+G_2)G_3G_4$",
@@ -399,10 +426,10 @@ const SECTIONS = [
           "④ $\\dfrac{(G_1+G_2)G_3G_4}{1+(G_1+G_2)G_3G_4}$"
         ],
         ans:3,
-        note:"直結ネガティブフィードバック：$\\dfrac{C}{R}=\\dfrac{G}{1+G}$（$G=(G_1+G_2)G_3G_4$）。分子=前向き伝達関数、分母=$1+$開ループ伝達関数。"
+        note:"閉ループ公式 $\\dfrac{G}{1+G}$ に $G=(G_1+G_2)G_3G_4$ を代入。分子=前向き、分母=$1+$開ループ。"
       },
       {
-        q:"問5（2）のブロック線図において、$G_3$・$G_4$ の直列接続にフィードバック要素 $H_1$ が付いた内側ループを閉ループ化した伝達関数はどれか。",
+        q:"【問5(2)(i)】問5（2）において $G_3\\cdot G_4$ の直列接続にフィードバック $H_1$ が付いた内側ループを閉ループ化した伝達関数はどれか。",
         opts:[
           "① $\\dfrac{G_3G_4H_1}{1+G_3G_4}$",
           "② $G_3G_4(1-H_1)$",
@@ -413,7 +440,18 @@ const SECTIONS = [
         note:"閉ループ基本式 $\\dfrac{G}{1+GH}$（$G=G_3G_4$，$H=H_1$）を適用。$\\dfrac{G_3G_4}{1+G_3G_4H_1}$。"
       },
       {
-        q:"問5（2）の全体の閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。（$G_1$・$G_2$ の直列経路、内側に $G_3G_4/H_1$ ループ、外側フィードバック $H_2$）",
+        q:"【問5(2)(ii)】問5（2）で内側ループを $\\dfrac{G_3G_4}{1+G_3G_4H_1}$ に置き換えたとき、$G_1$・$G_2$ との直列合成による前向き伝達関数はどれか。",
+        opts:[
+          "① $\\dfrac{G_3G_4}{1+G_3G_4H_1}$",
+          "② $\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1}$",
+          "③ $G_1G_2G_3G_4$",
+          "④ $\\dfrac{G_1G_2}{1+G_3G_4H_1}$"
+        ],
+        ans:1,
+        note:"$G_1\\cdot G_2\\cdot\\dfrac{G_3G_4}{1+G_3G_4H_1}=\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1}$（直列は積）。"
+      },
+      {
+        q:"【問5(2)(iii)】問5（2）の全体の閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。（前向き $\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1}$、外側フィードバック $H_2$）",
         opts:[
           "① $\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1}$",
           "② $\\dfrac{G_1G_2G_3G_4}{1+G_1G_2G_3G_4H_2}$",
@@ -421,7 +459,7 @@ const SECTIONS = [
           "④ $\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1+G_1G_2G_3G_4H_2}$"
         ],
         ans:3,
-        note:"①内側閉ループ：$\\dfrac{G_3G_4}{1+G_3G_4H_1}$ ②前向き全体：$\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1}$ ③外側 $H_2$ で再閉ループ：$\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1+G_1G_2G_3G_4H_2}$"
+        note:"$G'=\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1}$ に外側 $H_2$ で閉ループ：$\\dfrac{G'}{1+G'H_2}=\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1+G_1G_2G_3G_4H_2}$。"
       }
     ]
   }

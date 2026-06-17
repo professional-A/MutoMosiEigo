@@ -351,22 +351,22 @@ const SECTIONS = [
   },
   {
     id:"s5", no:"05",
-    title:"問4類似：ラプラス変換（定義・計算）（4問）",
-    desc:"過去問 問4と同じ形式で数値・関数を変えた問題",
+    title:"問4類似：ラプラス変換（定義・計算）（6問）",
+    desc:"過去問 問4と同じ形式で関数を変えた問題。問4(1) $f(t)=b\\cdot u(t)$・問4(2) $f(t)=e^{-\\beta t}$ を定義式から途中計算を経て求める",
     data:[
       {
-        q:"ラプラス変換（片側）の定義式において積分範囲として正しいのはどれか。",
+        q:"【問4(1)(i)】ラプラス変換の定義式（片側ラプラス変換）として正しいのはどれか。",
         opts:[
-          "① $-\\infty$ から $\\infty$（両側）",
-          "② $0$ から $\\infty$（片側）",
-          "③ $-\\infty$ から $0$",
-          "④ $0$ から $1$"
+          "① $F(s)=\\displaystyle\\int_{-\\infty}^{\\infty} f(t)e^{-st}\\,dt$",
+          "② $F(s)=\\displaystyle\\int_0^{\\infty} f(t)e^{st}\\,dt$",
+          "③ $F(s)=\\displaystyle\\int_0^{\\infty} f(t)e^{-j\\omega t}\\,dt$",
+          "④ $F(s)=\\displaystyle\\int_0^{\\infty} f(t)e^{-st}\\,dt$"
         ],
-        ans:1,
-        note:"片側ラプラス変換：$F(s)=\\int_0^\\infty f(t)e^{-st}dt$。$t<0$ では初期状態を $0$ とみなすため、積分は $0$ から $\\infty$。"
+        ans:3,
+        note:"片側ラプラス変換の定義：$F(s)=\\int_0^\\infty f(t)e^{-st}dt$。積分範囲は $[0,\\infty)$、核関数は $e^{-st}$（マイナス符号）。"
       },
       {
-        q:"$f(t) = b\\,u(t)$（$b$ は定数）のラプラス変換を定義式で計算した途中式として正しいのはどれか。",
+        q:"【問4(1)(ii)】$f(t)=b\\cdot u(t)=b$ を定義式に代入した積分式と途中計算として正しいのはどれか。",
         opts:[
           "① $\\displaystyle\\int_0^\\infty b\\,e^{-st}dt = b\\left[-\\dfrac{e^{-st}}{s}\\right]_0^\\infty = \\dfrac{b}{s}$",
           "② $\\displaystyle\\int_0^\\infty b\\,e^{-st}dt = \\dfrac{b}{s^2}$",
@@ -374,34 +374,51 @@ const SECTIONS = [
           "④ $\\displaystyle\\int_0^\\infty b\\,e^{-st}dt = b\\cdot s$"
         ],
         ans:0,
-        note:"$\\int_0^\\infty e^{-st}dt=\\dfrac{1}{s}$ なので $\\int_0^\\infty b e^{-st}dt=\\dfrac{b}{s}$。上限 $t\\to\\infty$ で $e^{-st}\\to 0$、下限 $t=0$ で $e^0=1$。"
+        note:"$u(t)=1$（$t\\ge 0$）なので $\\int_0^\\infty be^{-st}dt=b[-e^{-st}/s]_0^\\infty=b\\cdot(0-(-1/s))=b/s$。部分積分不要。"
       },
       {
-        q:"$f(t) = e^{-\\beta t}\\,u(t)$（$\\beta > 0$）のラプラス変換 $F(s)$ はどれか。",
+        q:"【問4(1)(iii)】$f(t)=b\\cdot u(t)$ のラプラス変換の最終結果 $F(s)$ として正しいのはどれか。",
+        opts:["① $\\dfrac{b}{s^2}$","② $b\\cdot s$","③ $\\dfrac{1}{bs}$","④ $\\dfrac{b}{s}$"],
+        ans:3,
+        note:"$\\mathcal{L}[b\\cdot u(t)]=b\\cdot\\dfrac{1}{s}=\\dfrac{b}{s}$（線形性）。定義式から直接積分しても $b/s$。"
+      },
+      {
+        q:"【問4(2)(i)】$f(t)=e^{-\\beta t}\\,u(t)$ を定義式に代入し指数を整理した積分式として正しいのはどれか。",
+        opts:[
+          "① $\\displaystyle\\int_0^\\infty e^{(s+\\beta)t}\\,dt$",
+          "② $\\displaystyle\\int_0^\\infty e^{-(s-\\beta)t}\\,dt$",
+          "③ $\\displaystyle\\int_0^\\infty e^{-(s+\\beta)t}\\,dt$",
+          "④ $\\displaystyle\\int_0^\\infty e^{-\\beta t}\\,dt$"
+        ],
+        ans:2,
+        note:"$\\int_0^\\infty e^{-\\beta t}\\cdot e^{-st}dt=\\int_0^\\infty e^{-(s+\\beta)t}dt$。指数法則：$-\\beta t-st=-(s+\\beta)t$。"
+      },
+      {
+        q:"【問4(2)(ii)】$\\displaystyle\\int_0^\\infty e^{-(s+\\beta)t}\\,dt$ を計算した途中式（定積分の評価式）として正しいのはどれか。",
+        opts:[
+          "① $\\left[-\\dfrac{e^{-(s+\\beta)t}}{s+\\beta}\\right]_0^\\infty$",
+          "② $\\left[\\dfrac{e^{-(s+\\beta)t}}{s+\\beta}\\right]_0^\\infty$",
+          "③ $\\left[-\\dfrac{e^{(s+\\beta)t}}{s+\\beta}\\right]_0^\\infty$",
+          "④ $\\left[-(s+\\beta)e^{-(s+\\beta)t}\\right]_0^\\infty$"
+        ],
+        ans:0,
+        note:"$\\int e^{-(s+\\beta)t}dt=-\\dfrac{e^{-(s+\\beta)t}}{s+\\beta}+C$（不定積分）。定積分の評価式は $\\left[-\\dfrac{e^{-(s+\\beta)t}}{s+\\beta}\\right]_0^\\infty$。"
+      },
+      {
+        q:"【問4(2)(iii)】$f(t)=e^{-\\beta t}\\,u(t)$ のラプラス変換の最終結果 $F(s)$ として正しいのはどれか。（$s+\\beta>0$ とする）",
         opts:["① $\\dfrac{1}{s-\\beta}$","② $\\dfrac{\\beta}{(s+\\beta)^2}$","③ $\\dfrac{s}{s^2+\\beta^2}$","④ $\\dfrac{1}{s+\\beta}$"],
         ans:3,
-        note:"$\\int_0^\\infty e^{-\\beta t}e^{-st}dt=\\int_0^\\infty e^{-(s+\\beta)t}dt=\\dfrac{1}{s+\\beta}$（$s+\\beta>0$）。$s-\\beta$ は誤り（符号に注意）。"
-      },
-      {
-        q:"$f(t)=e^{-\\beta t}$ の定義式計算で現れる $\\left[-\\dfrac{e^{-(s+\\beta)t}}{s+\\beta}\\right]_0^\\infty$ を計算すると？",
-        opts:[
-          "① $-\\dfrac{1}{s+\\beta}$",
-          "② $\\dfrac{1}{s+\\beta}$",
-          "③ $s+\\beta$",
-          "④ $0$"
-        ],
-        ans:1,
-        note:"$t\\to\\infty$：$e^{-(s+\\beta)t}\\to 0$（$s+\\beta>0$）→ 上限項は $0$。$t=0$：$-\\dfrac{1}{s+\\beta}$。差：$0-\\left(-\\dfrac{1}{s+\\beta}\\right)=\\dfrac{1}{s+\\beta}$。"
+        note:"$\\left[-\\dfrac{e^{-(s+\\beta)t}}{s+\\beta}\\right]_0^\\infty=0-\\left(-\\dfrac{1}{s+\\beta}\\right)=\\dfrac{1}{s+\\beta}$。$s-\\beta$ は誤り（符号に注意）。"
       }
     ]
   },
   {
     id:"s6", no:"06",
-    title:"問5類似：ブロック線図の等価変換（5問）",
-    desc:"過去問 問5と同じ手順で構成を変えたブロック線図問題",
+    title:"問5類似：ブロック線図の等価変換（6問）",
+    desc:"過去問 問5と同じ手順で構成を変えたブロック線図問題。各ステップを小問として出題",
     data:[
       {
-        q:"類似問5（1）において、$G_1$ と $G_2$ が直列接続されているとき合成伝達関数はどれか。",
+        q:"【問5(1)(i)】類似問5（1）において $G_1$ と $G_2$ が直列接続されているとき合成伝達関数はどれか。",
         opts:[
           "① $G_1 + G_2$",
           "② $G_1 \\cdot G_2$",
@@ -409,10 +426,10 @@ const SECTIONS = [
           "④ $\\dfrac{G_1\\cdot G_2}{G_1+G_2}$"
         ],
         ans:1,
-        note:"直列接続の合成伝達関数は各ブロックの伝達関数の「積」。$G_1\\cdot G_2$。（並列は和）"
+        note:"直列接続の合成伝達関数は各ブロックの「積」。$G_1\\cdot G_2$。（並列は和）"
       },
       {
-        q:"類似問5（1）において、前向き伝達関数 $G_1G_2$・直結ネガティブフィードバックの閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。",
+        q:"【問5(1)(ii)】類似問5（1）において前向き伝達関数 $G_1G_2$・直結ネガティブフィードバックの閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。",
         opts:[
           "① $G_1G_2$",
           "② $\\dfrac{1}{1+G_1G_2}$",
@@ -423,7 +440,7 @@ const SECTIONS = [
         note:"直結ネガティブフィードバック：$\\dfrac{C}{R}=\\dfrac{G}{1+G}=\\dfrac{G_1G_2}{1+G_1G_2}$。"
       },
       {
-        q:"類似問5（1）の閉ループ伝達関数が $\\dfrac{G_1G_2}{1+G_1G_2}$ のとき、偏差伝達関数 $\\dfrac{E(s)}{R(s)}$ はどれか。",
+        q:"【問5(1)(iii)】類似問5（1）の閉ループ伝達関数が $\\dfrac{G_1G_2}{1+G_1G_2}$ のとき偏差伝達関数 $\\dfrac{E(s)}{R(s)}$ はどれか。",
         opts:[
           "① $\\dfrac{G_1G_2}{1+G_1G_2}$",
           "② $1 + G_1G_2$",
@@ -431,10 +448,10 @@ const SECTIONS = [
           "④ $\\dfrac{1}{1+G_1G_2}$"
         ],
         ans:3,
-        note:"$E(s)=R(s)-C(s)=R(s)\\left(1-\\dfrac{G_1G_2}{1+G_1G_2}\\right)=\\dfrac{R(s)}{1+G_1G_2}$。偏差伝達関数は $\\dfrac{1}{1+G_1G_2}$。"
+        note:"$E=R-C=R\\left(1-\\dfrac{G_1G_2}{1+G_1G_2}\\right)=\\dfrac{R}{1+G_1G_2}$。偏差伝達関数は $\\dfrac{1}{1+G_1G_2}$。"
       },
       {
-        q:"類似問5（2）において、$G_2$ のみからなる前向き部にフィードバック要素 $H_1$ が付いた内側ループを閉ループ化した伝達関数はどれか。",
+        q:"【問5(2)(i)】類似問5（2）において $G_2$ のみの前向き部にフィードバック $H_1$ が付いた内側ループを閉ループ化した伝達関数はどれか。",
         opts:[
           "① $\\dfrac{G_2H_1}{1+G_2}$",
           "② $\\dfrac{G_2}{1+H_1}$",
@@ -445,7 +462,18 @@ const SECTIONS = [
         note:"閉ループ基本式 $\\dfrac{G}{1+GH}$（$G=G_2$，$H=H_1$）を適用：$\\dfrac{G_2}{1+G_2H_1}$。"
       },
       {
-        q:"類似問5（2）の全体の閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。（前向き $G_1$、内側ループ $G_2/H_1$、直後に $G_3$、外側フィードバック $H_2$）",
+        q:"【問5(2)(ii)】類似問5（2）で内側ループを $\\dfrac{G_2}{1+G_2H_1}$ に置き換えたとき、$G_1$ と $G_3$ との直列合成による前向き伝達関数はどれか。",
+        opts:[
+          "① $\\dfrac{G_2}{1+G_2H_1}$",
+          "② $\\dfrac{G_1G_2G_3}{1+G_2H_1}$",
+          "③ $G_1G_2G_3$",
+          "④ $\\dfrac{G_1G_3}{1+G_2H_1}$"
+        ],
+        ans:1,
+        note:"$G_1\\cdot\\dfrac{G_2}{1+G_2H_1}\\cdot G_3=\\dfrac{G_1G_2G_3}{1+G_2H_1}$（直列は積）。"
+      },
+      {
+        q:"【問5(2)(iii)】類似問5（2）の全体の閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。（前向き $\\dfrac{G_1G_2G_3}{1+G_2H_1}$、外側フィードバック $H_2$）",
         opts:[
           "① $\\dfrac{G_1G_2G_3}{1+G_2H_1}$",
           "② $\\dfrac{G_1G_2G_3}{1+G_1G_2G_3H_2}$",
@@ -453,7 +481,7 @@ const SECTIONS = [
           "④ $\\dfrac{G_1G_2G_3}{1+G_2H_1+G_1G_2G_3H_2}$"
         ],
         ans:3,
-        note:"①内側閉ループ：$\\dfrac{G_2}{1+G_2H_1}$ ②前向き全体：$G_1\\cdot\\dfrac{G_2}{1+G_2H_1}\\cdot G_3=\\dfrac{G_1G_2G_3}{1+G_2H_1}$ ③外側 $H_2$：$\\dfrac{G_1G_2G_3}{1+G_2H_1+G_1G_2G_3H_2}$"
+        note:"$G'=\\dfrac{G_1G_2G_3}{1+G_2H_1}$ に外側 $H_2$ で閉ループ：$\\dfrac{G'}{1+G'H_2}=\\dfrac{G_1G_2G_3}{1+G_2H_1+G_1G_2G_3H_2}$。"
       }
     ]
   }
