@@ -660,7 +660,9 @@ function restore(){
 
 function resetAll(){
   if(!confirm("全部の解答状況をリセットする？")) return;
-  state={}; save(); render();
+  state={}; save();
+  localStorage.setItem("mutou_u12_reset", "1");
+  render();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -680,6 +682,10 @@ document.addEventListener("keydown", function(e){
 
 render();
 window._quizSync = async function() {
+  if(localStorage.getItem("mutou_u12_reset")){
+    localStorage.removeItem("mutou_u12_reset");
+    return;
+  }
   const s = await progressLoad("mutou_u12");
   if (!s || !Object.keys(s).length) return;
   let chg = false;

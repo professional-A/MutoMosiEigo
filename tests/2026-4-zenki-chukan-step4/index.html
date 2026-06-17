@@ -510,7 +510,9 @@ function render(){
 
 function resetAll(){
   if(!confirm("全解答をリセットする？")) return;
-  state={}; save(); render();
+  state={}; save();
+  localStorage.setItem("mutou_step4_reset", "1");
+  render();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
@@ -530,6 +532,10 @@ document.addEventListener("keydown",function(e){
 
 render();
 window._quizSync = async function() {
+  if(localStorage.getItem("mutou_step4_reset")){
+    localStorage.removeItem("mutou_step4_reset");
+    return;
+  }
   const s = await progressLoad("mutou_step4");
   if (!s || !Object.keys(s).length) return;
   let chg = false;

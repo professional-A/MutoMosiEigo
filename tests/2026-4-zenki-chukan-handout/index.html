@@ -454,12 +454,18 @@ function render(){
 
 function resetAll(){
   if(!confirm("全部の解答状況をリセットする？")) return;
-  state={}; save(); render();
+  state={}; save();
+  localStorage.setItem("mutou_handout_u12_reset", "1");
+  render();
   window.scrollTo({top:0,behavior:"smooth"});
 }
 
 render();
 window._quizSync = async function() {
+  if(localStorage.getItem("mutou_handout_u12_reset")){
+    localStorage.removeItem("mutou_handout_u12_reset");
+    return;
+  }
   const s = await progressLoad("mutou_handout_u12");
   if (!s || !Object.keys(s).length) return;
   let chg = false;
