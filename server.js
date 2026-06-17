@@ -56,6 +56,7 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS unlocked_avatars TEXT DEFAULT '[]'`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS title TEXT DEFAULT 'ちょおちょおちょお'`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ouri_score INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS math_score INTEGER`).catch(()=>{});
   await pool.query(`UPDATE users SET title='ちょおちょおちょお' WHERE title IS NULL`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
@@ -259,18 +260,26 @@ app.get('/api/members', async (req, res) => {
 // 科目別成績一覧（ログイン不要）
 app.get('/api/scores', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, title, test_score, ouri_score
+    SELECT username, avatar, frame, title, test_score, ouri_score, math_score
     FROM users
     ORDER BY username
   `);
   res.json(rows);
 });
 
-// 応用物理得点入力（自己申告）
+// 応用物理得点入力（自己申告・再入力可）
 app.post('/api/ouri/score', auth, async (req, res) => {
   const s = parseInt(req.body.score, 10);
   if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
   await pool.query('UPDATE users SET ouri_score=$1 WHERE id=$2', [s, req.user.id]);
+  res.json({ ok: true, score: s });
+});
+
+// 応用数学得点入力（自己申告・再入力可）
+app.post('/api/math/score', auth, async (req, res) => {
+  const s = parseInt(req.body.score, 10);
+  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
+  await pool.query('UPDATE users SET math_score=$1 WHERE id=$2', [s, req.user.id]);
   res.json({ ok: true, score: s });
 });
 
