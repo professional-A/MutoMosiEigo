@@ -1780,11 +1780,20 @@ async function loadScores() {
       return `<th style="text-align:center;cursor:pointer;user-select:none${col}${extraStyle}" onclick="sortScores('${key}')">${label}${arr}</th>`;
     };
 
-    // ミッツ・波多野裏技のうちスコアが高い（表の下側）ほうの index にラインを引く
-    const lineIdx = Math.max(
-      sorted.findIndex(r => r.username === 'ミッツ'),
-      sorted.findIndex(r => r.username === '波多野裏技')
-    );
+    // みっつー波多野ライン: 両方未入力なら非表示、片方未入力なら入力済みに合わせる
+    const mittsAvg   = data.find(r => r.username === 'ミッツ')?._avg ?? null;
+    const hatanoAvg  = data.find(r => r.username === '波多野裏技')?._avg ?? null;
+    let lineIdx = -1;
+    if (mittsAvg != null && hatanoAvg != null) {
+      lineIdx = Math.max(
+        sorted.findIndex(r => r.username === 'ミッツ'),
+        sorted.findIndex(r => r.username === '波多野裏技')
+      );
+    } else if (mittsAvg != null) {
+      lineIdx = sorted.findIndex(r => r.username === 'ミッツ');
+    } else if (hatanoAvg != null) {
+      lineIdx = sorted.findIndex(r => r.username === '波多野裏技');
+    }
 
     const rows = sorted.map((r, i) => {
       const isMe = r.username === authUser;
