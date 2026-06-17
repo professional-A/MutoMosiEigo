@@ -1622,7 +1622,7 @@ async function openMembersModal() {
   const data = await res.json();
   if (!Array.isArray(data)) { el.innerHTML = 'エラー'; return; }
   el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
-      <thead><tr><th>#</th><th>名前</th><th>ポイント</th><th>予測</th><th>賭け金</th></tr></thead>
+      <thead><tr><th>#</th><th>名前</th><th>ポイント</th><th>賭け金</th></tr></thead>
       <tbody>${data.map((u, i) => `
         <tr>
           <td class="rank-num${Number(u.rank)<=3?' top':''}">${u.rank}</td>
@@ -1634,7 +1634,6 @@ async function openMembersModal() {
             </span>
           </td>
           <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
-          <td style="text-align:center;color:var(--teal)">${u.test_pred != null ? u.test_pred+'点' : '―'}</td>
           <td style="text-align:center;color:var(--amber)">${u.test_bet != null ? u.test_bet.toLocaleString()+'pt' : '―'}</td>
         </tr>`).join('')}
       </tbody>
