@@ -1676,7 +1676,7 @@ async function submitOuriScore() {
   try {
     const res  = await fetch('/api/ouri/score', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body: JSON.stringify({ score: n }) });
     const data = await res.json();
-    if (data.ok) { alert(`✅ 応用物理 ${data.score}点 を登録しました`); await loadScores(); }
+    if (data.ok) { alert(`✅ 応用物理 ${data.score}点 を登録しました`); await openScoresModal(); }
     else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー'); }
 }
