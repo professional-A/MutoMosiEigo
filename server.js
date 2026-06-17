@@ -54,6 +54,9 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS test_bet   INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS prev_frame TEXT DEFAULT 'default'`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS unlocked_avatars TEXT DEFAULT '[]'`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS title TEXT DEFAULT 'ちょおちょおちょお'`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ouri_score INTEGER`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='ちょおちょおちょお' WHERE title IS NULL`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
       id         SERIAL PRIMARY KEY,
@@ -245,12 +248,30 @@ app.get('/api/ranking', async (req, res) => {
 // メンバー一覧（ポイント順、ログイン不要）
 app.get('/api/members', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, points + COALESCE(test_bet,0) AS points, last_login, test_pred, test_bet,
+    SELECT username, avatar, frame, title, points + COALESCE(test_bet,0) AS points, last_login, test_pred, test_bet, test_score,
            DENSE_RANK() OVER (ORDER BY points + COALESCE(test_bet,0) DESC) AS rank
     FROM users
     ORDER BY points + COALESCE(test_bet,0) DESC
   `);
   res.json(rows);
+});
+
+// 科目別成績一覧（ログイン不要）
+app.get('/api/scores', async (req, res) => {
+  const { rows } = await pool.query(`
+    SELECT username, avatar, frame, title, test_score, ouri_score
+    FROM users
+    ORDER BY username
+  `);
+  res.json(rows);
+});
+
+// 応用物理得点入力（自己申告）
+app.post('/api/ouri/score', auth, async (req, res) => {
+  const s = parseInt(req.body.score, 10);
+  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
+  await pool.query('UPDATE users SET ouri_score=$1 WHERE id=$2', [s, req.user.id]);
+  res.json({ ok: true, score: s });
 });
 
 // 管理者：ユーザー一覧
@@ -268,7 +289,7 @@ app.get('/api/admin/users', auth, async (req, res) => {
 
 // 自分の情報を取得（パスワードユーザーの再ログイン用）
 app.get('/api/me', auth, async (req, res) => {
-  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: dp(req.user), unlockedAvatars: JSON.parse(req.user.unlocked_avatars || '[]') });
+  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: dp(req.user), unlockedAvatars: JSON.parse(req.user.unlocked_avatars || '[]'), title: req.user.title || 'ちょおちょおちょお', ouriScore: req.user.ouri_score ?? null });
 });
 
 // パスワード登録

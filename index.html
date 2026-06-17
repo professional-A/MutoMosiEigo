@@ -273,6 +273,7 @@ h1{
   <span id="auth-status">ログインしていません</span>
   <button class="auth-btn" id="admin-btn" style="display:none" onclick="openAdminModal()">管理</button>
   <button class="auth-btn" id="members-btn" style="display:none" onclick="openMembersModal()">メンバー</button>
+  <button class="auth-btn" id="scores-btn" style="display:none" onclick="openScoresModal()">📊成績</button>
   <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
   <button class="auth-btn" id="test-btn" style="display:none" onclick="openTestModal()">📋テスト</button>
   <button class="auth-btn" id="pw-open-btn" onclick="openLoginModal()">IDでログイン</button>
@@ -507,6 +508,21 @@ h1{
   </div>
 </div>
 
+<!-- 科目別成績モーダル -->
+<div class="modal-bg" id="scores-modal-bg">
+  <div class="modal" style="width:min(540px,95vw)">
+    <button onclick="closeScoresModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2>📊 科目別成績</h2>
+    <div id="scores-content" style="margin-top:12px;font-size:.85rem"></div>
+    <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
+      <button id="ouri-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid var(--teal);border-radius:10px;background:rgba(70,214,196,.1);color:var(--teal);cursor:pointer" onclick="submitOuriScore()">応用物理の点数を入力</button>
+    </div>
+    <div class="modal-btns" style="margin-top:12px">
+      <button onclick="closeScoresModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+  </div>
+</div>
+
 <!-- アバター選択モーダル -->
 <div class="modal-bg" id="avatar-modal-bg">
   <div class="modal">
@@ -662,6 +678,9 @@ h1{
       " onmouseover="this.style.background='rgba(70,214,196,.22)'" onmouseout="this.style.background='rgba(70,214,196,.12)'">
         📋 資料 — 加工学
       </a>
+      <button id="ouri-score-header-btn" onclick="submitOuriScore()" style="display:none;font-family:inherit;font-size:.85rem;font-weight:600;background:rgba(246,179,82,.12);border:1px solid var(--amber);color:var(--amber);padding:7px 16px;border-radius:99px;cursor:pointer;transition:.15s" onmouseover="this.style.background='rgba(246,179,82,.22)'" onmouseout="this.style.background='rgba(246,179,82,.12)'">
+        🧪 応用物理 点数を入力
+      </button>
     </div>
 
     <div id="survey-banner" style="display:none;margin-top:20px;background:linear-gradient(135deg,rgba(70,214,196,.12),rgba(246,179,82,.10));border:1px solid var(--teal);border-radius:14px;padding:14px 18px;align-items:center;gap:14px;flex-wrap:wrap">
@@ -884,6 +903,9 @@ function updateAuthBar() {
     document.getElementById('test-btn').style.display = 'inline-block';
     document.getElementById('admin-btn').style.display = authEmail === 'kabu6113450@gmail.com' ? 'inline-block' : 'none';
     document.getElementById('members-btn').style.display = 'inline-block';
+    document.getElementById('scores-btn').style.display = 'inline-block';
+    const ouriHdr = document.getElementById('ouri-score-header-btn');
+    if (ouriHdr) ouriHdr.style.display = 'inline-flex';
     loadRanking();
   } else {
     bar.textContent = 'ログインしていません';
@@ -895,6 +917,9 @@ function updateAuthBar() {
     document.getElementById('test-btn').style.display = 'none';
     document.getElementById('admin-btn').style.display = 'none';
     document.getElementById('members-btn').style.display = 'none';
+    document.getElementById('scores-btn').style.display = 'none';
+    const ouriHdrOff = document.getElementById('ouri-score-header-btn');
+    if (ouriHdrOff) ouriHdrOff.style.display = 'none';
     document.getElementById('ranking-content').innerHTML =
       '<p class="ranking-login-note">ログインするとランキングが表示されます</p>';
   }
@@ -1560,7 +1585,10 @@ async function openMembersModal() {
           <td class="rank-num${Number(u.rank)<=3?' top':''}">${u.rank}</td>
           <td class="rank-name">
             <span class="avatar frame-${u.frame||'default'}" style="width:24px;height:24px;font-size:.9rem;margin-right:6px;vertical-align:middle">${u.avatar||'🐸'}</span>
-            ${esc(u.username)}
+            <span>
+              ${esc(u.username)}
+              <br><span style="font-size:.7rem;color:var(--amber);font-weight:600">${esc(u.title||'ちょおちょおちょお')}</span>
+            </span>
           </td>
           <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
           <td style="text-align:center;color:var(--teal)">${u.test_pred != null ? u.test_pred+'点' : '―'}</td>
@@ -1576,6 +1604,82 @@ function closeMembersModal() {
 document.getElementById('members-modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeMembersModal();
 });
+
+// ── 科目別成績 ────────────────────────────────────────────
+async function openScoresModal() {
+  lockScroll();
+  document.getElementById('scores-modal-bg').classList.add('open');
+  const btn = document.getElementById('ouri-input-btn');
+  if (btn) btn.style.display = authToken ? 'inline-block' : 'none';
+  await loadScores();
+}
+function closeScoresModal() {
+  unlockScroll();
+  document.getElementById('scores-modal-bg').classList.remove('open');
+}
+document.getElementById('scores-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeScoresModal();
+});
+async function loadScores() {
+  const el = document.getElementById('scores-content');
+  try {
+    const res  = await fetch('/api/scores');
+    const data = await res.json();
+    if (!Array.isArray(data) || !data.length) { el.innerHTML = '<p style="color:var(--muted)">まだ点数が登録されていません</p>'; return; }
+
+    // 英語ランキング（test_score）
+    const eigoRows = [...data].filter(r => r.test_score != null).sort((a,b) => b.test_score - a.test_score);
+    let eigoRank = 0, prevScore = null;
+    eigoRows.forEach((r, i) => { if (r.test_score !== prevScore) { eigoRank = i + 1; prevScore = r.test_score; } r._eigoRank = eigoRank; });
+
+    // 応用物理ランキング（ouri_score）
+    const ouriRows = [...data].filter(r => r.ouri_score != null).sort((a,b) => b.ouri_score - a.ouri_score);
+    let ouriRank = 0, prevOuri = null;
+    ouriRows.forEach((r, i) => { if (r.ouri_score !== prevOuri) { ouriRank = i + 1; prevOuri = r.ouri_score; } r._ouriRank = ouriRank; });
+
+    // ユーザー名 → ランク情報マップ
+    const map = {};
+    eigoRows.forEach(r => { map[r.username] = { ...map[r.username], eigo: r.test_score, eigoRank: r._eigoRank, avatar: r.avatar, frame: r.frame, title: r.title }; });
+    ouriRows.forEach(r => { map[r.username] = { ...map[r.username], ouri: r.ouri_score, ouriRank: r._ouriRank, avatar: r.avatar, frame: r.frame, title: r.title }; });
+
+    // 全ユーザーをまとめる
+    const allNames = [...new Set(data.map(r => r.username))];
+    allNames.forEach(n => { if (!map[n]) { const r = data.find(x=>x.username===n); map[n]={avatar:r.avatar,frame:r.frame,title:r.title}; } });
+
+    el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
+      <thead><tr><th>名前</th><th style="text-align:center">英語</th><th style="text-align:center">応用物理</th></tr></thead>
+      <tbody>${allNames.map(n => {
+        const m = map[n] || {};
+        const isMe = n === authUser;
+        const eigoCell = m.eigo != null ? `<span style="font-weight:700;color:var(--teal)">${m.eigo}</span><span style="font-size:.7rem;color:var(--dim)"> (${m.eigoRank}位)</span>` : '<span style="color:var(--dim)">―</span>';
+        const ouriCell = m.ouri != null ? `<span style="font-weight:700;color:var(--amber)">${m.ouri}</span><span style="font-size:.7rem;color:var(--dim)"> (${m.ouriRank}位)</span>` : '<span style="color:var(--dim)">―</span>';
+        const d = data.find(r => r.username === n);
+        return `<tr${isMe?' style="background:rgba(70,214,196,.06)"':''}>
+          <td class="rank-name">
+            <span class="avatar frame-${d?.frame||'default'}" style="width:22px;height:22px;font-size:.85rem;margin-right:6px;vertical-align:middle">${d?.avatar||'🐸'}</span>
+            <span>${esc(n)}${isMe?' 👈':''}<br><span style="font-size:.68rem;color:var(--amber);font-weight:600">${esc(d?.title||'ちょおちょおちょお')}</span></span>
+          </td>
+          <td style="text-align:center">${eigoCell}</td>
+          <td style="text-align:center">${ouriCell}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+  } catch(e) { el.innerHTML = '<p style="color:var(--muted)">読み込みエラー</p>'; }
+}
+
+async function submitOuriScore() {
+  if (!authToken) { alert('ログインしてください'); return; }
+  const s = prompt('応用物理の点数を入力してください（0〜100）');
+  if (s === null) return;
+  const n = parseInt(s, 10);
+  if (isNaN(n) || n < 0 || n > 100) { alert('0〜100の整数で入力してください'); return; }
+  try {
+    const res  = await fetch('/api/ouri/score', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body: JSON.stringify({ score: n }) });
+    const data = await res.json();
+    if (data.ok) { alert(`✅ 応用物理 ${data.score}点 を登録しました`); await loadScores(); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
 
 // ── アンケート ───────────────────────────────────────────
 async function initSurveyBanner() {
