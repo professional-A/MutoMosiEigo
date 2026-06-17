@@ -1792,7 +1792,7 @@ async function loadScores() {
         : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`;
       const styles = [];
       if (isMe) styles.push('background:rgba(70,214,196,.06)');
-      if (isMitts) styles.push('border-bottom:3px solid rgba(239,68,68,.85)');
+      if (isMitts) styles.push('background:rgba(239,68,68,.1)');
       const rowAttr = styles.length ? ` style="${styles.join(';')}"` : '';
       const row = `<tr${rowAttr}>
         ${rankTd}
