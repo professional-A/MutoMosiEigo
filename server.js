@@ -406,13 +406,24 @@ app.post('/api/admin/award-worst', auth, async (req, res) => {
   res.json({ ok: true, username: rows[0]?.username });
 });
 
-// テスト最下位にバカフレーム付与
+// テスト合計下位3人にフレーム付与（全科目入力済みの人のみ）
 app.post('/api/admin/award-baka', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  const { rows } = await pool.query('SELECT id, username FROM users WHERE test_score IS NOT NULL ORDER BY test_score ASC LIMIT 1');
-  if (!rows[0]) return res.status(400).json({ error: 'まだ得点が登録されていません' });
-  await pool.query("UPDATE users SET frame='baka' WHERE id=$1", [rows[0].id]);
-  res.json({ ok: true, username: rows[0].username });
+  const { rows } = await pool.query(`
+    SELECT id, username, test_score + ouri_score + math_score AS total
+    FROM users
+    WHERE test_score IS NOT NULL AND ouri_score IS NOT NULL AND math_score IS NOT NULL
+    ORDER BY total ASC
+    LIMIT 3
+  `);
+  if (!rows[0]) return res.status(400).json({ error: '全科目入力済みのユーザーがいません' });
+  const frames = ['baka', 'moeru', 'kusai'];
+  const assigned = [];
+  for (let i = 0; i < rows.length; i++) {
+    await pool.query('UPDATE users SET frame=$1 WHERE id=$2', [frames[i], rows[i].id]);
+    assigned.push({ username: rows[i].username, frame: frames[i], total: rows[i].total });
+  }
+  res.json({ ok: true, assigned });
 });
 
 // プール配分：1/誤差² の比率でポイントを配分
