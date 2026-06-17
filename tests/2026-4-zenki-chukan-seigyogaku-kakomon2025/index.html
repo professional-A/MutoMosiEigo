@@ -1,0 +1,443 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>制御工学Ⅰ 2025年度 中間試験 過去問（選択式）</title>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.css">
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/katex.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.9/dist/contrib/auto-render.min.js"
+  onload="renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]})"></script>
+<script src="/js/progress.js"></script>
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{background:#0a1626;color:#c8d8f0;font-family:'Segoe UI',sans-serif;font-size:15px;line-height:1.7}
+a{color:#46d6c4;text-decoration:none}
+a:hover{text-decoration:underline}
+header{background:linear-gradient(135deg,#0d2040,#0a3060);padding:18px 20px 14px;border-bottom:2px solid #1a3a6a}
+header h1{font-size:1.2rem;font-weight:700;color:#fff;letter-spacing:.04em}
+header p{font-size:.82rem;color:#7ca0cc;margin-top:4px}
+.back{font-size:.82rem;color:#46d6c4;margin-bottom:8px;display:inline-block}
+.score-bar-wrap{background:#0d2040;border:1px solid #1a3a6a;border-radius:10px;padding:14px 18px;margin:16px 20px}
+.score-bar-bg{background:#071428;border-radius:6px;height:10px;overflow:hidden;margin:8px 0 4px}
+.score-bar{height:10px;border-radius:6px;background:linear-gradient(90deg,#1a6e9a,#46d6c4);transition:width .4s}
+.score-text{font-size:.82rem;color:#7ca0cc}
+.score-num{font-size:1.05rem;font-weight:700;color:#46d6c4}
+nav{background:#07111f;border-bottom:1px solid #1a3a6a;padding:10px 20px}
+nav h2{font-size:.78rem;text-transform:uppercase;letter-spacing:.1em;color:#4a7a9a;margin-bottom:6px}
+nav ul{list-style:none;display:flex;flex-wrap:wrap;gap:8px}
+nav ul li a{font-size:.82rem;background:#0d2040;border:1px solid #1a3a6a;border-radius:6px;padding:4px 10px;color:#7ca0cc;display:inline-block}
+nav ul li a:hover{color:#46d6c4;border-color:#46d6c4;text-decoration:none}
+main{max-width:820px;margin:0 auto;padding:20px}
+.section{margin-bottom:36px}
+.section-hd{background:linear-gradient(135deg,#0d2040,#071830);border:1px solid #1a3a6a;border-radius:10px;padding:14px 18px;margin-bottom:16px}
+.section-hd .no{font-size:.72rem;text-transform:uppercase;letter-spacing:.15em;color:#46d6c4;font-weight:700}
+.section-hd h2{font-size:1.05rem;color:#fff;margin-top:4px}
+.section-hd p{font-size:.8rem;color:#7ca0cc;margin-top:4px}
+.q-card{background:#0d2040;border:1px solid #1a3a6a;border-radius:10px;padding:16px 18px;margin-bottom:14px;transition:border-color .2s}
+.q-card.correct{border-color:#2ecc71}
+.q-card.wrong{border-color:#e74c3c}
+.q-num{font-size:.72rem;color:#46d6c4;font-weight:700;text-transform:uppercase;letter-spacing:.1em;margin-bottom:6px}
+.q-text{color:#c8d8f0;margin-bottom:12px;line-height:1.8}
+.opts{display:flex;flex-direction:column;gap:8px}
+.opt-btn{background:#071428;border:1px solid #1a3a6a;border-radius:7px;padding:10px 14px;color:#a0b8d8;text-align:left;cursor:pointer;font-size:.9rem;transition:all .15s;line-height:1.6}
+.opt-btn:hover:not(:disabled){background:#0d2040;border-color:#46d6c4;color:#fff}
+.opt-btn:disabled{cursor:default}
+.opt-btn.selected-correct{background:rgba(46,204,113,.15);border-color:#2ecc71;color:#2ecc71}
+.opt-btn.selected-wrong{background:rgba(231,76,60,.15);border-color:#e74c3c;color:#e74c3c}
+.opt-btn.reveal-correct{background:rgba(46,204,113,.08);border-color:#27ae60;color:#2ecc71}
+.note{margin-top:10px;background:#071428;border-left:3px solid #46d6c4;border-radius:0 6px 6px 0;padding:8px 12px;font-size:.82rem;color:#7ca0cc;line-height:1.7}
+.reset-btn{background:rgba(231,76,60,.15);border:1px solid #e74c3c;color:#e74c3c;padding:8px 20px;border-radius:8px;cursor:pointer;font-size:.85rem;margin:10px 20px 20px}
+.reset-btn:hover{background:rgba(231,76,60,.3)}
+.section-score{font-size:.78rem;color:#7ca0cc;text-align:right;margin-top:6px}
+</style>
+</head>
+<body>
+<header>
+  <a class="back" href="/">← トップへ</a>
+  <h1>制御工学Ⅰ — 2025年度 中間試験 過去問（選択式）</h1>
+  <p>2025.6.11 実施 ・ 全問選択式に変換 ・ 問1〜問5対応</p>
+</header>
+
+<div class="score-bar-wrap">
+  <div style="display:flex;justify-content:space-between;align-items:center">
+    <span class="score-text">総合スコア</span>
+    <span class="score-num" id="score-num">0 / 28</span>
+  </div>
+  <div class="score-bar-bg"><div class="score-bar" id="score-bar" style="width:0%"></div></div>
+  <div id="section-scores" style="font-size:.78rem;color:#7ca0cc;margin-top:4px"></div>
+</div>
+
+<nav>
+  <h2>目次</h2>
+  <ul id="toc"></ul>
+</nav>
+
+<main id="main"></main>
+<button class="reset-btn" onclick="resetAll()">リセット</button>
+
+<script>
+const STORAGE_KEY = "seigyo_kakomon2025_v1";
+const TOTAL = 28;
+
+const SECTIONS = [
+  {
+    id:"s1", no:"01",
+    title:"問1：基礎知識（10問）",
+    desc:"2025年度中間試験 問1（3点×10=30点）を選択式で再現",
+    data:[
+      {
+        q:"制御工学Ⅰの講義で取り扱うシステムの性質として「該当しない」のはどれか。",
+        opts:["① 線形性","② 静特性","③ 時不変性","④ 固有性"],
+        ans:3,
+        note:"制御工学Ⅰで扱うLTIシステムの基本性質は「線形性」と「時不変性」。「固有性」は制御工学の基本性質として定義されない用語。"
+      },
+      {
+        q:"制御量が電圧・電流等の電気量である制御系の名称として正しいのはどれか。",
+        opts:["① 自動制御","② サーボ機構","③ プロセス制御","④ プログラム制御","⑤ シーケンス制御"],
+        ans:2,
+        note:"プロセス制御は温度・圧力・流量・電圧・電流などの物理量を連続的に制御するもの。サーボ機構は位置・速度・方向などの機械量を制御する。"
+      },
+      {
+        q:"大規模企業側から見た FA（Factory Automation）の従来からの一般的な利点に「該当しない」のはどれか。",
+        opts:["① 大量生産","② 生産速度の向上","③ 品質の向上と均一化","④ 多品種少量生産","⑤ 労働者の削減"],
+        ans:3,
+        note:"従来のFAは大量・均一生産が主目的。「多品種少量生産」への対応は近年の新たな課題であり、従来の利点には含まれない。"
+      },
+      {
+        q:"時間関数 $u(t)$（単位ステップ関数）を $r(t)$ と表したとき、その性質として正しくないのはどれか。",
+        opts:["① ラプラス変換すると $\\dfrac{1}{s}$ である","② デルタ関数 $\\delta(t)$ を微分して得られる","③ $t < 0$ の領域では $r(t)=0$ である","④ 単位ステップ関数とも呼ばれる","⑤ $t > 0$ の領域では $r(t)=1$ である"],
+        ans:1,
+        note:"$u(t)$ はデルタ関数 $\\delta(t)$ を「積分」して得られる。$\\dfrac{d}{dt}u(t)=\\delta(t)$ より、$u(t)=\\displaystyle\\int_0^t\\delta(\\tau)d\\tau$。「微分して得られる」は誤り。"
+      },
+      {
+        q:"ブロック線図に関する説明として正しくないのはどれか。",
+        opts:[
+          "① 加え合わせ点の白丸（○）は引き出し点の黒丸（●）より大きく書く",
+          "② ブロック線図は制御系における各要素間の関係を表すのに用いられる",
+          "③ 前向き要素が $G$ の直結ネガティブフィードバック制御系の合成伝達関数は $\\dfrac{1}{1+G}$ である",
+          "④ 引き出し点から信号が2つに分かれても前後の信号の値は変わらない",
+          "⑤ ブロック線図の等価変換は変換前後が等価（同じ入出力関係）であれば適用可能である"
+        ],
+        ans:2,
+        note:"前向き要素 $G$、直結ネガティブフィードバックの閉ループ伝達関数は $\\dfrac{G}{1+G}$。分子は $G$ であり $1$ ではない。"
+      },
+      {
+        q:"各種変換の相互関係として正しくないのはどれか。",
+        opts:[
+          "① Z変換はラプラス変換を離散化した変換で、システム解析に用いられる",
+          "② 離散フーリエ変換（DFT）はフーリエ変換を離散化した変換で、周波数解析に用いられる",
+          "③ 高速フーリエ変換（FFT）はDFTを高速化した変換で、周波数解析に用いられる",
+          "④ ラプラス変換はフーリエ変換に減衰項 $e^{-\\alpha t}$ を導入し拡張した変換である",
+          "⑤ フーリエ変換に対して周期ゼロの孤立波形に対応できるよう拡張したのがフーリエ級数である"
+        ],
+        ans:4,
+        note:"フーリエ級数は「周期関数」を扱うもの。フーリエ変換が非周期（孤立波形）に対応できるよう拡張されたもの。⑤は説明が逆になっている。"
+      },
+      {
+        q:"単位ステップ関数 $u(t)$ を時間微分して得られる関数はどれか。",
+        opts:["① $\\delta(t)$（単位インパルス関数）","② $h(t)$（インパルス応答）","③ $u(t)$（単位ステップ関数自身）","④ $\\sin(t)$","⑤ $e^t$"],
+        ans:0,
+        note:"$\\dfrac{d}{dt}u(t)=\\delta(t)$。単位ステップ関数を微分すると単位インパルス関数（デルタ関数）になる。"
+      },
+      {
+        q:"制御系としてのシステムが最善な動作をすること（外乱やパラメータ変動があっても制御性能を維持すること）を意味する用語はどれか。",
+        opts:["① 同定（パラメータ推定）","② 可制御","③ 可観測","④ 規範（モデル）","⑤ 堅牢（ロバスト）"],
+        ans:4,
+        note:"堅牢（ロバスト）制御とは、モデル誤差・外乱・パラメータ変動があっても安定性と制御性能を維持し最善な動作を保つこと。"
+      },
+      {
+        q:"ラプラス変換における「時間移動（時間遅れ）の定理」として正しいのはどれか。",
+        opts:[
+          "① $\\lim_{t \\to 0} f(t) = \\lim_{s \\to \\infty} sF(s)$（初期値定理）",
+          "② $\\lim_{t \\to \\infty} f(t) = \\lim_{s \\to 0} sF(s)$（最終値定理）",
+          "③ $\\mathcal{L}[f(t-a)\\,u(t-a)] = e^{-as}F(s)$",
+          "④ $\\mathcal{L}[f_1(t) \\cdot f_2(t)] = F_1(s) \\cdot F_2(s)$",
+          "⑤ $\\mathcal{L}[f_1(t)+f_2(t)] = F_1(s)+F_2(s)$（線形性）"
+        ],
+        ans:2,
+        note:"時間移動（シフト）定理：$f(t)$ を $a$ だけ遅延させた $f(t-a)u(t-a)$ のラプラス変換は $e^{-as}F(s)$。"
+      },
+      {
+        q:"下記の三角波形（周期2、振幅1。$0 \\le t < 1$ で $0$ から $1$ へ線形増加、$1 \\le t < 2$ で $1$ から $0$ へ線形減少、以後繰り返す）のラプラス変換 $F(s)$ として正しいのはどれか。",
+        opts:[
+          "① $\\dfrac{1-2e^{-s}+e^{-2s}}{s^2(1-e^{-2s})}$",
+          "② $\\dfrac{1-e^{-s}}{s(1-e^{-2s})}$",
+          "③ $\\dfrac{1-2e^{-2s}+e^{-4s}}{s^2(1-e^{-4s})}$",
+          "④ $\\dfrac{e^{-s}(1-e^{-s})}{s^2(1-e^{-2s})}$",
+          "⑤ $\\dfrac{1-e^{-2s}}{s^2(1-e^{-2s})}$"
+        ],
+        ans:0,
+        note:"一周期分のLT：$(1-e^{-s})^2/s^2 = (1-2e^{-s}+e^{-2s})/s^2$。周期 $T=2$ の関数のLT：$F(s)=F_1(s)/(1-e^{-Ts})$ より $\\dfrac{1-2e^{-s}+e^{-2s}}{s^2(1-e^{-2s})}$。"
+      }
+    ]
+  },
+  {
+    id:"s2", no:"02",
+    title:"問2：フィードバック制御系（7問）",
+    desc:"2025年度中間試験 問2（14+8=22点）を選択式で再現",
+    data:[
+      {
+        q:"一般的なフィードバック制御系のブロック線図において、目標値 $R(s)$ と検出値 $B(s)$ の差（偏差）を求める部分の名称はどれか。",
+        opts:["① 制御対象（プラント）","② 検出部（フィードバック要素）","③ 加え合わせ点（比較器）","④ 調節部（コントローラ）"],
+        ans:2,
+        note:"加え合わせ点は基準入力 $R(s)$ から帰還信号 $B(s)$ を引いて偏差 $E(s)=R(s)-B(s)$ を出力する部分。"
+      },
+      {
+        q:"フィードバック制御系において偏差（誤差信号）$E(s)$ の正しい式はどれか。（$R(s)$：目標値、$C(s)$：制御量、$H(s)$：フィードバック要素）",
+        opts:[
+          "① $E(s) = R(s) + C(s)$",
+          "② $E(s) = R(s) - H(s)C(s)$",
+          "③ $E(s) = C(s) \\cdot H(s)$",
+          "④ $E(s) = R(s) \\cdot G(s)$"
+        ],
+        ans:1,
+        note:"$B(s)=H(s)C(s)$ がフィードバック信号。偏差 $E(s)=R(s)-B(s)=R(s)-H(s)C(s)$。"
+      },
+      {
+        q:"フィードバック制御系の「検出部（フィードバック要素） $H(s)$」の主な役割はどれか。",
+        opts:[
+          "① 偏差信号を増幅して操作量を生成する",
+          "② 制御量を検出し、目標値と比較できる信号形式に変換して帰還させる",
+          "③ 目標値（基準入力）を設定・入力する部分",
+          "④ 制御対象（プラント）への操作量を直接調節する"
+        ],
+        ans:1,
+        note:"検出部は制御量 $C(s)$ を検出し、目標値と同形式の信号 $B(s)=H(s)C(s)$ に変換して加え合わせ点へ帰還させる。"
+      },
+      {
+        q:"フルオートエアコンの制御系において「フィードバック要素（検出部）」に対応する機器はどれか。",
+        opts:["① 熱交換器（室外機）","② コンプレッサ","③ 温度センサ（サーミスタ）","④ 温度設定コントローラ"],
+        ans:2,
+        note:"温度センサ（サーミスタ）が室内温度を検出し、設定温度と比較できる電気信号としてフィードバックする役割を担う。"
+      },
+      {
+        q:"フルオートエアコンの制御系において「調節部（コントローラ）」に対応する機器はどれか。",
+        opts:["① 熱交換器（室外機）","② コンプレッサ","③ 温度センサ（サーミスタ）","④ 温度設定コントローラ"],
+        ans:3,
+        note:"温度設定コントローラが偏差（設定温度との差）をもとに制御信号（操作量）を生成し、コンプレッサなどへ指令する。"
+      },
+      {
+        q:"フルオートエアコンの制御系において「アクチュエータ（操作部）」として主に機能する機器はどれか。",
+        opts:["① 熱交換器（室外機）","② コンプレッサ","③ 温度センサ（サーミスタ）","④ 温度設定コントローラ"],
+        ans:1,
+        note:"コンプレッサはコントローラからの信号を受けて冷媒を圧縮し、実際の冷却・暖房動作（操作量）を行うアクチュエータ。"
+      },
+      {
+        q:"フルオートエアコンの制御系において「制御対象（プラント）」の主要部に対応する機器はどれか。",
+        opts:["① 熱交換器（室外機）","② コンプレッサ","③ 温度センサ（サーミスタ）","④ 温度設定コントローラ"],
+        ans:0,
+        note:"熱交換器（室外機）がコンプレッサによる操作量（冷媒圧縮）を受けて熱交換を行い、室温（制御量）に影響を与える制御対象の主要部。"
+      }
+    ]
+  },
+  {
+    id:"s3", no:"03",
+    title:"問3・問4：ラプラス変換（6問）",
+    desc:"2025年度中間試験 問3（8点）・問4（20点）を選択式で再現",
+    data:[
+      {
+        q:"$f(t) = \\dfrac{1}{3}\\,u(t)$ のラプラス変換 $F(s)$ はどれか。",
+        opts:["① $\\dfrac{3}{s}$","② $\\dfrac{1}{3s}$","③ $\\dfrac{1}{3s^2}$","④ $3s$"],
+        ans:1,
+        note:"$\\mathcal{L}[u(t)]=\\dfrac{1}{s}$ なので、$\\mathcal{L}\\!\\left[\\dfrac{1}{3}u(t)\\right]=\\dfrac{1}{3}\\cdot\\dfrac{1}{s}=\\dfrac{1}{3s}$（線形性）。"
+      },
+      {
+        q:"$F(s) = \\dfrac{16}{s^2+16}$ の逆ラプラス変換 $f(t)$ はどれか。",
+        opts:["① $\\sin(4t)\\,u(t)$","② $4\\cos(4t)\\,u(t)$","③ $4\\sin(4t)\\,u(t)$","④ $\\cos(4t)\\,u(t)$"],
+        ans:2,
+        note:"$\\mathcal{L}[\\sin(\\omega t)]=\\dfrac{\\omega}{s^2+\\omega^2}$ で $\\omega=4$ のとき $\\dfrac{4}{s^2+16}$。$\\dfrac{16}{s^2+16}=4\\cdot\\dfrac{4}{s^2+16}$ なので $f(t)=4\\sin(4t)\\,u(t)$。"
+      },
+      {
+        q:"ラプラス変換の定義式（片側ラプラス変換）として正しいのはどれか。",
+        opts:[
+          "① $F(s)=\\displaystyle\\int_{-\\infty}^{\\infty} f(t)e^{-st}\\,dt$",
+          "② $F(s)=\\displaystyle\\int_0^{\\infty} f(t)e^{st}\\,dt$",
+          "③ $F(s)=\\displaystyle\\int_0^{\\infty} f(t)e^{-j\\omega t}\\,dt$",
+          "④ $F(s)=\\displaystyle\\int_0^{\\infty} f(t)e^{-st}\\,dt$"
+        ],
+        ans:3,
+        note:"片側ラプラス変換の定義：$F(s)=\\int_0^\\infty f(t)e^{-st}dt$。積分範囲は $[0,\\infty)$、核関数は $e^{-st}$（マイナス符号）。"
+      },
+      {
+        q:"$f(t)=a\\,u(t)$（$a$ は定数）をラプラス変換の定義式から計算した結果として正しいのはどれか。",
+        opts:["① $\\dfrac{a}{s^2}$","② $a\\cdot s$","③ $\\dfrac{1}{as}$","④ $\\dfrac{a}{s}$"],
+        ans:3,
+        note:"$\\displaystyle\\int_0^\\infty a\\,e^{-st}dt = a\\left[-\\dfrac{e^{-st}}{s}\\right]_0^\\infty = a\\cdot\\dfrac{1}{s}=\\dfrac{a}{s}$。"
+      },
+      {
+        q:"$f(t) = e^{-\\alpha t}\\,u(t)$（$\\alpha > 0$）のラプラス変換 $F(s)$ はどれか。",
+        opts:["① $\\dfrac{1}{s-\\alpha}$","② $\\dfrac{\\alpha}{(s+\\alpha)^2}$","③ $\\dfrac{1}{s+\\alpha}$","④ $\\dfrac{s}{s^2+\\alpha^2}$"],
+        ans:2,
+        note:"$\\displaystyle\\int_0^\\infty e^{-\\alpha t}e^{-st}dt=\\int_0^\\infty e^{-(s+\\alpha)t}dt=\\left[-\\dfrac{e^{-(s+\\alpha)t}}{s+\\alpha}\\right]_0^\\infty=\\dfrac{1}{s+\\alpha}$（$s+\\alpha>0$）。"
+      },
+      {
+        q:"$f(t)=e^{-\\alpha t}$ をラプラス変換の定義式で計算する途中の積分 $\\displaystyle\\int_0^\\infty e^{-(s+\\alpha)t}\\,dt$ の正しい結果はどれか。",
+        opts:["① $-(s+\\alpha)$","② $\\dfrac{1}{s+\\alpha}$","③ $e^{-(s+\\alpha)}$","④ $-\\dfrac{1}{s+\\alpha}$"],
+        ans:1,
+        note:"$\\left[-\\dfrac{e^{-(s+\\alpha)t}}{s+\\alpha}\\right]_0^\\infty$：$t\\to\\infty$ で $0$（$s+\\alpha>0$なら）、$t=0$ で $-\\dfrac{1}{s+\\alpha}$。差をとると $0-\\left(-\\dfrac{1}{s+\\alpha}\\right)=\\dfrac{1}{s+\\alpha}$。"
+      }
+    ]
+  },
+  {
+    id:"s4", no:"04",
+    title:"問5：ブロック線図の等価変換（5問）",
+    desc:"2025年度中間試験 問5（8+12=20点）を選択式で再現",
+    data:[
+      {
+        q:"問5（1）のブロック線図において、$G_1$ と $G_2$ が並列接続されているとき、この部分の合成伝達関数はどれか。",
+        opts:["① $G_1 \\cdot G_2$","② $\\dfrac{G_1}{G_2}$","③ $G_1 + G_2$","④ $\\dfrac{G_1+G_2}{2}$"],
+        ans:2,
+        note:"並列接続の合成伝達関数は各ブロックの伝達関数の「和」。$G_1+G_2$。（直列は積）"
+      },
+      {
+        q:"問5（1）で $(G_1+G_2)$・$G_3$・$G_4$ が順に直列接続されているとき、前向き伝達関数はどれか。",
+        opts:["① $G_1G_2G_3G_4$","② $(G_1+G_2)G_3G_4$","③ $G_1+G_2+G_3+G_4$","④ $\\dfrac{G_1+G_2}{G_3G_4}$"],
+        ans:1,
+        note:"直列接続の合成伝達関数は各ブロックの伝達関数の「積」。$(G_1+G_2)\\cdot G_3\\cdot G_4$。"
+      },
+      {
+        q:"問5（1）の閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。（前向き伝達関数 $(G_1+G_2)G_3G_4$、直結ネガティブフィードバック）",
+        opts:[
+          "① $\\dfrac{G_3G_4}{1+(G_1+G_2)G_3G_4}$",
+          "② $(G_1+G_2)G_3G_4$",
+          "③ $\\dfrac{1}{1+(G_1+G_2)G_3G_4}$",
+          "④ $\\dfrac{(G_1+G_2)G_3G_4}{1+(G_1+G_2)G_3G_4}$"
+        ],
+        ans:3,
+        note:"直結ネガティブフィードバック：$\\dfrac{C}{R}=\\dfrac{G}{1+G}$（$G=(G_1+G_2)G_3G_4$）。分子=前向き伝達関数、分母=$1+$開ループ伝達関数。"
+      },
+      {
+        q:"問5（2）のブロック線図において、$G_3$・$G_4$ の直列接続にフィードバック要素 $H_1$ が付いた内側ループを閉ループ化した伝達関数はどれか。",
+        opts:[
+          "① $\\dfrac{G_3G_4H_1}{1+G_3G_4}$",
+          "② $G_3G_4(1-H_1)$",
+          "③ $\\dfrac{G_3G_4}{1+H_1}$",
+          "④ $\\dfrac{G_3G_4}{1+G_3G_4H_1}$"
+        ],
+        ans:3,
+        note:"閉ループ基本式 $\\dfrac{G}{1+GH}$（$G=G_3G_4$，$H=H_1$）を適用。$\\dfrac{G_3G_4}{1+G_3G_4H_1}$。"
+      },
+      {
+        q:"問5（2）の全体の閉ループ伝達関数 $\\dfrac{C(s)}{R(s)}$ はどれか。（$G_1$・$G_2$ の直列経路、内側に $G_3G_4/H_1$ ループ、外側フィードバック $H_2$）",
+        opts:[
+          "① $\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1}$",
+          "② $\\dfrac{G_1G_2G_3G_4}{1+G_1G_2G_3G_4H_2}$",
+          "③ $\\dfrac{G_1G_2G_3G_4}{1+H_1+H_2}$",
+          "④ $\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1+G_1G_2G_3G_4H_2}$"
+        ],
+        ans:3,
+        note:"①内側閉ループ：$\\dfrac{G_3G_4}{1+G_3G_4H_1}$ ②前向き全体：$\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1}$ ③外側 $H_2$ で再閉ループ：$\\dfrac{G_1G_2G_3G_4}{1+G_3G_4H_1+G_1G_2G_3G_4H_2}$"
+      }
+    ]
+  }
+];
+
+let state = {};
+const save = () => localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+const load = () => { try { return JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}'); } catch(e){ return {}; } };
+
+function updateScore(){
+  let total=0, correct=0;
+  const sects=[];
+  SECTIONS.forEach(sec=>{
+    let sc=0,tc=sec.data.length;
+    sec.data.forEach((_,i)=>{
+      total++;
+      const k=`${sec.id}_q${i}`;
+      if(state[k]==='correct'){correct++;sc++;}
+    });
+    sects.push(`<span style="margin-right:12px">${sec.no} ${sec.title.split('：')[0].replace('問','Q')}：${sc}/${tc}</span>`);
+  });
+  document.getElementById('score-num').textContent=`${correct} / ${TOTAL}`;
+  document.getElementById('score-bar').style.width=`${Math.round(correct/TOTAL*100)}%`;
+  document.getElementById('section-scores').innerHTML=sects.join('');
+}
+
+function pickOpt(secId, qi, chosen, correct){
+  const k=`${secId}_q${qi}`;
+  if(state[k]) return;
+  state[k] = chosen===correct ? 'correct' : 'wrong';
+  save();
+  const card=document.getElementById(`card_${secId}_${qi}`);
+  const btns=card.querySelectorAll('.opt-btn');
+  btns.forEach((b,idx)=>{
+    b.disabled=true;
+    if(idx===chosen && chosen===correct) b.classList.add('selected-correct');
+    else if(idx===chosen && chosen!==correct) b.classList.add('selected-wrong');
+    else if(idx===correct) b.classList.add('reveal-correct');
+  });
+  card.classList.add(chosen===correct?'correct':'wrong');
+  card.querySelector('.note').style.display='block';
+  updateScore();
+}
+
+function restoreCard(secId, qi, result, correct){
+  const card=document.getElementById(`card_${secId}_${qi}`);
+  if(!card) return;
+  const btns=card.querySelectorAll('.opt-btn');
+  btns.forEach((b,idx)=>{
+    b.disabled=true;
+    if(result==='correct' && idx===correct) b.classList.add('selected-correct');
+    else if(result==='wrong' && idx===correct) b.classList.add('reveal-correct');
+  });
+  card.classList.add(result==='correct'?'correct':'wrong');
+  card.querySelector('.note').style.display='block';
+}
+
+function render(){
+  state = load();
+  const toc=document.getElementById('toc');
+  toc.innerHTML='';
+  const main=document.getElementById('main');
+  main.innerHTML='';
+  SECTIONS.forEach(sec=>{
+    const li=document.createElement('li');
+    li.innerHTML=`<a href="#${sec.id}">${sec.no} ${sec.title}</a>`;
+    toc.appendChild(li);
+    const div=document.createElement('div');
+    div.className='section';
+    div.id=sec.id;
+    div.innerHTML=`<div class="section-hd"><div class="no">Section ${sec.no}</div><h2>${sec.title}</h2><p>${sec.desc}</p></div>`;
+    sec.data.forEach((q,i)=>{
+      const k=`${sec.id}_q${i}`;
+      const done=state[k];
+      const optsHtml=q.opts.map((o,idx)=>`<button class="opt-btn" onclick="pickOpt('${sec.id}',${i},${idx},${q.ans})" ${done?'disabled':''}>${o}</button>`).join('');
+      const card=document.createElement('div');
+      card.className='q-card';
+      card.id=`card_${sec.id}_${i}`;
+      card.innerHTML=`<div class="q-num">Q${String(i+1).padStart(2,'0')}</div><div class="q-text">${q.q}</div><div class="opts">${optsHtml}</div><div class="note" style="display:none">${q.note}</div>`;
+      div.appendChild(card);
+      if(done) restoreCard(sec.id, i, done, q.ans);
+    });
+    main.appendChild(div);
+  });
+  updateScore();
+  if(typeof renderMathInElement==='function') renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
+}
+
+function resetAll(){
+  if(!confirm('全解答をリセットする？')) return;
+  state={};
+  save();
+  localStorage.setItem(STORAGE_KEY+'_reset','1');
+  render();
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+window._quizSync = async function(){
+  if(localStorage.getItem(STORAGE_KEY+'_reset')){
+    localStorage.removeItem(STORAGE_KEY+'_reset');
+    return;
+  }
+  const s=await progressLoad(STORAGE_KEY);
+  if(!s||!Object.keys(s).length) return;
+  let chg=false;
+  for(const k in s){ if(s[k]&&!state[k]){state[k]=s[k];chg=true;} }
+  if(chg){save();render();}
+};
+
+window.addEventListener('load', render);
+</script>
+</body>
+</html>
