@@ -1783,24 +1783,24 @@ async function loadScores() {
       return `<th style="text-align:center;cursor:pointer;user-select:none${col}${extraStyle}" onclick="sortScores('${key}')">${label}${arr}</th>`;
     };
 
-    // みっつー波多野ライン: 両方未入力なら非表示、片方未入力なら入力済みに合わせる
-    const mittsAvg   = data.find(r => r.username === 'ミッツ')?._avg ?? null;
-    const hatanoAvg  = data.find(r => r.username === '波多野裏技')?._avg ?? null;
+    // みっつー波多野ライン: 平均点のしきい値で判定（ソートキーに依存しない）
+    const mittsAvg  = data.find(r => r.username === 'ミッツ')?._avg ?? null;
+    const hatanoAvg = data.find(r => r.username === '波多野裏技')?._avg ?? null;
+    // 両方未入力 → null（ライン非表示）、片方未入力 → 入力済みの値を採用
+    const lineThreshold = mittsAvg != null && hatanoAvg != null
+      ? Math.max(mittsAvg, hatanoAvg)
+      : (mittsAvg ?? hatanoAvg);
+    // sorted の中で「平均点 <= しきい値」の最後の行にラインを引く
     let lineIdx = -1;
-    if (mittsAvg != null && hatanoAvg != null) {
-      lineIdx = Math.max(
-        sorted.findIndex(r => r.username === 'ミッツ'),
-        sorted.findIndex(r => r.username === '波多野裏技')
-      );
-    } else if (mittsAvg != null) {
-      lineIdx = sorted.findIndex(r => r.username === 'ミッツ');
-    } else if (hatanoAvg != null) {
-      lineIdx = sorted.findIndex(r => r.username === '波多野裏技');
+    if (lineThreshold != null) {
+      sorted.forEach((r, i) => {
+        if (r._avg != null && r._avg <= lineThreshold) lineIdx = i;
+      });
     }
 
     const rows = sorted.map((r, i) => {
       const isMe = r.username === authUser;
-      const inZone = lineIdx >= 0 && i <= lineIdx;
+      const inZone = lineThreshold != null && r._avg != null && r._avg <= lineThreshold;
       const ar = rankMap[r.username];
       const rankTd = ar != null
         ? `<td class="rank-num${ar <= 3 ? ' top' : ''}">${ar}</td>`
