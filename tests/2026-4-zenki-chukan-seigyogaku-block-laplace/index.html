@@ -739,5 +739,39 @@ window._quizSync = async function() {
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"></script>
 <script>window.addEventListener("load",function(){ typeset(document.getElementById("app")); });</script>
 <a href="../../" style="position:fixed;bottom:20px;left:16px;background:rgba(10,22,38,.9);border:1px solid #27406a;color:#8aa1c0;text-decoration:none;padding:8px 14px;border-radius:99px;font-size:.82rem;z-index:200;backdrop-filter:blur(4px)">← トップへ</a>
+
+<!-- 参照画像フローティングパネル -->
+<style>
+#ref-panel{
+  position:fixed; bottom:20px; right:16px; z-index:300;
+  display:flex; flex-direction:column; align-items:flex-end; gap:6px;
+}
+#ref-toggle{
+  background:rgba(10,22,38,.92); border:1px solid #46d6c4; color:#46d6c4;
+  font-size:.78rem; font-weight:600; padding:6px 12px; border-radius:99px;
+  cursor:pointer; backdrop-filter:blur(6px); white-space:nowrap;
+  letter-spacing:.04em; user-select:none;
+}
+#ref-toggle:hover{ background:rgba(70,214,196,.15); }
+#ref-img-wrap{
+  background:rgba(10,22,38,.95); border:1px solid #27406a; border-radius:10px;
+  overflow:hidden; backdrop-filter:blur(8px);
+  transition:opacity .2s, transform .2s;
+  max-height:70vh; overflow-y:auto;
+}
+#ref-img-wrap.hidden{ opacity:0; pointer-events:none; transform:translateY(8px); }
+#ref-img-wrap img{
+  display:block; width:160px; cursor:pointer;
+  transition:width .2s;
+}
+#ref-img-wrap img.expanded{ width:min(360px, 90vw); }
+</style>
+<div id="ref-panel">
+  <div id="ref-img-wrap" class="hidden">
+    <img src="block-ref.jpg" alt="ブロック線図等価変換 参照" title="クリックで拡大/縮小"
+         onclick="this.classList.toggle('expanded')">
+  </div>
+  <button id="ref-toggle" onclick="document.getElementById('ref-img-wrap').classList.toggle('hidden')">📋 変換表</button>
+</div>
 </body>
 </html>
