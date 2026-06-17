@@ -1744,19 +1744,22 @@ async function loadScores() {
       r._avg = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
     });
 
-    // 平均順位は常に固定（# 列用）
-    const avgSorted = [...data].sort((a, b) => {
-      if (a._avg == null && b._avg == null) return 0;
-      if (a._avg == null) return 1;
-      if (b._avg == null) return -1;
-      return a._avg - b._avg;
+    // # 列: 現在のソートキーで昇順に並べた順位（ソートが変わると連動）
+    const rankBase = [...data].sort((a, b) => {
+      const k = _scSort.key;
+      const av = a[k], bv = b[k];
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      return av - bv;
     });
-    let rnk = 0, prevA = null;
-    const avgRankMap = {};
-    avgSorted.forEach((r, i) => {
-      if (r._avg == null) { avgRankMap[r.username] = null; return; }
-      if (r._avg !== prevA) { rnk = i + 1; prevA = r._avg; }
-      avgRankMap[r.username] = rnk;
+    let rnk = 0, prevV = null;
+    const rankMap = {};
+    rankBase.forEach((r, i) => {
+      const v = r[_scSort.key];
+      if (v == null) { rankMap[r.username] = null; return; }
+      if (v !== prevV) { rnk = i + 1; prevV = v; }
+      rankMap[r.username] = rnk;
     });
 
     // 選択キーでソート、未入力は末尾
@@ -1798,7 +1801,7 @@ async function loadScores() {
     const rows = sorted.map((r, i) => {
       const isMe = r.username === authUser;
       const inZone = lineIdx >= 0 && i <= lineIdx;
-      const ar = avgRankMap[r.username];
+      const ar = rankMap[r.username];
       const rankTd = ar != null
         ? `<td class="rank-num${ar <= 3 ? ' top' : ''}">${ar}</td>`
         : `<td class="rank-num" style="color:var(--dim)">―</td>`;
