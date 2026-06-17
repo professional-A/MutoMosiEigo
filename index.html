@@ -895,6 +895,7 @@ const SUPABASE_ANON_KEY = 'sb_publishable_4MgSWSr8bbuUf5Vp_LSD6Q_SI-ciZ2B';
 const supabaseClient    = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
 
 function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function tu(s){ const str = s ? String(s) : ''; return str.length > 10 ? str.slice(0,10)+'…' : str; }
 
 // ── 認証 ──────────────────────────────────────────────
 let authToken  = null;
@@ -930,7 +931,7 @@ function updateAuthBar() {
   const pwBtn = document.getElementById('pw-open-btn');
   const avEl  = document.getElementById('auth-avatar');
   if (authToken) {
-    bar.innerHTML = `<strong>${esc(authUser)}</strong> <span style="color:var(--teal);font-size:.85rem">${authPoints.toLocaleString()}pt</span>`;
+    bar.innerHTML = `<strong>${esc(tu(authUser))}</strong> <span style="color:var(--teal);font-size:.85rem">${authPoints.toLocaleString()}pt</span>`;
     avEl.textContent = authAvatar;
     avEl.style.display = 'inline-flex';
     applyFrame(avEl, authFrame);
@@ -1096,7 +1097,7 @@ async function loadTestResults() {
         r._rank = rank;
         return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
           <td class="rank-num">${rank}</td>
-          <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:22px;height:22px;font-size:.85rem;margin-right:6px;vertical-align:middle">${r.avatar||'🐸'}</span>${r.username}${isMe?' 👈':''}</td>
+          <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:22px;height:22px;font-size:.85rem;margin-right:6px;vertical-align:middle">${r.avatar||'🐸'}</span>${esc(tu(r.username))}${isMe?' 👈':''}</td>
           <td style="text-align:center">${r.test_pred ?? '―'}</td>
           <td style="text-align:center;font-weight:600">${r.test_score}</td>
           <td style="text-align:center;color:${err<=5?'var(--teal)':err<=15?'var(--amber)':'#f87171'}">${err}</td>
@@ -1428,7 +1429,7 @@ async function loadRanking() {
       const isMe = r.username === authUser;
       return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
         <td class="rank-num${rank <= 3 ? ' top' : ''}">${rank}</td>
-        <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:28px;height:28px;font-size:1rem;margin-right:8px;vertical-align:middle">${r.avatar||'🐸'}</span>${esc(r.username)}${isMe ? ' 👈' : ''}</td>
+        <td class="rank-name"><span class="avatar frame-${r.frame||'default'}" style="width:28px;height:28px;font-size:1rem;margin-right:8px;vertical-align:middle">${r.avatar||'🐸'}</span>${esc(tu(r.username))}${isMe ? ' 👈' : ''}</td>
         <td class="rank-score">${r.score} / ${r.total}</td>
         <td class="rank-pct">${pct}%</td>
       </tr>`;
@@ -1455,7 +1456,7 @@ async function reloadAdminContent() {
       <div class="admin-card-top">
         <span class="avatar frame-${u.frame||'default'}" style="width:32px;height:32px;font-size:1.1rem;flex-shrink:0">${u.avatar||'🐸'}</span>
         <div style="min-width:0">
-          <div class="admin-card-name">${i+1}. ${esc(u.username)}</div>
+          <div class="admin-card-name">${i+1}. ${esc(tu(u.username))}</div>
           <div class="admin-card-email">${esc(u.email||'（IDログイン）')}</div>
         </div>
       </div>
@@ -1520,7 +1521,7 @@ async function viewSurveyResults() {
         const v = a[k];
         return `<td style="padding:4px 8px;border:1px solid var(--line);font-size:.78rem;max-width:160px;white-space:pre-wrap;word-break:break-all">${Array.isArray(v) ? v.join(', ') : (v ?? '―')}</td>`;
       }).join('');
-      return `<tr><td style="padding:4px 8px;border:1px solid var(--line);font-weight:600;white-space:nowrap">${r.username}</td><td style="padding:4px 8px;border:1px solid var(--line);text-align:center">${r.test_score ?? '―'}</td>${cells}</tr>`;
+      return `<tr><td style="padding:4px 8px;border:1px solid var(--line);font-weight:600;white-space:nowrap">${esc(tu(r.username))}</td><td style="padding:4px 8px;border:1px solid var(--line);text-align:center">${r.test_score ?? '―'}</td>${cells}</tr>`;
     }).join('');
     const headers = ['名前','得点',...Object.values(qLabels)].map(h => `<th style="padding:4px 8px;border:1px solid var(--line);background:var(--card2);font-size:.75rem;white-space:nowrap">${h}</th>`).join('');
     const w = window.open('', '_blank');
@@ -1628,7 +1629,7 @@ async function openMembersModal() {
           <td class="rank-name">
             <span class="avatar frame-${u.frame||'default'}" style="width:24px;height:24px;font-size:.9rem;margin-right:6px;vertical-align:middle">${u.avatar||'🐸'}</span>
             <span>
-              ${esc(u.username)}
+              ${esc(tu(u.username))}
               <br><span class="shogou">◆ ${esc(u.title||'ちょおちょおちょお')}</span>
             </span>
           </td>
@@ -1701,7 +1702,7 @@ async function loadScores() {
               ${rankTd}
               <td class="rank-name">
                 <span class="avatar frame-${r.frame||'default'}" style="width:20px;height:20px;font-size:.78rem;margin-right:5px;vertical-align:middle">${r.avatar||'🐸'}</span>
-                <span>${esc(r.username)}${isMe ? ' 👈' : ''}
+                <span>${esc(tu(r.username))}${isMe ? ' 👈' : ''}
                 <br><span class="shogou">◆ ${esc(r.title||'ちょおちょおちょお')}</span></span>
               </td>
               ${scoreTd}
@@ -1820,7 +1821,7 @@ async function loadTicker() {
     const leader = data[0];
     const pt = leader.points || 0;
     const msgFn = LEADER_MSGS[Math.floor(Math.random() * LEADER_MSGS.length)];
-    const text = msgFn(esc(leader.username), pt);
+    const text = msgFn(esc(tu(leader.username)), pt);
     const wrap = document.getElementById('ticker-wrap');
     const track = document.getElementById('ticker-track');
     // テキストを2回繰り返してシームレスループ
