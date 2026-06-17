@@ -515,6 +515,7 @@ function pickOpt(secId, qi, chosen, correct){
   if(state[k]) return;
   if(chosen===correct && window.addPoints) addPoints(100);
   state[k] = chosen===correct ? 'correct' : 'wrong';
+  state[k+'_c'] = chosen;
   save();
   const card=document.getElementById(`card_${secId}_${qi}`);
   const btns=card.querySelectorAll('.opt-btn');
@@ -532,10 +533,12 @@ function pickOpt(secId, qi, chosen, correct){
 function restoreCard(secId, qi, result, correct){
   const card=document.getElementById(`card_${secId}_${qi}`);
   if(!card) return;
+  const chosen = state[`${secId}_q${qi}_c`];
   const btns=card.querySelectorAll('.opt-btn');
   btns.forEach((b,idx)=>{
     b.disabled=true;
     if(result==='correct' && idx===correct) b.classList.add('selected-correct');
+    else if(result==='wrong' && idx===chosen) b.classList.add('selected-wrong');
     else if(result==='wrong' && idx===correct) b.classList.add('reveal-correct');
   });
   card.classList.add(result==='correct'?'correct':'wrong');
@@ -575,6 +578,7 @@ function render(){
 
 function resetAll(){
   if(!confirm('全解答をリセットする？')) return;
+  if(window.addPoints) addPoints(-20);
   state={};
   save();
   localStorage.setItem(STORAGE_KEY+'_reset','1');
