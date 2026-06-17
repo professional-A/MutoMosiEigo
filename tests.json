@@ -189,8 +189,8 @@
     "subject": "制御工学Ⅰ",
     "title": "制御工学Ⅰ ・ 2025年度 中間試験 過去問（選択式）",
     "path": "tests/2026-4-zenki-chukan-seigyogaku-kakomon2025/",
-    "storageKey": "seigyo_kakomon2025_v2",
-    "totalItems": 28
+    "storageKey": "seigyo_kakomon2025_v3",
+    "totalItems": 43
   },
   {
     "year": 2025,
@@ -199,7 +199,7 @@
     "subject": "制御工学Ⅰ",
     "title": "制御工学Ⅰ ・ 2025年度 中間試験 類似問題",
     "path": "tests/2026-4-zenki-chukan-seigyogaku-kakomon2025-ruiji/",
-    "storageKey": "seigyo_ruiji2025_v1",
-    "totalItems": 28
+    "storageKey": "seigyo_ruiji2025_v2",
+    "totalItems": 43
   }
 ]
