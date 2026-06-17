@@ -534,6 +534,7 @@ function render(){
     div.className='section';
     div.id=sec.id;
     div.innerHTML=`<div class="section-hd"><div class="no">Section ${sec.no}</div><h2>${sec.title}</h2><p>${sec.desc}</p></div>`;
+    main.appendChild(div);
     sec.data.forEach((q,i)=>{
       const k=`${sec.id}_q${i}`;
       const done=state[k];
@@ -545,7 +546,6 @@ function render(){
       div.appendChild(card);
       if(done) restoreCard(sec.id, i, done, q.ans);
     });
-    main.appendChild(div);
   });
   updateScore();
   if(typeof renderMathInElement==='function') renderMathInElement(document.body,{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}]});
