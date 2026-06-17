@@ -1615,7 +1615,7 @@ async function awardBakaFrame() {
     const res  = await fetch('/api/admin/award-baka', { method:'POST', headers:{'Authorization':authToken} });
     const data = await res.json();
     if (data.ok) {
-      const msg = data.assigned.map(a => `${a.username}（合計${a.total}点） → ${a.frame}`).join('\n');
+      const msg = data.assigned.map(a => `${a.username}（平均${a.avg}点） → ${a.frame}`).join('\n');
       alert(`✅ フレーム付与完了\n${msg}`);
       await reloadAdminContent();
     } else alert(`❌ エラー (${res.status}): ${data.error || JSON.stringify(data)}`);
