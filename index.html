@@ -1792,9 +1792,10 @@ async function loadScores() {
       return `<th style="text-align:center;cursor:pointer;user-select:none${col}${extraStyle}" onclick="sortScores('${key}')">${label}${arr}</th>`;
     };
 
-    // みっつー波多野ライン: sorted内の順位（インデックス）で判定
-    const mittsIdx  = (() => { const i = sorted.findIndex(r => r.username === 'ミッツ' && r._avg != null); return i >= 0 ? i : null; })();
-    const hatanoIdx = (() => { const i = sorted.findIndex(r => r.username === '波多野裏技' && r._avg != null); return i >= 0 ? i : null; })();
+    // みっつー波多野ライン: 現在のソートキーに値がある場合のみ基準に使う
+    const _lk = _scSort.key;
+    const mittsIdx  = (() => { const i = sorted.findIndex(r => r.username === 'ミッツ' && r[_lk] != null); return i >= 0 ? i : null; })();
+    const hatanoIdx = (() => { const i = sorted.findIndex(r => r.username === '波多野裏技' && r[_lk] != null); return i >= 0 ? i : null; })();
     // 両方未入力 → -1（ライン非表示）、片方未入力 → 入力済みの方の位置、両方入力 → 高い方（より良い順位）
     let lineIdx = -1;
     if (mittsIdx != null && hatanoIdx != null) lineIdx = Math.max(mittsIdx, hatanoIdx);
