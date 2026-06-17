@@ -1702,8 +1702,7 @@ async function loadScores() {
               ${rankTd}
               <td class="rank-name">
                 <span class="avatar frame-${r.frame||'default'}" style="width:20px;height:20px;font-size:.78rem;margin-right:5px;vertical-align:middle">${r.avatar||'🐸'}</span>
-                <span>${esc(tu(r.username))}${isMe ? ' 👈' : ''}
-                <br><span class="shogou">◆ ${esc(r.title||'ちょおちょおちょお')}</span></span>
+                <span>${esc(tu(r.username))}${isMe ? ' 👈' : ''}</span>
               </td>
               ${scoreTd}
             </tr>`;
