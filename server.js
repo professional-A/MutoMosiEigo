@@ -43,6 +43,12 @@ async function initDB() {
       updated_by   TEXT,
       updated_at   TEXT
     );
+    CREATE TABLE IF NOT EXISTS class_rank_state (
+      id        INTEGER PRIMARY KEY DEFAULT 1,
+      ordered   TEXT DEFAULT '[]',
+      confirmed TEXT DEFAULT '{}'
+    );
+    INSERT INTO class_rank_state (id) VALUES (1) ON CONFLICT DO NOTHING;
   `);
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS supabase_id TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS email       TEXT`).catch(()=>{});
@@ -308,28 +314,35 @@ app.post('/api/math/score', auth, async (req, res) => {
 
 // クラス順位（全員共有）
 app.get('/api/class-rank', async (req, res) => {
-  const { rows } = await pool.query('SELECT position, student_name FROM class_ranking ORDER BY position');
-  const result = {};
-  rows.forEach(r => { result[r.position] = r.student_name; });
-  res.json(result);
+  const { rows } = await pool.query('SELECT ordered, confirmed FROM class_rank_state WHERE id=1');
+  if (!rows.length) return res.json({ ordered: [], confirmed: {} });
+  res.json({
+    ordered:   JSON.parse(rows[0].ordered   || '[]'),
+    confirmed: JSON.parse(rows[0].confirmed || '{}')
+  });
 });
 app.post('/api/class-rank', auth, async (req, res) => {
-  const { position, name } = req.body;
-  if (!Number.isInteger(position) || position < 1 || position > 36)
-    return res.status(400).json({ error: '無効な順位' });
-  const trimmed = name?.trim().slice(0, 20) || null;
-  if (trimmed) {
-    // 同じ名前が他のスロットにあれば先に削除（重複防止）
-    await pool.query('DELETE FROM class_ranking WHERE student_name=$1', [trimmed]);
-    await pool.query(
-      `INSERT INTO class_ranking (position, student_name, updated_by, updated_at)
-       VALUES ($1,$2,$3,$4)
-       ON CONFLICT (position) DO UPDATE SET student_name=$2, updated_by=$3, updated_at=$4`,
-      [position, trimmed, req.user.username, new Date().toISOString()]
-    );
-  } else {
-    await pool.query('DELETE FROM class_ranking WHERE position=$1', [position]);
-  }
+  const { ordered } = req.body;
+  if (!Array.isArray(ordered)) return res.status(400).json({ error: '不正なデータ' });
+  const cleaned = ordered.filter(n => n && typeof n === 'string').map(n => n.trim().slice(0, 20));
+  await pool.query(
+    'INSERT INTO class_rank_state (id, ordered) VALUES (1,$1) ON CONFLICT (id) DO UPDATE SET ordered=$1',
+    [JSON.stringify(cleaned)]
+  );
+  res.json({ ok: true });
+});
+app.post('/api/class-rank/confirm', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { rank, name } = req.body;
+  if (!Number.isInteger(rank) || rank < 1 || rank > 36) return res.status(400).json({ error: '無効な順位' });
+  const { rows } = await pool.query('SELECT confirmed FROM class_rank_state WHERE id=1');
+  const conf = JSON.parse(rows[0]?.confirmed || '{}');
+  if (name && name.trim()) conf[rank] = name.trim().slice(0, 20);
+  else delete conf[rank];
+  await pool.query(
+    'INSERT INTO class_rank_state (id, confirmed) VALUES (1,$1) ON CONFLICT (id) DO UPDATE SET confirmed=$1',
+    [JSON.stringify(conf)]
+  );
   res.json({ ok: true });
 });
 

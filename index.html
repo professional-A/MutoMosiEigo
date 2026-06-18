@@ -230,29 +230,36 @@ h1{
   .modal{padding:20px 16px}
 }
 
-/* クラス順位グリッド */
-.clrank-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
-.clrank-slot{
-  background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:5px;
-  padding:4px 2px;text-align:center;cursor:pointer;min-height:46px;
-  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
-  transition:all .15s;
+/* クラス順位リスト */
+.clrank-list{display:flex;flex-direction:column;gap:3px;max-height:260px;overflow-y:auto;padding-right:2px}
+.clrank-list-card{
+  display:flex;align-items:center;gap:8px;padding:7px 10px;
+  border:1px solid var(--line);border-radius:6px;
+  background:rgba(255,255,255,.03);cursor:pointer;transition:all .15s;flex-shrink:0;
 }
-.clrank-slot:hover{background:rgba(70,214,196,.07)}
-.clrank-slot.filled{border-color:rgba(70,214,196,.3)}
-.clrank-slot.droppable{border-color:var(--teal);background:rgba(70,214,196,.1)}
-.clrank-pos{font-size:.58rem;color:var(--dim);font-weight:700;line-height:1}
-.clrank-sname{font-size:.62rem;color:var(--teal);word-break:break-all;line-height:1.2;padding:0 1px;font-weight:600}
-.clrank-pool{display:flex;flex-wrap:wrap;gap:5px;margin-top:10px}
+.clrank-list-card:hover{background:rgba(70,214,196,.07)}
+.clrank-list-card.drop-target{border-style:dashed;border-color:rgba(70,214,196,.35)}
+.clrank-list-card.drop-target:hover{background:rgba(70,214,196,.1);border-color:var(--teal)}
+.card-rank{font-size:.6rem;color:var(--dim);font-weight:700;min-width:20px}
+.card-name{flex:1;font-size:.82rem;color:var(--fg);font-weight:500}
+.card-grip{font-size:.75rem;color:var(--dim);opacity:.35}
+.clrank-confirmed-line{
+  display:flex;align-items:center;gap:6px;padding:3px 0;flex-shrink:0;pointer-events:none;
+}
+.clrank-append-btn{
+  padding:7px;text-align:center;font-size:.72rem;color:var(--teal);
+  border:1px dashed rgba(70,214,196,.4);border-radius:6px;cursor:pointer;transition:.15s;flex-shrink:0;
+}
+.clrank-append-btn:hover{background:rgba(70,214,196,.08)}
+.clrank-pool{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
 .clrank-chip{
   display:inline-flex;align-items:center;padding:5px 9px;border-radius:6px;
   font-size:.73rem;cursor:pointer;border:1px solid var(--line);
   background:rgba(255,255,255,.04);transition:all .15s;white-space:nowrap;
 }
-.clrank-chip:hover:not(.placed){background:rgba(70,214,196,.08)}
-.clrank-chip.placed{opacity:.2;cursor:default;text-decoration:line-through}
+.clrank-chip:hover{background:rgba(70,214,196,.08)}
 .clrank-chip.selected{border-color:var(--teal);background:rgba(70,214,196,.18);color:var(--teal);font-weight:700}
-@media(max-width:360px){.clrank-sname{font-size:.55rem}.clrank-chip{font-size:.67rem;padding:4px 7px}}
+@media(max-width:360px){.card-name{font-size:.76rem}.clrank-chip{font-size:.67rem;padding:4px 7px}}
 
 /* 称号バッジ */
 .shogou{
@@ -1944,9 +1951,11 @@ const CLASS_NAMES = [
   'ならさつ','せいこ','はたの','はっとり','あおと','せいじゅうろう',
   'まさみ','ほのか','堀田','りお','むとう','小っちゃん'
 ];
-let _clrankData = {};
-let _clrankSelected = null;
-let _clrankSelectedFrom = null; // null=プールから, 数値=スロット番号から
+let _clrankOrdered   = []; // 順番に並んだ名前配列（先頭=1位）
+let _clrankConfirmed = {}; // { rank: name } 確定順位
+let _clrankSelected    = null;
+let _clrankSelectedFrom = null; // null=プール, 数値=orderedのインデックス
+
 async function openClrankModal() {
   lockScroll();
   document.getElementById('clrank-modal-bg').classList.add('open');
@@ -1962,96 +1971,156 @@ document.getElementById('clrank-modal-bg').addEventListener('click', e => {
 });
 async function loadClrank() {
   try {
-    const res = await fetch('/api/class-rank');
-    _clrankData = await res.json();
-  } catch(e) { _clrankData = {}; }
+    const res  = await fetch('/api/class-rank');
+    const data = await res.json();
+    _clrankOrdered   = data.ordered   || [];
+    _clrankConfirmed = data.confirmed || {};
+  } catch(e) { _clrankOrdered = []; _clrankConfirmed = {}; }
   renderClrank();
 }
+
+function _confirmedLine(rank, name) {
+  return `<div class="clrank-confirmed-line">
+    <div style="flex:1;height:1px;background:rgba(70,214,196,.4)"></div>
+    <span style="font-size:.6rem;color:var(--teal);font-weight:700;white-space:nowrap;padding:0 6px">📌 ${rank}位確定: ${esc(name)}</span>
+    <div style="flex:1;height:1px;background:rgba(70,214,196,.4)"></div>
+  </div>`;
+}
+
 function renderClrank() {
   const el = document.getElementById('clrank-content');
-  const placedNames = new Set(Object.values(_clrankData));
-  const slots = Array.from({ length: 36 }, (_, i) => {
-    const pos = i + 1;
-    const name = _clrankData[pos] || '';
-    const isPickedUp = _clrankSelectedFrom === pos;
-    const isDroppable = _clrankSelected && !name;
-    const cls = 'clrank-slot'
-      + (name ? ' filled' : '')
-      + (isDroppable ? ' droppable' : '')
-      + (isPickedUp ? ' droppable' : ''); // 拾い上げ元も強調
-    const nameHtml = name
-      ? `<div class="clrank-sname">${esc(name)}</div>`
-      : `<div style="font-size:.55rem;color:var(--line)">―</div>`;
-    return `<div class="${cls}" onclick="clickRankSlot(${pos})">
-      <div class="clrank-pos">${pos}</div>${nameHtml}</div>`;
+  const hasSelected = _clrankSelected !== null;
+  // 選択中のカードは表示リストから除外（ゴーストとして保持）
+  const displayList = _clrankSelectedFrom !== null
+    ? _clrankOrdered.filter((_, i) => i !== _clrankSelectedFrom)
+    : [..._clrankOrdered];
+  const placedSet = new Set(_clrankOrdered);
+  const pool = CLASS_NAMES.filter(n => !placedSet.has(n));
+
+  let listHtml = '';
+  displayList.forEach((name, di) => {
+    const rank = di + 1;
+    if (_clrankConfirmed[rank]) listHtml += _confirmedLine(rank, _clrankConfirmed[rank]);
+    const cls = 'clrank-list-card' + (hasSelected ? ' drop-target' : '');
+    const right = hasSelected
+      ? `<span style="font-size:.6rem;color:rgba(70,214,196,.6)">↑ここ</span>`
+      : `<span class="card-grip">⠿</span>`;
+    listHtml += `<div class="${cls}" onclick="${hasSelected ? `clrankInsertAt(${di})` : `clrankPickup(${di})`}">
+      <span class="card-rank">${rank}</span>
+      <span class="card-name">${esc(name)}</span>
+      ${right}
+    </div>`;
   });
-  const hint = _clrankSelected
-    ? `「<strong style="color:var(--teal)">${esc(_clrankSelected)}</strong>」を選択中 → 別のスロットをタップ${_clrankSelectedFrom != null ? '（入れ替え可）' : ''}`
-    : `名前 or 埋まったスロットをタップして選択`;
-  const chips = CLASS_NAMES.map(name => {
-    const placed = placedNames.has(name);
-    const selected = _clrankSelected === name;
-    const cls = 'clrank-chip' + (placed ? ' placed' : '') + (selected ? ' selected' : '');
-    return `<div class="${cls}" onclick="clickNameChip('${name}')">${esc(name)}</div>`;
+  // 確定ラインでリストより後ろのもの
+  for (let r = displayList.length + 1; r <= 36; r++) {
+    if (_clrankConfirmed[r]) listHtml += _confirmedLine(r, _clrankConfirmed[r]);
+  }
+  if (hasSelected) {
+    listHtml += `<div class="clrank-append-btn" onclick="clrankInsertAt(${displayList.length})">+ 末尾に追加（${displayList.length + 1}位）</div>`;
+  }
+
+  const cancelLink = hasSelected && _clrankSelectedFrom !== null
+    ? ` <span onclick="clrankCancel()" style="cursor:pointer;color:var(--dim);font-size:.85em">[キャンセル]</span>` : '';
+  const hint = hasSelected
+    ? `「<strong style="color:var(--teal)">${esc(_clrankSelected)}</strong>」選択中 → リストをタップして挿入${cancelLink}`
+    : `名前 or リストのカードをタップして並べ替え`;
+
+  const poolChips = pool.map(name => {
+    const sel = _clrankSelected === name && _clrankSelectedFrom === null;
+    return `<div class="clrank-chip${sel ? ' selected' : ''}" onclick="clrankPoolTap('${name}')">${esc(name)}</div>`;
   });
+
+  // 管理者：確定順位入力
+  let adminHtml = '';
+  if (authEmail === 'kabu6113450@gmail.com') {
+    const confItems = Object.entries(_clrankConfirmed).sort((a,b)=>a[0]-b[0])
+      .map(([r,n]) => `<span style="font-size:.7rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.3);border-radius:4px;padding:2px 6px;white-space:nowrap">${r}位: ${esc(n)} <span onclick="clrankRemoveConfirm(${r})" style="cursor:pointer;opacity:.6">✕</span></span>`).join('');
+    adminHtml = `<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line)">
+      <div style="font-size:.68rem;color:var(--teal);font-weight:700;margin-bottom:6px">📌 確定順位設定（管理者）</div>
+      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${confItems}</div>
+      <div style="display:flex;gap:6px">
+        <input id="conf-rank-inp" type="number" min="1" max="36" placeholder="順位" style="width:58px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);font-size:.8rem;font-family:inherit">
+        <input id="conf-name-inp" type="text" placeholder="名前" style="flex:1;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);font-size:.8rem;font-family:inherit">
+        <button onclick="clrankAddConfirm()" style="padding:4px 10px;border:1px solid var(--teal);border-radius:6px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.8rem;cursor:pointer;font-family:inherit">確定</button>
+      </div>
+    </div>`;
+  }
+
   el.innerHTML = `
-    <div class="clrank-grid">${slots.join('')}</div>
-    <div style="margin-top:8px;font-size:.68rem;color:var(--dim);min-height:18px">${hint}</div>
-    <div class="clrank-pool">${chips.join('')}</div>`;
+    <div style="font-size:.66rem;color:var(--dim);margin-bottom:6px;min-height:16px">${hint}</div>
+    <div class="clrank-list">${listHtml || '<div style="color:var(--dim);font-size:.8rem;padding:6px 0">まだ誰も配置されていません</div>'}</div>
+    <div style="margin-top:10px">
+      <div style="font-size:.63rem;color:var(--dim);margin-bottom:4px">プール（未配置）</div>
+      <div class="clrank-pool">${poolChips.join('') || '<span style="color:var(--dim);font-size:.75rem">全員配置済み</span>'}</div>
+    </div>
+    ${adminHtml}`;
 }
-function clickNameChip(name) {
-  const placedNames = new Set(Object.values(_clrankData));
-  if (placedNames.has(name)) return;
-  if (_clrankSelected === name) { _clrankSelected = null; _clrankSelectedFrom = null; }
-  else { _clrankSelected = name; _clrankSelectedFrom = null; }
+
+function clrankPickup(idx) {
+  _clrankSelected    = _clrankOrdered[idx];
+  _clrankSelectedFrom = idx;
   renderClrank();
 }
-async function clickRankSlot(pos) {
-  const current = _clrankData[pos] || '';
-  if (_clrankSelected) {
-    const fromPos = _clrankSelectedFrom;
-    const placing = _clrankSelected;
-    if (current) {
-      // 埋まったスロット → 入れ替え
-      if (fromPos != null) {
-        // スロット同士のswap
-        _clrankData[fromPos] = current;
-        _clrankData[pos] = placing;
-        _clrankSelected = null; _clrankSelectedFrom = null;
-        renderClrank();
-        await _postClrank(pos, placing);       // サーバーの重複削除でfromPosが消えるので
-        await _postClrank(fromPos, current);   // 続けてfromPosに戻す
-      } else {
-        // プールから → 既存名をプールに戻してここに配置
-        _clrankData[pos] = placing;
-        _clrankSelected = null; _clrankSelectedFrom = null;
-        renderClrank();
-        await _postClrank(pos, placing);
-      }
-    } else {
-      // 空きスロット → 配置
-      if (fromPos != null) delete _clrankData[fromPos];
-      _clrankData[pos] = placing;
-      _clrankSelected = null; _clrankSelectedFrom = null;
-      renderClrank();
-      await _postClrank(pos, placing);
-      if (fromPos != null) await _postClrank(fromPos, '');
-    }
-  } else if (current) {
-    // 選択なし＋埋まり → 拾い上げ
-    _clrankSelected = current;
-    _clrankSelectedFrom = pos;
-    delete _clrankData[pos];
-    renderClrank();
+function clrankPoolTap(name) {
+  if (_clrankSelected === name && _clrankSelectedFrom === null) {
+    _clrankSelected = null; _clrankSelectedFrom = null;
+  } else {
+    _clrankSelected = name; _clrankSelectedFrom = null;
   }
+  renderClrank();
 }
-async function _postClrank(pos, name) {
+function clrankCancel() {
+  _clrankSelected = null; _clrankSelectedFrom = null;
+  renderClrank();
+}
+async function clrankInsertAt(displayIdx) {
+  if (!_clrankSelected) return;
+  let newOrdered;
+  if (_clrankSelectedFrom !== null) {
+    // リストから → 元位置を除いてdisplayIdxに挿入
+    const filtered = _clrankOrdered.filter((_, i) => i !== _clrankSelectedFrom);
+    filtered.splice(displayIdx, 0, _clrankSelected);
+    newOrdered = filtered;
+  } else {
+    // プールから → そのまま挿入
+    newOrdered = [..._clrankOrdered];
+    newOrdered.splice(displayIdx, 0, _clrankSelected);
+  }
+  _clrankOrdered = newOrdered;
+  _clrankSelected = null; _clrankSelectedFrom = null;
+  renderClrank();
+  await _saveClrankOrder();
+}
+async function _saveClrankOrder() {
   try {
     await fetch('/api/class-rank', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify({ position: pos, name })
+      body: JSON.stringify({ ordered: _clrankOrdered })
     });
+  } catch(e) {}
+}
+async function clrankAddConfirm() {
+  const rank = parseInt(document.getElementById('conf-rank-inp').value);
+  const name = document.getElementById('conf-name-inp').value.trim();
+  if (!rank || !name) return;
+  try {
+    await fetch('/api/class-rank/confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ rank, name })
+    });
+    await loadClrank();
+  } catch(e) {}
+}
+async function clrankRemoveConfirm(rank) {
+  try {
+    await fetch('/api/class-rank/confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ rank, name: '' })
+    });
+    await loadClrank();
   } catch(e) {}
 }
 
