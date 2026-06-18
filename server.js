@@ -50,6 +50,7 @@ async function initDB() {
     );
     INSERT INTO class_rank_state (id) VALUES (1) ON CONFLICT DO NOTHING;
   `);
+  await pool.query(`ALTER TABLE class_rank_state ADD COLUMN IF NOT EXISTS max_score INTEGER DEFAULT 300`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS supabase_id TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS email       TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS avatar      TEXT DEFAULT '🐸'`).catch(()=>{});
@@ -317,20 +318,37 @@ app.post('/api/math/score', auth, async (req, res) => {
 
 // クラス順位（全員共有）
 app.get('/api/class-rank', async (req, res) => {
-  const { rows } = await pool.query('SELECT ordered, confirmed FROM class_rank_state WHERE id=1');
-  if (!rows.length) return res.json({ ordered: [], confirmed: {} });
+  const { rows } = await pool.query('SELECT ordered, confirmed, max_score FROM class_rank_state WHERE id=1');
+  if (!rows.length) return res.json({ positions: {}, confirmed: {}, max_score: 300 });
+  let positions = {};
+  try { const p = JSON.parse(rows[0].ordered || '{}'); if (!Array.isArray(p)) positions = p; } catch(e) {}
   res.json({
-    ordered:   JSON.parse(rows[0].ordered   || '[]'),
-    confirmed: JSON.parse(rows[0].confirmed || '{}')
+    positions,
+    confirmed: JSON.parse(rows[0].confirmed || '{}'),
+    max_score: rows[0].max_score || 300
   });
 });
 app.post('/api/class-rank', auth, async (req, res) => {
-  const { ordered } = req.body;
-  if (!Array.isArray(ordered)) return res.status(400).json({ error: '不正なデータ' });
-  const cleaned = ordered.filter(n => n && typeof n === 'string').map(n => n.trim().slice(0, 20));
+  const { positions } = req.body;
+  if (!positions || typeof positions !== 'object' || Array.isArray(positions)) return res.status(400).json({ error: '不正なデータ' });
+  const cleaned = {};
+  for (const [name, pos] of Object.entries(positions)) {
+    if (name && typeof pos === 'object' && typeof pos.x === 'number' && typeof pos.y === 'number')
+      cleaned[name.trim().slice(0,20)] = { x: Math.max(0,Math.min(100,pos.x)), y: Math.max(0,Math.min(100,pos.y)) };
+  }
   await pool.query(
     'INSERT INTO class_rank_state (id, ordered) VALUES (1,$1) ON CONFLICT (id) DO UPDATE SET ordered=$1',
     [JSON.stringify(cleaned)]
+  );
+  res.json({ ok: true });
+});
+app.post('/api/class-rank/max-score', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const ms = parseInt(req.body.max_score);
+  if (!ms || ms < 1 || ms > 1000) return res.status(400).json({ error: '無効な値' });
+  await pool.query(
+    'INSERT INTO class_rank_state (id, max_score) VALUES (1,$1) ON CONFLICT (id) DO UPDATE SET max_score=$1',
+    [ms]
   );
   res.json({ ok: true });
 });

@@ -230,36 +230,24 @@ h1{
   .modal{padding:20px 16px}
 }
 
-/* クラス順位リスト */
-.clrank-list{display:flex;flex-direction:column;gap:3px;max-height:260px;overflow-y:auto;padding-right:2px}
-.clrank-list-card{
-  display:flex;align-items:center;gap:8px;padding:7px 10px;
-  border:1px solid var(--line);border-radius:6px;
-  background:rgba(255,255,255,.03);cursor:pointer;transition:all .15s;flex-shrink:0;
-}
-.clrank-list-card:hover{background:rgba(70,214,196,.07)}
-.clrank-list-card.drop-target{border-style:dashed;border-color:rgba(70,214,196,.35)}
-.clrank-list-card.drop-target:hover{background:rgba(70,214,196,.1);border-color:var(--teal)}
-.card-rank{font-size:.6rem;color:var(--dim);font-weight:700;min-width:20px}
-.card-name{flex:1;font-size:.82rem;color:var(--fg);font-weight:500}
-.card-grip{font-size:.75rem;color:var(--dim);opacity:.35}
-.clrank-confirmed-line{
-  display:flex;align-items:center;gap:6px;padding:3px 0;flex-shrink:0;pointer-events:none;
-}
-.clrank-append-btn{
-  padding:7px;text-align:center;font-size:.72rem;color:var(--teal);
-  border:1px dashed rgba(70,214,196,.4);border-radius:6px;cursor:pointer;transition:.15s;flex-shrink:0;
-}
-.clrank-append-btn:hover{background:rgba(70,214,196,.08)}
-.clrank-pool{display:flex;flex-wrap:wrap;gap:5px;margin-top:8px}
-.clrank-chip{
-  display:inline-flex;align-items:center;padding:5px 9px;border-radius:6px;
-  font-size:.73rem;cursor:pointer;border:1px solid var(--line);
-  background:rgba(255,255,255,.04);transition:all .15s;white-space:nowrap;
-}
-.clrank-chip:hover{background:rgba(70,214,196,.08)}
-.clrank-chip.selected{border-color:var(--teal);background:rgba(70,214,196,.18);color:var(--teal);font-weight:700}
-@media(max-width:360px){.card-name{font-size:.76rem}.clrank-chip{font-size:.67rem;padding:4px 7px}}
+/* クラス順位フルスクリーンページ */
+#clrank-page{display:none;position:fixed;inset:0;z-index:200;background:#050f1e;flex-direction:column;overflow:hidden}
+#clrank-page.open{display:flex}
+.clrank-ph{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.1);flex-shrink:0;min-height:46px;background:#071424}
+.clrank-board-wrap{flex:1;display:flex;min-height:0;overflow:hidden}
+.clrank-yaxis{width:30px;flex-shrink:0;position:relative;border-right:1px solid rgba(255,255,255,.07)}
+.clrank-board{flex:1;position:relative;overflow:hidden;touch-action:manipulation}
+.clrank-pool-area{flex-shrink:0;border-top:1px solid rgba(255,255,255,.1);padding:6px 10px 8px;background:#071424;max-height:130px;overflow:hidden}
+.clrank-pool-row{display:flex;flex-wrap:wrap;gap:4px;max-height:76px;overflow-y:auto;margin-top:4px}
+.clrank-block{position:absolute;transform:translate(-50%,-50%);padding:3px 7px;border-radius:5px;font-size:.7rem;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid rgba(255,255,255,.18);background:rgba(15,35,65,.92);color:#d4e8ff;user-select:none;z-index:2;transition:box-shadow .12s,border-color .12s;box-shadow:0 1px 4px rgba(0,0,0,.5)}
+.clrank-block.selected{background:rgba(70,214,196,.22);border-color:var(--teal);color:var(--teal);box-shadow:0 0 10px rgba(70,214,196,.4);z-index:3}
+.clrank-conf-line-b{position:absolute;left:0;right:0;pointer-events:none;z-index:1}
+.clrank-conf-line-b::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:rgba(70,214,196,.6)}
+.clrank-grid-b{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.06);pointer-events:none}
+.clrank-yaxis-lbl{position:absolute;right:3px;font-size:.55rem;color:rgba(255,255,255,.28);line-height:1;transform:translateY(50%)}
+.clrank-chip{display:inline-flex;align-items:center;padding:4px 8px;border-radius:5px;font-size:.72rem;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);transition:all .12s;white-space:nowrap;color:var(--fg)}
+.clrank-chip:hover{background:rgba(70,214,196,.1)}
+.clrank-chip.selected{border-color:var(--teal);background:rgba(70,214,196,.2);color:var(--teal);font-weight:700}
 
 /* 称号バッジ */
 .shogou{
@@ -394,7 +382,7 @@ h1{
   <button class="auth-btn" id="admin-btn" style="display:none" onclick="openAdminModal()">管理</button>
   <button class="auth-btn" id="members-btn" style="display:none" onclick="openMembersModal()">メンバー</button>
   <button class="auth-btn" id="scores-btn" style="display:none" onclick="openScoresModal()">📊成績</button>
-  <button class="auth-btn" id="clrank-btn" style="display:none" onclick="openClrankModal()">🏆順位</button>
+  <button class="auth-btn" id="clrank-btn" style="display:none" onclick="openClrankPage()">🏆順位</button>
   <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
   <button class="auth-btn" id="test-btn" style="display:none" onclick="openTestModal()">📋テスト</button>
   <button class="auth-btn" id="pw-open-btn" onclick="openLoginModal()">IDでログイン</button>
@@ -698,16 +686,35 @@ h1{
   </div>
 </div>
 
-<!-- クラス順位予想モーダル -->
-<div class="modal-bg" id="clrank-modal-bg">
-  <div class="modal" style="width:min(520px,96vw);padding:16px 12px">
-    <button onclick="closeClrankModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
-    <h2>🏆 クラス順位予想</h2>
-    <p style="font-size:.73rem;color:var(--dim);margin:4px 0 12px">名前をタップして選択→順位スロットをタップして配置</p>
-    <div id="clrank-content"></div>
-    <div class="modal-btns" style="margin-top:14px">
-      <button onclick="closeClrankModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+<!-- クラス順位予測ページ（フルスクリーン） -->
+<div id="clrank-page">
+  <!-- ヘッダー -->
+  <div class="clrank-ph">
+    <span style="font-weight:700;font-size:.86rem;white-space:nowrap;color:#d4e8ff">🏆 クラス順位予測</span>
+    <span id="clrank-hint" style="flex:1;font-size:.66rem;color:rgba(70,214,196,.8);padding:0 8px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+    <span id="clrank-admin-ms" style="display:none;align-items:center;gap:4px;white-space:nowrap">
+      <span style="font-size:.62rem;color:var(--dim)">満点</span>
+      <input id="ms-val" type="number" min="1" max="1000" style="width:50px;padding:2px 4px;border:1px solid var(--line);border-radius:4px;background:#0d1f36;color:var(--fg);font-size:.72rem;font-family:inherit">
+      <button onclick="clrankUpdateMaxScore()" style="padding:2px 6px;border:1px solid var(--teal);border-radius:4px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.68rem;cursor:pointer;font-family:inherit">適用</button>
+    </span>
+    <button onclick="closeClrankPage()" style="padding:4px 10px;border:1px solid rgba(255,255,255,.15);border-radius:6px;background:none;color:var(--dim);font-size:.78rem;cursor:pointer;font-family:inherit;flex-shrink:0">✕ 閉じる</button>
+  </div>
+  <!-- 2Dボード -->
+  <div class="clrank-board-wrap">
+    <div class="clrank-yaxis" id="clrank-yaxis"></div>
+    <div class="clrank-board" id="clrank-board" onclick="clrankBoardTap(event)"></div>
+  </div>
+  <!-- プール＋確定入力 -->
+  <div class="clrank-pool-area">
+    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:2px">
+      <span style="font-size:.62rem;color:var(--dim);white-space:nowrap">プール: <span id="clrank-pool-count">0</span>人</span>
+      <span style="font-size:.62rem;color:var(--dim);white-space:nowrap;margin-left:6px">📌 確定点:</span>
+      <span id="clrank-confirmed-items" style="display:contents"></span>
+      <input id="clrank-conf-name" type="text" placeholder="名前" style="width:60px;padding:2px 5px;border:1px solid var(--line);border-radius:4px;background:#0d1f36;color:var(--fg);font-size:.72rem;font-family:inherit">
+      <input id="clrank-conf-score" type="number" min="0" max="1000" placeholder="点" style="width:46px;padding:2px 5px;border:1px solid var(--line);border-radius:4px;background:#0d1f36;color:var(--fg);font-size:.72rem;font-family:inherit">
+      <button onclick="clrankAddConfirm()" style="padding:2px 8px;border:1px solid var(--teal);border-radius:4px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.68rem;cursor:pointer;font-family:inherit">確定</button>
     </div>
+    <div class="clrank-pool-row" id="clrank-pool-inner"></div>
   </div>
 </div>
 
@@ -1964,7 +1971,7 @@ function sortScores(key) {
   loadScores();
 }
 
-// ── クラス順位 ────────────────────────────────────────────
+// ── クラス順位（2Dボード） ────────────────────────────────────
 const CLASS_NAMES = [
   'ゆず','いかい','そうすけ','えいと','しょう','おおひら',
   'りょうすけ','あやと','まさと','こうや','みっつー','しょうた',
@@ -1973,161 +1980,185 @@ const CLASS_NAMES = [
   'ならさつ','せいこ','はたの','はっとり','あおと','せいじゅうろう',
   'まさみ','ほのか','堀田','りお','むとう','小っちゃん'
 ];
-let _clrankOrdered   = []; // 順番に並んだ名前配列（先頭=1位）
-let _clrankConfirmed = {}; // { rank: name } 確定順位
-let _clrankSelected    = null;
-let _clrankSelectedFrom = null; // null=プール, 数値=orderedのインデックス
+let _clrankPositions = {}; // { name: {x,y} } — 0〜100の%座標（y=0が上=満点）
+let _clrankMaxScore  = 300;
+let _clrankConfirmed = {};  // { name: score }
+let _clrankSel       = null;  // 選択中の名前
+let _clrankSelBoard  = false; // trueならボードから選択
 
-async function openClrankModal() {
-  lockScroll();
-  document.getElementById('clrank-modal-bg').classList.add('open');
-  await loadClrank();
+function openClrankPage() {
+  document.getElementById('clrank-page').classList.add('open');
+  document.body.style.overflow = 'hidden';
+  loadClrankPage();
 }
-function closeClrankModal() {
-  _clrankSelected = null; _clrankSelectedFrom = null;
-  unlockScroll();
-  document.getElementById('clrank-modal-bg').classList.remove('open');
+function closeClrankPage() {
+  document.getElementById('clrank-page').classList.remove('open');
+  document.body.style.overflow = '';
+  _clrankSel = null; _clrankSelBoard = false;
 }
-document.getElementById('clrank-modal-bg').addEventListener('click', e => {
-  if (e.target === e.currentTarget) closeClrankModal();
-});
-async function loadClrank() {
+
+async function loadClrankPage() {
   try {
-    const res  = await fetch('/api/class-rank');
-    const data = await res.json();
-    _clrankOrdered   = data.ordered   || [];
+    const data = await fetch('/api/class-rank').then(r => r.json());
+    _clrankPositions = (data.positions && !Array.isArray(data.positions)) ? data.positions : {};
     _clrankConfirmed = data.confirmed || {};
-  } catch(e) { _clrankOrdered = []; _clrankConfirmed = {}; }
-  renderClrank();
+    _clrankMaxScore  = data.max_score  || 300;
+  } catch(e) {}
+  _clrankRenderAll();
 }
 
-function _confirmedLine(name, score) {
-  return `<div class="clrank-confirmed-line">
-    <div style="flex:1;height:1px;background:rgba(70,214,196,.4)"></div>
-    <span style="font-size:.6rem;color:var(--teal);font-weight:700;white-space:nowrap;padding:0 6px">📌 ${esc(name)} ${score}点</span>
-    <div style="flex:1;height:1px;background:rgba(70,214,196,.4)"></div>
-  </div>`;
+function _clrankRenderAll() {
+  _clrankRenderYAxis();
+  _clrankRenderBoard();
+  _clrankRenderPool();
+  _clrankRenderHint();
+  _clrankRenderConfirmed();
+  _clrankRenderAdminMs();
 }
 
-function renderClrank() {
-  const el = document.getElementById('clrank-content');
-  const hasSelected = _clrankSelected !== null;
-  // 選択中のカードは表示リストから除外（ゴーストとして保持）
-  const displayList = _clrankSelectedFrom !== null
-    ? _clrankOrdered.filter((_, i) => i !== _clrankSelectedFrom)
-    : [..._clrankOrdered];
-  const placedSet = new Set(_clrankOrdered);
-  const pool = CLASS_NAMES.filter(n => !placedSet.has(n));
-
-  // 確定済みを合計点の高い順にソート
-  const _confSorted = Object.entries(_clrankConfirmed).sort((a,b) => b[1] - a[1]);
-
-  let listHtml = '';
-  displayList.forEach((name, di) => {
-    const rank = di + 1;
-    const cls = 'clrank-list-card' + (hasSelected ? ' drop-target' : '');
-    const right = hasSelected
-      ? `<span style="font-size:.6rem;color:rgba(70,214,196,.6)">↑ここ</span>`
-      : `<span class="card-grip">⠿</span>`;
-    listHtml += `<div class="${cls}" onclick="${hasSelected ? `clrankInsertAt(${di})` : `clrankPickup(${di})`}">
-      <span class="card-rank">${rank}</span>
-      <span class="card-name">${esc(name)}</span>
-      ${right}
-    </div>`;
-    if (_confSorted[di]) listHtml += _confirmedLine(_confSorted[di][0], _confSorted[di][1]);
-  });
-  // 確定ラインでリストより後ろのもの
-  for (let ci = displayList.length; ci < _confSorted.length; ci++) {
-    listHtml += _confirmedLine(_confSorted[ci][0], _confSorted[ci][1]);
+function _clrankRenderYAxis() {
+  const el = document.getElementById('clrank-yaxis');
+  if (!el) return;
+  const step = _clrankMaxScore > 200 ? 50 : 25;
+  let h = '';
+  for (let s = 0; s <= _clrankMaxScore; s += step) {
+    const bot = (s / _clrankMaxScore * 100).toFixed(1);
+    h += `<div class="clrank-yaxis-lbl" style="bottom:${bot}%">${s}</div>`;
   }
-  if (hasSelected) {
-    listHtml += `<div class="clrank-append-btn" onclick="clrankInsertAt(${displayList.length})">+ 末尾に追加（${displayList.length + 1}位）</div>`;
+  el.innerHTML = h;
+}
+
+function _clrankRenderBoard() {
+  const board = document.getElementById('clrank-board');
+  if (!board) return;
+  board.innerHTML = '';
+
+  // グリッドライン
+  const step = _clrankMaxScore > 200 ? 50 : 25;
+  for (let s = 0; s <= _clrankMaxScore; s += step) {
+    const top = ((1 - s / _clrankMaxScore) * 100).toFixed(1);
+    const g = document.createElement('div');
+    g.className = 'clrank-grid-b';
+    g.style.top = top + '%';
+    board.appendChild(g);
   }
 
-  const cancelLink = hasSelected && _clrankSelectedFrom !== null
-    ? ` <span onclick="clrankCancel()" style="cursor:pointer;color:var(--dim);font-size:.85em">[キャンセル]</span>` : '';
-  const hint = hasSelected
-    ? `「<strong style="color:var(--teal)">${esc(_clrankSelected)}</strong>」選択中 → リストをタップして挿入${cancelLink}`
-    : `名前 or リストのカードをタップして並べ替え`;
-
-  const poolChips = pool.map(name => {
-    const sel = _clrankSelected === name && _clrankSelectedFrom === null;
-    return `<div class="clrank-chip${sel ? ' selected' : ''}" onclick="clrankPoolTap('${name}')">${esc(name)}</div>`;
+  // 確定スコアライン
+  Object.entries(_clrankConfirmed).forEach(([name, score]) => {
+    const top = ((1 - score / _clrankMaxScore) * 100).toFixed(1);
+    const l = document.createElement('div');
+    l.className = 'clrank-conf-line-b';
+    l.style.top = top + '%';
+    l.innerHTML = `<span style="position:absolute;left:4px;top:2px;font-size:.56rem;color:rgba(70,214,196,.9);font-weight:700;white-space:nowrap;pointer-events:none">📌 ${esc(name)} ${score}点</span>`;
+    board.appendChild(l);
   });
 
-  // 確定合計点入力（全ユーザー）
-  let adminHtml = '';
-  if (authEmail) {
-    const confItems = Object.entries(_clrankConfirmed).sort((a,b)=>b[1]-a[1])
-      .map(([n,s]) => `<span style="font-size:.7rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.3);border-radius:4px;padding:2px 6px;white-space:nowrap">${esc(n)}: ${s}点 <span onclick="clrankRemoveConfirm('${n.replace(/'/g,"\\'")}')" style="cursor:pointer;opacity:.6">✕</span></span>`).join('');
-    adminHtml = `<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line)">
-      <div style="font-size:.68rem;color:var(--teal);font-weight:700;margin-bottom:6px">📌 確定合計点</div>
-      <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${confItems}</div>
-      <div style="display:flex;gap:6px">
-        <input id="conf-name-inp" type="text" placeholder="名前" style="flex:1;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);font-size:.8rem;font-family:inherit">
-        <input id="conf-score-inp" type="number" min="0" max="300" placeholder="合計点" style="width:68px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);font-size:.8rem;font-family:inherit">
-        <button onclick="clrankAddConfirm()" style="padding:4px 10px;border:1px solid var(--teal);border-radius:6px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.8rem;cursor:pointer;font-family:inherit">確定</button>
-      </div>
-    </div>`;
-  }
-
-  el.innerHTML = `
-    <div style="font-size:.66rem;color:var(--dim);margin-bottom:6px;min-height:16px">${hint}</div>
-    <div class="clrank-list">${listHtml || '<div style="color:var(--dim);font-size:.8rem;padding:6px 0">まだ誰も配置されていません</div>'}</div>
-    <div style="margin-top:10px">
-      <div style="font-size:.63rem;color:var(--dim);margin-bottom:4px">プール（未配置）</div>
-      <div class="clrank-pool">${poolChips.join('') || '<span style="color:var(--dim);font-size:.75rem">全員配置済み</span>'}</div>
-    </div>
-    ${adminHtml}`;
+  // 配置済みブロック
+  Object.entries(_clrankPositions).forEach(([name, pos]) => {
+    const isSel = _clrankSel === name && _clrankSelBoard;
+    const b = document.createElement('div');
+    b.className = 'clrank-block' + (isSel ? ' selected' : '');
+    b.style.left = pos.x + '%';
+    b.style.top  = pos.y + '%';
+    b.textContent = name;
+    b.addEventListener('click', e => { e.stopPropagation(); _clrankBlockTap(name); });
+    board.appendChild(b);
+  });
 }
 
-function clrankPickup(idx) {
-  _clrankSelected    = _clrankOrdered[idx];
-  _clrankSelectedFrom = idx;
-  renderClrank();
-}
-function clrankPoolTap(name) {
-  if (_clrankSelected === name && _clrankSelectedFrom === null) {
-    _clrankSelected = null; _clrankSelectedFrom = null;
-  } else {
-    _clrankSelected = name; _clrankSelectedFrom = null;
+function _clrankRenderPool() {
+  const el = document.getElementById('clrank-pool-inner');
+  if (!el) return;
+  const placed = new Set(Object.keys(_clrankPositions));
+  const unplaced = CLASS_NAMES.filter(n => !placed.has(n));
+  const cnt = document.getElementById('clrank-pool-count');
+  if (cnt) cnt.textContent = unplaced.length;
+  if (!unplaced.length) {
+    el.innerHTML = '<span style="color:var(--dim);font-size:.72rem">全員配置済み</span>';
+    return;
   }
-  renderClrank();
+  el.innerHTML = unplaced.map(n => {
+    const sel = _clrankSel === n && !_clrankSelBoard;
+    return `<div class="clrank-chip${sel ? ' selected' : ''}" onclick="clrankPoolChipTap('${n}')">${esc(n)}</div>`;
+  }).join('');
 }
-function clrankCancel() {
-  _clrankSelected = null; _clrankSelectedFrom = null;
-  renderClrank();
+
+function _clrankRenderHint() {
+  const el = document.getElementById('clrank-hint');
+  if (!el) return;
+  if (_clrankSel && _clrankSelBoard)
+    el.innerHTML = `<strong style="color:var(--teal)">${esc(_clrankSel)}</strong> 選択中 — 移動先をタップ／もう一度タップでプールに戻す`;
+  else if (_clrankSel)
+    el.innerHTML = `<strong style="color:var(--teal)">${esc(_clrankSel)}</strong> 選択中 — ボードをタップして配置`;
+  else
+    el.textContent = 'ブロックをタップ → ボードに配置 | 配置済みを再タップ → 移動・返す';
 }
-async function clrankInsertAt(displayIdx) {
-  if (!_clrankSelected) return;
-  let newOrdered;
-  if (_clrankSelectedFrom !== null) {
-    // リストから → 元位置を除いてdisplayIdxに挿入
-    const filtered = _clrankOrdered.filter((_, i) => i !== _clrankSelectedFrom);
-    filtered.splice(displayIdx, 0, _clrankSelected);
-    newOrdered = filtered;
-  } else {
-    // プールから → そのまま挿入
-    newOrdered = [..._clrankOrdered];
-    newOrdered.splice(displayIdx, 0, _clrankSelected);
+
+function _clrankRenderConfirmed() {
+  const el = document.getElementById('clrank-confirmed-items');
+  if (!el) return;
+  el.innerHTML = Object.entries(_clrankConfirmed).sort((a,b) => b[1]-a[1])
+    .map(([n,s]) => `<span style="font-size:.65rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.28);border-radius:4px;padding:1px 5px;white-space:nowrap">${esc(n)}:${s}点 <span onclick="clrankRemoveConfirm('${n.replace(/'/g,"\\'")}')" style="cursor:pointer;opacity:.55">✕</span></span>`).join('');
+}
+
+function _clrankRenderAdminMs() {
+  const el = document.getElementById('clrank-admin-ms');
+  if (!el) return;
+  if (authEmail !== 'kabu6113450@gmail.com') { el.style.display = 'none'; return; }
+  el.style.display = 'inline-flex';
+  const inp = document.getElementById('ms-val');
+  if (inp && !inp.value) inp.value = _clrankMaxScore;
+}
+
+// ── ボードタップ（配置） ─────────────────────────────────────
+function clrankBoardTap(e) {
+  if (!_clrankSel) return;
+  const board = document.getElementById('clrank-board');
+  const rect = board.getBoundingClientRect();
+  const x = Math.max(2, Math.min(98, (e.clientX - rect.left) / rect.width  * 100));
+  const y = Math.max(1, Math.min(99, (e.clientY - rect.top)  / rect.height * 100));
+  _clrankPositions[_clrankSel] = { x, y };
+  _clrankSel = null; _clrankSelBoard = false;
+  _clrankRenderAll();
+  _saveClrankPositions();
+}
+
+// ── ブロックタップ（選択 or プールに戻す） ─────────────────────
+function _clrankBlockTap(name) {
+  if (_clrankSel === name && _clrankSelBoard) {
+    // 2度目のタップ → プールに戻す
+    delete _clrankPositions[name];
+    _clrankSel = null; _clrankSelBoard = false;
+    _clrankRenderAll();
+    _saveClrankPositions();
+    return;
   }
-  _clrankOrdered = newOrdered;
-  _clrankSelected = null; _clrankSelectedFrom = null;
-  renderClrank();
-  await _saveClrankOrder();
+  _clrankSel = name; _clrankSelBoard = true;
+  _clrankRenderAll();
 }
-async function _saveClrankOrder() {
+
+// ── プールチップタップ ────────────────────────────────────────
+function clrankPoolChipTap(name) {
+  if (_clrankSel === name && !_clrankSelBoard) { _clrankSel = null; }
+  else { _clrankSel = name; _clrankSelBoard = false; }
+  _clrankRenderAll();
+}
+
+// ── 保存 ──────────────────────────────────────────────────────
+async function _saveClrankPositions() {
   try {
     await fetch('/api/class-rank', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify({ ordered: _clrankOrdered })
+      body: JSON.stringify({ positions: _clrankPositions })
     });
   } catch(e) {}
 }
+
+// ── 確定合計点 ────────────────────────────────────────────────
 async function clrankAddConfirm() {
-  const name = document.getElementById('conf-name-inp').value.trim();
-  const total = parseInt(document.getElementById('conf-score-inp').value);
+  const name  = document.getElementById('clrank-conf-name').value.trim();
+  const total = parseInt(document.getElementById('clrank-conf-score').value);
   if (!name || !total) return;
   try {
     await fetch('/api/class-rank/confirm', {
@@ -2135,7 +2166,10 @@ async function clrankAddConfirm() {
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
       body: JSON.stringify({ name, total })
     });
-    await loadClrank();
+    _clrankConfirmed[name] = total;
+    document.getElementById('clrank-conf-name').value  = '';
+    document.getElementById('clrank-conf-score').value = '';
+    _clrankRenderAll();
   } catch(e) {}
 }
 async function clrankRemoveConfirm(name) {
@@ -2145,7 +2179,23 @@ async function clrankRemoveConfirm(name) {
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
       body: JSON.stringify({ name, total: 0 })
     });
-    await loadClrank();
+    delete _clrankConfirmed[name];
+    _clrankRenderAll();
+  } catch(e) {}
+}
+
+// ── 管理者：満点変更 ──────────────────────────────────────────
+async function clrankUpdateMaxScore() {
+  const ms = parseInt(document.getElementById('ms-val').value);
+  if (!ms || ms < 1 || ms > 1000) return;
+  try {
+    await fetch('/api/class-rank/max-score', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ max_score: ms })
+    });
+    _clrankMaxScore = ms;
+    _clrankRenderAll();
   } catch(e) {}
 }
 
