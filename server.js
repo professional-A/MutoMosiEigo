@@ -117,6 +117,8 @@ async function initDB() {
   await pool.query(`UPDATE users SET frame='rainbow' WHERE username='田中謙佑' AND frame IN ('worst','default')`).catch(()=>{});
   // アンケート完了済みユーザーのunlocked_avatarsに😼を追加（アバター変更後も対応）
   await pool.query(`UPDATE users SET unlocked_avatars='["😼"]' WHERE id IN (SELECT user_id FROM survey_responses) AND (unlocked_avatars='[]' OR unlocked_avatars IS NULL OR unlocked_avatars NOT LIKE '%😼%')`).catch(()=>{});
+  // 全員に😏（あきとアイコン）をアンロック
+  await pool.query(`UPDATE users SET unlocked_avatars = CASE WHEN unlocked_avatars IS NULL OR unlocked_avatars = '[]' THEN '["😏"]' WHEN unlocked_avatars NOT LIKE '%😏%' THEN REPLACE(unlocked_avatars, ']', ',"😏"]') ELSE unlocked_avatars END`).catch(()=>{});
 }
 
 // 1位に worst フレームを自動付与・外れたら prev_frame に戻す
