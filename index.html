@@ -2025,7 +2025,6 @@ function renderClrank() {
   let listHtml = '';
   displayList.forEach((name, di) => {
     const rank = di + 1;
-    if (_confSorted[di]) listHtml += _confirmedLine(_confSorted[di][0], _confSorted[di][1]);
     const cls = 'clrank-list-card' + (hasSelected ? ' drop-target' : '');
     const right = hasSelected
       ? `<span style="font-size:.6rem;color:rgba(70,214,196,.6)">↑ここ</span>`
@@ -2035,6 +2034,7 @@ function renderClrank() {
       <span class="card-name">${esc(name)}</span>
       ${right}
     </div>`;
+    if (_confSorted[di]) listHtml += _confirmedLine(_confSorted[di][0], _confSorted[di][1]);
   });
   // 確定ラインでリストより後ろのもの
   for (let ci = displayList.length; ci < _confSorted.length; ci++) {
