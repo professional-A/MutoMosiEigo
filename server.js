@@ -37,6 +37,12 @@ async function initDB() {
       total      INTEGER NOT NULL,
       updated_at TEXT NOT NULL
     );
+    CREATE TABLE IF NOT EXISTS class_ranking (
+      position     INTEGER PRIMARY KEY,
+      student_name TEXT,
+      updated_by   TEXT,
+      updated_at   TEXT
+    );
   `);
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS supabase_id TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS email       TEXT`).catch(()=>{});
@@ -298,20 +304,28 @@ app.post('/api/math/score', auth, async (req, res) => {
   res.json({ ok: true, score: s });
 });
 
-// クラス順位予想
-app.get('/api/class-rank', auth, async (req, res) => {
-  const { rows } = await pool.query('SELECT class_rank FROM users WHERE id=$1', [req.user.id]);
-  res.json(JSON.parse(rows[0]?.class_rank || '{}'));
+// クラス順位（全員共有）
+app.get('/api/class-rank', async (req, res) => {
+  const { rows } = await pool.query('SELECT position, student_name FROM class_ranking ORDER BY position');
+  const result = {};
+  rows.forEach(r => { result[r.position] = r.student_name; });
+  res.json(result);
 });
 app.post('/api/class-rank', auth, async (req, res) => {
   const { position, name } = req.body;
   if (!Number.isInteger(position) || position < 1 || position > 36)
     return res.status(400).json({ error: '無効な順位' });
-  const { rows } = await pool.query('SELECT class_rank FROM users WHERE id=$1', [req.user.id]);
-  const cr = JSON.parse(rows[0]?.class_rank || '{}');
-  if (name && name.trim()) cr[position] = name.trim().slice(0, 20);
-  else delete cr[position];
-  await pool.query('UPDATE users SET class_rank=$1 WHERE id=$2', [JSON.stringify(cr), req.user.id]);
+  const trimmed = name?.trim().slice(0, 20) || null;
+  if (trimmed) {
+    await pool.query(
+      `INSERT INTO class_ranking (position, student_name, updated_by, updated_at)
+       VALUES ($1,$2,$3,$4)
+       ON CONFLICT (position) DO UPDATE SET student_name=$2, updated_by=$3, updated_at=$4`,
+      [position, trimmed, req.user.username, new Date().toISOString()]
+    );
+  } else {
+    await pool.query('DELETE FROM class_ranking WHERE position=$1', [position]);
+  }
   res.json({ ok: true });
 });
 

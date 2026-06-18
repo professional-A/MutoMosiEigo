@@ -1911,9 +1911,8 @@ document.getElementById('clrank-modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeClrankModal();
 });
 async function loadClrank() {
-  const el = document.getElementById('clrank-content');
   try {
-    const res = await fetch('/api/class-rank', { headers: { 'Authorization': authToken } });
+    const res = await fetch('/api/class-rank');
     _clrankData = await res.json();
   } catch(e) { _clrankData = {}; }
   renderClrank();
