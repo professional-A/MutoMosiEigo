@@ -290,14 +290,14 @@ h1{
 .title-hiroto{background:linear-gradient(110deg,#0c1a3a,#1d4ed8,#93c5fd 50%,#1d4ed8,#0c1a3a);border-color:rgba(147,197,253,.6);color:#e0f2fe;text-shadow:0 0 8px rgba(147,197,253,.9),0 0 2px #fff;animation:hiroto-ice 2.5s ease-in-out infinite;border-radius:0;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)}
 .title-hiroto::before{display:none}
 @keyframes hiroto-ice{0%,100%{box-shadow:0 0 6px rgba(59,130,246,.5),0 0 14px rgba(147,197,253,.2);filter:brightness(1)}50%{box-shadow:0 0 16px rgba(147,197,253,.9),0 0 32px rgba(59,130,246,.4);filter:brightness(1.25)}}
-/* はせがわ "女さん" — ピンクスパーク・ピル型 ♡ */
-.title-hasegawa{background:linear-gradient(110deg,#831843,#be185d,#f472b6 50%,#be185d,#831843);border-color:rgba(244,114,182,.6);color:#fce7f3;text-shadow:0 0 8px rgba(249,168,212,1);animation:hasegawa-spark 1.1s ease-in-out infinite alternate;border-radius:50px}
+/* はせがわ "多頭飼い" — 女の園・多彩グラデーション・波型角丸 ♡ */
+.title-hasegawa{background:linear-gradient(110deg,#3b0764,#7c2d9b,#d946ef 35%,#ec4899 55%,#a855f7,#3b0764);border-color:rgba(217,70,239,.65);color:#fae8ff;text-shadow:0 0 8px rgba(217,70,239,.9),0 0 3px rgba(244,114,182,.5);box-shadow:0 0 10px rgba(217,70,239,.35),inset 0 1px 0 rgba(255,220,255,.2);animation:hasegawa-garden 4s ease-in-out infinite;border-radius:18px 4px 18px 4px}
 .title-hasegawa::before{display:none}
-@keyframes hasegawa-spark{0%{box-shadow:0 0 5px #db2777,0 0 10px rgba(244,114,182,.3);transform:scale(1)}100%{box-shadow:0 0 14px #f472b6,0 0 28px rgba(249,168,212,.55),0 0 42px rgba(251,207,232,.2);transform:scale(1.04)}}
-/* professional-A "AIマスター" — サイバーグリッチ・直角 ▸ */
-.title-pro{background:#000;border-color:#00ffcc;color:#00ffcc;font-family:monospace;letter-spacing:.15em;text-shadow:0 0 6px #00ffcc,0 0 16px rgba(0,255,204,.4);animation:pro-glitch 3.2s steps(1) infinite;border-radius:0}
+@keyframes hasegawa-garden{0%{background-position:0%}50%{background-position:100%;box-shadow:0 0 18px rgba(244,114,182,.6),0 0 32px rgba(217,70,239,.3)}100%{background-position:0%}}
+/* professional-A "女使われ/…" — 夜の紫スクロール ♟ */
+.title-pro{background:linear-gradient(110deg,#0d001a,#2e1065,#6d28d9 45%,#7c3aed 55%,#2e1065,#0d001a);border-color:rgba(109,40,217,.75);color:#ede9fe;text-shadow:0 0 8px rgba(139,92,246,1),0 0 3px rgba(221,214,254,.5);box-shadow:0 0 10px rgba(109,40,217,.4),inset 0 1px 0 rgba(200,180,255,.15);max-width:82px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:2px 12px 2px 12px}
 .title-pro::before{display:none}
-@keyframes pro-glitch{0%,85%,100%{text-shadow:0 0 6px #00ffcc;transform:translate(0)}86%{transform:translateX(-2px);text-shadow:-2px 0 #ff0066,2px 0 #00ffcc;filter:hue-rotate(20deg)}88%{transform:translateX(2px);text-shadow:2px 0 #ff0066,-2px 0 #00ffcc;filter:hue-rotate(-20deg)}90%{transform:translate(0);text-shadow:0 0 6px #00ffcc;filter:none}}
+.title-pro .ti-scroll{animation-duration:11s}
 /* 荒らし乙 "ほんまごめん" — 震え謝罪・不均等角丸 ⚠ */
 .title-arashi{background:linear-gradient(110deg,#7f1d1d,#dc2626,#ef4444 50%,#dc2626,#7f1d1d);border-color:rgba(239,68,68,.7);color:#fff;text-shadow:0 0 6px rgba(255,100,100,.8);animation:arashi-shake .09s linear infinite;border-radius:2px 12px 2px 12px}
 .title-arashi::before{display:none}
@@ -324,10 +324,19 @@ h1{
 .title-kawakami::before{display:none}
 @keyframes kawakami-fart{0%,100%{transform:skewX(0deg) scaleY(1);filter:blur(0px)}15%{transform:skewX(-1.5deg) scaleY(1.04)}30%{transform:skewX(2deg) scaleY(.96);filter:blur(.4px)}50%{transform:skewX(-1deg) scaleY(1.03)}70%{transform:skewX(1.5deg) scaleY(.97)}85%{transform:skewX(-.5deg) scaleY(1.01)}}
 
-/* SHIMESABA "当麻村" — 土くさい田舎ブラウン・くたびれ看板 田 */
-.title-shimesaba{background:linear-gradient(110deg,#1c1005,#4a3000,#8b6914 50%,#4a3000,#1c1005);border-color:rgba(139,105,20,.7);color:#d4b483;text-shadow:0 0 6px rgba(139,105,20,.9);box-shadow:0 0 8px rgba(100,70,10,.4),inset 0 1px 0 rgba(200,160,80,.15);animation:shimesaba-tilt 3s ease-in-out infinite;border-radius:1px}
+/* SHIMESABA "当麻村の中学生" — 田舎ブラウン+中学生ピンクフラッシュ 田 */
+.title-shimesaba{background:linear-gradient(110deg,#1c1005,#4a3000,#8b6914 50%,#4a3000,#1c1005);border-color:rgba(139,105,20,.7);color:#d4b483;text-shadow:0 0 6px rgba(139,105,20,.9);box-shadow:0 0 8px rgba(100,70,10,.4),inset 0 1px 0 rgba(200,160,80,.15);animation:shimesaba-tilt 3s ease-in-out infinite,shimesaba-flash 6s ease-in-out infinite;border-radius:1px}
 .title-shimesaba::before{display:none}
 @keyframes shimesaba-tilt{0%,100%{transform:rotate(0deg)}25%{transform:rotate(.6deg)}75%{transform:rotate(-.6deg)}}
+@keyframes shimesaba-flash{0%,55%,100%{color:#d4b483;text-shadow:0 0 6px rgba(139,105,20,.9)}65%{color:#ffaadd;text-shadow:0 0 12px rgba(255,100,200,1),0 0 24px rgba(255,150,220,.5)}75%{color:#d4b483;text-shadow:0 0 6px rgba(139,105,20,.9)}}
+/* やー "喋んな触んなきもちわりー" — 赤敵意・平行四辺形・拒絶ジャーク ⛔ */
+.title-ya{background:linear-gradient(110deg,#1a0000,#5c0a0a,#b91c1c 50%,#5c0a0a,#1a0000);border-color:rgba(220,38,38,.85);color:#fca5a5;text-shadow:0 0 8px rgba(220,38,38,1),0 0 2px rgba(255,180,180,.5);box-shadow:0 0 12px rgba(220,38,38,.5),inset 0 1px 0 rgba(255,200,200,.1);animation:ya-repulse .9s ease-in-out infinite;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);border-radius:0}
+.title-ya::before{display:none}
+@keyframes ya-repulse{0%,100%{transform:translateX(0) skewX(0deg);filter:brightness(1)}20%{transform:translateX(-2px) skewX(-1.8deg);filter:brightness(1.5)}50%{transform:translateX(1px) skewX(.9deg);filter:brightness(.85)}75%{transform:translateX(-1px) skewX(-1deg);filter:brightness(1.2)}}
+/* 福澤まさみ "膝枕/…" — エロ感ピンクスクロール ♛ */
+.title-masami{background:linear-gradient(110deg,#4a0028,#9d1753,#ec4899 40%,#f472b6 55%,#9d1753,#4a0028);border-color:rgba(244,114,182,.75);color:#fce7f3;text-shadow:0 0 10px rgba(236,72,153,1),0 0 4px rgba(255,182,215,.6);box-shadow:0 0 14px rgba(236,72,153,.5),inset 0 1px 0 rgba(255,200,240,.2);max-width:82px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:12px 2px 12px 2px}
+.title-masami::before{display:none}
+.title-masami .ti-scroll{animation-duration:14s}
 
 /* よしよしぎゅー "ひざまくら" — あったか琥珀・ふんわり大丸角 ☁ */
 .title-yoshi{background:linear-gradient(110deg,#78350f,#c2701f,#fcd9a0 50%,#c2701f,#78350f);border-color:rgba(251,191,96,.55);color:#fff7e6;text-shadow:0 0 8px rgba(253,186,116,.9),0 0 3px rgba(255,237,213,.6);animation:yoshi-warm 3.5s ease-in-out infinite;border-radius:18px}
@@ -378,7 +387,7 @@ h1{
 <div class="auth-bar" id="auth-bar">
   <div class="auth-bar-left">
     <button class="notif-btn" onclick="toggleNotif()" title="お知らせ">
-      🔔<span class="notif-badge" id="notif-badge">1</span>
+      🔔<span class="notif-badge" id="notif-badge">2</span>
     </button>
   </div>
   <span id="auth-status">ログインしていません</span>
@@ -399,6 +408,17 @@ h1{
 <!-- お知らせパネル -->
 <div class="notif-panel" id="notif-panel">
   <div class="notif-header">お知らせ</div>
+  <div class="notif-item notif-new">
+    <div class="notif-item-date">2026-06-18</div>
+    <div class="notif-item-title">🏷️ メンバー固有称号・大幅リニューアル＆クラス順位更新！</div>
+    <div class="notif-item-body">
+      各メンバーの称号がそれぞれ独自のデザイン・アニメーションにパワーアップ！🎨<br>
+      誰がどんな称号になったかはログインして確認してみてね。<br><br>
+      また <strong style="color:var(--teal)">🏆クラス順位</strong> の確定マーカーが変わりました。<br>
+      順位ではなく<strong style="color:var(--amber)">合計点</strong>で基準を設定できるようになったよ。<br>
+      点数が確定した人から順番のヒントに使ってね！
+    </div>
+  </div>
   <div class="notif-item notif-new">
     <div class="notif-item-date">2026-06-18</div>
     <div class="notif-item-title">😏 考え方やなアイコン＆クラス順位リニューアル！</div>
@@ -1034,12 +1054,14 @@ function titleBadge(u){
   const cls = u.title_class || '';
   const syms = {
     'title-tanaka':'✦','title-hiroto':'❄','title-hasegawa':'♡',
-    'title-pro':'▸','title-arashi':'⚠','title-eye':'☠',
+    'title-pro':'♟','title-arashi':'⚠','title-eye':'☠',
     'title-hatano':'☣','title-honari':'…','title-mitts':'»',
-    'title-kawakami':'〜','title-yoshi':'☁','title-shimesaba':'田'
+    'title-kawakami':'〜','title-yoshi':'☁','title-shimesaba':'田',
+    'title-ya':'⛔','title-masami':'♛'
   };
   const sym = syms[cls] || '◆';
-  const inner = cls === 'title-mitts'
+  const scrollCls = new Set(['title-mitts','title-masami','title-pro']);
+  const inner = scrollCls.has(cls)
     ? `<span class="ti-scroll">${sym} ${esc(u.title)}</span>`
     : `${sym} ${esc(u.title)}`;
   return `<span class="shogou${cls?' '+cls:''}">${inner}</span>`;
@@ -1979,10 +2001,10 @@ async function loadClrank() {
   renderClrank();
 }
 
-function _confirmedLine(rank, name) {
+function _confirmedLine(name, score) {
   return `<div class="clrank-confirmed-line">
     <div style="flex:1;height:1px;background:rgba(70,214,196,.4)"></div>
-    <span style="font-size:.6rem;color:var(--teal);font-weight:700;white-space:nowrap;padding:0 6px">📌 ${rank}位確定: ${esc(name)}</span>
+    <span style="font-size:.6rem;color:var(--teal);font-weight:700;white-space:nowrap;padding:0 6px">📌 ${esc(name)} ${score}点</span>
     <div style="flex:1;height:1px;background:rgba(70,214,196,.4)"></div>
   </div>`;
 }
@@ -1997,10 +2019,13 @@ function renderClrank() {
   const placedSet = new Set(_clrankOrdered);
   const pool = CLASS_NAMES.filter(n => !placedSet.has(n));
 
+  // 確定済みを合計点の高い順にソート
+  const _confSorted = Object.entries(_clrankConfirmed).sort((a,b) => b[1] - a[1]);
+
   let listHtml = '';
   displayList.forEach((name, di) => {
     const rank = di + 1;
-    if (_clrankConfirmed[rank]) listHtml += _confirmedLine(rank, _clrankConfirmed[rank]);
+    if (_confSorted[di]) listHtml += _confirmedLine(_confSorted[di][0], _confSorted[di][1]);
     const cls = 'clrank-list-card' + (hasSelected ? ' drop-target' : '');
     const right = hasSelected
       ? `<span style="font-size:.6rem;color:rgba(70,214,196,.6)">↑ここ</span>`
@@ -2012,8 +2037,8 @@ function renderClrank() {
     </div>`;
   });
   // 確定ラインでリストより後ろのもの
-  for (let r = displayList.length + 1; r <= 36; r++) {
-    if (_clrankConfirmed[r]) listHtml += _confirmedLine(r, _clrankConfirmed[r]);
+  for (let ci = displayList.length; ci < _confSorted.length; ci++) {
+    listHtml += _confirmedLine(_confSorted[ci][0], _confSorted[ci][1]);
   }
   if (hasSelected) {
     listHtml += `<div class="clrank-append-btn" onclick="clrankInsertAt(${displayList.length})">+ 末尾に追加（${displayList.length + 1}位）</div>`;
@@ -2033,14 +2058,14 @@ function renderClrank() {
   // 管理者：確定順位入力
   let adminHtml = '';
   if (authEmail === 'kabu6113450@gmail.com') {
-    const confItems = Object.entries(_clrankConfirmed).sort((a,b)=>a[0]-b[0])
-      .map(([r,n]) => `<span style="font-size:.7rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.3);border-radius:4px;padding:2px 6px;white-space:nowrap">${r}位: ${esc(n)} <span onclick="clrankRemoveConfirm(${r})" style="cursor:pointer;opacity:.6">✕</span></span>`).join('');
+    const confItems = Object.entries(_clrankConfirmed).sort((a,b)=>b[1]-a[1])
+      .map(([n,s]) => `<span style="font-size:.7rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.3);border-radius:4px;padding:2px 6px;white-space:nowrap">${esc(n)}: ${s}点 <span onclick="clrankRemoveConfirm('${n.replace(/'/g,"\\'")}')" style="cursor:pointer;opacity:.6">✕</span></span>`).join('');
     adminHtml = `<div style="margin-top:12px;padding-top:10px;border-top:1px solid var(--line)">
-      <div style="font-size:.68rem;color:var(--teal);font-weight:700;margin-bottom:6px">📌 確定順位設定（管理者）</div>
+      <div style="font-size:.68rem;color:var(--teal);font-weight:700;margin-bottom:6px">📌 確定合計点設定（管理者）</div>
       <div style="display:flex;flex-wrap:wrap;gap:4px;margin-bottom:8px">${confItems}</div>
       <div style="display:flex;gap:6px">
-        <input id="conf-rank-inp" type="number" min="1" max="36" placeholder="順位" style="width:58px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);font-size:.8rem;font-family:inherit">
         <input id="conf-name-inp" type="text" placeholder="名前" style="flex:1;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);font-size:.8rem;font-family:inherit">
+        <input id="conf-score-inp" type="number" min="0" max="300" placeholder="合計点" style="width:68px;padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--card);color:var(--fg);font-size:.8rem;font-family:inherit">
         <button onclick="clrankAddConfirm()" style="padding:4px 10px;border:1px solid var(--teal);border-radius:6px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.8rem;cursor:pointer;font-family:inherit">確定</button>
       </div>
     </div>`;
@@ -2101,24 +2126,24 @@ async function _saveClrankOrder() {
   } catch(e) {}
 }
 async function clrankAddConfirm() {
-  const rank = parseInt(document.getElementById('conf-rank-inp').value);
   const name = document.getElementById('conf-name-inp').value.trim();
-  if (!rank || !name) return;
+  const total = parseInt(document.getElementById('conf-score-inp').value);
+  if (!name || !total) return;
   try {
     await fetch('/api/class-rank/confirm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify({ rank, name })
+      body: JSON.stringify({ name, total })
     });
     await loadClrank();
   } catch(e) {}
 }
-async function clrankRemoveConfirm(rank) {
+async function clrankRemoveConfirm(name) {
   try {
     await fetch('/api/class-rank/confirm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify({ rank, name: '' })
+      body: JSON.stringify({ name, total: 0 })
     });
     await loadClrank();
   } catch(e) {}

@@ -75,8 +75,8 @@ async function initDB() {
   // 個人称号を設定
   await pool.query(`UPDATE users SET title='ちょおちょおちょお', title_class='title-tanaka'  WHERE username='田中謙佑'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='ほりきた',           title_class='title-hiroto'   WHERE username='高橋ヒロト'`).catch(()=>{});
-  await pool.query(`UPDATE users SET title='女さん',             title_class='title-hasegawa' WHERE username='はせがわ'`).catch(()=>{});
-  await pool.query(`UPDATE users SET title='AIマスター',         title_class='title-pro'      WHERE username='professional-A'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='多頭飼い',            title_class='title-hasegawa' WHERE username='はせがわ'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='女使われ/こゆこゆ中…/寝落ち通話でイヤホン口の中', title_class='title-pro' WHERE username='professional-A'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='ほんまごめん',       title_class='title-arashi'   WHERE username='荒らし乙'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='俺は〇〇をい〇めたい', title_class='title-eye'   WHERE username LIKE '%ꙮ%'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='ハンタウイルス',     title_class='title-hatano'   WHERE username='波多野裏技'`).catch(()=>{});
@@ -84,7 +84,9 @@ async function initDB() {
   await pool.query(`UPDATE users SET title='そもそもそんなこと言ってるけど、', title_class='title-mitts' WHERE username='ミッツ'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='ママぁ～',           title_class='title-kawakami' WHERE username='川上晃弥'`).catch(()=>{});
   await pool.query(`UPDATE users SET title=NULL, title_class=NULL WHERE username IN ('honari2','seijuro_dummy')`).catch(()=>{});
-  await pool.query(`UPDATE users SET title='当麻村', title_class='title-shimesaba' WHERE username='SHIMESABA'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='当麻村の中学生', title_class='title-shimesaba' WHERE username='SHIMESABA'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='喋んな触んなきもちわりー', title_class='title-ya' WHERE username='やー'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='膝枕/ゆずのおっぱいをもむことだぁ/足長ノッポ手足長病メガネラーメン', title_class='title-masami' WHERE username='福澤まさみ'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='ひざまくら',          title_class='title-yoshi'    WHERE username='よしよしぎゅー'`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
@@ -334,12 +336,12 @@ app.post('/api/class-rank', auth, async (req, res) => {
 });
 app.post('/api/class-rank/confirm', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  const { rank, name } = req.body;
-  if (!Number.isInteger(rank) || rank < 1 || rank > 36) return res.status(400).json({ error: '無効な順位' });
+  const { name, total } = req.body;
+  if (!name || !name.trim()) return res.status(400).json({ error: '無効な名前' });
   const { rows } = await pool.query('SELECT confirmed FROM class_rank_state WHERE id=1');
   const conf = JSON.parse(rows[0]?.confirmed || '{}');
-  if (name && name.trim()) conf[rank] = name.trim().slice(0, 20);
-  else delete conf[rank];
+  if (Number.isInteger(total) && total > 0) conf[name.trim()] = total;
+  else delete conf[name.trim()];
   await pool.query(
     'INSERT INTO class_rank_state (id, confirmed) VALUES (1,$1) ON CONFLICT (id) DO UPDATE SET confirmed=$1',
     [JSON.stringify(conf)]
