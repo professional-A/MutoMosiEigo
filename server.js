@@ -317,6 +317,8 @@ app.post('/api/class-rank', auth, async (req, res) => {
     return res.status(400).json({ error: '無効な順位' });
   const trimmed = name?.trim().slice(0, 20) || null;
   if (trimmed) {
+    // 同じ名前が他のスロットにあれば先に削除（重複防止）
+    await pool.query('DELETE FROM class_ranking WHERE student_name=$1', [trimmed]);
     await pool.query(
       `INSERT INTO class_ranking (position, student_name, updated_by, updated_at)
        VALUES ($1,$2,$3,$4)
