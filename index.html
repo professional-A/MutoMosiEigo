@@ -1930,13 +1930,14 @@ const CLASS_NAMES = [
 ];
 let _clrankData = {};
 let _clrankSelected = null;
+let _clrankSelectedFrom = null; // null=プールから, 数値=スロット番号から
 async function openClrankModal() {
   lockScroll();
   document.getElementById('clrank-modal-bg').classList.add('open');
   await loadClrank();
 }
 function closeClrankModal() {
-  _clrankSelected = null;
+  _clrankSelected = null; _clrankSelectedFrom = null;
   unlockScroll();
   document.getElementById('clrank-modal-bg').classList.remove('open');
 }
@@ -1956,7 +1957,12 @@ function renderClrank() {
   const slots = Array.from({ length: 36 }, (_, i) => {
     const pos = i + 1;
     const name = _clrankData[pos] || '';
-    const cls = 'clrank-slot' + (name ? ' filled' : '') + (_clrankSelected && !name ? ' droppable' : '');
+    const isPickedUp = _clrankSelectedFrom === pos;
+    const isDroppable = _clrankSelected && !name;
+    const cls = 'clrank-slot'
+      + (name ? ' filled' : '')
+      + (isDroppable ? ' droppable' : '')
+      + (isPickedUp ? ' droppable' : ''); // 拾い上げ元も強調
     const nameHtml = name
       ? `<div class="clrank-sname">${esc(name)}</div>`
       : `<div style="font-size:.55rem;color:var(--line)">―</div>`;
@@ -1964,8 +1970,8 @@ function renderClrank() {
       <div class="clrank-pos">${pos}</div>${nameHtml}</div>`;
   });
   const hint = _clrankSelected
-    ? `「<strong style="color:var(--teal)">${esc(_clrankSelected)}</strong>」を選択中 → スロットをタップ`
-    : `名前をタップして選択`;
+    ? `「<strong style="color:var(--teal)">${esc(_clrankSelected)}</strong>」を選択中 → 別のスロットをタップ${_clrankSelectedFrom != null ? '（入れ替え可）' : ''}`
+    : `名前 or 埋まったスロットをタップして選択`;
   const chips = CLASS_NAMES.map(name => {
     const placed = placedNames.has(name);
     const selected = _clrankSelected === name;
@@ -1980,24 +1986,47 @@ function renderClrank() {
 function clickNameChip(name) {
   const placedNames = new Set(Object.values(_clrankData));
   if (placedNames.has(name)) return;
-  _clrankSelected = (_clrankSelected === name) ? null : name;
+  if (_clrankSelected === name) { _clrankSelected = null; _clrankSelectedFrom = null; }
+  else { _clrankSelected = name; _clrankSelectedFrom = null; }
   renderClrank();
 }
 async function clickRankSlot(pos) {
   const current = _clrankData[pos] || '';
   if (_clrankSelected) {
-    // 選択名の旧スロットを消してここに配置
-    Object.keys(_clrankData).forEach(k => { if (_clrankData[k] === _clrankSelected) delete _clrankData[k]; });
-    _clrankData[pos] = _clrankSelected;
+    const fromPos = _clrankSelectedFrom;
     const placing = _clrankSelected;
-    _clrankSelected = null;
-    renderClrank();
-    await _postClrank(pos, placing);
+    if (current) {
+      // 埋まったスロット → 入れ替え
+      if (fromPos != null) {
+        // スロット同士のswap
+        _clrankData[fromPos] = current;
+        _clrankData[pos] = placing;
+        _clrankSelected = null; _clrankSelectedFrom = null;
+        renderClrank();
+        await _postClrank(pos, placing);       // サーバーの重複削除でfromPosが消えるので
+        await _postClrank(fromPos, current);   // 続けてfromPosに戻す
+      } else {
+        // プールから → 既存名をプールに戻してここに配置
+        _clrankData[pos] = placing;
+        _clrankSelected = null; _clrankSelectedFrom = null;
+        renderClrank();
+        await _postClrank(pos, placing);
+      }
+    } else {
+      // 空きスロット → 配置
+      if (fromPos != null) delete _clrankData[fromPos];
+      _clrankData[pos] = placing;
+      _clrankSelected = null; _clrankSelectedFrom = null;
+      renderClrank();
+      await _postClrank(pos, placing);
+      if (fromPos != null) await _postClrank(fromPos, '');
+    }
   } else if (current) {
-    // スロットを空に
+    // 選択なし＋埋まり → 拾い上げ
+    _clrankSelected = current;
+    _clrankSelectedFrom = pos;
     delete _clrankData[pos];
     renderClrank();
-    await _postClrank(pos, '');
   }
 }
 async function _postClrank(pos, name) {
