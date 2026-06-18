@@ -295,7 +295,7 @@ h1{
 .title-hasegawa::before{display:none}
 @keyframes hasegawa-garden{0%{background-position:0%}50%{background-position:100%;box-shadow:0 0 18px rgba(244,114,182,.6),0 0 32px rgba(217,70,239,.3)}100%{background-position:0%}}
 /* professional-A "女使われ/…" — 夜の紫スクロール ♟ */
-.title-pro{background:linear-gradient(110deg,#0d001a,#2e1065,#6d28d9 45%,#7c3aed 55%,#2e1065,#0d001a);border-color:rgba(109,40,217,.75);color:#ede9fe;text-shadow:0 0 8px rgba(139,92,246,1),0 0 3px rgba(221,214,254,.5);box-shadow:0 0 10px rgba(109,40,217,.4),inset 0 1px 0 rgba(200,180,255,.15);max-width:82px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:2px 12px 2px 12px}
+.title-pro{background:linear-gradient(110deg,#0d001a,#2e1065,#6d28d9 45%,#7c3aed 55%,#2e1065,#0d001a);border-color:rgba(109,40,217,.75);color:#ede9fe;text-shadow:0 0 8px rgba(139,92,246,1),0 0 3px rgba(221,214,254,.5);box-shadow:0 0 10px rgba(109,40,217,.4),inset 0 1px 0 rgba(200,180,255,.15);max-width:180px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:2px 12px 2px 12px}
 .title-pro::before{display:none}
 .title-pro .ti-scroll{animation-duration:11s}
 /* 荒らし乙 "ほんまごめん" — 震え謝罪・不均等角丸 ⚠ */
@@ -315,10 +315,10 @@ h1{
 .title-honari::before{display:none}
 @keyframes honari-sulk{0%,100%{opacity:.45;transform:translateX(4px)}25%{opacity:.9;transform:translateX(-3px)}55%{opacity:.55;transform:translateX(2px)}80%{opacity:.85;transform:translateX(-1px)}}
 /* ミッツ "そもそもそんなこと言ってるけど、" — スクロール・薄角 » */
-.title-mitts{background:linear-gradient(110deg,#1c1917,#44403c,#78716c 50%,#44403c,#1c1917);border-color:rgba(120,113,108,.5);color:#e7e5e4;text-shadow:0 0 4px rgba(231,229,228,.3);max-width:82px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:3px}
+.title-mitts{background:linear-gradient(110deg,#1c1917,#44403c,#78716c 50%,#44403c,#1c1917);border-color:rgba(120,113,108,.5);color:#e7e5e4;text-shadow:0 0 4px rgba(231,229,228,.3);max-width:180px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:3px}
 .title-mitts::before{display:none}
 .ti-scroll{display:inline-block;animation:mitts-scroll 7s linear infinite;white-space:nowrap;padding-right:16px}
-@keyframes mitts-scroll{0%{transform:translateX(82px)}100%{transform:translateX(-100%)}}
+@keyframes mitts-scroll{0%{transform:translateX(180px)}100%{transform:translateX(-100%)}}
 /* 川上晃弥 "ママぁ～" — 黄緑ぷよぷよ・波型角丸 〜 */
 .title-kawakami{background:linear-gradient(110deg,#1a2e05,#4d7c0f,#a3e635 50%,#4d7c0f,#1a2e05);border-color:rgba(163,230,53,.5);color:#ecfccb;text-shadow:0 0 6px rgba(163,230,53,.7);animation:kawakami-fart 2.2s ease-in-out infinite;border-radius:0 16px 0 16px}
 .title-kawakami::before{display:none}
@@ -334,7 +334,7 @@ h1{
 .title-ya::before{display:none}
 @keyframes ya-repulse{0%,100%{transform:translateX(0) skewX(0deg);filter:brightness(1)}20%{transform:translateX(-2px) skewX(-1.8deg);filter:brightness(1.5)}50%{transform:translateX(1px) skewX(.9deg);filter:brightness(.85)}75%{transform:translateX(-1px) skewX(-1deg);filter:brightness(1.2)}}
 /* 福澤まさみ "膝枕/…" — エロ感ピンクスクロール ♛ */
-.title-masami{background:linear-gradient(110deg,#4a0028,#9d1753,#ec4899 40%,#f472b6 55%,#9d1753,#4a0028);border-color:rgba(244,114,182,.75);color:#fce7f3;text-shadow:0 0 10px rgba(236,72,153,1),0 0 4px rgba(255,182,215,.6);box-shadow:0 0 14px rgba(236,72,153,.5),inset 0 1px 0 rgba(255,200,240,.2);max-width:82px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:12px 2px 12px 2px}
+.title-masami{background:linear-gradient(110deg,#4a0028,#9d1753,#ec4899 40%,#f472b6 55%,#9d1753,#4a0028);border-color:rgba(244,114,182,.75);color:#fce7f3;text-shadow:0 0 10px rgba(236,72,153,1),0 0 4px rgba(255,182,215,.6);box-shadow:0 0 14px rgba(236,72,153,.5),inset 0 1px 0 rgba(255,200,240,.2);max-width:180px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:12px 2px 12px 2px}
 .title-masami::before{display:none}
 .title-masami .ti-scroll{animation-duration:14s}
 
@@ -1056,7 +1056,7 @@ function titleBadge(u){
     'title-tanaka':'✦','title-hiroto':'❄','title-hasegawa':'♡',
     'title-pro':'♟','title-arashi':'⚠','title-eye':'☠',
     'title-hatano':'☣','title-honari':'…','title-mitts':'»',
-    'title-kawakami':'〜','title-yoshi':'☁','title-shimesaba':'村',
+    'title-kawakami':'〜','title-yoshi':'☁','title-shimesaba':'🌾',
     'title-ya':'⛔','title-masami':'♛'
   };
   const sym = syms[cls] || '◆';
