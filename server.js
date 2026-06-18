@@ -86,7 +86,7 @@ async function initDB() {
   await pool.query(`UPDATE users SET title=NULL, title_class=NULL WHERE username IN ('honari2','seijuro_dummy')`).catch(()=>{});
   await pool.query(`UPDATE users SET title='当麻村の中学生', title_class='title-shimesaba' WHERE username='SHIMESABA'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='喋んな触んなきもちわりー', title_class='title-ya' WHERE username='やー'`).catch(()=>{});
-  await pool.query(`UPDATE users SET title='膝枕/ゆずのおっぱいをもむことだぁ/足長ノッポ手足長病メガネラーメン', title_class='title-masami' WHERE username='福澤まさみ'`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='膝枕/ゆずのおっぱいをもむことだぁ/足長ノッポ手足長病メガネラーメン', title_class='title-masami' WHERE username='福澤'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='ひざまくら',          title_class='title-yoshi'    WHERE username='よしよしぎゅー'`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS quiz_progress (
