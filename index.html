@@ -230,6 +230,25 @@ h1{
   .modal{padding:20px 16px}
 }
 
+/* クラス順位グリッド */
+.clrank-grid{display:grid;grid-template-columns:repeat(6,1fr);gap:4px}
+.clrank-cell{
+  background:rgba(255,255,255,.03);border:1px solid var(--line);border-radius:5px;
+  padding:4px 2px;text-align:center;cursor:pointer;min-height:46px;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;gap:1px;
+  transition:background .15s;
+}
+.clrank-cell:hover{background:rgba(70,214,196,.08);border-color:rgba(70,214,196,.3)}
+.clrank-cell.filled{border-color:rgba(70,214,196,.25)}
+.clrank-pos{font-size:.58rem;color:var(--dim);font-weight:700;line-height:1}
+.clrank-name{font-size:.62rem;color:var(--fg);word-break:break-all;line-height:1.2;padding:0 1px}
+.clrank-input{
+  width:90%;font-size:.62rem;background:transparent;border:none;
+  border-bottom:1px solid var(--teal);color:var(--fg);text-align:center;
+  outline:none;padding:1px 0;
+}
+@media(max-width:360px){.clrank-grid{grid-template-columns:repeat(6,1fr)}.clrank-name{font-size:.55rem}}
+
 /* 称号バッジ */
 .shogou{
   display:inline-block;position:relative;overflow:hidden;
@@ -346,6 +365,7 @@ h1{
   <button class="auth-btn" id="admin-btn" style="display:none" onclick="openAdminModal()">管理</button>
   <button class="auth-btn" id="members-btn" style="display:none" onclick="openMembersModal()">メンバー</button>
   <button class="auth-btn" id="scores-btn" style="display:none" onclick="openScoresModal()">📊成績</button>
+  <button class="auth-btn" id="clrank-btn" style="display:none" onclick="openClrankModal()">🏆順位</button>
   <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
   <button class="auth-btn" id="test-btn" style="display:none" onclick="openTestModal()">📋テスト</button>
   <button class="auth-btn" id="pw-open-btn" onclick="openLoginModal()">IDでログイン</button>
@@ -612,6 +632,19 @@ h1{
     </div>
     <div class="modal-btns" style="margin-top:12px">
       <button onclick="closeScoresModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- クラス順位予想モーダル -->
+<div class="modal-bg" id="clrank-modal-bg">
+  <div class="modal" style="width:min(520px,96vw);padding:16px 12px">
+    <button onclick="closeClrankModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2>🏆 クラス順位予想</h2>
+    <p style="font-size:.73rem;color:var(--dim);margin:4px 0 12px">各順位をタップして名前を入力しよう（自分だけの予想・36人）</p>
+    <div id="clrank-content"></div>
+    <div class="modal-btns" style="margin-top:14px">
+      <button onclick="closeClrankModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
 </div>
@@ -1015,6 +1048,7 @@ function updateAuthBar() {
     document.getElementById('admin-btn').style.display = authEmail === 'kabu6113450@gmail.com' ? 'inline-block' : 'none';
     document.getElementById('members-btn').style.display = 'inline-block';
     document.getElementById('scores-btn').style.display = 'inline-block';
+    document.getElementById('clrank-btn').style.display = 'inline-block';
     const ouriHdr = document.getElementById('ouri-score-header-btn');
     if (ouriHdr) ouriHdr.style.display = 'inline-flex';
     const mathHdr = document.getElementById('math-score-header-btn');
@@ -1031,6 +1065,7 @@ function updateAuthBar() {
     document.getElementById('admin-btn').style.display = 'none';
     document.getElementById('members-btn').style.display = 'none';
     document.getElementById('scores-btn').style.display = 'none';
+    document.getElementById('clrank-btn').style.display = 'none';
     const ouriHdrOff = document.getElementById('ouri-score-header-btn');
     if (ouriHdrOff) ouriHdrOff.style.display = 'none';
     const mathHdrOff = document.getElementById('math-score-header-btn');
@@ -1747,10 +1782,11 @@ async function loadScores() {
     const data = await res.json();
     if (!Array.isArray(data) || !data.length) { el.innerHTML = '<p style="color:var(--muted)">まだ点数が登録されていません</p>'; return; }
 
-    // 平均点を計算（入力済み科目のみ）
+    // 平均点・合計点を計算（入力済み科目のみ）
     data.forEach(r => {
       const vals = [r.test_score, r.ouri_score, r.math_score].filter(v => v != null);
-      r._avg = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
+      r._avg   = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
+      r._total = vals.length ? vals.reduce((s, v) => s + v, 0) : null;
     });
 
     // # 列: 現在のソートキーで昇順に並べた順位（ソートが変わると連動）
@@ -1825,10 +1861,11 @@ async function loadScores() {
         <td style="text-align:center">${sc(r.test_score)}</td>
         <td style="text-align:center">${sc(r.ouri_score)}</td>
         <td style="text-align:center">${sc(r.math_score)}</td>
+        ${r._total != null ? `<td style="text-align:center;font-weight:700;color:var(--rose)">${r._total}</td>` : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`}
         ${avgTd}
       </tr>`;
       if (i === lineIdx) {
-        return row + `<tr><td colspan="6" style="padding:0;border:none">
+        return row + `<tr><td colspan="7" style="padding:0;border:none">
           <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 5px;background:rgba(239,68,68,.12)">
             <div style="flex:1;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,#ef4444)"></div>
             <span style="font-size:.7rem;color:#ef4444;font-weight:900;letter-spacing:.1em;white-space:nowrap;text-shadow:0 0 8px rgba(239,68,68,.6)">みっつー波多野ライン</span>
@@ -1846,6 +1883,7 @@ async function loadScores() {
         ${th('test_score', '📘 英語')}
         ${th('ouri_score', '⚡ 応用物理')}
         ${th('math_score', '📐 応用数学')}
+        ${th('_total', '合計')}
         ${th('_avg', '平均')}
       </tr></thead>
       <tbody>${rows}</tbody>
@@ -1856,6 +1894,71 @@ function sortScores(key) {
   if (_scSort.key === key) _scSort.dir *= -1;
   else { _scSort.key = key; _scSort.dir = 1; }
   loadScores();
+}
+
+// ── クラス順位予想 ────────────────────────────────────────
+let _clrankData = {};
+async function openClrankModal() {
+  lockScroll();
+  document.getElementById('clrank-modal-bg').classList.add('open');
+  await loadClrank();
+}
+function closeClrankModal() {
+  unlockScroll();
+  document.getElementById('clrank-modal-bg').classList.remove('open');
+}
+document.getElementById('clrank-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeClrankModal();
+});
+async function loadClrank() {
+  const el = document.getElementById('clrank-content');
+  try {
+    const res = await fetch('/api/class-rank', { headers: { 'Authorization': authToken } });
+    _clrankData = await res.json();
+  } catch(e) { _clrankData = {}; }
+  renderClrank();
+}
+function renderClrank() {
+  const el = document.getElementById('clrank-content');
+  const cells = Array.from({ length: 36 }, (_, i) => {
+    const pos = i + 1;
+    const name = _clrankData[pos] || '';
+    const filled = name ? ' filled' : '';
+    const nameHtml = name
+      ? `<div class="clrank-name">${esc(name)}</div>`
+      : `<div class="clrank-name" style="color:var(--line);font-size:.6rem">―</div>`;
+    return `<div class="clrank-cell${filled}" id="clrc-${pos}" onclick="editClrankCell(${pos})">
+      <div class="clrank-pos">${pos}</div>
+      ${nameHtml}
+    </div>`;
+  });
+  el.innerHTML = `<div class="clrank-grid">${cells.join('')}</div>`;
+}
+function editClrankCell(pos) {
+  const cell = document.getElementById(`clrc-${pos}`);
+  if (!cell) return;
+  const name = _clrankData[pos] || '';
+  cell.innerHTML = `<div class="clrank-pos">${pos}</div>
+    <input class="clrank-input" id="clrc-inp-${pos}" value="${esc(name)}"
+      onblur="saveClrankCell(${pos})"
+      onkeydown="if(event.key==='Enter')this.blur();else if(event.key==='Escape'){_clrankData[${pos}]=_clrankData[${pos}]||'';renderClrank();}">`;
+  cell.onclick = null;
+  const inp = document.getElementById(`clrc-inp-${pos}`);
+  inp.focus(); inp.select();
+}
+async function saveClrankCell(pos) {
+  const inp = document.getElementById(`clrc-inp-${pos}`);
+  if (!inp) return;
+  const name = inp.value.trim();
+  if (name) _clrankData[pos] = name; else delete _clrankData[pos];
+  try {
+    await fetch('/api/class-rank', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ position: pos, name })
+    });
+  } catch(e) {}
+  renderClrank();
 }
 
 async function _submitScore(label, endpoint) {

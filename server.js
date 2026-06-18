@@ -58,6 +58,7 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS title_class TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ouri_score INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS math_score INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS class_rank TEXT DEFAULT '{}'`).catch(()=>{});
   await pool.query(`UPDATE users SET username='荒らし乙' WHERE username LIKE '%﷽%'`).catch(()=>{});
   // 個人称号を設定
   await pool.query(`UPDATE users SET title='ちょおちょおちょお', title_class='title-tanaka'  WHERE username='田中謙佑'`).catch(()=>{});
@@ -295,6 +296,23 @@ app.post('/api/math/score', auth, async (req, res) => {
   if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
   await pool.query('UPDATE users SET math_score=$1 WHERE id=$2', [s, req.user.id]);
   res.json({ ok: true, score: s });
+});
+
+// クラス順位予想
+app.get('/api/class-rank', auth, async (req, res) => {
+  const { rows } = await pool.query('SELECT class_rank FROM users WHERE id=$1', [req.user.id]);
+  res.json(JSON.parse(rows[0]?.class_rank || '{}'));
+});
+app.post('/api/class-rank', auth, async (req, res) => {
+  const { position, name } = req.body;
+  if (!Number.isInteger(position) || position < 1 || position > 36)
+    return res.status(400).json({ error: '無効な順位' });
+  const { rows } = await pool.query('SELECT class_rank FROM users WHERE id=$1', [req.user.id]);
+  const cr = JSON.parse(rows[0]?.class_rank || '{}');
+  if (name && name.trim()) cr[position] = name.trim().slice(0, 20);
+  else delete cr[position];
+  await pool.query('UPDATE users SET class_rank=$1 WHERE id=$2', [JSON.stringify(cr), req.user.id]);
+  res.json({ ok: true });
 });
 
 // 管理者：ユーザー一覧
