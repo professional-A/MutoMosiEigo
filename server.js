@@ -335,7 +335,6 @@ app.post('/api/class-rank', auth, async (req, res) => {
   res.json({ ok: true });
 });
 app.post('/api/class-rank/confirm', auth, async (req, res) => {
-  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { name, total } = req.body;
   if (!name || !name.trim()) return res.status(400).json({ error: '無効な名前' });
   const { rows } = await pool.query('SELECT confirmed FROM class_rank_state WHERE id=1');
