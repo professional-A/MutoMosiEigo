@@ -85,6 +85,8 @@ async function initDB() {
   await pool.query(`UPDATE users SET title='そもそもそんなこと言ってるけど、', title_class='title-mitts' WHERE username='ミッツ'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='ママぁ～',           title_class='title-kawakami' WHERE username='川上晃弥'`).catch(()=>{});
   await pool.query(`UPDATE users SET title=NULL, title_class=NULL WHERE username IN ('honari2','seijuro_dummy')`).catch(()=>{});
+  await pool.query(`UPDATE users SET ouri_score=36 WHERE username='波多野裏技' AND (ouri_score IS NULL OR ouri_score=0)`).catch(()=>{});
+  await pool.query(`DELETE FROM users WHERE username='honari2'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='当麻村の中学生', title_class='title-shimesaba' WHERE username='SHIMESABA'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='喋んな触んなきもちわりー', title_class='title-ya' WHERE username='やー'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='膝枕/ゆずのおっぱいをもむことだぁ/足長ノッポ手足長病メガネラーメン', title_class='title-masami' WHERE username='福澤'`).catch(()=>{});
@@ -316,17 +318,43 @@ app.post('/api/math/score', auth, async (req, res) => {
   res.json({ ok: true, score: s });
 });
 
+// アプリユーザー → クラス順位コマ対応表
+const USER_CLRANK_MAP = {
+  '福澤':          'まさみ',
+  'professional-A':'むとう',
+  'はせがわ':      'ひろと',
+  'やー':          'けんすけ',
+  '荒らし乙':      'しょう',
+  'ちんこうや':    'こうや',
+  'SHIMESABA':     'りょうすけ',
+  'ミッツ':        'みっつー',
+  'えむししょ':    'しょうた',
+  '波多野裏技':    'はたの',
+  'honari':        'ほなり',
+  'seijuro_dummy': 'せいじゅうろう',
+};
+
 // クラス順位（全員共有）
 app.get('/api/class-rank', async (req, res) => {
   const { rows } = await pool.query('SELECT ordered, confirmed, max_score FROM class_rank_state WHERE id=1');
   if (!rows.length) return res.json({ positions: {}, confirmed: {}, max_score: 300 });
   let positions = {};
   try { const p = JSON.parse(rows[0].ordered || '{}'); if (!Array.isArray(p)) positions = p; } catch(e) {}
-  res.json({
-    positions,
-    confirmed: JSON.parse(rows[0].confirmed || '{}'),
-    max_score: rows[0].max_score || 300
-  });
+  const conf = JSON.parse(rows[0].confirmed || '{}');
+  // 3教科全入力済みのユーザーは自動で確定点に反映
+  try {
+    const usernames = Object.keys(USER_CLRANK_MAP);
+    const { rows: urows } = await pool.query(
+      'SELECT username, test_score, ouri_score, math_score FROM users WHERE username = ANY($1)',
+      [usernames]
+    );
+    for (const u of urows) {
+      if (u.test_score != null && u.ouri_score != null && u.math_score != null) {
+        conf[USER_CLRANK_MAP[u.username]] = u.test_score + u.ouri_score + u.math_score;
+      }
+    }
+  } catch(e) {}
+  res.json({ positions, confirmed: conf, max_score: rows[0].max_score || 300 });
 });
 app.post('/api/class-rank', auth, async (req, res) => {
   const { positions } = req.body;

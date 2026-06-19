@@ -234,9 +234,9 @@ h1{
 #clrank-page{display:none;position:fixed;inset:0;z-index:200;background:#050f1e;flex-direction:column;overflow:hidden}
 #clrank-page.open{display:flex}
 .clrank-ph{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.1);flex-shrink:0;min-height:46px;background:#071424}
-.clrank-board-wrap{flex:1;display:flex;min-height:0;overflow:hidden}
-.clrank-yaxis{width:30px;flex-shrink:0;position:relative;border-right:1px solid rgba(255,255,255,.07)}
-.clrank-board{flex:1;position:relative;overflow:hidden;touch-action:manipulation}
+.clrank-board-wrap{flex:1;display:flex;min-height:0;overflow-y:auto;overflow-x:hidden}
+.clrank-yaxis{width:30px;flex-shrink:0;position:relative;border-right:1px solid rgba(255,255,255,.07);min-height:800px}
+.clrank-board{flex:1;position:relative;min-height:800px;touch-action:manipulation}
 .clrank-pool-area{flex-shrink:0;border-top:1px solid rgba(255,255,255,.1);padding:6px 10px 8px;background:#071424;max-height:130px;overflow:hidden}
 .clrank-pool-row{display:flex;flex-wrap:wrap;gap:4px;max-height:76px;overflow-y:auto;margin-top:4px}
 .clrank-block{position:absolute;transform:translate(-50%,-50%);padding:3px 7px;border-radius:5px;font-size:.7rem;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid rgba(255,255,255,.18);background:rgba(15,35,65,.92);color:#d4e8ff;user-select:none;z-index:2;transition:box-shadow .12s,border-color .12s;box-shadow:0 1px 4px rgba(0,0,0,.5)}
@@ -1907,15 +1907,17 @@ async function loadScores() {
     const _lk = _scSort.key;
     const mittsIdx  = (() => { const i = sorted.findIndex(r => r.username === 'ミッツ' && r[_lk] != null); return i >= 0 ? i : null; })();
     const hatanoIdx = (() => { const i = sorted.findIndex(r => r.username === '波多野裏技' && r[_lk] != null); return i >= 0 ? i : null; })();
-    // 両方未入力 → -1（ライン非表示）、片方未入力 → 入力済みの方の位置、両方入力 → 高い方（より良い順位）
+    // 両方未入力 → -1（ライン非表示）、片方未入力 → 入力済みの方の位置
+    // 降順(desc)はインデックスが小さい方が上位 → Math.min / i >= lineIdx
+    const _lineDesc = _scSort.dir === -1;
     let lineIdx = -1;
-    if (mittsIdx != null && hatanoIdx != null) lineIdx = Math.max(mittsIdx, hatanoIdx);
+    if (mittsIdx != null && hatanoIdx != null) lineIdx = _lineDesc ? Math.min(mittsIdx, hatanoIdx) : Math.max(mittsIdx, hatanoIdx);
     else if (mittsIdx != null) lineIdx = mittsIdx;
     else if (hatanoIdx != null) lineIdx = hatanoIdx;
 
     const rows = sorted.map((r, i) => {
       const isMe = r.username === authUser;
-      const inZone = lineIdx >= 0 && i <= lineIdx;
+      const inZone = lineIdx >= 0 && (_lineDesc ? i >= lineIdx : i <= lineIdx);
       const ar = rankMap[r.username];
       const rankTd = ar != null
         ? `<td class="rank-num${ar <= 3 ? ' top' : ''}">${ar}</td>`
