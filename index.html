@@ -103,7 +103,19 @@ h1{
 }
 
 /* Filter button containers */
-#subject-filters,#exam-filters{display:flex;flex-wrap:wrap;gap:8px}
+#exam-filters{display:flex;flex-wrap:wrap;gap:8px}
+
+/* Subject folders */
+.folder-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:12px;padding:20px 0 32px}
+.folder-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:18px 16px 14px;display:flex;flex-direction:column;gap:5px;cursor:pointer;transition:all .15s;user-select:none}
+.folder-card:hover{border-color:var(--teal);transform:translateY(-2px)}
+.folder-icon{font-size:2rem;line-height:1;margin-bottom:2px}
+.folder-name{font-size:.95rem;font-weight:700;color:var(--ink);line-height:1.2}
+.folder-count{font-size:.72rem;color:var(--dim)}
+.subject-nav{display:flex;align-items:center;gap:10px;padding:16px 0 4px;flex-wrap:wrap}
+.subject-back-btn{background:none;border:1px solid var(--line);border-radius:99px;color:var(--muted);font-size:.82rem;padding:5px 14px;cursor:pointer;font-family:inherit;transition:.15s;flex-shrink:0}
+.subject-back-btn:hover{border-color:var(--teal);color:var(--teal)}
+.subject-nav-title{font-size:1rem;font-weight:700;color:var(--ink)}
 
 /* Hidden */
 [hidden]{display:none!important}
@@ -909,17 +921,24 @@ h1{
 </header>
 
 <div class="wrap">
-  <div class="filters">
-    <div class="filter-row">
-      <span class="filter-label">科目</span>
-      <div id="subject-filters"></div>
-    </div>
-    <div class="filter-row">
-      <span class="filter-label">試験</span>
-      <div id="exam-filters"></div>
-    </div>
+  <!-- フォルダビュー（デフォルト） -->
+  <div id="folder-view">
+    <div class="folder-grid" id="folder-grid"></div>
   </div>
-  <div id="groups"></div>
+  <!-- 教科内ビュー -->
+  <div id="subject-view" style="display:none">
+    <div class="subject-nav">
+      <button class="subject-back-btn" onclick="closeSubject()">← 戻る</button>
+      <span id="subject-nav-title" class="subject-nav-title"></span>
+    </div>
+    <div class="filters" style="padding-top:10px">
+      <div class="filter-row">
+        <span class="filter-label">試験</span>
+        <div id="exam-filters"></div>
+      </div>
+    </div>
+    <div id="groups"></div>
+  </div>
 
   <!-- ランキング -->
   <div class="ranking-section">
@@ -930,9 +949,14 @@ h1{
 
 <script>
 const EXAM_ORDER = ["前期中間試験","前期末試験","後期中間試験","学年末試験"];
+const SUBJECT_ICONS = {
+  '科学技術英語Ⅰ': '📖',
+  '加工学':         '⚙️',
+  '制御工学Ⅰ':     '🎛️',
+};
 
 let tests = [];
-let activeSubject = "すべて";
+let selectedSubject = null;
 let activeExam = "すべて";
 
 function getProgress(storageKey, totalItems) {
@@ -945,15 +969,50 @@ function getProgress(storageKey, totalItems) {
   }
 }
 
-function renderFilters() {
-  const subjects = ["すべて", ...new Set(tests.map(t => t.subject))];
-  const exams = ["すべて", ...EXAM_ORDER.filter(e => tests.some(t => t.exam === e))];
+function renderFolders() {
+  const subjects = [...new Set(tests.map(t => t.subject))];
+  document.getElementById("folder-grid").innerHTML = subjects.map(s => {
+    const stests = tests.filter(t => t.subject === s);
+    let totalItems = 0, done = 0;
+    stests.forEach(t => {
+      if (t.storageKey && t.totalItems) {
+        const p = getProgress(t.storageKey, t.totalItems);
+        totalItems += p.total;
+        done += p.done;
+      }
+    });
+    const pct = totalItems ? Math.round(done / totalItems * 100) : 0;
+    const icon = SUBJECT_ICONS[s] || '📁';
+    return `<div class="folder-card" onclick="openSubject(${JSON.stringify(s)})">
+      <div class="folder-icon">${icon}</div>
+      <div class="folder-name">${esc(s)}</div>
+      <div class="folder-count">${stests.length} 教材</div>
+      <div class="progress-bar-wrap" style="margin-top:6px"><div class="progress-bar" style="width:${pct}%"></div></div>
+      <div class="progress-text">${pct > 0 ? pct + '% 完了' : '未着手'}</div>
+    </div>`;
+  }).join("");
+}
 
-  document.getElementById("subject-filters").innerHTML =
-    subjects.map(s =>
-      `<button class="fbtn${s === activeSubject ? " active" : ""}" data-val="${s.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">${s}</button>`
-    ).join("");
+function openSubject(s) {
+  selectedSubject = s;
+  activeExam = "すべて";
+  document.getElementById("folder-view").style.display = "none";
+  document.getElementById("subject-view").style.display = "block";
+  document.getElementById("subject-nav-title").textContent = s;
+  renderExamFilter();
+  renderGroups();
+}
 
+function closeSubject() {
+  selectedSubject = null;
+  document.getElementById("subject-view").style.display = "none";
+  document.getElementById("folder-view").style.display = "block";
+  renderFolders();
+}
+
+function renderExamFilter() {
+  const stests = tests.filter(t => t.subject === selectedSubject);
+  const exams = ["すべて", ...EXAM_ORDER.filter(e => stests.some(t => t.exam === e))];
   document.getElementById("exam-filters").innerHTML =
     exams.map(e =>
       `<button class="fbtn${e === activeExam ? " active" : ""}" data-val="${e.replace(/&/g,'&amp;').replace(/"/g,'&quot;')}">${e}</button>`
@@ -962,7 +1021,7 @@ function renderFilters() {
 
 function filtered() {
   return tests.filter(t =>
-    (activeSubject === "すべて" || t.subject === activeSubject) &&
+    t.subject === selectedSubject &&
     (activeExam === "すべて" || t.exam === activeExam)
   );
 }
@@ -1015,13 +1074,8 @@ function renderGroups() {
   }).join("");
 }
 
-function setSubject(s) { activeSubject = s; renderFilters(); renderGroups(); }
-function setExam(e) { activeExam = e; renderFilters(); renderGroups(); }
+function setExam(e) { activeExam = e; renderExamFilter(); renderGroups(); }
 
-document.getElementById("subject-filters").addEventListener("click", e => {
-  const btn = e.target.closest("[data-val]");
-  if (btn) setSubject(btn.dataset.val);
-});
 document.getElementById("exam-filters").addEventListener("click", e => {
   const btn = e.target.closest("[data-val]");
   if (btn) setExam(btn.dataset.val);
@@ -1031,11 +1085,10 @@ fetch("tests.json")
   .then(r => r.json())
   .then(data => {
     tests = data;
-    renderFilters();
-    renderGroups();
+    renderFolders();
   })
   .catch(() => {
-    document.getElementById("groups").innerHTML =
+    document.getElementById("folder-grid").innerHTML =
       `<div class="empty">模試データを読み込めませんでした。<br>tests.json が存在するか確認してください。</div>`;
   });
 </script>
