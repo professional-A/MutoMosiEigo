@@ -294,10 +294,9 @@ h1{
 .title-hasegawa{background:linear-gradient(110deg,#3b0764,#7c2d9b,#d946ef 35%,#ec4899 55%,#a855f7,#3b0764);border-color:rgba(217,70,239,.65);color:#fae8ff;text-shadow:0 0 8px rgba(217,70,239,.9),0 0 3px rgba(244,114,182,.5);box-shadow:0 0 10px rgba(217,70,239,.35),inset 0 1px 0 rgba(255,220,255,.2);animation:hasegawa-garden 4s ease-in-out infinite;border-radius:18px 4px 18px 4px}
 .title-hasegawa::before{display:none}
 @keyframes hasegawa-garden{0%{background-position:0%}50%{background-position:100%;box-shadow:0 0 18px rgba(244,114,182,.6),0 0 32px rgba(217,70,239,.3)}100%{background-position:0%}}
-/* professional-A "女使われ/…" — 夜の紫スクロール ♟ */
-.title-pro{background:linear-gradient(110deg,#0d001a,#2e1065,#6d28d9 45%,#7c3aed 55%,#2e1065,#0d001a);border-color:rgba(109,40,217,.75);color:#ede9fe;text-shadow:0 0 8px rgba(139,92,246,1),0 0 3px rgba(221,214,254,.5);box-shadow:0 0 10px rgba(109,40,217,.4),inset 0 1px 0 rgba(200,180,255,.15);max-width:180px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:2px 12px 2px 12px}
+/* professional-A "女使われ/…" — 夜の紫・テキスト切り替え ♟ */
+.title-pro{background:linear-gradient(110deg,#0d001a,#2e1065,#6d28d9 45%,#7c3aed 55%,#2e1065,#0d001a);border-color:rgba(109,40,217,.75);color:#ede9fe;text-shadow:0 0 8px rgba(139,92,246,1),0 0 3px rgba(221,214,254,.5);box-shadow:0 0 10px rgba(109,40,217,.4),inset 0 1px 0 rgba(200,180,255,.15);border-radius:2px 12px 2px 12px}
 .title-pro::before{display:none}
-.title-pro .ti-scroll{animation-duration:11s}
 /* 荒らし乙 "ほんまごめん" — 震え謝罪・不均等角丸 ⚠ */
 .title-arashi{background:linear-gradient(110deg,#7f1d1d,#dc2626,#ef4444 50%,#dc2626,#7f1d1d);border-color:rgba(239,68,68,.7);color:#fff;text-shadow:0 0 6px rgba(255,100,100,.8);animation:arashi-shake .09s linear infinite;border-radius:2px 12px 2px 12px}
 .title-arashi::before{display:none}
@@ -333,10 +332,13 @@ h1{
 .title-ya{background:linear-gradient(110deg,#1a0000,#5c0a0a,#b91c1c 50%,#5c0a0a,#1a0000);border-color:rgba(220,38,38,.85);color:#fca5a5;text-shadow:0 0 8px rgba(220,38,38,1),0 0 2px rgba(255,180,180,.5);box-shadow:0 0 12px rgba(220,38,38,.5),inset 0 1px 0 rgba(255,200,200,.1);animation:ya-repulse .9s ease-in-out infinite;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);border-radius:0}
 .title-ya::before{display:none}
 @keyframes ya-repulse{0%,100%{transform:translateX(0) skewX(0deg);filter:brightness(1)}20%{transform:translateX(-2px) skewX(-1.8deg);filter:brightness(1.5)}50%{transform:translateX(1px) skewX(.9deg);filter:brightness(.85)}75%{transform:translateX(-1px) skewX(-1deg);filter:brightness(1.2)}}
-/* 福澤まさみ "膝枕/…" — エロ感ピンクスクロール ♛ */
-.title-masami{background:linear-gradient(110deg,#4a0028,#9d1753,#ec4899 40%,#f472b6 55%,#9d1753,#4a0028);border-color:rgba(244,114,182,.75);color:#fce7f3;text-shadow:0 0 10px rgba(236,72,153,1),0 0 4px rgba(255,182,215,.6);box-shadow:0 0 14px rgba(236,72,153,.5),inset 0 1px 0 rgba(255,200,240,.2);max-width:180px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:12px 2px 12px 2px}
+/* 福澤まさみ "膝枕/…" — エロ感ピンク・テキスト切り替え ♛ */
+.title-masami{background:linear-gradient(110deg,#4a0028,#9d1753,#ec4899 40%,#f472b6 55%,#9d1753,#4a0028);border-color:rgba(244,114,182,.75);color:#fce7f3;text-shadow:0 0 10px rgba(236,72,153,1),0 0 4px rgba(255,182,215,.6);box-shadow:0 0 14px rgba(236,72,153,.5),inset 0 1px 0 rgba(255,200,240,.2);border-radius:12px 2px 12px 2px}
 .title-masami::before{display:none}
-.title-masami .ti-scroll{animation-duration:14s}
+.ti-rotate{display:inline-block}
+.ti-rotate-item{display:none}
+.ti-rotate-item.active{display:inline;animation:ti-fade-in .6s ease}
+@keyframes ti-fade-in{from{opacity:0}to{opacity:1}}
 
 /* よしよしぎゅー "ひざまくら" — あったか琥珀・ふんわり大丸角 ☁ */
 .title-yoshi{background:linear-gradient(110deg,#78350f,#c2701f,#fcd9a0 50%,#c2701f,#78350f);border-color:rgba(251,191,96,.55);color:#fff7e6;text-shadow:0 0 8px rgba(253,186,116,.9),0 0 3px rgba(255,237,213,.6);animation:yoshi-warm 3.5s ease-in-out infinite;border-radius:18px}
@@ -1115,12 +1117,37 @@ function titleBadge(u){
     'title-ya':'⛔','title-masami':'♛'
   };
   const sym = syms[cls] || '◆';
-  const scrollCls = new Set(['title-mitts','title-masami','title-pro']);
-  const inner = scrollCls.has(cls)
-    ? `<span class="ti-scroll">${sym} ${esc(u.title)}</span>`
-    : `${sym} ${esc(u.title)}`;
+  const rotateCls = new Set(['title-masami','title-pro']);
+  let inner;
+  if (cls === 'title-mitts') {
+    inner = `<span class="ti-scroll">${sym} ${esc(u.title)}</span>`;
+  } else if (rotateCls.has(cls) && u.title && u.title.includes('/')) {
+    const parts = u.title.split('/');
+    const items = parts.map((p, i) =>
+      `<span class="ti-rotate-item${i===0?' active':''}">${esc(p.trim())}</span>`
+    ).join('');
+    inner = `${sym} <span class="ti-rotate">${items}</span>`;
+  } else {
+    inner = `${sym} ${esc(u.title)}`;
+  }
   return `<span class="shogou${cls?' '+cls:''}">${inner}</span>`;
 }
+
+let _titleRotateTimer = null;
+function startTitleRotate() {
+  if (_titleRotateTimer) return;
+  _titleRotateTimer = setInterval(() => {
+    document.querySelectorAll('.ti-rotate').forEach(el => {
+      const items = el.querySelectorAll('.ti-rotate-item');
+      if (!items.length) return;
+      let cur = 0;
+      items.forEach((it, i) => { if (it.classList.contains('active')) cur = i; });
+      items.forEach(it => it.classList.remove('active'));
+      items[(cur + 1) % items.length].classList.add('active');
+    });
+  }, 3000);
+}
+startTitleRotate();
 
 // ── 認証 ──────────────────────────────────────────────
 let authToken  = null;
