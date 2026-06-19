@@ -2130,7 +2130,8 @@ function _clrankRenderPool() {
   const el = document.getElementById('clrank-pool-inner');
   if (!el) return;
   const placed = new Set(Object.keys(_clrankPositions));
-  const unplaced = CLASS_NAMES.filter(n => !placed.has(n));
+  const confirmed = new Set(Object.keys(_clrankConfirmed));
+  const unplaced = CLASS_NAMES.filter(n => !placed.has(n) && !confirmed.has(n));
   const cnt = document.getElementById('clrank-pool-count');
   if (cnt) cnt.textContent = unplaced.length;
   if (!unplaced.length) {
