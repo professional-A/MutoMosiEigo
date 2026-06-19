@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="ja">
 <head>
 <meta charset="UTF-8">
@@ -983,7 +983,7 @@ function renderFolders() {
     });
     const pct = totalItems ? Math.round(done / totalItems * 100) : 0;
     const icon = SUBJECT_ICONS[s] || '📁';
-    return `<div class="folder-card" onclick="openSubject(${JSON.stringify(s)})">
+    return `<div class="folder-card" data-subj="${esc(s)}" onclick="openSubject(this.dataset.subj)">
       <div class="folder-icon">${icon}</div>
       <div class="folder-name">${esc(s)}</div>
       <div class="folder-count">${stests.length} 教材</div>
