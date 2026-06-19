@@ -341,7 +341,20 @@ app.get('/api/class-rank', async (req, res) => {
   let positions = {};
   try { const p = JSON.parse(rows[0].ordered || '{}'); if (!Array.isArray(p)) positions = p; } catch(e) {}
   const conf = JSON.parse(rows[0].confirmed || '{}');
-  // 3教科全入力済みのユーザーは自動で確定点に反映
+  // 入力済み教科数 × 100 を満点として自動算出
+  let autoMaxScore = 100;
+  try {
+    const { rows: sc } = await pool.query(`
+      SELECT
+        (COUNT(*) FILTER (WHERE test_score  IS NOT NULL)) > 0 AS has_test,
+        (COUNT(*) FILTER (WHERE ouri_score  IS NOT NULL)) > 0 AS has_ouri,
+        (COUNT(*) FILTER (WHERE math_score  IS NOT NULL)) > 0 AS has_math
+      FROM users
+    `);
+    const s = sc[0];
+    autoMaxScore = ([s.has_test, s.has_ouri, s.has_math].filter(Boolean).length) * 100 || 100;
+  } catch(e) {}
+  // ユーザー紐づけ：全入力済みの人を確定点に自動反映
   try {
     const usernames = Object.keys(USER_CLRANK_MAP);
     const { rows: urows } = await pool.query(
@@ -354,7 +367,7 @@ app.get('/api/class-rank', async (req, res) => {
       }
     }
   } catch(e) {}
-  res.json({ positions, confirmed: conf, max_score: rows[0].max_score || 300 });
+  res.json({ positions, confirmed: conf, max_score: autoMaxScore });
 });
 app.post('/api/class-rank', auth, async (req, res) => {
   const { positions } = req.body;

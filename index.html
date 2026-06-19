@@ -704,11 +704,6 @@ h1{
   <div class="clrank-ph">
     <span style="font-weight:700;font-size:.86rem;white-space:nowrap;color:#d4e8ff">🏆 クラス順位予測</span>
     <span id="clrank-hint" style="flex:1;font-size:.66rem;color:rgba(70,214,196,.8);padding:0 8px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
-    <span id="clrank-admin-ms" style="display:none;align-items:center;gap:4px;white-space:nowrap">
-      <span style="font-size:.62rem;color:var(--dim)">満点</span>
-      <input id="ms-val" type="number" min="1" max="1000" style="width:50px;padding:2px 4px;border:1px solid var(--line);border-radius:4px;background:#0d1f36;color:var(--fg);font-size:.72rem;font-family:inherit">
-      <button onclick="clrankUpdateMaxScore()" style="padding:2px 6px;border:1px solid var(--teal);border-radius:4px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.68rem;cursor:pointer;font-family:inherit">適用</button>
-    </span>
     <button onclick="closeClrankPage()" style="padding:4px 10px;border:1px solid rgba(255,255,255,.15);border-radius:6px;background:none;color:var(--dim);font-size:.78rem;cursor:pointer;font-family:inherit;flex-shrink:0">✕ 閉じる</button>
   </div>
   <!-- 2Dボード -->
@@ -2162,14 +2157,7 @@ function _clrankRenderConfirmed() {
     .map(([n,s]) => `<span style="font-size:.65rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.28);border-radius:4px;padding:1px 5px;white-space:nowrap">${esc(n)}:${s}点 <span onclick="clrankRemoveConfirm('${n.replace(/'/g,"\\'")}')" style="cursor:pointer;opacity:.55">✕</span></span>`).join('');
 }
 
-function _clrankRenderAdminMs() {
-  const el = document.getElementById('clrank-admin-ms');
-  if (!el) return;
-  if (authEmail !== 'kabu6113450@gmail.com') { el.style.display = 'none'; return; }
-  el.style.display = 'inline-flex';
-  const inp = document.getElementById('ms-val');
-  if (inp && !inp.value) inp.value = _clrankMaxScore;
-}
+function _clrankRenderAdminMs() {}
 
 // ── ボードタップ（配置） ─────────────────────────────────────
 function clrankBoardTap(e) {
@@ -2245,20 +2233,6 @@ async function clrankRemoveConfirm(name) {
   } catch(e) {}
 }
 
-// ── 管理者：満点変更 ──────────────────────────────────────────
-async function clrankUpdateMaxScore() {
-  const ms = parseInt(document.getElementById('ms-val').value);
-  if (!ms || ms < 1 || ms > 1000) return;
-  try {
-    await fetch('/api/class-rank/max-score', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify({ max_score: ms })
-    });
-    _clrankMaxScore = ms;
-    _clrankRenderAll();
-  } catch(e) {}
-}
 
 async function _submitScore(label, endpoint) {
   if (!authToken) { alert('ログインしてください'); return; }
