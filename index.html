@@ -1135,21 +1135,18 @@ function titleBadge(u){
   return `<span class="shogou${cls?' '+cls:''}">${inner}</span>`;
 }
 
-let _titleRotateTimer = null;
-function startTitleRotate() {
-  if (_titleRotateTimer) return;
-  _titleRotateTimer = setInterval(() => {
-    document.querySelectorAll('.ti-rotate').forEach(el => {
-      const items = el.querySelectorAll('.ti-rotate-item');
-      if (!items.length) return;
-      let cur = 0;
-      items.forEach((it, i) => { if (it.classList.contains('active')) cur = i; });
-      items.forEach(it => it.classList.remove('active'));
-      items[(cur + 1) % items.length].classList.add('active');
-    });
-  }, 3000);
+function _rotateTick(sel) {
+  document.querySelectorAll(sel).forEach(el => {
+    const items = el.querySelectorAll('.ti-rotate-item');
+    if (!items.length) return;
+    let cur = 0;
+    items.forEach((it, i) => { if (it.classList.contains('active')) cur = i; });
+    items.forEach(it => it.classList.remove('active'));
+    items[(cur + 1) % items.length].classList.add('active');
+  });
 }
-startTitleRotate();
+setInterval(() => _rotateTick('.ti-rotate:not(.ti-instant)'), 3000);
+setInterval(() => _rotateTick('.ti-instant'), 1500);
 
 // ── 認証 ──────────────────────────────────────────────
 let authToken  = null;
