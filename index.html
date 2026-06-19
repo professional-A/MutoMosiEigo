@@ -2063,6 +2063,7 @@ const CLASS_NAMES = [
 ];
 let _clrankPositions = {}; // { name: {x,y} } — 0〜100の%座標（y=0が上=満点）
 let _clrankMaxScore  = 300;
+let _clrankMinScore  = 0;
 let _clrankConfirmed = {};  // { name: score }
 let _clrankSel       = null;  // 選択中の名前
 let _clrankSelBoard  = false; // trueならボードから選択
@@ -2084,6 +2085,14 @@ async function loadClrankPage() {
     _clrankPositions = (data.positions && !Array.isArray(data.positions)) ? data.positions : {};
     _clrankConfirmed = data.confirmed || {};
     _clrankMaxScore  = data.max_score  || 300;
+    // 確定点の最小値からステップ単位で下端を自動算出
+    const scores = Object.values(_clrankConfirmed);
+    if (scores.length) {
+      const step = _clrankMaxScore > 200 ? 50 : 25;
+      _clrankMinScore = Math.max(0, Math.floor(Math.min(...scores) / step) * step);
+    } else {
+      _clrankMinScore = 0;
+    }
   } catch(e) {}
   _clrankRenderAll();
 }
@@ -2097,13 +2106,19 @@ function _clrankRenderAll() {
   _clrankRenderAdminMs();
 }
 
+function _scoreToTop(score) {
+  const range = _clrankMaxScore - _clrankMinScore || 1;
+  return ((1 - (score - _clrankMinScore) / range) * 100).toFixed(1);
+}
+
 function _clrankRenderYAxis() {
   const el = document.getElementById('clrank-yaxis');
   if (!el) return;
   const step = _clrankMaxScore > 200 ? 50 : 25;
+  const range = _clrankMaxScore - _clrankMinScore || 1;
   let h = '';
-  for (let s = 0; s <= _clrankMaxScore; s += step) {
-    const bot = (s / _clrankMaxScore * 100).toFixed(1);
+  for (let s = _clrankMinScore; s <= _clrankMaxScore; s += step) {
+    const bot = ((s - _clrankMinScore) / range * 100).toFixed(1);
     h += `<div class="clrank-yaxis-lbl" style="bottom:${bot}%">${s}</div>`;
   }
   el.innerHTML = h;
@@ -2116,8 +2131,8 @@ function _clrankRenderBoard() {
 
   // グリッドライン
   const step = _clrankMaxScore > 200 ? 50 : 25;
-  for (let s = 0; s <= _clrankMaxScore; s += step) {
-    const top = ((1 - s / _clrankMaxScore) * 100).toFixed(1);
+  for (let s = _clrankMinScore; s <= _clrankMaxScore; s += step) {
+    const top = _scoreToTop(s);
     const g = document.createElement('div');
     g.className = 'clrank-grid-b';
     g.style.top = top + '%';
@@ -2126,7 +2141,7 @@ function _clrankRenderBoard() {
 
   // 確定スコアライン
   Object.entries(_clrankConfirmed).forEach(([name, score]) => {
-    const top = ((1 - score / _clrankMaxScore) * 100).toFixed(1);
+    const top = _scoreToTop(score);
     const l = document.createElement('div');
     l.className = 'clrank-conf-line-b';
     l.style.top = top + '%';
