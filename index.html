@@ -338,6 +338,7 @@ h1{
 .ti-rotate{display:inline-block}
 .ti-rotate-item{display:none}
 .ti-rotate-item.active{display:inline;animation:ti-fade-in .6s ease}
+.ti-instant .ti-rotate-item.active{animation:none}
 @keyframes ti-fade-in{from{opacity:0}to{opacity:1}}
 
 /* よしよしぎゅー "ひざまくら" — あったか琥珀・ふんわり大丸角 ☁ */
@@ -1126,7 +1127,8 @@ function titleBadge(u){
     const items = parts.map((p, i) =>
       `<span class="ti-rotate-item${i===0?' active':''}">${esc(p.trim())}</span>`
     ).join('');
-    inner = `${sym} <span class="ti-rotate">${items}</span>`;
+    const rotateMod = cls === 'title-pro' ? ' ti-instant' : '';
+    inner = `${sym} <span class="ti-rotate${rotateMod}">${items}</span>`;
   } else {
     inner = `${sym} ${esc(u.title)}`;
   }
