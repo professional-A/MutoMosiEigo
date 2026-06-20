@@ -735,11 +735,11 @@ app.post('/api/admin/reset-season-points', auth, async (req, res) => {
   res.json({ ok: true });
 });
 
-// 管理者：シーズンポイントをlifetimeから復元
+// 管理者：season_points → points に同期（累計が0になった場合の修復）
 app.post('/api/admin/restore-season-points', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  await pool.query('UPDATE users SET season_points = points');
-  const { rows } = await pool.query('SELECT username, season_points FROM users ORDER BY season_points DESC');
+  await pool.query('UPDATE users SET points = season_points');
+  const { rows } = await pool.query('SELECT username, points, season_points FROM users ORDER BY season_points DESC');
   res.json({ ok: true, users: rows });
 });
 
