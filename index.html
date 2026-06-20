@@ -432,6 +432,7 @@ h1{
 <!-- お知らせパネル -->
 <div class="notif-panel" id="notif-panel">
   <div class="notif-header">お知らせ</div>
+  <div id="db-banners"></div>
   <div class="notif-item notif-new">
     <div class="notif-item-date">2026-06-18</div>
     <div class="notif-item-title">🏷️ メンバー固有称号・大幅リニューアル＆クラス順位更新！</div>
@@ -550,6 +551,16 @@ h1{
       英語テスト返却後にアンケートを実施します。<br>
       事前に新規登録をお願いします！<br>
       登録後はアイコンやフレームもカスタマイズできます。
+    </div>
+  </div>
+  <div id="notif-post-section" style="display:none;padding:10px 14px;border-top:1px solid var(--line)">
+    <button onclick="toggleNotifPostForm()" style="background:none;border:none;color:var(--teal);font-size:.8rem;cursor:pointer;font-family:inherit;padding:0">📢 お知らせを投稿する ▾</button>
+    <div id="notif-form" style="display:none;margin-top:8px">
+      <input id="notif-post-title" type="text" maxlength="60" placeholder="タイトル (最大60文字)"
+        style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.82rem;margin-bottom:6px">
+      <textarea id="notif-post-body" rows="3" placeholder="本文"
+        style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.82rem;resize:vertical;margin-bottom:6px"></textarea>
+      <button onclick="submitBanner()" style="padding:5px 16px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit">投稿する</button>
     </div>
   </div>
 </div>
@@ -1389,7 +1400,9 @@ function updateAuthBar() {
     document.getElementById('scores-btn').style.display = 'inline-block';
     document.getElementById('clrank-btn').style.display = 'inline-block';
     document.getElementById('battle-btn').style.display = 'inline-block';
+    document.getElementById('notif-post-section').style.display = 'block';
     loadRanking();
+    loadBanners();
   } else {
     bar.textContent = 'ログインしていません';
     avEl.style.display = 'none';
@@ -1403,8 +1416,10 @@ function updateAuthBar() {
     document.getElementById('scores-btn').style.display = 'none';
     document.getElementById('clrank-btn').style.display = 'none';
     document.getElementById('battle-btn').style.display = 'none';
+    document.getElementById('notif-post-section').style.display = 'none';
     document.getElementById('ranking-content').innerHTML =
       '<p class="ranking-login-note">ログインするとランキングが表示されます</p>';
+    loadBanners();
   }
   requestAnimationFrame(syncLayout);
 }
@@ -2102,21 +2117,81 @@ async function submitBattleBet(battleId) {
 async function loadBanners() {
   try {
     const data = await fetch('/api/banners').then(r => r.json());
+    const container = document.getElementById('db-banners');
+    if (!container) return;
+    container.innerHTML = '';
     if (!Array.isArray(data) || !data.length) return;
-    const panel  = document.getElementById('notif-panel');
-    const header = panel.querySelector('.notif-header');
     let newCount = 0;
-    data.slice().reverse().forEach(b => {
+    data.forEach(b => {
+      const canDelete = authUser && (b.author === authUser || authEmail === 'kabu6113450@gmail.com');
       const div = document.createElement('div');
       div.className = 'notif-item' + (b.is_new ? ' notif-new' : '');
-      div.innerHTML = `<div class="notif-item-date">${esc(b.date||'')}</div><div class="notif-item-title">${esc(b.title)}</div><div class="notif-item-body">${b.body}</div>`;
-      header.after(div);
+      div.innerHTML = `<div style="display:flex;justify-content:space-between;align-items:flex-start;gap:6px">
+        <div style="min-width:0">
+          <div class="notif-item-date">${esc(b.date||'')}${b.author ? `<span style="color:var(--dim);margin-left:6px">by ${esc(b.author)}</span>` : ''}</div>
+          <div class="notif-item-title">${esc(b.title)}</div>
+        </div>
+        ${canDelete ? `<button onclick="deleteBanner(${b.id})" style="border:none;background:none;color:var(--dim);cursor:pointer;font-size:.85rem;padding:2px 4px;flex-shrink:0;line-height:1" title="削除">✕</button>` : ''}
+      </div>
+      <div class="notif-item-body">${b.body}</div>`;
+      container.appendChild(div);
       if (b.is_new) newCount++;
     });
     const badge = document.getElementById('notif-badge');
-    if (badge && newCount) badge.textContent = parseInt(badge.textContent||0) + newCount;
+    if (badge && newCount) {
+      const prev = parseInt(badge.dataset.dbCount || 0);
+      badge.dataset.dbCount = newCount;
+      badge.textContent = parseInt(badge.textContent || 0) - prev + newCount;
+    }
   } catch(e) {}
 }
+
+function toggleNotifPostForm() {
+  const form = document.getElementById('notif-form');
+  form.style.display = form.style.display === 'none' ? 'block' : 'none';
+}
+
+async function submitBanner() {
+  const title = document.getElementById('notif-post-title').value.trim();
+  const body  = document.getElementById('notif-post-body').value.trim();
+  if (!title) { showToast('タイトルを入力してください'); return; }
+  if (!body)  { showToast('本文を入力してください'); return; }
+  try {
+    const res = await fetch('/api/banners', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ title, body })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      document.getElementById('notif-post-title').value = '';
+      document.getElementById('notif-post-body').value = '';
+      document.getElementById('notif-form').style.display = 'none';
+      showToast('お知らせを投稿しました！');
+      loadBanners();
+    } else {
+      showToast('❌ ' + (data.error || 'エラー'));
+    }
+  } catch(e) { showToast('通信エラー'); }
+}
+
+async function deleteBanner(id) {
+  if (!confirm('このお知らせを削除しますか？')) return;
+  try {
+    const res = await fetch('/api/banners/' + id, {
+      method: 'DELETE',
+      headers: { 'Authorization': authToken }
+    });
+    const data = await res.json();
+    if (data.ok) {
+      showToast('削除しました');
+      loadBanners();
+    } else {
+      showToast('❌ ' + (data.error || 'エラー'));
+    }
+  } catch(e) { showToast('通信エラー'); }
+}
+
 async function adminAddBanner() {
   const title = prompt('バナータイトル');
   if (!title) return;
@@ -2130,9 +2205,9 @@ async function adminAddBanner() {
       body: JSON.stringify({ title, body, date, is_new: true })
     });
     const data = await res.json();
-    if (data.ok) { alert('✅ バナーを追加しました（ページリロードで反映）'); }
-    else alert('❌ ' + (data.error || 'エラー'));
-  } catch(e) { alert('通信エラー'); }
+    if (data.ok) { showToast('バナーを追加しました'); loadBanners(); }
+    else showToast('❌ ' + (data.error || 'エラー'));
+  } catch(e) { showToast('通信エラー'); }
 }
 
 async function adminCreateBattles() {

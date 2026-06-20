@@ -93,6 +93,8 @@ async function initDB() {
       created_at TEXT DEFAULT ''
     )
   `).catch(()=>{});
+  await pool.query(`ALTER TABLE banners ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`).catch(()=>{});
+  await pool.query(`ALTER TABLE banners ADD COLUMN IF NOT EXISTS author TEXT`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS battles (
       id         SERIAL PRIMARY KEY,
@@ -803,18 +805,42 @@ app.post('/api/admin/exam-schedule', auth, async (req, res) => {
 
 // ── バナー ────────────────────────────────────────────────────
 app.get('/api/banners', async (req, res) => {
-  const { rows } = await pool.query('SELECT * FROM banners ORDER BY date DESC, id DESC');
+  const { rows } = await pool.query('SELECT id, date, title, body, is_new, author, user_id, created_at FROM banners ORDER BY date DESC, id DESC');
   res.json(rows);
 });
 
+// メンバー投稿（ログイン必須）
+app.post('/api/banners', auth, async (req, res) => {
+  const { title, body } = req.body;
+  if (!title || !body) return res.status(400).json({ error: 'titleとbodyが必要' });
+  const now = new Date().toISOString();
+  const { rows } = await pool.query(
+    'INSERT INTO banners (date, title, body, is_new, created_at, user_id, author) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id',
+    [now.slice(0,10), title, body, true, now, req.user.id, req.user.username]
+  );
+  res.json({ ok: true, id: rows[0].id });
+});
+
+// 削除（自分の投稿 or 管理者）
+app.delete('/api/banners/:id', auth, async (req, res) => {
+  const id = parseInt(req.params.id);
+  const { rows } = await pool.query('SELECT user_id FROM banners WHERE id = $1', [id]);
+  if (!rows[0]) return res.status(404).json({ error: '見つかりません' });
+  const isAdmin = req.user.email === 'kabu6113450@gmail.com';
+  if (!isAdmin && rows[0].user_id !== req.user.id) return res.status(403).json({ error: '権限がありません' });
+  await pool.query('DELETE FROM banners WHERE id = $1', [id]);
+  res.json({ ok: true });
+});
+
+// 管理者用（日付・is_new を細かく指定したいとき用）
 app.post('/api/admin/banners', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { date, title, body, is_new } = req.body;
   if (!title || !body) return res.status(400).json({ error: 'titleとbodyが必要' });
   const now = new Date().toISOString();
   const { rows } = await pool.query(
-    'INSERT INTO banners (date, title, body, is_new, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING id',
-    [date || now.slice(0, 10), title, body, is_new !== false, now]
+    'INSERT INTO banners (date, title, body, is_new, created_at, author, user_id) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id',
+    [date || now.slice(0,10), title, body, is_new !== false, now, req.user.username, req.user.id]
   );
   res.json({ ok: true, id: rows[0].id });
 });
