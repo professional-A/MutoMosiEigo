@@ -743,6 +743,34 @@ app.post('/api/admin/restore-season-points', auth, async (req, res) => {
   res.json({ ok: true, users: rows });
 });
 
+// 管理者：ポイント一括設定（リセット前の値を復元）
+app.post('/api/admin/restore-points-manual', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const DATA = {
+    '福澤': 61700,
+    'professional-A': 27760,
+    'はせがわ': 25140,
+    'やー': 21100,
+    'MCsho': 13600,
+    'ちんこうや': 17700,
+    'SHIMESABA': 15800,
+    'Shochan': 8000,
+    'ミッツ': 7800,
+    '波多野裏技': 5100,
+    'honari': 5000,
+    'seijuro_dummy': 4000,
+  };
+  const results = [];
+  for (const [username, pts] of Object.entries(DATA)) {
+    const { rowCount } = await pool.query(
+      'UPDATE users SET points = $1, season_points = $1 WHERE username = $2',
+      [pts, username]
+    );
+    results.push(`${username}: ${pts}pt (${rowCount > 0 ? '✅' : '❌ 未マッチ'})`);
+  }
+  res.json({ ok: true, results });
+});
+
 // 管理者：全プレイヤー一斉ポイント配布
 app.post('/api/admin/grant-all', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
