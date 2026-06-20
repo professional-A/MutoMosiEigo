@@ -8,7 +8,8 @@ function genToken() { return crypto.randomBytes(32).toString('hex'); }
 function hashPw(pw, salt) { return crypto.pbkdf2Sync(pw, salt, 100000, 64, 'sha512').toString('hex'); }
 // JST 5:00 AM でリセット（UTC+4h オフセットで計算）
 function bonusDay() { return new Date(Date.now() + 4 * 60 * 60 * 1000).toISOString().slice(0, 10); }
-function dp(u) { return (u.points || 0) + (u.test_bet || 0); } // 表示ポイント（賭け中含む）
+function dp(u) { return (u.points || 0) + (u.test_bet || 0); } // 累計ポイント（賭け中含む）
+function dsp(u) { return u.season_points || 0; }               // シーズンポイント
 
 let siteLocked = false; // 管理者によるアクセス制限フラグ
 let scoreInputLocked = false; // 得点入力締め切りフラグ
@@ -58,6 +59,7 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS created_at  TEXT DEFAULT ''`).catch(()=>{});
   await pool.query(`ALTER TABLE users ALTER COLUMN password DROP NOT NULL`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS points        INTEGER DEFAULT 0`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS season_points INTEGER DEFAULT 0`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS last_login   TEXT DEFAULT ''`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_hash TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS password_salt TEXT`).catch(()=>{});
@@ -69,8 +71,32 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS unlocked_avatars TEXT DEFAULT '[]'`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS title TEXT DEFAULT 'ちょおちょおちょお'`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS title_class TEXT`).catch(()=>{});
-  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ouri_score INTEGER`).catch(()=>{});
-  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS math_score INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ouri_score       INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS math_score       INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS kakougaku_score  INTEGER`).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS banners (
+      id         SERIAL PRIMARY KEY,
+      date       TEXT,
+      title      TEXT NOT NULL,
+      body       TEXT NOT NULL,
+      is_new     BOOLEAN DEFAULT true,
+      created_at TEXT DEFAULT ''
+    )
+  `).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS battles (
+      id         SERIAL PRIMARY KEY,
+      subject    TEXT NOT NULL,
+      p1_id      INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      p2_id      INTEGER REFERENCES users(id) ON DELETE CASCADE,
+      p1_bet     INTEGER DEFAULT 0,
+      p2_bet     INTEGER DEFAULT 0,
+      winner_id  INTEGER REFERENCES users(id),
+      status     TEXT DEFAULT 'open',
+      created_at TEXT DEFAULT ''
+    )
+  `).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS class_rank TEXT DEFAULT '{}'`).catch(()=>{});
   await pool.query(`UPDATE users SET username='荒らし乙' WHERE username LIKE '%﷽%'`).catch(()=>{});
   // 個人称号を設定
@@ -201,13 +227,13 @@ app.post('/api/sync-user', async (req, res) => {
   const today = bonusDay();
   let loginBonus = 0;
   if (u.last_login !== today) {
-    await pool.query('UPDATE users SET points = points + 1000, last_login = $1 WHERE id = $2', [today, u.id]);
+    await pool.query('UPDATE users SET points = points + 1000, season_points = season_points + 1000, last_login = $1 WHERE id = $2', [today, u.id]);
     loginBonus = 1000;
   }
 
   const { rows: r2 } = await pool.query('SELECT * FROM users WHERE id = $1', [u.id]);
   const u2 = r2[0];
-  res.json({ username: u2.username, avatar: u2.avatar, frame: u2.frame, email: u2.email, points: dp(u2), loginBonus, unlockedAvatars: JSON.parse(u2.unlocked_avatars || '[]') });
+  res.json({ username: u2.username, avatar: u2.avatar, frame: u2.frame, email: u2.email, points: dsp(u2), lifetime_points: dp(u2), loginBonus, unlockedAvatars: JSON.parse(u2.unlocked_avatars || '[]') });
 });
 
 // アバター・フレーム更新
@@ -227,9 +253,9 @@ app.post('/api/points', auth, async (req, res) => {
   // quizKey/questionKey なし: シンプル加算（レガシー）
   if (!quizKey || !questionKey) {
     if (!Number.isInteger(amount) || amount <= 0 || amount > 200) return res.status(400).json({ error: '不正なポイント' });
-    await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, req.user.id]);
-    const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id = $1', [req.user.id]);
-    return res.json({ ok: true, points: dp(rows[0]), delta: amount });
+    await pool.query('UPDATE users SET points = points + $1, season_points = season_points + $1 WHERE id = $2', [amount, req.user.id]);
+    const { rows } = await pool.query('SELECT points, test_bet, season_points FROM users WHERE id = $1', [req.user.id]);
+    return res.json({ ok: true, points: dsp(rows[0]), lifetime_points: dp(rows[0]), delta: amount });
   }
 
   // dedup モード: 初回正解+100 / 復習正解+20 / 復習不正解-50 / 初回不正解=0
@@ -250,10 +276,10 @@ app.post('/api/points', auth, async (req, res) => {
   }
 
   if (delta !== 0) {
-    await pool.query('UPDATE users SET points = GREATEST(0, points + $1) WHERE id = $2', [delta, req.user.id]);
+    await pool.query('UPDATE users SET points = GREATEST(0, points + $1), season_points = GREATEST(0, season_points + $1) WHERE id = $2', [delta, req.user.id]);
   }
-  const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id = $1', [req.user.id]);
-  res.json({ ok: true, points: dp(rows[0]), delta });
+  const { rows } = await pool.query('SELECT points, test_bet, season_points FROM users WHERE id = $1', [req.user.id]);
+  res.json({ ok: true, points: dsp(rows[0]), lifetime_points: dp(rows[0]), delta });
   if (delta !== 0) syncWorstFrame();
 });
 
@@ -284,10 +310,13 @@ app.get('/api/ranking', async (req, res) => {
 // メンバー一覧（ポイント順、ログイン不要）
 app.get('/api/members', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, title, title_class, points + COALESCE(test_bet,0) AS points, last_login, test_pred, test_bet, test_score,
-           DENSE_RANK() OVER (ORDER BY points + COALESCE(test_bet,0) DESC) AS rank
+    SELECT username, avatar, frame, title, title_class,
+           season_points,
+           points + COALESCE(test_bet,0) AS lifetime_points,
+           last_login, test_pred, test_bet, test_score,
+           DENSE_RANK() OVER (ORDER BY season_points DESC) AS rank
     FROM users
-    ORDER BY points + COALESCE(test_bet,0) DESC
+    ORDER BY season_points DESC
   `);
   res.json(rows);
 });
@@ -422,7 +451,7 @@ app.get('/api/admin/users', auth, async (req, res) => {
 
 // 自分の情報を取得（パスワードユーザーの再ログイン用）
 app.get('/api/me', auth, async (req, res) => {
-  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: dp(req.user), unlockedAvatars: JSON.parse(req.user.unlocked_avatars || '[]'), title: req.user.title || 'ちょおちょおちょお', ouriScore: req.user.ouri_score ?? null });
+  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: dsp(req.user), lifetime_points: dp(req.user), unlockedAvatars: JSON.parse(req.user.unlocked_avatars || '[]'), title: req.user.title || 'ちょおちょおちょお', ouriScore: req.user.ouri_score ?? null });
 });
 
 // パスワード登録
@@ -446,7 +475,7 @@ app.post('/api/register', async (req, res) => {
   );
   const { rows } = await pool.query('SELECT * FROM users WHERE session_token=$1', [token]);
   const u = rows[0];
-  res.json({ token, username: u.username, avatar: u.avatar, frame: u.frame, points: dp(u), loginBonus: 1000, unlockedAvatars: JSON.parse(u.unlocked_avatars || '[]') });
+  res.json({ token, username: u.username, avatar: u.avatar, frame: u.frame, points: dsp(u), lifetime_points: dp(u), loginBonus: 1000, unlockedAvatars: JSON.parse(u.unlocked_avatars || '[]') });
 });
 
 // パスワードログイン
@@ -470,7 +499,7 @@ app.post('/api/login', async (req, res) => {
   await pool.query('UPDATE users SET session_token=$1 WHERE id=$2', [token, u.id]);
   const { rows: r } = await pool.query('SELECT * FROM users WHERE id=$1', [u.id]);
   const u2 = r[0];
-  res.json({ token, username: u2.username, avatar: u2.avatar, frame: u2.frame, points: dp(u2), loginBonus, unlockedAvatars: JSON.parse(u2.unlocked_avatars || '[]') });
+  res.json({ token, username: u2.username, avatar: u2.avatar, frame: u2.frame, points: dsp(u2), lifetime_points: dp(u2), loginBonus, unlockedAvatars: JSON.parse(u2.unlocked_avatars || '[]') });
 });
 
 // ── テストイベント ──────────────────────────────────────
@@ -680,9 +709,16 @@ app.post('/api/admin/grant-points', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { userId, amount } = req.body;
   if (!userId || !Number.isInteger(amount)) return res.status(400).json({ error: '不正なリクエスト（整数のptを指定）' });
-  await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, userId]);
-  const { rows } = await pool.query('SELECT points, test_bet FROM users WHERE id = $1', [userId]);
-  res.json({ ok: true, points: dp(rows[0]) });
+  await pool.query('UPDATE users SET points = points + $1, season_points = season_points + $1 WHERE id = $2', [amount, userId]);
+  const { rows } = await pool.query('SELECT points, test_bet, season_points FROM users WHERE id = $1', [userId]);
+  res.json({ ok: true, points: dsp(rows[0]), lifetime_points: dp(rows[0]) });
+});
+
+// 管理者：シーズンポイントリセット
+app.post('/api/admin/reset-season-points', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  await pool.query('UPDATE users SET season_points = 0');
+  res.json({ ok: true });
 });
 
 // 管理者：全プレイヤー一斉ポイント配布
@@ -735,6 +771,145 @@ app.post('/api/admin/unlock', auth, async (req, res) => {
   siteLocked = false;
   await pool.query("INSERT INTO settings (key, value) VALUES ('site_locked','false') ON CONFLICT (key) DO UPDATE SET value='false'");
   res.json({ ok: true });
+});
+
+// ── バナー ────────────────────────────────────────────────────
+app.get('/api/banners', async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM banners ORDER BY date DESC, id DESC');
+  res.json(rows);
+});
+
+app.post('/api/admin/banners', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { date, title, body, is_new } = req.body;
+  if (!title || !body) return res.status(400).json({ error: 'titleとbodyが必要' });
+  const now = new Date().toISOString();
+  const { rows } = await pool.query(
+    'INSERT INTO banners (date, title, body, is_new, created_at) VALUES ($1, $2, $3, $4, $5) RETURNING id',
+    [date || now.slice(0, 10), title, body, is_new !== false, now]
+  );
+  res.json({ ok: true, id: rows[0].id });
+});
+
+// ── バトルイベント ────────────────────────────────────────────
+const BATTLE_SUBJ_COL = { eigo: 'test_score', ouri: 'ouri_score', math: 'math_score', kakougaku: 'kakougaku_score' };
+
+// バトル一覧（公開）
+app.get('/api/battles', async (req, res) => {
+  const { rows } = await pool.query(`
+    SELECT b.id, b.subject, b.status, b.p1_bet, b.p2_bet, b.created_at,
+      u1.username AS p1_name, u1.avatar AS p1_avatar,
+      u2.username AS p2_name, u2.avatar AS p2_avatar,
+      uw.username AS winner_name
+    FROM battles b
+    JOIN users u1 ON b.p1_id = u1.id
+    JOIN users u2 ON b.p2_id = u2.id
+    LEFT JOIN users uw ON b.winner_id = uw.id
+    ORDER BY b.created_at DESC, b.id
+  `);
+  res.json(rows);
+});
+
+// 自分のバトル
+app.get('/api/battles/mine', auth, async (req, res) => {
+  const uid = req.user.id;
+  const { rows } = await pool.query(`
+    SELECT b.id, b.subject, b.status, b.p1_bet, b.p2_bet,
+      u1.username AS p1_name, u1.avatar AS p1_avatar,
+      u2.username AS p2_name, u2.avatar AS p2_avatar,
+      uw.username AS winner_name
+    FROM battles b
+    JOIN users u1 ON b.p1_id = u1.id
+    JOIN users u2 ON b.p2_id = u2.id
+    LEFT JOIN users uw ON b.winner_id = uw.id
+    WHERE b.p1_id = $1 OR b.p2_id = $1
+    ORDER BY b.created_at DESC
+    LIMIT 5
+  `, [uid]);
+  res.json(rows);
+});
+
+// ベット設定
+app.post('/api/battles/:id/bet', auth, async (req, res) => {
+  const battleId = parseInt(req.params.id);
+  const { amount } = req.body;
+  const uid = req.user.id;
+  if (!Number.isInteger(amount) || amount < 0) return res.status(400).json({ error: '0以上の整数を入力してください' });
+  const { rows } = await pool.query('SELECT * FROM battles WHERE id = $1', [battleId]);
+  const battle = rows[0];
+  if (!battle) return res.status(404).json({ error: 'バトルが見つかりません' });
+  if (battle.status !== 'open') return res.status(400).json({ error: '受付終了済みです' });
+  const isP1 = battle.p1_id === uid;
+  const isP2 = battle.p2_id === uid;
+  if (!isP1 && !isP2) return res.status(403).json({ error: 'このバトルの参加者ではありません' });
+  const currentBet = isP1 ? (battle.p1_bet || 0) : (battle.p2_bet || 0);
+  const diff = amount - currentBet;
+  if (diff > 0) {
+    const { rows: uRows } = await pool.query('SELECT points FROM users WHERE id = $1', [uid]);
+    if ((uRows[0]?.points || 0) < diff) return res.status(400).json({ error: 'ポイントが足りません' });
+  }
+  const col = isP1 ? 'p1_bet' : 'p2_bet';
+  await pool.query(`UPDATE battles SET ${col} = $1 WHERE id = $2`, [amount, battleId]);
+  if (diff !== 0) await pool.query('UPDATE users SET points = points - $1 WHERE id = $2', [diff, uid]);
+  res.json({ ok: true, bet: amount });
+});
+
+// バトル作成（管理者）
+app.post('/api/admin/battles/create', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { subject } = req.body;
+  if (!subject) return res.status(400).json({ error: 'subjectが必要' });
+  const { rows: users } = await pool.query(
+    `SELECT id, username FROM users WHERE username NOT IN ('seijuro_dummy','honari2') ORDER BY RANDOM()`
+  );
+  await pool.query("DELETE FROM battles WHERE subject = $1 AND status = 'open'", [subject]);
+  const pairs = [];
+  for (let i = 0; i + 1 < users.length; i += 2) pairs.push([users[i], users[i + 1]]);
+  const bye = users.length % 2 === 1 ? users[users.length - 1] : null;
+  const now = new Date().toISOString();
+  for (const [p1, p2] of pairs) {
+    await pool.query('INSERT INTO battles (subject, p1_id, p2_id, created_at) VALUES ($1, $2, $3, $4)',
+      [subject, p1.id, p2.id, now]);
+  }
+  res.json({ ok: true, pairs: pairs.map(([a, b]) => [a.username, b.username]), bye: bye?.username });
+});
+
+// バトル決着（管理者）
+app.post('/api/admin/battles/settle', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { subject } = req.body;
+  const scoreCol = BATTLE_SUBJ_COL[subject];
+  if (!scoreCol) return res.status(400).json({ error: '無効な教科: ' + subject });
+  const { rows: battles } = await pool.query("SELECT * FROM battles WHERE subject = $1 AND status = 'open'", [subject]);
+  const results = [];
+  for (const b of battles) {
+    const { rows: r1 } = await pool.query(`SELECT ${scoreCol} AS score, username FROM users WHERE id = $1`, [b.p1_id]);
+    const { rows: r2 } = await pool.query(`SELECT ${scoreCol} AS score, username FROM users WHERE id = $1`, [b.p2_id]);
+    const s1 = r1[0]?.score, s2 = r2[0]?.score;
+    if (s1 == null || s2 == null) {
+      results.push({ result: `${r1[0]?.username} vs ${r2[0]?.username}: スコア未入力 — スキップ` });
+      continue;
+    }
+    if (s1 === s2) {
+      if (b.p1_bet > 0) await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [b.p1_bet, b.p1_id]);
+      if (b.p2_bet > 0) await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [b.p2_bet, b.p2_id]);
+      await pool.query("UPDATE battles SET status = 'settled' WHERE id = $1", [b.id]);
+      results.push({ result: `${r1[0].username} vs ${r2[0].username}: 引き分け (${s1}点)` });
+    } else {
+      const [winnerId, winnerBet, loserBet, wName, lName, wScore, lScore] =
+        s1 > s2
+          ? [b.p1_id, b.p1_bet || 0, b.p2_bet || 0, r1[0].username, r2[0].username, s1, s2]
+          : [b.p2_id, b.p2_bet || 0, b.p1_bet || 0, r2[0].username, r1[0].username, s2, s1];
+      const prize = winnerBet + loserBet;
+      if (prize > 0) await pool.query(
+        'UPDATE users SET points = points + $1, season_points = season_points + $1 WHERE id = $2',
+        [prize, winnerId]
+      );
+      await pool.query('UPDATE battles SET status = $1, winner_id = $2 WHERE id = $3', ['settled', winnerId, b.id]);
+      results.push({ result: `${wName}(${wScore}点) > ${lName}(${lScore}点) → ${wName}の勝ち +${prize}pt` });
+    }
+  }
+  res.json({ ok: true, results });
 });
 
 app.use(express.static('.'));

@@ -10,13 +10,16 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <style>
 :root{
-  --bg:#0a1626; --bg2:#0e1d33; --card:#15263f;
-  --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c;
-  --teal:#46d6c4;
-  --amber:#f6b352;
+  --bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#0e1d33;
+  --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c; --fg:#e7eef7;
+  --teal:#46d6c4; --amber:#f6b352; --rose:#f0716e;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
+/* テーマプリセット */
+[data-theme="purple"]{--bg:#0d0a1f;--bg2:#131028;--card:#1e1840;--card2:#131028;--line:#362e60;--ink:#e8e4ff;--fg:#e8e4ff;--muted:#9b8fc0;--dim:#6b5e9c}
+[data-theme="forest"]{--bg:#08100f;--bg2:#0d1a18;--card:#102820;--card2:#0d1a18;--line:#1a3830;--ink:#d4ede8;--fg:#d4ede8;--muted:#7aaba0;--dim:#4d7870}
+[data-theme="charcoal"]{--bg:#0f0f0f;--bg2:#1a1a1a;--card:#242424;--card2:#1a1a1a;--line:#3a3a3a;--ink:#f0f0f0;--fg:#f0f0f0;--muted:#999;--dim:#666}
 body{
   font-family:"Outfit","Noto Sans JP",sans-serif;
   background:
@@ -26,6 +29,10 @@ body{
   color:var(--ink); line-height:1.6; -webkit-font-smoothing:antialiased;
   min-height:100vh; padding-bottom:80px;
 }
+.theme-dot{width:22px;height:22px;border-radius:50%;cursor:pointer;border:2px solid transparent;transition:.15s;flex-shrink:0}
+.theme-dot.active{border-color:var(--teal);box-shadow:0 0 0 2px rgba(70,214,196,.35)}
+.archived-toggle{font-size:.75rem;color:var(--dim);background:none;border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer;font-family:inherit;transition:.15s}
+.archived-toggle:hover{color:var(--teal);border-color:var(--teal)}
 .wrap{max-width:920px;margin:0 auto;padding:0 18px}
 
 /* Header */
@@ -253,6 +260,19 @@ h1{
 .clrank-pool-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
 .clrank-block{position:absolute;transform:translate(-50%,-50%);padding:3px 7px;border-radius:5px;font-size:.7rem;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid rgba(255,255,255,.18);background:rgba(15,35,65,.92);color:#d4e8ff;user-select:none;z-index:2;transition:box-shadow .12s,border-color .12s;box-shadow:0 1px 4px rgba(0,0,0,.5)}
 .clrank-block.selected{background:rgba(70,214,196,.22);border-color:var(--teal);color:var(--teal);box-shadow:0 0 10px rgba(70,214,196,.4);z-index:3}
+/* バトルモーダル */
+.battle-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.battle-vs{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.battle-player{flex:1;text-align:center}
+.battle-player-name{font-size:.95rem;font-weight:700}
+.battle-player-bet{font-size:.72rem;color:var(--amber);margin-top:2px}
+.battle-vs-label{font-size:1.3rem;color:var(--rose);font-weight:900;flex-shrink:0}
+.battle-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.battle-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700}
+.battle-badge-open{background:rgba(70,214,196,.15);color:var(--teal);border:1px solid rgba(70,214,196,.3)}
+.battle-badge-settled{background:rgba(255,255,255,.07);color:var(--dim);border:1px solid var(--line)}
+.clrank-block-conf{background:rgba(0,55,45,.92);border-color:rgba(70,214,196,.6);color:var(--teal)}
+.clrank-block-conf.selected{background:rgba(70,214,196,.32);border-color:var(--teal);color:#fff;box-shadow:0 0 12px rgba(70,214,196,.5)}
 .clrank-conf-line-b{position:absolute;left:0;right:0;pointer-events:none;z-index:1}
 .clrank-conf-line-b::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:rgba(70,214,196,.6)}
 .clrank-grid-b{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.06);pointer-events:none}
@@ -397,6 +417,7 @@ h1{
   <button class="auth-btn" id="admin-btn" style="display:none" onclick="openAdminModal()">管理</button>
   <button class="auth-btn" id="members-btn" style="display:none" onclick="openMembersModal()">メンバー</button>
   <button class="auth-btn" id="scores-btn" style="display:none" onclick="openScoresModal()">📊成績</button>
+  <button class="auth-btn" id="battle-btn" style="display:none" onclick="openBattleModal()">⚔️バトル</button>
   <button class="auth-btn" id="clrank-btn" style="display:none" onclick="openClrankPage()">🏆順位</button>
   <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
   <button class="auth-btn" id="test-btn" style="display:none" onclick="openTestModal()">📋テスト</button>
@@ -664,11 +685,27 @@ h1{
       <button id="lock-btn" onclick="toggleSiteLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🔒 アクセス制限</button>
       <button id="score-lock-btn" onclick="toggleScoreLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">✏️ 得点入力締め切り</button>
       <button onclick="grantAll()" style="background:#7c3aed;color:#fff;border:none;font-weight:700">🎁 全員配布</button>
+      <button onclick="resetSeasonPoints()" style="background:#0f766e;color:#fff;border:none;font-weight:700">🔄 シーズンリセット</button>
       <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 配分</button>
       <button onclick="viewSurveyResults()" style="background:#0ea5e9;color:#fff;border:none;font-weight:700">📊 アンケート結果</button>
       <button onclick="awardWorstFrame()" style="background:#ff3333;color:#fff;border:none;font-weight:700">🔴 1位に付与</button>
       <button onclick="awardBakaFrame()" style="background:linear-gradient(90deg,#ff00ff,#ff6600);color:#fff;border:none;font-weight:700">🔥 下位3フレーム付与</button>
+      <button onclick="adminAddBanner()" style="background:#1e3320;color:#86efac;border:1px solid #4ade80;font-weight:700">📢 バナー追加</button>
+      <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
+      <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- バトルモーダル -->
+<div class="modal-bg" id="battle-modal-bg">
+  <div class="modal" style="width:min(500px,95vw);max-height:90vh;display:flex;flex-direction:column">
+    <button onclick="closeBattleModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2>⚔️ バトルイベント</h2>
+    <div id="battle-content" style="margin-top:12px;font-size:.85rem;flex:1;overflow-y:auto;min-height:0"></div>
+    <div class="modal-btns" style="margin-top:12px;flex-shrink:0">
+      <button onclick="closeBattleModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
 </div>
@@ -732,6 +769,16 @@ h1{
 <div class="modal-bg" id="avatar-modal-bg">
   <div class="modal">
     <h2>アイコンを選ぶ</h2>
+    <div style="display:flex;gap:12px;margin-bottom:14px">
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;flex:1;text-align:center">
+        <div style="font-size:.65rem;color:var(--dim);margin-bottom:2px">🏆 シーズンpt</div>
+        <div id="modal-season-pts" style="font-size:1.1rem;font-weight:700;color:var(--teal)">―</div>
+      </div>
+      <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;flex:1;text-align:center">
+        <div style="font-size:.65rem;color:var(--dim);margin-bottom:2px">📦 個人pt（累計）</div>
+        <div id="modal-lifetime-pts" style="font-size:1.1rem;font-weight:700;color:var(--amber)">―</div>
+      </div>
+    </div>
     <div style="margin-bottom:12px">
       <label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:4px">プレイヤーネーム</label>
       <input id="username-input" type="text" maxlength="20" style="width:100%;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--text);font-family:inherit;font-size:.95rem">
@@ -741,6 +788,16 @@ h1{
     <div class="frame-section">
       <h3>フレームを選ぶ</h3>
       <div class="frame-grid" id="frame-grid"></div>
+    </div>
+    <div style="margin-top:16px;padding-top:12px;border-top:1px solid var(--line)">
+      <div style="font-size:.72rem;color:var(--dim);margin-bottom:8px">背景テーマ</div>
+      <div style="display:flex;gap:8px;align-items:center">
+        <div class="theme-dot" data-theme="navy"    style="background:#0e1d33" onclick="applyTheme('navy')"     title="ネイビー"></div>
+        <div class="theme-dot" data-theme="purple"  style="background:#1e1840" onclick="applyTheme('purple')"   title="パープル"></div>
+        <div class="theme-dot" data-theme="forest"  style="background:#102820" onclick="applyTheme('forest')"   title="フォレスト"></div>
+        <div class="theme-dot" data-theme="charcoal" style="background:#242424" onclick="applyTheme('charcoal')" title="チャコール"></div>
+        <span id="theme-label" style="font-size:.72rem;color:var(--dim);margin-left:4px"></span>
+      </div>
     </div>
     <div class="modal-btns">
       <button onclick="saveAvatar()" style="background:var(--teal);color:#0a1626">保存</button>
@@ -877,12 +934,6 @@ h1{
       ">
         📋 資料 — 加工学
       </a>
-      <button id="ouri-score-header-btn" onclick="submitOuriScore()" style="display:none;font-family:inherit;font-size:.85rem;font-weight:600;background:rgba(246,179,82,.12);border:1px solid var(--amber);color:var(--amber);padding:7px 16px;border-radius:99px;cursor:pointer;transition:.15s" onmouseover="this.style.background='rgba(246,179,82,.22)'" onmouseout="this.style.background='rgba(246,179,82,.12)'">
-        ⚡ 応用物理 点数を入力
-      </button>
-      <button id="math-score-header-btn" onclick="submitMathScore()" style="display:none;font-family:inherit;font-size:.85rem;font-weight:600;background:rgba(248,113,146,.12);border:1px solid var(--rose);color:var(--rose);padding:7px 16px;border-radius:99px;cursor:pointer;transition:.15s" onmouseover="this.style.background='rgba(248,113,146,.22)'" onmouseout="this.style.background='rgba(248,113,146,.12)'">
-        📐 応用数学 点数を入力
-      </button>
     </div>
 
     <div id="survey-banner" style="display:none;margin-top:20px;background:linear-gradient(135deg,rgba(70,214,196,.12),rgba(246,179,82,.10));border:1px solid var(--teal);border-radius:14px;padding:14px 18px;align-items:center;gap:14px;flex-wrap:wrap">
@@ -921,6 +972,9 @@ h1{
 <div class="wrap">
   <!-- フォルダビュー（デフォルト） -->
   <div id="folder-view">
+    <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
+      <button class="archived-toggle" id="archive-toggle-btn" onclick="toggleShowArchived()">📦 アーカイブを表示</button>
+    </div>
     <div class="folder-grid" id="folder-grid"></div>
   </div>
   <!-- 教科内ビュー -->
@@ -956,6 +1010,28 @@ const SUBJECT_ICONS = {
 let tests = [];
 let selectedSubject = null;
 let activeExam = "すべて";
+let showArchived = false;
+
+// ── テーマ ────────────────────────────────────────────────
+const THEME_LABELS = { navy:'ネイビー', purple:'パープル', forest:'フォレスト', charcoal:'チャコール' };
+function applyTheme(key) {
+  document.documentElement.setAttribute('data-theme', key === 'navy' ? '' : key);
+  localStorage.setItem('mutou_theme', key);
+  document.querySelectorAll('.theme-dot').forEach(d => {
+    d.classList.toggle('active', d.dataset.theme === key);
+  });
+  const lbl = document.getElementById('theme-label');
+  if (lbl) lbl.textContent = THEME_LABELS[key] || '';
+}
+function loadTheme() { applyTheme(localStorage.getItem('mutou_theme') || 'navy'); }
+
+// ── アーカイブトグル ──────────────────────────────────────
+function toggleShowArchived() {
+  showArchived = !showArchived;
+  const btn = document.getElementById('archive-toggle-btn');
+  if (btn) btn.textContent = showArchived ? '📦 アーカイブを隠す' : '📦 アーカイブを表示';
+  renderFolders();
+}
 
 function getProgress(storageKey, totalItems) {
   try {
@@ -970,7 +1046,9 @@ function getProgress(storageKey, totalItems) {
 function renderFolders() {
   const subjects = [...new Set(tests.map(t => t.subject))];
   document.getElementById("folder-grid").innerHTML = subjects.map(s => {
-    const stests = tests.filter(t => t.subject === s);
+    const stests = tests.filter(t => t.subject === s && (!t.archived || showArchived));
+    if (!stests.length) return '';
+    const allArchived = tests.filter(t => t.subject === s).every(t => t.archived);
     let totalItems = 0, done = 0;
     stests.forEach(t => {
       if (t.storageKey && t.totalItems) {
@@ -981,9 +1059,9 @@ function renderFolders() {
     });
     const pct = totalItems ? Math.round(done / totalItems * 100) : 0;
     const icon = SUBJECT_ICONS[s] || '📁';
-    return `<div class="folder-card" data-subj="${esc(s)}" onclick="openSubject(this.dataset.subj)">
+    return `<div class="folder-card" data-subj="${esc(s)}" onclick="openSubject(this.dataset.subj)" style="${allArchived ? 'opacity:.55' : ''}">
       <div class="folder-icon">${icon}</div>
-      <div class="folder-name">${esc(s)}</div>
+      <div class="folder-name">${esc(s)}${allArchived ? ' <span style="font-size:.6rem;color:var(--dim)">📦</span>' : ''}</div>
       <div class="folder-count">${stests.length} 教材</div>
       <div class="progress-bar-wrap" style="margin-top:6px"><div class="progress-bar" style="width:${pct}%"></div></div>
       <div class="progress-text">${pct > 0 ? pct + '% 完了' : '未着手'}</div>
@@ -1020,7 +1098,8 @@ function renderExamFilter() {
 function filtered() {
   return tests.filter(t =>
     t.subject === selectedSubject &&
-    (activeExam === "すべて" || t.exam === activeExam)
+    (activeExam === "すべて" || t.exam === activeExam) &&
+    (!t.archived || showArchived)
   );
 }
 
@@ -1078,6 +1157,9 @@ document.getElementById("exam-filters").addEventListener("click", e => {
   const btn = e.target.closest("[data-val]");
   if (btn) setExam(btn.dataset.val);
 });
+
+loadTheme();
+loadBanners();
 
 fetch("tests.json")
   .then(r => r.json())
@@ -1154,7 +1236,8 @@ let authUser   = null;
 let authEmail  = null;
 let authAvatar = localStorage.getItem('muto_avatar') || '🐸';
 let authFrame  = localStorage.getItem('muto_frame')  || 'default';
-let authPoints = 0;
+let authPoints = 0;         // シーズンポイント（ランキング表示用）
+let authLifetimePoints = 0; // 累計ポイント（個人ポイント）
 let authUnlockedAvatars = JSON.parse(localStorage.getItem('muto_unlocked_avatars') || '[]');
 let selectedAvatar = authAvatar;
 let selectedFrame  = authFrame;
@@ -1195,10 +1278,7 @@ function updateAuthBar() {
     document.getElementById('members-btn').style.display = 'inline-block';
     document.getElementById('scores-btn').style.display = 'inline-block';
     document.getElementById('clrank-btn').style.display = 'inline-block';
-    const ouriHdr = document.getElementById('ouri-score-header-btn');
-    if (ouriHdr) ouriHdr.style.display = 'inline-flex';
-    const mathHdr = document.getElementById('math-score-header-btn');
-    if (mathHdr) mathHdr.style.display = 'inline-flex';
+    document.getElementById('battle-btn').style.display = 'inline-block';
     loadRanking();
   } else {
     bar.textContent = 'ログインしていません';
@@ -1212,10 +1292,7 @@ function updateAuthBar() {
     document.getElementById('members-btn').style.display = 'none';
     document.getElementById('scores-btn').style.display = 'none';
     document.getElementById('clrank-btn').style.display = 'none';
-    const ouriHdrOff = document.getElementById('ouri-score-header-btn');
-    if (ouriHdrOff) ouriHdrOff.style.display = 'none';
-    const mathHdrOff = document.getElementById('math-score-header-btn');
-    if (mathHdrOff) mathHdrOff.style.display = 'none';
+    document.getElementById('battle-btn').style.display = 'none';
     document.getElementById('ranking-content').innerHTML =
       '<p class="ranking-login-note">ログインするとランキングが表示されます</p>';
   }
@@ -1257,7 +1334,7 @@ async function doLogout() {
   localStorage.removeItem('muto_avatar');
   localStorage.removeItem('muto_frame');
   authToken = null; authUser = null; authEmail = null;
-  authAvatar = '🐸'; authFrame = 'default'; authPoints = 0;
+  authAvatar = '🐸'; authFrame = 'default'; authPoints = 0; authLifetimePoints = 0;
   updateAuthBar();
 }
 
@@ -1372,7 +1449,7 @@ async function submitPrediction() {
   const res  = await fetch('/api/test/predict', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({prediction:pred, bet}) });
   const data = await res.json();
   if (data.error) { msg.style.color='red'; msg.textContent=data.error; return; }
-  authPoints = data.points;
+  authPoints = data.points; authLifetimePoints = data.lifetime_points || authLifetimePoints;
   updateAuthBar();
   msg.textContent=''; await loadTestState();
 }
@@ -1387,7 +1464,7 @@ async function submitPredictionChange() {
   const res  = await fetch('/api/test/predict', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({prediction:pred, bet}) });
   const data = await res.json();
   if (data.error) { msg.style.color='red'; msg.textContent=data.error; return; }
-  authPoints = data.points;
+  authPoints = data.points; authLifetimePoints = data.lifetime_points || authLifetimePoints;
   updateAuthBar();
   msg.style.color='var(--teal)'; msg.textContent='変更しました！';
   await loadTestState();
@@ -1401,7 +1478,7 @@ async function submitScore() {
   const res  = await fetch('/api/test/score', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({score:val}) });
   const data = await res.json();
   if (data.error) { msg.style.color='red'; msg.textContent=data.error; return; }
-  authPoints = data.points ?? authPoints;
+  authPoints = data.points ?? authPoints; authLifetimePoints = data.lifetime_points ?? authLifetimePoints;
   updateAuthBar();
   msg.textContent=''; await loadTestState();
 }
@@ -1414,7 +1491,7 @@ async function submitScoreEdit() {
   const res  = await fetch('/api/test/score', { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body:JSON.stringify({score:val}) });
   const data = await res.json();
   if (data.error) { msg.style.color='red'; msg.textContent=data.error; return; }
-  authPoints = data.points ?? authPoints;
+  authPoints = data.points ?? authPoints; authLifetimePoints = data.lifetime_points ?? authLifetimePoints;
   updateAuthBar();
   msg.style.color='var(--teal)'; msg.textContent='修正しました！';
   await loadTestState();
@@ -1451,7 +1528,7 @@ function applyPasswordLogin(data) {
   authEmail  = '';
   authAvatar = data.avatar || '🐸';
   authFrame  = data.frame  || 'default';
-  authPoints = data.points || 0;
+  authPoints = data.points || 0; authLifetimePoints = data.lifetime_points || 0;
   authUnlockedAvatars = data.unlockedAvatars || [];
   localStorage.setItem('muto_session',           data.token);
   localStorage.setItem('muto_user',              data.username);
@@ -1585,6 +1662,10 @@ function openAvatarModal() {
   selectedAvatar = authAvatar;
   selectedFrame  = authFrame;
   document.getElementById('username-input').value = authUser || '';
+  const spEl = document.getElementById('modal-season-pts');
+  const ltEl = document.getElementById('modal-lifetime-pts');
+  if (spEl) spEl.textContent = authPoints.toLocaleString() + 'pt';
+  if (ltEl) ltEl.textContent = authLifetimePoints.toLocaleString() + 'pt';
   const prev = document.getElementById('avatar-preview');
   prev.textContent = selectedAvatar;
   applyFrame(prev, selectedFrame);
@@ -1788,6 +1869,213 @@ async function viewSurveyResults() {
     w.document.close();
   } catch(e) { alert('通信エラー: ' + e.message); }
 }
+// ── バトルイベント ────────────────────────────────────────────
+async function openBattleModal() {
+  lockScroll();
+  document.getElementById('battle-modal-bg').classList.add('open');
+  await loadBattleContent();
+}
+function closeBattleModal() {
+  unlockScroll();
+  document.getElementById('battle-modal-bg').classList.remove('open');
+}
+document.getElementById('battle-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeBattleModal();
+});
+
+const BATTLE_SUBJ_LABEL = { eigo: '英語', ouri: '応物', math: '応数', kakougaku: '加工学' };
+
+async function loadBattleContent() {
+  const el = document.getElementById('battle-content');
+  el.innerHTML = '<p style="color:var(--dim)">読み込み中…</p>';
+  try {
+    const [mine, all] = await Promise.all([
+      fetch('/api/battles/mine', { headers: { 'Authorization': authToken } }).then(r => r.json()),
+      fetch('/api/battles').then(r => r.json())
+    ]);
+
+    let html = '';
+
+    // 自分のバトル
+    if (Array.isArray(mine) && mine.length > 0) {
+      const b = mine[0];
+      const isP1   = b.p1_name === authUser;
+      const myBet  = isP1 ? (b.p1_bet || 0) : (b.p2_bet || 0);
+      const opName = isP1 ? b.p2_name : b.p1_name;
+      const opBet  = isP1 ? (b.p2_bet || 0) : (b.p1_bet || 0);
+      const subj   = BATTLE_SUBJ_LABEL[b.subject] || b.subject;
+      html += `<div class="battle-card">`;
+      html += `<div style="font-size:.7rem;color:var(--dim);margin-bottom:8px">🎯 あなたのバトル — <strong style="color:var(--amber)">${subj}</strong></div>`;
+      html += `<div class="battle-vs">
+        <div class="battle-player">
+          <div class="battle-player-name">${esc(tu(authUser))}</div>
+          <div class="battle-player-bet">${myBet.toLocaleString()}pt 賭け中</div>
+        </div>
+        <div class="battle-vs-label">VS</div>
+        <div class="battle-player">
+          <div class="battle-player-name">${esc(tu(opName))}</div>
+          <div class="battle-player-bet">${opBet.toLocaleString()}pt 賭け中</div>
+        </div>
+      </div>`;
+      if (b.status === 'open') {
+        html += `<div class="battle-row" style="margin-top:4px">
+          <input id="battle-bet-input" type="number" min="0" placeholder="賭け金" value="${myBet || ''}"
+            style="width:90px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.9rem">
+          <span style="color:var(--dim)">pt</span>
+          <button onclick="submitBattleBet(${b.id})"
+            style="padding:6px 14px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit">賭ける</button>
+        </div>
+        <div style="font-size:.7rem;color:var(--dim);margin-top:4px">所持pt: ${authPoints.toLocaleString()}pt</div>`;
+      } else if (b.status === 'settled') {
+        if (b.winner_name) {
+          const won = b.winner_name === authUser;
+          html += `<div style="margin-top:6px;font-weight:700;font-size:1rem;color:${won ? 'var(--teal)' : 'var(--rose)'}">${won ? '🏆 勝利！' : '💀 敗北'}</div>`;
+          html += `<div style="font-size:.75rem;color:var(--dim)">勝者: ${esc(tu(b.winner_name))}</div>`;
+        } else {
+          html += `<div style="margin-top:6px;font-size:.85rem;color:var(--amber)">🤝 引き分け — ベット返還済み</div>`;
+        }
+      }
+      html += `</div>`;
+    } else {
+      html += `<p style="color:var(--dim);font-size:.85rem">現在あなたのバトルはありません</p>`;
+    }
+
+    // 全バトル一覧
+    if (Array.isArray(all) && all.length > 0) {
+      const bySubj = {};
+      all.forEach(b => { (bySubj[b.subject] = bySubj[b.subject] || []).push(b); });
+      Object.entries(bySubj).forEach(([subj, list]) => {
+        const label = BATTLE_SUBJ_LABEL[subj] || subj;
+        html += `<div style="font-size:.72rem;color:var(--dim);margin:12px 0 5px">📋 全バトル — ${label}</div>`;
+        html += `<div class="table-scroll"><table class="ranking-table">
+          <thead><tr><th>選手1</th><th></th><th>選手2</th><th>状態</th></tr></thead><tbody>`;
+        list.forEach(b => {
+          const p1w = b.winner_name === b.p1_name, p2w = b.winner_name === b.p2_name;
+          const st  = b.status === 'settled' ? (b.winner_name ? '確定' : '引き分け') : '受付中';
+          const stC = b.status === 'settled' ? 'var(--teal)' : 'var(--dim)';
+          html += `<tr>
+            <td style="${p1w ? 'color:var(--teal);font-weight:700' : ''}">${esc(tu(b.p1_name))}
+              ${b.p1_bet ? `<span style="color:var(--amber);font-size:.7rem"> ${b.p1_bet.toLocaleString()}pt</span>` : ''}</td>
+            <td style="color:var(--dim);font-size:.78rem;padding:4px 2px">vs</td>
+            <td style="${p2w ? 'color:var(--teal);font-weight:700' : ''}">${esc(tu(b.p2_name))}
+              ${b.p2_bet ? `<span style="color:var(--amber);font-size:.7rem"> ${b.p2_bet.toLocaleString()}pt</span>` : ''}</td>
+            <td style="font-size:.7rem;color:${stC}">${st}</td>
+          </tr>`;
+        });
+        html += `</tbody></table></div>`;
+      });
+    }
+
+    el.innerHTML = html;
+  } catch(e) {
+    el.innerHTML = '<p style="color:var(--muted)">読み込みエラー</p>';
+  }
+}
+
+async function submitBattleBet(battleId) {
+  const input  = document.getElementById('battle-bet-input');
+  const amount = parseInt(input?.value);
+  if (isNaN(amount) || amount < 0) { alert('賭け金を入力してください'); return; }
+  try {
+    const res  = await fetch(`/api/battles/${battleId}/bet`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ amount })
+    });
+    const data = await res.json();
+    if (data.ok) { await loadBattleContent(); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+
+// ── バナー ────────────────────────────────────────────────
+async function loadBanners() {
+  try {
+    const data = await fetch('/api/banners').then(r => r.json());
+    if (!Array.isArray(data) || !data.length) return;
+    const panel  = document.getElementById('notif-panel');
+    const header = panel.querySelector('.notif-header');
+    let newCount = 0;
+    data.slice().reverse().forEach(b => {
+      const div = document.createElement('div');
+      div.className = 'notif-item' + (b.is_new ? ' notif-new' : '');
+      div.innerHTML = `<div class="notif-item-date">${esc(b.date||'')}</div><div class="notif-item-title">${esc(b.title)}</div><div class="notif-item-body">${b.body}</div>`;
+      header.after(div);
+      if (b.is_new) newCount++;
+    });
+    const badge = document.getElementById('notif-badge');
+    if (badge && newCount) badge.textContent = parseInt(badge.textContent||0) + newCount;
+  } catch(e) {}
+}
+async function adminAddBanner() {
+  const title = prompt('バナータイトル');
+  if (!title) return;
+  const body  = prompt('バナー本文（HTMLタグ可）');
+  if (!body) return;
+  const date  = prompt('日付 (YYYY-MM-DD)', new Date().toISOString().slice(0,10));
+  try {
+    const res  = await fetch('/api/admin/banners', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ title, body, date, is_new: true })
+    });
+    const data = await res.json();
+    if (data.ok) { alert('✅ バナーを追加しました（ページリロードで反映）'); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function adminCreateBattles() {
+  const subject = prompt('教科コードを入力\neigo / ouri / math / kakougaku');
+  if (!subject) return;
+  if (!confirm(`「${BATTLE_SUBJ_LABEL[subject] || subject}」のバトルを作成します。\n既存のopen状態バトルは削除されます。`)) return;
+  try {
+    const res  = await fetch('/api/admin/battles/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      let msg = `✅ ${data.pairs.length}ペア作成\n`;
+      data.pairs.forEach(([a, b]) => { msg += `  ${a}  vs  ${b}\n`; });
+      if (data.bye) msg += `\n（${data.bye} は今回バイ）`;
+      alert(msg);
+    } else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function adminSettleBattles() {
+  const subject = prompt('決着教科コードを入力\neigo / ouri / math / kakougaku');
+  if (!subject) return;
+  if (!confirm(`「${BATTLE_SUBJ_LABEL[subject] || subject}」のバトルを決着しますか？`)) return;
+  try {
+    const res  = await fetch('/api/admin/battles/settle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      let msg = '✅ 決着完了\n\n';
+      data.results.forEach(r => { msg += r.result + '\n'; });
+      alert(msg);
+    } else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function resetSeasonPoints() {
+  if (!confirm('シーズンポイントを全員リセットしますか？この操作は取り消せません。')) return;
+  try {
+    const res = await fetch('/api/admin/reset-season-points', {
+      method: 'POST',
+      headers: { 'Authorization': authToken }
+    });
+    const data = await res.json();
+    if (data.ok) { alert('✅ シーズンポイントをリセットしました'); await reloadAdminContent(); }
+    else alert('❌ エラー: ' + (data.error || 'unknown'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
 async function grantAll() {
   const input = prompt('全プレイヤーに配布するポイント数を入力');
   const amount = parseInt(input);
@@ -1881,7 +2169,7 @@ async function openMembersModal() {
   const data = await res.json();
   if (!Array.isArray(data)) { el.innerHTML = 'エラー'; return; }
   el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
-      <thead><tr><th>#</th><th>名前</th><th>ポイント</th><th>賭け金</th></tr></thead>
+      <thead><tr><th>#</th><th>名前</th><th>🏆シーズンpt</th><th>賭け金</th></tr></thead>
       <tbody>${data.map((u, i) => `
         <tr>
           <td class="rank-num${Number(u.rank)<=3?' top':''}">${u.rank}</td>
@@ -1892,7 +2180,7 @@ async function openMembersModal() {
               ${u.title ? `<br>${titleBadge(u)}` : ''}
             </span>
           </td>
-          <td class="rank-score">${(u.points||0).toLocaleString()}pt</td>
+          <td class="rank-score">${(u.season_points!=null?u.season_points:u.points||0).toLocaleString()}pt</td>
           <td style="text-align:center;color:var(--amber)">${u.test_bet != null ? u.test_bet.toLocaleString()+'pt' : '―'}</td>
         </tr>`).join('')}
       </tbody>
@@ -2149,8 +2437,24 @@ function _clrankRenderBoard() {
     board.appendChild(l);
   });
 
-  // 配置済みブロック
+  // 確定済みブロック（Y=確定スコア位置に固定、X=保存済み or 自動展開）
+  const _confEntries = Object.entries(_clrankConfirmed);
+  _confEntries.forEach(([name, score], idx) => {
+    const isSel = _clrankSel === name && _clrankSelBoard;
+    const b = document.createElement('div');
+    b.className = 'clrank-block clrank-block-conf' + (isSel ? ' selected' : '');
+    const savedX = _clrankPositions[name]?.x;
+    const autoX = _confEntries.length <= 1 ? 50 : 10 + (80 / (_confEntries.length - 1)) * idx;
+    b.style.left = (savedX != null ? savedX : autoX) + '%';
+    b.style.top  = _scoreToTop(score) + '%';
+    b.textContent = name;
+    b.addEventListener('click', e => { e.stopPropagation(); _clrankBlockTap(name); });
+    board.appendChild(b);
+  });
+
+  // 未確定の配置済みブロック
   Object.entries(_clrankPositions).forEach(([name, pos]) => {
+    if (_clrankConfirmed[name] != null) return; // 確定済みは上で描画済み
     const isSel = _clrankSel === name && _clrankSelBoard;
     const b = document.createElement('div');
     b.className = 'clrank-block' + (isSel ? ' selected' : '');
@@ -2195,7 +2499,10 @@ function _clrankRenderConfirmed() {
   const el = document.getElementById('clrank-confirmed-items');
   if (!el) return;
   el.innerHTML = Object.entries(_clrankConfirmed).sort((a,b) => b[1]-a[1])
-    .map(([n,s]) => `<span style="font-size:.65rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.28);border-radius:4px;padding:1px 5px;white-space:nowrap">${esc(n)}:${s}点 <span onclick="clrankRemoveConfirm('${n.replace(/'/g,"\\'")}')" style="cursor:pointer;opacity:.55">✕</span></span>`).join('');
+    .map(([n,s]) => {
+      const ns = n.replace(/'/g,"\\'");
+      return `<span style="font-size:.65rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.28);border-radius:4px;padding:1px 5px;white-space:nowrap;cursor:pointer" onclick="clrankEditConfirm('${ns}')">${esc(n)}:${s}点 ✏️ <span onclick="event.stopPropagation();clrankRemoveConfirm('${ns}')" style="cursor:pointer;opacity:.55">✕</span></span>`;
+    }).join('');
 }
 
 function _clrankRenderAdminMs() {}
@@ -2216,11 +2523,16 @@ function clrankBoardTap(e) {
 // ── ブロックタップ（選択 or プールに戻す） ─────────────────────
 function _clrankBlockTap(name) {
   if (_clrankSel === name && _clrankSelBoard) {
-    // 2度目のタップ → プールに戻す
-    delete _clrankPositions[name];
-    _clrankSel = null; _clrankSelBoard = false;
+    if (_clrankConfirmed[name] != null) {
+      // 確定済みはプールに戻せない → 選択解除のみ
+      _clrankSel = null; _clrankSelBoard = false;
+    } else {
+      // 2度目のタップ → プールに戻す
+      delete _clrankPositions[name];
+      _clrankSel = null; _clrankSelBoard = false;
+      _saveClrankPositions();
+    }
     _clrankRenderAll();
-    _saveClrankPositions();
     return;
   }
   _clrankSel = name; _clrankSelBoard = true;
@@ -2272,6 +2584,27 @@ async function clrankRemoveConfirm(name) {
     delete _clrankConfirmed[name];
     _clrankRenderAll();
   } catch(e) {}
+}
+async function clrankEditConfirm(name) {
+  const current = _clrankConfirmed[name];
+  const input = prompt(`${name} の合計点を変更（現在: ${current}点）`, current);
+  if (input === null) return;
+  const total = parseInt(input);
+  if (isNaN(total) || total < 0) { alert('有効な点数を入力してください'); return; }
+  try {
+    await fetch('/api/class-rank/confirm', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ name, total })
+    });
+    _clrankConfirmed[name] = total;
+    const scores = Object.values(_clrankConfirmed);
+    if (scores.length) {
+      const step = _clrankMaxScore > 200 ? 50 : 25;
+      _clrankMinScore = Math.max(0, Math.floor(Math.min(...scores) / step) * step);
+    }
+    _clrankRenderAll();
+  } catch(e) { alert('通信エラー'); }
 }
 
 
@@ -2376,7 +2709,7 @@ async function loadTicker() {
     const data = await res.json();
     if (!Array.isArray(data) || !data[0]) return;
     const leader = data[0];
-    const pt = leader.points || 0;
+    const pt = leader.season_points != null ? leader.season_points : (leader.points || 0);
     const msgFn = LEADER_MSGS[Math.floor(Math.random() * LEADER_MSGS.length)];
     const text = msgFn(esc(tu(leader.username)), pt);
     const wrap = document.getElementById('ticker-wrap');
@@ -2438,7 +2771,7 @@ supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
       initSurveyBanner();
     } else if (event === 'SIGNED_OUT') {
       if (!localStorage.getItem('muto_session')) {
-        authToken = null; authUser = null; authEmail = null; authPoints = 0;
+        authToken = null; authUser = null; authEmail = null; authPoints = 0; authLifetimePoints = 0;
       }
     }
     updateAuthBar();
