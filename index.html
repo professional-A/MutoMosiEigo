@@ -696,7 +696,6 @@ h1{
       <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
       <button onclick="restorePointsManual()" style="background:#0f766e;color:#fff;border:none;font-weight:700">♻️ ポイント復元</button>
       <button onclick="debugPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔍 DB確認</button>
-      <button onclick="applyTitles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">🏷️ 称号適用</button>
       <button onclick="resetSeasonPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔄 シーズンリセット</button>
       <button id="reg-lock-btn" onclick="toggleRegistrationLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🚫 新規登録制限</button>
       <button id="lock-btn" onclick="toggleSiteLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🔒 アクセス制限</button>
@@ -2271,30 +2270,6 @@ async function restoreSeasonPoints() {
       await reloadAdminContent();
     } else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー: ' + e.message); }
-}
-async function applyTitles() {
-  const TITLES = [
-    { username: '福澤',        title: 'おっぱいラーメン',                              title_class: 'title-masami' },
-    { username: '田中謙佑',    title: 'ちょおちょおちょお',                             title_class: 'title-tanaka' },
-    { username: '高橋ヒロト',  title: 'ほりきた',                                       title_class: 'title-hiroto' },
-    { username: 'はせがわ',    title: '多頭飼い',                                       title_class: 'title-hasegawa' },
-    { username: 'professional-A', title: '女使われ/こゆこゆ中…/寝落ち通話でイヤホン口の中', title_class: 'title-pro' },
-    { username: '波多野裏技',  title: 'ハンタウイルス',                                 title_class: 'title-hatano' },
-    { username: 'honari',      title: 'じゃあいいよぉもう',                             title_class: 'title-honari' },
-    { username: 'ミッツ',      title: 'そもそもそんなこと言ってるけど、',               title_class: 'title-mitts' },
-  ];
-  const results = [];
-  for (const t of TITLES) {
-    const res = await fetch('/api/admin/set-title', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify(t)
-    });
-    const d = await res.json();
-    results.push(`${t.username}: ${d.updated > 0 ? '✅' : '❌'}`);
-  }
-  alert('称号適用完了\n' + results.join('\n'));
-  await reloadAdminContent();
 }
 async function debugPoints() {
   try {
