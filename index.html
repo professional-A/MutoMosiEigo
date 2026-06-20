@@ -695,6 +695,7 @@ h1{
     <div class="modal-btns" style="margin-top:12px;flex-shrink:0;flex-wrap:wrap;gap:8px">
       <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
       <button onclick="restorePointsManual()" style="background:#0f766e;color:#fff;border:none;font-weight:700">♻️ ポイント復元</button>
+      <button onclick="debugPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔍 DB確認</button>
       <button onclick="resetSeasonPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔄 シーズンリセット</button>
       <button id="reg-lock-btn" onclick="toggleRegistrationLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🚫 新規登録制限</button>
       <button id="lock-btn" onclick="toggleSiteLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🔒 アクセス制限</button>
@@ -2268,6 +2269,14 @@ async function restoreSeasonPoints() {
       alert('✅ 復元完了\n\n' + lines);
       await reloadAdminContent();
     } else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+async function debugPoints() {
+  try {
+    const res = await fetch('/api/admin/debug-points', { headers: { 'Authorization': authToken } });
+    const data = await res.json();
+    if (!Array.isArray(data)) { alert('エラー: ' + JSON.stringify(data)); return; }
+    alert(data.map(u => `${u.username}: points=${u.points} season=${u.season_points} bet=${u.test_bet}`).join('\n'));
   } catch(e) { alert('通信エラー: ' + e.message); }
 }
 async function restorePointsManual() {

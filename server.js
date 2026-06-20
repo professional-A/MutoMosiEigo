@@ -743,6 +743,13 @@ app.post('/api/admin/restore-season-points', auth, async (req, res) => {
   res.json({ ok: true, users: rows });
 });
 
+// 管理者：ポイント確認（デバッグ用）
+app.get('/api/admin/debug-points', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { rows } = await pool.query('SELECT username, points, season_points, test_bet FROM users ORDER BY username');
+  res.json(rows);
+});
+
 // 管理者：ポイント一括設定（リセット前の値を復元）
 app.post('/api/admin/restore-points-manual', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
