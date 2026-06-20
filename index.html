@@ -2289,6 +2289,9 @@ async function restorePointsManual() {
     const data = await res.json();
     if (data.ok) {
       alert('✅ 復元完了\n\n' + data.results.join('\n') + '\n\n--- DB上のユーザー名 ---\n' + (data.dbUsers||[]).join(', '));
+      // 自分の表示ポイントをリフレッシュ
+      const me = await fetch('/api/me', { headers: { 'Authorization': authToken } }).then(r => r.json()).catch(()=>({}));
+      if (me.lifetime_points != null) { authLifetimePoints = me.lifetime_points; updateAuthBar(); }
       await reloadAdminContent();
     } else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー: ' + e.message); }
