@@ -744,6 +744,18 @@ app.post('/api/admin/restore-season-points', auth, async (req, res) => {
   res.json({ ok: true, users: rows });
 });
 
+// 管理者：称号設定
+app.post('/api/admin/set-title', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { username, title, title_class } = req.body;
+  if (!username) return res.status(400).json({ error: 'usernameが必要' });
+  const { rowCount } = await pool.query(
+    'UPDATE users SET title=$1, title_class=$2 WHERE username=$3',
+    [title || null, title_class || null, username]
+  );
+  res.json({ ok: true, updated: rowCount });
+});
+
 // 管理者：ポイント確認（デバッグ用）
 app.get('/api/admin/debug-points', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
