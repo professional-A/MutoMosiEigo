@@ -690,10 +690,24 @@ h1{
       <button onclick="viewSurveyResults()" style="background:#0ea5e9;color:#fff;border:none;font-weight:700">📊 アンケート結果</button>
       <button onclick="awardWorstFrame()" style="background:#ff3333;color:#fff;border:none;font-weight:700">🔴 1位に付与</button>
       <button onclick="awardBakaFrame()" style="background:linear-gradient(90deg,#ff00ff,#ff6600);color:#fff;border:none;font-weight:700">🔥 下位3フレーム付与</button>
+      <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
       <button onclick="adminAddBanner()" style="background:#1e3320;color:#86efac;border:1px solid #4ade80;font-weight:700">📢 バナー追加</button>
       <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
       <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- 試験日程モーダル -->
+<div class="modal-bg" id="schedule-modal-bg">
+  <div class="modal" style="width:min(460px,95vw);max-height:90vh;display:flex;flex-direction:column">
+    <button onclick="closeScheduleModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2>📅 試験日程管理</h2>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;flex-shrink:0">設定日以降、その試験のテストが自動でアーカイブされます</p>
+    <div id="schedule-content" style="flex:1;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:8px"></div>
+    <div class="modal-btns" style="margin-top:12px;flex-shrink:0">
+      <button onclick="closeScheduleModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
 </div>
@@ -1012,6 +1026,99 @@ let selectedSubject = null;
 let activeExam = "すべて";
 let showArchived = false;
 
+// ── 試験日程・自動アーカイブ ──────────────────────────────────
+async function loadExamSchedule() {
+  try {
+    const data = await fetch('/api/exam-schedule').then(r => r.json());
+    _examSchedule = {};
+    if (Array.isArray(data)) {
+      data.forEach(row => { _examSchedule[row.subject + '||' + row.exam] = row.archive_after; });
+    }
+  } catch(e) {}
+  applyExamArchive();
+  renderFolders();
+}
+
+function applyExamArchive() {
+  const today = new Date().toISOString().slice(0, 10);
+  tests.forEach(t => {
+    const key = t.subject + '||' + t.exam;
+    const d = _examSchedule[key];
+    if (d && today >= d) t.archived = true;
+  });
+}
+
+function openScheduleModal() {
+  lockScroll();
+  _schedulePairs = [...new Map(
+    tests.map(t => [t.subject + '||' + t.exam, { subject: t.subject, exam: t.exam }])
+  ).values()];
+  const el = document.getElementById('schedule-content');
+  el.innerHTML = _schedulePairs.map((p, i) => {
+    const val = _examSchedule[p.subject + '||' + p.exam] || '';
+    const archived = val && new Date().toISOString().slice(0,10) >= val;
+    return `<div style="background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
+      <div style="font-size:.72rem;color:var(--dim);margin-bottom:4px">${esc(p.exam)}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-size:.9rem;font-weight:600;flex:1">${esc(p.subject)}</span>
+        ${archived ? '<span style="font-size:.65rem;color:var(--teal)">📦 アーカイブ中</span>' : ''}
+        <input type="date" id="sch-${i}" value="${val}"
+          style="padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+        <button onclick="saveSchedule(${i})"
+          style="padding:4px 12px;border:1px solid var(--teal);border-radius:5px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.75rem;cursor:pointer;font-family:inherit;white-space:nowrap">保存</button>
+        ${val ? `<button onclick="clearSchedule(${i})" style="padding:4px 8px;border:1px solid var(--line);border-radius:5px;background:none;color:var(--dim);font-size:.72rem;cursor:pointer;font-family:inherit">解除</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+  document.getElementById('schedule-modal-bg').classList.add('open');
+}
+
+function closeScheduleModal() {
+  unlockScroll();
+  document.getElementById('schedule-modal-bg').classList.remove('open');
+}
+document.getElementById('schedule-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeScheduleModal();
+});
+
+async function saveSchedule(idx) {
+  const p = _schedulePairs[idx];
+  const input = document.getElementById('sch-' + idx);
+  const archive_after = input?.value || null;
+  if (!archive_after) { alert('日付を選択してください'); return; }
+  try {
+    const res = await fetch('/api/admin/exam-schedule', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject: p.subject, exam: p.exam, archive_after })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      _examSchedule[p.subject + '||' + p.exam] = archive_after;
+      applyExamArchive();
+      renderFolders();
+      if (input) { input.style.borderColor = 'var(--teal)'; setTimeout(() => { input.style.borderColor = ''; }, 1500); }
+      openScheduleModal();
+    } else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function clearSchedule(idx) {
+  const p = _schedulePairs[idx];
+  try {
+    await fetch('/api/admin/exam-schedule', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject: p.subject, exam: p.exam, archive_after: null })
+    });
+    delete _examSchedule[p.subject + '||' + p.exam];
+    tests.forEach(t => { if (t.subject === p.subject && t.exam === p.exam) delete t.archived; });
+    applyExamArchive();
+    renderFolders();
+    openScheduleModal();
+  } catch(e) { alert('通信エラー'); }
+}
+
 // ── テーマ ────────────────────────────────────────────────
 const THEME_LABELS = { navy:'ネイビー', purple:'パープル', forest:'フォレスト', charcoal:'チャコール' };
 function applyTheme(key) {
@@ -1161,11 +1268,14 @@ document.getElementById("exam-filters").addEventListener("click", e => {
 loadTheme();
 loadBanners();
 
+let _examSchedule = {};
+let _schedulePairs = [];
+
 fetch("tests.json")
   .then(r => r.json())
   .then(data => {
     tests = data;
-    renderFolders();
+    loadExamSchedule();
   })
   .catch(() => {
     document.getElementById("folder-grid").innerHTML =
@@ -2690,7 +2800,7 @@ async function submitSurvey() {
     unlockScroll();
     document.getElementById('survey-modal-bg').classList.remove('open');
     document.getElementById('survey-banner').style.display = 'none';
-    setTimeout(() => alert('😼 ひろとアイコンをゲットしました！'), 100);
+    showPointToast('😼 ひろとアイコンをゲットしました！');
   } catch(e) { msg.style.color='red'; msg.textContent='通信エラー: ' + e.message; }
 }
 

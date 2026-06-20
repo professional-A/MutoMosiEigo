@@ -75,6 +75,15 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS math_score       INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS kakougaku_score  INTEGER`).catch(()=>{});
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS exam_schedule (
+      id            SERIAL PRIMARY KEY,
+      subject       TEXT NOT NULL,
+      exam          TEXT NOT NULL,
+      archive_after TEXT,
+      UNIQUE(subject, exam)
+    )
+  `).catch(()=>{});
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS banners (
       id         SERIAL PRIMARY KEY,
       date       TEXT,
@@ -770,6 +779,25 @@ app.post('/api/admin/unlock', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   siteLocked = false;
   await pool.query("INSERT INTO settings (key, value) VALUES ('site_locked','false') ON CONFLICT (key) DO UPDATE SET value='false'");
+  res.json({ ok: true });
+});
+
+// ── 試験日程 ──────────────────────────────────────────────────
+app.get('/api/exam-schedule', async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM exam_schedule');
+  res.json(rows);
+});
+
+app.post('/api/admin/exam-schedule', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { subject, exam, archive_after } = req.body;
+  if (!subject || !exam) return res.status(400).json({ error: 'subject, examが必要' });
+  await pool.query(
+    `INSERT INTO exam_schedule (subject, exam, archive_after)
+     VALUES ($1, $2, $3)
+     ON CONFLICT (subject, exam) DO UPDATE SET archive_after = $3`,
+    [subject, exam, archive_after || null]
+  );
   res.json({ ok: true });
 });
 
