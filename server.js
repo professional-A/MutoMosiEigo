@@ -763,7 +763,7 @@ app.post('/api/admin/restore-points-manual', auth, async (req, res) => {
   const results = [];
   for (const [username, pts] of Object.entries(DATA)) {
     const { rowCount } = await pool.query(
-      'UPDATE users SET points = $1, season_points = $1 WHERE username = $2',
+      'UPDATE users SET points = $1 WHERE username = $2',
       [pts, username]
     );
     results.push(`${username}: ${pts}pt (${rowCount > 0 ? '✅' : '❌ 未マッチ'})`);
