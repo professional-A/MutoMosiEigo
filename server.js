@@ -123,6 +123,7 @@ async function initDB() {
   await pool.query(`UPDATE users SET title='そもそもそんなこと言ってるけど、', title_class='title-mitts' WHERE username='ミッツ'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='ママぁ～',           title_class='title-kawakami' WHERE username='川上晃弥'`).catch(()=>{});
   await pool.query(`UPDATE users SET title=NULL, title_class=NULL WHERE username IN ('honari2','seijuro_dummy')`).catch(()=>{});
+  await pool.query(`UPDATE users SET title='おっぱいラーメン', title_class='title-masami' WHERE username='福澤'`).catch(()=>{});
   await pool.query(`UPDATE users SET ouri_score=36 WHERE username='波多野裏技' AND (ouri_score IS NULL OR ouri_score=0)`).catch(()=>{});
   await pool.query(`DELETE FROM users WHERE username='honari2'`).catch(()=>{});
   await pool.query(`UPDATE users SET title='当麻村の中学生', title_class='title-shimesaba' WHERE username='SHIMESABA'`).catch(()=>{});
