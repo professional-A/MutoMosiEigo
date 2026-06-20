@@ -732,6 +732,14 @@ app.post('/api/admin/reset-season-points', auth, async (req, res) => {
   res.json({ ok: true });
 });
 
+// 管理者：シーズンポイントをlifetimeから復元
+app.post('/api/admin/restore-season-points', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  await pool.query('UPDATE users SET season_points = points');
+  const { rows } = await pool.query('SELECT username, season_points FROM users ORDER BY season_points DESC');
+  res.json({ ok: true, users: rows });
+});
+
 // 管理者：全プレイヤー一斉ポイント配布
 app.post('/api/admin/grant-all', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });

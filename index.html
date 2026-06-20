@@ -693,15 +693,16 @@ h1{
     <h2 style="flex-shrink:0">登録ユーザー一覧 <span id="admin-count" style="font-size:.8rem;color:var(--muted);font-weight:400"></span></h2>
     <div id="admin-content" style="flex:1;overflow-y:auto;min-height:0;padding-right:2px"></div>
     <div class="modal-btns" style="margin-top:12px;flex-shrink:0;flex-wrap:wrap;gap:8px">
+      <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
+      <button onclick="restoreSeasonPoints()" style="background:#0f766e;color:#fff;border:none;font-weight:700">♻️ ポイント復元</button>
+      <button onclick="resetSeasonPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔄 シーズンリセット</button>
       <button id="lock-btn" onclick="toggleSiteLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🔒 アクセス制限</button>
       <button id="score-lock-btn" onclick="toggleScoreLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">✏️ 得点入力締め切り</button>
       <button onclick="grantAll()" style="background:#7c3aed;color:#fff;border:none;font-weight:700">🎁 全員配布</button>
-      <button onclick="resetSeasonPoints()" style="background:#0f766e;color:#fff;border:none;font-weight:700">🔄 シーズンリセット</button>
       <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 配分</button>
       <button onclick="viewSurveyResults()" style="background:#0ea5e9;color:#fff;border:none;font-weight:700">📊 アンケート結果</button>
       <button onclick="awardWorstFrame()" style="background:#ff3333;color:#fff;border:none;font-weight:700">🔴 1位に付与</button>
       <button onclick="awardBakaFrame()" style="background:linear-gradient(90deg,#ff00ff,#ff6600);color:#fff;border:none;font-weight:700">🔥 下位3フレーム付与</button>
-      <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
       <button onclick="adminAddBanner()" style="background:#1e3320;color:#86efac;border:1px solid #4ade80;font-weight:700">📢 バナー追加</button>
       <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
       <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
@@ -968,9 +969,7 @@ h1{
       </div>
       <button onclick="openSurveyModal()" style="padding:9px 22px;border:none;border-radius:99px;background:var(--teal);color:#0a1626;font-family:inherit;font-size:.9rem;font-weight:700;cursor:pointer;white-space:nowrap">回答する →</button>
     </div>
-    <div id="survey-done-banner" style="display:none;margin-top:20px;background:rgba(70,214,196,.08);border:1px solid var(--line);border-radius:14px;padding:12px 18px;font-size:.85rem;color:var(--muted)">
-      😼 アンケート回答済み！ひろとアイコンをゲットしました
-    </div>
+    <div id="survey-done-banner" style="display:none"></div>
 
     <details style="margin-top:20px" id="contact-details">
       <summary style="
@@ -2257,8 +2256,23 @@ async function resetSeasonPoints() {
       headers: { 'Authorization': authToken }
     });
     const data = await res.json();
-    if (data.ok) { alert('✅ シーズンポイントをリセットしました'); await reloadAdminContent(); }
+    if (data.ok) { showToast('シーズンポイントをリセットしました'); await reloadAdminContent(); }
     else alert('❌ エラー: ' + (data.error || 'unknown'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+async function restoreSeasonPoints() {
+  if (!confirm('各メンバーのシーズンポイントを累計ポイントから復元しますか？')) return;
+  try {
+    const res = await fetch('/api/admin/restore-season-points', {
+      method: 'POST',
+      headers: { 'Authorization': authToken }
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const lines = data.users.map(u => `${u.username}: ${u.season_points}pt`).join('\n');
+      alert('✅ 復元完了\n\n' + lines);
+      await reloadAdminContent();
+    } else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー: ' + e.message); }
 }
 async function grantAll() {
