@@ -2279,7 +2279,7 @@ async function restorePointsManual() {
     });
     const data = await res.json();
     if (data.ok) {
-      alert('✅ 復元完了\n\n' + data.results.join('\n'));
+      alert('✅ 復元完了\n\n' + data.results.join('\n') + '\n\n--- DB上のユーザー名 ---\n' + (data.dbUsers||[]).join(', '));
       await reloadAdminContent();
     } else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー: ' + e.message); }

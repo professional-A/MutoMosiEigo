@@ -760,15 +760,18 @@ app.post('/api/admin/restore-points-manual', auth, async (req, res) => {
     'honari': 5000,
     'seijuro_dummy': 4000,
   };
+  // DB の全ユーザー名を取得してデバッグ情報として返す
+  const { rows: allUsers } = await pool.query('SELECT id, username FROM users');
   const results = [];
   for (const [username, pts] of Object.entries(DATA)) {
     const { rowCount } = await pool.query(
-      'UPDATE users SET points = $1, season_points = 0 WHERE username = $2',
+      'UPDATE users SET points = $1, season_points = 0 WHERE LOWER(username) = LOWER($2)',
       [pts, username]
     );
-    results.push(`${username}: ${pts}pt (${rowCount > 0 ? '✅' : '❌ 未マッチ'})`);
+    results.push(`${username}: ${pts}pt → ${rowCount > 0 ? '✅' : '❌ 未マッチ'}`);
   }
-  res.json({ ok: true, results });
+  const dbNames = allUsers.map(u => u.username);
+  res.json({ ok: true, results, dbUsers: dbNames });
 });
 
 // 管理者：全プレイヤー一斉ポイント配布
