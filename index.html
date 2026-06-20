@@ -2851,19 +2851,8 @@ async function _submitScore(label, endpoint) {
 async function submitOuriScore() { await _submitScore('応用物理', '/api/ouri/score'); }
 async function submitMathScore() { await _submitScore('応用数学', '/api/math/score'); }
 
-// ── アンケート ───────────────────────────────────────────
-async function initSurveyBanner() {
-  if (!authToken) return;
-  try {
-    const res  = await fetch('/api/survey/me', { headers: { 'Authorization': authToken } });
-    const data = await res.json();
-    if (data.submitted) {
-      document.getElementById('survey-done-banner').style.display = 'block';
-    } else {
-      document.getElementById('survey-banner').style.display = 'flex';
-    }
-  } catch(e) {}
-}
+// ── アンケート（終了済み）───────────────────────────────────────────
+async function initSurveyBanner() { /* アンケート終了 */ }
 async function openSurveyModal() {
   if (authToken) {
     const res  = await fetch('/api/survey/me', { headers: { 'Authorization': authToken } });
