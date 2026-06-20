@@ -752,6 +752,7 @@ app.post('/api/admin/restore-points-manual', auth, async (req, res) => {
     'はせがわ': 25140,
     'やー': 21100,
     'MCsho': 13600,
+    'MCSho': 13600,
     'ちんこうや': 17700,
     'SHIMESABA': 15800,
     'Shochan': 8000,
