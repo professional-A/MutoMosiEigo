@@ -696,6 +696,7 @@ h1{
       <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
       <button onclick="restoreSeasonPoints()" style="background:#0f766e;color:#fff;border:none;font-weight:700">♻️ ポイント復元</button>
       <button onclick="resetSeasonPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔄 シーズンリセット</button>
+      <button id="reg-lock-btn" onclick="toggleRegistrationLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🚫 新規登録制限</button>
       <button id="lock-btn" onclick="toggleSiteLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🔒 アクセス制限</button>
       <button id="score-lock-btn" onclick="toggleScoreLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">✏️ 得点入力締め切り</button>
       <button onclick="grantAll()" style="background:#7c3aed;color:#fff;border:none;font-weight:700">🎁 全員配布</button>
@@ -2309,16 +2310,24 @@ async function awardBakaFrame() {
 }
 
 let _siteLocked = false;
+let _registrationLocked = false;
 async function updateLockBtn() {
   try {
     const res = await fetch('/api/site-status');
     const data = await res.json();
     _siteLocked = data.locked;
+    _registrationLocked = data.registrationLocked;
   } catch(e) {}
   const btn = document.getElementById('lock-btn');
-  if (!btn) return;
-  btn.textContent = _siteLocked ? '🔓 制限解除' : '🔒 アクセス制限';
-  btn.style.background = _siteLocked ? '#16a34a' : '#dc2626';
+  if (btn) {
+    btn.textContent = _siteLocked ? '🔓 制限解除' : '🔒 アクセス制限';
+    btn.style.background = _siteLocked ? '#16a34a' : '#dc2626';
+  }
+  const rBtn = document.getElementById('reg-lock-btn');
+  if (rBtn) {
+    rBtn.textContent = _registrationLocked ? '✅ 新規登録を再開' : '🚫 新規登録制限';
+    rBtn.style.background = _registrationLocked ? '#16a34a' : '#dc2626';
+  }
 }
 async function toggleSiteLock() {
   const endpoint = _siteLocked ? '/api/admin/unlock' : '/api/admin/lock';
@@ -2342,6 +2351,17 @@ async function updateScoreLockBtn() {
   if (!btn) return;
   btn.textContent = _scoreLocked ? '✏️ 得点入力を再開' : '✏️ 得点入力締め切り';
   btn.style.background = _scoreLocked ? '#16a34a' : '#dc2626';
+}
+async function toggleRegistrationLock() {
+  const label = _registrationLocked ? '新規登録を再開' : '新規登録を制限（既存ユーザーはログイン可）';
+  if (!confirm(`${label}しますか？`)) return;
+  try {
+    const endpoint = _registrationLocked ? '/api/admin/unlock-registration' : '/api/admin/lock-registration';
+    const res  = await fetch(endpoint, { method:'POST', headers:{'Authorization':authToken} });
+    const data = await res.json();
+    if (data.ok) await updateLockBtn();
+    else alert('エラー: ' + (data.error || 'unknown'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
 }
 async function toggleScoreLock() {
   const endpoint = _scoreLocked ? '/api/admin/unlock-score' : '/api/admin/lock-score';
