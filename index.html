@@ -768,6 +768,7 @@ h1{
   <div class="clrank-ph">
     <span style="font-weight:700;font-size:.86rem;white-space:nowrap;color:#d4e8ff">🏆 クラス順位予測</span>
     <span id="clrank-hint" style="flex:1;font-size:.66rem;color:rgba(70,214,196,.8);padding:0 8px;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap"></span>
+    <button onclick="openClrankConfirmPanel()" style="padding:4px 10px;border:1px solid var(--teal);border-radius:6px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.78rem;cursor:pointer;font-family:inherit;flex-shrink:0">📝 合計点入力</button>
     <button onclick="closeClrankPage()" style="padding:4px 10px;border:1px solid rgba(255,255,255,.15);border-radius:6px;background:none;color:var(--dim);font-size:.78rem;cursor:pointer;font-family:inherit;flex-shrink:0">✕ 閉じる</button>
   </div>
   <!-- 2Dボード -->
@@ -775,17 +776,30 @@ h1{
     <div class="clrank-yaxis" id="clrank-yaxis"></div>
     <div class="clrank-board" id="clrank-board" onclick="clrankBoardTap(event)"></div>
   </div>
-  <!-- プール＋確定入力 -->
+  <!-- プール -->
   <div class="clrank-pool-area">
-    <div style="display:flex;flex-wrap:wrap;align-items:center;gap:5px;margin-bottom:2px">
+    <div style="display:flex;align-items:center;gap:6px;margin-bottom:2px">
       <span style="font-size:.62rem;color:var(--dim);white-space:nowrap">プール: <span id="clrank-pool-count">0</span>人</span>
-      <span style="font-size:.62rem;color:var(--dim);white-space:nowrap;margin-left:6px">📌 確定点:</span>
-      <span id="clrank-confirmed-items" style="display:contents"></span>
-      <input id="clrank-conf-name" type="text" placeholder="名前" style="width:60px;padding:2px 5px;border:1px solid var(--line);border-radius:4px;background:#0d1f36;color:var(--fg);font-size:.72rem;font-family:inherit">
-      <input id="clrank-conf-score" type="number" min="0" max="1000" placeholder="点" style="width:46px;padding:2px 5px;border:1px solid var(--line);border-radius:4px;background:#0d1f36;color:var(--fg);font-size:.72rem;font-family:inherit">
-      <button onclick="clrankAddConfirm()" style="padding:2px 8px;border:1px solid var(--teal);border-radius:4px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.68rem;cursor:pointer;font-family:inherit">確定</button>
     </div>
     <div class="clrank-pool-row" id="clrank-pool-inner"></div>
+  </div>
+  <!-- 合計点入力パネル -->
+  <div id="clrank-conf-panel" style="display:none;position:fixed;inset:0;z-index:3000;background:rgba(0,0,0,.55);backdrop-filter:blur(2px)" onclick="if(event.target===this)closeClrankConfirmPanel()">
+    <div style="position:absolute;bottom:0;left:0;right:0;max-height:75vh;overflow-y:auto;background:#0d1f36;border-top:1px solid var(--line);border-radius:16px 16px 0 0;padding:14px 14px 24px">
+      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:12px">
+        <span style="font-weight:700;font-size:.88rem;color:#d4e8ff">📌 合計点確定ユーザー</span>
+        <button onclick="closeClrankConfirmPanel()" style="padding:3px 10px;border:1px solid rgba(255,255,255,.15);border-radius:6px;background:none;color:var(--dim);font-size:.8rem;cursor:pointer;font-family:inherit">✕ 閉じる</button>
+      </div>
+      <!-- 確定済みリスト -->
+      <div id="clrank-confirmed-items" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:14px;min-height:20px"></div>
+      <!-- 追加フォーム -->
+      <div style="display:flex;flex-wrap:wrap;align-items:center;gap:6px;border-top:1px solid var(--line);padding-top:12px">
+        <span style="font-size:.7rem;color:var(--dim);white-space:nowrap">新規追加:</span>
+        <input id="clrank-conf-name" type="text" placeholder="名前" style="width:70px;padding:4px 6px;border:1px solid var(--line);border-radius:4px;background:#0a172b;color:var(--fg);font-size:.78rem;font-family:inherit">
+        <input id="clrank-conf-score" type="number" min="0" max="1000" placeholder="点" style="width:56px;padding:4px 6px;border:1px solid var(--line);border-radius:4px;background:#0a172b;color:var(--fg);font-size:.78rem;font-family:inherit">
+        <button onclick="clrankAddConfirm()" style="padding:4px 12px;border:1px solid var(--teal);border-radius:4px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.74rem;cursor:pointer;font-family:inherit">確定</button>
+      </div>
+    </div>
   </div>
 </div>
 
@@ -2789,11 +2803,24 @@ function _clrankRenderHint() {
 function _clrankRenderConfirmed() {
   const el = document.getElementById('clrank-confirmed-items');
   if (!el) return;
-  el.innerHTML = Object.entries(_clrankConfirmed).sort((a,b) => b[1]-a[1])
-    .map(([n,s]) => {
-      const ns = n.replace(/'/g,"\\'");
-      return `<span style="font-size:.65rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.28);border-radius:4px;padding:1px 5px;white-space:nowrap;cursor:pointer" onclick="clrankEditConfirm('${ns}')">${esc(n)}:${s}点 ✏️ <span onclick="event.stopPropagation();clrankRemoveConfirm('${ns}')" style="cursor:pointer;opacity:.55">✕</span></span>`;
-    }).join('');
+  const entries = Object.entries(_clrankConfirmed).sort((a,b) => b[1]-a[1]);
+  if (!entries.length) {
+    el.innerHTML = '<span style="font-size:.68rem;color:var(--dim)">まだ確定ユーザーはいません</span>';
+    return;
+  }
+  el.innerHTML = entries.map(([n,s]) => {
+    const ns = n.replace(/'/g,"\\'");
+    return `<span style="display:inline-flex;align-items:center;gap:4px;font-size:.72rem;background:rgba(70,214,196,.1);border:1px solid rgba(70,214,196,.28);border-radius:6px;padding:3px 8px;white-space:nowrap;cursor:pointer" onclick="clrankEditConfirm('${ns}')">${esc(n)}: ${s}点 <span onclick="event.stopPropagation();clrankRemoveConfirm('${ns}')" style="cursor:pointer;opacity:.55;font-size:.8rem">✕</span></span>`;
+  }).join('');
+}
+
+function openClrankConfirmPanel() {
+  const p = document.getElementById('clrank-conf-panel');
+  if (p) p.style.display = '';
+}
+function closeClrankConfirmPanel() {
+  const p = document.getElementById('clrank-conf-panel');
+  if (p) p.style.display = 'none';
 }
 
 function _clrankRenderAdminMs() {}
