@@ -1082,23 +1082,28 @@ h1{
       <div class="race-groups" id="race-groups"></div>
       <table class="race-table">
         <thead><tr>
-          <th>#</th><th>名前</th><th>グループ</th><th>テスト内</th><th>外部</th><th>合計</th><th>シーズンpt</th><th>ライバル差</th>
+          <th>#</th><th>名前</th><th>グループ</th><th>武藤模試</th><th>外部</th><th>合計</th><th>シーズンpt</th><th>ライバル差</th>
         </tr></thead>
         <tbody id="race-table-body"></tbody>
       </table>
       <div id="race-self-report" style="display:none">
         <div class="race-report">
-          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">外部勉強:</span>
-          <input id="race-manual-h" type="number" min="0" placeholder="時間" style="width:56px">
-          <input id="race-manual-m" type="number" min="0" max="59" placeholder="分" style="width:48px">
-          <input id="race-manual-tool" type="text" placeholder="使用ツール（例: 教科書）" style="width:130px">
-          <button onclick="submitRaceManual()">📚 記録</button>
+          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📖 武藤模試:</span>
+          <input id="race-muto-h" type="number" min="0" placeholder="時間" style="width:52px">
+          <input id="race-muto-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
+          <input id="race-muto-tool" type="text" placeholder="内容（例: Unit1語彙）" style="width:140px">
+          <button onclick="submitRaceAll()">💾 記録</button>
         </div>
         <div class="race-report" style="margin-top:6px">
-          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">ゲーム時間:</span>
-          <input id="race-game-h" type="number" min="0" placeholder="時間" style="width:56px">
-          <input id="race-game-m" type="number" min="0" max="59" placeholder="分" style="width:48px">
-          <button onclick="submitRaceGame()">🎮 記録</button>
+          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📚 外部勉強:</span>
+          <input id="race-manual-h" type="number" min="0" placeholder="時間" style="width:52px">
+          <input id="race-manual-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
+          <input id="race-manual-tool" type="text" placeholder="内容（例: 教科書p.12）" style="width:140px">
+        </div>
+        <div class="race-report" style="margin-top:6px">
+          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">🎮 ゲーム:</span>
+          <input id="race-game-h" type="number" min="0" placeholder="時間" style="width:52px">
+          <input id="race-game-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
         </div>
       </div>
     </div>
@@ -1333,12 +1338,10 @@ function openSubject(s) {
   document.getElementById("subject-view").style.display = "block";
   document.getElementById("subject-nav-title").textContent = s;
   renderExamFilter();
-  startTestTimer();
   renderGroups();
 }
 
 function closeSubject() {
-  stopTestTimer();
   selectedSubject = null;
   document.getElementById("subject-view").style.display = "none";
   document.getElementById("folder-view").style.display = "block";
@@ -3049,7 +3052,6 @@ async function clrankEditConfirm(name) {
 
 // ── レース ─────────────────────────────────────────────────────
 let _currentRace = null;
-let _testTimerStart = null;
 
 async function loadRaceSection() {
   try {
@@ -3093,9 +3095,9 @@ function _renderRace(data) {
   const allMembers = [];
   groups.forEach(g => g.members.forEach(m => {
     const log = logMap[m.user_id] || {};
-    const autoMin = Math.floor((log.auto_seconds || 0) / 60);
+    const mutoMin = log.muto_minutes || 0;
     const manMin  = log.manual_minutes || 0;
-    allMembers.push({ ...m, autoMin, manMin, total: autoMin + manMin, gname: g.name, log });
+    allMembers.push({ ...m, mutoMin, manMin, total: mutoMin + manMin, gname: g.name, log });
   }));
   allMembers.sort((a, b) => b.total - a.total);
 
@@ -3114,7 +3116,7 @@ function _renderRace(data) {
       <td style="color:var(--dim)">${i + 1}</td>
       <td style="font-weight:${isMe ? '700' : '400'};color:${isMe ? 'var(--teal)' : 'var(--fg)'}">${esc(m.username)}${isMe ? ' 👤' : ''}</td>
       <td style="color:var(--dim);font-size:.7rem">${esc(m.gname)}</td>
-      <td>${_fmtSec(m.log.auto_seconds || 0)}</td>
+      <td>${m.mutoMin > 0 ? _fmtMin(m.mutoMin) : '—'}</td>
       <td>${m.manMin > 0 ? _fmtMin(m.manMin) : '—'}</td>
       <td style="font-weight:700;color:#d4e8ff">${_fmtMin(m.total)}</td>
       <td style="color:var(--amber);font-size:.72rem">${spt}</td>
@@ -3128,6 +3130,11 @@ function _renderRace(data) {
   document.getElementById('race-self-report').style.display = (inRace && isActive) ? '' : 'none';
   if (inRace && myRow) {
     const log = myRow.log;
+    if (log.muto_minutes > 0) {
+      document.getElementById('race-muto-h').value = Math.floor(log.muto_minutes / 60);
+      document.getElementById('race-muto-m').value = log.muto_minutes % 60;
+    }
+    if (log.muto_tool) document.getElementById('race-muto-tool').value = log.muto_tool;
     if (log.manual_minutes > 0) {
       document.getElementById('race-manual-h').value = Math.floor(log.manual_minutes / 60);
       document.getElementById('race-manual-m').value = log.manual_minutes % 60;
@@ -3149,65 +3156,28 @@ function toggleRaceBody() {
   arrow.textContent = collapsed ? '▼' : '▶';
 }
 
-async function submitRaceManual() {
+async function submitRaceAll() {
   if (!_currentRace || !authToken) return;
-  const h = parseInt(document.getElementById('race-manual-h').value) || 0;
-  const m = parseInt(document.getElementById('race-manual-m').value) || 0;
-  const tool = document.getElementById('race-manual-tool').value.trim();
-  const totalMin = h * 60 + m;
+  const mutoMin  = (parseInt(document.getElementById('race-muto-h').value) || 0) * 60
+                 + (parseInt(document.getElementById('race-muto-m').value) || 0);
+  const mutoTool = document.getElementById('race-muto-tool').value.trim();
+  const manMin   = (parseInt(document.getElementById('race-manual-h').value) || 0) * 60
+                 + (parseInt(document.getElementById('race-manual-m').value) || 0);
+  const manTool  = document.getElementById('race-manual-tool').value.trim();
+  const gameMin  = (parseInt(document.getElementById('race-game-h').value) || 0) * 60
+                 + (parseInt(document.getElementById('race-game-m').value) || 0);
   await fetch(`/api/races/${_currentRace.id}/study`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-    body: JSON.stringify({ auto_seconds: 0, manual_minutes: totalMin, manual_tool: tool, game_minutes: -1 })
+    body: JSON.stringify({
+      muto_minutes: mutoMin, muto_tool: mutoTool,
+      manual_minutes: manMin, manual_tool: manTool,
+      game_minutes: gameMin
+    })
   });
-  showPointToast('📚 外部勉強時間を記録しました');
+  showPointToast('💾 勉強時間を記録しました');
   loadRaceSection();
 }
-
-async function submitRaceGame() {
-  if (!_currentRace || !authToken) return;
-  const h = parseInt(document.getElementById('race-game-h').value) || 0;
-  const m = parseInt(document.getElementById('race-game-m').value) || 0;
-  await fetch(`/api/races/${_currentRace.id}/study`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-    body: JSON.stringify({ auto_seconds: 0, manual_minutes: -1, game_minutes: h * 60 + m })
-  });
-  showPointToast('🎮 ゲーム時間を記録しました');
-  loadRaceSection();
-}
-
-// テスト滞在タイマー（openSubject/closeSubject に hook）
-// レースに教科が設定されている場合、その教科を開いているときのみ計測
-function startTestTimer() {
-  if (_testTimerStart) return;
-  if (!_currentRace) return;
-  if (_currentRace.subject && selectedSubject !== _currentRace.subject) return;
-  _testTimerStart = Date.now();
-}
-async function stopTestTimer() {
-  if (!_testTimerStart || !_currentRace || !authToken) { _testTimerStart = null; return; }
-  const sec = Math.floor((Date.now() - _testTimerStart) / 1000);
-  _testTimerStart = null;
-  if (sec < 10) return;
-  await fetch(`/api/races/${_currentRace.id}/study`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-    body: JSON.stringify({ auto_seconds: sec, manual_minutes: -1, game_minutes: -1 })
-  }).catch(() => {});
-}
-
-window.addEventListener('beforeunload', () => {
-  if (_testTimerStart && _currentRace && authToken) {
-    const sec = Math.floor((Date.now() - _testTimerStart) / 1000);
-    if (sec >= 10) {
-      navigator.sendBeacon(`/api/races/${_currentRace.id}/study`,
-        new Blob([JSON.stringify({ auto_seconds: sec, manual_minutes: -1, game_minutes: -1 })],
-          { type: 'application/json' }));
-    }
-    _testTimerStart = null;
-  }
-});
 
 // ── レース発行モーダル ───────────────────────────────────────────
 let _raceModalUsers = [];

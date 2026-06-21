@@ -194,6 +194,8 @@ async function initDB() {
   `).catch(()=>{});
   await pool.query(`ALTER TABLE races ADD COLUMN IF NOT EXISTS subject TEXT DEFAULT ''`).catch(()=>{});
   await pool.query(`ALTER TABLE races ADD COLUMN IF NOT EXISTS status  TEXT DEFAULT 'active'`).catch(()=>{});
+  await pool.query(`ALTER TABLE race_study_log ADD COLUMN IF NOT EXISTS muto_minutes INTEGER DEFAULT 0`).catch(()=>{});
+  await pool.query(`ALTER TABLE race_study_log ADD COLUMN IF NOT EXISTS muto_tool    TEXT    DEFAULT ''`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS race_bets (
       id             SERIAL PRIMARY KEY,
@@ -1225,22 +1227,27 @@ app.post('/api/admin/races', auth, async (req, res) => {
 });
 
 // 勉強時間ログ更新（ログイン必須）
-// auto_seconds は加算、manual_minutes / manual_tool / game_minutes は上書き
+// muto_minutes/muto_tool/manual_minutes/manual_tool/game_minutes はすべて上書き（-1=変更なし）
 app.put('/api/races/:id/study', auth, async (req, res) => {
   const raceId = parseInt(req.params.id);
   const userId = req.user.id;
-  const { auto_seconds, manual_minutes, manual_tool, game_minutes } = req.body;
+  const { muto_minutes, muto_tool, manual_minutes, manual_tool, game_minutes } = req.body;
   try {
     await pool.query(`
-      INSERT INTO race_study_log(race_id, user_id, auto_seconds, manual_minutes, manual_tool, game_minutes, updated_at)
-      VALUES($1,$2,$3,$4,$5,$6,$7)
+      INSERT INTO race_study_log(race_id, user_id, muto_minutes, muto_tool, manual_minutes, manual_tool, game_minutes, updated_at)
+      VALUES($1,$2,$3,$4,$5,$6,$7,$8)
       ON CONFLICT(race_id, user_id) DO UPDATE SET
-        auto_seconds   = race_study_log.auto_seconds + EXCLUDED.auto_seconds,
-        manual_minutes = COALESCE(NULLIF($4,-1), race_study_log.manual_minutes),
-        manual_tool    = CASE WHEN $4 != -1 THEN $5 ELSE race_study_log.manual_tool END,
-        game_minutes   = COALESCE(NULLIF($6,-1), race_study_log.game_minutes),
-        updated_at     = $7
-    `, [raceId, userId, auto_seconds || 0, manual_minutes ?? -1, manual_tool || '', game_minutes ?? -1, new Date().toISOString()]);
+        muto_minutes   = COALESCE(NULLIF($3,-1), race_study_log.muto_minutes),
+        muto_tool      = CASE WHEN $3 != -1 THEN $4 ELSE race_study_log.muto_tool END,
+        manual_minutes = COALESCE(NULLIF($5,-1), race_study_log.manual_minutes),
+        manual_tool    = CASE WHEN $5 != -1 THEN $6 ELSE race_study_log.manual_tool END,
+        game_minutes   = COALESCE(NULLIF($7,-1), race_study_log.game_minutes),
+        updated_at     = $8
+    `, [raceId, userId,
+        muto_minutes ?? -1, muto_tool || '',
+        manual_minutes ?? -1, manual_tool || '',
+        game_minutes ?? -1,
+        new Date().toISOString()]);
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
