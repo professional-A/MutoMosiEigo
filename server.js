@@ -735,6 +735,19 @@ app.post('/api/admin/grant-points', auth, async (req, res) => {
   res.json({ ok: true, points: dsp(rows[0]), lifetime_points: dp(rows[0]) });
 });
 
+// 管理者：個人ポイント直接設定
+app.post('/api/admin/set-points-user', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { userId, points } = req.body;
+  if (!userId || !Number.isInteger(points) || points < 0) return res.status(400).json({ error: '不正なリクエスト' });
+  const { rows } = await pool.query('SELECT test_bet FROM users WHERE id = $1', [userId]);
+  if (!rows[0]) return res.status(404).json({ error: 'ユーザーが見つかりません' });
+  const newPoints = Math.max(0, points - (rows[0].test_bet || 0));
+  await pool.query('UPDATE users SET points = $1 WHERE id = $2', [newPoints, userId]);
+  const { rows: r } = await pool.query('SELECT points, test_bet, season_points FROM users WHERE id = $1', [userId]);
+  res.json({ ok: true, points: dsp(r[0]), lifetime_points: dp(r[0]) });
+});
+
 // 管理者：シーズンポイントリセット
 app.post('/api/admin/reset-season-points', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });

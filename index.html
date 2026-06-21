@@ -1937,8 +1937,9 @@ async function reloadAdminContent() {
         <div class="admin-stat">賭け金 <span>${u.test_bet != null ? u.test_bet.toLocaleString()+'pt' : '―'}</span></div>
       </div>
       <div class="admin-card-grant">
-        <input type="number" id="grant-amt-${u.id}" value="500" min="1" placeholder="pt">
+        <input type="number" id="grant-amt-${u.id}" value="500" placeholder="pt">
         <button onclick="grantPoints(${u.id})">付与</button>
+        <button onclick="setPoints(${u.id})" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6">設定</button>
       </div>
     </div>`).join('');
 }
@@ -1952,6 +1953,19 @@ async function grantPoints(userId) {
   });
   const data = await res.json();
   if (data.ok) { showPointToast(`+${amt.toLocaleString()}pt 付与完了`); await reloadAdminContent(); }
+}
+async function setPoints(userId) {
+  const amt = parseInt(document.getElementById(`grant-amt-${userId}`).value);
+  if (isNaN(amt) || amt < 0) return;
+  if (!confirm(`このユーザーの個人ポイントを ${amt.toLocaleString()}pt に設定しますか？`)) return;
+  const res = await fetch('/api/admin/set-points-user', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+    body: JSON.stringify({ userId, points: amt })
+  });
+  const data = await res.json();
+  if (data.ok) { showPointToast(`${amt.toLocaleString()}pt に設定完了`); await reloadAdminContent(); }
+  else alert('❌ ' + (data.error || 'エラー'));
 }
 function closeAdminModal() {
   unlockScroll();
