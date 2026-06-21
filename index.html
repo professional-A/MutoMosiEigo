@@ -1193,7 +1193,8 @@ function getProgress(storageKey, totalItems) {
 
 function renderFolders() {
   const subjects = [...new Set(tests.map(t => t.subject))];
-  document.getElementById("folder-grid").innerHTML = subjects.map(s => {
+  const archivedCount = tests.filter(t => t.archived).length;
+  const cards = subjects.map(s => {
     const stests = tests.filter(t => t.subject === s && (!t.archived || showArchived));
     if (!stests.length) return '';
     const allArchived = tests.filter(t => t.subject === s).every(t => t.archived);
@@ -1215,6 +1216,16 @@ function renderFolders() {
       <div class="progress-text">${pct > 0 ? pct + '% 完了' : '未着手'}</div>
     </div>`;
   }).join("");
+
+  let html = cards;
+  if (!cards.trim()) {
+    if (showArchived) {
+      html = '<p style="color:var(--muted);font-size:.85rem;padding:16px 0;text-align:center">試験データがありません</p>';
+    } else if (archivedCount > 0) {
+      html = `<p style="color:var(--muted);font-size:.85rem;padding:16px 0;text-align:center">📦 ${archivedCount} 件がアーカイブ中です。「アーカイブを表示」で確認できます。</p>`;
+    }
+  }
+  document.getElementById("folder-grid").innerHTML = html;
 }
 
 function openSubject(s) {
