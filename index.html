@@ -731,8 +731,6 @@ h1{
       <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
       <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
       <button onclick="openRaceModal()" style="background:#0f2a1a;color:#6ee7b7;border:1px solid #34d399;font-weight:700">🏁 レース発行</button>
-      <button onclick="adminStartRaceBetting()" style="background:#2a1f0a;color:#fbbf24;border:1px solid #f59e0b;font-weight:700">🎲 賭け開始</button>
-      <button onclick="adminSettleRaceBets()" style="background:#1e1a2e;color:#c4b5fd;border:1px solid #8b5cf6;font-weight:700">🏆 賭け決着</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
@@ -1102,18 +1100,6 @@ h1{
           <input id="race-game-m" type="number" min="0" max="59" placeholder="分" style="width:48px">
           <button onclick="submitRaceGame()">🎮 記録</button>
         </div>
-      </div>
-      <!-- 賭けフェーズUI -->
-      <div id="race-bet-section" style="display:none;border-top:1px solid var(--line);padding-top:12px;margin-top:10px">
-        <div style="font-size:.78rem;font-weight:700;color:var(--amber);margin-bottom:8px">🎲 賭けフェーズ開幕！ — シーズンptを使って1位予想に賭けよう</div>
-        <div style="font-size:.72rem;color:var(--dim);margin-bottom:8px">あなたのシーズンpt: <span id="race-bet-mypts" style="color:var(--teal);font-weight:700">―</span></div>
-        <div id="race-bet-targets" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
-        <div class="race-report">
-          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">賭け金:</span>
-          <input id="race-bet-amount" type="number" min="1" placeholder="pt" style="width:80px">
-          <button onclick="submitRaceBet()">🎲 賭ける</button>
-        </div>
-        <div id="race-bet-msg" style="font-size:.72rem;color:var(--teal);margin-top:6px"></div>
       </div>
     </div>
   </div>
@@ -2410,14 +2396,23 @@ async function adminAddBanner() {
 }
 
 async function adminCreateBattles() {
-  const subject = prompt('教科コードを入力\neigo / ouri / math / kakougaku');
+  // 現在のレースを取得して紐づけ
+  let raceId = null, raceName = '';
+  try {
+    const rd = await fetch('/api/races/current').then(r => r.json());
+    if (rd.race) { raceId = rd.race.id; raceName = rd.race.name; }
+  } catch(e) {}
+
+  const subjectChoices = Object.entries(BATTLE_SUBJ_LABEL).map(([k,v]) => `${k} = ${v}`).join('\n');
+  const subject = prompt(`教科コードを入力\n${subjectChoices}${raceName ? `\n\n紐づけるレース: 「${raceName}」` : '\n（現在アクティブなレースなし）'}`);
   if (!subject) return;
-  if (!confirm(`「${BATTLE_SUBJ_LABEL[subject] || subject}」のバトルを作成します。\n既存のopen状態バトルは削除されます。`)) return;
+  const label = BATTLE_SUBJ_LABEL[subject] || subject;
+  if (!confirm(`「${label}」のバトルを作成します。${raceName ? `\nレース「${raceName}」に紐づけます。` : ''}\n既存のopen状態バトルは削除されます。`)) return;
   try {
     const res  = await fetch('/api/admin/battles/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify({ subject })
+      body: JSON.stringify({ subject, race_id: raceId })
     });
     const data = await res.json();
     if (data.ok) {
@@ -3068,14 +3063,12 @@ function _fmtMin(totalMin) {
 }
 function _fmtSec(sec) { return _fmtMin(Math.floor(sec / 60)); }
 
-let _raceBetTargetId = null;
-
 function _renderRace(data) {
-  const { race, groups, study_logs, bets } = data;
+  const { race, groups, study_logs } = data;
   document.getElementById('race-hd-title').textContent = '🏁 ' + race.name;
   const subjectPart = race.subject ? `[${race.subject}]` : '';
   const datePart = [race.start_date, race.end_date].filter(Boolean).join(' 〜 ');
-  const statusLabel = race.status === 'betting' ? ' 🎲賭け中' : race.status === 'closed' ? ' ✅終了' : '';
+  const statusLabel = race.status === 'closed' ? ' ✅終了' : '';
   document.getElementById('race-hd-date').textContent = [subjectPart, datePart].filter(Boolean).join(' ') + statusLabel;
 
   // グループチップ
@@ -3090,11 +3083,6 @@ function _renderRace(data) {
   study_logs.forEach(l => { logMap[l.user_id] = l; });
   const groupMap = {};
   groups.forEach(g => g.members.forEach(m => { groupMap[m.user_id] = g.name; }));
-
-  // 賭け集計: target_user_id → 合計賭け金
-  const betTotals = {};
-  bets.forEach(b => { betTotals[b.target_user_id] = (betTotals[b.target_user_id] || 0) + b.amount; });
-  const myBet = authUserId ? bets.find(b => b.user_id === authUserId) : null;
 
   // 全メンバーを収集してソート
   const allMembers = [];
@@ -3146,68 +3134,6 @@ function _renderRace(data) {
     }
   }
 
-  // 賭けフェーズUI
-  const isBetting = race.status === 'betting';
-  document.getElementById('race-bet-section').style.display = (isBetting && authToken) ? '' : 'none';
-  if (isBetting && authToken) {
-    const mySeasonPt = myRow ? (myRow.season_points || 0) : 0;
-    document.getElementById('race-bet-mypts').textContent = mySeasonPt.toLocaleString() + 'pt';
-    if (myBet) document.getElementById('race-bet-amount').value = myBet.amount;
-    // 賭け対象ボタン（レース参加メンバー）
-    document.getElementById('race-bet-targets').innerHTML = allMembers.map(m => {
-      const total = betTotals[m.user_id] || 0;
-      const isMine = myBet && myBet.target_user_id === m.user_id;
-      const isSelected = _raceBetTargetId === m.user_id;
-      return `<button onclick="selectRaceBetTarget(${m.user_id})" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:.74rem;cursor:pointer;border:1px solid ${isMine||isSelected?'var(--teal)':'var(--line)'};background:${isMine||isSelected?'rgba(70,214,196,.15)':'none'};color:${isMine||isSelected?'var(--teal)':'var(--fg)'}">
-        ${esc(m.username)}${total ? ` <span style="color:var(--amber)">${total.toLocaleString()}pt</span>` : ''}${isMine ? ' ✓' : ''}
-      </button>`;
-    }).join('');
-  }
-}
-
-function selectRaceBetTarget(uid) {
-  _raceBetTargetId = uid;
-  if (_currentRace) loadRaceSection();
-}
-
-async function submitRaceBet() {
-  if (!_currentRace || !authToken || !_raceBetTargetId) {
-    document.getElementById('race-bet-msg').textContent = '賭け対象を選んでください';
-    return;
-  }
-  const amount = parseInt(document.getElementById('race-bet-amount').value);
-  if (!amount || amount <= 0) { document.getElementById('race-bet-msg').textContent = '賭け金を入力してください'; return; }
-  const res = await fetch(`/api/races/${_currentRace.id}/bet`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-    body: JSON.stringify({ target_user_id: _raceBetTargetId, amount })
-  }).then(r => r.json());
-  if (res.ok) {
-    document.getElementById('race-bet-msg').textContent = `✅ 賭けました！残りシーズンpt: ${res.season_points.toLocaleString()}pt`;
-    loadRaceSection();
-  } else {
-    document.getElementById('race-bet-msg').textContent = '❌ ' + (res.error || 'エラー');
-  }
-}
-
-async function adminStartRaceBetting() {
-  if (!_currentRace) { alert('アクティブなレースがありません'); return; }
-  if (!confirm(`「${_currentRace.name}」の賭けフェーズを開始しますか？\n（メンバーがシーズンptで賭けられるようになります）`)) return;
-  const res = await fetch(`/api/admin/races/${_currentRace.id}/close`, {
-    method: 'POST', headers: { Authorization: authToken }
-  }).then(r => r.json());
-  if (res.ok) { showPointToast('🎲 賭けフェーズ開始！'); closeAdminModal(); loadRaceSection(); }
-  else alert('エラー: ' + (res.error || ''));
-}
-
-async function adminSettleRaceBets() {
-  if (!_currentRace) { alert('アクティブなレースがありません'); return; }
-  if (!confirm(`「${_currentRace.name}」の賭けを決着しますか？\n最多勉強時間のメンバーに賭けた人でシーズンptを山分けします。`)) return;
-  const res = await fetch(`/api/admin/races/${_currentRace.id}/settle`, {
-    method: 'POST', headers: { Authorization: authToken }
-  }).then(r => r.json());
-  if (res.ok) { showPointToast('🏆 賭け決着！'); alert(res.result); closeAdminModal(); loadRaceSection(); }
-  else alert('エラー: ' + (res.error || ''));
 }
 
 function toggleRaceBody() {

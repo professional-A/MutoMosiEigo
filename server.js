@@ -102,6 +102,7 @@ async function initDB() {
   `).catch(()=>{});
   await pool.query(`ALTER TABLE banners ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`).catch(()=>{});
   await pool.query(`ALTER TABLE banners ADD COLUMN IF NOT EXISTS author TEXT`).catch(()=>{});
+  await pool.query(`ALTER TABLE battles ADD COLUMN IF NOT EXISTS race_id INTEGER REFERENCES races(id) ON DELETE SET NULL`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS battles (
       id         SERIAL PRIMARY KEY,
@@ -1075,8 +1076,9 @@ app.post('/api/battles/:id/bet', auth, async (req, res) => {
 // バトル作成（管理者）
 app.post('/api/admin/battles/create', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  const { subject } = req.body;
+  const { subject, race_id } = req.body;
   if (!subject) return res.status(400).json({ error: 'subjectが必要' });
+  const raceId = race_id ? parseInt(race_id) : null;
   const { rows: users } = await pool.query(
     `SELECT id, username FROM users WHERE username NOT IN ('seijuro_dummy','honari2') ORDER BY RANDOM()`
   );
@@ -1086,8 +1088,8 @@ app.post('/api/admin/battles/create', auth, async (req, res) => {
   const bye = users.length % 2 === 1 ? users[users.length - 1] : null;
   const now = new Date().toISOString();
   for (const [p1, p2] of pairs) {
-    await pool.query('INSERT INTO battles (subject, p1_id, p2_id, created_at) VALUES ($1, $2, $3, $4)',
-      [subject, p1.id, p2.id, now]);
+    await pool.query('INSERT INTO battles (subject, p1_id, p2_id, race_id, created_at) VALUES ($1, $2, $3, $4, $5)',
+      [subject, p1.id, p2.id, raceId, now]);
   }
   res.json({ ok: true, pairs: pairs.map(([a, b]) => [a.username, b.username]), bye: bye?.username });
 });
