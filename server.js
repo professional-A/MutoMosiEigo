@@ -909,7 +909,7 @@ app.get('/api/banners', async (req, res) => {
 // メンバー投稿（ログイン必須）
 app.post('/api/banners', auth, async (req, res) => {
   const { title, body } = req.body;
-  if (!title || !body) return res.status(400).json({ error: 'titleとbodyが必要' });
+  if (!title) return res.status(400).json({ error: 'titleが必要' });
   const now = new Date().toISOString();
   const { rows } = await pool.query(
     'INSERT INTO banners (date, title, body, is_new, created_at, user_id, author) VALUES ($1,$2,$3,$4,$5,$6,$7) RETURNING id',

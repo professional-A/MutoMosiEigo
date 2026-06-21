@@ -1897,6 +1897,7 @@ async function loadRanking() {
   const res  = await fetch('/api/ranking');
   const data = await res.json();
   const el   = document.getElementById('ranking-content');
+  if (!el) return;
   if (!data.length) {
     el.innerHTML = '<p class="ranking-login-note">まだ誰もスコアを登録していません</p>';
     return;
@@ -2181,7 +2182,7 @@ async function loadBanners() {
 
 async function submitBanner() {
   const text = document.getElementById('notif-post-text').value.trim();
-  if (!text) { showToast('メッセージを入力してください'); return; }
+  if (!text) { showPointToast('メッセージを入力してください'); return; }
   try {
     const res = await fetch('/api/banners', {
       method: 'POST',
@@ -2191,12 +2192,12 @@ async function submitBanner() {
     const data = await res.json();
     if (data.ok) {
       document.getElementById('notif-post-text').value = '';
-      showToast('流しました！');
+      showPointToast('流しました！');
       loadBanners();
     } else {
-      showToast('❌ ' + (data.error || 'エラー'));
+      showPointToast('❌ ' + (data.error || 'エラー'));
     }
-  } catch(e) { showToast('通信エラー'); }
+  } catch(e) { showPointToast('通信エラー'); }
 }
 
 async function deleteBanner(id) {
@@ -2208,12 +2209,12 @@ async function deleteBanner(id) {
     });
     const data = await res.json();
     if (data.ok) {
-      showToast('削除しました');
+      showPointToast('削除しました');
       loadBanners();
     } else {
-      showToast('❌ ' + (data.error || 'エラー'));
+      showPointToast('❌ ' + (data.error || 'エラー'));
     }
-  } catch(e) { showToast('通信エラー'); }
+  } catch(e) { showPointToast('通信エラー'); }
 }
 
 async function adminAddBanner() {
@@ -2229,9 +2230,9 @@ async function adminAddBanner() {
       body: JSON.stringify({ title, body, date, is_new: true })
     });
     const data = await res.json();
-    if (data.ok) { showToast('バナーを追加しました'); loadBanners(); }
-    else showToast('❌ ' + (data.error || 'エラー'));
-  } catch(e) { showToast('通信エラー'); }
+    if (data.ok) { showPointToast('バナーを追加しました'); loadBanners(); }
+    else showPointToast('❌ ' + (data.error || 'エラー'));
+  } catch(e) { showPointToast('通信エラー'); }
 }
 
 async function adminCreateBattles() {
@@ -2281,7 +2282,7 @@ async function resetSeasonPoints() {
       headers: { 'Authorization': authToken }
     });
     const data = await res.json();
-    if (data.ok) { showToast('シーズンポイントをリセットしました'); await reloadAdminContent(); }
+    if (data.ok) { showPointToast('シーズンポイントをリセットしました'); await reloadAdminContent(); }
     else alert('❌ エラー: ' + (data.error || 'unknown'));
   } catch(e) { alert('通信エラー: ' + e.message); }
 }
