@@ -2047,102 +2047,124 @@ async function loadBattleContent() {
   const el = document.getElementById('battle-content');
   el.innerHTML = '<p style="color:var(--dim)">読み込み中…</p>';
   try {
-    const [mine, all] = await Promise.all([
-      fetch('/api/battles/mine', { headers: { 'Authorization': authToken } }).then(r => r.json()),
-      fetch('/api/battles').then(r => r.json())
-    ]);
-
+    const all = await fetch('/api/battles', { headers: { 'Authorization': authToken } }).then(r => r.json());
+    if (!Array.isArray(all) || !all.length) {
+      el.innerHTML = '<p style="color:var(--dim);font-size:.85rem">現在バトルはありません</p>';
+      return;
+    }
+    const bySubj = {};
+    all.forEach(b => { (bySubj[b.subject] = bySubj[b.subject] || []).push(b); });
     let html = '';
-
-    // 自分のバトル
-    if (Array.isArray(mine) && mine.length > 0) {
-      const b = mine[0];
-      const isP1   = b.p1_name === authUser;
-      const myBet  = isP1 ? (b.p1_bet || 0) : (b.p2_bet || 0);
-      const opName = isP1 ? b.p2_name : b.p1_name;
-      const opBet  = isP1 ? (b.p2_bet || 0) : (b.p1_bet || 0);
-      const subj   = BATTLE_SUBJ_LABEL[b.subject] || b.subject;
-      html += `<div class="battle-card">`;
-      html += `<div style="font-size:.7rem;color:var(--dim);margin-bottom:8px">🎯 あなたのバトル — <strong style="color:var(--amber)">${subj}</strong></div>`;
-      html += `<div class="battle-vs">
-        <div class="battle-player">
-          <div class="battle-player-name">${esc(tu(authUser))}</div>
-          <div class="battle-player-bet">${myBet.toLocaleString()}pt 賭け中</div>
-        </div>
-        <div class="battle-vs-label">VS</div>
-        <div class="battle-player">
-          <div class="battle-player-name">${esc(tu(opName))}</div>
-          <div class="battle-player-bet">${opBet.toLocaleString()}pt 賭け中</div>
-        </div>
-      </div>`;
-      if (b.status === 'open') {
-        html += `<div class="battle-row" style="margin-top:4px">
-          <input id="battle-bet-input" type="number" min="0" placeholder="賭け金" value="${myBet || ''}"
-            style="width:90px;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.9rem">
-          <span style="color:var(--dim)">pt</span>
-          <button onclick="submitBattleBet(${b.id})"
-            style="padding:6px 14px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit">賭ける</button>
-        </div>
-        <div style="font-size:.7rem;color:var(--dim);margin-top:4px">所持pt: ${authPoints.toLocaleString()}pt</div>`;
-      } else if (b.status === 'settled') {
-        if (b.winner_name) {
-          const won = b.winner_name === authUser;
-          html += `<div style="margin-top:6px;font-weight:700;font-size:1rem;color:${won ? 'var(--teal)' : 'var(--rose)'}">${won ? '🏆 勝利！' : '💀 敗北'}</div>`;
-          html += `<div style="font-size:.75rem;color:var(--dim)">勝者: ${esc(tu(b.winner_name))}</div>`;
-        } else {
-          html += `<div style="margin-top:6px;font-size:.85rem;color:var(--amber)">🤝 引き分け — ベット返還済み</div>`;
+    Object.entries(bySubj).forEach(([subj, list]) => {
+      const label = BATTLE_SUBJ_LABEL[subj] || subj;
+      html += `<div style="font-size:.72rem;color:var(--dim);margin:8px 0 6px;letter-spacing:.05em">⚔️ ${esc(label)}</div>`;
+      list.forEach(b => {
+        const p1Total = Number(b.p1_bet) || 0;
+        const p2Total = Number(b.p2_bet) || 0;
+        const total   = p1Total + p2Total;
+        const p1Odds  = total > 0 && p1Total > 0 ? (total / p1Total).toFixed(2) : '—';
+        const p2Odds  = total > 0 && p2Total > 0 ? (total / p2Total).toFixed(2) : '—';
+        const isOpen  = b.status === 'open';
+        const p1Win   = b.winner_name === b.p1_name;
+        const p2Win   = b.winner_name === b.p2_name;
+        const myBet   = Number(b.my_bet) || 0;
+        const mySide  = b.my_side;
+        html += `<div class="battle-card">`;
+        // VS 表示
+        html += `<div class="battle-vs">
+          <div class="battle-player" style="${p1Win ? 'color:var(--teal)' : ''}">
+            <div class="battle-player-name">${esc(tu(b.p1_name))}${p1Win ? ' 🏆' : ''}</div>
+            <div style="font-size:.68rem;color:var(--amber);margin-top:2px">${p1Total.toLocaleString()}pt 集計</div>
+            <div style="font-size:.72rem;color:var(--dim)">倍率 ${p1Odds}x</div>
+          </div>
+          <div class="battle-vs-label">VS</div>
+          <div class="battle-player" style="${p2Win ? 'color:var(--teal)' : ''}">
+            <div class="battle-player-name">${p2Win ? '🏆 ' : ''}${esc(tu(b.p2_name))}</div>
+            <div style="font-size:.68rem;color:var(--amber);margin-top:2px">${p2Total.toLocaleString()}pt 集計</div>
+            <div style="font-size:.72rem;color:var(--dim)">倍率 ${p2Odds}x</div>
+          </div>
+        </div>`;
+        if (isOpen && authToken) {
+          // 自分の現在のベット
+          if (myBet > 0) {
+            const sideName = mySide === 1 ? esc(tu(b.p1_name)) : esc(tu(b.p2_name));
+            html += `<div style="font-size:.72rem;color:var(--teal);margin-bottom:6px">✅ ${sideName}派に ${myBet.toLocaleString()}pt 賭け中</div>`;
+          }
+          // ベットフォーム
+          html += `<div class="battle-row">
+            <button onclick="selectBattleSide(${b.id},1)" id="side-btn-${b.id}-1"
+              style="flex:1;padding:6px 4px;border:1px solid ${mySide===1?'var(--teal)':'var(--line)'};border-radius:6px;background:${mySide===1?'rgba(70,214,196,.15)':'var(--bg)'};color:${mySide===1?'var(--teal)':'var(--ink)'};font-size:.78rem;font-weight:${mySide===1?'700':'400'};cursor:pointer;font-family:inherit">
+              ${esc(tu(b.p1_name))}派
+            </button>
+            <button onclick="selectBattleSide(${b.id},2)" id="side-btn-${b.id}-2"
+              style="flex:1;padding:6px 4px;border:1px solid ${mySide===2?'var(--teal)':'var(--line)'};border-radius:6px;background:${mySide===2?'rgba(70,214,196,.15)':'var(--bg)'};color:${mySide===2?'var(--teal)':'var(--ink)'};font-size:.78rem;font-weight:${mySide===2?'700':'400'};cursor:pointer;font-family:inherit">
+              ${esc(tu(b.p2_name))}派
+            </button>
+          </div>
+          <div class="battle-row" style="margin-top:6px">
+            <input id="battle-bet-input-${b.id}" type="number" min="0" placeholder="賭け金" value="${myBet || ''}"
+              style="flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.88rem">
+            <span style="color:var(--dim);flex-shrink:0">pt</span>
+            <button onclick="submitBattleBet(${b.id})"
+              style="padding:6px 14px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;flex-shrink:0">賭ける</button>
+          </div>
+          <div style="font-size:.68rem;color:var(--dim);margin-top:3px">所持: ${authPoints.toLocaleString()}pt　プール合計: ${total.toLocaleString()}pt</div>`;
+        } else if (!isOpen) {
+          const result = b.winner_name
+            ? `🏆 ${esc(tu(b.winner_name))}の勝ち`
+            : '🤝 引き分け';
+          html += `<div style="font-size:.82rem;color:var(--teal);margin-top:4px">${result}</div>`;
+          if (myBet > 0) {
+            const won = (mySide === 1 && p1Win) || (mySide === 2 && p2Win);
+            html += `<div style="font-size:.72rem;color:${won?'var(--teal)':'var(--rose)'};margin-top:2px">あなた: ${won?'🎉 勝ち':'💀 負け'}（${myBet.toLocaleString()}pt 賭け）</div>`;
+          }
         }
-      }
-      html += `</div>`;
-    } else {
-      html += `<p style="color:var(--dim);font-size:.85rem">現在あなたのバトルはありません</p>`;
-    }
-
-    // 全バトル一覧
-    if (Array.isArray(all) && all.length > 0) {
-      const bySubj = {};
-      all.forEach(b => { (bySubj[b.subject] = bySubj[b.subject] || []).push(b); });
-      Object.entries(bySubj).forEach(([subj, list]) => {
-        const label = BATTLE_SUBJ_LABEL[subj] || subj;
-        html += `<div style="font-size:.72rem;color:var(--dim);margin:12px 0 5px">📋 全バトル — ${label}</div>`;
-        html += `<div class="table-scroll"><table class="ranking-table">
-          <thead><tr><th>選手1</th><th></th><th>選手2</th><th>状態</th></tr></thead><tbody>`;
-        list.forEach(b => {
-          const p1w = b.winner_name === b.p1_name, p2w = b.winner_name === b.p2_name;
-          const st  = b.status === 'settled' ? (b.winner_name ? '確定' : '引き分け') : '受付中';
-          const stC = b.status === 'settled' ? 'var(--teal)' : 'var(--dim)';
-          html += `<tr>
-            <td style="${p1w ? 'color:var(--teal);font-weight:700' : ''}">${esc(tu(b.p1_name))}
-              ${b.p1_bet ? `<span style="color:var(--amber);font-size:.7rem"> ${b.p1_bet.toLocaleString()}pt</span>` : ''}</td>
-            <td style="color:var(--dim);font-size:.78rem;padding:4px 2px">vs</td>
-            <td style="${p2w ? 'color:var(--teal);font-weight:700' : ''}">${esc(tu(b.p2_name))}
-              ${b.p2_bet ? `<span style="color:var(--amber);font-size:.7rem"> ${b.p2_bet.toLocaleString()}pt</span>` : ''}</td>
-            <td style="font-size:.7rem;color:${stC}">${st}</td>
-          </tr>`;
-        });
-        html += `</tbody></table></div>`;
+        html += `</div>`;
       });
-    }
-
+    });
     el.innerHTML = html;
+    // サイド選択状態を保持
+    Object.keys(_battleSides).forEach(key => {
+      const [bid, side] = key.split('-');
+      updateSideBtns(parseInt(bid), parseInt(side));
+    });
   } catch(e) {
     el.innerHTML = '<p style="color:var(--muted)">読み込みエラー</p>';
   }
 }
 
+const _battleSides = {};
+function selectBattleSide(battleId, side) {
+  _battleSides[battleId] = side;
+  updateSideBtns(battleId, side);
+}
+function updateSideBtns(battleId, side) {
+  [1,2].forEach(s => {
+    const btn = document.getElementById(`side-btn-${battleId}-${s}`);
+    if (!btn) return;
+    const active = s === side;
+    btn.style.borderColor = active ? 'var(--teal)' : 'var(--line)';
+    btn.style.background  = active ? 'rgba(70,214,196,.15)' : 'var(--bg)';
+    btn.style.color       = active ? 'var(--teal)' : 'var(--ink)';
+    btn.style.fontWeight  = active ? '700' : '400';
+  });
+}
+
 async function submitBattleBet(battleId) {
-  const input  = document.getElementById('battle-bet-input');
+  const input  = document.getElementById(`battle-bet-input-${battleId}`);
   const amount = parseInt(input?.value);
-  if (isNaN(amount) || amount < 0) { alert('賭け金を入力してください'); return; }
+  const side   = _battleSides[battleId];
+  if (!side) { showPointToast('先に派閥を選んでください'); return; }
+  if (isNaN(amount) || amount < 0) { showPointToast('賭け金を入力してください'); return; }
   try {
     const res  = await fetch(`/api/battles/${battleId}/bet`, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify({ amount })
+      body: JSON.stringify({ amount, side })
     });
     const data = await res.json();
-    if (data.ok) { await loadBattleContent(); }
-    else alert('❌ ' + (data.error || 'エラー'));
+    if (data.ok) { authPoints = data.points || authPoints; await loadBattleContent(); }
+    else showPointToast('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー'); }
 }
 
