@@ -249,6 +249,30 @@ h1{
   .modal{padding:20px 16px}
 }
 
+/* レースセクション */
+#race-section{margin:0 0 8px;border:1px solid rgba(70,214,196,.3);border-radius:12px;background:rgba(10,23,40,.7);overflow:hidden}
+.race-hd{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(70,214,196,.15);cursor:pointer;user-select:none}
+.race-hd-title{font-weight:700;font-size:.9rem;color:#d4e8ff;flex:1}
+.race-hd-date{font-size:.68rem;color:var(--dim)}
+.race-body{padding:10px 14px 14px}
+.race-groups{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.race-group-chip{background:rgba(70,214,196,.08);border:1px solid rgba(70,214,196,.22);border-radius:8px;padding:4px 10px;font-size:.72rem;color:var(--teal)}
+.race-group-chip span{color:var(--fg);margin-left:4px}
+.race-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-bottom:10px}
+.race-table th{text-align:left;color:var(--dim);font-weight:600;padding:3px 6px;border-bottom:1px solid var(--line)}
+.race-table td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.04)}
+.race-table tr:last-child td{border-bottom:none}
+.race-table .rank-me{background:rgba(70,214,196,.06)}
+.race-rival{font-size:.68rem;color:var(--rose)}
+.race-rival.ahead{color:var(--teal)}
+.race-report{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:10px;border-top:1px solid var(--line)}
+.race-report input{padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#0a172b;color:var(--fg);font-size:.78rem;font-family:inherit}
+.race-report button{padding:5px 12px;border:1px solid var(--teal);border-radius:6px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.74rem;cursor:pointer;font-family:inherit;white-space:nowrap}
+/* レース発行モーダル */
+#race-modal-bg .modal{width:min(500px,96vw);max-height:90vh;display:flex;flex-direction:column;padding:20px 16px}
+.race-group-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
+.race-group-row input{flex:1;min-width:80px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.84rem;font-family:inherit}
+
 /* クラス順位フルスクリーンページ */
 #clrank-page{display:none;position:fixed;inset:0;z-index:200;background:#050f1e;flex-direction:column;overflow:hidden}
 #clrank-page.open{display:flex}
@@ -703,8 +727,45 @@ h1{
       <button onclick="adminAddBanner()" style="background:#1e3320;color:#86efac;border:1px solid #4ade80;font-weight:700">📢 バナー追加</button>
       <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
       <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
+      <button onclick="openRaceModal()" style="background:#0f2a1a;color:#6ee7b7;border:1px solid #34d399;font-weight:700">🏁 レース発行</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
+  </div>
+</div>
+
+<!-- レース発行モーダル -->
+<div class="modal-bg" id="race-modal-bg">
+  <div class="modal" id="race-modal-inner" style="width:min(500px,96vw);max-height:90vh;display:flex;flex-direction:column;padding:20px 16px">
+    <button onclick="closeRaceModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2 style="flex-shrink:0">🏁 新規レース発行</h2>
+    <div style="overflow-y:auto;flex:1;padding-right:2px">
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+        <div>
+          <label style="font-size:.78rem;color:var(--dim)">レース名</label>
+          <input id="race-name-input" type="text" placeholder="例: 前期末レース" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.9rem;font-family:inherit">
+        </div>
+        <div style="display:flex;gap:10px">
+          <div style="flex:1">
+            <label style="font-size:.78rem;color:var(--dim)">開始日</label>
+            <input id="race-start-input" type="date" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
+          </div>
+          <div style="flex:1">
+            <label style="font-size:.78rem;color:var(--dim)">終了日</label>
+            <input id="race-end-input" type="date" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
+          </div>
+        </div>
+      </div>
+      <div style="font-size:.82rem;font-weight:700;color:var(--teal);margin-bottom:8px">グループ設定</div>
+      <div id="race-modal-groups"></div>
+      <button onclick="raceAddGroup()" style="margin-top:6px;padding:5px 14px;border:1px dashed var(--line);border-radius:6px;background:none;color:var(--dim);font-size:.8rem;cursor:pointer;font-family:inherit">+ グループ追加</button>
+      <div style="font-size:.78rem;color:var(--dim);margin-top:16px;margin-bottom:6px">ユーザー割り当て（グループ番号を選択）</div>
+      <div id="race-modal-users" style="display:flex;flex-direction:column;gap:5px"></div>
+    </div>
+    <div class="modal-btns" style="flex-shrink:0;margin-top:14px">
+      <button onclick="adminCreateRace()" style="background:var(--teal);color:#0a1626;font-weight:700;border:none">🏁 発行</button>
+      <button onclick="closeRaceModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">キャンセル</button>
+    </div>
+    <div id="race-modal-msg" class="modal-msg"></div>
   </div>
 </div>
 
@@ -1000,6 +1061,39 @@ h1{
 </header>
 
 <div class="wrap">
+  <!-- レースセクション -->
+  <div id="race-section" style="display:none">
+    <div class="race-hd" onclick="toggleRaceBody()">
+      <span>🏁</span>
+      <span class="race-hd-title" id="race-hd-title">勉強時間レース</span>
+      <span class="race-hd-date" id="race-hd-date"></span>
+      <span id="race-hd-arrow" style="color:var(--dim);font-size:.8rem">▼</span>
+    </div>
+    <div id="race-body" class="race-body">
+      <div class="race-groups" id="race-groups"></div>
+      <table class="race-table">
+        <thead><tr>
+          <th>#</th><th>名前</th><th>グループ</th><th>テスト内</th><th>外部</th><th>合計</th><th>ライバル差</th>
+        </tr></thead>
+        <tbody id="race-table-body"></tbody>
+      </table>
+      <div id="race-self-report" style="display:none">
+        <div class="race-report">
+          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">外部勉強:</span>
+          <input id="race-manual-h" type="number" min="0" placeholder="時間" style="width:56px">
+          <input id="race-manual-m" type="number" min="0" max="59" placeholder="分" style="width:48px">
+          <input id="race-manual-tool" type="text" placeholder="使用ツール（例: 教科書）" style="width:130px">
+          <button onclick="submitRaceManual()">📚 記録</button>
+        </div>
+        <div class="race-report" style="margin-top:6px">
+          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">ゲーム時間:</span>
+          <input id="race-game-h" type="number" min="0" placeholder="時間" style="width:56px">
+          <input id="race-game-m" type="number" min="0" max="59" placeholder="分" style="width:48px">
+          <button onclick="submitRaceGame()">🎮 記録</button>
+        </div>
+      </div>
+    </div>
+  </div>
   <!-- フォルダビュー（デフォルト） -->
   <div id="folder-view">
     <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
@@ -1230,10 +1324,12 @@ function openSubject(s) {
   document.getElementById("subject-view").style.display = "block";
   document.getElementById("subject-nav-title").textContent = s;
   renderExamFilter();
+  startTestTimer();
   renderGroups();
 }
 
 function closeSubject() {
+  stopTestTimer();
   selectedSubject = null;
   document.getElementById("subject-view").style.display = "none";
   document.getElementById("folder-view").style.display = "block";
@@ -1391,6 +1487,7 @@ let authAvatar = localStorage.getItem('muto_avatar') || '🐸';
 let authFrame  = localStorage.getItem('muto_frame')  || 'default';
 let authPoints = 0;         // シーズンポイント（ランキング表示用）
 let authLifetimePoints = 0; // 累計ポイント（個人ポイント）
+let authUserId = null;
 let authUnlockedAvatars = JSON.parse(localStorage.getItem('muto_unlocked_avatars') || '[]');
 let selectedAvatar = authAvatar;
 let selectedFrame  = authFrame;
@@ -1435,9 +1532,11 @@ function updateAuthBar() {
     document.getElementById('notif-post-section').style.display = 'block';
     loadRanking();
     loadBanners();
+    loadRaceSection();
   } else {
     bar.textContent = 'ログインしていません';
     avEl.style.display = 'none';
+    loadRaceSection();
     btn.textContent = 'Googleでログイン';
     btn.classList.add('primary');
     btn.onclick = loginWithGoogle;
@@ -1739,6 +1838,7 @@ async function syncPasswordUser(token) {
       authFrame           = data.frame  || 'default';
       authPoints          = data.points || 0;
       authLifetimePoints  = data.lifetime_points || 0;
+      authUserId          = data.id || null;
       authUnlockedAvatars = (data.unlockedAvatars && data.unlockedAvatars.length > 0) ? data.unlockedAvatars : (data.avatar === '😼' ? ['😼'] : []);
       localStorage.setItem('muto_avatar',           authAvatar);
       localStorage.setItem('muto_frame',            authFrame);
@@ -1774,6 +1874,7 @@ async function syncUser(token) {
       authFrame           = data.frame  || 'default';
       authPoints          = data.points || 0;
       authLifetimePoints  = data.lifetime_points || 0;
+      authUserId          = data.id || null;
       authUnlockedAvatars = (data.unlockedAvatars && data.unlockedAvatars.length > 0) ? data.unlockedAvatars : (data.avatar === '😼' ? ['😼'] : []);
       localStorage.setItem('muto_avatar',           authAvatar);
       localStorage.setItem('muto_frame',            authFrame);
@@ -2910,6 +3011,244 @@ async function clrankEditConfirm(name) {
   } catch(e) { alert('通信エラー'); }
 }
 
+
+// ── レース ─────────────────────────────────────────────────────
+let _currentRace = null;
+let _testTimerStart = null;
+
+async function loadRaceSection() {
+  try {
+    const data = await fetch('/api/races/current').then(r => r.json());
+    const sec = document.getElementById('race-section');
+    if (!data.race) { if (sec) sec.style.display = 'none'; return; }
+    _currentRace = data.race;
+    if (sec) sec.style.display = '';
+    _renderRace(data);
+  } catch(e) {}
+}
+
+function _fmtMin(totalMin) {
+  const h = Math.floor(totalMin / 60), m = totalMin % 60;
+  return h > 0 ? `${h}h${m > 0 ? m + 'm' : ''}` : `${m}m`;
+}
+function _fmtSec(sec) { return _fmtMin(Math.floor(sec / 60)); }
+
+function _renderRace(data) {
+  const { race, groups, study_logs } = data;
+  document.getElementById('race-hd-title').textContent = '🏁 ' + race.name;
+  const datePart = [race.start_date, race.end_date].filter(Boolean).join(' 〜 ');
+  document.getElementById('race-hd-date').textContent = datePart;
+
+  // グループチップ
+  const gc = document.getElementById('race-groups');
+  gc.innerHTML = groups.map(g => {
+    const names = g.members.map(m => esc(m.username)).join('・');
+    return `<span class="race-group-chip">${esc(g.name)}<span>${names}</span></span>`;
+  }).join('');
+
+  // 各ユーザーの合計分数を計算
+  const logMap = {};
+  study_logs.forEach(l => { logMap[l.user_id] = l; });
+  const groupMap = {}; // user_id → group name
+  groups.forEach(g => g.members.forEach(m => { groupMap[m.user_id] = g.name; }));
+
+  // 全メンバーを収集してソート
+  const allMembers = [];
+  groups.forEach(g => g.members.forEach(m => {
+    const log = logMap[m.user_id] || {};
+    const autoMin = Math.floor((log.auto_seconds || 0) / 60);
+    const manMin  = log.manual_minutes || 0;
+    allMembers.push({ ...m, autoMin, manMin, total: autoMin + manMin, gname: g.name, log });
+  }));
+  allMembers.sort((a, b) => b.total - a.total);
+
+  // 自分の順位
+  const myRow = authUserId ? allMembers.find(m => m.user_id === authUserId) : null;
+  const myTotal = myRow ? myRow.total : -1;
+
+  const tbody = document.getElementById('race-table-body');
+  tbody.innerHTML = allMembers.map((m, i) => {
+    const isMe = m.user_id === authUserId;
+    const prev = allMembers[i - 1];
+    const rivalDiff = prev ? (m.total - prev.total) : null;
+    const rivalHtml = rivalDiff !== null
+      ? `<span class="race-rival${rivalDiff >= 0 ? ' ahead' : ''}">${rivalDiff >= 0 ? '+' : ''}${_fmtMin(rivalDiff)}</span>`
+      : '<span style="color:var(--teal);font-size:.7rem">👑</span>';
+    return `<tr class="${isMe ? 'rank-me' : ''}">
+      <td style="color:var(--dim)">${i + 1}</td>
+      <td style="font-weight:${isMe ? '700' : '400'};color:${isMe ? 'var(--teal)' : 'var(--fg)'}">${esc(m.username)}${isMe ? ' 👤' : ''}</td>
+      <td style="color:var(--dim);font-size:.7rem">${esc(m.gname)}</td>
+      <td>${_fmtSec(m.log.auto_seconds || 0)}</td>
+      <td>${m.manMin > 0 ? _fmtMin(m.manMin) : '—'}</td>
+      <td style="font-weight:700;color:#d4e8ff">${_fmtMin(m.total)}</td>
+      <td>${rivalHtml}</td>
+    </tr>`;
+  }).join('');
+
+  // 自己申告フォーム（ログイン中かつグループ所属）
+  const inRace = authUserId && groupMap[authUserId] != null;
+  document.getElementById('race-self-report').style.display = inRace ? '' : 'none';
+  if (inRace && myRow) {
+    const log = myRow.log;
+    if (log.manual_minutes > 0) {
+      document.getElementById('race-manual-h').value = Math.floor(log.manual_minutes / 60);
+      document.getElementById('race-manual-m').value = log.manual_minutes % 60;
+    }
+    if (log.manual_tool) document.getElementById('race-manual-tool').value = log.manual_tool;
+    if (log.game_minutes > 0) {
+      document.getElementById('race-game-h').value = Math.floor(log.game_minutes / 60);
+      document.getElementById('race-game-m').value = log.game_minutes % 60;
+    }
+  }
+}
+
+function toggleRaceBody() {
+  const body = document.getElementById('race-body');
+  const arrow = document.getElementById('race-hd-arrow');
+  const collapsed = body.style.display === 'none';
+  body.style.display = collapsed ? '' : 'none';
+  arrow.textContent = collapsed ? '▼' : '▶';
+}
+
+async function submitRaceManual() {
+  if (!_currentRace || !authToken) return;
+  const h = parseInt(document.getElementById('race-manual-h').value) || 0;
+  const m = parseInt(document.getElementById('race-manual-m').value) || 0;
+  const tool = document.getElementById('race-manual-tool').value.trim();
+  const totalMin = h * 60 + m;
+  await fetch(`/api/races/${_currentRace.id}/study`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+    body: JSON.stringify({ auto_seconds: 0, manual_minutes: totalMin, manual_tool: tool, game_minutes: -1 })
+  });
+  showPointToast('📚 外部勉強時間を記録しました');
+  loadRaceSection();
+}
+
+async function submitRaceGame() {
+  if (!_currentRace || !authToken) return;
+  const h = parseInt(document.getElementById('race-game-h').value) || 0;
+  const m = parseInt(document.getElementById('race-game-m').value) || 0;
+  await fetch(`/api/races/${_currentRace.id}/study`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+    body: JSON.stringify({ auto_seconds: 0, manual_minutes: -1, game_minutes: h * 60 + m })
+  });
+  showPointToast('🎮 ゲーム時間を記録しました');
+  loadRaceSection();
+}
+
+// テスト滞在タイマー（openSubject/closeSubject に hook）
+function startTestTimer() {
+  if (_testTimerStart) return;
+  _testTimerStart = Date.now();
+}
+async function stopTestTimer() {
+  if (!_testTimerStart || !_currentRace || !authToken) { _testTimerStart = null; return; }
+  const sec = Math.floor((Date.now() - _testTimerStart) / 1000);
+  _testTimerStart = null;
+  if (sec < 10) return;
+  await fetch(`/api/races/${_currentRace.id}/study`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+    body: JSON.stringify({ auto_seconds: sec, manual_minutes: -1, game_minutes: -1 })
+  }).catch(() => {});
+}
+
+window.addEventListener('beforeunload', () => {
+  if (_testTimerStart && _currentRace && authToken) {
+    const sec = Math.floor((Date.now() - _testTimerStart) / 1000);
+    if (sec >= 10) {
+      navigator.sendBeacon(`/api/races/${_currentRace.id}/study`,
+        new Blob([JSON.stringify({ auto_seconds: sec, manual_minutes: -1, game_minutes: -1 })],
+          { type: 'application/json' }));
+    }
+    _testTimerStart = null;
+  }
+});
+
+// ── レース発行モーダル ───────────────────────────────────────────
+let _raceModalUsers = [];
+let _raceGroupCount = 0;
+
+async function openRaceModal() {
+  closeAdminModal();
+  _raceGroupCount = 0;
+  document.getElementById('race-modal-groups').innerHTML = '';
+  document.getElementById('race-modal-users').innerHTML = '<span style="font-size:.8rem;color:var(--dim)">読み込み中…</span>';
+  document.getElementById('race-modal-msg').textContent = '';
+  document.getElementById('race-name-input').value = '';
+  document.getElementById('race-modal-bg').style.display = 'flex';
+  const data = await fetch('/api/admin/users', { headers: { Authorization: authToken } }).then(r => r.json());
+  _raceModalUsers = data.users || data || [];
+  raceAddGroup(); raceAddGroup();
+  _renderRaceModalUsers();
+}
+function closeRaceModal() { document.getElementById('race-modal-bg').style.display = 'none'; }
+
+function raceAddGroup() {
+  _raceGroupCount++;
+  const idx = _raceGroupCount;
+  const wrap = document.getElementById('race-modal-groups');
+  const row = document.createElement('div');
+  row.className = 'race-group-row';
+  row.id = `race-group-row-${idx}`;
+  row.innerHTML = `<span style="font-size:.76rem;color:var(--dim);white-space:nowrap">組${idx}</span>
+    <input type="text" id="race-group-name-${idx}" placeholder="グループ名（例: チームA）" value="チーム${String.fromCharCode(64 + idx)}">
+    <button onclick="document.getElementById('race-group-row-${idx}').remove();_renderRaceModalUsers()" style="padding:3px 8px;border:1px solid var(--line);border-radius:4px;background:none;color:var(--rose);cursor:pointer;font-size:.76rem;font-family:inherit">✕</button>`;
+  wrap.appendChild(row);
+  _renderRaceModalUsers();
+}
+
+function _renderRaceModalUsers() {
+  const wrap = document.getElementById('race-modal-users');
+  const groupRows = Array.from(document.getElementById('race-modal-groups').querySelectorAll('.race-group-row'));
+  const groupOpts = groupRows.map(r => {
+    const idx = r.id.replace('race-group-row-', '');
+    const name = document.getElementById(`race-group-name-${idx}`)?.value || `グループ${idx}`;
+    return { idx, name };
+  });
+  wrap.innerHTML = _raceModalUsers.map(u => {
+    const sel = `race-user-group-${u.id}`;
+    const opts = [`<option value="">（なし）</option>`,
+      ...groupOpts.map(g => `<option value="${g.idx}">${esc(g.name)}</option>`)].join('');
+    return `<div style="display:flex;align-items:center;gap:8px">
+      <span style="flex:1;font-size:.82rem">${esc(u.username)}</span>
+      <select id="${sel}" style="padding:3px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">${opts}</select>
+    </div>`;
+  }).join('');
+}
+
+async function adminCreateRace() {
+  const name = document.getElementById('race-name-input').value.trim();
+  if (!name) { document.getElementById('race-modal-msg').textContent = 'レース名を入力してください'; return; }
+  const groupRows = Array.from(document.getElementById('race-modal-groups').querySelectorAll('.race-group-row'));
+  const groupMap = {};
+  groupRows.forEach(r => {
+    const idx = r.id.replace('race-group-row-', '');
+    const gname = document.getElementById(`race-group-name-${idx}`)?.value.trim() || `グループ${idx}`;
+    groupMap[idx] = { name: gname, members: [] };
+  });
+  _raceModalUsers.forEach(u => {
+    const sel = document.getElementById(`race-user-group-${u.id}`)?.value;
+    if (sel && groupMap[sel]) groupMap[sel].members.push(u.id);
+  });
+  const groups = Object.values(groupMap).filter(g => g.members.length > 0);
+  const start_date = document.getElementById('race-start-input').value;
+  const end_date   = document.getElementById('race-end-input').value;
+  const res = await fetch('/api/admin/races', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+    body: JSON.stringify({ name, start_date, end_date, groups })
+  }).then(r => r.json());
+  if (res.ok) {
+    showPointToast('🏁 レースを発行しました');
+    closeRaceModal();
+    loadRaceSection();
+  } else {
+    document.getElementById('race-modal-msg').textContent = res.error || 'エラー';
+  }
+}
 
 async function _submitScore(label, endpoint) {
   if (!authToken) { alert('ログインしてください'); return; }

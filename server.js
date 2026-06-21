@@ -179,6 +179,44 @@ async function initDB() {
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
   `).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS races (
+      id         SERIAL PRIMARY KEY,
+      name       TEXT NOT NULL,
+      start_date TEXT DEFAULT '',
+      end_date   TEXT DEFAULT '',
+      active     INTEGER DEFAULT 1,
+      created_at TEXT DEFAULT ''
+    )
+  `).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS race_groups (
+      id      SERIAL PRIMARY KEY,
+      race_id INTEGER NOT NULL REFERENCES races(id) ON DELETE CASCADE,
+      name    TEXT NOT NULL
+    )
+  `).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS race_group_members (
+      id       SERIAL PRIMARY KEY,
+      group_id INTEGER NOT NULL REFERENCES race_groups(id) ON DELETE CASCADE,
+      user_id  INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      UNIQUE(group_id, user_id)
+    )
+  `).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS race_study_log (
+      id             SERIAL PRIMARY KEY,
+      race_id        INTEGER NOT NULL REFERENCES races(id) ON DELETE CASCADE,
+      user_id        INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      auto_seconds   INTEGER DEFAULT 0,
+      manual_minutes INTEGER DEFAULT 0,
+      manual_tool    TEXT DEFAULT '',
+      game_minutes   INTEGER DEFAULT 0,
+      updated_at     TEXT DEFAULT '',
+      UNIQUE(race_id, user_id)
+    )
+  `).catch(()=>{});
   // 福澤まさみ以外のワーストフレームをリセット
   await pool.query(`UPDATE users SET frame='default' WHERE frame='worst' AND username != '福澤まさみ'`).catch(()=>{});
   // 田中謙佑に誤付与されたワーストを修正してrainbowに
@@ -264,7 +302,7 @@ app.post('/api/sync-user', async (req, res) => {
 
   const { rows: r2 } = await pool.query('SELECT * FROM users WHERE id = $1', [u.id]);
   const u2 = r2[0];
-  res.json({ username: u2.username, avatar: u2.avatar, frame: u2.frame, email: u2.email, points: dsp(u2), lifetime_points: dp(u2), loginBonus, unlockedAvatars: JSON.parse(u2.unlocked_avatars || '[]') });
+  res.json({ id: u2.id, username: u2.username, avatar: u2.avatar, frame: u2.frame, email: u2.email, points: dsp(u2), lifetime_points: dp(u2), loginBonus, unlockedAvatars: JSON.parse(u2.unlocked_avatars || '[]') });
 });
 
 // アバター・フレーム更新
@@ -482,7 +520,7 @@ app.get('/api/admin/users', auth, async (req, res) => {
 
 // 自分の情報を取得（パスワードユーザーの再ログイン用）
 app.get('/api/me', auth, async (req, res) => {
-  res.json({ username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: dsp(req.user), lifetime_points: dp(req.user), unlockedAvatars: JSON.parse(req.user.unlocked_avatars || '[]'), title: req.user.title || 'ちょおちょおちょお', ouriScore: req.user.ouri_score ?? null });
+  res.json({ id: req.user.id, username: req.user.username, avatar: req.user.avatar, frame: req.user.frame, email: req.user.email || '', points: dsp(req.user), lifetime_points: dp(req.user), unlockedAvatars: JSON.parse(req.user.unlocked_avatars || '[]'), title: req.user.title || 'ちょおちょおちょお', ouriScore: req.user.ouri_score ?? null });
 });
 
 // パスワード登録
@@ -1100,6 +1138,91 @@ app.post('/api/admin/battles/settle', auth, async (req, res) => {
     }
   }
   res.json({ ok: true, results });
+});
+
+// ── レース ──────────────────────────────────────────────────────
+// 現在のアクティブレース取得（誰でも）
+app.get('/api/races/current', async (req, res) => {
+  try {
+    const { rows: races } = await pool.query("SELECT * FROM races WHERE active=1 ORDER BY id DESC LIMIT 1");
+    if (!races[0]) return res.json({ race: null, groups: [], study_logs: [] });
+    const race = races[0];
+    const { rows: groups } = await pool.query("SELECT * FROM race_groups WHERE race_id=$1 ORDER BY id", [race.id]);
+    const groupIds = groups.map(g => g.id);
+    let members = [];
+    if (groupIds.length) {
+      const { rows } = await pool.query(
+        `SELECT rgm.group_id, u.id AS user_id, u.username, u.avatar, u.frame
+         FROM race_group_members rgm
+         JOIN users u ON u.id = rgm.user_id
+         WHERE rgm.group_id = ANY($1)`,
+        [groupIds]
+      );
+      members = rows;
+    }
+    const { rows: logs } = await pool.query("SELECT * FROM race_study_log WHERE race_id=$1", [race.id]);
+    const groupsWithMembers = groups.map(g => ({ ...g, members: members.filter(m => m.group_id === g.id) }));
+    res.json({ race, groups: groupsWithMembers, study_logs: logs });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// レース発行（管理者）— 既存アクティブレースを停止して新規作成
+app.post('/api/admin/races', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { name, start_date, end_date, groups } = req.body;
+  if (!name) return res.status(400).json({ error: 'name required' });
+  try {
+    await pool.query("UPDATE races SET active=0 WHERE active=1");
+    const { rows } = await pool.query(
+      "INSERT INTO races(name, start_date, end_date, active, created_at) VALUES($1,$2,$3,1,$4) RETURNING id",
+      [name, start_date || '', end_date || '', new Date().toISOString()]
+    );
+    const raceId = rows[0].id;
+    if (Array.isArray(groups)) {
+      for (const g of groups) {
+        const { rows: gr } = await pool.query(
+          "INSERT INTO race_groups(race_id, name) VALUES($1,$2) RETURNING id",
+          [raceId, g.name || 'グループ']
+        );
+        const gid = gr[0].id;
+        for (const uid of (g.members || [])) {
+          await pool.query(
+            "INSERT INTO race_group_members(group_id, user_id) VALUES($1,$2) ON CONFLICT DO NOTHING",
+            [gid, parseInt(uid)]
+          ).catch(() => {});
+        }
+      }
+    }
+    res.json({ ok: true, race_id: raceId });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// 勉強時間ログ更新（ログイン必須）
+// auto_seconds は加算、manual_minutes / manual_tool / game_minutes は上書き
+app.put('/api/races/:id/study', auth, async (req, res) => {
+  const raceId = parseInt(req.params.id);
+  const userId = req.user.id;
+  const { auto_seconds, manual_minutes, manual_tool, game_minutes } = req.body;
+  try {
+    await pool.query(`
+      INSERT INTO race_study_log(race_id, user_id, auto_seconds, manual_minutes, manual_tool, game_minutes, updated_at)
+      VALUES($1,$2,$3,$4,$5,$6,$7)
+      ON CONFLICT(race_id, user_id) DO UPDATE SET
+        auto_seconds   = race_study_log.auto_seconds + EXCLUDED.auto_seconds,
+        manual_minutes = COALESCE(NULLIF($4,-1), race_study_log.manual_minutes),
+        manual_tool    = CASE WHEN $4 != -1 THEN $5 ELSE race_study_log.manual_tool END,
+        game_minutes   = COALESCE(NULLIF($6,-1), race_study_log.game_minutes),
+        updated_at     = $7
+    `, [raceId, userId, auto_seconds || 0, manual_minutes ?? -1, manual_tool || '', game_minutes ?? -1, new Date().toISOString()]);
+    res.json({ ok: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// レース終了（管理者）
+app.post('/api/admin/races/:id/close', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  await pool.query("UPDATE races SET active=0 WHERE id=$1", [parseInt(req.params.id)]);
+  res.json({ ok: true });
 });
 
 app.use(express.static('.'));
