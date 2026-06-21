@@ -1055,7 +1055,8 @@ function applyExamArchive() {
 }
 
 function openScheduleModal() {
-  lockScroll();
+  // 管理者モーダルを先に閉じてから日程モーダルを開く
+  document.getElementById('admin-modal-bg').classList.remove('open');
   _schedulePairs = [...new Map(
     tests.map(t => [t.subject + '||' + t.exam, { subject: t.subject, exam: t.exam }])
   ).values()];
