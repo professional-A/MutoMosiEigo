@@ -2742,21 +2742,6 @@ function _clrankRenderBoard() {
     board.appendChild(l);
   });
 
-  // 確定済みブロック（Y=確定スコア位置に固定、X=保存済み or 自動展開）
-  const _confEntries = Object.entries(_clrankConfirmed);
-  _confEntries.forEach(([name, score], idx) => {
-    const isSel = _clrankSel === name && _clrankSelBoard;
-    const b = document.createElement('div');
-    b.className = 'clrank-block clrank-block-conf' + (isSel ? ' selected' : '');
-    const savedX = _clrankPositions[name]?.x;
-    const autoX = _confEntries.length <= 1 ? 50 : 10 + (80 / (_confEntries.length - 1)) * idx;
-    b.style.left = (savedX != null ? savedX : autoX) + '%';
-    b.style.top  = _scoreToTop(score) + '%';
-    b.textContent = name;
-    b.addEventListener('click', e => { e.stopPropagation(); _clrankBlockTap(name); });
-    board.appendChild(b);
-  });
-
   // 未確定の配置済みブロック
   Object.entries(_clrankPositions).forEach(([name, pos]) => {
     if (_clrankConfirmed[name] != null) return; // 確定済みは上で描画済み
