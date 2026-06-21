@@ -2396,20 +2396,25 @@ async function adminAddBanner() {
 }
 
 async function adminCreateBattles() {
-  // 現在のレースを取得して紐づけ
-  let raceId = null, raceName = '';
-  try {
-    const rd = await fetch('/api/races/current').then(r => r.json());
-    if (rd.race) { raceId = rd.race.id; raceName = rd.race.name; }
-  } catch(e) {}
+  // レース一覧を取得して選択
+  let races = [];
+  try { races = await fetch('/api/races').then(r => r.json()); } catch(e) {}
+
+  let raceId = null, raceName = '（なし）';
+  if (races.length) {
+    const raceList = races.map((r, i) => `${i + 1}. ${r.name}${r.active ? ' ★' : ''}`).join('\n');
+    const pick = prompt(`紐づけるレースを番号で選択（Enter でスキップ）\n\n${raceList}`);
+    const idx = parseInt(pick) - 1;
+    if (!isNaN(idx) && races[idx]) { raceId = races[idx].id; raceName = races[idx].name; }
+  }
 
   const subjectChoices = Object.entries(BATTLE_SUBJ_LABEL).map(([k,v]) => `${k} = ${v}`).join('\n');
-  const subject = prompt(`教科コードを入力\n${subjectChoices}${raceName ? `\n\n紐づけるレース: 「${raceName}」` : '\n（現在アクティブなレースなし）'}`);
+  const subject = prompt(`教科コードを入力\n${subjectChoices}`);
   if (!subject) return;
   const label = BATTLE_SUBJ_LABEL[subject] || subject;
-  if (!confirm(`「${label}」のバトルを作成します。${raceName ? `\nレース「${raceName}」に紐づけます。` : ''}\n既存のopen状態バトルは削除されます。`)) return;
+  if (!confirm(`「${label}」のバトルを作成します。\nレース: 「${raceName}」\n既存のopen状態バトルは削除されます。`)) return;
   try {
-    const res  = await fetch('/api/admin/battles/create', {
+    const res = await fetch('/api/admin/battles/create', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
       body: JSON.stringify({ subject, race_id: raceId })

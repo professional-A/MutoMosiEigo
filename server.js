@@ -1157,6 +1157,14 @@ app.post('/api/admin/battles/settle', auth, async (req, res) => {
 });
 
 // ── レース ──────────────────────────────────────────────────────
+// レース一覧（管理者向け）
+app.get('/api/races', async (req, res) => {
+  try {
+    const { rows } = await pool.query("SELECT id, name, subject, active, status, start_date, end_date FROM races ORDER BY id DESC LIMIT 20");
+    res.json(rows);
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 // 現在のアクティブレース取得（誰でも）
 app.get('/api/races/current', async (req, res) => {
   try {
