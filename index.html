@@ -1745,6 +1745,7 @@ async function syncPasswordUser(token) {
       authAvatar          = data.avatar || '🐸';
       authFrame           = data.frame  || 'default';
       authPoints          = data.points || 0;
+      authLifetimePoints  = data.lifetime_points || 0;
       authUnlockedAvatars = (data.unlockedAvatars && data.unlockedAvatars.length > 0) ? data.unlockedAvatars : (data.avatar === '😼' ? ['😼'] : []);
       localStorage.setItem('muto_avatar',           authAvatar);
       localStorage.setItem('muto_frame',            authFrame);
@@ -1779,6 +1780,7 @@ async function syncUser(token) {
       authAvatar          = data.avatar || '🐸';
       authFrame           = data.frame  || 'default';
       authPoints          = data.points || 0;
+      authLifetimePoints  = data.lifetime_points || 0;
       authUnlockedAvatars = (data.unlockedAvatars && data.unlockedAvatars.length > 0) ? data.unlockedAvatars : (data.avatar === '😼' ? ['😼'] : []);
       localStorage.setItem('muto_avatar',           authAvatar);
       localStorage.setItem('muto_frame',            authFrame);
