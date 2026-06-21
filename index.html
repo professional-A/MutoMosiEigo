@@ -272,6 +272,9 @@ h1{
 #race-modal-bg .modal{width:min(500px,96vw);max-height:90vh;display:flex;flex-direction:column;padding:20px 16px}
 .race-group-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
 .race-group-row input{flex:1;min-width:80px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.84rem;font-family:inherit}
+/* 再挑戦ボタン */
+.card-wrap{position:relative}
+.retry-btn{position:absolute;bottom:8px;right:8px;padding:3px 8px;border:1px solid rgba(70,214,196,.4);border-radius:5px;background:rgba(70,214,196,.08);color:var(--teal);font-size:.65rem;cursor:pointer;font-family:inherit;z-index:1}
 
 /* クラス順位フルスクリーンページ */
 #clrank-page{display:none;position:fixed;inset:0;z-index:200;background:#050f1e;flex-direction:column;overflow:hidden}
@@ -743,6 +746,12 @@ h1{
         <div>
           <label style="font-size:.78rem;color:var(--dim)">レース名</label>
           <input id="race-name-input" type="text" placeholder="例: 前期末レース" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.9rem;font-family:inherit">
+        </div>
+        <div>
+          <label style="font-size:.78rem;color:var(--dim)">対象教科（自動計測に使用）</label>
+          <select id="race-subject-input" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
+            <option value="">（教科を選択）</option>
+          </select>
         </div>
         <div style="display:flex;gap:10px">
           <div style="flex:1">
@@ -1376,29 +1385,43 @@ function renderGroups() {
       const { done, total } = getProgress(t.storageKey, t.totalItems);
       const pct = total ? Math.round(done / total * 100) : 0;
       const untouched = done === 0;
+      const sk = (t.storageKey || '').replace(/'/g, "\\'");
+      const path = (t.path || '').replace(/'/g, "\\'");
+      const retryBtn = (!isSummary && done > 0 && t.storageKey)
+        ? `<button class="retry-btn" onclick="event.preventDefault();retryTest('${sk}','${path}')">🔄 再挑戦</button>`
+        : '';
       return `
-        <a class="card" href="${t.path}">
-          <div class="card-exam">${t.year}年度 ${t.grade}年 ${t.exam}</div>
-          <div class="card-subject">${t.title || t.subject}</div>
-          ${isSummary ? `
-          <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%;background:linear-gradient(90deg,#46d6c4,#1f9e90)"></div></div>
-          <div class="progress-text" style="color:#46d6c4">📖 まとめ・参照用</div>
-          ` : `
-          <div class="progress-bar-wrap">
-            <div class="progress-bar" style="width:${pct}%"></div>
-          </div>
-          <div class="progress-text${untouched ? " untouched" : ""}">
-            ${untouched ? "未着手" : `${done} / ${total} 問`}
-          </div>
-          `}
-          <div class="card-arrow">開く →</div>
-        </a>`;
+        <div class="card-wrap">
+          <a class="card" href="${t.path}">
+            <div class="card-exam">${t.year}年度 ${t.grade}年 ${t.exam}</div>
+            <div class="card-subject">${t.title || t.subject}</div>
+            ${isSummary ? `
+            <div class="progress-bar-wrap"><div class="progress-bar" style="width:100%;background:linear-gradient(90deg,#46d6c4,#1f9e90)"></div></div>
+            <div class="progress-text" style="color:#46d6c4">📖 まとめ・参照用</div>
+            ` : `
+            <div class="progress-bar-wrap">
+              <div class="progress-bar" style="width:${pct}%"></div>
+            </div>
+            <div class="progress-text${untouched ? " untouched" : ""}">
+              ${untouched ? "未着手" : `${done} / ${total} 問`}
+            </div>
+            `}
+            <div class="card-arrow">開く →</div>
+          </a>
+          ${retryBtn}
+        </div>`;
     }).join("");
     return `<div class="group">
       <div class="group-title">${key}</div>
       <div class="grid">${cards}</div>
     </div>`;
   }).join("");
+}
+
+function retryTest(storageKey, path) {
+  if (!confirm('進捗をリセットして再挑戦しますか？\n（2回目以降は獲得ポイントが減少します）')) return;
+  localStorage.removeItem(storageKey);
+  location.href = path;
 }
 
 function setExam(e) { activeExam = e; renderExamFilter(); renderGroups(); }
@@ -3036,8 +3059,9 @@ function _fmtSec(sec) { return _fmtMin(Math.floor(sec / 60)); }
 function _renderRace(data) {
   const { race, groups, study_logs } = data;
   document.getElementById('race-hd-title').textContent = '🏁 ' + race.name;
+  const subjectPart = race.subject ? `[${race.subject}]` : '';
   const datePart = [race.start_date, race.end_date].filter(Boolean).join(' 〜 ');
-  document.getElementById('race-hd-date').textContent = datePart;
+  document.getElementById('race-hd-date').textContent = [subjectPart, datePart].filter(Boolean).join(' ');
 
   // グループチップ
   const gc = document.getElementById('race-groups');
@@ -3139,8 +3163,11 @@ async function submitRaceGame() {
 }
 
 // テスト滞在タイマー（openSubject/closeSubject に hook）
+// レースに教科が設定されている場合、その教科を開いているときのみ計測
 function startTestTimer() {
   if (_testTimerStart) return;
+  if (!_currentRace) return;
+  if (_currentRace.subject && selectedSubject !== _currentRace.subject) return;
   _testTimerStart = Date.now();
 }
 async function stopTestTimer() {
@@ -3178,6 +3205,10 @@ async function openRaceModal() {
   document.getElementById('race-modal-users').innerHTML = '<span style="font-size:.8rem;color:var(--dim)">読み込み中…</span>';
   document.getElementById('race-modal-msg').textContent = '';
   document.getElementById('race-name-input').value = '';
+  // 教科一覧をtestsから取得して選択肢に反映
+  const sel = document.getElementById('race-subject-input');
+  const subjects = [...new Set((typeof tests !== 'undefined' ? tests : []).map(t => t.subject).filter(Boolean))];
+  sel.innerHTML = '<option value="">（教科を選択）</option>' + subjects.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
   document.getElementById('race-modal-bg').style.display = 'flex';
   const data = await fetch('/api/admin/users', { headers: { Authorization: authToken } }).then(r => r.json());
   _raceModalUsers = data.users || data || [];
@@ -3236,10 +3267,11 @@ async function adminCreateRace() {
   const groups = Object.values(groupMap).filter(g => g.members.length > 0);
   const start_date = document.getElementById('race-start-input').value;
   const end_date   = document.getElementById('race-end-input').value;
+  const subject    = document.getElementById('race-subject-input').value;
   const res = await fetch('/api/admin/races', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-    body: JSON.stringify({ name, start_date, end_date, groups })
+    body: JSON.stringify({ name, start_date, end_date, subject, groups })
   }).then(r => r.json());
   if (res.ok) {
     showPointToast('🏁 レースを発行しました');

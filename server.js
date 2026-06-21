@@ -186,9 +186,11 @@ async function initDB() {
       start_date TEXT DEFAULT '',
       end_date   TEXT DEFAULT '',
       active     INTEGER DEFAULT 1,
-      created_at TEXT DEFAULT ''
+      created_at TEXT DEFAULT '',
+      subject    TEXT DEFAULT ''
     )
   `).catch(()=>{});
+  await pool.query(`ALTER TABLE races ADD COLUMN IF NOT EXISTS subject TEXT DEFAULT ''`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS race_groups (
       id      SERIAL PRIMARY KEY,
@@ -1169,13 +1171,13 @@ app.get('/api/races/current', async (req, res) => {
 // レース発行（管理者）— 既存アクティブレースを停止して新規作成
 app.post('/api/admin/races', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  const { name, start_date, end_date, groups } = req.body;
+  const { name, start_date, end_date, subject, groups } = req.body;
   if (!name) return res.status(400).json({ error: 'name required' });
   try {
     await pool.query("UPDATE races SET active=0 WHERE active=1");
     const { rows } = await pool.query(
-      "INSERT INTO races(name, start_date, end_date, active, created_at) VALUES($1,$2,$3,1,$4) RETURNING id",
-      [name, start_date || '', end_date || '', new Date().toISOString()]
+      "INSERT INTO races(name, start_date, end_date, subject, active, created_at) VALUES($1,$2,$3,$4,1,$5) RETURNING id",
+      [name, start_date || '', end_date || '', subject || '', new Date().toISOString()]
     );
     const raceId = rows[0].id;
     if (Array.isArray(groups)) {
