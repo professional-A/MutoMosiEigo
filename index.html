@@ -432,6 +432,11 @@ h1{
 <!-- お知らせパネル -->
 <div class="notif-panel" id="notif-panel">
   <div class="notif-header">お知らせ</div>
+  <div id="notif-post-section" style="display:none;padding:10px 14px;border-bottom:1px solid var(--line)">
+    <textarea id="notif-post-text" rows="2" maxlength="80" placeholder="みんなへひとこと… (80文字以内)"
+      style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.82rem;resize:none;margin-bottom:6px"></textarea>
+    <button onclick="submitBanner()" style="padding:5px 16px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit">📢 流す</button>
+  </div>
   <div id="db-banners"></div>
   <div class="notif-item notif-new">
     <div class="notif-item-date">2026-06-18</div>
@@ -551,16 +556,6 @@ h1{
       英語テスト返却後にアンケートを実施します。<br>
       事前に新規登録をお願いします！<br>
       登録後はアイコンやフレームもカスタマイズできます。
-    </div>
-  </div>
-  <div id="notif-post-section" style="display:none;padding:10px 14px;border-top:1px solid var(--line)">
-    <button onclick="toggleNotifPostForm()" style="background:none;border:none;color:var(--teal);font-size:.8rem;cursor:pointer;font-family:inherit;padding:0">📢 お知らせを投稿する ▾</button>
-    <div id="notif-form" style="display:none;margin-top:8px">
-      <input id="notif-post-title" type="text" maxlength="60" placeholder="タイトル (最大60文字)"
-        style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.82rem;margin-bottom:6px">
-      <textarea id="notif-post-body" rows="3" placeholder="本文"
-        style="width:100%;box-sizing:border-box;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.82rem;resize:vertical;margin-bottom:6px"></textarea>
-      <button onclick="submitBanner()" style="padding:5px 16px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-size:.8rem;font-weight:700;cursor:pointer;font-family:inherit">投稿する</button>
     </div>
   </div>
 </div>
@@ -2184,28 +2179,19 @@ async function loadBanners() {
   } catch(e) {}
 }
 
-function toggleNotifPostForm() {
-  const form = document.getElementById('notif-form');
-  form.style.display = form.style.display === 'none' ? 'block' : 'none';
-}
-
 async function submitBanner() {
-  const title = document.getElementById('notif-post-title').value.trim();
-  const body  = document.getElementById('notif-post-body').value.trim();
-  if (!title) { showToast('タイトルを入力してください'); return; }
-  if (!body)  { showToast('本文を入力してください'); return; }
+  const text = document.getElementById('notif-post-text').value.trim();
+  if (!text) { showToast('メッセージを入力してください'); return; }
   try {
     const res = await fetch('/api/banners', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify({ title, body })
+      body: JSON.stringify({ title: text, body: '' })
     });
     const data = await res.json();
     if (data.ok) {
-      document.getElementById('notif-post-title').value = '';
-      document.getElementById('notif-post-body').value = '';
-      document.getElementById('notif-form').style.display = 'none';
-      showToast('お知らせを投稿しました！');
+      document.getElementById('notif-post-text').value = '';
+      showToast('流しました！');
       loadBanners();
     } else {
       showToast('❌ ' + (data.error || 'エラー'));
@@ -2967,37 +2953,17 @@ async function submitSurvey() {
 
 // ── お知らせ ────────────────────────────────────────────
 const NOTIF_KEY = 'muto_notif_read_3';
-const LEADER_MSGS = [
-  (name, pt) => `🔥 現在 ${name} が1位独走中！（${pt.toLocaleString()}pt）　追いつけるか？`,
-  (name, pt) => `💀 ${name} がぶっちぎりのトップ（${pt.toLocaleString()}pt）　このままでいいの？`,
-  (name, pt) => `😇 ${name} が首位キープ中（${pt.toLocaleString()}pt）　誰か止めてくれ`,
-  (name, pt) => `🏃 ランキング1位は ${name}（${pt.toLocaleString()}pt）　差を縮めろ！`,
-  (name, pt) => `⚡ ${name} に勝ちたければ問題解け！（現在 ${pt.toLocaleString()}pt 差）`,
-];
 async function loadTicker() {
   try {
-    const [members, banners] = await Promise.all([
-      fetch('/api/members').then(r => r.json()).catch(() => []),
-      fetch('/api/banners').then(r => r.json()).catch(() => [])
-    ]);
-    const items = [];
-    if (Array.isArray(members) && members[0]) {
-      const leader = members[0];
-      const pt = leader.season_points != null ? leader.season_points : (leader.points || 0);
-      const msgFn = LEADER_MSGS[Math.floor(Math.random() * LEADER_MSGS.length)];
-      items.push(msgFn(esc(tu(leader.username)), pt));
-    }
-    if (Array.isArray(banners)) {
-      banners.slice(0, 5).forEach(b => {
-        items.push(`📢 ${esc(b.title)}${b.author ? '　— ' + esc(b.author) : ''}`);
-      });
-    }
-    if (!items.length) return;
+    const banners = await fetch('/api/banners').then(r => r.json()).catch(() => []);
     const wrap = document.getElementById('ticker-wrap');
     const track = document.getElementById('ticker-track');
-    // 全アイテムを2回繰り返してシームレスループ（アニメーションが-50%移動で1周）
-    track.innerHTML = [...items, ...items].map(t => `<span class="ticker-item">${t}</span>`).join('');
-    track.style.animationDuration = Math.max(18, items.length * 9) + 's';
+    if (!Array.isArray(banners) || !banners[0]) { wrap.style.display = 'none'; return; }
+    const b = banners[0];
+    const text = `📢 ${esc(b.title)}${b.author ? '　— ' + esc(b.author) : ''}`;
+    // 繰り返しでシームレスループ
+    track.innerHTML = Array(6).fill(`<span class="ticker-item">${text}</span>`).join('');
+    track.style.animationDuration = '22s';
     wrap.style.display = 'flex';
     requestAnimationFrame(syncLayout);
   } catch(e) {}
