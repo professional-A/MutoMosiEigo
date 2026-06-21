@@ -1013,11 +1013,6 @@ h1{
     <div id="groups"></div>
   </div>
 
-  <!-- ランキング -->
-  <div class="ranking-section">
-    <h2>みんなの進捗ランキング</h2>
-    <div id="ranking-content"><p class="ranking-login-note">ログインするとランキングが表示されます</p></div>
-  </div>
 </div>
 
 <script>
@@ -1193,7 +1188,6 @@ function getProgress(storageKey, totalItems) {
 
 function renderFolders() {
   const subjects = [...new Set(tests.map(t => t.subject))];
-  const archivedCount = tests.filter(t => t.archived).length;
   const cards = subjects.map(s => {
     const stests = tests.filter(t => t.subject === s && (!t.archived || showArchived));
     if (!stests.length) return '';
@@ -1217,15 +1211,7 @@ function renderFolders() {
     </div>`;
   }).join("");
 
-  let html = cards;
-  if (!cards.trim()) {
-    if (showArchived) {
-      html = '<p style="color:var(--muted);font-size:.85rem;padding:16px 0;text-align:center">試験データがありません</p>';
-    } else if (archivedCount > 0) {
-      html = `<p style="color:var(--muted);font-size:.85rem;padding:16px 0;text-align:center">📦 ${archivedCount} 件がアーカイブ中です。「アーカイブを表示」で確認できます。</p>`;
-    }
-  }
-  document.getElementById("folder-grid").innerHTML = html;
+  document.getElementById("folder-grid").innerHTML = cards;
 }
 
 function openSubject(s) {
