@@ -1055,12 +1055,14 @@ function applyExamArchive() {
 }
 
 function openScheduleModal() {
-  closeAdminModal();
+  document.getElementById('admin-modal-bg').classList.remove('open');
   _schedulePairs = [...new Map(
     tests.map(t => [t.subject + '||' + t.exam, { subject: t.subject, exam: t.exam }])
   ).values()];
   const el = document.getElementById('schedule-content');
-  el.innerHTML = _schedulePairs.map((p, i) => {
+  el.innerHTML = _schedulePairs.length === 0
+    ? '<p style="color:var(--muted);font-size:.85rem;padding:8px">試験データがありません</p>'
+    : _schedulePairs.map((p, i) => {
     const val = _examSchedule[p.subject + '||' + p.exam] || '';
     const archived = val && new Date().toISOString().slice(0,10) >= val;
     return `<div style="background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
@@ -1076,8 +1078,10 @@ function openScheduleModal() {
       </div>
     </div>`;
   }).join('');
-  lockScroll();
-  document.getElementById('schedule-modal-bg').classList.add('open');
+  setTimeout(() => {
+    lockScroll();
+    document.getElementById('schedule-modal-bg').classList.add('open');
+  }, 50);
 }
 
 function closeScheduleModal() {
