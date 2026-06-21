@@ -731,6 +731,8 @@ h1{
       <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
       <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
       <button onclick="openRaceModal()" style="background:#0f2a1a;color:#6ee7b7;border:1px solid #34d399;font-weight:700">🏁 レース発行</button>
+      <button onclick="adminStartRaceBetting()" style="background:#2a1f0a;color:#fbbf24;border:1px solid #f59e0b;font-weight:700">🎲 賭け開始</button>
+      <button onclick="adminSettleRaceBets()" style="background:#1e1a2e;color:#c4b5fd;border:1px solid #8b5cf6;font-weight:700">🏆 賭け決着</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
@@ -1082,7 +1084,7 @@ h1{
       <div class="race-groups" id="race-groups"></div>
       <table class="race-table">
         <thead><tr>
-          <th>#</th><th>名前</th><th>グループ</th><th>テスト内</th><th>外部</th><th>合計</th><th>ライバル差</th>
+          <th>#</th><th>名前</th><th>グループ</th><th>テスト内</th><th>外部</th><th>合計</th><th>シーズンpt</th><th>ライバル差</th>
         </tr></thead>
         <tbody id="race-table-body"></tbody>
       </table>
@@ -1100,6 +1102,18 @@ h1{
           <input id="race-game-m" type="number" min="0" max="59" placeholder="分" style="width:48px">
           <button onclick="submitRaceGame()">🎮 記録</button>
         </div>
+      </div>
+      <!-- 賭けフェーズUI -->
+      <div id="race-bet-section" style="display:none;border-top:1px solid var(--line);padding-top:12px;margin-top:10px">
+        <div style="font-size:.78rem;font-weight:700;color:var(--amber);margin-bottom:8px">🎲 賭けフェーズ開幕！ — シーズンptを使って1位予想に賭けよう</div>
+        <div style="font-size:.72rem;color:var(--dim);margin-bottom:8px">あなたのシーズンpt: <span id="race-bet-mypts" style="color:var(--teal);font-weight:700">―</span></div>
+        <div id="race-bet-targets" style="display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px"></div>
+        <div class="race-report">
+          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">賭け金:</span>
+          <input id="race-bet-amount" type="number" min="1" placeholder="pt" style="width:80px">
+          <button onclick="submitRaceBet()">🎲 賭ける</button>
+        </div>
+        <div id="race-bet-msg" style="font-size:.72rem;color:var(--teal);margin-top:6px"></div>
       </div>
     </div>
   </div>
@@ -2598,7 +2612,7 @@ async function openMembersModal() {
   const data = await res.json();
   if (!Array.isArray(data)) { el.innerHTML = 'エラー'; return; }
   el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
-      <thead><tr><th>#</th><th>名前</th><th>🏆シーズンpt</th><th>賭け金</th></tr></thead>
+      <thead><tr><th>#</th><th>名前</th></tr></thead>
       <tbody>${data.map((u, i) => `
         <tr>
           <td class="rank-num${Number(u.rank)<=3?' top':''}">${u.rank}</td>
@@ -2609,8 +2623,6 @@ async function openMembersModal() {
               ${u.title ? `<br>${titleBadge(u)}` : ''}
             </span>
           </td>
-          <td class="rank-score">${(u.season_points!=null?u.season_points:u.points||0).toLocaleString()}pt</td>
-          <td style="text-align:center;color:var(--amber)">${u.test_bet != null ? u.test_bet.toLocaleString()+'pt' : '―'}</td>
         </tr>`).join('')}
       </tbody>
     </table></div>`;
@@ -3056,12 +3068,15 @@ function _fmtMin(totalMin) {
 }
 function _fmtSec(sec) { return _fmtMin(Math.floor(sec / 60)); }
 
+let _raceBetTargetId = null;
+
 function _renderRace(data) {
-  const { race, groups, study_logs } = data;
+  const { race, groups, study_logs, bets } = data;
   document.getElementById('race-hd-title').textContent = '🏁 ' + race.name;
   const subjectPart = race.subject ? `[${race.subject}]` : '';
   const datePart = [race.start_date, race.end_date].filter(Boolean).join(' 〜 ');
-  document.getElementById('race-hd-date').textContent = [subjectPart, datePart].filter(Boolean).join(' ');
+  const statusLabel = race.status === 'betting' ? ' 🎲賭け中' : race.status === 'closed' ? ' ✅終了' : '';
+  document.getElementById('race-hd-date').textContent = [subjectPart, datePart].filter(Boolean).join(' ') + statusLabel;
 
   // グループチップ
   const gc = document.getElementById('race-groups');
@@ -3073,8 +3088,13 @@ function _renderRace(data) {
   // 各ユーザーの合計分数を計算
   const logMap = {};
   study_logs.forEach(l => { logMap[l.user_id] = l; });
-  const groupMap = {}; // user_id → group name
+  const groupMap = {};
   groups.forEach(g => g.members.forEach(m => { groupMap[m.user_id] = g.name; }));
+
+  // 賭け集計: target_user_id → 合計賭け金
+  const betTotals = {};
+  bets.forEach(b => { betTotals[b.target_user_id] = (betTotals[b.target_user_id] || 0) + b.amount; });
+  const myBet = authUserId ? bets.find(b => b.user_id === authUserId) : null;
 
   // 全メンバーを収集してソート
   const allMembers = [];
@@ -3086,9 +3106,7 @@ function _renderRace(data) {
   }));
   allMembers.sort((a, b) => b.total - a.total);
 
-  // 自分の順位
   const myRow = authUserId ? allMembers.find(m => m.user_id === authUserId) : null;
-  const myTotal = myRow ? myRow.total : -1;
 
   const tbody = document.getElementById('race-table-body');
   tbody.innerHTML = allMembers.map((m, i) => {
@@ -3098,6 +3116,7 @@ function _renderRace(data) {
     const rivalHtml = rivalDiff !== null
       ? `<span class="race-rival${rivalDiff >= 0 ? ' ahead' : ''}">${rivalDiff >= 0 ? '+' : ''}${_fmtMin(rivalDiff)}</span>`
       : '<span style="color:var(--teal);font-size:.7rem">👑</span>';
+    const spt = m.season_points != null ? m.season_points.toLocaleString() + 'pt' : '―';
     return `<tr class="${isMe ? 'rank-me' : ''}">
       <td style="color:var(--dim)">${i + 1}</td>
       <td style="font-weight:${isMe ? '700' : '400'};color:${isMe ? 'var(--teal)' : 'var(--fg)'}">${esc(m.username)}${isMe ? ' 👤' : ''}</td>
@@ -3105,13 +3124,15 @@ function _renderRace(data) {
       <td>${_fmtSec(m.log.auto_seconds || 0)}</td>
       <td>${m.manMin > 0 ? _fmtMin(m.manMin) : '—'}</td>
       <td style="font-weight:700;color:#d4e8ff">${_fmtMin(m.total)}</td>
+      <td style="color:var(--amber);font-size:.72rem">${spt}</td>
       <td>${rivalHtml}</td>
     </tr>`;
   }).join('');
 
-  // 自己申告フォーム（ログイン中かつグループ所属）
+  // 自己申告フォーム（active中かつグループ所属）
   const inRace = authUserId && groupMap[authUserId] != null;
-  document.getElementById('race-self-report').style.display = inRace ? '' : 'none';
+  const isActive = race.status === 'active';
+  document.getElementById('race-self-report').style.display = (inRace && isActive) ? '' : 'none';
   if (inRace && myRow) {
     const log = myRow.log;
     if (log.manual_minutes > 0) {
@@ -3124,6 +3145,69 @@ function _renderRace(data) {
       document.getElementById('race-game-m').value = log.game_minutes % 60;
     }
   }
+
+  // 賭けフェーズUI
+  const isBetting = race.status === 'betting';
+  document.getElementById('race-bet-section').style.display = (isBetting && authToken) ? '' : 'none';
+  if (isBetting && authToken) {
+    const mySeasonPt = myRow ? (myRow.season_points || 0) : 0;
+    document.getElementById('race-bet-mypts').textContent = mySeasonPt.toLocaleString() + 'pt';
+    if (myBet) document.getElementById('race-bet-amount').value = myBet.amount;
+    // 賭け対象ボタン（レース参加メンバー）
+    document.getElementById('race-bet-targets').innerHTML = allMembers.map(m => {
+      const total = betTotals[m.user_id] || 0;
+      const isMine = myBet && myBet.target_user_id === m.user_id;
+      const isSelected = _raceBetTargetId === m.user_id;
+      return `<button onclick="selectRaceBetTarget(${m.user_id})" style="padding:4px 10px;border-radius:6px;font-family:inherit;font-size:.74rem;cursor:pointer;border:1px solid ${isMine||isSelected?'var(--teal)':'var(--line)'};background:${isMine||isSelected?'rgba(70,214,196,.15)':'none'};color:${isMine||isSelected?'var(--teal)':'var(--fg)'}">
+        ${esc(m.username)}${total ? ` <span style="color:var(--amber)">${total.toLocaleString()}pt</span>` : ''}${isMine ? ' ✓' : ''}
+      </button>`;
+    }).join('');
+  }
+}
+
+function selectRaceBetTarget(uid) {
+  _raceBetTargetId = uid;
+  if (_currentRace) loadRaceSection();
+}
+
+async function submitRaceBet() {
+  if (!_currentRace || !authToken || !_raceBetTargetId) {
+    document.getElementById('race-bet-msg').textContent = '賭け対象を選んでください';
+    return;
+  }
+  const amount = parseInt(document.getElementById('race-bet-amount').value);
+  if (!amount || amount <= 0) { document.getElementById('race-bet-msg').textContent = '賭け金を入力してください'; return; }
+  const res = await fetch(`/api/races/${_currentRace.id}/bet`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+    body: JSON.stringify({ target_user_id: _raceBetTargetId, amount })
+  }).then(r => r.json());
+  if (res.ok) {
+    document.getElementById('race-bet-msg').textContent = `✅ 賭けました！残りシーズンpt: ${res.season_points.toLocaleString()}pt`;
+    loadRaceSection();
+  } else {
+    document.getElementById('race-bet-msg').textContent = '❌ ' + (res.error || 'エラー');
+  }
+}
+
+async function adminStartRaceBetting() {
+  if (!_currentRace) { alert('アクティブなレースがありません'); return; }
+  if (!confirm(`「${_currentRace.name}」の賭けフェーズを開始しますか？\n（メンバーがシーズンptで賭けられるようになります）`)) return;
+  const res = await fetch(`/api/admin/races/${_currentRace.id}/close`, {
+    method: 'POST', headers: { Authorization: authToken }
+  }).then(r => r.json());
+  if (res.ok) { showPointToast('🎲 賭けフェーズ開始！'); closeAdminModal(); loadRaceSection(); }
+  else alert('エラー: ' + (res.error || ''));
+}
+
+async function adminSettleRaceBets() {
+  if (!_currentRace) { alert('アクティブなレースがありません'); return; }
+  if (!confirm(`「${_currentRace.name}」の賭けを決着しますか？\n最多勉強時間のメンバーに賭けた人でシーズンptを山分けします。`)) return;
+  const res = await fetch(`/api/admin/races/${_currentRace.id}/settle`, {
+    method: 'POST', headers: { Authorization: authToken }
+  }).then(r => r.json());
+  if (res.ok) { showPointToast('🏆 賭け決着！'); alert(res.result); closeAdminModal(); loadRaceSection(); }
+  else alert('エラー: ' + (res.error || ''));
 }
 
 function toggleRaceBody() {

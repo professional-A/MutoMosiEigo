@@ -187,10 +187,22 @@ async function initDB() {
       end_date   TEXT DEFAULT '',
       active     INTEGER DEFAULT 1,
       created_at TEXT DEFAULT '',
-      subject    TEXT DEFAULT ''
+      subject    TEXT DEFAULT '',
+      status     TEXT DEFAULT 'active'
     )
   `).catch(()=>{});
   await pool.query(`ALTER TABLE races ADD COLUMN IF NOT EXISTS subject TEXT DEFAULT ''`).catch(()=>{});
+  await pool.query(`ALTER TABLE races ADD COLUMN IF NOT EXISTS status  TEXT DEFAULT 'active'`).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS race_bets (
+      id             SERIAL PRIMARY KEY,
+      race_id        INTEGER NOT NULL REFERENCES races(id) ON DELETE CASCADE,
+      user_id        INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      target_user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      amount         INTEGER NOT NULL DEFAULT 0,
+      UNIQUE(race_id, user_id)
+    )
+  `).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS race_groups (
       id      SERIAL PRIMARY KEY,
@@ -1147,14 +1159,14 @@ app.post('/api/admin/battles/settle', auth, async (req, res) => {
 app.get('/api/races/current', async (req, res) => {
   try {
     const { rows: races } = await pool.query("SELECT * FROM races WHERE active=1 ORDER BY id DESC LIMIT 1");
-    if (!races[0]) return res.json({ race: null, groups: [], study_logs: [] });
+    if (!races[0]) return res.json({ race: null, groups: [], study_logs: [], bets: [] });
     const race = races[0];
     const { rows: groups } = await pool.query("SELECT * FROM race_groups WHERE race_id=$1 ORDER BY id", [race.id]);
     const groupIds = groups.map(g => g.id);
     let members = [];
     if (groupIds.length) {
       const { rows } = await pool.query(
-        `SELECT rgm.group_id, u.id AS user_id, u.username, u.avatar, u.frame
+        `SELECT rgm.group_id, u.id AS user_id, u.username, u.avatar, u.frame, u.season_points
          FROM race_group_members rgm
          JOIN users u ON u.id = rgm.user_id
          WHERE rgm.group_id = ANY($1)`,
@@ -1163,20 +1175,23 @@ app.get('/api/races/current', async (req, res) => {
       members = rows;
     }
     const { rows: logs } = await pool.query("SELECT * FROM race_study_log WHERE race_id=$1", [race.id]);
+    const { rows: bets } = await pool.query("SELECT * FROM race_bets WHERE race_id=$1", [race.id]);
     const groupsWithMembers = groups.map(g => ({ ...g, members: members.filter(m => m.group_id === g.id) }));
-    res.json({ race, groups: groupsWithMembers, study_logs: logs });
+    res.json({ race, groups: groupsWithMembers, study_logs: logs, bets });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
-// レース発行（管理者）— 既存アクティブレースを停止して新規作成
+// レース発行（管理者）— 既存アクティブレースを停止してシーズンptリセット→新規作成
 app.post('/api/admin/races', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { name, start_date, end_date, subject, groups } = req.body;
   if (!name) return res.status(400).json({ error: 'name required' });
   try {
     await pool.query("UPDATE races SET active=0 WHERE active=1");
+    // 新レース＝新シーズン：全員のシーズンptをリセット
+    await pool.query("UPDATE users SET season_points=0");
     const { rows } = await pool.query(
-      "INSERT INTO races(name, start_date, end_date, subject, active, created_at) VALUES($1,$2,$3,$4,1,$5) RETURNING id",
+      "INSERT INTO races(name, start_date, end_date, subject, active, status, created_at) VALUES($1,$2,$3,$4,1,'active',$5) RETURNING id",
       [name, start_date || '', end_date || '', subject || '', new Date().toISOString()]
     );
     const raceId = rows[0].id;
@@ -1220,11 +1235,83 @@ app.put('/api/races/:id/study', auth, async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
-// レース終了（管理者）
+// レース終了→賭けフェーズへ移行（管理者）
 app.post('/api/admin/races/:id/close', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  await pool.query("UPDATE races SET active=0 WHERE id=$1", [parseInt(req.params.id)]);
+  await pool.query("UPDATE races SET status='betting' WHERE id=$1", [parseInt(req.params.id)]);
   res.json({ ok: true });
+});
+
+// 賭け投票（ログイン必須）— season_points を賭ける、1レース1票
+app.post('/api/races/:id/bet', auth, async (req, res) => {
+  const raceId = parseInt(req.params.id);
+  const userId = req.user.id;
+  const { target_user_id, amount } = req.body;
+  if (!target_user_id || !Number.isInteger(amount) || amount <= 0) return res.status(400).json({ error: '無効な入力' });
+  try {
+    const { rows: race } = await pool.query("SELECT status FROM races WHERE id=$1 AND active=1", [raceId]);
+    if (!race[0] || race[0].status !== 'betting') return res.status(400).json({ error: '賭けフェーズではありません' });
+    const { rows: u } = await pool.query("SELECT season_points FROM users WHERE id=$1", [userId]);
+    if (!u[0] || u[0].season_points < amount) return res.status(400).json({ error: 'シーズンptが足りません' });
+    // 既存ベットがあれば差分調整
+    const { rows: ex } = await pool.query("SELECT amount, target_user_id FROM race_bets WHERE race_id=$1 AND user_id=$2", [raceId, userId]);
+    if (ex[0]) {
+      const diff = amount - ex[0].amount;
+      await pool.query("UPDATE users SET season_points=season_points-$1 WHERE id=$2", [diff, userId]);
+      await pool.query("UPDATE race_bets SET target_user_id=$1, amount=$2 WHERE race_id=$3 AND user_id=$4",
+        [target_user_id, amount, raceId, userId]);
+    } else {
+      await pool.query("UPDATE users SET season_points=season_points-$1 WHERE id=$2", [amount, userId]);
+      await pool.query("INSERT INTO race_bets(race_id,user_id,target_user_id,amount) VALUES($1,$2,$3,$4)",
+        [raceId, userId, target_user_id, amount]);
+    }
+    const { rows: r } = await pool.query("SELECT season_points FROM users WHERE id=$1", [userId]);
+    res.json({ ok: true, season_points: r[0].season_points });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// 賭け決着（管理者）— 最多勉強時間のユーザーに賭けた人でプールを山分け
+app.post('/api/admin/races/:id/settle', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const raceId = parseInt(req.params.id);
+  try {
+    const { rows: race } = await pool.query("SELECT * FROM races WHERE id=$1", [raceId]);
+    if (!race[0]) return res.status(404).json({ error: 'レースが見つかりません' });
+    // 勝者判定: 合計勉強時間（auto_seconds/60 + manual_minutes）が最大のユーザー
+    const { rows: logs } = await pool.query(
+      "SELECT user_id, (auto_seconds/60 + manual_minutes) AS total FROM race_study_log WHERE race_id=$1 ORDER BY total DESC LIMIT 1",
+      [raceId]
+    );
+    const { rows: bets } = await pool.query("SELECT * FROM race_bets WHERE race_id=$1", [raceId]);
+    const totalPool = bets.reduce((s, b) => s + b.amount, 0);
+    let resultMsg = '';
+    if (!logs[0] || !bets.length) {
+      resultMsg = '賭けなし or 勉強記録なし — 全員返還';
+      for (const b of bets) await pool.query("UPDATE users SET season_points=season_points+$1 WHERE id=$2", [b.amount, b.user_id]);
+    } else {
+      const winnerId = logs[0].user_id;
+      const winBets = bets.filter(b => b.target_user_id === winnerId);
+      const winTotal = winBets.reduce((s, b) => s + b.amount, 0);
+      if (!winTotal) {
+        resultMsg = '勝者に賭けた人がいないため全員返還';
+        for (const b of bets) await pool.query("UPDATE users SET season_points=season_points+$1 WHERE id=$2", [b.amount, b.user_id]);
+      } else {
+        let dist = 0;
+        for (const b of winBets) {
+          const pay = Math.floor((b.amount / winTotal) * totalPool);
+          await pool.query("UPDATE users SET season_points=season_points+$1 WHERE id=$2", [pay, b.user_id]);
+          dist += pay;
+        }
+        if (totalPool - dist > 0) {
+          const top = winBets.sort((a,b) => b.amount - a.amount)[0];
+          await pool.query("UPDATE users SET season_points=season_points+$1 WHERE id=$2", [totalPool - dist, top.user_id]);
+        }
+        resultMsg = `勝者ユーザーID ${winnerId} に賭けた ${winBets.length} 人で ${totalPool}pt 分配`;
+      }
+    }
+    await pool.query("UPDATE races SET status='closed', active=0 WHERE id=$1", [raceId]);
+    res.json({ ok: true, result: resultMsg });
+  } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
 app.use(express.static('.'));
