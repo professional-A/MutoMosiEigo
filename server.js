@@ -11,6 +11,12 @@ function bonusDay() { return new Date(Date.now() + 4 * 60 * 60 * 1000).toISOStri
 function dp(u) { return (u.points || 0) + (u.test_bet || 0); } // 累計ポイント（賭け中含む）
 function dsp(u) { return u.season_points || 0; }               // シーズンポイント
 
+// 称号オーバーライド（DB値より優先）
+function applyTitleOverride(u) {
+  if (u && u.username === '福澤') { u.title = 'おっぱいラーメン'; u.title_class = 'title-masami'; }
+  return u;
+}
+
 let siteLocked = false; // 管理者によるアクセス制限フラグ
 let scoreInputLocked = false; // 得点入力締め切りフラグ
 let registrationLocked = false; // 新規登録制限フラグ
@@ -332,7 +338,7 @@ app.get('/api/members', async (req, res) => {
     FROM users
     ORDER BY season_points DESC
   `);
-  res.json(rows);
+  res.json(rows.map(applyTitleOverride));
 });
 
 // 科目別成績一覧（ログイン不要）
