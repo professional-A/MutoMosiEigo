@@ -1031,6 +1031,8 @@ let tests = [];
 let selectedSubject = null;
 let activeExam = "すべて";
 let showArchived = false;
+let _examSchedule = {};
+let _schedulePairs = [];
 
 // ── 試験日程・自動アーカイブ ──────────────────────────────────
 async function loadExamSchedule() {
@@ -1278,9 +1280,6 @@ document.getElementById("exam-filters").addEventListener("click", e => {
 
 loadTheme();
 loadBanners();
-
-let _examSchedule = {};
-let _schedulePairs = [];
 
 fetch("tests.json")
   .then(r => r.json())
