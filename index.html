@@ -2180,6 +2180,7 @@ async function loadBanners() {
       badge.dataset.dbCount = newCount;
       badge.textContent = parseInt(badge.textContent || 0) - prev + newCount;
     }
+    loadTicker();
   } catch(e) {}
 }
 
@@ -2975,18 +2976,28 @@ const LEADER_MSGS = [
 ];
 async function loadTicker() {
   try {
-    const res = await fetch('/api/members');
-    const data = await res.json();
-    if (!Array.isArray(data) || !data[0]) return;
-    const leader = data[0];
-    const pt = leader.season_points != null ? leader.season_points : (leader.points || 0);
-    const msgFn = LEADER_MSGS[Math.floor(Math.random() * LEADER_MSGS.length)];
-    const text = msgFn(esc(tu(leader.username)), pt);
+    const [members, banners] = await Promise.all([
+      fetch('/api/members').then(r => r.json()).catch(() => []),
+      fetch('/api/banners').then(r => r.json()).catch(() => [])
+    ]);
+    const items = [];
+    if (Array.isArray(members) && members[0]) {
+      const leader = members[0];
+      const pt = leader.season_points != null ? leader.season_points : (leader.points || 0);
+      const msgFn = LEADER_MSGS[Math.floor(Math.random() * LEADER_MSGS.length)];
+      items.push(msgFn(esc(tu(leader.username)), pt));
+    }
+    if (Array.isArray(banners)) {
+      banners.slice(0, 5).forEach(b => {
+        items.push(`📢 ${esc(b.title)}${b.author ? '　— ' + esc(b.author) : ''}`);
+      });
+    }
+    if (!items.length) return;
     const wrap = document.getElementById('ticker-wrap');
     const track = document.getElementById('ticker-track');
-    // テキストを2回繰り返してシームレスループ
-    const item = `<span class="ticker-item">${text}</span>`;
-    track.innerHTML = item.repeat(6);
+    // 全アイテムを2回繰り返してシームレスループ（アニメーションが-50%移動で1周）
+    track.innerHTML = [...items, ...items].map(t => `<span class="ticker-item">${t}</span>`).join('');
+    track.style.animationDuration = Math.max(18, items.length * 9) + 's';
     wrap.style.display = 'flex';
     requestAnimationFrame(syncLayout);
   } catch(e) {}
