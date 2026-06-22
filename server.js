@@ -22,7 +22,7 @@ let scoreInputLocked = false; // 得点入力締め切りフラグ
 let registrationLocked = false; // 新規登録制限フラグ
 
 const app = express();
-const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false } });
+const pool = new Pool({ connectionString: process.env.DATABASE_URL, ssl: { rejectUnauthorized: false }, connectionTimeoutMillis: 10000, statement_timeout: 20000 });
 const supabaseAdmin = createClient(process.env.SUPABASE_URL, process.env.SUPABASE_SERVICE_KEY);
 
 app.use(express.json());
@@ -57,7 +57,7 @@ async function initDB() {
       confirmed TEXT DEFAULT '{}'
     );
     INSERT INTO class_rank_state (id) VALUES (1) ON CONFLICT DO NOTHING;
-  `);
+  `).catch(()=>{});
   await pool.query(`ALTER TABLE class_rank_state ADD COLUMN IF NOT EXISTS max_score INTEGER DEFAULT 300`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS supabase_id TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS email       TEXT`).catch(()=>{});
