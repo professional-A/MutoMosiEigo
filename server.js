@@ -81,6 +81,7 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ouri_score       INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS math_score       INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS kakougaku_score  INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS nekku_score      INTEGER`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS exam_schedule (
       id            SERIAL PRIMARY KEY,
@@ -410,7 +411,7 @@ app.get('/api/members', async (req, res) => {
 // 科目別成績一覧（ログイン不要）
 app.get('/api/scores', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, title, test_score, ouri_score, math_score
+    SELECT username, avatar, frame, title, test_score, ouri_score, math_score, kakougaku_score, nekku_score
     FROM users
     ORDER BY username
   `);
@@ -430,6 +431,22 @@ app.post('/api/math/score', auth, async (req, res) => {
   const s = parseInt(req.body.score, 10);
   if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
   await pool.query('UPDATE users SET math_score=$1 WHERE id=$2', [s, req.user.id]);
+  res.json({ ok: true, score: s });
+});
+
+// 加工学得点入力
+app.post('/api/kakougaku/score', auth, async (req, res) => {
+  const s = parseInt(req.body.score, 10);
+  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
+  await pool.query('UPDATE users SET kakougaku_score=$1 WHERE id=$2', [s, req.user.id]);
+  res.json({ ok: true, score: s });
+});
+
+// 熱流体工学Ⅰ得点入力
+app.post('/api/nekku/score', auth, async (req, res) => {
+  const s = parseInt(req.body.score, 10);
+  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
+  await pool.query('UPDATE users SET nekku_score=$1 WHERE id=$2', [s, req.user.id]);
   res.json({ ok: true, score: s });
 });
 
@@ -461,9 +478,11 @@ app.get('/api/class-rank', async (req, res) => {
   try {
     const { rows: sc } = await pool.query(`
       SELECT
-        (COUNT(*) FILTER (WHERE test_score  IS NOT NULL)) > 0 AS has_test,
-        (COUNT(*) FILTER (WHERE ouri_score  IS NOT NULL)) > 0 AS has_ouri,
-        (COUNT(*) FILTER (WHERE math_score  IS NOT NULL)) > 0 AS has_math
+        (COUNT(*) FILTER (WHERE test_score       IS NOT NULL)) > 0 AS has_test,
+        (COUNT(*) FILTER (WHERE ouri_score       IS NOT NULL)) > 0 AS has_ouri,
+        (COUNT(*) FILTER (WHERE math_score       IS NOT NULL)) > 0 AS has_math,
+        (COUNT(*) FILTER (WHERE kakougaku_score  IS NOT NULL)) > 0 AS has_kakougaku,
+        (COUNT(*) FILTER (WHERE nekku_score      IS NOT NULL)) > 0 AS has_nekku
       FROM users
     `);
     const s = sc[0];
@@ -473,12 +492,12 @@ app.get('/api/class-rank', async (req, res) => {
   try {
     const usernames = Object.keys(USER_CLRANK_MAP);
     const { rows: urows } = await pool.query(
-      'SELECT username, test_score, ouri_score, math_score FROM users WHERE username = ANY($1)',
+      'SELECT username, test_score, ouri_score, math_score, kakougaku_score, nekku_score FROM users WHERE username = ANY($1)',
       [usernames]
     );
     for (const u of urows) {
-      if (u.test_score != null && u.ouri_score != null && u.math_score != null) {
-        conf[USER_CLRANK_MAP[u.username]] = u.test_score + u.ouri_score + u.math_score;
+      if (u.test_score != null && u.ouri_score != null && u.math_score != null && u.kakougaku_score != null && u.nekku_score != null) {
+        conf[USER_CLRANK_MAP[u.username]] = u.test_score + u.ouri_score + u.math_score + u.kakougaku_score + u.nekku_score;
       }
     }
   } catch(e) {}
@@ -650,12 +669,15 @@ app.post('/api/admin/award-baka', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { rows } = await pool.query(`
     SELECT id, username,
-      (COALESCE(test_score,0) + COALESCE(ouri_score,0) + COALESCE(math_score,0))::float /
-      (CASE WHEN test_score IS NOT NULL THEN 1 ELSE 0 END +
-       CASE WHEN ouri_score IS NOT NULL THEN 1 ELSE 0 END +
-       CASE WHEN math_score IS NOT NULL THEN 1 ELSE 0 END) AS avg
+      (COALESCE(test_score,0) + COALESCE(ouri_score,0) + COALESCE(math_score,0) + COALESCE(kakougaku_score,0) + COALESCE(nekku_score,0))::float /
+      (CASE WHEN test_score       IS NOT NULL THEN 1 ELSE 0 END +
+       CASE WHEN ouri_score       IS NOT NULL THEN 1 ELSE 0 END +
+       CASE WHEN math_score       IS NOT NULL THEN 1 ELSE 0 END +
+       CASE WHEN kakougaku_score  IS NOT NULL THEN 1 ELSE 0 END +
+       CASE WHEN nekku_score      IS NOT NULL THEN 1 ELSE 0 END) AS avg
     FROM users
     WHERE test_score IS NOT NULL OR ouri_score IS NOT NULL OR math_score IS NOT NULL
+       OR kakougaku_score IS NOT NULL OR nekku_score IS NOT NULL
     ORDER BY avg ASC
     LIMIT 3
   `);
@@ -1009,7 +1031,7 @@ app.post('/api/admin/banners', auth, async (req, res) => {
 });
 
 // ── バトルイベント ────────────────────────────────────────────
-const BATTLE_SUBJ_COL = { eigo: 'test_score', ouri: 'ouri_score', math: 'math_score', kakougaku: 'kakougaku_score' };
+const BATTLE_SUBJ_COL = { eigo: 'test_score', ouri: 'ouri_score', math: 'math_score', kakougaku: 'kakougaku_score', nekku: 'nekku_score' };
 
 // バトル一覧（公開）
 app.get('/api/battles', async (req, res) => {

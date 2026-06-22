@@ -2190,7 +2190,7 @@ document.getElementById('battle-modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeBattleModal();
 });
 
-const BATTLE_SUBJ_LABEL = { eigo: '英語', ouri: '応物', math: '応数', kakougaku: '加工学' };
+const BATTLE_SUBJ_LABEL = { eigo: '英語', ouri: '応物', math: '応数', kakougaku: '加工学', nekku: '熱流体工学Ⅰ' };
 
 async function loadBattleContent() {
   const el = document.getElementById('battle-content');
@@ -2441,7 +2441,7 @@ async function adminCreateBattles() {
 }
 
 async function adminSettleBattles() {
-  const subject = prompt('決着教科コードを入力\neigo / ouri / math / kakougaku');
+  const subject = prompt('決着教科コードを入力\neigo / ouri / math / kakougaku / nekku');
   if (!subject) return;
   if (!confirm(`「${BATTLE_SUBJ_LABEL[subject] || subject}」のバトルを決着しますか？`)) return;
   try {
