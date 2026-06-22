@@ -1315,12 +1315,10 @@ app.put('/api/races/:id/study', auth, async (req, res) => {
   const man = Math.max(0, parseInt(manual_minutes) || 0);
   const gm  = Math.max(0, parseInt(game_minutes)   || 0);
   try {
-    // end_date を過ぎていたら拒否
-    const { rows: raceCheck } = await pool.query("SELECT end_date, status FROM races WHERE id=$1", [raceId]);
+    // statusがactiveでなければ拒否
+    const { rows: raceCheck } = await pool.query("SELECT status FROM races WHERE id=$1", [raceId]);
     if (!raceCheck[0]) return res.status(404).json({ error: 'レースが見つかりません' });
     if (raceCheck[0].status !== 'active') return res.status(400).json({ error: 'レースはすでに終了しています' });
-    if (raceCheck[0].end_date && new Date() > new Date(raceCheck[0].end_date))
-      return res.status(400).json({ error: '申告期限を過ぎています' });
     await pool.query(`
       INSERT INTO race_study_log(race_id, user_id, muto_minutes, muto_tool, manual_minutes, manual_tool, game_minutes, updated_at)
       VALUES($1,$2,$3,$4,$5,$6,$7,$8)
