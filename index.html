@@ -3368,15 +3368,31 @@ async function savePairs() {
   }
 }
 
-async function editPairName(pairId, currentName) {
-  const newName = prompt('ペア名を入力してください', currentName);
-  if (!newName || newName.trim() === currentName) return;
+function editPairName(pairId, currentName) {
+  // インライン編集UI
+  const existing = document.getElementById('pair-name-edit-row');
+  if (existing) existing.remove();
+  const wrap = document.createElement('div');
+  wrap.id = 'pair-name-edit-row';
+  wrap.style.cssText = 'display:flex;gap:6px;align-items:center;margin:8px 0;padding:8px;background:rgba(70,214,196,.08);border-radius:8px;border:1px solid rgba(70,214,196,.3)';
+  wrap.innerHTML = `<input id="pair-name-input" value="${esc(currentName)}" style="flex:1;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#0a172b;color:var(--fg);font-size:.85rem;font-family:inherit">
+    <button onclick="savePairName(${pairId})" style="padding:5px 12px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-size:.8rem">保存</button>
+    <button onclick="document.getElementById('pair-name-edit-row').remove()" style="padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:none;color:var(--dim);cursor:pointer;font-size:.8rem">✕</button>`;
+  const pairSection = document.getElementById('race-pair-ranking');
+  pairSection.insertBefore(wrap, pairSection.firstChild);
+  document.getElementById('pair-name-input').focus();
+}
+async function savePairName(pairId) {
+  const input = document.getElementById('pair-name-input');
+  if (!input) return;
+  const newName = input.value.trim();
+  if (!newName) return;
   const res = await fetch(`/api/pairs/${pairId}/name`, {
     method: 'PUT',
     headers: { 'Content-Type': 'application/json', Authorization: authToken },
-    body: JSON.stringify({ name: newName.trim() })
+    body: JSON.stringify({ name: newName })
   }).then(r => r.json());
-  if (res.ok) { loadRaceSection(); }
+  if (res.ok) { document.getElementById('pair-name-edit-row')?.remove(); loadRaceSection(); }
   else alert('❌ ' + (res.error || 'エラー'));
 }
 
