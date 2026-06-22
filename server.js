@@ -200,10 +200,11 @@ async function initDB() {
   await pool.query(`
     CREATE TABLE IF NOT EXISTS race_pairs (
       id      SERIAL PRIMARY KEY,
-      race_id INTEGER NOT NULL REFERENCES races(id) ON DELETE CASCADE,
+      race_id INTEGER REFERENCES races(id) ON DELETE CASCADE,
       name    TEXT NOT NULL DEFAULT 'ペア'
     )
   `).catch(()=>{});
+  await pool.query(`ALTER TABLE race_pairs ALTER COLUMN race_id DROP NOT NULL`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS race_pair_members (
       pair_id INTEGER NOT NULL REFERENCES race_pairs(id) ON DELETE CASCADE,
@@ -1217,22 +1218,25 @@ app.get('/api/races/current', async (req, res) => {
         `SELECT rgm.group_id, u.id AS user_id, u.username, u.avatar, u.frame, u.season_points
          FROM race_group_members rgm
          JOIN users u ON u.id = rgm.user_id
-         WHERE rgm.group_id = ANY($1)`,
+         WHERE rgm.group_id = ANY($1) AND u.username != 'seijuro_dummy'`,
         [groupIds]
       );
       members = rows;
     }
-    const { rows: logs } = await pool.query("SELECT * FROM race_study_log WHERE race_id=$1", [race.id]);
+    const { rows: logs } = await pool.query(
+      "SELECT rsl.* FROM race_study_log rsl JOIN users u ON u.id=rsl.user_id WHERE rsl.race_id=$1 AND u.username!='seijuro_dummy'",
+      [race.id]
+    );
     const { rows: bets } = await pool.query("SELECT * FROM race_bets WHERE race_id=$1", [race.id]);
-    // ペアデータ取得
-    const { rows: pairs } = await pool.query("SELECT * FROM race_pairs WHERE race_id=$1 ORDER BY id", [race.id]);
+    // グローバルペアデータ取得
+    const { rows: pairs } = await pool.query("SELECT * FROM race_pairs WHERE race_id IS NULL ORDER BY id");
     let pairMembers = [];
     if (pairs.length) {
       const { rows: pm } = await pool.query(
         `SELECT rpm.pair_id, u.id AS user_id, u.username, u.season_points
          FROM race_pair_members rpm
          JOIN users u ON u.id = rpm.user_id
-         WHERE rpm.pair_id = ANY($1)`,
+         WHERE rpm.pair_id = ANY($1) AND u.username != 'seijuro_dummy'`,
         [pairs.map(p => p.id)]
       );
       pairMembers = pm;
@@ -1302,11 +1306,10 @@ app.put('/api/races/:id/study', auth, async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
-// ペア取得（任意レース）
-app.get('/api/races/:id/pairs', async (req, res) => {
+// グローバルペア取得
+app.get('/api/pairs', async (req, res) => {
   try {
-    const raceId = parseInt(req.params.id);
-    const { rows: pairs } = await pool.query("SELECT * FROM race_pairs WHERE race_id=$1 ORDER BY id", [raceId]);
+    const { rows: pairs } = await pool.query("SELECT * FROM race_pairs WHERE race_id IS NULL ORDER BY id");
     if (!pairs.length) return res.json([]);
     const { rows: members } = await pool.query(
       `SELECT rpm.pair_id, u.id AS user_id, u.username, u.season_points
@@ -1319,18 +1322,17 @@ app.get('/api/races/:id/pairs', async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
-// ペア設定（管理者）— レースのペアを一括登録・上書き
-app.post('/api/admin/races/:id/pairs', auth, async (req, res) => {
+// グローバルペア設定（管理者）— 一括登録・上書き
+app.post('/api/admin/pairs', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  const raceId = parseInt(req.params.id);
-  const { pairs } = req.body; // [{ name, members: [userId, ...] }, ...]
+  const { pairs } = req.body;
   if (!Array.isArray(pairs)) return res.status(400).json({ error: 'pairs配列が必要' });
   try {
-    await pool.query("DELETE FROM race_pairs WHERE race_id=$1", [raceId]);
+    await pool.query("DELETE FROM race_pairs WHERE race_id IS NULL");
     for (const p of pairs) {
       const { rows } = await pool.query(
-        "INSERT INTO race_pairs(race_id, name) VALUES($1,$2) RETURNING id",
-        [raceId, p.name || 'ペア']
+        "INSERT INTO race_pairs(race_id, name) VALUES(NULL,$1) RETURNING id",
+        [p.name || 'ペア']
       );
       const pairId = rows[0].id;
       for (const uid of (p.members || [])) {
