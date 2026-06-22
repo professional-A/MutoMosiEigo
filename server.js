@@ -1504,4 +1504,4 @@ initDB().then(async () => {
   const { rows: rr } = await pool.query("SELECT value FROM settings WHERE key='registration_locked'").catch(() => ({ rows: [] }));
   registrationLocked = rr[0]?.value === 'true';
   app.listen(PORT, () => console.log(`サーバー起動中 → http://localhost:${PORT}`));
-});
+}).catch(err => { console.error('起動エラー:', err); process.exit(1); });
