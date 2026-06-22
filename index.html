@@ -3385,6 +3385,11 @@ async function submitRaceAll() {
       game_minutes: gameMin
     })
   });
+  // 記録後は入力欄をリセット（積み重ね方式なので誤重複防止）
+  ['race-muto-h','race-muto-m','race-muto-tool','race-manual-h','race-manual-m','race-manual-tool','race-game-h','race-game-m'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.value = '';
+  });
   showPointToast('💾 勉強時間を記録しました');
   loadRaceSection();
 }

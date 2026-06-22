@@ -1290,28 +1290,29 @@ app.post('/api/admin/races', auth, async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
-// 勉強時間ログ更新（ログイン必須）
-// muto_minutes/muto_tool/manual_minutes/manual_tool/game_minutes はすべて上書き（-1=変更なし）
+// 勉強時間ログ更新（ログイン必須）— 各項目は入力値を既存値に加算
 app.put('/api/races/:id/study', auth, async (req, res) => {
   const raceId = parseInt(req.params.id);
   const userId = req.user.id;
   const { muto_minutes, muto_tool, manual_minutes, manual_tool, game_minutes } = req.body;
+  const mm  = Math.max(0, parseInt(muto_minutes)   || 0);
+  const man = Math.max(0, parseInt(manual_minutes) || 0);
+  const gm  = Math.max(0, parseInt(game_minutes)   || 0);
   try {
     await pool.query(`
       INSERT INTO race_study_log(race_id, user_id, muto_minutes, muto_tool, manual_minutes, manual_tool, game_minutes, updated_at)
       VALUES($1,$2,$3,$4,$5,$6,$7,$8)
       ON CONFLICT(race_id, user_id) DO UPDATE SET
-        muto_minutes   = COALESCE(NULLIF($3,-1), race_study_log.muto_minutes),
-        muto_tool      = CASE WHEN $3 != -1 THEN $4 ELSE race_study_log.muto_tool END,
-        manual_minutes = COALESCE(NULLIF($5,-1), race_study_log.manual_minutes),
-        manual_tool    = CASE WHEN $5 != -1 THEN $6 ELSE race_study_log.manual_tool END,
-        game_minutes   = COALESCE(NULLIF($7,-1), race_study_log.game_minutes),
+        muto_minutes   = race_study_log.muto_minutes   + $3,
+        muto_tool      = CASE WHEN $3 > 0 THEN $4 ELSE race_study_log.muto_tool END,
+        manual_minutes = race_study_log.manual_minutes + $5,
+        manual_tool    = CASE WHEN $5 > 0 THEN $6 ELSE race_study_log.manual_tool END,
+        game_minutes   = race_study_log.game_minutes   + $7,
         updated_at     = $8
     `, [raceId, userId,
-        muto_minutes ?? -1, muto_tool || '',
-        manual_minutes ?? -1, manual_tool || '',
-        game_minutes ?? -1,
-        new Date().toISOString()]);
+        mm,  muto_tool   || '',
+        man, manual_tool || '',
+        gm,  new Date().toISOString()]);
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
@@ -1414,9 +1415,9 @@ app.post('/api/admin/races/:id/settle', auth, async (req, res) => {
   try {
     const { rows: race } = await pool.query("SELECT * FROM races WHERE id=$1", [raceId]);
     if (!race[0]) return res.status(404).json({ error: 'レースが見つかりません' });
-    // 勝者判定: 合計勉強時間（auto_seconds/60 + manual_minutes）が最大のユーザー
+    // 勝者判定: 合計勉強時間（muto_minutes + auto_seconds/60 + manual_minutes）が最大のユーザー
     const { rows: logs } = await pool.query(
-      "SELECT user_id, (auto_seconds/60 + manual_minutes) AS total FROM race_study_log WHERE race_id=$1 ORDER BY total DESC LIMIT 1",
+      "SELECT user_id, (muto_minutes + auto_seconds/60 + manual_minutes) AS total FROM race_study_log WHERE race_id=$1 ORDER BY total DESC LIMIT 1",
       [raceId]
     );
     const { rows: bets } = await pool.query("SELECT * FROM race_bets WHERE race_id=$1", [raceId]);
