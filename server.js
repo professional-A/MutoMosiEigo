@@ -82,6 +82,7 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS math_score       INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS kakougaku_score  INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS nekku_score      INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS seigyo_score     INTEGER`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS exam_schedule (
       id            SERIAL PRIMARY KEY,
@@ -426,7 +427,7 @@ app.get('/api/members', async (req, res) => {
 // 科目別成績一覧（ログイン不要）
 app.get('/api/scores', async (req, res) => {
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, title, test_score, ouri_score, math_score, kakougaku_score, nekku_score
+    SELECT username, avatar, frame, title, test_score, ouri_score, math_score, kakougaku_score, nekku_score, seigyo_score
     FROM users
     ORDER BY username
   `);
@@ -462,6 +463,14 @@ app.post('/api/nekku/score', auth, async (req, res) => {
   const s = parseInt(req.body.score, 10);
   if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
   await pool.query('UPDATE users SET nekku_score=$1 WHERE id=$2', [s, req.user.id]);
+  res.json({ ok: true, score: s });
+});
+
+// 制御工学Ⅰ得点入力
+app.post('/api/seigyo/score', auth, async (req, res) => {
+  const s = parseInt(req.body.score, 10);
+  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
+  await pool.query('UPDATE users SET seigyo_score=$1 WHERE id=$2', [s, req.user.id]);
   res.json({ ok: true, score: s });
 });
 
@@ -1046,7 +1055,7 @@ app.post('/api/admin/banners', auth, async (req, res) => {
 });
 
 // ── バトルイベント ────────────────────────────────────────────
-const BATTLE_SUBJ_COL = { eigo: 'test_score', ouri: 'ouri_score', math: 'math_score', kakougaku: 'kakougaku_score', nekku: 'nekku_score' };
+const BATTLE_SUBJ_COL = { eigo: 'test_score', ouri: 'ouri_score', math: 'math_score', kakougaku: 'kakougaku_score', nekku: 'nekku_score', seigyo: 'seigyo_score' };
 
 // バトル一覧（公開）
 app.get('/api/battles', async (req, res) => {

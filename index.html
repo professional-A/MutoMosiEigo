@@ -841,6 +841,7 @@ h1{
     <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
       <button id="ouri-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid var(--teal);border-radius:10px;background:rgba(70,214,196,.1);color:var(--teal);cursor:pointer" onclick="submitOuriScore()">⚡ 応用物理の点数を入力</button>
       <button id="math-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid var(--rose);border-radius:10px;background:rgba(240,107,142,.1);color:var(--rose);cursor:pointer" onclick="submitMathScore()">📐 応用数学の点数を入力</button>
+      <button id="seigyo-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid #a78bfa;border-radius:10px;background:rgba(167,139,250,.1);color:#a78bfa;cursor:pointer" onclick="submitSeigyoScore()">🎛️ 制御工学Ⅰの点数を入力</button>
     </div>
     <div class="modal-btns" style="margin-top:12px">
       <button onclick="closeScoresModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
@@ -2468,7 +2469,7 @@ async function adminCreateBattles() {
 }
 
 async function adminSettleBattles() {
-  const subject = prompt('決着教科コードを入力\neigo / ouri / math / kakougaku / nekku');
+  const subject = prompt('決着教科コードを入力\neigo / ouri / math / kakougaku / nekku / seigyo');
   if (!subject) return;
   if (!confirm(`「${BATTLE_SUBJ_LABEL[subject] || subject}」のバトルを決着しますか？`)) return;
   try {
@@ -2677,10 +2678,13 @@ document.getElementById('members-modal-bg').addEventListener('click', e => {
 async function openScoresModal() {
   lockScroll();
   document.getElementById('scores-modal-bg').classList.add('open');
+  const seigyoActive = new Date().toISOString().slice(0, 10) >= '2026-06-23';
   const btn = document.getElementById('ouri-input-btn');
   if (btn) btn.style.display = authToken ? 'inline-block' : 'none';
   const btn2 = document.getElementById('math-input-btn');
   if (btn2) btn2.style.display = authToken ? 'inline-block' : 'none';
+  const btn3 = document.getElementById('seigyo-input-btn');
+  if (btn3) btn3.style.display = (authToken && seigyoActive) ? 'inline-block' : 'none';
   await loadScores();
 }
 function closeScoresModal() {
@@ -2698,9 +2702,11 @@ async function loadScores() {
     const data = await res.json();
     if (!Array.isArray(data) || !data.length) { el.innerHTML = '<p style="color:var(--muted)">まだ点数が登録されていません</p>'; return; }
 
+    const seigyoActive = new Date().toISOString().slice(0, 10) >= '2026-06-23';
+
     // 平均点・合計点を計算（入力済み科目のみ）
     data.forEach(r => {
-      const vals = [r.test_score, r.ouri_score, r.math_score].filter(v => v != null);
+      const vals = [r.test_score, r.ouri_score, r.math_score, ...(seigyoActive ? [r.seigyo_score] : [])].filter(v => v != null);
       r._avg   = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
       r._total = vals.length ? vals.reduce((s, v) => s + v, 0) : null;
     });
@@ -2784,11 +2790,13 @@ async function loadScores() {
         <td style="text-align:center">${sc(r.test_score)}</td>
         <td style="text-align:center">${sc(r.ouri_score)}</td>
         <td style="text-align:center">${sc(r.math_score)}</td>
+        ${seigyoActive ? `<td style="text-align:center">${sc(r.seigyo_score)}</td>` : ''}
         ${r._total != null ? `<td style="text-align:center;font-weight:700;color:var(--rose)">${r._total}</td>` : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`}
         ${avgTd}
       </tr>`;
+      const colspan = seigyoActive ? 8 : 7;
       if (i === lineIdx) {
-        return row + `<tr><td colspan="7" style="padding:0;border:none">
+        return row + `<tr><td colspan="${colspan}" style="padding:0;border:none">
           <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 5px;background:rgba(239,68,68,.12)">
             <div style="flex:1;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,#ef4444)"></div>
             <span style="font-size:.7rem;color:#ef4444;font-weight:900;letter-spacing:.1em;white-space:nowrap;text-shadow:0 0 8px rgba(239,68,68,.6)">みっつー波多野ライン</span>
@@ -2806,6 +2814,7 @@ async function loadScores() {
         ${th('test_score', '📘 英語')}
         ${th('ouri_score', '⚡ 応用物理')}
         ${th('math_score', '📐 応用数学')}
+        ${seigyoActive ? th('seigyo_score', '🎛️ 制御工学') : ''}
         ${th('_total', '合計')}
         ${th('_avg', '平均')}
       </tr></thead>
@@ -3342,9 +3351,11 @@ async function openRaceModal() {
   document.getElementById('race-modal-users').innerHTML = '<span style="font-size:.8rem;color:var(--dim)">読み込み中…</span>';
   document.getElementById('race-modal-msg').textContent = '';
   document.getElementById('race-name-input').value = '';
-  // 教科一覧をtestsから取得して選択肢に反映
+  // 教科一覧（固定リスト + tests.jsonの教科をマージ）
   const sel = document.getElementById('race-subject-input');
-  const subjects = [...new Set((typeof tests !== 'undefined' ? tests : []).map(t => t.subject).filter(Boolean))];
+  const fixedSubjects = ['科学技術英語Ⅰ', '応用物理', '応用数学', '加工学', '熱流体工学Ⅰ', '制御工学Ⅰ'];
+  const testSubjects = (typeof tests !== 'undefined' ? tests : []).map(t => t.subject).filter(Boolean);
+  const subjects = [...new Set([...fixedSubjects, ...testSubjects])];
   sel.innerHTML = '<option value="">（教科を選択）</option>' + subjects.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
   document.getElementById('race-modal-bg').style.display = 'flex';
   const data = await fetch('/api/admin/users', { headers: { Authorization: authToken } }).then(r => r.json());
@@ -3434,6 +3445,7 @@ async function _submitScore(label, endpoint) {
 }
 async function submitOuriScore() { await _submitScore('応用物理', '/api/ouri/score'); }
 async function submitMathScore() { await _submitScore('応用数学', '/api/math/score'); }
+async function submitSeigyoScore() { await _submitScore('制御工学Ⅰ', '/api/seigyo/score'); }
 
 // ── アンケート（終了済み）───────────────────────────────────────────
 async function initSurveyBanner() { /* アンケート終了 */ }
