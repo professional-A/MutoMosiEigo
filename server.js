@@ -1299,8 +1299,8 @@ app.post('/api/admin/races', auth, async (req, res) => {
   if (!name) return res.status(400).json({ error: 'name required' });
   try {
     await pool.query("UPDATE races SET active=0 WHERE active=1");
-    // 新レース＝新シーズン：シーズンptと解答履歴をリセット（全員1周目に戻る）
-    await pool.query("UPDATE users SET season_points=0");
+    // 新レース＝新シーズン：シーズンptとログインボーナスと解答履歴をリセット
+    await pool.query("UPDATE users SET season_points=0, last_login=''");
     if (subject) await pool.query("DELETE FROM quiz_answers WHERE subject=$1", [subject]);
     const { rows } = await pool.query(
       "INSERT INTO races(name, start_date, end_date, subject, active, status, created_at) VALUES($1,$2,$3,$4,1,'active',$5) RETURNING id",
