@@ -3394,9 +3394,6 @@ let _raceGroupCount = 0;
 
 async function openRaceModal() {
   closeAdminModal();
-  _raceGroupCount = 0;
-  document.getElementById('race-modal-groups').innerHTML = '';
-  document.getElementById('race-modal-users').innerHTML = '<span style="font-size:.8rem;color:var(--dim)">読み込み中…</span>';
   document.getElementById('race-modal-msg').textContent = '';
   document.getElementById('race-name-input').value = '';
   // 教科一覧（固定リスト + tests.jsonの教科をマージ）
