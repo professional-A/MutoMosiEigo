@@ -770,12 +770,12 @@ h1{
         </div>
         <div style="display:flex;gap:10px">
           <div style="flex:1">
-            <label style="font-size:.78rem;color:var(--dim)">開始日</label>
-            <input id="race-start-input" type="date" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
+            <label style="font-size:.78rem;color:var(--dim)">開始日時</label>
+            <input id="race-start-input" type="datetime-local" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
           </div>
           <div style="flex:1">
-            <label style="font-size:.78rem;color:var(--dim)">終了日</label>
-            <input id="race-end-input" type="date" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
+            <label style="font-size:.78rem;color:var(--dim)">終了日時</label>
+            <input id="race-end-input" type="datetime-local" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
           </div>
         </div>
       </div>
@@ -3166,7 +3166,8 @@ function _renderRace(data) {
   const { race, groups, study_logs } = data;
   document.getElementById('race-hd-title').textContent = '🏁 ' + race.name;
   const subjectPart = race.subject ? `[${race.subject}]` : '';
-  const datePart = [race.start_date, race.end_date].filter(Boolean).join(' 〜 ');
+  const _fmtDt = s => s ? s.replace('T', ' ').replace(/-(\d{2})-(\d{2})/, '/$1/$2') : '';
+  const datePart = [race.start_date, race.end_date].filter(Boolean).map(_fmtDt).join(' 〜 ');
   const statusLabel = race.status === 'closed' ? ' ✅終了' : '';
   document.getElementById('race-hd-date').textContent = [subjectPart, datePart].filter(Boolean).join(' ') + statusLabel;
 
@@ -3470,6 +3471,14 @@ async function adminCreateRace() {
     body: JSON.stringify({ name, start_date, end_date, subject, groups })
   }).then(r => r.json());
   if (res.ok) {
+    // グループをそのままペア応援システムのペアとして自動同期
+    if (groups.length) {
+      await fetch('/api/admin/pairs', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', Authorization: authToken },
+        body: JSON.stringify({ pairs: groups.map(g => ({ name: g.name, members: g.members })) })
+      }).catch(() => {});
+    }
     showPointToast('🏁 レースを発行しました');
     closeRaceModal();
     loadRaceSection();
