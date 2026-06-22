@@ -3223,24 +3223,33 @@ function _renderRace(data) {
   const pairTbody = document.getElementById('race-pair-tbody');
   if (pairs.length) {
     pairSection.style.display = '';
+    // 人数補正: 最大ペア人数に合わせてスコアを正規化
+    const maxPairSize = Math.max(...pairs.map(p => p.members.length), 1);
     const pairRows = pairs.map(p => {
+      const size = p.members.length || 1;
+      const factor = maxPairSize / size;
       const mutoTotal = p.members.reduce((s, m) => s + ((logMap[m.user_id] || {}).muto_minutes || 0), 0);
       const manTotal  = p.members.reduce((s, m) => s + ((logMap[m.user_id] || {}).manual_minutes || 0), 0);
-      const studyTotal = mutoTotal + manTotal;
-      const sptTotal  = p.members.reduce((s, m) => s + (m.season_points || 0), 0);
-      return { p, studyTotal, sptTotal };
+      const rawStudy = mutoTotal + manTotal;
+      const rawSpt   = p.members.reduce((s, m) => s + (m.season_points || 0), 0);
+      return { p, size, factor,
+        studyTotal: Math.round(rawStudy * factor),
+        sptTotal:   Math.round(rawSpt   * factor) };
     });
-    // 合計勉強時間でソート
+    // 正規化後の合計勉強時間でソート
     pairRows.sort((a, b) => b.studyTotal - a.studyTotal);
-    pairTbody.innerHTML = pairRows.map(({ p, studyTotal, sptTotal }, i) => {
+    pairTbody.innerHTML = pairRows.map(({ p, size, factor, studyTotal, sptTotal }, i) => {
       const names = p.members.map(m => esc(m.username)).join('・');
       const isMyPair = authUserId && p.members.some(m => m.user_id === authUserId);
       const nameCell = isMyPair
         ? `${esc(p.name)} <button onclick="editPairName(${p.id},${JSON.stringify(p.name)})" title="ペア名を変更" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:.8rem;padding:0 2px">✏️</button>`
         : esc(p.name);
+      const factorBadge = factor > 1
+        ? `<span style="font-size:.65rem;color:var(--teal);margin-left:4px">(×${maxPairSize}/${size})</span>`
+        : '';
       return `<tr>
         <td style="color:var(--dim)">${i + 1}</td>
-        <td style="font-weight:700">${nameCell}</td>
+        <td style="font-weight:700">${nameCell}${factorBadge}</td>
         <td style="font-size:.7rem;color:var(--dim)">${names}</td>
         <td style="font-weight:700;color:#d4e8ff">${studyTotal > 0 ? _fmtMin(studyTotal) : '—'}</td>
         <td style="color:var(--amber)">${sptTotal.toLocaleString()}pt</td>
@@ -3254,23 +3263,6 @@ function _renderRace(data) {
   const inRace = authUserId && groupMap[authUserId] != null;
   const isActive = race.status === 'active';
   document.getElementById('race-self-report').style.display = (inRace && isActive) ? '' : 'none';
-  if (inRace && myRow) {
-    const log = myRow.log;
-    if (log.muto_minutes > 0) {
-      document.getElementById('race-muto-h').value = Math.floor(log.muto_minutes / 60);
-      document.getElementById('race-muto-m').value = log.muto_minutes % 60;
-    }
-    if (log.muto_tool) document.getElementById('race-muto-tool').value = log.muto_tool;
-    if (log.manual_minutes > 0) {
-      document.getElementById('race-manual-h').value = Math.floor(log.manual_minutes / 60);
-      document.getElementById('race-manual-m').value = log.manual_minutes % 60;
-    }
-    if (log.manual_tool) document.getElementById('race-manual-tool').value = log.manual_tool;
-    if (log.game_minutes > 0) {
-      document.getElementById('race-game-h').value = Math.floor(log.game_minutes / 60);
-      document.getElementById('race-game-m').value = log.game_minutes % 60;
-    }
-  }
 
 }
 
