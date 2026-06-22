@@ -599,7 +599,7 @@ app.post('/api/login', async (req, res) => {
   const today = bonusDay();
   let loginBonus = 0;
   if (u.last_login !== today) {
-    await pool.query('UPDATE users SET points=points+1000, last_login=$1 WHERE id=$2', [today, u.id]);
+    await pool.query('UPDATE users SET points=points+1000, season_points=season_points+1000, last_login=$1 WHERE id=$2', [today, u.id]);
     loginBonus = 1000;
   }
   await pool.query('UPDATE users SET session_token=$1 WHERE id=$2', [token, u.id]);
