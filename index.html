@@ -3176,9 +3176,13 @@ function _renderRace(data) {
     pairRows.sort((a, b) => b.studyTotal - a.studyTotal);
     pairTbody.innerHTML = pairRows.map(({ p, studyTotal, sptTotal }, i) => {
       const names = p.members.map(m => esc(m.username)).join('・');
+      const isMyPair = authUserId && p.members.some(m => m.user_id === authUserId);
+      const nameCell = isMyPair
+        ? `${esc(p.name)} <button onclick="editPairName(${p.id},${JSON.stringify(p.name)})" title="ペア名を変更" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:.8rem;padding:0 2px">✏️</button>`
+        : esc(p.name);
       return `<tr>
         <td style="color:var(--dim)">${i + 1}</td>
-        <td style="font-weight:700">${esc(p.name)}</td>
+        <td style="font-weight:700">${nameCell}</td>
         <td style="font-size:.7rem;color:var(--dim)">${names}</td>
         <td style="font-weight:700;color:#d4e8ff">${studyTotal > 0 ? _fmtMin(studyTotal) : '—'}</td>
         <td style="color:var(--amber)">${sptTotal.toLocaleString()}pt</td>
@@ -3246,9 +3250,8 @@ function pairAddGroup(name = '', memberIds = []) {
   div.style.cssText = 'background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:12px';
   div.innerHTML = `
     <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
-      <input id="pair-name-${idx}" type="text" value="${esc(name)}" placeholder="ペア名（例: チームA）"
-        style="flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.85rem">
-      <button onclick="document.getElementById('pair-group-${idx}').remove()" style="background:none;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;padding:2px 6px">✕</button>
+      <span style="font-size:.85rem;font-weight:700;color:var(--dim)">ペア ${idx}</span>
+      <button onclick="document.getElementById('pair-group-${idx}').remove()" style="background:none;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;padding:2px 6px;margin-left:auto">✕</button>
     </div>
     <div id="pair-members-${idx}" style="display:flex;flex-wrap:wrap;gap:5px">
       ${_pairModalUsers.map(u => {
@@ -3262,15 +3265,13 @@ function pairAddGroup(name = '', memberIds = []) {
 }
 
 async function savePairs() {
-  if (!_pairRaceId) return;
   const pairs = [];
-  let i = 1;
+  let i = 1, pairNum = 1;
   while (i <= _pairGroupCount) {
     const g = document.getElementById(`pair-group-${i}`);
     if (g) {
-      const name = document.getElementById(`pair-name-${i}`)?.value.trim() || 'ペア';
       const members = [...g.querySelectorAll('input[type=checkbox]:checked')].map(cb => parseInt(cb.dataset.uid));
-      pairs.push({ name, members });
+      pairs.push({ name: `ペア${pairNum++}`, members });
     }
     i++;
   }
@@ -3285,6 +3286,18 @@ async function savePairs() {
   } else {
     document.getElementById('pair-modal-msg').textContent = '❌ ' + (res.error || 'エラー');
   }
+}
+
+async function editPairName(pairId, currentName) {
+  const newName = prompt('ペア名を入力してください', currentName);
+  if (!newName || newName.trim() === currentName) return;
+  const res = await fetch(`/api/pairs/${pairId}/name`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Authorization: authToken },
+    body: JSON.stringify({ name: newName.trim() })
+  }).then(r => r.json());
+  if (res.ok) { loadRaceSection(); }
+  else alert('❌ ' + (res.error || 'エラー'));
 }
 
 function toggleRaceBody() {

@@ -1322,6 +1322,22 @@ app.get('/api/pairs', async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
+// ペア名変更（メンバー本人のみ）
+app.put('/api/pairs/:id/name', auth, async (req, res) => {
+  const pairId = parseInt(req.params.id);
+  const { name } = req.body;
+  if (!name) return res.status(400).json({ error: '名前が必要' });
+  try {
+    const { rows } = await pool.query(
+      "SELECT 1 FROM race_pair_members WHERE pair_id=$1 AND user_id=$2",
+      [pairId, req.user.id]
+    );
+    if (!rows.length) return res.status(403).json({ error: 'このペアのメンバーではありません' });
+    await pool.query("UPDATE race_pairs SET name=$1 WHERE id=$2", [name.trim(), pairId]);
+    res.json({ ok: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 // グローバルペア設定（管理者）— 一括登録・上書き
 app.post('/api/admin/pairs', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
