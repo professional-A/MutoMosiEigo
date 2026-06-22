@@ -85,7 +85,7 @@
   <div class="score-card">
     <span class="score-label">正解</span>
     <div class="score-track"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
-    <span class="score-num" id="score-num">0 / 23</span>
+    <span class="score-num" id="score-num">0 / --</span>
     <button class="reset-btn" onclick="resetAll()">リセット</button>
   </div>
 </div>
@@ -211,7 +211,7 @@ const PROBS = [
       'u₃ = Q₃/(π×0.04²/4) = 0.01005/0.001257 = 8.00 m/s'
     ],
     parts:[
-      {label:'(1) Q₁', unit:'×10⁻² m³/s', ans:2.011,  isAngle:false, mult:1e-2},
+      {label:'(1) Q₁', unit:'×10⁻² m³/s', ans:2.011e-2, isAngle:false, mult:1e-2},
       {label:'(2) u₂', unit:'m/s',          ans:3.556, isAngle:false},
       {label:'(3) u₃', unit:'m/s',          ans:8.00,  isAngle:false}
     ]
@@ -249,8 +249,8 @@ const PROBS = [
     ],
     parts:[
       {label:'(1) ρ', unit:'kg/m³',   ans:800,    isAngle:false},
-      {label:'(2) v', unit:'×10⁻³ m³/kg', ans:1.25, isAngle:false, mult:1e-3},
-      {label:'(3) μ', unit:'×10⁻² Pa·s',  ans:1.60, isAngle:false, mult:1e-2}
+      {label:'(2) v', unit:'×10⁻³ m³/kg', ans:1.25e-3, isAngle:false, mult:1e-3},
+      {label:'(3) μ', unit:'×10⁻² Pa·s',  ans:1.60e-2, isAngle:false, mult:1e-2}
     ]
   },
   {
@@ -331,7 +331,7 @@ const PROBS = [
       '=8000+903−2943=5960 Pa≈5.96 kPa'
     ],
     parts:[
-      {label:'(1) Q',  unit:'×10⁻³ m³/s', ans:4.241, isAngle:false, mult:1e-3},
+      {label:'(1) Q',  unit:'×10⁻³ m³/s', ans:4.241e-3, isAngle:false, mult:1e-3},
       {label:'(2) v₂', unit:'m/s',          ans:0.6667, isAngle:false},
       {label:'(3) P₂', unit:'kPa',          ans:5.960,  isAngle:false}
     ]
