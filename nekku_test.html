@@ -69,6 +69,8 @@
   .ans-box.show{display:block}
 
   .note{font-size:.78rem;color:var(--muted);background:rgba(255,204,100,.08);border:1px solid rgba(255,204,100,.25);border-radius:6px;padding:6px 12px;margin-bottom:12px}
+  .prob-svg{margin:0 0 10px;overflow-x:auto}
+  .prob-svg svg{max-width:100%;height:auto;display:block}
 </style>
 </head>
 <body>
@@ -99,30 +101,451 @@
    isAngle=true → |val-ans|<=2 で正解
    それ以外     → |val-ans|/|ans|<=0.02
 ────────────────────────────────────────── */
+/* ── SVG 図解 ── */
+const _W='stroke-width',_F='font-family="sans-serif"',_T=(x,y,s,c,a)=>`<text x="${x}" y="${y}" fill="${c||'#e8eaf6'}" font-size="${s||11}" ${_F} text-anchor="${a||'start'}">`;
+const SVG={};
+/* 問1: シリンダ-ピストン */
+SVG[1]=`<svg viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="18" width="240" height="74" fill="none" stroke="#9ca3af" ${_W}="2" rx="2"/>
+<rect x="54" y="20" width="204" height="70" fill="rgba(59,130,246,.14)"/>
+<rect x="20" y="18" width="34" height="74" fill="#1e2235" stroke="#a5b4fc" ${_W}="2"/>
+<line x1="56" y1="55" x2="78" y2="55" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="78,51 78,59 86,55" fill="#56cfb2"/>
+<text x="36" y="14" fill="#56cfb2" font-size="10" ${_F} text-anchor="middle">U →</text>
+<text x="155" y="59" fill="#a5b4fc" font-size="11" ${_F} text-anchor="middle">油（μ, ν）</text>
+<line x1="252" y1="20" x2="258" y2="20" stroke="#56cfb2" ${_W}="1.2"/>
+<line x1="252" y1="92" x2="258" y2="92" stroke="#56cfb2" ${_W}="1.2"/>
+<line x1="255" y1="20" x2="255" y2="92" stroke="#56cfb2" ${_W}="1.2"/>
+<text x="261" y="61" fill="#56cfb2" font-size="12" ${_F} font-style="italic">Y</text>
+<text x="37" y="107" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">ピストン</text>
+<text x="160" y="107" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">固定シリンダ</text>
+</svg>`;
+
+/* 問2: 両面せん断 */
+SVG[2]=`<svg viewBox="0 0 280 158" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="5"   width="220" height="18" fill="#1e2235" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="20" y="23"  width="220" height="35" fill="rgba(59,130,246,.14)"/>
+<rect x="20" y="58"  width="220" height="13" fill="#1e2235" stroke="#a5b4fc" ${_W}="2"/>
+<rect x="20" y="71"  width="220" height="52" fill="rgba(59,130,246,.14)"/>
+<rect x="20" y="123" width="220" height="18" fill="#1e2235" stroke="#9ca3af" ${_W}="1.5"/>
+<line x1="244" y1="58" x2="265" y2="58" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="265,54 265,62 273,58" fill="#56cfb2"/>
+<text x="275" y="63" fill="#56cfb2" font-size="10" ${_F}>F, U</text>
+<line x1="8" y1="23" x2="14" y2="23" stroke="#56cfb2" ${_W}="1"/>
+<line x1="8" y1="58" x2="14" y2="58" stroke="#56cfb2" ${_W}="1"/>
+<line x1="11" y1="23" x2="11" y2="58" stroke="#56cfb2" ${_W}="1"/>
+<text x="0" y="43" fill="#56cfb2" font-size="9" ${_F}>Y₁</text>
+<line x1="8" y1="71"  x2="14" y2="71"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="8" y1="123" x2="14" y2="123" stroke="#56cfb2" ${_W}="1"/>
+<line x1="11" y1="71" x2="11" y2="123" stroke="#56cfb2" ${_W}="1"/>
+<text x="0" y="100" fill="#56cfb2" font-size="9" ${_F}>Y₂</text>
+<text x="130" y="15"  fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">固定壁</text>
+<text x="130" y="68"  fill="#a5b4fc" font-size="9" ${_F} text-anchor="middle">動板（面積 A）</text>
+<text x="130" y="133" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">固定壁</text>
+</svg>`;
+
+/* 問3: 傾斜面滑落 */
+SVG[3]=`<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+<polygon points="30,145 250,45 250,155 30,155" fill="#1e2235" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="80" y="80" width="90" height="38" rx="3" fill="#2d3154" stroke="#a5b4fc" ${_W}="2" transform="rotate(-24.6,125,99)"/>
+<text x="120" y="105" fill="#e8eaf6" font-size="10" ${_F} text-anchor="middle" transform="rotate(-24.6,125,99)">m</text>
+<path d="M60,145 A25,25 0 0,0 82,124" fill="none" stroke="#56cfb2" ${_W}="1.2"/>
+<text x="68" y="128" fill="#56cfb2" font-size="10" ${_F}>θ</text>
+<line x1="30" y1="50" x2="30" y2="80" stroke="#f87171" ${_W}="2"/>
+<polygon points="26,78 34,78 30,86" fill="#f87171"/>
+<text x="34" y="74" fill="#f87171" font-size="10" ${_F}>g</text>
+<text x="200" y="130" fill="#56cfb2" font-size="9" ${_F}>油膜 δ</text>
+</svg>`;
+
+/* 問4: 静水圧 */
+SVG[4]=`<svg viewBox="0 0 200 170" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="30" width="140" height="130" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="1.5" rx="2"/>
+<line x1="30" y1="30" x2="170" y2="30" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="100" y="22" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<line x1="100" y1="30" x2="100" y2="140" stroke="#56cfb2" ${_W}="1.2" stroke-dasharray="4,3"/>
+<line x1="94" y1="30"  x2="106" y2="30"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="94" y1="140" x2="106" y2="140" stroke="#56cfb2" ${_W}="1"/>
+<text x="112" y="92" fill="#56cfb2" font-size="11" ${_F}>h</text>
+<circle cx="100" cy="148" r="5" fill="#a5b4fc"/>
+<line x1="100" y1="140" x2="100" y2="153" stroke="#f87171" ${_W}="2"/>
+<polygon points="96,150 104,150 100,158" fill="#f87171"/>
+<text x="110" y="158" fill="#f87171" font-size="10" ${_F}>P ?</text>
+</svg>`;
+
+/* 問5: パスカルの原理 */
+SVG[5]=`<svg viewBox="0 0 280 140" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="50" width="28" height="70" rx="2" fill="#1e2235" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="232" y="20" width="28" height="100" rx="2" fill="#1e2235" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="28" y="86" width="14" height="18" fill="#2d3154" stroke="#a5b4fc" ${_W}="1.5"/>
+<rect x="232" y="56" width="14" height="36" fill="#2d3154" stroke="#a5b4fc" ${_W}="1.5"/>
+<rect x="42" y="90" width="190" height="10" fill="rgba(59,130,246,.25)" stroke="#60a5fa" ${_W}="1"/>
+<line x1="35" y1="30" x2="35" y2="86" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="31,85 39,85 35,93" fill="#56cfb2"/>
+<text x="30" y="24" fill="#56cfb2" font-size="10" ${_F}>F₁↓</text>
+<line x1="239" y1="140" x2="239" y2="95" stroke="#f87171" ${_W}="2"/>
+<polygon points="235,97 243,97 239,89" fill="#f87171"/>
+<text x="228" y="150" fill="#f87171" font-size="10" ${_F}>F₂↑</text>
+<text x="34" y="130" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">d₁</text>
+<text x="238" y="130" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">d₂</text>
+</svg>`;
+
+/* 問6: レバーパスカル */
+SVG[6]=`<svg viewBox="0 0 280 175" xmlns="http://www.w3.org/2000/svg">
+<line x1="30" y1="75" x2="220" y2="75" stroke="#9ca3af" ${_W}="3"/>
+<circle cx="130" cy="75" r="6" fill="#9ca3af"/>
+<line x1="30" y1="40" x2="30" y2="75" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="26,73 34,73 30,81" fill="#56cfb2"/>
+<text x="22" y="34" fill="#56cfb2" font-size="10" ${_F}>f↓</text>
+<text x="24" y="90" fill="#9ca3af" font-size="9" ${_F}>A</text>
+<text x="198" y="90" fill="#9ca3af" font-size="9" ${_F}>B</text>
+<rect x="205" y="75" width="22" height="55" rx="2" fill="#1e2235" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="208" y="94" width="16" height="20" fill="#2d3154" stroke="#a5b4fc" ${_W}="1.5"/>
+<rect x="236" y="95" width="34" height="80" rx="2" fill="#1e2235" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="236" y="115" width="34" height="34" fill="#2d3154" stroke="#a5b4fc" ${_W}="1.5"/>
+<rect x="227" y="108" width="9" height="10" fill="rgba(59,130,246,.25)" stroke="#60a5fa" ${_W}="1"/>
+<line x1="253" y1="165" x2="253" y2="150" stroke="#f87171" ${_W}="2"/>
+<polygon points="249,152 257,152 253,144" fill="#f87171"/>
+<text x="245" y="173" fill="#f87171" font-size="9" ${_F}>F₂↑</text>
+<text x="214" y="170" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">d₁</text>
+<text x="253" y="99" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">d₂</text>
+</svg>`;
+
+/* 問7: U字管マノメータ */
+SVG[7]=`<svg viewBox="0 0 220 185" xmlns="http://www.w3.org/2000/svg">
+<rect x="40" y="20" width="24" height="130" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="156" y="20" width="24" height="130" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="40" y="150" width="140" height="20" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="42" y="55" width="20" height="95" fill="rgba(59,130,246,.2)"/>
+<rect x="158" y="80" width="20" height="70" fill="rgba(59,130,246,.2)"/>
+<rect x="42" y="150" width="136" height="18" fill="rgba(180,180,200,.25)"/>
+<text x="52" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">P₁</text>
+<text x="168" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">P₂</text>
+<line x1="10" y1="55"  x2="40"  y2="55"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="10" y1="150" x2="40"  y2="150" stroke="#56cfb2" ${_W}="1"/>
+<line x1="14" y1="55"  x2="14"  y2="150" stroke="#56cfb2" ${_W}="1"/>
+<text x="0" y="108" fill="#56cfb2" font-size="9" ${_F}>y₁</text>
+<line x1="186" y1="80"  x2="210" y2="80"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="186" y1="150" x2="210" y2="150" stroke="#56cfb2" ${_W}="1"/>
+<line x1="207" y1="80"  x2="207" y2="150" stroke="#56cfb2" ${_W}="1"/>
+<text x="211" y="118" fill="#56cfb2" font-size="9" ${_F}>y₂</text>
+<line x1="186" y1="150" x2="210" y2="150" stroke="#9ca3af" ${_W}="1"/>
+<line x1="186" y1="168" x2="210" y2="168" stroke="#9ca3af" ${_W}="1"/>
+<line x1="207" y1="150" x2="207" y2="168" stroke="#9ca3af" ${_W}="1"/>
+<text x="211" y="162" fill="#9ca3af" font-size="9" ${_F}>h</text>
+<text x="110" y="163" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">水銀(ρ')</text>
+<text x="52" y="100" fill="#60a5fa" font-size="9" ${_F} text-anchor="middle">水</text>
+<text x="168" y="115" fill="#60a5fa" font-size="9" ${_F} text-anchor="middle">水</text>
+</svg>`;
+
+/* 問8: 逆U字管 */
+SVG[8]=`<svg viewBox="0 0 220 185" xmlns="http://www.w3.org/2000/svg">
+<rect x="40" y="35" width="24" height="130" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="156" y="35" width="24" height="130" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="40" y="15" width="140" height="20" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="42" y="35" width="20" height="90" fill="rgba(59,130,246,.2)"/>
+<rect x="158" y="35" width="20" height="110" fill="rgba(59,130,246,.2)"/>
+<rect x="42" y="17" width="136" height="16" fill="rgba(100,200,100,.2)"/>
+<text x="110" y="28" fill="#a3e635" font-size="9" ${_F} text-anchor="middle">軽液体(ρ')</text>
+<text x="52" y="8" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">P₁</text>
+<text x="168" y="8" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">P₂</text>
+<line x1="10" y1="35"  x2="40"  y2="35"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="10" y1="125" x2="40"  y2="125" stroke="#56cfb2" ${_W}="1"/>
+<line x1="14" y1="35"  x2="14"  y2="125" stroke="#56cfb2" ${_W}="1"/>
+<text x="0" y="84" fill="#56cfb2" font-size="9" ${_F}>y₁</text>
+<line x1="186" y1="35"  x2="210" y2="35"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="186" y1="145" x2="210" y2="145" stroke="#56cfb2" ${_W}="1"/>
+<line x1="207" y1="35"  x2="207" y2="145" stroke="#56cfb2" ${_W}="1"/>
+<text x="211" y="94" fill="#56cfb2" font-size="9" ${_F}>y₂</text>
+<line x1="10" y1="35"  x2="40"  y2="35"  stroke="#9ca3af" ${_W}="1"/>
+<line x1="10" y1="15"  x2="40"  y2="15"  stroke="#9ca3af" ${_W}="1"/>
+<line x1="14" y1="15"  x2="14"  y2="35"  stroke="#9ca3af" ${_W}="1"/>
+<text x="0" y="28" fill="#9ca3af" font-size="9" ${_F}>h</text>
+<text x="52" y="80" fill="#60a5fa" font-size="9" ${_F} text-anchor="middle">水</text>
+<text x="168" y="90" fill="#60a5fa" font-size="9" ${_F} text-anchor="middle">水</text>
+</svg>`;
+
+/* 問9: 平面板 */
+SVG[9]=`<svg viewBox="0 0 210 185" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="20" width="150" height="155" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="1.5" rx="2"/>
+<line x1="30" y1="20" x2="180" y2="20" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="105" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<ellipse cx="105" cy="105" rx="18" ry="48" fill="none" stroke="#a5b4fc" ${_W}="2"/>
+<line x1="8" y1="20"  x2="22" y2="20"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="8" y1="105" x2="22" y2="105" stroke="#56cfb2" ${_W}="1"/>
+<line x1="12" y1="20" x2="12" y2="105" stroke="#56cfb2" ${_W}="1"/>
+<text x="0" y="67" fill="#56cfb2" font-size="9" ${_F}>hG</text>
+<line x1="125" y1="105" x2="158" y2="105" stroke="#f87171" ${_W}="2"/>
+<polygon points="156,101 156,109 164,105" fill="#f87171"/>
+<text x="166" y="109" fill="#f87171" font-size="10" ${_F}>F</text>
+<text x="105" y="108" fill="#a5b4fc" font-size="9" ${_F} text-anchor="middle">円板 d</text>
+</svg>`;
+
+/* 問10: 曲面板（外側） */
+SVG[10]=`<svg viewBox="0 0 210 190" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="20" width="150" height="160" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="1.5" rx="2"/>
+<line x1="20" y1="20" x2="170" y2="20" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="90" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<path d="M 20,60 Q 170,60 170,180" fill="none" stroke="#a5b4fc" ${_W}="2.5"/>
+<text x="18" y="62" fill="#a5b4fc" font-size="10" ${_F}>A</text>
+<text x="158" y="178" fill="#a5b4fc" font-size="10" ${_F}>B</text>
+<line x1="172" y1="20" x2="190" y2="20" stroke="#56cfb2" ${_W}="1"/>
+<line x1="172" y1="60" x2="190" y2="60" stroke="#56cfb2" ${_W}="1"/>
+<line x1="186" y1="20" x2="186" y2="60" stroke="#56cfb2" ${_W}="1"/>
+<text x="192" y="44" fill="#56cfb2" font-size="9" ${_F}>h</text>
+<line x1="20" y1="60" x2="170" y2="60" stroke="#56cfb2" ${_W}="1" stroke-dasharray="4,3"/>
+<text x="95" y="120" fill="#56cfb2" font-size="9" ${_F} text-anchor="middle">r</text>
+<line x1="20" y1="60" x2="170" y2="180" stroke="#56cfb2" ${_W}="1" stroke-dasharray="2,2"/>
+</svg>`;
+
+/* 問11: 浮力（立方体） */
+SVG[11]=`<svg viewBox="0 0 180 175" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="20" width="140" height="145" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="1.5" rx="2"/>
+<line x1="20" y1="20" x2="160" y2="20" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="90" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<rect x="55" y="20" width="70" height="70" fill="#2d3154" stroke="#a5b4fc" ${_W}="2"/>
+<text x="90" y="62" fill="#e8eaf6" font-size="10" ${_F} text-anchor="middle">木材</text>
+<text x="90" y="74" fill="#a5b4fc" font-size="9" ${_F} text-anchor="middle">L×L</text>
+<line x1="160" y1="20" x2="174" y2="20" stroke="#56cfb2" ${_W}="1"/>
+<line x1="160" y1="90" x2="174" y2="90" stroke="#56cfb2" ${_W}="1"/>
+<line x1="169" y1="20" x2="169" y2="90" stroke="#56cfb2" ${_W}="1"/>
+<text x="152" y="57" fill="#56cfb2" font-size="9" ${_F}>h</text>
+</svg>`;
+
+/* 問12: 連続の式 */
+SVG[12]=`<svg viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg">
+<path d="M20,35 L100,35 L150,50 L250,50" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<path d="M20,75 L100,75 L150,60 L250,60" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<path d="M20,35 L100,35 L150,50 L250,50 L250,60 L150,60 L100,75 L20,75 Z" fill="rgba(59,130,246,.14)"/>
+<line x1="35" y1="55" x2="58" y2="55" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="56,51 56,59 64,55" fill="#56cfb2"/>
+<text x="28" y="50" fill="#56cfb2" font-size="9" ${_F}>u₁</text>
+<text x="24" y="90" fill="#9ca3af" font-size="9" ${_F}>d₁</text>
+<line x1="195" y1="55" x2="218" y2="55" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="216,51 216,59 224,55" fill="#56cfb2"/>
+<text x="188" y="50" fill="#56cfb2" font-size="9" ${_F}>u₂</text>
+<text x="190" y="70" fill="#9ca3af" font-size="9" ${_F}>d₂</text>
+</svg>`;
+
+/* 問13: 分岐管 */
+SVG[13]=`<svg viewBox="0 0 280 150" xmlns="http://www.w3.org/2000/svg">
+<path d="M20,65 L120,65 L120,55 L180,30 L180,40 L130,62 L130,88 L180,110 L180,120 L120,95 L120,85 L20,85 Z" fill="rgba(59,130,246,.14)" stroke="#9ca3af" ${_W}="1.5"/>
+<line x1="40" y1="75" x2="68" y2="75" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="66,71 66,79 74,75" fill="#56cfb2"/>
+<text x="30" y="70" fill="#56cfb2" font-size="9" ${_F}>u₁</text>
+<text x="14" y="98" fill="#9ca3af" font-size="9" ${_F}>d₁①</text>
+<line x1="165" y1="35" x2="178" y2="28" stroke="#56cfb2" ${_W}="1.5"/>
+<polygon points="174,24 182,30 174,36" fill="#56cfb2"/>
+<text x="182" y="26" fill="#56cfb2" font-size="9" ${_F}>u₂</text>
+<text x="182" y="38" fill="#9ca3af" font-size="9" ${_F}>d₂②</text>
+<line x1="165" y1="115" x2="178" y2="122" stroke="#56cfb2" ${_W}="1.5"/>
+<polygon points="174,118 182,122 174,128" fill="#56cfb2"/>
+<text x="182" y="120" fill="#56cfb2" font-size="9" ${_F}>u₃</text>
+<text x="182" y="132" fill="#9ca3af" font-size="9" ${_F}>d₃③</text>
+</svg>`;
+
+/* 問14: ベルヌーイ（水平管） */
+SVG[14]=`<svg viewBox="0 0 280 110" xmlns="http://www.w3.org/2000/svg">
+<path d="M20,30 L100,30 L140,45 L250,45 L250,65 L140,65 L100,80 L20,80 Z" fill="rgba(59,130,246,.14)" stroke="#9ca3af" ${_W}="1.5"/>
+<line x1="36" y1="55" x2="58" y2="55" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="56,51 56,59 64,55" fill="#56cfb2"/>
+<text x="25" y="50" fill="#56cfb2" font-size="9" ${_F}>u₁</text>
+<text x="25" y="95" fill="#9ca3af" font-size="9" ${_F}>① d₁</text>
+<line x1="30" y1="25" x2="30" y2="30" stroke="#f87171" ${_W}="2"/>
+<polygon points="26,23 34,23 30,17" fill="#f87171"/>
+<text x="22" y="14" fill="#f87171" font-size="9" ${_F}>p₁</text>
+<line x1="196" y1="55" x2="218" y2="55" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="216,51 216,59 224,55" fill="#56cfb2"/>
+<text x="185" y="50" fill="#56cfb2" font-size="9" ${_F}>u₂?</text>
+<text x="185" y="74" fill="#9ca3af" font-size="9" ${_F}>② d₂</text>
+<line x1="200" y1="40" x2="200" y2="45" stroke="#f87171" ${_W}="2"/>
+<polygon points="196,38 204,38 200,32" fill="#f87171"/>
+<text x="192" y="28" fill="#f87171" font-size="9" ${_F}>p₂?</text>
+</svg>`;
+
+/* 問15: トリチェリー */
+SVG[15]=`<svg viewBox="0 0 200 185" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="20" width="120" height="145" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="1.5" rx="2"/>
+<line x1="30" y1="20" x2="150" y2="20" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="90" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<circle cx="30" cy="165" r="5" fill="#60a5fa"/>
+<line x1="155" y1="20"  x2="170" y2="20"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="155" y1="165" x2="170" y2="165" stroke="#56cfb2" ${_W}="1"/>
+<line x1="163" y1="20"  x2="163" y2="165" stroke="#56cfb2" ${_W}="1"/>
+<text x="172" y="97" fill="#56cfb2" font-size="11" ${_F} font-style="italic">H</text>
+<line x1="30" y1="165" x2="62" y2="165" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="60,161 60,169 68,165" fill="#56cfb2"/>
+<text x="70" y="162" fill="#56cfb2" font-size="10" ${_F}>u=?</text>
+</svg>`;
+
+/* 問16: 密度・比容積 */
+SVG[16]=`<svg viewBox="0 0 200 130" xmlns="http://www.w3.org/2000/svg">
+<rect x="40" y="30" width="120" height="85" rx="4" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="2"/>
+<rect x="40" y="30" width="120" height="22" rx="4" fill="rgba(59,130,246,.07)" stroke="#60a5fa" ${_W}="1"/>
+<text x="100" y="45" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">油（V m³）</text>
+<text x="100" y="82" fill="#a5b4fc" font-size="12" ${_F} text-anchor="middle">ρ, ν, μ = ?</text>
+<line x1="20" y1="115" x2="180" y2="115" stroke="#9ca3af" ${_W}="1" stroke-dasharray="3,3"/>
+<line x1="100" y1="115" x2="100" y2="125" stroke="#9ca3af" ${_W}="1.5"/>
+<polygon points="96,123 104,123 100,129" fill="#9ca3af"/>
+<text x="100" y="120" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">台ばかり: m kg</text>
+</svg>`;
+
+/* 問17: 圧力→水柱 */
+SVG[17]=`<svg viewBox="0 0 160 175" xmlns="http://www.w3.org/2000/svg">
+<rect x="50" y="20" width="60" height="130" fill="rgba(59,130,246,.2)" stroke="#60a5fa" ${_W}="2"/>
+<line x1="50" y1="20" x2="110" y2="20" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="80" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<line x1="115" y1="20"  x2="128" y2="20"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="115" y1="150" x2="128" y2="150" stroke="#56cfb2" ${_W}="1"/>
+<line x1="122" y1="20"  x2="122" y2="150" stroke="#56cfb2" ${_W}="1"/>
+<text x="130" y="90" fill="#56cfb2" font-size="11" ${_F} font-style="italic">h = ?</text>
+<line x1="80" y1="150" x2="80" y2="162" stroke="#f87171" ${_W}="2"/>
+<polygon points="76,160 84,160 80,168" fill="#f87171"/>
+<text x="60" y="173" fill="#f87171" font-size="10" ${_F}>P = 80 kPa</text>
+</svg>`;
+
+/* 問18: U字管(y₁求める) */
+SVG[18]=`<svg viewBox="0 0 230 185" xmlns="http://www.w3.org/2000/svg">
+<rect x="40" y="20" width="24" height="130" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="166" y="20" width="24" height="130" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="40" y="150" width="150" height="20" fill="none" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="42" y="40" width="20" height="110" fill="rgba(59,130,246,.2)"/>
+<rect x="168" y="65" width="20" height="85" fill="rgba(59,130,246,.2)"/>
+<rect x="42" y="150" width="146" height="18" fill="rgba(180,180,200,.25)"/>
+<text x="52"  y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">P₁</text>
+<text x="178" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">P₂</text>
+<text x="52"  y="35" fill="#a3e635" font-size="10" ${_F} text-anchor="middle">y₁=?</text>
+<text x="178" y="60" fill="#56cfb2" font-size="9" ${_F} text-anchor="middle">y₀</text>
+<text x="118" y="163" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">水銀(ρ')</text>
+<line x1="8" y1="150" x2="38" y2="150" stroke="#9ca3af" ${_W}="1" stroke-dasharray="3,2"/>
+<line x1="8" y1="168" x2="38" y2="168" stroke="#9ca3af" ${_W}="1" stroke-dasharray="3,2"/>
+<line x1="12" y1="150" x2="12" y2="168" stroke="#9ca3af" ${_W}="1"/>
+<text x="0" y="162" fill="#9ca3af" font-size="9" ${_F}>h</text>
+</svg>`;
+
+/* 問19: 傾斜円板 */
+SVG[19]=`<svg viewBox="0 0 220 185" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="20" width="160" height="155" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="1.5" rx="2"/>
+<line x1="20" y1="20" x2="180" y2="20" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="100" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<ellipse cx="100" cy="105" rx="14" ry="60" fill="#2d3154" stroke="#a5b4fc" ${_W}="2" transform="rotate(-20,100,105)"/>
+<line x1="5" y1="40"  x2="20"  y2="40"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="5" y1="90"  x2="20"  y2="90"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="9" y1="40"  x2="9"   y2="90"  stroke="#56cfb2" ${_W}="1"/>
+<text x="0" y="68" fill="#56cfb2" font-size="8" ${_F}>h₁</text>
+<line x1="5" y1="122" x2="20"  y2="122" stroke="#56cfb2" ${_W}="1"/>
+<line x1="5" y1="172" x2="20"  y2="172" stroke="#56cfb2" ${_W}="1"/>
+<line x1="9" y1="122" x2="9"   y2="172" stroke="#56cfb2" ${_W}="1"/>
+<text x="0" y="150" fill="#56cfb2" font-size="8" ${_F}>h₂</text>
+<text x="100" y="108" fill="#a5b4fc" font-size="9" ${_F} text-anchor="middle">d</text>
+</svg>`;
+
+/* 問20: 木片＋鉛 */
+SVG[20]=`<svg viewBox="0 0 180 195" xmlns="http://www.w3.org/2000/svg">
+<rect x="30" y="50" width="120" height="135" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="1.5" rx="2"/>
+<line x1="30" y1="50" x2="150" y2="50" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="90" y="44" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<rect x="65" y="50"  width="50" height="20"  rx="2" fill="#1e2235" stroke="#9ca3af" ${_W}="1.5"/>
+<rect x="65" y="70"  width="50" height="80"  rx="2" fill="#2d3154" stroke="#a5b4fc" ${_W}="2"/>
+<rect x="75" y="150" width="30" height="20" rx="2" fill="#6b7280" stroke="#9ca3af" ${_W}="1.5"/>
+<text x="90" y="115" fill="#e8eaf6" font-size="10" ${_F} text-anchor="middle">木材</text>
+<text x="90" y="164" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">鉛</text>
+<line x1="152" y1="50" x2="166" y2="50" stroke="#56cfb2" ${_W}="1"/>
+<line x1="152" y1="70" x2="166" y2="70" stroke="#56cfb2" ${_W}="1"/>
+<line x1="159" y1="50" x2="159" y2="70" stroke="#56cfb2" ${_W}="1"/>
+<text x="168" y="63" fill="#56cfb2" font-size="8" ${_F}>h</text>
+</svg>`;
+
+/* 問21: 下向き3断面ベルヌーイ */
+SVG[21]=`<svg viewBox="0 0 220 230" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="10" width="140" height="80" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="1.5" rx="2"/>
+<line x1="20" y1="10" x2="160" y2="10" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="90" y="5" fill="#60a5fa" font-size="9" ${_F} text-anchor="middle">水面</text>
+<line x1="80" y1="90" x2="80" y2="10" stroke="#56cfb2" ${_W}="1" stroke-dasharray="3,2"/>
+<line x1="160" y1="60" x2="180" y2="60" stroke="#56cfb2" ${_W}="1"/>
+<line x1="160" y1="10" x2="180" y2="10" stroke="#56cfb2" ${_W}="1"/>
+<line x1="175" y1="10" x2="175" y2="60" stroke="#56cfb2" ${_W}="1"/>
+<text x="182" y="39" fill="#56cfb2" font-size="9" ${_F}>H₁</text>
+<rect x="70" y="90" width="20" height="65" fill="rgba(59,130,246,.2)" stroke="#9ca3af" ${_W}="1.5"/>
+<text x="90" y="96" fill="#9ca3af" font-size="8" ${_F}>①</text>
+<line x1="92" y1="90"  x2="110" y2="90"  stroke="#56cfb2" ${_W}="1"/>
+<line x1="92" y1="155" x2="110" y2="155" stroke="#56cfb2" ${_W}="1"/>
+<line x1="106" y1="90" x2="106" y2="155" stroke="#56cfb2" ${_W}="1"/>
+<text x="112" y="127" fill="#56cfb2" font-size="9" ${_F}>H₂</text>
+<circle cx="80" cy="155" r="4" fill="#a5b4fc"/>
+<text x="92" y="153" fill="#a5b4fc" font-size="8" ${_F}>② 出口(P=P₀)</text>
+<line x1="80" y1="159" x2="80" y2="205" stroke="#60a5fa" ${_W}="1.5" stroke-dasharray="3,2"/>
+<line x1="92" y1="155" x2="110" y2="155" stroke="#9ca3af" ${_W}="1"/>
+<line x1="92" y1="205" x2="110" y2="205" stroke="#9ca3af" ${_W}="1"/>
+<line x1="106" y1="155" x2="106" y2="205" stroke="#9ca3af" ${_W}="1"/>
+<text x="112" y="184" fill="#9ca3af" font-size="9" ${_F}>H₃</text>
+<text x="68" y="214" fill="#9ca3af" font-size="8" ${_F} text-anchor="middle">③ 自由噴流</text>
+</svg>`;
+
+/* 問22: 傾斜拡大管 */
+SVG[22]=`<svg viewBox="0 0 280 150" xmlns="http://www.w3.org/2000/svg">
+<path d="M20,110 L100,90 L100,74 L160,48 L220,48 L220,68 L160,68 L106,95 L106,110 Z" fill="rgba(59,130,246,.14)" stroke="#9ca3af" ${_W}="1.5"/>
+<line x1="30" y1="100" x2="55" y2="100" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="53,96 53,104 61,100" fill="#56cfb2"/>
+<text x="22" y="96" fill="#56cfb2" font-size="9" ${_F}>v₁</text>
+<line x1="175" y1="58" x2="200" y2="58" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="198,54 198,62 206,58" fill="#56cfb2"/>
+<text x="167" y="54" fill="#56cfb2" font-size="9" ${_F}>v₂</text>
+<text x="62" y="120" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">① d₁</text>
+<text x="180" y="75" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">② d₂</text>
+<line x1="20" y1="115" x2="20" y2="140" stroke="#56cfb2" ${_W}="1"/>
+<line x1="104" y1="115" x2="104" y2="140" stroke="#56cfb2" ${_W}="1"/>
+<line x1="20" y1="136" x2="104" y2="136" stroke="#56cfb2" ${_W}="1"/>
+<text x="62" y="148" fill="#56cfb2" font-size="8" ${_F} text-anchor="middle">z₁</text>
+<line x1="20" y1="140" x2="20" y2="145" stroke="#56cfb2" ${_W}="1"/>
+<line x1="220" y1="55" x2="220" y2="145" stroke="#56cfb2" ${_W}="1"/>
+<line x1="20" y1="142" x2="220" y2="142" stroke="#56cfb2" ${_W}="1"/>
+<text x="140" y="148" fill="#56cfb2" font-size="8" ${_F} text-anchor="middle">z₂（基準面から）</text>
+</svg>`;
+
+/* 問23: 曲面板（内側） */
+SVG[23]=`<svg viewBox="0 0 220 195" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="15" width="160" height="170" fill="rgba(59,130,246,.14)" stroke="#60a5fa" ${_W}="1.5" rx="2"/>
+<line x1="20" y1="15" x2="180" y2="15" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="100" y="10" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<path d="M 180,65 Q 180,185 60,185" fill="rgba(30,34,53,.8)" stroke="#a5b4fc" ${_W}="2.5"/>
+<line x1="20" y1="65" x2="180" y2="65" stroke="#56cfb2" ${_W}="1" stroke-dasharray="3,2"/>
+<text x="178" y="63" fill="#a5b4fc" font-size="10" ${_F} text-anchor="end">A</text>
+<text x="62" y="183" fill="#a5b4fc" font-size="10" ${_F}>B</text>
+<line x1="182" y1="15" x2="198" y2="15" stroke="#56cfb2" ${_W}="1"/>
+<line x1="182" y1="65" x2="198" y2="65" stroke="#56cfb2" ${_W}="1"/>
+<line x1="194" y1="15" x2="194" y2="65" stroke="#56cfb2" ${_W}="1"/>
+<text x="200" y="44" fill="#56cfb2" font-size="9" ${_F}>h</text>
+<line x1="180" y1="65" x2="60" y2="185" stroke="#56cfb2" ${_W}="1" stroke-dasharray="2,2"/>
+<text x="130" y="120" fill="#56cfb2" font-size="9" ${_F} text-anchor="middle">r</text>
+<line x1="50" y1="100" x2="70" y2="118" stroke="#f87171" ${_W}="1.5"/>
+<polygon points="65,114 72,122 76,112" fill="#f87171"/>
+<text x="36" y="100" fill="#f87171" font-size="9" ${_F}>Fx,Fy</text>
+</svg>`;
+
 const PROBS = [
   {
-    no:1, ch:'第1章', chN:1, tag:'動粘度',
+    no:1, ch:'第1章', chN:1, tag:'動粘度', svg:SVG[1],
     q:'間隙 <code>Y = 1.0 mm</code>、比重 <code>s = 0.90</code> の油が満たされたシリンダを、速度 <code>U = 5.0 m/s</code> でピストンが動いている。シリンダ面のせん断応力が <code>τ = 3.60 Pa</code> のとき、この油の動粘度 <code>ν</code> を求めよ。<br><span style="font-size:.8rem;color:#9ca3af">（小さい数は <code>8e-7</code> のように入力可）</span>',
     hint:'① τ = μ(U/Y) → μ = τY/U\n② ρ = s × 1000\n③ ν = μ/ρ',
     reveal:['μ = 3.60 × 0.001 / 5.0 = 7.20×10⁻⁴ Pa·s','ρ = 0.90 × 1000 = 900 kg/m³','ν = 7.20×10⁻⁴ / 900 = 8.00×10⁻⁷ m²/s'],
     parts:[{label:'', unit:'m²/s', ans:8.00e-7, isAngle:false}]
   },
   {
-    no:2, ch:'第1章', chN:1, tag:'両面せん断',
+    no:2, ch:'第1章', chN:1, tag:'両面せん断', svg:SVG[2],
     q:'間隔 <code>h = 20 mm</code> の固定平行2平面に <code>μ = 0.80 Pa·s</code> の油が満たされている。面積 <code>A = 0.30 m²</code> の薄い板を、固定面から <code>Y₁ = 8.0 mm</code> の位置に置き、速度 <code>U = 0.50 m/s</code> で引くのに必要な力 <code>F</code> を求めよ。',
     hint:'F = μAU(1/Y₁ + 1/Y₂)　（Y₂ = h − Y₁ = 12 mm）',
     reveal:['Y₂ = 20 − 8.0 = 12.0 mm','F = 0.80 × 0.30 × 0.50 × (1/0.008 + 1/0.012)','= 0.12 × (125 + 83.3) = 0.12 × 208.3 = 25.0 N'],
     parts:[{label:'', unit:'N', ans:25.0, isAngle:false}]
   },
   {
-    no:3, ch:'第1章', chN:1, tag:'傾斜面滑落',
+    no:3, ch:'第1章', chN:1, tag:'傾斜面滑落', svg:SVG[3],
     q:'底面積 <code>A = 0.04 m²</code>、質量 <code>m = 40 kg</code> の物体が、傾斜角 <code>θ = 30°</code> の斜面上を油膜（厚さ <code>δ = 0.020 mm</code>、粘性係数 <code>μ = 0.020 Pa·s</code>）の上を滑落する。到達できる最大速度 <code>U<sub>max</sub></code> を求めよ。',
     hint:'つり合い: mgsinθ = μA(U_max/δ)\n→ U_max = δmgsinθ/(μA)',
     reveal:['U_max = δmgsinθ/(μA)','= (0.020×10⁻³ × 40 × 9.81 × sin30°) / (0.020 × 0.04)','= (2.0×10⁻⁵ × 196.2) / 8.0×10⁻⁴ = 4.91 m/s'],
     parts:[{label:'', unit:'m/s', ans:4.905, isAngle:false}]
   },
   {
-    no:4, ch:'第2章', chN:2, tag:'静水圧',
+    no:4, ch:'第2章', chN:2, tag:'静水圧', svg:SVG[4],
     q:'水面下 <code>h = 12 m</code> における水の圧力を求めよ。ただし大気圧 <code>P₀ = 101 kPa</code> とする。',
     hint:'ゲージ圧: p = ρgh\n絶対圧: P = P₀ + p',
     reveal:['p = 1000 × 9.81 × 12 = 117 720 Pa ≈ 117.7 kPa','P = 101 + 117.7 = 218.7 kPa ≈ 219 kPa'],
@@ -132,7 +555,7 @@ const PROBS = [
     ]
   },
   {
-    no:5, ch:'第2章', chN:2, tag:'パスカルの原理',
+    no:5, ch:'第2章', chN:2, tag:'パスカルの原理', svg:SVG[5],
     q:'小ピストン直径 <code>d₁ = 20 mm</code> に <code>F₁ = 10 N</code> を加えた。液体の圧力 <code>P</code> と大ピストン直径 <code>d₂ = 80 mm</code> に生じる力 <code>F₂</code> を求めよ。',
     hint:'P = F₁/A₁ = 4F₁/(πd₁²)\nF₂ = (d₂/d₁)² × F₁',
     reveal:['P = 4×10/(π×0.02²) = 31 831 Pa ≈ 31.8 kPa','F₂ = (80/20)² × 10 = 16 × 10 = 160 N'],
@@ -142,35 +565,35 @@ const PROBS = [
     ]
   },
   {
-    no:6, ch:'第2章', chN:2, tag:'レバー付きパスカル',
+    no:6, ch:'第2章', chN:2, tag:'レバー付きパスカル', svg:SVG[6],
     q:'レバーのA端（アーム長 <code>l₁ = 150 mm</code>）に <code>f = 300 N</code> を加えたとき、B端（アーム長 <code>l₂ = 50 mm</code>）の小ピストン（<code>d₁ = 40 mm</code>）に力が伝わる。大ピストン（<code>d₂ = 160 mm</code>）に生じる力 <code>F₂</code> を求めよ。',
     hint:'① てこ: F₁ = f × l₁/l₂\n② パスカル: F₂ = (d₂/d₁)² × F₁',
     reveal:['F₁ = 300 × 150/50 = 900 N','F₂ = (160/40)² × 900 = 16 × 900 = 14 400 N = 14.4 kN'],
     parts:[{label:'', unit:'kN', ans:14.4, isAngle:false}]
   },
   {
-    no:7, ch:'第2章', chN:2, tag:'U字管マノメータ',
+    no:7, ch:'第2章', chN:2, tag:'U字管マノメータ', svg:SVG[7],
     q:'U字管マノメータで、両腕の液体は水（<code>ρ = 1000 kg/m³</code>）、底部の液体は水銀（<code>ρ\' = 13 600 kg/m³</code>）。各高さは <code>h = 0.50 m</code>、<code>y₁ = 0.80 m</code>、<code>y₂ = 0.30 m</code>。圧力差 <code>P₁ − P₂</code> を求めよ。',
     hint:'基準面Aで等値:\nP_A = P₁ + ρgy₁　（左）\nP_A = P₂ + ρgy₂ + ρ\'gh　（右）\n→ P₁−P₂ = ρg(y₂−y₁) + ρ\'gh',
     reveal:["P₁−P₂ = 1000×9.81×(0.30−0.80) + 13600×9.81×0.50","= 9810×(−0.50) + 66708 = −4905 + 66708 = 61 803 Pa ≈ 61.8 kPa"],
     parts:[{label:'', unit:'kPa', ans:61.8, isAngle:false}]
   },
   {
-    no:8, ch:'第2章', chN:2, tag:'逆U字管マノメータ',
+    no:8, ch:'第2章', chN:2, tag:'逆U字管マノメータ', svg:SVG[8],
     q:'逆U字管マノメータで、両腕は水（<code>ρ = 1000 kg/m³</code>）、上部は軽い液体（<code>ρ\' = 800 kg/m³</code>）。<code>h = 0.20 m</code>、<code>y₁ = 0.70 m</code>、<code>y₂ = 0.30 m</code>。圧力差 <code>P₁ − P₂</code> を求めよ。',
     hint:'逆U字管の基準面Aで等値（上部液体で−）:\nP₁−P₂ = ρ₁gy₁ − ρ\'gh − ρ₂gy₂',
     reveal:['P₁−P₂ = 1000×9.81×0.70 − 800×9.81×0.20 − 1000×9.81×0.30','= 9.81×(700 − 160 − 300) = 9.81×240 = 2354 Pa ≈ 2.35 kPa'],
     parts:[{label:'', unit:'kPa', ans:2.354, isAngle:false}]
   },
   {
-    no:9, ch:'第2章', chN:2, tag:'平面板への力',
+    no:9, ch:'第2章', chN:2, tag:'平面板への力', svg:SVG[9],
     q:'水面に対して垂直な円板（直径 <code>d = 1.0 m</code>）が、図心深さ <code>h_G = 1.5 m</code> の位置にある。この板に作用する合力 <code>F</code> を求めよ。',
     hint:'F = ρg h_G A　（A = πd²/4）',
     reveal:['A = π×1.0²/4 = 0.7854 m²','F = 1000×9.81×1.5×0.7854 = 11 554 N ≈ 11.6 kN'],
     parts:[{label:'', unit:'kN', ans:11.55, isAngle:false}]
   },
   {
-    no:10, ch:'第2章', chN:2, tag:'曲面板',
+    no:10, ch:'第2章', chN:2, tag:'曲面板', svg:SVG[10],
     q:'タンクの壁面 AB が半径 <code>r = 0.8 m</code>、幅 <code>b = 1.5 m</code> の 1/4 円筒面。水面から A までの深さ <code>h = 0.5 m</code>。壁面 AB に作用する力の水平分力 <code>F<sub>x</sub></code>・鉛直分力 <code>F<sub>y</sub></code>・合力 <code>F</code>・方向角 <code>α</code> を求めよ。',
     hint:'Fx = ρg(h + r/2)×br　（鉛直投影面への静水圧）\nFy = ρg(πr²/4 + hr)×b　（上部液体の重量）\nF = √(Fx²+Fy²)、α = arctan(Fy/Fx)',
     reveal:[
@@ -187,21 +610,21 @@ const PROBS = [
     ]
   },
   {
-    no:11, ch:'第2章', chN:2, tag:'浮力',
+    no:11, ch:'第2章', chN:2, tag:'浮力', svg:SVG[11],
     q:'密度 <code>ρ = 800 kg/m³</code>、一辺 <code>L = 0.40 m</code> の立方体の木材が水（<code>ρ<sub>w</sub> = 1000 kg/m³</code>）に浮いている。水面下に沈んでいる深さ <code>h</code> を求めよ。',
     hint:'浮力 = 重力：ρ_w × g × L² × h = ρ_wood × g × L³\n→ h = ρ_wood × L / ρ_w',
     reveal:['h = ρ_wood × L / ρ_w = 800 × 0.40 / 1000 = 0.320 m'],
     parts:[{label:'', unit:'m', ans:0.320, isAngle:false}]
   },
   {
-    no:12, ch:'第3章', chN:3, tag:'連続の式',
+    no:12, ch:'第3章', chN:3, tag:'連続の式', svg:SVG[12],
     q:'内径 <code>d₁ = 120 mm</code> の管を平均流速 <code>u₁ = 2.0 m/s</code> で流れる水が、内径 <code>d₂ = 40 mm</code> に縮小した。断面②での流速 <code>u₂</code> を求めよ。',
     hint:'u₂ = (d₁/d₂)² × u₁',
     reveal:['u₂ = (120/40)² × 2.0 = 9 × 2.0 = 18.0 m/s'],
     parts:[{label:'', unit:'m/s', ans:18.0, isAngle:false}]
   },
   {
-    no:13, ch:'第3章', chN:3, tag:'分岐管',
+    no:13, ch:'第3章', chN:3, tag:'分岐管', svg:SVG[13],
     q:'内径 <code>d₁ = 80 mm</code> の管を流速 <code>u₁ = 4.0 m/s</code> で流れる水が、<code>d₂ = 60 mm</code>（管②）と <code>d₃ = 40 mm</code>（管③）に等量分岐する。流量 <code>Q₁</code>、管②の流速 <code>u₂</code>、管③の流速 <code>u₃</code> を求めよ。',
     hint:'Q₁ = A₁u₁　　Q₂=Q₃=Q₁/2\nu₂=Q₂/A₂、u₃=Q₃/A₃',
     reveal:[
@@ -217,7 +640,7 @@ const PROBS = [
     ]
   },
   {
-    no:14, ch:'第4章', chN:4, tag:'ベルヌーイ（2点間）',
+    no:14, ch:'第4章', chN:4, tag:'ベルヌーイ（2点間）', svg:SVG[14],
     q:'水平管が <code>d₁ = 60 mm</code> から <code>d₂ = 30 mm</code> に縮小している。断面①の流速 <code>u₁ = 3.0 m/s</code>、圧力 <code>p₁ = 180 kPa</code>（高さは同じ）。断面②の流速 <code>u₂</code> と圧力 <code>p₂</code> を求めよ。',
     hint:'① 連続の式: u₂ = (d₁/d₂)²u₁\n② ベルヌーイ: p₂ = p₁ + ρ(u₁²−u₂²)/2',
     reveal:[
@@ -231,7 +654,7 @@ const PROBS = [
     ]
   },
   {
-    no:15, ch:'第4章', chN:4, tag:'トリチェリーの定理',
+    no:15, ch:'第4章', chN:4, tag:'トリチェリーの定理', svg:SVG[15],
     q:'十分大きいタンクの液面から <code>H = 5.0 m</code> 下の小孔からの噴出速度 <code>u</code> を求めよ。（液面速度は無視してよい）',
     hint:'液面①と小孔②にベルヌーイ適用（どちらも P₀）:\nP₀ + ρgH = P₀ + ρu²/2\n→ u = √(2gH)',
     reveal:['u = √(2 × 9.81 × 5.0) = √98.1 = 9.90 m/s'],
@@ -239,7 +662,7 @@ const PROBS = [
   },
   /* ── 演習JPG 追加問題 ── */
   {
-    no:16, ch:'第1章', chN:1, tag:'密度・比容積・粘性係数',
+    no:16, ch:'第1章', chN:1, tag:'密度・比容積・粘性係数', svg:SVG[16],
     q:'動粘度 <code>ν = 2.00×10⁻⁵ m²/s</code> の油の体積が <code>V = 30×10⁻³ m³</code>、質量が <code>m = 24.0 kg</code> である。密度 <code>ρ</code>、比容積 <code>v</code>（= V/m）、粘性係数 <code>μ</code> を求めよ。',
     hint:'ρ = m/V\nv = 1/ρ（または V/m）\nμ = ν × ρ',
     reveal:[
@@ -254,14 +677,14 @@ const PROBS = [
     ]
   },
   {
-    no:17, ch:'第2章', chN:2, tag:'圧力→水柱高さ換算',
+    no:17, ch:'第2章', chN:2, tag:'圧力→水柱高さ換算', svg:SVG[17],
     q:'圧力 <code>P = 80 kPa</code> は水柱何 m に相当するか求めよ。',
     hint:'P = ρgh → h = P/(ρg)',
     reveal:['h = 80 000 / (1000 × 9.81) = 8.155 ≈ 8.16 m'],
     parts:[{label:'', unit:'m', ans:8.155, isAngle:false}]
   },
   {
-    no:18, ch:'第2章', chN:2, tag:'U字管（液面高さを求める）',
+    no:18, ch:'第2章', chN:2, tag:'U字管（液面高さを求める）', svg:SVG[18],
     q:'U字管マノメータで2容器が接続されている。液体は水（<code>ρ=1000 kg/m³</code>）、底部は水銀（<code>ρ\'=13 600 kg/m³</code>）。左容器の圧力が右より <code>P₁−P₂=50 kPa</code> 高い。水銀柱の高さ <code>h=0.40 m</code>、右管の水銀面からの水位 <code>y₀=0.25 m</code>。左管の水銀面からの水位 <code>y₁</code> を求めよ。',
     hint:'左水銀面で圧力を等値:\nP₁ + ρg·y₁ = P₂ + ρg·y₀ + ρ\'g·h\n→ y₁ = y₀ + (P₂−P₁)/(ρg) + (ρ\'/ρ)·h',
     reveal:[
@@ -271,7 +694,7 @@ const PROBS = [
     parts:[{label:'', unit:'m', ans:0.593, isAngle:false}]
   },
   {
-    no:19, ch:'第2章', chN:2, tag:'傾斜平面板（合力・作用点）',
+    no:19, ch:'第2章', chN:2, tag:'傾斜平面板（合力・作用点）', svg:SVG[19],
     q:'傾斜した円板（直径 <code>d=2.0 m</code>）が水中に置かれている。上端の水深 <code>h₁=0.80 m</code>、下端の水深 <code>h₂=2.0 m</code>。この円板に作用する合力 <code>F</code> と、水面から板面に沿った作用点距離 <code>y_c</code> を求めよ。',
     hint:'hG = (h₁+h₂)/2, A = πd²/4\nF = ρg·hG·A\nsinθ = (h₂−h₁)/d, s_G = hG/sinθ\ny_c = s_G + IG/(A·s_G)   [IG = πd⁴/64]',
     reveal:[
@@ -289,7 +712,7 @@ const PROBS = [
     ]
   },
   {
-    no:20, ch:'第2章', chN:2, tag:'浮力（木片＋鉛）',
+    no:20, ch:'第2章', chN:2, tag:'浮力（木片＋鉛）', svg:SVG[20],
     q:'比重 <code>s=0.70</code>、長さ <code>L=1.5 m</code>、一辺 <code>a=6.0 cm</code> の正方形断面の木片の一端に、質量 <code>m_pb=1.2 kg</code>（比重11.5）の鉛を付けて水中に入れたところ鉛を下にして浮いた。水面から突き出た部分の長さ <code>h</code> を求めよ。',
     hint:'全重力 W = (m_wood + m_pb)g\n沈み長さ = L−h\n浮力 B = ρ_w·g·[a²(L−h) + V_pb]\nW = B を解く',
     reveal:[
@@ -303,7 +726,7 @@ const PROBS = [
     parts:[{label:'', unit:'m', ans:0.146, isAngle:false}]
   },
   {
-    no:21, ch:'第4章', chN:4, tag:'下向き3断面ベルヌーイ',
+    no:21, ch:'第4章', chN:4, tag:'下向き3断面ベルヌーイ', svg:SVG[21],
     q:'大きなタンクの底面に下向きで直径 <code>d=60 mm</code> の円管が取り付けられている（ρ=1000 kg/m³）。タンク底面から水面までの高さ <code>H₁=1.2 m</code>、円管の出口②はタンク底面から <code>H₂=0.5 m</code> 下方（断面②の圧力は大気圧）。断面①はタンク底面の管入口。出口②からさらに <code>H₃=0.8 m</code> 下方が断面③（自由噴流）。<br>（1）出口②の流速 <code>u₂</code>　（2）断面①のゲージ圧 <code>p₁</code>　（3）断面③の流速 <code>u₃</code>　（4）断面③の水柱の直径 <code>d₃</code>',
     hint:'液面→②ベルヌーイ: u₂=√(2g(H₁+H₂))\n液面→①ベルヌーイ: p₁=ρg·H₁−ρu₁²/2　(u₁=u₂)\n液面→③ベルヌーイ: u₃=√(2g(H₁+H₂+H₃))\nd₃=d√(u₂/u₃)',
     reveal:[
@@ -320,7 +743,7 @@ const PROBS = [
     ]
   },
   {
-    no:22, ch:'第4章', chN:4, tag:'傾斜拡大管ベルヌーイ',
+    no:22, ch:'第4章', chN:4, tag:'傾斜拡大管ベルヌーイ', svg:SVG[22],
     q:'左側から右側へ流れる傾斜した拡大管。内径は断面① <code>d₁=60 mm</code>、断面② <code>d₂=90 mm</code>。基準面からの高さは <code>z₁=20 cm</code>、<code>z₂=50 cm</code>。断面①の流速 <code>v₁=1.5 m/s</code>。<br>（1）流量 <code>Q</code>　（2）断面②の流速 <code>v₂</code>　（3）断面①の圧力が <code>P₁=8.0 kPa</code>（ゲージ）のとき断面②の圧力 <code>P₂</code>',
     hint:'Q=A₁v₁, v₂=Q/A₂\nベルヌーイ: P₂=P₁+ρ(v₁²−v₂²)/2 − ρg(z₂−z₁)',
     reveal:[
@@ -337,7 +760,7 @@ const PROBS = [
     ]
   },
   {
-    no:23, ch:'第2章', chN:2, tag:'曲面板（タンク内側）',
+    no:23, ch:'第2章', chN:2, tag:'曲面板（タンク内側）', svg:SVG[23],
     q:'タンクの 1/4 円弧面 AB（半径 <code>r=1.2 m</code>、タンク幅 <code>b=1.2 m</code>）に水が作用している。A は水面から <code>h=0.8 m</code> 下方、B は A の鉛直下 r の位置。合力 <code>F</code> と水平方向からの角度 <code>α</code> を求めよ。',
     hint:'Fx=ρg(h+r/2)·r·b　（鉛直投影面）\nFy=ρg·b·(h·r + πr²/4)　（上方液体重量）\nF=√(Fx²+Fy²), α=arctan(Fy/Fx)',
     reveal:[
@@ -432,6 +855,7 @@ function render(){
         <span class="prob-tag">${p.tag}</span>
       </div>
       <div class="prob-body">
+        ${p.svg?`<div class="prob-svg">${p.svg}</div>`:''}
         <div class="prob-q">${p.q}</div>
         ${p.parts.map((pt,i)=>`
           <div class="part">
