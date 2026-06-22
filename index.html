@@ -3273,7 +3273,8 @@ function _renderRace(data) {
   // 自己申告フォーム（active中かつグループ所属）
   const inRace = authUserId && groupMap[authUserId] != null;
   const isActive = race.status === 'active';
-  document.getElementById('race-self-report').style.display = (inRace && isActive) ? '' : 'none';
+  const withinPeriod = !race.end_date || new Date() <= new Date(race.end_date);
+  document.getElementById('race-self-report').style.display = (inRace && isActive && withinPeriod) ? '' : 'none';
 
 }
 
