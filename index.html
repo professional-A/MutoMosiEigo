@@ -446,6 +446,7 @@ h1{
   <button class="auth-btn" id="scores-btn" style="display:none" onclick="openScoresModal()">📊成績</button>
   <button class="auth-btn" id="battle-btn" style="display:none" onclick="openBattleModal()">⚔️バトル</button>
   <button class="auth-btn" id="clrank-btn" style="display:none" onclick="openClrankPage()">🏆順位</button>
+  <button class="auth-btn" id="race-view-btn" style="display:none" onclick="openRaceView()">🏁レース</button>
   <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
   <button class="auth-btn" id="test-btn" style="display:none" onclick="openTestModal()">📋テスト</button>
   <button class="auth-btn" id="pw-open-btn" onclick="openLoginModal()">IDでログイン</button>
@@ -748,6 +749,53 @@ h1{
       <button onclick="adminCloseRace()" style="background:#2a1a0a;color:#fcd34d;border:1px solid #f59e0b;font-weight:700">🔒 レース終了</button>
       <button onclick="openPairModal()" style="background:#1a2a1a;color:#86efac;border:1px solid #4ade80;font-weight:700">👥 ペア設定</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- レース閲覧モーダル -->
+<div class="modal-bg" id="race-view-bg" style="display:none" onclick="if(event.target===this)closeRaceView()">
+  <div class="modal" style="width:min(640px,98vw);max-height:95vh;overflow-y:auto;padding:20px 16px;position:relative">
+    <button onclick="closeRaceView()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2 id="race-hd-title" style="margin-bottom:2px">🏁 レース</h2>
+    <div id="race-hd-date" style="font-size:.78rem;color:var(--dim);margin-bottom:12px"></div>
+    <div class="race-groups" id="race-groups"></div>
+    <div style="overflow-x:auto">
+      <table class="race-table">
+        <thead><tr>
+          <th>#</th><th>名前</th><th>ペア</th><th>武藤模試</th><th>外部</th><th style="color:var(--dim)">🎮</th><th>合計</th><th>シーズンpt</th><th>ライバル差</th>
+        </tr></thead>
+        <tbody id="race-table-body"></tbody>
+      </table>
+    </div>
+    <div id="race-pair-ranking" style="display:none;margin-top:14px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--amber);letter-spacing:.05em;margin-bottom:6px">👥 ペアランキング</div>
+      <table class="race-table">
+        <thead><tr>
+          <th>#</th><th>ペア名</th><th>メンバー</th><th>合計勉強</th><th>合計シーズンpt</th>
+        </tr></thead>
+        <tbody id="race-pair-tbody"></tbody>
+      </table>
+    </div>
+    <div id="race-self-report" style="display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:12px">
+      <div class="race-report">
+        <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📖 武藤模試:</span>
+        <input id="race-muto-h" type="number" min="0" placeholder="時間" style="width:52px">
+        <input id="race-muto-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
+        <input id="race-muto-tool" type="text" placeholder="内容（例: Unit1語彙）" style="width:140px">
+        <button onclick="submitRaceAll()">💾 記録</button>
+      </div>
+      <div class="race-report" style="margin-top:6px">
+        <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📚 外部勉強:</span>
+        <input id="race-manual-h" type="number" min="0" placeholder="時間" style="width:52px">
+        <input id="race-manual-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
+        <input id="race-manual-tool" type="text" placeholder="内容（例: 教科書p.12）" style="width:140px">
+      </div>
+      <div class="race-report" style="margin-top:6px">
+        <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">🎮 ゲーム:</span>
+        <input id="race-game-h" type="number" min="0" placeholder="時間" style="width:52px">
+        <input id="race-game-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
+      </div>
     </div>
   </div>
 </div>
@@ -1097,55 +1145,6 @@ h1{
 </header>
 
 <div class="wrap">
-  <!-- レースセクション -->
-  <div id="race-section" style="display:none">
-    <div class="race-hd" onclick="toggleRaceBody()">
-      <span>🏁</span>
-      <span class="race-hd-title" id="race-hd-title">勉強時間レース</span>
-      <span class="race-hd-date" id="race-hd-date"></span>
-      <span id="race-hd-arrow" style="color:var(--dim);font-size:.8rem">▼</span>
-    </div>
-    <div id="race-body" class="race-body">
-      <div class="race-groups" id="race-groups"></div>
-      <table class="race-table">
-        <thead><tr>
-          <th>#</th><th>名前</th><th>グループ</th><th>武藤模試</th><th>外部</th><th>合計</th><th>シーズンpt</th><th>ライバル差</th>
-        </tr></thead>
-        <tbody id="race-table-body"></tbody>
-      </table>
-      <!-- ペアランキング -->
-      <div id="race-pair-ranking" style="display:none;margin-top:14px">
-        <div style="font-size:.72rem;font-weight:700;color:var(--amber);letter-spacing:.05em;margin-bottom:6px">👥 ペアランキング</div>
-        <table class="race-table">
-          <thead><tr>
-            <th>#</th><th>ペア名</th><th>メンバー</th><th>合計勉強</th><th>合計シーズンpt</th>
-          </tr></thead>
-          <tbody id="race-pair-tbody"></tbody>
-        </table>
-      </div>
-
-      <div id="race-self-report" style="display:none">
-        <div class="race-report">
-          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📖 武藤模試:</span>
-          <input id="race-muto-h" type="number" min="0" placeholder="時間" style="width:52px">
-          <input id="race-muto-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
-          <input id="race-muto-tool" type="text" placeholder="内容（例: Unit1語彙）" style="width:140px">
-          <button onclick="submitRaceAll()">💾 記録</button>
-        </div>
-        <div class="race-report" style="margin-top:6px">
-          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📚 外部勉強:</span>
-          <input id="race-manual-h" type="number" min="0" placeholder="時間" style="width:52px">
-          <input id="race-manual-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
-          <input id="race-manual-tool" type="text" placeholder="内容（例: 教科書p.12）" style="width:140px">
-        </div>
-        <div class="race-report" style="margin-top:6px">
-          <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">🎮 ゲーム:</span>
-          <input id="race-game-h" type="number" min="0" placeholder="時間" style="width:52px">
-          <input id="race-game-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
-        </div>
-      </div>
-    </div>
-  </div>
   <!-- フォルダビュー（デフォルト） -->
   <div id="folder-view">
     <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
@@ -3154,12 +3153,19 @@ let _currentRace = null;
 async function loadRaceSection() {
   try {
     const data = await fetch('/api/races/current').then(r => r.json());
-    const sec = document.getElementById('race-section');
-    if (!data.race) { if (sec) sec.style.display = 'none'; return; }
+    const btn = document.getElementById('race-view-btn');
+    if (!data.race) { if (btn) btn.style.display = 'none'; _currentRace = null; return; }
     _currentRace = data.race;
-    if (sec) sec.style.display = '';
-    _renderRace(data);
+    if (btn) btn.style.display = '';
+    if (document.getElementById('race-view-bg').style.display !== 'none') _renderRace(data);
   } catch(e) {}
+}
+function openRaceView() {
+  document.getElementById('race-view-bg').style.display = 'flex';
+  loadRaceSection();
+}
+function closeRaceView() {
+  document.getElementById('race-view-bg').style.display = 'none';
 }
 
 function _fmtMin(totalMin) {
@@ -3192,27 +3198,35 @@ function _renderRace(data) {
     const log = logMap[m.user_id] || {};
     const mutoMin = log.muto_minutes || 0;
     const manMin  = log.manual_minutes || 0;
-    allMembers.push({ ...m, mutoMin, manMin, total: mutoMin + manMin, gname: pairNameMap[m.user_id] || '', log });
+    const gameMin = log.game_minutes  || 0;
+    allMembers.push({ ...m, mutoMin, manMin, gameMin, total: mutoMin + manMin, gname: pairNameMap[m.user_id] || '', log });
   }));
   allMembers.sort((a, b) => b.total - a.total);
 
-  const myRow = authUserId ? allMembers.find(m => m.user_id === authUserId) : null;
+  // 同順位対応
+  let _rank = 1;
+  allMembers.forEach((m, i) => {
+    if (i > 0 && m.total === allMembers[i - 1].total) { m.rank = allMembers[i - 1].rank; }
+    else { m.rank = _rank; }
+    _rank = m.rank + 1;
+  });
 
   const tbody = document.getElementById('race-table-body');
   tbody.innerHTML = allMembers.map((m, i) => {
     const isMe = m.user_id === authUserId;
-    const prev = allMembers[i - 1];
+    const prev = allMembers.slice(0, i).reverse().find(p => p.rank < m.rank);
     const rivalDiff = prev ? (m.total - prev.total) : null;
     const rivalHtml = rivalDiff !== null
       ? `<span class="race-rival${rivalDiff >= 0 ? ' ahead' : ''}">${rivalDiff >= 0 ? '+' : ''}${_fmtMin(rivalDiff)}</span>`
       : '<span style="color:var(--teal);font-size:.7rem">👑</span>';
     const spt = m.season_points != null ? m.season_points.toLocaleString() + 'pt' : '―';
     return `<tr class="${isMe ? 'rank-me' : ''}">
-      <td style="color:var(--dim)">${i + 1}</td>
+      <td style="color:var(--dim)">${m.rank}</td>
       <td style="font-weight:${isMe ? '700' : '400'};color:${isMe ? 'var(--teal)' : 'var(--fg)'}">${esc(m.username)}${isMe ? ' 👤' : ''}</td>
       <td style="color:var(--dim);font-size:.7rem">${esc(m.gname)}</td>
       <td>${m.mutoMin > 0 ? _fmtMin(m.mutoMin) : '—'}</td>
       <td>${m.manMin > 0 ? _fmtMin(m.manMin) : '—'}</td>
+      <td style="color:var(--dim);font-size:.72rem">${m.gameMin > 0 ? _fmtMin(m.gameMin) : '—'}</td>
       <td style="font-weight:700;color:#d4e8ff">${_fmtMin(m.total)}</td>
       <td style="color:var(--amber);font-size:.72rem">${spt}</td>
       <td>${rivalHtml}</td>
@@ -3261,8 +3275,8 @@ function _renderRace(data) {
     pairSection.style.display = 'none';
   }
 
-  // 自己申告フォーム（active中かつグループ所属）
-  const inRace = authUserId && groupMap[authUserId] != null;
+  // 自己申告フォーム（active中かつレース参加者）
+  const inRace = authUserId && allMembers.some(m => m.user_id === authUserId);
   const isActive = race.status === 'active';
   document.getElementById('race-self-report').style.display = (inRace && isActive) ? '' : 'none';
 
