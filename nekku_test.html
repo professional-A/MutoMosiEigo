@@ -3,85 +3,89 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>熱流体工学Ⅰ 基礎問題集</title>
+<title>熱流体工学Ⅰ 中間試験対策</title>
 <style>
   :root{
-    --bg:#0f1117; --card:#1a1d2e; --card2:#242740;
-    --accent:#7c6af7; --accent2:#56cfb2; --text:#e8eaf6;
-    --muted:#9ca3af; --border:#2d3154;
+    --bg:#0f1117;--card:#1a1d2e;--card2:#242740;
+    --accent:#7c6af7;--accent2:#56cfb2;--text:#e8eaf6;
+    --muted:#9ca3af;--border:#2d3154;
   }
   *{box-sizing:border-box;margin:0;padding:0}
   body{background:var(--bg);color:var(--text);font-family:'Segoe UI','Noto Sans JP',sans-serif;font-size:15px;line-height:1.7;padding-bottom:60px}
   header{background:linear-gradient(135deg,#1a1d2e,#0d0f1a);border-bottom:2px solid var(--accent);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
-  header h1{font-size:1.3rem;color:var(--accent)}
-  .back-btn{margin-left:auto;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:6px;cursor:pointer;text-decoration:none;font-size:.85rem;white-space:nowrap}
+  header h1{font-size:1.2rem;color:var(--accent)}
+  header small{color:var(--muted);font-size:.8rem}
+  .back-btn{margin-left:auto;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:6px;text-decoration:none;font-size:.85rem;white-space:nowrap}
 
-  /* スコアバー */
-  .score-wrap{max-width:860px;margin:16px auto;padding:0 16px}
-  .score-bar-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px}
-  .score-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+  .score-wrap{max-width:860px;margin:14px auto;padding:0 16px}
+  .score-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:14px}
   .score-track{flex:1;height:10px;background:var(--card2);border-radius:99px;overflow:hidden}
   .score-fill{height:100%;background:var(--accent2);border-radius:99px;transition:width .4s}
-  .score-num{font-size:1.1rem;font-weight:700;color:var(--accent2);white-space:nowrap}
-  .reset-btn{background:none;border:1px solid var(--border);color:var(--muted);font-size:.78rem;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:inherit}
+  .score-num{font-size:1.05rem;font-weight:700;color:var(--accent2);white-space:nowrap}
+  .score-label{font-size:.78rem;color:var(--muted);white-space:nowrap}
+  .reset-btn{background:none;border:1px solid var(--border);color:var(--muted);font-size:.76rem;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:inherit}
   .reset-btn:hover{border-color:var(--accent);color:var(--accent)}
 
   main{max-width:860px;margin:0 auto;padding:0 16px}
 
-  /* 問題カード */
-  .prob{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;transition:border-color .2s}
-  .prob.correct{border-color:#4caf50}
-  .prob.wrong{border-color:#f44336}
+  .prob{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;transition:border-color .2s}
+  .prob.all-ok{border-color:#4caf50}
+  .prob.has-ng{border-color:#f44336}
 
-  .prob-head{background:var(--card2);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
-  .prob-no{font-weight:700;color:var(--accent);min-width:28px;font-size:.9rem}
-  .badge{font-size:.72rem;padding:2px 9px;border-radius:20px;font-weight:600}
+  .prob-head{background:var(--card2);padding:9px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+  .prob-no{font-weight:700;color:var(--accent);min-width:30px;font-size:.9rem}
+  .badge{font-size:.7rem;padding:2px 8px;border-radius:20px;font-weight:600}
   .b1{background:#3b4fd8;color:#fff}
   .b2{background:#2e7d32;color:#fff}
   .b3{background:#e65100;color:#fff}
   .b4{background:#6a1b9a;color:#fff}
-  .prob-tag{font-size:.82rem;color:var(--muted);margin-left:auto}
+  .prob-tag{font-size:.8rem;color:var(--muted);margin-left:auto}
 
-  .prob-body{padding:16px}
-  .prob-q{font-size:.95rem;color:var(--text);line-height:1.75;margin-bottom:14px}
-  .prob-q code{font-family:monospace;background:var(--card2);padding:1px 6px;border-radius:3px;font-size:.9em;color:#a5b4fc}
+  .prob-body{padding:14px 16px}
+  .prob-q{font-size:.93rem;line-height:1.8;margin-bottom:12px}
+  .prob-q code{font-family:monospace;background:var(--card2);padding:1px 6px;border-radius:3px;font-size:.88em;color:#a5b4fc}
 
-  .input-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
-  .ans-input{background:var(--card2);border:1px solid var(--border);color:var(--text);font-size:1rem;padding:8px 12px;border-radius:8px;width:140px;font-family:monospace;outline:none;transition:border-color .2s}
+  .part{margin-bottom:8px}
+  .part-label{font-size:.82rem;color:var(--accent2);font-weight:600;margin-bottom:4px}
+  .input-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .ans-input{background:var(--card2);border:1px solid var(--border);color:var(--text);font-size:.95rem;padding:7px 10px;border-radius:7px;width:130px;font-family:monospace;outline:none;transition:border-color .2s}
   .ans-input:focus{border-color:var(--accent)}
-  .unit{color:var(--muted);font-size:.9rem;font-family:monospace;white-space:nowrap}
-  .check-btn{background:var(--accent);border:none;color:#fff;padding:8px 18px;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:600;font-family:inherit;transition:opacity .15s;white-space:nowrap}
-  .check-btn:hover{opacity:.85}
-  .hint-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:8px;cursor:pointer;font-size:.82rem;font-family:inherit;transition:.15s;white-space:nowrap}
+  .unit{color:var(--muted);font-size:.85rem;font-family:monospace;white-space:nowrap}
+  .chk-btn{background:var(--accent);border:none;color:#fff;padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.82rem;font-weight:600;font-family:inherit;white-space:nowrap}
+  .chk-btn:hover{opacity:.85}
+  .part-fb{font-size:.82rem;font-weight:600;margin-top:3px;min-height:18px}
+  .part-fb.ok{color:#a5d6a7}
+  .part-fb.ng{color:#ef9a9a}
+
+  .prob-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .hint-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:7px;cursor:pointer;font-size:.8rem;font-family:inherit;transition:.15s}
   .hint-btn:hover{border-color:var(--accent2);color:var(--accent2)}
-  .reveal-btn{background:none;border:1px solid #444;color:#888;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:.82rem;font-family:inherit;transition:.15s;white-space:nowrap}
-  .reveal-btn:hover{border-color:#888;color:var(--text)}
+  .reveal-btn{background:none;border:1px solid #333;color:#777;padding:6px 14px;border-radius:7px;cursor:pointer;font-size:.8rem;font-family:inherit;transition:.15s}
+  .reveal-btn:hover{border-color:#666;color:var(--text)}
 
-  .feedback{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.88rem;font-weight:600;display:none}
-  .feedback.ok{background:rgba(76,175,80,.15);border:1px solid #4caf50;color:#a5d6a7;display:block}
-  .feedback.ng{background:rgba(244,67,54,.15);border:1px solid #f44336;color:#ef9a9a;display:block}
-
-  .hint-box{background:#1a1a2a;border-left:3px solid var(--accent2);padding:10px 14px;border-radius:0 6px 6px 0;font-family:monospace;font-size:.88rem;color:#a5b4fc;margin-top:10px;display:none}
+  .hint-box{background:#1a1a2a;border-left:3px solid var(--accent2);padding:9px 14px;border-radius:0 6px 6px 0;font-family:monospace;font-size:.85rem;color:#a5b4fc;margin-top:10px;display:none;line-height:1.8}
   .hint-box.show{display:block}
-
-  .ans-box{background:#1a2a1a;border-left:3px solid #4caf50;padding:10px 14px;border-radius:0 6px 6px 0;font-family:monospace;font-size:.95rem;color:#a5d6a7;margin-top:10px;display:none}
+  .ans-box{background:#1a2a1a;border-left:3px solid #4caf50;padding:9px 14px;border-radius:0 6px 6px 0;font-size:.85rem;color:#a5d6a7;margin-top:8px;display:none;line-height:1.85}
   .ans-box.show{display:block}
+
+  .note{font-size:.78rem;color:var(--muted);background:rgba(255,204,100,.08);border:1px solid rgba(255,204,100,.25);border-radius:6px;padding:6px 12px;margin-bottom:12px}
 </style>
 </head>
 <body>
 
 <header>
   <div>
-    <h1>📝 熱流体工学Ⅰ 基礎問題集</h1>
+    <h1>📝 熱流体工学Ⅰ 中間試験対策</h1>
+    <small>演習全問＋課題全問を参考に作成・数字変更済</small>
   </div>
   <a class="back-btn" href="javascript:history.back()">← 戻る</a>
 </header>
 
 <div class="score-wrap">
-  <div class="score-bar-card">
+  <div class="score-card">
     <span class="score-label">正解</span>
     <div class="score-track"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
-    <span class="score-num" id="score-num">0 / 10</span>
+    <span class="score-num" id="score-num">0 / 23</span>
     <button class="reset-btn" onclick="resetAll()">リセット</button>
   </div>
 </div>
@@ -89,149 +93,364 @@
 <main id="main"></main>
 
 <script>
+/* ──────────────────────────────────────────
+   問題データ
+   parts: [{label, unit, ans, isAngle}]
+   isAngle=true → |val-ans|<=2 で正解
+   それ以外     → |val-ans|/|ans|<=0.02
+────────────────────────────────────────── */
 const PROBS = [
   {
-    no:1, ch:'第1章', chN:1, tag:'密度',
-    q:'体積 <code>V = 20 L</code> の油の質量が <code>m = 18 kg</code> のとき、密度 <code>ρ</code> を求めよ。',
-    hint:'ρ = m / V　　（20 L = 0.020 m³ に変換）',
-    unit:'kg/m³', ans:900,
+    no:1, ch:'第1章', chN:1, tag:'動粘度',
+    q:'間隙 <code>Y = 1.0 mm</code>、比重 <code>s = 0.90</code> の油が満たされたシリンダを、速度 <code>U = 5.0 m/s</code> でピストンが動いている。シリンダ面のせん断応力が <code>τ = 3.60 Pa</code> のとき、この油の動粘度 <code>ν</code> を求めよ。<br><span style="font-size:.8rem;color:#9ca3af">（小さい数は <code>8e-7</code> のように入力可）</span>',
+    hint:'① τ = μ(U/Y) → μ = τY/U\n② ρ = s × 1000\n③ ν = μ/ρ',
+    reveal:['μ = 3.60 × 0.001 / 5.0 = 7.20×10⁻⁴ Pa·s','ρ = 0.90 × 1000 = 900 kg/m³','ν = 7.20×10⁻⁴ / 900 = 8.00×10⁻⁷ m²/s'],
+    parts:[{label:'', unit:'m²/s', ans:8.00e-7, isAngle:false}]
   },
   {
-    no:2, ch:'第1章', chN:1, tag:'せん断力',
-    q:'粘性係数 <code>μ = 0.060 Pa·s</code> の油が隙間 <code>Y = 5 mm</code> の固定平板間にある。面積 <code>A = 0.40 m²</code> の板を速度 <code>U = 1.5 m/s</code> で引くのに必要な力 <code>F</code> を求めよ。',
-    hint:'F = μ A (U / Y)',
-    unit:'N', ans:7.2,
+    no:2, ch:'第1章', chN:1, tag:'両面せん断',
+    q:'間隔 <code>h = 20 mm</code> の固定平行2平面に <code>μ = 0.80 Pa·s</code> の油が満たされている。面積 <code>A = 0.30 m²</code> の薄い板を、固定面から <code>Y₁ = 8.0 mm</code> の位置に置き、速度 <code>U = 0.50 m/s</code> で引くのに必要な力 <code>F</code> を求めよ。',
+    hint:'F = μAU(1/Y₁ + 1/Y₂)　（Y₂ = h − Y₁ = 12 mm）',
+    reveal:['Y₂ = 20 − 8.0 = 12.0 mm','F = 0.80 × 0.30 × 0.50 × (1/0.008 + 1/0.012)','= 0.12 × (125 + 83.3) = 0.12 × 208.3 = 25.0 N'],
+    parts:[{label:'', unit:'N', ans:25.0, isAngle:false}]
   },
   {
-    no:3, ch:'第2章', chN:2, tag:'圧力ヘッド',
-    q:'ゲージ圧 <code>p = 29.4 kPa</code> は水柱何 m に相当するか。高さ <code>h</code> を求めよ。',
-    hint:'h = p / (ρg)　　（p を Pa に変換: 29400 Pa）',
-    unit:'m', ans:3.00,
+    no:3, ch:'第1章', chN:1, tag:'傾斜面滑落',
+    q:'底面積 <code>A = 0.04 m²</code>、質量 <code>m = 40 kg</code> の物体が、傾斜角 <code>θ = 30°</code> の斜面上を油膜（厚さ <code>δ = 0.020 mm</code>、粘性係数 <code>μ = 0.020 Pa·s</code>）の上を滑落する。到達できる最大速度 <code>U<sub>max</sub></code> を求めよ。',
+    hint:'つり合い: mgsinθ = μA(U_max/δ)\n→ U_max = δmgsinθ/(μA)',
+    reveal:['U_max = δmgsinθ/(μA)','= (0.020×10⁻³ × 40 × 9.81 × sin30°) / (0.020 × 0.04)','= (2.0×10⁻⁵ × 196.2) / 8.0×10⁻⁴ = 4.91 m/s'],
+    parts:[{label:'', unit:'m/s', ans:4.905, isAngle:false}]
   },
   {
     no:4, ch:'第2章', chN:2, tag:'静水圧',
-    q:'水面下 <code>h = 8.0 m</code> における水のゲージ圧 <code>p</code> を求めよ。',
-    hint:'p = ρ g h　　（答えは kPa で）',
-    unit:'kPa', ans:78.5,
+    q:'水面下 <code>h = 12 m</code> における水の圧力を求めよ。ただし大気圧 <code>P₀ = 101 kPa</code> とする。',
+    hint:'ゲージ圧: p = ρgh\n絶対圧: P = P₀ + p',
+    reveal:['p = 1000 × 9.81 × 12 = 117 720 Pa ≈ 117.7 kPa','P = 101 + 117.7 = 218.7 kPa ≈ 219 kPa'],
+    parts:[
+      {label:'(1) ゲージ圧 p', unit:'kPa', ans:117.7, isAngle:false},
+      {label:'(2) 絶対圧 P',   unit:'kPa', ans:218.7, isAngle:false}
+    ]
   },
   {
-    no:5, ch:'第2章', chN:2, tag:'パスカル',
-    q:'小ピストン直径 <code>d₁ = 30 mm</code> に <code>F₁ = 200 N</code> を加えたとき、大ピストン直径 <code>d₂ = 90 mm</code> に生じる力 <code>F₂</code> を求めよ。',
-    hint:'F₂ = (d₂ / d₁)² × F₁',
-    unit:'N', ans:1800,
+    no:5, ch:'第2章', chN:2, tag:'パスカルの原理',
+    q:'小ピストン直径 <code>d₁ = 20 mm</code> に <code>F₁ = 10 N</code> を加えた。液体の圧力 <code>P</code> と大ピストン直径 <code>d₂ = 80 mm</code> に生じる力 <code>F₂</code> を求めよ。',
+    hint:'P = F₁/A₁ = 4F₁/(πd₁²)\nF₂ = (d₂/d₁)² × F₁',
+    reveal:['P = 4×10/(π×0.02²) = 31 831 Pa ≈ 31.8 kPa','F₂ = (80/20)² × 10 = 16 × 10 = 160 N'],
+    parts:[
+      {label:'(1) 圧力 P', unit:'kPa', ans:31.83, isAngle:false},
+      {label:'(2) 力 F₂',  unit:'N',   ans:160,   isAngle:false}
+    ]
   },
   {
-    no:6, ch:'第2章', chN:2, tag:'U字管',
-    q:'U字管マノメータで、両腕に水（<code>ρ = 1000 kg/m³</code>）、底部に水銀（<code>ρ\' = 13600 kg/m³</code>）が高さ差 <code>h = 0.30 m</code> あり、両腕の水面高さが等しい（<code>y₁ = y₂ = 0</code>）とき、圧力差 <code>P₁ − P₂</code> を求めよ。',
-    hint:'y₁=y₂=0 のとき: P₁−P₂ = ρ\'gh　　（答えは kPa で）',
-    unit:'kPa', ans:40.0,
+    no:6, ch:'第2章', chN:2, tag:'レバー付きパスカル',
+    q:'レバーのA端（アーム長 <code>l₁ = 150 mm</code>）に <code>f = 300 N</code> を加えたとき、B端（アーム長 <code>l₂ = 50 mm</code>）の小ピストン（<code>d₁ = 40 mm</code>）に力が伝わる。大ピストン（<code>d₂ = 160 mm</code>）に生じる力 <code>F₂</code> を求めよ。',
+    hint:'① てこ: F₁ = f × l₁/l₂\n② パスカル: F₂ = (d₂/d₁)² × F₁',
+    reveal:['F₁ = 300 × 150/50 = 900 N','F₂ = (160/40)² × 900 = 16 × 900 = 14 400 N = 14.4 kN'],
+    parts:[{label:'', unit:'kN', ans:14.4, isAngle:false}]
   },
   {
-    no:7, ch:'第2章', chN:2, tag:'平面板',
-    q:'水面に対して垂直な円板（直径 <code>d = 1.0 m</code）が、図心深さ <code>h_G = 2.0 m</code> にある。この板に作用する合力 <code>F</code> を求めよ。',
-    hint:'F = ρ g h_G A　　（A = πd²/4、答えは kN で）',
-    unit:'kN', ans:15.4,
+    no:7, ch:'第2章', chN:2, tag:'U字管マノメータ',
+    q:'U字管マノメータで、両腕の液体は水（<code>ρ = 1000 kg/m³</code>）、底部の液体は水銀（<code>ρ\' = 13 600 kg/m³</code>）。各高さは <code>h = 0.50 m</code>、<code>y₁ = 0.80 m</code>、<code>y₂ = 0.30 m</code>。圧力差 <code>P₁ − P₂</code> を求めよ。',
+    hint:'基準面Aで等値:\nP_A = P₁ + ρgy₁　（左）\nP_A = P₂ + ρgy₂ + ρ\'gh　（右）\n→ P₁−P₂ = ρg(y₂−y₁) + ρ\'gh',
+    reveal:["P₁−P₂ = 1000×9.81×(0.30−0.80) + 13600×9.81×0.50","= 9810×(−0.50) + 66708 = −4905 + 66708 = 61 803 Pa ≈ 61.8 kPa"],
+    parts:[{label:'', unit:'kPa', ans:61.8, isAngle:false}]
   },
   {
-    no:8, ch:'第2章', chN:2, tag:'浮力',
-    q:'一辺 <code>0.30 m</code> の立方体が水中に完全に沈んでいる。この立方体に作用する浮力 <code>F</code> を求めよ。',
-    hint:'F = ρ_流体 × g × V_排除　　（V = 0.30³ m³）',
-    unit:'N', ans:265,
+    no:8, ch:'第2章', chN:2, tag:'逆U字管マノメータ',
+    q:'逆U字管マノメータで、両腕は水（<code>ρ = 1000 kg/m³</code>）、上部は軽い液体（<code>ρ\' = 800 kg/m³</code>）。<code>h = 0.20 m</code>、<code>y₁ = 0.70 m</code>、<code>y₂ = 0.30 m</code>。圧力差 <code>P₁ − P₂</code> を求めよ。',
+    hint:'逆U字管の基準面Aで等値（上部液体で−）:\nP₁−P₂ = ρ₁gy₁ − ρ\'gh − ρ₂gy₂',
+    reveal:['P₁−P₂ = 1000×9.81×0.70 − 800×9.81×0.20 − 1000×9.81×0.30','= 9.81×(700 − 160 − 300) = 9.81×240 = 2354 Pa ≈ 2.35 kPa'],
+    parts:[{label:'', unit:'kPa', ans:2.354, isAngle:false}]
   },
   {
-    no:9, ch:'第3章', chN:3, tag:'連続の式',
-    q:'内径 <code>d₁ = 100 mm</code> の管を流速 <code>u₁ = 3.0 m/s</code> で流れる水が、内径 <code>d₂ = 50 mm</code> に縮小した。断面②での流速 <code>u₂</code> を求めよ。',
+    no:9, ch:'第2章', chN:2, tag:'平面板への力',
+    q:'水面に対して垂直な円板（直径 <code>d = 1.0 m</code>）が、図心深さ <code>h_G = 1.5 m</code> の位置にある。この板に作用する合力 <code>F</code> を求めよ。',
+    hint:'F = ρg h_G A　（A = πd²/4）',
+    reveal:['A = π×1.0²/4 = 0.7854 m²','F = 1000×9.81×1.5×0.7854 = 11 554 N ≈ 11.6 kN'],
+    parts:[{label:'', unit:'kN', ans:11.55, isAngle:false}]
+  },
+  {
+    no:10, ch:'第2章', chN:2, tag:'曲面板',
+    q:'タンクの壁面 AB が半径 <code>r = 0.8 m</code>、幅 <code>b = 1.5 m</code> の 1/4 円筒面。水面から A までの深さ <code>h = 0.5 m</code>。壁面 AB に作用する力の水平分力 <code>F<sub>x</sub></code>・鉛直分力 <code>F<sub>y</sub></code>・合力 <code>F</code>・方向角 <code>α</code> を求めよ。',
+    hint:'Fx = ρg(h + r/2)×br　（鉛直投影面への静水圧）\nFy = ρg(πr²/4 + hr)×b　（上部液体の重量）\nF = √(Fx²+Fy²)、α = arctan(Fy/Fx)',
+    reveal:[
+      'Fx = 1000×9.81×(0.5+0.4)×1.5×0.8 = 9810×0.9×1.2 = 10 595 N ≈ 10.6 kN',
+      'Fy = 1000×9.81×(π×0.8²/4 + 0.5×0.8)×1.5 = 9810×(0.5027+0.4)×1.5 = 13 283 N ≈ 13.3 kN',
+      'F = √(10.6²+13.3²) = √(112.4+176.9) = √289.3 ≈ 17.0 kN',
+      'α = arctan(13.3/10.6) ≈ 51.4°'
+    ],
+    parts:[
+      {label:'(1) F<sub>x</sub>', unit:'kN', ans:10.595, isAngle:false},
+      {label:'(2) F<sub>y</sub>', unit:'kN', ans:13.283, isAngle:false},
+      {label:'(3) F',            unit:'kN', ans:16.99,  isAngle:false},
+      {label:'(4) α',            unit:'°',  ans:51.4,   isAngle:true}
+    ]
+  },
+  {
+    no:11, ch:'第2章', chN:2, tag:'浮力',
+    q:'密度 <code>ρ = 800 kg/m³</code>、一辺 <code>L = 0.40 m</code> の立方体の木材が水（<code>ρ<sub>w</sub> = 1000 kg/m³</code>）に浮いている。水面下に沈んでいる深さ <code>h</code> を求めよ。',
+    hint:'浮力 = 重力：ρ_w × g × L² × h = ρ_wood × g × L³\n→ h = ρ_wood × L / ρ_w',
+    reveal:['h = ρ_wood × L / ρ_w = 800 × 0.40 / 1000 = 0.320 m'],
+    parts:[{label:'', unit:'m', ans:0.320, isAngle:false}]
+  },
+  {
+    no:12, ch:'第3章', chN:3, tag:'連続の式',
+    q:'内径 <code>d₁ = 120 mm</code> の管を平均流速 <code>u₁ = 2.0 m/s</code> で流れる水が、内径 <code>d₂ = 40 mm</code> に縮小した。断面②での流速 <code>u₂</code> を求めよ。',
     hint:'u₂ = (d₁/d₂)² × u₁',
-    unit:'m/s', ans:12.0,
+    reveal:['u₂ = (120/40)² × 2.0 = 9 × 2.0 = 18.0 m/s'],
+    parts:[{label:'', unit:'m/s', ans:18.0, isAngle:false}]
   },
   {
-    no:10, ch:'第4章', chN:4, tag:'トリチェリー',
-    q:'十分大きいタンクの液面から <code>H = 3.0 m</code> 下の小孔からの噴出速度 <code>u</code> を求めよ。（タンク液面の速度は無視してよい）',
-    hint:'u = √(2gH)',
-    unit:'m/s', ans:7.67,
+    no:13, ch:'第3章', chN:3, tag:'分岐管',
+    q:'内径 <code>d₁ = 80 mm</code> の管を流速 <code>u₁ = 4.0 m/s</code> で流れる水が、<code>d₂ = 60 mm</code>（管②）と <code>d₃ = 40 mm</code>（管③）に等量分岐する。流量 <code>Q₁</code>、管②の流速 <code>u₂</code>、管③の流速 <code>u₃</code> を求めよ。',
+    hint:'Q₁ = A₁u₁　　Q₂=Q₃=Q₁/2\nu₂=Q₂/A₂、u₃=Q₃/A₃',
+    reveal:[
+      'Q₁ = π×0.08²/4 × 4.0 = 0.005027×4.0 = 2.01×10⁻² m³/s',
+      'Q₂ = Q₃ = 1.005×10⁻² m³/s',
+      'u₂ = Q₂/(π×0.06²/4) = 0.01005/0.002827 = 3.56 m/s',
+      'u₃ = Q₃/(π×0.04²/4) = 0.01005/0.001257 = 8.00 m/s'
+    ],
+    parts:[
+      {label:'(1) Q₁', unit:'×10⁻² m³/s', ans:2.011,  isAngle:false, mult:1e-2},
+      {label:'(2) u₂', unit:'m/s',          ans:3.556, isAngle:false},
+      {label:'(3) u₃', unit:'m/s',          ans:8.00,  isAngle:false}
+    ]
   },
+  {
+    no:14, ch:'第4章', chN:4, tag:'ベルヌーイ（2点間）',
+    q:'水平管が <code>d₁ = 60 mm</code> から <code>d₂ = 30 mm</code> に縮小している。断面①の流速 <code>u₁ = 3.0 m/s</code>、圧力 <code>p₁ = 180 kPa</code>（高さは同じ）。断面②の流速 <code>u₂</code> と圧力 <code>p₂</code> を求めよ。',
+    hint:'① 連続の式: u₂ = (d₁/d₂)²u₁\n② ベルヌーイ: p₂ = p₁ + ρ(u₁²−u₂²)/2',
+    reveal:[
+      'u₂ = (60/30)² × 3.0 = 4 × 3.0 = 12.0 m/s',
+      'p₂ = 180 000 + 1000×(3.0²−12.0²)/2',
+      '= 180 000 + 1000×(9−144)/2 = 180 000 − 67 500 = 112 500 Pa = 112.5 kPa'
+    ],
+    parts:[
+      {label:'(1) u₂', unit:'m/s', ans:12.0,  isAngle:false},
+      {label:'(2) p₂', unit:'kPa', ans:112.5, isAngle:false}
+    ]
+  },
+  {
+    no:15, ch:'第4章', chN:4, tag:'トリチェリーの定理',
+    q:'十分大きいタンクの液面から <code>H = 5.0 m</code> 下の小孔からの噴出速度 <code>u</code> を求めよ。（液面速度は無視してよい）',
+    hint:'液面①と小孔②にベルヌーイ適用（どちらも P₀）:\nP₀ + ρgH = P₀ + ρu²/2\n→ u = √(2gH)',
+    reveal:['u = √(2 × 9.81 × 5.0) = √98.1 = 9.90 m/s'],
+    parts:[{label:'', unit:'m/s', ans:9.904, isAngle:false}]
+  },
+  /* ── 演習JPG 追加問題 ── */
+  {
+    no:16, ch:'第1章', chN:1, tag:'密度・比容積・粘性係数',
+    q:'動粘度 <code>ν = 2.00×10⁻⁵ m²/s</code> の油の体積が <code>V = 30×10⁻³ m³</code>、質量が <code>m = 24.0 kg</code> である。密度 <code>ρ</code>、比容積 <code>v</code>（= V/m）、粘性係数 <code>μ</code> を求めよ。',
+    hint:'ρ = m/V\nv = 1/ρ（または V/m）\nμ = ν × ρ',
+    reveal:[
+      'ρ = 24.0 / 0.030 = 800 kg/m³',
+      'v = 1/800 = 1.25×10⁻³ m³/kg',
+      'μ = 2.00×10⁻⁵ × 800 = 1.60×10⁻² Pa·s'
+    ],
+    parts:[
+      {label:'(1) ρ', unit:'kg/m³',   ans:800,    isAngle:false},
+      {label:'(2) v', unit:'×10⁻³ m³/kg', ans:1.25, isAngle:false, mult:1e-3},
+      {label:'(3) μ', unit:'×10⁻² Pa·s',  ans:1.60, isAngle:false, mult:1e-2}
+    ]
+  },
+  {
+    no:17, ch:'第2章', chN:2, tag:'圧力→水柱高さ換算',
+    q:'圧力 <code>P = 80 kPa</code> は水柱何 m に相当するか求めよ。',
+    hint:'P = ρgh → h = P/(ρg)',
+    reveal:['h = 80 000 / (1000 × 9.81) = 8.155 ≈ 8.16 m'],
+    parts:[{label:'', unit:'m', ans:8.155, isAngle:false}]
+  },
+  {
+    no:18, ch:'第2章', chN:2, tag:'U字管（液面高さを求める）',
+    q:'U字管マノメータで2容器が接続されている。液体は水（<code>ρ=1000 kg/m³</code>）、底部は水銀（<code>ρ\'=13 600 kg/m³</code>）。左容器の圧力が右より <code>P₁−P₂=50 kPa</code> 高い。水銀柱の高さ <code>h=0.40 m</code>、右管の水銀面からの水位 <code>y₀=0.25 m</code>。左管の水銀面からの水位 <code>y₁</code> を求めよ。',
+    hint:'左水銀面で圧力を等値:\nP₁ + ρg·y₁ = P₂ + ρg·y₀ + ρ\'g·h\n→ y₁ = y₀ + (P₂−P₁)/(ρg) + (ρ\'/ρ)·h',
+    reveal:[
+      'y₁ = 0.25 + (−50 000)/(1000×9.81) + (13 600/1000)×0.40',
+      '= 0.25 − 5.097 + 5.440 = 0.593 m'
+    ],
+    parts:[{label:'', unit:'m', ans:0.593, isAngle:false}]
+  },
+  {
+    no:19, ch:'第2章', chN:2, tag:'傾斜平面板（合力・作用点）',
+    q:'傾斜した円板（直径 <code>d=2.0 m</code>）が水中に置かれている。上端の水深 <code>h₁=0.80 m</code>、下端の水深 <code>h₂=2.0 m</code>。この円板に作用する合力 <code>F</code> と、水面から板面に沿った作用点距離 <code>y_c</code> を求めよ。',
+    hint:'hG = (h₁+h₂)/2, A = πd²/4\nF = ρg·hG·A\nsinθ = (h₂−h₁)/d, s_G = hG/sinθ\ny_c = s_G + IG/(A·s_G)   [IG = πd⁴/64]',
+    reveal:[
+      'hG = (0.80+2.0)/2 = 1.40 m',
+      'A = π×1² = 3.1416 m²',
+      'F = 1000×9.81×1.40×3.1416 = 43 100 N ≈ 43.1 kN',
+      'sinθ = (2.0−0.80)/2.0 = 0.600',
+      's_G = 1.40/0.600 = 2.333 m',
+      'IG = π×2⁴/64 = 0.7854 m⁴',
+      'y_c = 2.333 + 0.7854/(3.1416×2.333) = 2.333 + 0.107 = 2.44 m'
+    ],
+    parts:[
+      {label:'(1) F',   unit:'kN', ans:43.1,  isAngle:false},
+      {label:'(2) y_c', unit:'m',  ans:2.440, isAngle:false}
+    ]
+  },
+  {
+    no:20, ch:'第2章', chN:2, tag:'浮力（木片＋鉛）',
+    q:'比重 <code>s=0.70</code>、長さ <code>L=1.5 m</code>、一辺 <code>a=6.0 cm</code> の正方形断面の木片の一端に、質量 <code>m_pb=1.2 kg</code>（比重11.5）の鉛を付けて水中に入れたところ鉛を下にして浮いた。水面から突き出た部分の長さ <code>h</code> を求めよ。',
+    hint:'全重力 W = (m_wood + m_pb)g\n沈み長さ = L−h\n浮力 B = ρ_w·g·[a²(L−h) + V_pb]\nW = B を解く',
+    reveal:[
+      'm_wood = 700×(1.5×0.06²) = 3.78 kg',
+      'V_pb = 1.2/11500 = 1.043×10⁻⁴ m³',
+      'W = (3.78+1.2)×9.81 = 48.84 N',
+      '48.84/9810 = 0.0036(1.5−h) + 1.043×10⁻⁴',
+      '0.0036h = 5.40×10⁻³ + 1.043×10⁻⁴ − 4.978×10⁻³',
+      'h = 0.526×10⁻³/0.0036 = 0.146 m'
+    ],
+    parts:[{label:'', unit:'m', ans:0.146, isAngle:false}]
+  },
+  {
+    no:21, ch:'第4章', chN:4, tag:'下向き3断面ベルヌーイ',
+    q:'大きなタンクの底面に下向きで直径 <code>d=60 mm</code> の円管が取り付けられている（ρ=1000 kg/m³）。タンク底面から水面までの高さ <code>H₁=1.2 m</code>、円管の出口②はタンク底面から <code>H₂=0.5 m</code> 下方（断面②の圧力は大気圧）。断面①はタンク底面の管入口。出口②からさらに <code>H₃=0.8 m</code> 下方が断面③（自由噴流）。<br>（1）出口②の流速 <code>u₂</code>　（2）断面①のゲージ圧 <code>p₁</code>　（3）断面③の流速 <code>u₃</code>　（4）断面③の水柱の直径 <code>d₃</code>',
+    hint:'液面→②ベルヌーイ: u₂=√(2g(H₁+H₂))\n液面→①ベルヌーイ: p₁=ρg·H₁−ρu₁²/2　(u₁=u₂)\n液面→③ベルヌーイ: u₃=√(2g(H₁+H₂+H₃))\nd₃=d√(u₂/u₃)',
+    reveal:[
+      'u₂ = √(2×9.81×1.7) = √33.35 = 5.78 m/s',
+      'p₁ = 1000×9.81×1.2 − 1000×5.78²/2 = 11772 − 16705 = −4933 Pa ≈ −4.93 kPa',
+      'u₃ = √(2×9.81×2.5) = √49.05 = 7.00 m/s',
+      'd₃ = 60×√(5.78/7.00) = 60×0.909 = 54.5 mm ≈ 5.45 cm'
+    ],
+    parts:[
+      {label:'(1) u₂', unit:'m/s',  ans:5.776,  isAngle:false},
+      {label:'(2) p₁', unit:'kPa',  ans:-4.91,  isAngle:false},
+      {label:'(3) u₃', unit:'m/s',  ans:7.004,  isAngle:false},
+      {label:'(4) d₃', unit:'cm',   ans:5.45,   isAngle:false}
+    ]
+  },
+  {
+    no:22, ch:'第4章', chN:4, tag:'傾斜拡大管ベルヌーイ',
+    q:'左側から右側へ流れる傾斜した拡大管。内径は断面① <code>d₁=60 mm</code>、断面② <code>d₂=90 mm</code>。基準面からの高さは <code>z₁=20 cm</code>、<code>z₂=50 cm</code>。断面①の流速 <code>v₁=1.5 m/s</code>。<br>（1）流量 <code>Q</code>　（2）断面②の流速 <code>v₂</code>　（3）断面①の圧力が <code>P₁=8.0 kPa</code>（ゲージ）のとき断面②の圧力 <code>P₂</code>',
+    hint:'Q=A₁v₁, v₂=Q/A₂\nベルヌーイ: P₂=P₁+ρ(v₁²−v₂²)/2 − ρg(z₂−z₁)',
+    reveal:[
+      'A₁=π×0.06²/4=2.827×10⁻³ m²',
+      'Q=2.827×10⁻³×1.5=4.24×10⁻³ m³/s',
+      'v₂=v₁×(d₁/d₂)²=1.5×(6/9)²=0.667 m/s',
+      'P₂=8000+1000(1.5²−0.667²)/2−1000×9.81×0.30',
+      '=8000+903−2943=5960 Pa≈5.96 kPa'
+    ],
+    parts:[
+      {label:'(1) Q',  unit:'×10⁻³ m³/s', ans:4.241, isAngle:false, mult:1e-3},
+      {label:'(2) v₂', unit:'m/s',          ans:0.6667, isAngle:false},
+      {label:'(3) P₂', unit:'kPa',          ans:5.960,  isAngle:false}
+    ]
+  },
+  {
+    no:23, ch:'第2章', chN:2, tag:'曲面板（タンク内側）',
+    q:'タンクの 1/4 円弧面 AB（半径 <code>r=1.2 m</code>、タンク幅 <code>b=1.2 m</code>）に水が作用している。A は水面から <code>h=0.8 m</code> 下方、B は A の鉛直下 r の位置。合力 <code>F</code> と水平方向からの角度 <code>α</code> を求めよ。',
+    hint:'Fx=ρg(h+r/2)·r·b　（鉛直投影面）\nFy=ρg·b·(h·r + πr²/4)　（上方液体重量）\nF=√(Fx²+Fy²), α=arctan(Fy/Fx)',
+    reveal:[
+      'Fx=1000×9.81×(0.8+0.6)×1.2×1.2=9810×1.4×1.44=19 755 N≈19.8 kN',
+      'Fy=9810×1.2×(0.8×1.2+π×1.44/4)=11 772×(0.96+1.131)=24 615 N≈24.6 kN',
+      'F=√(19.8²+24.6²)≈31.6 kN',
+      'α=arctan(24.6/19.8)=arctan(1.242)≈51.2°'
+    ],
+    parts:[
+      {label:'(1) F', unit:'kN', ans:31.56,  isAngle:false},
+      {label:'(2) α', unit:'°',  ans:51.2,   isAngle:true}
+    ]
+  }
 ];
 
-const BADGE_CLS = {1:'b1',2:'b2',3:'b3',4:'b4'};
-const state = {}; // { no: 'ok'|'ng' }
+/* ── スコア管理 ── */
+const TOTAL = PROBS.reduce((s,p)=>s+p.parts.length, 0);
+const correct = {}; // 'probNo-partIdx': true/false
 
-function pct(){ return Math.round(Object.values(state).filter(v=>v==='ok').length/PROBS.length*100); }
-function correctCount(){ return Object.values(state).filter(v=>v==='ok').length; }
-
+function countOk(){
+  return Object.values(correct).filter(v=>v).length;
+}
 function updateScore(){
-  const c = correctCount();
-  document.getElementById('score-fill').style.width = pct()+'%';
-  document.getElementById('score-num').textContent = c+' / '+PROBS.length;
+  const c = countOk();
+  document.getElementById('score-fill').style.width = (c/TOTAL*100)+'%';
+  document.getElementById('score-num').textContent = c+' / '+TOTAL;
 }
 
-function check(no){
+/* ── 採点 ── */
+function checkPart(no, idx){
   const prob = PROBS.find(p=>p.no===no);
-  const input = document.getElementById('inp-'+no);
-  const fb = document.getElementById('fb-'+no);
-  const card = document.getElementById('prob-'+no);
-  const val = parseFloat(input.value);
-  if(isNaN(val)){ input.style.borderColor='#f44336'; return; }
-  const tol = Math.abs(val - prob.ans) / prob.ans;
-  if(tol <= 0.02){
-    fb.className='feedback ok';
-    fb.textContent='✓ 正解！　'+prob.ans+' '+prob.unit;
-    state[no]='ok';
-    card.className='prob correct';
+  const part = prob.parts[idx];
+  const inp  = document.getElementById('inp-'+no+'-'+idx);
+  const fb   = document.getElementById('fb-'+no+'-'+idx);
+  let val = parseFloat(inp.value);
+  if(isNaN(val)){ inp.style.borderColor='#f44336'; return; }
+
+  /* ×10⁻² 単位の場合は実際の値に換算 */
+  if(part.mult) val = val * part.mult;
+
+  let ok;
+  if(part.isAngle){
+    ok = Math.abs(val - part.ans) <= 2;
   } else {
-    fb.className='feedback ng';
-    fb.textContent='✗ 不正解。もう一度試すか、ヒントを見てください。';
-    state[no]='ng';
-    card.className='prob wrong';
+    ok = Math.abs(val - part.ans) / Math.abs(part.ans) <= 0.02;
   }
+  correct[no+'-'+idx] = ok;
+  fb.className = 'part-fb ' + (ok ? 'ok' : 'ng');
+  fb.textContent = ok ? '✓ 正解' : '✗ もう一度';
+  inp.style.borderColor = ok ? '#4caf50' : '#f44336';
+
+  /* カード全体のボーダー更新 */
+  const card = document.getElementById('prob-'+no);
+  const allOk  = prob.parts.every((_,i)=> correct[no+'-'+i] === true);
+  const hasNg  = prob.parts.some((_,i)=> correct[no+'-'+i] === false);
+  card.className = 'prob' + (allOk ? ' all-ok' : hasNg ? ' has-ng' : '');
+
   updateScore();
 }
 
 function toggleHint(no){
-  const box = document.getElementById('hint-'+no);
-  box.classList.toggle('show');
+  document.getElementById('hint-'+no).classList.toggle('show');
 }
-
-function reveal(no){
-  const prob = PROBS.find(p=>p.no===no);
-  const box = document.getElementById('reveal-'+no);
-  box.textContent = '答え: '+prob.ans+' '+prob.unit;
-  box.classList.add('show');
+function showReveal(no){
+  document.getElementById('reveal-'+no).classList.add('show');
 }
-
 function resetAll(){
-  Object.keys(state).forEach(k=>delete state[k]);
+  Object.keys(correct).forEach(k=>delete correct[k]);
   PROBS.forEach(p=>{
-    document.getElementById('inp-'+p.no).value='';
-    document.getElementById('fb-'+p.no).className='feedback';
-    document.getElementById('hint-'+p.no).classList.remove('show');
-    document.getElementById('reveal-'+p.no).classList.remove('show');
+    p.parts.forEach((_,i)=>{
+      const inp = document.getElementById('inp-'+p.no+'-'+i);
+      if(inp){ inp.value=''; inp.style.borderColor=''; }
+      const fb = document.getElementById('fb-'+p.no+'-'+i);
+      if(fb){ fb.className='part-fb'; fb.textContent=''; }
+    });
+    document.getElementById('hint-'+p.no)?.classList.remove('show');
+    document.getElementById('reveal-'+p.no)?.classList.remove('show');
     document.getElementById('prob-'+p.no).className='prob';
   });
   updateScore();
 }
 
+/* ── レンダリング ── */
+const BADGE = {1:'b1',2:'b2',3:'b3',4:'b4'};
+
 function render(){
-  const main = document.getElementById('main');
-  main.innerHTML = PROBS.map(p=>`
+  document.getElementById('main').innerHTML = PROBS.map(p=>`
     <div class="prob" id="prob-${p.no}">
       <div class="prob-head">
         <span class="prob-no">問${p.no}</span>
-        <span class="badge ${BADGE_CLS[p.chN]}">${p.ch}</span>
+        <span class="badge ${BADGE[p.chN]}">${p.ch}</span>
         <span class="prob-tag">${p.tag}</span>
       </div>
       <div class="prob-body">
         <div class="prob-q">${p.q}</div>
-        <div class="input-row">
-          <input class="ans-input" id="inp-${p.no}" type="number" step="any" placeholder="答えを入力"
-            onkeydown="if(event.key==='Enter')check(${p.no})">
-          <span class="unit">${p.unit}</span>
-          <button class="check-btn" onclick="check(${p.no})">確認</button>
-          <button class="hint-btn" onclick="toggleHint(${p.no})">ヒント</button>
-          <button class="reveal-btn" onclick="reveal(${p.no})">解答を見る</button>
+        ${p.parts.map((pt,i)=>`
+          <div class="part">
+            ${pt.label ? `<div class="part-label">${pt.label}</div>` : ''}
+            <div class="input-row">
+              <input class="ans-input" id="inp-${p.no}-${i}" type="number" step="any" placeholder="答え"
+                onkeydown="if(event.key==='Enter')checkPart(${p.no},${i})">
+              <span class="unit">${pt.unit}</span>
+              <button class="chk-btn" onclick="checkPart(${p.no},${i})">確認</button>
+            </div>
+            <div class="part-fb" id="fb-${p.no}-${i}"></div>
+          </div>
+        `).join('')}
+        <div class="prob-actions">
+          <button class="hint-btn" onclick="toggleHint(${p.no})">💡 ヒント</button>
+          <button class="reveal-btn" onclick="showReveal(${p.no})">解答を見る</button>
         </div>
-        <div class="hint-box" id="hint-${p.no}">${p.hint}</div>
-        <div class="feedback" id="fb-${p.no}"></div>
-        <div class="ans-box" id="reveal-${p.no}"></div>
+        <div class="hint-box" id="hint-${p.no}">${p.hint.replace(/\n/g,'<br>')}</div>
+        <div class="ans-box" id="reveal-${p.no}">${p.reveal.join('<br>')}</div>
       </div>
     </div>
   `).join('');
