@@ -2253,7 +2253,7 @@ async function loadBattleContent() {
           <div class="battle-row" style="margin-top:6px">
             <input id="battle-bet-input-${b.id}" type="number" min="0" placeholder="賭け金" value="${myBet || ''}"
               style="flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.88rem">
-            <span style="color:var(--dim);flex-shrink:0">pt</span>
+            <span style="color:var(--amber);flex-shrink:0;font-size:.72rem">シーズンpt</span>
             <button onclick="submitBattleBet(${b.id})"
               style="padding:6px 14px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;flex-shrink:0">賭ける</button>
           </div>
@@ -2312,7 +2312,7 @@ async function submitBattleBet(battleId) {
       body: JSON.stringify({ amount, side })
     });
     const data = await res.json();
-    if (data.ok) { authPoints = data.points || authPoints; await loadBattleContent(); }
+    if (data.ok) { await loadBattleContent(); showPointToast('🎲 賭け完了！'); }
     else showPointToast('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー'); }
 }

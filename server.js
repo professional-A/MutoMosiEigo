@@ -1076,7 +1076,7 @@ app.post('/api/battles/:id/bet', auth, async (req, res) => {
   const { rows: ex } = await pool.query('SELECT amount FROM battle_bets WHERE battle_id=$1 AND user_id=$2', [battleId, uid]);
   const oldAmount = ex[0]?.amount || 0;
   const diff = amount - oldAmount;
-  if (diff > 0 && req.user.points < diff) return res.status(400).json({ error: 'ポイントが足りません' });
+  if (diff > 0 && req.user.season_points < diff) return res.status(400).json({ error: 'シーズンptが足りません' });
   if (amount === 0) {
     await pool.query('DELETE FROM battle_bets WHERE battle_id=$1 AND user_id=$2', [battleId, uid]);
   } else {
@@ -1085,7 +1085,7 @@ app.post('/api/battles/:id/bet', auth, async (req, res) => {
       VALUES ($1,$2,$3,$4,$5) ON CONFLICT (battle_id, user_id) DO UPDATE SET side=$3, amount=$4
     `, [battleId, uid, side, amount, new Date().toISOString()]);
   }
-  if (diff !== 0) await pool.query('UPDATE users SET points=points-$1 WHERE id=$2', [diff, uid]);
+  if (diff !== 0) await pool.query('UPDATE users SET season_points=season_points-$1 WHERE id=$2', [diff, uid]);
   // p1_bet/p2_bet を集計して更新
   const { rows: totals } = await pool.query(`
     SELECT COALESCE(SUM(CASE WHEN side=1 THEN amount ELSE 0 END),0) AS t1,
@@ -1094,7 +1094,7 @@ app.post('/api/battles/:id/bet', auth, async (req, res) => {
   `, [battleId]);
   await pool.query('UPDATE battles SET p1_bet=$1, p2_bet=$2 WHERE id=$3', [totals[0].t1, totals[0].t2, battleId]);
   const { rows: u } = await pool.query('SELECT points, test_bet, season_points FROM users WHERE id=$1', [uid]);
-  res.json({ ok: true, points: dp(u[0]) });
+  res.json({ ok: true, season_points: dsp(u[0]) });
 });
 
 // バトル作成（管理者）
@@ -1139,7 +1139,7 @@ app.post('/api/admin/battles/settle', auth, async (req, res) => {
     if (s1 === s2) {
       // 引き分け：全員に返還
       for (const bet of bets) {
-        await pool.query('UPDATE users SET points=points+$1 WHERE id=$2', [bet.amount, bet.user_id]);
+        await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [bet.amount, bet.user_id]);
       }
       await pool.query("UPDATE battles SET status='settled' WHERE id=$1", [b.id]);
       results.push({ result: `${r1[0].username} vs ${r2[0].username}: 引き分け (${s1}点) → 全員返還` });
@@ -1157,19 +1157,19 @@ app.post('/api/admin/battles/settle', auth, async (req, res) => {
         let distributed = 0;
         for (const bet of winBets) {
           const payout = Math.floor((bet.amount / winTotal) * totalPool);
-          await pool.query('UPDATE users SET points=points+$1, season_points=season_points+$1 WHERE id=$2', [payout, bet.user_id]);
+          await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [payout, bet.user_id]);
           distributed += payout;
         }
         // 端数は最大ベット者に追加
         const remainder = totalPool - distributed;
         if (remainder > 0) {
           const top = winBets.sort((a, b) => b.amount - a.amount)[0];
-          await pool.query('UPDATE users SET points=points+$1 WHERE id=$2', [remainder, top.user_id]);
+          await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [remainder, top.user_id]);
         }
       } else if (winTotal === 0 && totalPool > 0) {
         // 勝った側に誰も賭けていない → 全員返還
         for (const bet of bets) {
-          await pool.query('UPDATE users SET points=points+$1 WHERE id=$2', [bet.amount, bet.user_id]);
+          await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [bet.amount, bet.user_id]);
         }
       }
       const odds = winTotal > 0 ? (totalPool / winTotal).toFixed(2) : '∞';
