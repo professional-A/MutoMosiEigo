@@ -2861,6 +2861,12 @@ async function loadClrankPage() {
     _clrankPositions = (data.positions && !Array.isArray(data.positions)) ? data.positions : {};
     _clrankConfirmed = data.confirmed || {};
     _clrankMaxScore  = data.max_score  || 300;
+    // 確定済みユーザーをpositionsから削除（ブロック化防止）
+    let posChanged = false;
+    Object.keys(_clrankConfirmed).forEach(n => {
+      if (_clrankPositions[n] !== undefined) { delete _clrankPositions[n]; posChanged = true; }
+    });
+    if (posChanged) _saveClrankPositions();
     // 確定点の最小値からステップ単位で下端を自動算出
     const scores = Object.values(_clrankConfirmed);
     if (scores.length) {
@@ -3044,17 +3050,34 @@ async function _saveClrankPositions() {
 }
 
 // ── 確定合計点 ────────────────────────────────────────────────
+function _clrankSetConfirmed(name, total) {
+  _clrankConfirmed[name] = total;
+  // 確定済みはボード上のブロック位置を削除してプールへ戻す
+  if (_clrankPositions[name] !== undefined) {
+    delete _clrankPositions[name];
+    _saveClrankPositions();
+  }
+}
+function _clrankUnsetConfirmed(name) {
+  delete _clrankConfirmed[name];
+  // ブロック位置も削除してプールへ（確定線→ブロック変換を防止）
+  if (_clrankPositions[name] !== undefined) {
+    delete _clrankPositions[name];
+    _saveClrankPositions();
+  }
+}
+
 async function clrankAddConfirm() {
   const name  = document.getElementById('clrank-conf-name').value.trim();
   const total = parseInt(document.getElementById('clrank-conf-score').value);
-  if (!name || !total) return;
+  if (!name || !total || total <= 0) return;
   try {
     await fetch('/api/class-rank/confirm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
       body: JSON.stringify({ name, total })
     });
-    _clrankConfirmed[name] = total;
+    _clrankSetConfirmed(name, total);
     document.getElementById('clrank-conf-name').value  = '';
     document.getElementById('clrank-conf-score').value = '';
     _clrankRenderAll();
@@ -3067,7 +3090,7 @@ async function clrankRemoveConfirm(name) {
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
       body: JSON.stringify({ name, total: 0 })
     });
-    delete _clrankConfirmed[name];
+    _clrankUnsetConfirmed(name);
     _clrankRenderAll();
   } catch(e) {}
 }
@@ -3076,14 +3099,14 @@ async function clrankEditConfirm(name) {
   const input = prompt(`${name} の合計点を変更（現在: ${current}点）`, current);
   if (input === null) return;
   const total = parseInt(input);
-  if (isNaN(total) || total < 0) { alert('有効な点数を入力してください'); return; }
+  if (isNaN(total) || total <= 0) { alert('有効な点数を入力してください（1以上）'); return; }
   try {
     await fetch('/api/class-rank/confirm', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
       body: JSON.stringify({ name, total })
     });
-    _clrankConfirmed[name] = total;
+    _clrankSetConfirmed(name, total);
     const scores = Object.values(_clrankConfirmed);
     if (scores.length) {
       const step = _clrankMaxScore > 200 ? 50 : 25;

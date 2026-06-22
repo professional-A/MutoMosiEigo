@@ -510,7 +510,7 @@ app.get('/api/class-rank', async (req, res) => {
       FROM users
     `);
     const s = sc[0];
-    autoMaxScore = ([s.has_test, s.has_ouri, s.has_math].filter(Boolean).length) * 100 || 100;
+    autoMaxScore = ([s.has_test, s.has_ouri, s.has_math, s.has_kakougaku, s.has_nekku].filter(Boolean).length) * 100 || 100;
   } catch(e) {}
   // ユーザー紐づけ：全入力済みの人を確定点に自動反映
   try {
