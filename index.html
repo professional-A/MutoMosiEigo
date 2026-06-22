@@ -2678,7 +2678,7 @@ document.getElementById('members-modal-bg').addEventListener('click', e => {
 async function openScoresModal() {
   lockScroll();
   document.getElementById('scores-modal-bg').classList.add('open');
-  const seigyoActive = new Date().toISOString().slice(0, 10) >= '2026-06-23';
+  const seigyoActive = new Date() >= new Date('2026-06-23T00:00:00Z');
   const btn = document.getElementById('ouri-input-btn');
   if (btn) btn.style.display = authToken ? 'inline-block' : 'none';
   const btn2 = document.getElementById('math-input-btn');
@@ -2702,7 +2702,7 @@ async function loadScores() {
     const data = await res.json();
     if (!Array.isArray(data) || !data.length) { el.innerHTML = '<p style="color:var(--muted)">まだ点数が登録されていません</p>'; return; }
 
-    const seigyoActive = new Date().toISOString().slice(0, 10) >= '2026-06-23';
+    const seigyoActive = new Date() >= new Date('2026-06-23T00:00:00Z');
 
     // 平均点・合計点を計算（入力済み科目のみ）
     data.forEach(r => {
