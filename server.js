@@ -351,12 +351,24 @@ app.put('/api/avatar', auth, async (req, res) => {
 // ポイント加算（問題正解）— サーバー側重複防止
 app.post('/api/points', auth, async (req, res) => {
   if (siteLocked) return res.status(423).json({ error: 'サイトがロック中のためポイントを加算できません' });
-  const { amount, quizKey, questionKey, correct } = req.body;
+  const { amount, quizKey, questionKey, correct, subject } = req.body;
+
+  // アクティブレースの教科を取得してシーズンpt加算可否を判定
+  let addSeason = true;
+  try {
+    const { rows: races } = await pool.query("SELECT subject FROM races WHERE active=1 ORDER BY id DESC LIMIT 1");
+    const raceSubject = races[0]?.subject;
+    if (raceSubject && subject && raceSubject !== subject) addSeason = false;
+  } catch(e) {}
 
   // quizKey/questionKey なし: シンプル加算（レガシー）
   if (!quizKey || !questionKey) {
     if (!Number.isInteger(amount) || amount <= 0 || amount > 200) return res.status(400).json({ error: '不正なポイント' });
-    await pool.query('UPDATE users SET points = points + $1, season_points = season_points + $1 WHERE id = $2', [amount, req.user.id]);
+    if (addSeason) {
+      await pool.query('UPDATE users SET points = points + $1, season_points = season_points + $1 WHERE id = $2', [amount, req.user.id]);
+    } else {
+      await pool.query('UPDATE users SET points = points + $1 WHERE id = $2', [amount, req.user.id]);
+    }
     const { rows } = await pool.query('SELECT points, test_bet, season_points FROM users WHERE id = $1', [req.user.id]);
     return res.json({ ok: true, points: dsp(rows[0]), lifetime_points: dp(rows[0]), delta: amount });
   }
@@ -379,7 +391,11 @@ app.post('/api/points', auth, async (req, res) => {
   }
 
   if (delta !== 0) {
-    await pool.query('UPDATE users SET points = GREATEST(0, points + $1), season_points = GREATEST(0, season_points + $1) WHERE id = $2', [delta, req.user.id]);
+    if (addSeason) {
+      await pool.query('UPDATE users SET points = GREATEST(0, points + $1), season_points = GREATEST(0, season_points + $1) WHERE id = $2', [delta, req.user.id]);
+    } else {
+      await pool.query('UPDATE users SET points = GREATEST(0, points + $1) WHERE id = $2', [delta, req.user.id]);
+    }
   }
   const { rows } = await pool.query('SELECT points, test_bet, season_points FROM users WHERE id = $1', [req.user.id]);
   res.json({ ok: true, points: dsp(rows[0]), lifetime_points: dp(rows[0]), delta });

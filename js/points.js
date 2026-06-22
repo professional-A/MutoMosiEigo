@@ -18,7 +18,7 @@
     return _token;
   }
 
-  window.addPoints = async function(amount, quizKey, questionKey, correct) {
+  window.addPoints = async function(amount, quizKey, questionKey, correct, subject) {
     const token = await getToken();
     if (!token) return;
     try {
@@ -28,6 +28,7 @@
         body.questionKey = questionKey;
         if (correct === false) body.correct = false;
       }
+      if (subject) body.subject = subject;
       const res = await fetch('/api/points', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': token },
