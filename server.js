@@ -164,10 +164,12 @@ async function initDB() {
     CREATE TABLE IF NOT EXISTS quiz_answers (
       user_id    INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
       answer_key TEXT NOT NULL,
+      subject    TEXT NOT NULL DEFAULT '',
       awarded_at TIMESTAMPTZ DEFAULT NOW(),
       PRIMARY KEY (user_id, answer_key)
     )
   `).catch(()=>{});
+  await pool.query(`ALTER TABLE quiz_answers ADD COLUMN IF NOT EXISTS subject TEXT NOT NULL DEFAULT ''`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS settings (
       key   TEXT PRIMARY KEY,
@@ -384,7 +386,7 @@ app.post('/api/points', auth, async (req, res) => {
   let delta = 0;
   if (!isRepeat) {
     if (correct !== false) {
-      await pool.query('INSERT INTO quiz_answers (user_id, answer_key) VALUES ($1, $2) ON CONFLICT DO NOTHING', [req.user.id, answerKey]);
+      await pool.query('INSERT INTO quiz_answers (user_id, answer_key, subject) VALUES ($1, $2, $3) ON CONFLICT DO NOTHING', [req.user.id, answerKey, subject || '']);
       delta = baseAmount;
     }
   } else {
@@ -1299,7 +1301,7 @@ app.post('/api/admin/races', auth, async (req, res) => {
     await pool.query("UPDATE races SET active=0 WHERE active=1");
     // 新レース＝新シーズン：シーズンptと解答履歴をリセット（全員1周目に戻る）
     await pool.query("UPDATE users SET season_points=0");
-    await pool.query("DELETE FROM quiz_answers");
+    if (subject) await pool.query("DELETE FROM quiz_answers WHERE subject=$1", [subject]);
     const { rows } = await pool.query(
       "INSERT INTO races(name, start_date, end_date, subject, active, status, created_at) VALUES($1,$2,$3,$4,1,'active',$5) RETURNING id",
       [name, start_date || '', end_date || '', subject || '', new Date().toISOString()]
