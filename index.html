@@ -731,6 +731,7 @@ h1{
       <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
       <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
       <button onclick="openRaceModal()" style="background:#0f2a1a;color:#6ee7b7;border:1px solid #34d399;font-weight:700">🏁 レース発行</button>
+      <button onclick="openPairModal()" style="background:#1a2a1a;color:#86efac;border:1px solid #4ade80;font-weight:700">👥 ペア設定</button>
       <button onclick="closeAdminModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
@@ -789,6 +790,21 @@ h1{
       <button onclick="archiveAllTests()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📦 全部アーカイブ</button>
       <button onclick="closeScheduleModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
+  </div>
+</div>
+
+<!-- ペア設定モーダル -->
+<div class="modal-bg" id="pair-modal-bg" style="display:none">
+  <div class="modal" style="width:min(480px,96vw);max-height:90vh;display:flex;flex-direction:column;padding:20px 16px">
+    <button onclick="closePairModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer">✕</button>
+    <h2 style="flex-shrink:0">👥 ペア設定</h2>
+    <p id="pair-modal-race-name" style="font-size:.78rem;color:var(--dim);margin-bottom:12px;flex-shrink:0"></p>
+    <div id="pair-modal-pairs" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-shrink:0">
+      <button onclick="pairAddGroup()" style="flex:1;background:var(--card2);border:1px solid var(--line)">＋ ペア追加</button>
+      <button onclick="savePairs()" style="flex:1;background:var(--teal);color:#0a1626;border:none;font-weight:700">💾 保存</button>
+    </div>
+    <div id="pair-modal-msg" style="font-size:.78rem;color:var(--teal);margin-top:8px;flex-shrink:0"></div>
   </div>
 </div>
 
@@ -1086,6 +1102,17 @@ h1{
         </tr></thead>
         <tbody id="race-table-body"></tbody>
       </table>
+      <!-- ペアランキング -->
+      <div id="race-pair-ranking" style="display:none;margin-top:14px">
+        <div style="font-size:.72rem;font-weight:700;color:var(--amber);letter-spacing:.05em;margin-bottom:6px">👥 ペアランキング</div>
+        <table class="race-table">
+          <thead><tr>
+            <th>#</th><th>ペア名</th><th>メンバー</th><th>合計勉強</th><th>合計シーズンpt</th>
+          </tr></thead>
+          <tbody id="race-pair-tbody"></tbody>
+        </table>
+      </div>
+
       <div id="race-self-report" style="display:none">
         <div class="race-report">
           <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📖 武藤模試:</span>
@@ -3132,6 +3159,35 @@ function _renderRace(data) {
     </tr>`;
   }).join('');
 
+  // ペアランキング
+  const pairs = data.pairs || [];
+  const pairSection = document.getElementById('race-pair-ranking');
+  const pairTbody = document.getElementById('race-pair-tbody');
+  if (pairs.length) {
+    pairSection.style.display = '';
+    const pairRows = pairs.map(p => {
+      const mutoTotal = p.members.reduce((s, m) => s + ((logMap[m.user_id] || {}).muto_minutes || 0), 0);
+      const manTotal  = p.members.reduce((s, m) => s + ((logMap[m.user_id] || {}).manual_minutes || 0), 0);
+      const studyTotal = mutoTotal + manTotal;
+      const sptTotal  = p.members.reduce((s, m) => s + (m.season_points || 0), 0);
+      return { p, studyTotal, sptTotal };
+    });
+    // 合計勉強時間でソート
+    pairRows.sort((a, b) => b.studyTotal - a.studyTotal);
+    pairTbody.innerHTML = pairRows.map(({ p, studyTotal, sptTotal }, i) => {
+      const names = p.members.map(m => esc(m.username)).join('・');
+      return `<tr>
+        <td style="color:var(--dim)">${i + 1}</td>
+        <td style="font-weight:700">${esc(p.name)}</td>
+        <td style="font-size:.7rem;color:var(--dim)">${names}</td>
+        <td style="font-weight:700;color:#d4e8ff">${studyTotal > 0 ? _fmtMin(studyTotal) : '—'}</td>
+        <td style="color:var(--amber)">${sptTotal.toLocaleString()}pt</td>
+      </tr>`;
+    }).join('');
+  } else {
+    pairSection.style.display = 'none';
+  }
+
   // 自己申告フォーム（active中かつグループ所属）
   const inRace = authUserId && groupMap[authUserId] != null;
   const isActive = race.status === 'active';
@@ -3154,6 +3210,83 @@ function _renderRace(data) {
     }
   }
 
+}
+
+// ── ペア設定モーダル ─────────────────────────────────────────
+let _pairRaceId = null;
+let _pairModalUsers = [];
+let _pairGroupCount = 0;
+
+async function openPairModal() {
+  closeAdminModal();
+  _pairGroupCount = 0;
+  document.getElementById('pair-modal-pairs').innerHTML = '';
+  document.getElementById('pair-modal-msg').textContent = '';
+  // 現在のアクティブレースを取得
+  const rd = await fetch('/api/races/current').then(r => r.json()).catch(() => ({}));
+  if (!rd.race) { alert('アクティブなレースがありません'); return; }
+  _pairRaceId = rd.race.id;
+  document.getElementById('pair-modal-race-name').textContent = `対象レース: ${rd.race.name}`;
+  // 既存ペアを描画
+  const data = await fetch('/api/admin/users', { headers: { Authorization: authToken } }).then(r => r.json());
+  _pairModalUsers = data.users || data || [];
+  if (rd.pairs && rd.pairs.length) {
+    rd.pairs.forEach(p => pairAddGroup(p.name, p.members.map(m => m.user_id)));
+  } else {
+    pairAddGroup(); pairAddGroup();
+  }
+  document.getElementById('pair-modal-bg').style.display = 'flex';
+}
+function closePairModal() { document.getElementById('pair-modal-bg').style.display = 'none'; }
+
+function pairAddGroup(name = '', memberIds = []) {
+  _pairGroupCount++;
+  const idx = _pairGroupCount;
+  const container = document.getElementById('pair-modal-pairs');
+  const div = document.createElement('div');
+  div.id = `pair-group-${idx}`;
+  div.style.cssText = 'background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:12px';
+  div.innerHTML = `
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <input id="pair-name-${idx}" type="text" value="${esc(name)}" placeholder="ペア名（例: チームA）"
+        style="flex:1;padding:6px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-family:inherit;font-size:.85rem">
+      <button onclick="document.getElementById('pair-group-${idx}').remove()" style="background:none;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;padding:2px 6px">✕</button>
+    </div>
+    <div id="pair-members-${idx}" style="display:flex;flex-wrap:wrap;gap:5px">
+      ${_pairModalUsers.map(u => {
+        const checked = memberIds.includes(u.id) ? 'checked' : '';
+        return `<label style="display:flex;align-items:center;gap:4px;font-size:.78rem;cursor:pointer;padding:3px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg)">
+          <input type="checkbox" data-uid="${u.id}" ${checked} style="accent-color:var(--teal)"> ${esc(u.username)}
+        </label>`;
+      }).join('')}
+    </div>`;
+  container.appendChild(div);
+}
+
+async function savePairs() {
+  if (!_pairRaceId) return;
+  const pairs = [];
+  let i = 1;
+  while (i <= _pairGroupCount) {
+    const g = document.getElementById(`pair-group-${i}`);
+    if (g) {
+      const name = document.getElementById(`pair-name-${i}`)?.value.trim() || 'ペア';
+      const members = [...g.querySelectorAll('input[type=checkbox]:checked')].map(cb => parseInt(cb.dataset.uid));
+      pairs.push({ name, members });
+    }
+    i++;
+  }
+  const res = await fetch(`/api/admin/races/${_pairRaceId}/pairs`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: authToken },
+    body: JSON.stringify({ pairs })
+  }).then(r => r.json());
+  if (res.ok) {
+    document.getElementById('pair-modal-msg').textContent = '✅ 保存しました';
+    loadRaceSection();
+  } else {
+    document.getElementById('pair-modal-msg').textContent = '❌ ' + (res.error || 'エラー');
+  }
 }
 
 function toggleRaceBody() {

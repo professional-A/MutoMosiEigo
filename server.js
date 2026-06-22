@@ -198,6 +198,20 @@ async function initDB() {
   await pool.query(`ALTER TABLE race_study_log ADD COLUMN IF NOT EXISTS muto_minutes INTEGER DEFAULT 0`).catch(()=>{});
   await pool.query(`ALTER TABLE race_study_log ADD COLUMN IF NOT EXISTS muto_tool    TEXT    DEFAULT ''`).catch(()=>{});
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS race_pairs (
+      id      SERIAL PRIMARY KEY,
+      race_id INTEGER NOT NULL REFERENCES races(id) ON DELETE CASCADE,
+      name    TEXT NOT NULL DEFAULT 'ペア'
+    )
+  `).catch(()=>{});
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS race_pair_members (
+      pair_id INTEGER NOT NULL REFERENCES race_pairs(id) ON DELETE CASCADE,
+      user_id INTEGER NOT NULL REFERENCES users(id) ON DELETE CASCADE,
+      UNIQUE(pair_id, user_id)
+    )
+  `).catch(()=>{});
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS race_bets (
       id             SERIAL PRIMARY KEY,
       race_id        INTEGER NOT NULL REFERENCES races(id) ON DELETE CASCADE,
@@ -1210,8 +1224,22 @@ app.get('/api/races/current', async (req, res) => {
     }
     const { rows: logs } = await pool.query("SELECT * FROM race_study_log WHERE race_id=$1", [race.id]);
     const { rows: bets } = await pool.query("SELECT * FROM race_bets WHERE race_id=$1", [race.id]);
+    // ペアデータ取得
+    const { rows: pairs } = await pool.query("SELECT * FROM race_pairs WHERE race_id=$1 ORDER BY id", [race.id]);
+    let pairMembers = [];
+    if (pairs.length) {
+      const { rows: pm } = await pool.query(
+        `SELECT rpm.pair_id, u.id AS user_id, u.username, u.season_points
+         FROM race_pair_members rpm
+         JOIN users u ON u.id = rpm.user_id
+         WHERE rpm.pair_id = ANY($1)`,
+        [pairs.map(p => p.id)]
+      );
+      pairMembers = pm;
+    }
     const groupsWithMembers = groups.map(g => ({ ...g, members: members.filter(m => m.group_id === g.id) }));
-    res.json({ race, groups: groupsWithMembers, study_logs: logs, bets });
+    const pairsWithMembers = pairs.map(p => ({ ...p, members: pairMembers.filter(m => m.pair_id === p.id) }));
+    res.json({ race, groups: groupsWithMembers, study_logs: logs, bets, pairs: pairsWithMembers });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
@@ -1270,6 +1298,31 @@ app.put('/api/races/:id/study', auth, async (req, res) => {
         manual_minutes ?? -1, manual_tool || '',
         game_minutes ?? -1,
         new Date().toISOString()]);
+    res.json({ ok: true });
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+// ペア設定（管理者）— レースのペアを一括登録・上書き
+app.post('/api/admin/races/:id/pairs', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const raceId = parseInt(req.params.id);
+  const { pairs } = req.body; // [{ name, members: [userId, ...] }, ...]
+  if (!Array.isArray(pairs)) return res.status(400).json({ error: 'pairs配列が必要' });
+  try {
+    await pool.query("DELETE FROM race_pairs WHERE race_id=$1", [raceId]);
+    for (const p of pairs) {
+      const { rows } = await pool.query(
+        "INSERT INTO race_pairs(race_id, name) VALUES($1,$2) RETURNING id",
+        [raceId, p.name || 'ペア']
+      );
+      const pairId = rows[0].id;
+      for (const uid of (p.members || [])) {
+        await pool.query(
+          "INSERT INTO race_pair_members(pair_id, user_id) VALUES($1,$2) ON CONFLICT DO NOTHING",
+          [pairId, parseInt(uid)]
+        ).catch(() => {});
+      }
+    }
     res.json({ ok: true });
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
