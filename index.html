@@ -1329,13 +1329,13 @@ function renderFolders() {
     </div>`;
   }).join("");
 
-  const nekku = `<a href="nekku.html" class="folder-card" style="text-decoration:none;color:inherit">
+  const nekku = `<div class="folder-card" onclick="openNekkuMenu()">
     <div class="folder-icon">🔥</div>
     <div class="folder-name">熱流体工学Ⅰ</div>
-    <div class="folder-count">公式集</div>
+    <div class="folder-count">公式集・問題集</div>
     <div class="progress-bar-wrap" style="margin-top:6px"><div class="progress-bar" style="width:100%;background:var(--teal)"></div></div>
-    <div class="progress-text">公式集を開く →</div>
-  </a>`;
+    <div class="progress-text">メニューを開く →</div>
+  </div>`;
   document.getElementById("folder-grid").innerHTML = cards + nekku;
 }
 
@@ -3425,5 +3425,40 @@ supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
 });
 </script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");</script>
+
+<!-- 熱流体工学Ⅰ メニューモーダル -->
+<div id="nekku-modal-bg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;align-items:center;justify-content:center" onclick="closeNekkuMenu()">
+  <div onclick="event.stopPropagation()" style="background:#1a1d2e;border:1px solid #2d3154;border-radius:16px;padding:28px 28px 24px;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.6)">
+    <div style="text-align:center;font-size:2rem;margin-bottom:6px">🔥</div>
+    <h2 style="text-align:center;font-size:1.05rem;color:#e8eaf6;margin-bottom:20px">熱流体工学Ⅰ</h2>
+    <a href="nekku.html" style="display:flex;align-items:center;gap:12px;background:#242740;border:1px solid #3b4fd8;border-radius:10px;padding:14px 18px;text-decoration:none;color:#a5b4fc;margin-bottom:12px;transition:.15s;font-weight:600"
+      onmouseover="this.style.background='#2d3560'" onmouseout="this.style.background='#242740'">
+      <span style="font-size:1.5rem">📘</span>
+      <div>
+        <div style="font-size:.95rem">公式集</div>
+        <div style="font-size:.75rem;color:#9ca3af;font-weight:400">第1〜4章・全公式・導出・図解</div>
+      </div>
+    </a>
+    <a href="nekku_test.html" style="display:flex;align-items:center;gap:12px;background:#242740;border:1px solid #2e7d32;border-radius:10px;padding:14px 18px;text-decoration:none;color:#a5d6a7;transition:.15s;font-weight:600"
+      onmouseover="this.style.background='#1e3020'" onmouseout="this.style.background='#242740'">
+      <span style="font-size:1.5rem">📝</span>
+      <div>
+        <div style="font-size:.95rem">基礎問題集</div>
+        <div style="font-size:.75rem;color:#9ca3af;font-weight:400">公式を使って10問チャレンジ</div>
+      </div>
+    </a>
+    <button onclick="closeNekkuMenu()" style="display:block;width:100%;margin-top:16px;background:none;border:1px solid #2d3154;color:#9ca3af;padding:8px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.85rem">閉じる</button>
+  </div>
+</div>
+
+<script>
+function openNekkuMenu(){
+  const m = document.getElementById('nekku-modal-bg');
+  m.style.display = 'flex';
+}
+function closeNekkuMenu(){
+  document.getElementById('nekku-modal-bg').style.display = 'none';
+}
+</script>
 </body>
 </html>

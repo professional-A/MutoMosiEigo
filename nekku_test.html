@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>熱流体工学Ⅰ 基礎問題集</title>
+<style>
+  :root{
+    --bg:#0f1117; --card:#1a1d2e; --card2:#242740;
+    --accent:#7c6af7; --accent2:#56cfb2; --text:#e8eaf6;
+    --muted:#9ca3af; --border:#2d3154;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI','Noto Sans JP',sans-serif;font-size:15px;line-height:1.7;padding-bottom:60px}
+  header{background:linear-gradient(135deg,#1a1d2e,#0d0f1a);border-bottom:2px solid var(--accent);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+  header h1{font-size:1.3rem;color:var(--accent)}
+  .back-btn{margin-left:auto;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:6px;cursor:pointer;text-decoration:none;font-size:.85rem;white-space:nowrap}
+
+  /* スコアバー */
+  .score-wrap{max-width:860px;margin:16px auto;padding:0 16px}
+  .score-bar-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:14px 18px;display:flex;align-items:center;gap:16px}
+  .score-label{font-size:.8rem;color:var(--muted);white-space:nowrap}
+  .score-track{flex:1;height:10px;background:var(--card2);border-radius:99px;overflow:hidden}
+  .score-fill{height:100%;background:var(--accent2);border-radius:99px;transition:width .4s}
+  .score-num{font-size:1.1rem;font-weight:700;color:var(--accent2);white-space:nowrap}
+  .reset-btn{background:none;border:1px solid var(--border);color:var(--muted);font-size:.78rem;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:inherit}
+  .reset-btn:hover{border-color:var(--accent);color:var(--accent)}
+
+  main{max-width:860px;margin:0 auto;padding:0 16px}
+
+  /* 問題カード */
+  .prob{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:16px;overflow:hidden;transition:border-color .2s}
+  .prob.correct{border-color:#4caf50}
+  .prob.wrong{border-color:#f44336}
+
+  .prob-head{background:var(--card2);padding:10px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+  .prob-no{font-weight:700;color:var(--accent);min-width:28px;font-size:.9rem}
+  .badge{font-size:.72rem;padding:2px 9px;border-radius:20px;font-weight:600}
+  .b1{background:#3b4fd8;color:#fff}
+  .b2{background:#2e7d32;color:#fff}
+  .b3{background:#e65100;color:#fff}
+  .b4{background:#6a1b9a;color:#fff}
+  .prob-tag{font-size:.82rem;color:var(--muted);margin-left:auto}
+
+  .prob-body{padding:16px}
+  .prob-q{font-size:.95rem;color:var(--text);line-height:1.75;margin-bottom:14px}
+  .prob-q code{font-family:monospace;background:var(--card2);padding:1px 6px;border-radius:3px;font-size:.9em;color:#a5b4fc}
+
+  .input-row{display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+  .ans-input{background:var(--card2);border:1px solid var(--border);color:var(--text);font-size:1rem;padding:8px 12px;border-radius:8px;width:140px;font-family:monospace;outline:none;transition:border-color .2s}
+  .ans-input:focus{border-color:var(--accent)}
+  .unit{color:var(--muted);font-size:.9rem;font-family:monospace;white-space:nowrap}
+  .check-btn{background:var(--accent);border:none;color:#fff;padding:8px 18px;border-radius:8px;cursor:pointer;font-size:.88rem;font-weight:600;font-family:inherit;transition:opacity .15s;white-space:nowrap}
+  .check-btn:hover{opacity:.85}
+  .hint-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:7px 14px;border-radius:8px;cursor:pointer;font-size:.82rem;font-family:inherit;transition:.15s;white-space:nowrap}
+  .hint-btn:hover{border-color:var(--accent2);color:var(--accent2)}
+  .reveal-btn{background:none;border:1px solid #444;color:#888;padding:7px 14px;border-radius:8px;cursor:pointer;font-size:.82rem;font-family:inherit;transition:.15s;white-space:nowrap}
+  .reveal-btn:hover{border-color:#888;color:var(--text)}
+
+  .feedback{margin-top:10px;padding:10px 14px;border-radius:8px;font-size:.88rem;font-weight:600;display:none}
+  .feedback.ok{background:rgba(76,175,80,.15);border:1px solid #4caf50;color:#a5d6a7;display:block}
+  .feedback.ng{background:rgba(244,67,54,.15);border:1px solid #f44336;color:#ef9a9a;display:block}
+
+  .hint-box{background:#1a1a2a;border-left:3px solid var(--accent2);padding:10px 14px;border-radius:0 6px 6px 0;font-family:monospace;font-size:.88rem;color:#a5b4fc;margin-top:10px;display:none}
+  .hint-box.show{display:block}
+
+  .ans-box{background:#1a2a1a;border-left:3px solid #4caf50;padding:10px 14px;border-radius:0 6px 6px 0;font-family:monospace;font-size:.95rem;color:#a5d6a7;margin-top:10px;display:none}
+  .ans-box.show{display:block}
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>📝 熱流体工学Ⅰ 基礎問題集</h1>
+  </div>
+  <a class="back-btn" href="javascript:history.back()">← 戻る</a>
+</header>
+
+<div class="score-wrap">
+  <div class="score-bar-card">
+    <span class="score-label">正解</span>
+    <div class="score-track"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+    <span class="score-num" id="score-num">0 / 10</span>
+    <button class="reset-btn" onclick="resetAll()">リセット</button>
+  </div>
+</div>
+
+<main id="main"></main>
+
+<script>
+const PROBS = [
+  {
+    no:1, ch:'第1章', chN:1, tag:'密度',
+    q:'体積 <code>V = 20 L</code> の油の質量が <code>m = 18 kg</code> のとき、密度 <code>ρ</code> を求めよ。',
+    hint:'ρ = m / V　　（20 L = 0.020 m³ に変換）',
+    unit:'kg/m³', ans:900,
+  },
+  {
+    no:2, ch:'第1章', chN:1, tag:'せん断力',
+    q:'粘性係数 <code>μ = 0.060 Pa·s</code> の油が隙間 <code>Y = 5 mm</code> の固定平板間にある。面積 <code>A = 0.40 m²</code> の板を速度 <code>U = 1.5 m/s</code> で引くのに必要な力 <code>F</code> を求めよ。',
+    hint:'F = μ A (U / Y)',
+    unit:'N', ans:7.2,
+  },
+  {
+    no:3, ch:'第2章', chN:2, tag:'圧力ヘッド',
+    q:'ゲージ圧 <code>p = 29.4 kPa</code> は水柱何 m に相当するか。高さ <code>h</code> を求めよ。',
+    hint:'h = p / (ρg)　　（p を Pa に変換: 29400 Pa）',
+    unit:'m', ans:3.00,
+  },
+  {
+    no:4, ch:'第2章', chN:2, tag:'静水圧',
+    q:'水面下 <code>h = 8.0 m</code> における水のゲージ圧 <code>p</code> を求めよ。',
+    hint:'p = ρ g h　　（答えは kPa で）',
+    unit:'kPa', ans:78.5,
+  },
+  {
+    no:5, ch:'第2章', chN:2, tag:'パスカル',
+    q:'小ピストン直径 <code>d₁ = 30 mm</code> に <code>F₁ = 200 N</code> を加えたとき、大ピストン直径 <code>d₂ = 90 mm</code> に生じる力 <code>F₂</code> を求めよ。',
+    hint:'F₂ = (d₂ / d₁)² × F₁',
+    unit:'N', ans:1800,
+  },
+  {
+    no:6, ch:'第2章', chN:2, tag:'U字管',
+    q:'U字管マノメータで、両腕に水（<code>ρ = 1000 kg/m³</code>）、底部に水銀（<code>ρ\' = 13600 kg/m³</code>）が高さ差 <code>h = 0.30 m</code> あり、両腕の水面高さが等しい（<code>y₁ = y₂ = 0</code>）とき、圧力差 <code>P₁ − P₂</code> を求めよ。',
+    hint:'y₁=y₂=0 のとき: P₁−P₂ = ρ\'gh　　（答えは kPa で）',
+    unit:'kPa', ans:40.0,
+  },
+  {
+    no:7, ch:'第2章', chN:2, tag:'平面板',
+    q:'水面に対して垂直な円板（直径 <code>d = 1.0 m</code）が、図心深さ <code>h_G = 2.0 m</code> にある。この板に作用する合力 <code>F</code> を求めよ。',
+    hint:'F = ρ g h_G A　　（A = πd²/4、答えは kN で）',
+    unit:'kN', ans:15.4,
+  },
+  {
+    no:8, ch:'第2章', chN:2, tag:'浮力',
+    q:'一辺 <code>0.30 m</code> の立方体が水中に完全に沈んでいる。この立方体に作用する浮力 <code>F</code> を求めよ。',
+    hint:'F = ρ_流体 × g × V_排除　　（V = 0.30³ m³）',
+    unit:'N', ans:265,
+  },
+  {
+    no:9, ch:'第3章', chN:3, tag:'連続の式',
+    q:'内径 <code>d₁ = 100 mm</code> の管を流速 <code>u₁ = 3.0 m/s</code> で流れる水が、内径 <code>d₂ = 50 mm</code> に縮小した。断面②での流速 <code>u₂</code> を求めよ。',
+    hint:'u₂ = (d₁/d₂)² × u₁',
+    unit:'m/s', ans:12.0,
+  },
+  {
+    no:10, ch:'第4章', chN:4, tag:'トリチェリー',
+    q:'十分大きいタンクの液面から <code>H = 3.0 m</code> 下の小孔からの噴出速度 <code>u</code> を求めよ。（タンク液面の速度は無視してよい）',
+    hint:'u = √(2gH)',
+    unit:'m/s', ans:7.67,
+  },
+];
+
+const BADGE_CLS = {1:'b1',2:'b2',3:'b3',4:'b4'};
+const state = {}; // { no: 'ok'|'ng' }
+
+function pct(){ return Math.round(Object.values(state).filter(v=>v==='ok').length/PROBS.length*100); }
+function correctCount(){ return Object.values(state).filter(v=>v==='ok').length; }
+
+function updateScore(){
+  const c = correctCount();
+  document.getElementById('score-fill').style.width = pct()+'%';
+  document.getElementById('score-num').textContent = c+' / '+PROBS.length;
+}
+
+function check(no){
+  const prob = PROBS.find(p=>p.no===no);
+  const input = document.getElementById('inp-'+no);
+  const fb = document.getElementById('fb-'+no);
+  const card = document.getElementById('prob-'+no);
+  const val = parseFloat(input.value);
+  if(isNaN(val)){ input.style.borderColor='#f44336'; return; }
+  const tol = Math.abs(val - prob.ans) / prob.ans;
+  if(tol <= 0.02){
+    fb.className='feedback ok';
+    fb.textContent='✓ 正解！　'+prob.ans+' '+prob.unit;
+    state[no]='ok';
+    card.className='prob correct';
+  } else {
+    fb.className='feedback ng';
+    fb.textContent='✗ 不正解。もう一度試すか、ヒントを見てください。';
+    state[no]='ng';
+    card.className='prob wrong';
+  }
+  updateScore();
+}
+
+function toggleHint(no){
+  const box = document.getElementById('hint-'+no);
+  box.classList.toggle('show');
+}
+
+function reveal(no){
+  const prob = PROBS.find(p=>p.no===no);
+  const box = document.getElementById('reveal-'+no);
+  box.textContent = '答え: '+prob.ans+' '+prob.unit;
+  box.classList.add('show');
+}
+
+function resetAll(){
+  Object.keys(state).forEach(k=>delete state[k]);
+  PROBS.forEach(p=>{
+    document.getElementById('inp-'+p.no).value='';
+    document.getElementById('fb-'+p.no).className='feedback';
+    document.getElementById('hint-'+p.no).classList.remove('show');
+    document.getElementById('reveal-'+p.no).classList.remove('show');
+    document.getElementById('prob-'+p.no).className='prob';
+  });
+  updateScore();
+}
+
+function render(){
+  const main = document.getElementById('main');
+  main.innerHTML = PROBS.map(p=>`
+    <div class="prob" id="prob-${p.no}">
+      <div class="prob-head">
+        <span class="prob-no">問${p.no}</span>
+        <span class="badge ${BADGE_CLS[p.chN]}">${p.ch}</span>
+        <span class="prob-tag">${p.tag}</span>
+      </div>
+      <div class="prob-body">
+        <div class="prob-q">${p.q}</div>
+        <div class="input-row">
+          <input class="ans-input" id="inp-${p.no}" type="number" step="any" placeholder="答えを入力"
+            onkeydown="if(event.key==='Enter')check(${p.no})">
+          <span class="unit">${p.unit}</span>
+          <button class="check-btn" onclick="check(${p.no})">確認</button>
+          <button class="hint-btn" onclick="toggleHint(${p.no})">ヒント</button>
+          <button class="reveal-btn" onclick="reveal(${p.no})">解答を見る</button>
+        </div>
+        <div class="hint-box" id="hint-${p.no}">${p.hint}</div>
+        <div class="feedback" id="fb-${p.no}"></div>
+        <div class="ans-box" id="reveal-${p.no}"></div>
+      </div>
+    </div>
+  `).join('');
+}
+
+render();
+updateScore();
+</script>
+</body>
+</html>
