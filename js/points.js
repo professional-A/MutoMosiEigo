@@ -28,7 +28,8 @@
         body.questionKey = questionKey;
         if (correct === false) body.correct = false;
       }
-      if (subject) body.subject = subject;
+      const sub = subject || window.QUIZ_SUBJECT;
+      if (sub) body.subject = sub;
       const res = await fetch('/api/points', {
         method: 'POST',
         headers: { 'Content-Type': 'application/json', 'Authorization': token },
