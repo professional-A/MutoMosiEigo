@@ -780,11 +780,6 @@ h1{
           </div>
         </div>
       </div>
-      <div style="font-size:.82rem;font-weight:700;color:var(--teal);margin-bottom:8px">グループ設定</div>
-      <div id="race-modal-groups"></div>
-      <button onclick="raceAddGroup()" style="margin-top:6px;padding:5px 14px;border:1px dashed var(--line);border-radius:6px;background:none;color:var(--dim);font-size:.8rem;cursor:pointer;font-family:inherit">+ グループ追加</button>
-      <div style="font-size:.78rem;color:var(--dim);margin-top:16px;margin-bottom:6px">ユーザー割り当て（グループ番号を選択）</div>
-      <div id="race-modal-users" style="display:flex;flex-direction:column;gap:5px"></div>
     </div>
     <div class="modal-btns" style="flex-shrink:0;margin-top:14px">
       <button onclick="adminCreateRace()" style="background:var(--teal);color:#0a1626;font-weight:700;border:none">🏁 発行</button>
@@ -3182,18 +3177,14 @@ function _renderRace(data) {
   const statusLabel = race.status === 'closed' ? ' ✅終了' : '';
   document.getElementById('race-hd-date').textContent = [subjectPart, datePart].filter(Boolean).join(' ') + statusLabel;
 
-  // グループチップ
-  const gc = document.getElementById('race-groups');
-  gc.innerHTML = groups.map(g => {
-    const names = g.members.map(m => esc(m.username)).join('・');
-    return `<span class="race-group-chip">${esc(g.name)}<span>${names}</span></span>`;
-  }).join('');
+  document.getElementById('race-groups').innerHTML = '';
 
   // 各ユーザーの合計分数を計算
   const logMap = {};
   study_logs.forEach(l => { logMap[l.user_id] = l; });
-  const groupMap = {};
-  groups.forEach(g => g.members.forEach(m => { groupMap[m.user_id] = g.name; }));
+  // グループ列はペア名を使用
+  const pairNameMap = {};
+  (data.pairs || []).forEach(p => p.members.forEach(m => { pairNameMap[m.user_id] = p.name; }));
 
   // 全メンバーを収集してソート
   const allMembers = [];
@@ -3201,7 +3192,7 @@ function _renderRace(data) {
     const log = logMap[m.user_id] || {};
     const mutoMin = log.muto_minutes || 0;
     const manMin  = log.manual_minutes || 0;
-    allMembers.push({ ...m, mutoMin, manMin, total: mutoMin + manMin, gname: g.name, log });
+    allMembers.push({ ...m, mutoMin, manMin, total: mutoMin + manMin, gname: pairNameMap[m.user_id] || '', log });
   }));
   allMembers.sort((a, b) => b.total - a.total);
 
@@ -3416,9 +3407,7 @@ async function openRaceModal() {
   sel.innerHTML = '<option value="">（教科を選択）</option>' + subjects.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
   document.getElementById('race-modal-bg').style.display = 'flex';
   const data = await fetch('/api/admin/users', { headers: { Authorization: authToken } }).then(r => r.json());
-  _raceModalUsers = data.users || data || [];
-  raceAddGroup(); raceAddGroup();
-  _renderRaceModalUsers();
+  _raceModalUsers = (data.users || data || []).filter(u => u.username !== 'seijuro_dummy');
 }
 function closeRaceModal() { document.getElementById('race-modal-bg').style.display = 'none'; }
 
@@ -3458,18 +3447,8 @@ function _renderRaceModalUsers() {
 async function adminCreateRace() {
   const name = document.getElementById('race-name-input').value.trim();
   if (!name) { document.getElementById('race-modal-msg').textContent = 'レース名を入力してください'; return; }
-  const groupRows = Array.from(document.getElementById('race-modal-groups').querySelectorAll('.race-group-row'));
-  const groupMap = {};
-  groupRows.forEach(r => {
-    const idx = r.id.replace('race-group-row-', '');
-    const gname = document.getElementById(`race-group-name-${idx}`)?.value.trim() || `グループ${idx}`;
-    groupMap[idx] = { name: gname, members: [] };
-  });
-  _raceModalUsers.forEach(u => {
-    const sel = document.getElementById(`race-user-group-${u.id}`)?.value;
-    if (sel && groupMap[sel]) groupMap[sel].members.push(u.id);
-  });
-  const groups = Object.values(groupMap).filter(g => g.members.length > 0);
+  // 全メンバーを1グループとして自動参加（グループ表示はペアから取得）
+  const groups = [{ name: '全員', members: _raceModalUsers.map(u => u.id) }];
   const start_date = document.getElementById('race-start-input').value;
   const end_date   = document.getElementById('race-end-input').value;
   const subject    = document.getElementById('race-subject-input').value;
@@ -3479,14 +3458,6 @@ async function adminCreateRace() {
     body: JSON.stringify({ name, start_date, end_date, subject, groups })
   }).then(r => r.json());
   if (res.ok) {
-    // グループをそのままペア応援システムのペアとして自動同期
-    if (groups.length) {
-      await fetch('/api/admin/pairs', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json', Authorization: authToken },
-        body: JSON.stringify({ pairs: groups.map(g => ({ name: g.name, members: g.members })) })
-      }).catch(() => {});
-    }
     showPointToast('🏁 レースを発行しました');
     closeRaceModal();
     loadRaceSection();
