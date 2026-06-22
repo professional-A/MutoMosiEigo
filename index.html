@@ -1138,6 +1138,7 @@ const SUBJECT_ICONS = {
   '科学技術英語Ⅰ': '📖',
   '加工学':         '⚙️',
   '制御工学Ⅰ':     '🎛️',
+  '熱流体工学Ⅰ':   '🔥',
 };
 
 let tests = [];
@@ -1328,7 +1329,14 @@ function renderFolders() {
     </div>`;
   }).join("");
 
-  document.getElementById("folder-grid").innerHTML = cards;
+  const nekku = `<a href="nekku.html" class="folder-card" style="text-decoration:none;color:inherit">
+    <div class="folder-icon">🔥</div>
+    <div class="folder-name">熱流体工学Ⅰ</div>
+    <div class="folder-count">公式集</div>
+    <div class="progress-bar-wrap" style="margin-top:6px"><div class="progress-bar" style="width:100%;background:var(--teal)"></div></div>
+    <div class="progress-text">公式集を開く →</div>
+  </a>`;
+  document.getElementById("folder-grid").innerHTML = cards + nekku;
 }
 
 function openSubject(s) {

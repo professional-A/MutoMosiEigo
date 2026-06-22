@@ -1,0 +1,821 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>熱流体工学Ⅰ 公式集</title>
+<style>
+  :root {
+    --bg: #0f1117;
+    --card: #1a1d2e;
+    --card2: #242740;
+    --accent: #7c6af7;
+    --accent2: #56cfb2;
+    --accent3: #f97171;
+    --text: #e8eaf6;
+    --muted: #9ca3af;
+    --border: #2d3154;
+    --formula-bg: #0d1b2a;
+    --formula-border: #3b4fd8;
+    --example-bg: #1a2a1a;
+    --example-border: #2e7d32;
+    --note-bg: #2a1a0e;
+    --note-border: #e65100;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Segoe UI', 'Noto Sans JP', sans-serif;
+    font-size: 15px;
+    line-height: 1.7;
+  }
+  header {
+    background: linear-gradient(135deg, #1a1d2e 0%, #0d0f1a 100%);
+    border-bottom: 2px solid var(--accent);
+    padding: 20px 24px;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  header h1 { font-size: 1.4rem; color: var(--accent); }
+  header span { color: var(--muted); font-size: 0.9rem; }
+  .back-btn {
+    margin-left: auto;
+    background: var(--card2);
+    border: 1px solid var(--border);
+    color: var(--text);
+    padding: 6px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+    text-decoration: none;
+    font-size: 0.85rem;
+  }
+  .back-btn:hover { border-color: var(--accent); }
+
+  .toc {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin: 20px 24px;
+    padding: 16px 20px;
+  }
+  .toc h2 { font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
+  .toc-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 6px;
+  }
+  .toc a {
+    color: var(--accent2);
+    text-decoration: none;
+    font-size: 0.9rem;
+    padding: 4px 8px;
+    border-radius: 4px;
+    display: block;
+  }
+  .toc a:hover { background: var(--card2); }
+
+  main { padding: 0 24px 60px; max-width: 900px; margin: 0 auto; }
+
+  .chapter {
+    margin-top: 40px;
+  }
+  .chapter-header {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 24px;
+  }
+  .chapter-num {
+    background: var(--accent);
+    color: white;
+    border-radius: 8px;
+    padding: 4px 12px;
+    font-weight: 700;
+    font-size: 0.85rem;
+  }
+  .chapter-header h2 {
+    font-size: 1.3rem;
+    color: var(--text);
+  }
+
+  .formula-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 10px;
+    margin-bottom: 20px;
+    overflow: hidden;
+  }
+  .formula-card .fc-title {
+    background: var(--card2);
+    padding: 10px 16px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    border-bottom: 1px solid var(--border);
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .tag {
+    font-size: 0.72rem;
+    padding: 2px 8px;
+    border-radius: 20px;
+    font-weight: 500;
+  }
+  .tag-key { background: #3b4fd8; color: white; }
+  .tag-derive { background: #2e7d32; color: white; }
+
+  .formula-box {
+    background: var(--formula-bg);
+    border-left: 3px solid var(--formula-border);
+    margin: 16px;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    font-family: 'Consolas', 'Courier New', monospace;
+    font-size: 1.05rem;
+    letter-spacing: 0.03em;
+  }
+  .formula-box .main-formula {
+    font-size: 1.15rem;
+    color: #a5b4fc;
+    font-weight: 600;
+  }
+  .formula-box .alt-formula {
+    font-size: 0.95rem;
+    color: var(--muted);
+    margin-top: 6px;
+  }
+
+  .vars-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin: 0 16px 16px;
+    width: calc(100% - 32px);
+    font-size: 0.875rem;
+  }
+  .vars-table th {
+    text-align: left;
+    padding: 6px 10px;
+    color: var(--muted);
+    font-weight: 500;
+    border-bottom: 1px solid var(--border);
+    font-size: 0.8rem;
+  }
+  .vars-table td {
+    padding: 5px 10px;
+    border-bottom: 1px solid #1e2235;
+  }
+  .vars-table td:first-child {
+    font-family: monospace;
+    color: #f0c040;
+    width: 60px;
+  }
+  .vars-table td:last-child {
+    color: var(--muted);
+    font-size: 0.82rem;
+  }
+
+  .derive-box {
+    background: var(--example-bg);
+    border-left: 3px solid var(--example-border);
+    margin: 0 16px 16px;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.875rem;
+  }
+  .derive-box h4 {
+    color: #4caf50;
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .derive-box p { color: #c8e6c9; line-height: 1.65; }
+  .derive-box code {
+    font-family: monospace;
+    background: #0d1a0d;
+    padding: 1px 5px;
+    border-radius: 3px;
+    font-size: 0.85em;
+    color: #a5d6a7;
+  }
+
+  .example-box {
+    background: #1a1a2a;
+    border-left: 3px solid var(--accent);
+    margin: 0 16px 16px;
+    padding: 12px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.875rem;
+  }
+  .example-box h4 {
+    color: var(--accent);
+    font-size: 0.8rem;
+    font-weight: 600;
+    margin-bottom: 6px;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .example-box p { color: #c5cae9; line-height: 1.65; }
+
+  .note-box {
+    background: var(--note-bg);
+    border-left: 3px solid var(--note-border);
+    margin: 0 16px 16px;
+    padding: 10px 16px;
+    border-radius: 0 6px 6px 0;
+    font-size: 0.85rem;
+    color: #ffccbc;
+  }
+
+  .grid-2 {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 16px;
+  }
+  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+
+  .divider {
+    height: 1px;
+    background: var(--border);
+    margin: 32px 0;
+  }
+
+  sub, sup {
+    font-size: 0.72em;
+    line-height: 0;
+  }
+
+  .frac {
+    display: inline-flex;
+    flex-direction: column;
+    align-items: center;
+    vertical-align: middle;
+    margin: 0 3px;
+    font-size: 0.9em;
+  }
+  .frac .num { border-bottom: 1px solid currentColor; padding: 0 4px; }
+  .frac .den { padding: 0 4px; }
+
+  .eq-label {
+    color: var(--muted);
+    font-size: 0.82rem;
+    margin-left: 12px;
+  }
+
+  footer {
+    text-align: center;
+    padding: 24px;
+    color: var(--muted);
+    font-size: 0.82rem;
+    border-top: 1px solid var(--border);
+    margin-top: 40px;
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div>
+    <h1>🔥 熱流体工学Ⅰ 公式集</h1>
+    <span>全資料（4月〜5月）完全対応版</span>
+  </div>
+  <a class="back-btn" href="index.html">← 戻る</a>
+</header>
+
+<div class="toc" style="max-width:900px;margin:20px auto;">
+  <h2>目次</h2>
+  <div class="toc-grid">
+    <a href="#ch1">第1章 流体の基本性質</a>
+    <a href="#ch2a">第2章① 静水圧・パスカル</a>
+    <a href="#ch2b">第2章② マノメータ</a>
+    <a href="#ch2c">第2章③ 平面板・曲面板</a>
+    <a href="#ch2d">第2章④ 浮力</a>
+    <a href="#ch3">第3章 連続の式</a>
+    <a href="#ch4">第4章 ベルヌーイの定理</a>
+  </div>
+</div>
+
+<main>
+
+<!-- ============================================================ -->
+<!-- 第1章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch1">
+  <div class="chapter-header">
+    <span class="chapter-num">第1章</span>
+    <h2>流体の基本性質</h2>
+  </div>
+
+  <!-- 密度・比重量・比体積 -->
+  <div class="formula-card">
+    <div class="fc-title">密度・比重量・比体積 <span class="tag tag-key">基本</span></div>
+    <div class="formula-box">
+      <div class="main-formula">ρ = m / V　　　[kg/m³]</div>
+      <div class="alt-formula">γ = W / V = ρg　[N/m³]（比重量）</div>
+      <div class="alt-formula">v = V / m = 1/ρ　[m³/kg]（比体積）</div>
+      <div class="alt-formula">s = ρ / ρ<sub>w</sub>　（比重、ρ<sub>w</sub> = 1000 kg/m³）</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
+      <tr><td>ρ</td><td>密度</td><td>kg/m³</td></tr>
+      <tr><td>m</td><td>質量</td><td>kg</td></tr>
+      <tr><td>V</td><td>体積</td><td>m³</td></tr>
+      <tr><td>γ</td><td>比重量（単位体積あたりの重量）</td><td>N/m³</td></tr>
+      <tr><td>g</td><td>重力加速度 ≈ 9.81</td><td>m/s²</td></tr>
+      <tr><td>s</td><td>比重（無次元）</td><td>—</td></tr>
+    </table>
+    <div class="note-box">💡 水の密度 ρ<sub>w</sub> = 1000 kg/m³、水銀 ρ<sub>Hg</sub> = 13600 kg/m³、海水 ≈ 1025 kg/m³</div>
+  </div>
+
+  <!-- ニュートンの粘性法則 -->
+  <div class="formula-card">
+    <div class="fc-title">ニュートンの粘性法則 <span class="tag tag-key">重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">τ = μ (du/dy)　　[Pa = N/m²]</div>
+      <div class="alt-formula">一定速度勾配の場合：τ = μ (U / Y)</div>
+      <div class="alt-formula">せん断力：F = τA = μA (U / Y)</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
+      <tr><td>τ</td><td>せん断応力</td><td>Pa</td></tr>
+      <tr><td>μ</td><td>粘性係数（粘度）</td><td>Pa·s</td></tr>
+      <tr><td>du/dy</td><td>速度勾配（せん断速度）</td><td>1/s</td></tr>
+      <tr><td>U</td><td>板の速度</td><td>m/s</td></tr>
+      <tr><td>Y</td><td>板間の距離（すき間幅）</td><td>m</td></tr>
+      <tr><td>F</td><td>せん断力</td><td>N</td></tr>
+      <tr><td>A</td><td>板の面積</td><td>m²</td></tr>
+    </table>
+    <div class="derive-box">
+      <h4>導出のポイント</h4>
+      <p>粘性流体は隣り合う流体層がずれると抵抗力が生じる。速度差 U がある間隔 Y の平板間では速度は線形変化 → 勾配 = U/Y。</p>
+    </div>
+    <div class="example-box">
+      <h4>例題（両面せん断）</h4>
+      <p>板が上下の液体層（隙間 Y₁, Y₂）の中にある場合：<br>
+      <code>F = μAU (1/Y₁ + 1/Y₂)</code><br>
+      引く力が最小になる板の位置：<code>x = h/2</code>（中央）</p>
+    </div>
+  </div>
+
+  <!-- 動粘度 -->
+  <div class="formula-card">
+    <div class="fc-title">動粘度</div>
+    <div class="formula-box">
+      <div class="main-formula">ν = μ / ρ　　[m²/s]</div>
+    </div>
+    <div class="example-box">
+      <h4>例題（傾斜面を滑落する物体の最大速度）</h4>
+      <p>油膜（厚さ δ）の上を質量 m の物体が傾斜角 θ の面を滑落するとき、重力とせん断力がつり合う最大速度：<br>
+      <code>U<sub>max</sub> = (δ · m · g · sinθ) / (μ · A)</code><br>
+      ※ mg sinθ = μA(U<sub>max</sub>/δ) のつり合いから導出</p>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- 第2章① -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch2a">
+  <div class="chapter-header">
+    <span class="chapter-num">第2章①</span>
+    <h2>静水圧・パスカルの原理</h2>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">圧力の定義</div>
+    <div class="formula-box">
+      <div class="main-formula">P = F / A　　[Pa = N/m²]</div>
+      <div class="alt-formula">円形断面の場合：P = 4F / (πd²)</div>
+    </div>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">パスカルの原理 <span class="tag tag-key">重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">F₁/A₁ = F₂/A₂ = P　（圧力は等しく伝わる）</div>
+      <div class="alt-formula">直径表記：F₂ = (d₂/d₁)² × F₁</div>
+    </div>
+    <div class="derive-box">
+      <h4>導出のポイント</h4>
+      <p>密閉容器内の静止流体に加えた圧力は、あらゆる方向に等しく伝わる（パスカルの原理）。面積比だけ力が増幅される → 油圧ジャッキの原理。</p>
+    </div>
+    <div class="example-box">
+      <h4>例題（レバー付き油圧装置）</h4>
+      <p>レバーでの力変換：<code>f × L₁ = F × L₂</code> でまず小ピストンの力 F を求め、<br>
+      次に <code>P = F/A</code> でシリンダ圧力を求め、大ピストンに <code>F₂ = P × A₂</code> を適用する。</p>
+    </div>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">静止流体内の圧力（静水圧公式） <span class="tag tag-key">重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">P = P₀ + ρgh　　[Pa]　…(2.9)</div>
+      <div class="alt-formula">ゲージ圧：p = P − P₀ = ρgh　[Pa]　…(2.10)</div>
+      <div class="alt-formula">圧力ヘッド：h = p / (ρg)　[m]　…(2.11)</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
+      <tr><td>P</td><td>絶対圧力（真空 = 0 基準）</td><td>Pa</td></tr>
+      <tr><td>P₀</td><td>大気圧（≈ 101.3 kPa）</td><td>Pa</td></tr>
+      <tr><td>p</td><td>ゲージ圧（大気圧基準）</td><td>Pa</td></tr>
+      <tr><td>ρ</td><td>液体の密度</td><td>kg/m³</td></tr>
+      <tr><td>h</td><td>液面からの深さ</td><td>m</td></tr>
+    </table>
+    <div class="derive-box">
+      <h4>導出のポイント</h4>
+      <p>深さ h の微小要素に作用する力のつり合いを取ると、深さが増すほど上の液体の重さが加わる。結果として <code>p = ρgh</code>（深さに比例）。</p>
+    </div>
+    <div class="example-box">
+      <h4>例題</h4>
+      <p>水面下 5m のゲージ圧：<code>p = 1000 × 9.81 × 5 = 49.1 kPa</code><br>
+      絶対圧：<code>P = 101.3 + 49.1 = 150.4 kPa</code><br>
+      水銀換算：<code>760 mmHg = 13600 × 9.81 × 0.760 = 101.4 kPa</code></p>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- 第2章② -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch2b">
+  <div class="chapter-header">
+    <span class="chapter-num">第2章②</span>
+    <h2>液柱計（マノメータ）</h2>
+  </div>
+
+  <div class="note-box" style="margin-bottom:16px;">
+    💡 <strong>基本原理：</strong>連通した静止液体では、同一水平面上の圧力は等しい。基準面（A面）での左右の圧力を等値して解く。
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">単純マノメータ（液柱計）</div>
+    <div class="formula-box">
+      <div class="main-formula">P = P₀ + ρ'gh − ρgy　…(2.13)</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th></tr>
+      <tr><td>ρ'</td><td>細管内液体の密度</td></tr>
+      <tr><td>ρ</td><td>容器内液体の密度</td></tr>
+      <tr><td>h</td><td>細管内液面の高さ</td></tr>
+      <tr><td>y</td><td>基準面から容器液面までの距離</td></tr>
+    </table>
+    <div class="derive-box">
+      <h4>導出</h4>
+      <p>基準面 A での左右圧力を等値：<br>
+      左：<code>P_A = P + ρgy</code>　右：<code>P_A = P₀ + ρ'gh</code><br>
+      ①=② → <code>P = P₀ + ρ'gh − ρgy</code></p>
+    </div>
+  </div>
+
+  <div class="grid-2">
+    <div class="formula-card">
+      <div class="fc-title">U字管マノメータ <span class="tag tag-key">頻出</span></div>
+      <div class="formula-box" style="font-size:0.95rem;">
+        <div class="main-formula">P₁ − P₂ = ρ₂gy₂ + ρ'gh − ρ₁gy₁　…(2.14)</div>
+        <div class="alt-formula">同液体（ρ₁=ρ₂=ρ）の場合：<br>P₁ − P₂ = ρg(y₂ − y₁) + ρ'gh</div>
+      </div>
+      <div class="derive-box">
+        <h4>導出</h4>
+        <p>基準面 A の圧力等値：<br>
+        左：<code>P_A = P₁ + ρ₁gy₁</code><br>
+        右：<code>P_A = P₂ + ρ₂gy₂ + ρ'gh</code></p>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="fc-title">逆U字管マノメータ</div>
+      <div class="formula-box" style="font-size:0.95rem;">
+        <div class="main-formula">P₁ − P₂ = ρ₁gy₁ − ρ'gh − ρ₂gy₂　…(2.15)</div>
+      </div>
+      <div class="derive-box">
+        <h4>導出</h4>
+        <p>上部管の流体密度が小さい（ρ' &lt; ρ）。<br>
+        基準面 A の圧力等値（符号が逆になることに注意）。</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="example-box" style="margin-top:0; border-radius:6px;">
+    <h4>例題（逆U字管、水 ρ=1000、油 ρ'=850）</h4>
+    <p><code>P_B − P_A = (ρ − ρ')gh = (1000 − 850) × 9.81 × 0.075 = 110 Pa</code></p>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- 第2章③ -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch2c">
+  <div class="chapter-header">
+    <span class="chapter-num">第2章③</span>
+    <h2>平面板・曲面板に作用する力</h2>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">平面板に作用する全静水圧力 <span class="tag tag-key">重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">F = ρg h<sub>G</sub> A　　[N]　…(2.21)</div>
+      <div class="alt-formula">= ρg y<sub>G</sub> sinθ · A　（傾斜面表記）</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
+      <tr><td>h<sub>G</sub></td><td>水面から平面板の図心 G までの鉛直深さ</td><td>m</td></tr>
+      <tr><td>A</td><td>平面板の面積</td><td>m²</td></tr>
+      <tr><td>y<sub>G</sub></td><td>基準点 O から図心 G までの斜面に沿った距離</td><td>m</td></tr>
+      <tr><td>θ</td><td>平面板と水平面のなす角</td><td>°</td></tr>
+    </table>
+    <div class="derive-box">
+      <h4>導出のポイント</h4>
+      <p>圧力は深さに比例する（p = ρgh）。板全体の合力 = 板の各微小面積に作用する圧力の積分 → 図心での圧力 × 全面積。</p>
+    </div>
+    <div class="note-box">
+      傾斜角と深さの関係：<code>h<sub>G</sub> = y<sub>G</sub> sinθ</code>　→　<code>y<sub>G</sub> = h<sub>G</sub> / sinθ</code>
+    </div>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">圧力中心（力の作用点） <span class="tag tag-key">重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">y<sub>C</sub> = I<sub>G</sub> / (y<sub>G</sub> · A) + y<sub>G</sub>　…(2.25)</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th></tr>
+      <tr><td>y<sub>C</sub></td><td>基準点 O から圧力中心 C までの斜面距離</td></tr>
+      <tr><td>I<sub>G</sub></td><td>図心 G まわりの断面 2 次モーメント</td></tr>
+    </table>
+    <div class="note-box">圧力中心は常に図心より深い側（y<sub>C</sub> &gt; y<sub>G</sub>）。圧力が深くなるほど大きいため。</div>
+
+    <div style="padding:0 16px 16px;">
+      <strong style="font-size:0.9rem; color:var(--accent2);">断面 2 次モーメント I<sub>G</sub></strong>
+      <div class="formula-box" style="margin:8px 0 0;">
+        <div class="main-formula">円（直径 d）：I<sub>G</sub> = πd⁴ / 64　→　y<sub>C</sub> = d² / (16y<sub>G</sub>) + y<sub>G</sub></div>
+        <div class="alt-formula">長方形（幅 a, 高さ b）：I<sub>G</sub> = ab³ / 12　→　y<sub>C</sub> = b² / (12y<sub>G</sub>) + y<sub>G</sub></div>
+      </div>
+    </div>
+
+    <div class="example-box">
+      <h4>例題（傾斜した円板、θ = 36°、d = 1.8m、h = 0.75m）</h4>
+      <p><code>h<sub>G</sub> = 0.75 + (1.8/2)×sin36° = 1.279 m</code><br>
+      <code>y<sub>G</sub> = 1.279 / sin36° = 2.176 m</code><br>
+      <code>F = 1000 × 9.81 × 1.279 × π×1.8²/4 = 31.9 kN</code><br>
+      <code>y<sub>C</sub> = 1.8² / (16×2.176) + 2.176 = 2.269 m</code></p>
+    </div>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">曲面板に作用する力 <span class="tag tag-key">重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">F<sub>x</sub> = ρg z̄ A<sub>x</sub>　（水平分力）　…(2.26)</div>
+      <div class="main-formula" style="margin-top:8px;">F<sub>y</sub> = ρg V　　（鉛直分力）　…(2.27)</div>
+      <div class="alt-formula" style="margin-top:8px;">F = √(F<sub>x</sub>² + F<sub>y</sub>²)　…(2.28)</div>
+      <div class="alt-formula">α = tan⁻¹(F<sub>y</sub> / F<sub>x</sub>)　（合力の方向角）　…(2.29)</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th></tr>
+      <tr><td>A<sub>x</sub></td><td>曲面を水平方向に投影した面積</td></tr>
+      <tr><td>z̄</td><td>水平投影面の図心深さ</td></tr>
+      <tr><td>V</td><td>曲面板の上に乗っている液体の体積</td></tr>
+    </table>
+    <div class="derive-box">
+      <h4>導出のポイント</h4>
+      <p>水平分力 Fx：曲面を横から見た「投影平板」への静水圧と同じ。<br>
+      鉛直分力 Fy：曲面板の上の液体の重量（重さ = 浮力の反作用）。</p>
+    </div>
+    <div class="example-box">
+      <h4>例題（1/4 円筒、半径 r = 1.2m、幅 b = 4m）</h4>
+      <p><code>F<sub>x</sub> = ρg(r/2) × br = 1000×9.81×0.6×4×1.2 = 28.25 kN</code><br>
+      <code>F<sub>y</sub> = ρg(πr²/4)×b = 1000×9.81×π×1.44/4×4 = 44.38 kN</code><br>
+      <code>F = √(28.25² + 44.38²) = 52.6 kN、α = 57.5°</code></p>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- 第2章④ -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch2d">
+  <div class="chapter-header">
+    <span class="chapter-num">第2章④</span>
+    <h2>浮力（アルキメデスの原理）</h2>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">浮力 <span class="tag tag-key">重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">F = ρ<sub>流体</sub> · g · V<sub>排除</sub>　…(2.30)</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th></tr>
+      <tr><td>ρ<sub>流体</sub></td><td>流体（液体）の密度（物体の密度ではない！）</td></tr>
+      <tr><td>V<sub>排除</sub></td><td>物体が液体中に沈んでいる部分の体積</td></tr>
+    </table>
+    <div class="derive-box">
+      <h4>アルキメデスの原理</h4>
+      <p>液体中に沈んだ物体は、排除した液体の重量に等しい上向きの力（浮力）を受ける。</p>
+    </div>
+    <div class="example-box">
+      <h4>重量＝浮力のつり合い式</h4>
+      <p>物体の重量：<code>mg = ρ<sub>物体</sub> V g</code><br>
+      浮力：<code>F = ρ<sub>流体</sub> V<sub>沈</sub> g</code><br>
+      つり合い：<code>ρ<sub>物体</sub> V g = ρ<sub>流体</sub> (V − V<sub>1</sub>) g</code><br>
+      → <code>V = ρ<sub>流体</sub> V<sub>1</sub> / (ρ<sub>流体</sub> − ρ<sub>物体</sub>)</code>　（氷山の全体積）</p>
+    </div>
+    <div class="example-box">
+      <h4>直方体が水面に浮く場合の沈む深さ</h4>
+      <p><code>mg = ρ<sub>水</sub> g a b h</code> → <code>h = m / (ρ<sub>水</sub> a b)</code></p>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- 第3章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch3">
+  <div class="chapter-header">
+    <span class="chapter-num">第3章</span>
+    <h2>連続の式（質量保存）</h2>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">連続の式（定常非圧縮流れ） <span class="tag tag-key">重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">A₁u₁ = A₂u₂ = Q = 一定　…(3.7)</div>
+      <div class="alt-formula">直径表記：u₂ = (d₁/d₂)² × u₁</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
+      <tr><td>A</td><td>断面積</td><td>m²</td></tr>
+      <tr><td>u</td><td>断面平均流速</td><td>m/s</td></tr>
+      <tr><td>Q</td><td>体積流量</td><td>m³/s</td></tr>
+      <tr><td>d</td><td>内径</td><td>m</td></tr>
+    </table>
+    <div class="derive-box">
+      <h4>導出のポイント</h4>
+      <p>非圧縮性（密度一定）の定常流では、単位時間に断面を通過する体積は変化しない（質量保存）。断面積が小さくなれば流速が大きくなる。</p>
+    </div>
+    <div class="example-box">
+      <h4>例題（管径が変わる場合）</h4>
+      <p>d₁ = 80mm → d₂ = 40mm、u₁ = 6 m/s のとき：<br>
+      <code>u₂ = (80/40)² × 6 = 4 × 6 = 24 m/s</code></p>
+    </div>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">流量・質量流量</div>
+    <div class="formula-box">
+      <div class="main-formula">Q = Au = (πd²/4) u　[m³/s]</div>
+      <div class="alt-formula">G = ρQ = ρAu　　　　[kg/s]（質量流量）</div>
+      <div class="alt-formula">u<sub>a</sub> = Q / A　　　　　[m/s]（平均流速）　…(3.8)</div>
+    </div>
+    <div class="example-box">
+      <h4>分岐管（Y字管）の連続の式</h4>
+      <p><code>Q₁ = Q₂ + Q₃</code><br>
+      等量分岐（Q₂ = Q₃）の場合：<code>u₂ = (1/2)(d₁/d₂)² u₁</code><br>
+      タンク充填時間：<code>T = (D/d)² × (h/u)</code></p>
+    </div>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">速度分布と平均流速 <span class="tag tag-derive">積分</span></div>
+    <div class="formula-box">
+      <div class="main-formula">【円管・放物線分布】</div>
+      <div class="alt-formula">u = u<sub>max</sub> (1 − r²/R²)</div>
+      <div class="alt-formula">平均流速：u<sub>a</sub> = u<sub>max</sub> / 2</div>
+      <div class="main-formula" style="margin-top:12px;">【平板間・放物線分布】</div>
+      <div class="alt-formula">v = 2v<sub>max</sub> (y/Y)(1 − y/Y)</div>
+      <div class="alt-formula">流量（幅 b）：Q = bv<sub>max</sub>Y / 3</div>
+    </div>
+    <div class="derive-box">
+      <h4>放物線（円管）の積分</h4>
+      <p>微小環状面積 <code>dA = 2πr dr</code> に速度 <code>u</code> を掛けて積分：<br>
+      <code>Q = ∫₀ᴿ 2πr·u<sub>max</sub>(1−r²/R²)dr = πR²u<sub>max</sub>/2</code><br>
+      → <code>u<sub>a</sub> = Q/A = u<sub>max</sub>/2</code></p>
+    </div>
+  </div>
+
+</section>
+
+<div class="divider"></div>
+
+<!-- ============================================================ -->
+<!-- 第4章 -->
+<!-- ============================================================ -->
+<section class="chapter" id="ch4">
+  <div class="chapter-header">
+    <span class="chapter-num">第4章</span>
+    <h2>ベルヌーイの定理とその応用</h2>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">ベルヌーイの定理（定常非圧縮流れ） <span class="tag tag-key">最重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">p + ρu²/2 + ρgz = 一定　[Pa]　…(4.8)</div>
+      <div class="alt-formula">2点間：p₁ + ρu₁²/2 + ρgz₁ = p₂ + ρu₂²/2 + ρgz₂</div>
+      <br>
+      <div class="alt-formula">比エネルギー形式：p/ρ + u²/2 + gz = 一定　[J/kg]　…(4.7)</div>
+      <div class="alt-formula">ヘッド形式：p/(ρg) + u²/(2g) + z = 一定　[m]　…(4.9)</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
+      <tr><td>p</td><td>圧力（静圧）</td><td>Pa</td></tr>
+      <tr><td>ρu²/2</td><td>動圧（運動エネルギー密度）</td><td>Pa</td></tr>
+      <tr><td>ρgz</td><td>位置圧（位置エネルギー密度）</td><td>Pa</td></tr>
+      <tr><td>u</td><td>流速</td><td>m/s</td></tr>
+      <tr><td>z</td><td>基準面からの高さ</td><td>m</td></tr>
+    </table>
+    <div class="derive-box">
+      <h4>導出のポイント</h4>
+      <p>流体の単位体積当たりエネルギーを保存。<br>
+      運動エネルギー <code>½ρu²</code>（①）＋ 位置エネルギー <code>ρgz</code>（②）＋ 圧力による仕事 <code>pAuΔt</code>（③）の和が一定。<br>
+      連続の式 <code>A₁u₁ = A₂u₂</code> を使って AuΔt で割ると整理される。</p>
+    </div>
+    <div class="note-box">
+      ⚠️ 適用条件：<strong>①定常流　②非圧縮性（密度一定）　③粘性なし（理想流体）　④同一流線上</strong>
+    </div>
+    <div class="example-box">
+      <h4>例題（縮小管、d₁=80mm → d₂=40mm、h=100mm）</h4>
+      <p>まず連続式で u₂ を求める：<code>u₂ = (80/40)² × 6 = 24 m/s</code><br>
+      ①を基準面（z₁=0, z₂=h）にベルヌーイ適用：<br>
+      <code>p₂ = p₁ + ρ(u₁²−u₂²)/2 − ρgh</code><br>
+      <code>= 500×10³ + 1000(36−576)/2 − 1000×9.81×0.1 = 229 kPa</code></p>
+    </div>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">トリチェリーの定理 <span class="tag tag-key">重要</span></div>
+    <div class="formula-box">
+      <div class="main-formula">u₂ = √(2gH)　…(4.16)</div>
+    </div>
+    <table class="vars-table">
+      <tr><th>記号</th><th>説明</th></tr>
+      <tr><td>u₂</td><td>小孔からの噴出速度 [m/s]</td></tr>
+      <tr><td>H</td><td>液面から小孔までの高さ [m]</td></tr>
+    </table>
+    <div class="derive-box">
+      <h4>導出</h4>
+      <p>タンク液面①（u₁≈0、p₁=P₀）と小孔出口②（p₂=P₀）にベルヌーイを適用：<br>
+      <code>P₀ + ρgH = P₀ + ρu₂²/2</code><br>
+      → <code>u₂² = 2gH</code>　→　<code>u₂ = √(2gH)</code><br>
+      ※タンク断面積が大きく水面速度 u₁ ≈ 0 と仮定。</p>
+    </div>
+    <div class="example-box">
+      <h4>例題</h4>
+      <p>H = 2m のとき：<code>u₂ = √(2 × 9.81 × 2) = 6.26 m/s</code></p>
+    </div>
+  </div>
+
+  <div class="formula-card">
+    <div class="fc-title">ピエゾメータ（圧力測定管）</div>
+    <div class="formula-box">
+      <div class="main-formula">p = P₀ + ρgH₂</div>
+      <div class="alt-formula">H₂ = (p − P₀) / (ρg)</div>
+    </div>
+    <div class="derive-box">
+      <h4>ポイント</h4>
+      <p>ピエゾメータ（管壁に穴を開けた静圧測定管）の液面は静止しているので、液面高さは静水圧の式で決まる。</p>
+    </div>
+  </div>
+
+</section>
+
+<!-- 定数一覧 -->
+<div class="divider"></div>
+<div class="formula-card">
+  <div class="fc-title">📌 よく使う定数・物性値</div>
+  <table class="vars-table">
+    <tr><th>物質・量</th><th>値</th><th>単位</th></tr>
+    <tr><td>重力加速度 g</td><td>9.81</td><td>m/s²</td></tr>
+    <tr><td>水の密度 ρ<sub>w</sub></td><td>1000</td><td>kg/m³</td></tr>
+    <tr><td>海水の密度</td><td>≈ 1025</td><td>kg/m³</td></tr>
+    <tr><td>水銀の密度 ρ<sub>Hg</sub></td><td>13600</td><td>kg/m³</td></tr>
+    <tr><td>大気圧 P₀</td><td>101325 ≈ 101.3×10³</td><td>Pa</td></tr>
+    <tr><td>760 mmHg</td><td>= 13600 × 9.81 × 0.760 ≈ 101.4 kPa</td><td>Pa</td></tr>
+  </table>
+</div>
+
+</main>
+
+<footer>熱流体工学Ⅰ 公式集 — 全資料（4月11日〜5月28日）・全課題解答より作成</footer>
+
+</body>
+</html>
