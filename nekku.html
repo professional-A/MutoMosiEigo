@@ -6,276 +6,82 @@
 <title>熱流体工学Ⅰ 公式集</title>
 <style>
   :root {
-    --bg: #0f1117;
-    --card: #1a1d2e;
-    --card2: #242740;
-    --accent: #7c6af7;
-    --accent2: #56cfb2;
-    --accent3: #f97171;
-    --text: #e8eaf6;
-    --muted: #9ca3af;
-    --border: #2d3154;
-    --formula-bg: #0d1b2a;
-    --formula-border: #3b4fd8;
-    --example-bg: #1a2a1a;
-    --example-border: #2e7d32;
-    --note-bg: #2a1a0e;
-    --note-border: #e65100;
+    --bg:#0f1117; --card:#1a1d2e; --card2:#242740;
+    --accent:#7c6af7; --accent2:#56cfb2; --text:#e8eaf6;
+    --muted:#9ca3af; --border:#2d3154;
+    --formula-bg:#0d1b2a; --formula-border:#3b4fd8;
+    --derive-bg:#1a2a1a; --derive-border:#2e7d32;
+    --note-bg:#2a1a0e; --note-border:#e65100;
   }
-  * { box-sizing: border-box; margin: 0; padding: 0; }
-  body {
-    background: var(--bg);
-    color: var(--text);
-    font-family: 'Segoe UI', 'Noto Sans JP', sans-serif;
-    font-size: 15px;
-    line-height: 1.7;
-  }
-  header {
-    background: linear-gradient(135deg, #1a1d2e 0%, #0d0f1a 100%);
-    border-bottom: 2px solid var(--accent);
-    padding: 20px 24px;
-    display: flex;
-    align-items: center;
-    gap: 16px;
-    position: sticky;
-    top: 0;
-    z-index: 100;
-  }
-  header h1 { font-size: 1.4rem; color: var(--accent); }
-  header span { color: var(--muted); font-size: 0.9rem; }
-  .back-btn {
-    margin-left: auto;
-    background: var(--card2);
-    border: 1px solid var(--border);
-    color: var(--text);
-    padding: 6px 14px;
-    border-radius: 6px;
-    cursor: pointer;
-    text-decoration: none;
-    font-size: 0.85rem;
-  }
-  .back-btn:hover { border-color: var(--accent); }
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI','Noto Sans JP',sans-serif;font-size:15px;line-height:1.7}
+  header{background:linear-gradient(135deg,#1a1d2e,#0d0f1a);border-bottom:2px solid var(--accent);padding:18px 24px;display:flex;align-items:center;gap:16px;position:sticky;top:0;z-index:100}
+  header h1{font-size:1.4rem;color:var(--accent)}
+  header span{color:var(--muted);font-size:.9rem}
+  .back-btn{margin-left:auto;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:6px;cursor:pointer;text-decoration:none;font-size:.85rem}
+  .back-btn:hover{border-color:var(--accent)}
 
-  .toc {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    margin: 20px 24px;
-    padding: 16px 20px;
-  }
-  .toc h2 { font-size: 0.85rem; color: var(--muted); margin-bottom: 10px; letter-spacing: 0.1em; text-transform: uppercase; }
-  .toc-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 6px;
-  }
-  .toc a {
-    color: var(--accent2);
-    text-decoration: none;
-    font-size: 0.9rem;
-    padding: 4px 8px;
-    border-radius: 4px;
-    display: block;
-  }
-  .toc a:hover { background: var(--card2); }
+  .toc{background:var(--card);border:1px solid var(--border);border-radius:10px;margin:20px auto;max-width:900px;padding:16px 20px}
+  .toc h2{font-size:.8rem;color:var(--muted);margin-bottom:10px;letter-spacing:.1em;text-transform:uppercase}
+  .toc-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(190px,1fr));gap:4px}
+  .toc a{color:var(--accent2);text-decoration:none;font-size:.88rem;padding:4px 8px;border-radius:4px;display:block}
+  .toc a:hover{background:var(--card2)}
+  .toc a.summary{color:#f0c040;font-weight:600}
 
-  main { padding: 0 24px 60px; max-width: 900px; margin: 0 auto; }
+  main{padding:0 24px 60px;max-width:900px;margin:0 auto}
 
-  .chapter {
-    margin-top: 40px;
-  }
-  .chapter-header {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 24px;
-  }
-  .chapter-num {
-    background: var(--accent);
-    color: white;
-    border-radius: 8px;
-    padding: 4px 12px;
-    font-weight: 700;
-    font-size: 0.85rem;
-  }
-  .chapter-header h2 {
-    font-size: 1.3rem;
-    color: var(--text);
-  }
+  .chapter{margin-top:40px}
+  .chapter-header{display:flex;align-items:center;gap:12px;margin-bottom:20px}
+  .chapter-num{background:var(--accent);color:white;border-radius:8px;padding:4px 12px;font-weight:700;font-size:.85rem}
+  .chapter-header h2{font-size:1.25rem}
 
-  .formula-card {
-    background: var(--card);
-    border: 1px solid var(--border);
-    border-radius: 10px;
-    margin-bottom: 20px;
-    overflow: hidden;
-  }
-  .formula-card .fc-title {
-    background: var(--card2);
-    padding: 10px 16px;
-    font-weight: 600;
-    font-size: 0.95rem;
-    border-bottom: 1px solid var(--border);
-    display: flex;
-    align-items: center;
-    gap: 8px;
-  }
-  .tag {
-    font-size: 0.72rem;
-    padding: 2px 8px;
-    border-radius: 20px;
-    font-weight: 500;
-  }
-  .tag-key { background: #3b4fd8; color: white; }
-  .tag-derive { background: #2e7d32; color: white; }
+  .formula-card{background:var(--card);border:1px solid var(--border);border-radius:10px;margin-bottom:18px;overflow:hidden}
+  .fc-title{background:var(--card2);padding:10px 16px;font-weight:600;font-size:.95rem;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:8px}
+  .tag{font-size:.72rem;padding:2px 8px;border-radius:20px;font-weight:500}
+  .tag-key{background:#3b4fd8;color:white}
+  .tag-derive{background:#2e7d32;color:white}
 
-  .formula-box {
-    background: var(--formula-bg);
-    border-left: 3px solid var(--formula-border);
-    margin: 16px;
-    padding: 12px 16px;
-    border-radius: 0 6px 6px 0;
-    font-family: 'Consolas', 'Courier New', monospace;
-    font-size: 1.05rem;
-    letter-spacing: 0.03em;
-  }
-  .formula-box .main-formula {
-    font-size: 1.15rem;
-    color: #a5b4fc;
-    font-weight: 600;
-  }
-  .formula-box .alt-formula {
-    font-size: 0.95rem;
-    color: var(--muted);
-    margin-top: 6px;
-  }
+  .formula-box{background:var(--formula-bg);border-left:3px solid var(--formula-border);margin:14px 16px;padding:12px 16px;border-radius:0 6px 6px 0;font-family:'Consolas','Courier New',monospace;font-size:1.05rem;letter-spacing:.03em}
+  .formula-box .mf{font-size:1.1rem;color:#a5b4fc;font-weight:600}
+  .formula-box .af{font-size:.93rem;color:var(--muted);margin-top:5px}
 
-  .vars-table {
-    width: 100%;
-    border-collapse: collapse;
-    margin: 0 16px 16px;
-    width: calc(100% - 32px);
-    font-size: 0.875rem;
-  }
-  .vars-table th {
-    text-align: left;
-    padding: 6px 10px;
-    color: var(--muted);
-    font-weight: 500;
-    border-bottom: 1px solid var(--border);
-    font-size: 0.8rem;
-  }
-  .vars-table td {
-    padding: 5px 10px;
-    border-bottom: 1px solid #1e2235;
-  }
-  .vars-table td:first-child {
-    font-family: monospace;
-    color: #f0c040;
-    width: 60px;
-  }
-  .vars-table td:last-child {
-    color: var(--muted);
-    font-size: 0.82rem;
-  }
+  .vars-table{width:calc(100% - 32px);margin:0 16px 14px;border-collapse:collapse;font-size:.86rem}
+  .vars-table th{text-align:left;padding:5px 10px;color:var(--muted);font-weight:500;border-bottom:1px solid var(--border);font-size:.78rem}
+  .vars-table td{padding:4px 10px;border-bottom:1px solid #1e2235}
+  .vars-table td:first-child{font-family:monospace;color:#f0c040;width:70px}
+  .vars-table td:last-child{color:var(--muted);font-size:.81rem}
 
-  .derive-box {
-    background: var(--example-bg);
-    border-left: 3px solid var(--example-border);
-    margin: 0 16px 16px;
-    padding: 12px 16px;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.875rem;
-  }
-  .derive-box h4 {
-    color: #4caf50;
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-  .derive-box p { color: #c8e6c9; line-height: 1.65; }
-  .derive-box code {
-    font-family: monospace;
-    background: #0d1a0d;
-    padding: 1px 5px;
-    border-radius: 3px;
-    font-size: 0.85em;
-    color: #a5d6a7;
-  }
+  .derive-box{background:var(--derive-bg);border-left:3px solid var(--derive-border);margin:0 16px 14px;padding:11px 16px;border-radius:0 6px 6px 0;font-size:.87rem}
+  .derive-box h4{color:#4caf50;font-size:.78rem;font-weight:600;margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase}
+  .derive-box p{color:#c8e6c9;line-height:1.65}
+  .derive-box code{font-family:monospace;background:#0d1a0d;padding:1px 5px;border-radius:3px;font-size:.85em;color:#a5d6a7}
 
-  .example-box {
-    background: #1a1a2a;
-    border-left: 3px solid var(--accent);
-    margin: 0 16px 16px;
-    padding: 12px 16px;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.875rem;
-  }
-  .example-box h4 {
-    color: var(--accent);
-    font-size: 0.8rem;
-    font-weight: 600;
-    margin-bottom: 6px;
-    letter-spacing: 0.05em;
-    text-transform: uppercase;
-  }
-  .example-box p { color: #c5cae9; line-height: 1.65; }
+  .example-box{background:#1a1a2a;border-left:3px solid var(--accent);margin:0 16px 14px;padding:11px 16px;border-radius:0 6px 6px 0;font-size:.87rem}
+  .example-box h4{color:var(--accent);font-size:.78rem;font-weight:600;margin-bottom:5px;letter-spacing:.05em;text-transform:uppercase}
+  .example-box p{color:#c5cae9;line-height:1.65}
 
-  .note-box {
-    background: var(--note-bg);
-    border-left: 3px solid var(--note-border);
-    margin: 0 16px 16px;
-    padding: 10px 16px;
-    border-radius: 0 6px 6px 0;
-    font-size: 0.85rem;
-    color: #ffccbc;
-  }
+  .note-box{background:var(--note-bg);border-left:3px solid var(--note-border);margin:0 16px 14px;padding:9px 16px;border-radius:0 6px 6px 0;font-size:.84rem;color:#ffccbc}
 
-  .grid-2 {
-    display: grid;
-    grid-template-columns: 1fr 1fr;
-    gap: 16px;
-  }
-  @media (max-width: 640px) { .grid-2 { grid-template-columns: 1fr; } }
+  .diagram{text-align:center;margin:0 16px 14px;overflow-x:auto}
+  .diagram svg{max-width:100%}
 
-  .divider {
-    height: 1px;
-    background: var(--border);
-    margin: 32px 0;
-  }
+  .grid-2{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+  @media(max-width:600px){.grid-2{grid-template-columns:1fr}}
 
-  sub, sup {
-    font-size: 0.72em;
-    line-height: 0;
-  }
+  .divider{height:1px;background:var(--border);margin:28px 0}
 
-  .frac {
-    display: inline-flex;
-    flex-direction: column;
-    align-items: center;
-    vertical-align: middle;
-    margin: 0 3px;
-    font-size: 0.9em;
-  }
-  .frac .num { border-bottom: 1px solid currentColor; padding: 0 4px; }
-  .frac .den { padding: 0 4px; }
+  /* ── 公式まとめページ ── */
+  .summary-section{background:var(--card);border:2px solid #f0c040;border-radius:12px;margin-top:40px;overflow:hidden}
+  .summary-section .ss-header{background:#2a2000;padding:14px 20px;display:flex;align-items:center;gap:10px}
+  .summary-section .ss-header h2{font-size:1.2rem;color:#f0c040}
+  .ss-ch{padding:16px 20px 0}
+  .ss-ch h3{font-size:.82rem;letter-spacing:.12em;text-transform:uppercase;color:var(--accent2);font-weight:700;margin-bottom:10px;padding-bottom:6px;border-bottom:1px solid var(--border)}
+  .ss-row{font-family:'Consolas','Courier New',monospace;font-size:.9rem;color:#a5b4fc;padding:3px 0;border-bottom:1px solid #1e2235;display:flex;gap:12px}
+  .ss-row span{color:var(--muted);font-family:'Segoe UI',sans-serif;font-size:.8rem;white-space:nowrap}
+  .ss-last{padding-bottom:20px}
 
-  .eq-label {
-    color: var(--muted);
-    font-size: 0.82rem;
-    margin-left: 12px;
-  }
-
-  footer {
-    text-align: center;
-    padding: 24px;
-    color: var(--muted);
-    font-size: 0.82rem;
-    border-top: 1px solid var(--border);
-    margin-top: 40px;
-  }
+  footer{text-align:center;padding:24px;color:var(--muted);font-size:.82rem;border-top:1px solid var(--border);margin-top:40px}
+  sub,sup{font-size:.72em;line-height:0}
 </style>
 </head>
 <body>
@@ -283,12 +89,12 @@
 <header>
   <div>
     <h1>🔥 熱流体工学Ⅰ 公式集</h1>
-    <span>全資料（4月〜5月）完全対応版</span>
+    <span>全資料（4月〜5月）対応版</span>
   </div>
   <a class="back-btn" href="index.html">← 戻る</a>
 </header>
 
-<div class="toc" style="max-width:900px;margin:20px auto;">
+<div class="toc">
   <h2>目次</h2>
   <div class="toc-grid">
     <a href="#ch1">第1章 流体の基本性質</a>
@@ -298,6 +104,7 @@
     <a href="#ch2d">第2章④ 浮力</a>
     <a href="#ch3">第3章 連続の式</a>
     <a href="#ch4">第4章 ベルヌーイの定理</a>
+    <a href="#summary" class="summary">★ 公式まとめ（一覧）</a>
   </div>
 </div>
 
@@ -312,71 +119,103 @@
     <h2>流体の基本性質</h2>
   </div>
 
-  <!-- 密度・比重量・比体積 -->
   <div class="formula-card">
-    <div class="fc-title">密度・比重量・比体積 <span class="tag tag-key">基本</span></div>
+    <div class="fc-title">密度・比重量・比体積・比重 <span class="tag tag-key">基本</span></div>
     <div class="formula-box">
-      <div class="main-formula">ρ = m / V　　　[kg/m³]</div>
-      <div class="alt-formula">γ = W / V = ρg　[N/m³]（比重量）</div>
-      <div class="alt-formula">v = V / m = 1/ρ　[m³/kg]（比体積）</div>
-      <div class="alt-formula">s = ρ / ρ<sub>w</sub>　（比重、ρ<sub>w</sub> = 1000 kg/m³）</div>
+      <div class="mf">ρ = m / V　　[kg/m³]</div>
+      <div class="af">γ = W / V = ρg　[N/m³]（比重量）</div>
+      <div class="af">v = 1/ρ　　　　[m³/kg]（比体積）</div>
+      <div class="af">s = ρ / ρ<sub>w</sub>　　（比重、無次元）</div>
     </div>
     <table class="vars-table">
       <tr><th>記号</th><th>説明</th><th>単位</th></tr>
       <tr><td>ρ</td><td>密度</td><td>kg/m³</td></tr>
-      <tr><td>m</td><td>質量</td><td>kg</td></tr>
-      <tr><td>V</td><td>体積</td><td>m³</td></tr>
       <tr><td>γ</td><td>比重量（単位体積あたりの重量）</td><td>N/m³</td></tr>
-      <tr><td>g</td><td>重力加速度 ≈ 9.81</td><td>m/s²</td></tr>
-      <tr><td>s</td><td>比重（無次元）</td><td>—</td></tr>
+      <tr><td>s</td><td>比重（水との密度比）</td><td>無次元</td></tr>
     </table>
-    <div class="note-box">💡 水の密度 ρ<sub>w</sub> = 1000 kg/m³、水銀 ρ<sub>Hg</sub> = 13600 kg/m³、海水 ≈ 1025 kg/m³</div>
   </div>
 
-  <!-- ニュートンの粘性法則 -->
   <div class="formula-card">
     <div class="fc-title">ニュートンの粘性法則 <span class="tag tag-key">重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">τ = μ (du/dy)　　[Pa = N/m²]</div>
-      <div class="alt-formula">一定速度勾配の場合：τ = μ (U / Y)</div>
-      <div class="alt-formula">せん断力：F = τA = μA (U / Y)</div>
+      <div class="mf">τ = μ (du/dy)　[Pa]</div>
+      <div class="af">一定勾配：τ = μ U/Y　　　せん断力：F = μA (U/Y)</div>
+      <div class="af">両面せん断：F = μAU (1/Y₁ + 1/Y₂)</div>
     </div>
+
+    <!-- SVG: 平板間速度分布 -->
+    <div class="diagram">
+      <svg viewBox="0 0 360 160" width="360" height="160" xmlns="http://www.w3.org/2000/svg">
+        <!-- bottom plate (fixed) -->
+        <rect x="30" y="132" width="220" height="14" rx="2" fill="#3a3a5a" stroke="#6060a0" stroke-width="1"/>
+        <!-- top plate (moving) -->
+        <rect x="30" y="14" width="220" height="14" rx="2" fill="#3a3a5a" stroke="#6060a0" stroke-width="1"/>
+        <!-- velocity arrow on top plate -->
+        <line x1="255" y1="21" x2="295" y2="21" stroke="#56cfb2" stroke-width="2" marker-end="url(#arr)"/>
+        <text x="300" y="25" font-size="13" fill="#56cfb2" font-family="monospace">U</text>
+        <!-- u=0 label on bottom -->
+        <text x="258" y="143" font-size="11" fill="#9ca3af" font-family="monospace">u = 0</text>
+        <!-- velocity profile arrows (linear: short at bottom, long at top) -->
+        <!-- y positions: 125,110,95,80,65,50,35 -> lengths proportional to (132-y)/100 -->
+        <g stroke="#a5b4fc" stroke-width="1.5" marker-end="url(#arr2)">
+          <line x1="44" y1="125" x2="52" y2="125"/>
+          <line x1="44" y1="110" x2="65" y2="110"/>
+          <line x1="44" y1="95" x2="79" y2="95"/>
+          <line x1="44" y1="80" x2="93" y2="80"/>
+          <line x1="44" y1="65" x2="107" y2="65"/>
+          <line x1="44" y1="50" x2="121" y2="50"/>
+          <line x1="44" y1="35" x2="135" y2="35"/>
+        </g>
+        <!-- velocity profile outline -->
+        <polyline points="44,28 135,28 44,132" fill="rgba(165,180,252,0.08)" stroke="#a5b4fc" stroke-width="1" stroke-dasharray="4,3"/>
+        <!-- Y brace -->
+        <line x1="272" y1="28" x2="272" y2="132" stroke="#56cfb2" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="268" y1="28" x2="276" y2="28" stroke="#56cfb2" stroke-width="1"/>
+        <line x1="268" y1="132" x2="276" y2="132" stroke="#56cfb2" stroke-width="1"/>
+        <text x="278" y="84" font-size="13" fill="#56cfb2" font-family="monospace">Y</text>
+        <!-- τ label -->
+        <text x="150" y="92" font-size="11" fill="#f0c040" font-family="monospace">τ=μ(U/Y)</text>
+        <!-- arrows defs -->
+        <defs>
+          <marker id="arr" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto">
+            <path d="M0,0 L0,6 L6,3 z" fill="#56cfb2"/>
+          </marker>
+          <marker id="arr2" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto">
+            <path d="M0,0 L0,5 L5,2.5 z" fill="#a5b4fc"/>
+          </marker>
+        </defs>
+        <!-- labels -->
+        <text x="32" y="147" font-size="10" fill="#9ca3af">固定壁</text>
+        <text x="32" y="12" font-size="10" fill="#9ca3af">移動壁</text>
+      </svg>
+    </div>
+
     <table class="vars-table">
       <tr><th>記号</th><th>説明</th><th>単位</th></tr>
       <tr><td>τ</td><td>せん断応力</td><td>Pa</td></tr>
       <tr><td>μ</td><td>粘性係数（粘度）</td><td>Pa·s</td></tr>
-      <tr><td>du/dy</td><td>速度勾配（せん断速度）</td><td>1/s</td></tr>
-      <tr><td>U</td><td>板の速度</td><td>m/s</td></tr>
-      <tr><td>Y</td><td>板間の距離（すき間幅）</td><td>m</td></tr>
-      <tr><td>F</td><td>せん断力</td><td>N</td></tr>
-      <tr><td>A</td><td>板の面積</td><td>m²</td></tr>
+      <tr><td>U</td><td>上板の移動速度</td><td>m/s</td></tr>
+      <tr><td>Y</td><td>板間距離</td><td>m</td></tr>
     </table>
     <div class="derive-box">
       <h4>導出のポイント</h4>
-      <p>粘性流体は隣り合う流体層がずれると抵抗力が生じる。速度差 U がある間隔 Y の平板間では速度は線形変化 → 勾配 = U/Y。</p>
-    </div>
-    <div class="example-box">
-      <h4>例題（両面せん断）</h4>
-      <p>板が上下の液体層（隙間 Y₁, Y₂）の中にある場合：<br>
-      <code>F = μAU (1/Y₁ + 1/Y₂)</code><br>
-      引く力が最小になる板の位置：<code>x = h/2</code>（中央）</p>
-    </div>
-  </div>
-
-  <!-- 動粘度 -->
-  <div class="formula-card">
-    <div class="fc-title">動粘度</div>
-    <div class="formula-box">
-      <div class="main-formula">ν = μ / ρ　　[m²/s]</div>
+      <p>板間の速度分布は線形（上図）→ 速度勾配 du/dy = U/Y = 一定。<br>
+      両面せん断は Y₁・Y₂ それぞれのせん断力を足す。引く力が最小になる板の位置は中央（x = h/2）。</p>
     </div>
     <div class="example-box">
       <h4>例題（傾斜面を滑落する物体の最大速度）</h4>
-      <p>油膜（厚さ δ）の上を質量 m の物体が傾斜角 θ の面を滑落するとき、重力とせん断力がつり合う最大速度：<br>
-      <code>U<sub>max</sub> = (δ · m · g · sinθ) / (μ · A)</code><br>
-      ※ mg sinθ = μA(U<sub>max</sub>/δ) のつり合いから導出</p>
+      <p>油膜（厚さ δ）上を質量 m・傾斜角 θ の面を滑落：<br>
+      重力とせん断力のつり合い：<code>mg sinθ = μA(U<sub>max</sub>/δ)</code><br>
+      → <code>U<sub>max</sub> = (δ · m · g · sinθ) / (μ · A)</code></p>
     </div>
   </div>
 
+  <div class="formula-card">
+    <div class="fc-title">動粘度</div>
+    <div class="formula-box">
+      <div class="mf">ν = μ / ρ　　[m²/s]</div>
+    </div>
+  </div>
 </section>
 
 <div class="divider"></div>
@@ -393,55 +232,102 @@
   <div class="formula-card">
     <div class="fc-title">圧力の定義</div>
     <div class="formula-box">
-      <div class="main-formula">P = F / A　　[Pa = N/m²]</div>
-      <div class="alt-formula">円形断面の場合：P = 4F / (πd²)</div>
+      <div class="mf">P = F / A　[Pa = N/m²]</div>
+      <div class="af">円形断面：P = 4F / (πd²)</div>
     </div>
   </div>
 
   <div class="formula-card">
     <div class="fc-title">パスカルの原理 <span class="tag tag-key">重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">F₁/A₁ = F₂/A₂ = P　（圧力は等しく伝わる）</div>
-      <div class="alt-formula">直径表記：F₂ = (d₂/d₁)² × F₁</div>
+      <div class="mf">F₁/A₁ = F₂/A₂ = P</div>
+      <div class="af">直径表記：F₂ = (d₂/d₁)² × F₁</div>
+    </div>
+    <!-- SVG: 油圧シリンダ -->
+    <div class="diagram">
+      <svg viewBox="0 0 340 150" width="340" height="150" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ad" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#a5b4fc"/></marker>
+          <marker id="ad2" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#56cfb2"/></marker>
+        </defs>
+        <!-- water fill in cylinders -->
+        <rect x="52" y="70" width="46" height="52" fill="rgba(59,79,216,0.25)"/>
+        <rect x="162" y="50" width="96" height="72" fill="rgba(59,79,216,0.25)"/>
+        <!-- connecting pipe -->
+        <rect x="98" y="108" width="64" height="14" fill="rgba(59,79,216,0.25)" stroke="#6060a0" stroke-width="1"/>
+        <!-- small cylinder walls -->
+        <rect x="50" y="60" width="50" height="70" rx="2" fill="none" stroke="#6060a0" stroke-width="1.5"/>
+        <!-- small piston -->
+        <rect x="50" y="55" width="50" height="12" rx="2" fill="#5050a0" stroke="#a5b4fc" stroke-width="1.5"/>
+        <!-- large cylinder walls -->
+        <rect x="160" y="40" width="100" height="82" rx="2" fill="none" stroke="#6060a0" stroke-width="1.5"/>
+        <!-- large piston -->
+        <rect x="160" y="35" width="100" height="12" rx="2" fill="#5050a0" stroke="#a5b4fc" stroke-width="1.5"/>
+        <!-- F1 arrow down -->
+        <line x1="75" y1="15" x2="75" y2="52" stroke="#a5b4fc" stroke-width="2" marker-end="url(#ad)"/>
+        <text x="80" y="30" font-size="13" fill="#a5b4fc" font-family="monospace">F₁</text>
+        <!-- F2 arrow up -->
+        <line x1="210" y1="15" x2="210" y2="32" stroke="#56cfb2" stroke-width="2" marker-end="url(#ad2)"/>
+        <text x="220" y="28" font-size="13" fill="#56cfb2" font-family="monospace">F₂</text>
+        <!-- d1 label -->
+        <line x1="50" y1="145" x2="100" y2="145" stroke="#f0c040" stroke-width="1"/>
+        <text x="65" y="142" font-size="11" fill="#f0c040" font-family="monospace">d₁</text>
+        <!-- d2 label -->
+        <line x1="160" y1="145" x2="260" y2="145" stroke="#f0c040" stroke-width="1"/>
+        <text x="198" y="142" font-size="11" fill="#f0c040" font-family="monospace">d₂ (大)</text>
+        <!-- P label in pipe -->
+        <text x="106" y="120" font-size="11" fill="#ffccbc" font-family="monospace">P₁/A₁=P₂/A₂</text>
+      </svg>
     </div>
     <div class="derive-box">
-      <h4>導出のポイント</h4>
-      <p>密閉容器内の静止流体に加えた圧力は、あらゆる方向に等しく伝わる（パスカルの原理）。面積比だけ力が増幅される → 油圧ジャッキの原理。</p>
-    </div>
-    <div class="example-box">
-      <h4>例題（レバー付き油圧装置）</h4>
-      <p>レバーでの力変換：<code>f × L₁ = F × L₂</code> でまず小ピストンの力 F を求め、<br>
-      次に <code>P = F/A</code> でシリンダ圧力を求め、大ピストンに <code>F₂ = P × A₂</code> を適用する。</p>
+      <h4>ポイント</h4>
+      <p>密閉容器内の静止流体に加えた圧力はあらゆる方向に等しく伝わる。<br>
+      面積比が大きいほど力が増幅（油圧ジャッキの原理）。<br>
+      レバー付きの場合：まず <code>f × L₁ = F₁ × L₂</code> でF₁を求め、次に <code>F₂ = (d₂/d₁)²F₁</code>。</p>
     </div>
   </div>
 
   <div class="formula-card">
-    <div class="fc-title">静止流体内の圧力（静水圧公式） <span class="tag tag-key">重要</span></div>
+    <div class="fc-title">静水圧公式 <span class="tag tag-key">重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">P = P₀ + ρgh　　[Pa]　…(2.9)</div>
-      <div class="alt-formula">ゲージ圧：p = P − P₀ = ρgh　[Pa]　…(2.10)</div>
-      <div class="alt-formula">圧力ヘッド：h = p / (ρg)　[m]　…(2.11)</div>
+      <div class="mf">P = P₀ + ρgh　　[Pa]　…(2.9)</div>
+      <div class="af">ゲージ圧：p = ρgh　[Pa]　…(2.10)</div>
+      <div class="af">圧力ヘッド：h = p/(ρg)　[m]　…(2.11)</div>
+    </div>
+    <!-- SVG: 静水圧 -->
+    <div class="diagram">
+      <svg viewBox="0 0 260 190" width="260" height="190" xmlns="http://www.w3.org/2000/svg">
+        <defs><marker id="adown" markerWidth="6" markerHeight="6" refX="3" refY="5" orient="auto"><path d="M0,0 L6,0 L3,6 z" fill="#56cfb2"/></marker></defs>
+        <!-- container walls -->
+        <rect x="60" y="30" width="140" height="130" rx="3" fill="rgba(59,79,216,0.18)" stroke="#6060a0" stroke-width="1.5"/>
+        <!-- water surface -->
+        <line x1="60" y1="40" x2="200" y2="40" stroke="#56cfb2" stroke-width="2"/>
+        <text x="64" y="36" font-size="11" fill="#56cfb2">液面 (P₀)</text>
+        <!-- depth h arrow -->
+        <line x1="215" y1="40" x2="215" y2="138" stroke="#56cfb2" stroke-width="1.5" marker-end="url(#adown)"/>
+        <line x1="210" y1="40" x2="220" y2="40" stroke="#56cfb2" stroke-width="1"/>
+        <line x1="210" y1="138" x2="220" y2="138" stroke="#56cfb2" stroke-width="1"/>
+        <text x="222" y="94" font-size="13" fill="#56cfb2" font-family="monospace">h</text>
+        <!-- pressure arrows at depth -->
+        <line x1="70" y1="140" x2="100" y2="140" stroke="#a5b4fc" stroke-width="2"/>
+        <line x1="190" y1="140" x2="160" y2="140" stroke="#a5b4fc" stroke-width="2"/>
+        <line x1="130" y1="155" x2="130" y2="130" stroke="#a5b4fc" stroke-width="2"/>
+        <!-- pressure point -->
+        <circle cx="130" cy="140" r="4" fill="#a5b4fc"/>
+        <text x="90" y="175" font-size="12" fill="#a5b4fc" font-family="monospace">p = ρgh</text>
+      </svg>
     </div>
     <table class="vars-table">
-      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
-      <tr><td>P</td><td>絶対圧力（真空 = 0 基準）</td><td>Pa</td></tr>
-      <tr><td>P₀</td><td>大気圧（≈ 101.3 kPa）</td><td>Pa</td></tr>
-      <tr><td>p</td><td>ゲージ圧（大気圧基準）</td><td>Pa</td></tr>
-      <tr><td>ρ</td><td>液体の密度</td><td>kg/m³</td></tr>
-      <tr><td>h</td><td>液面からの深さ</td><td>m</td></tr>
+      <tr><th>記号</th><th>説明</th></tr>
+      <tr><td>P₀</td><td>大気圧（絶対圧の基準）</td></tr>
+      <tr><td>p</td><td>ゲージ圧（大気圧基準）</td></tr>
+      <tr><td>h</td><td>液面からの深さ [m]</td></tr>
     </table>
     <div class="derive-box">
       <h4>導出のポイント</h4>
-      <p>深さ h の微小要素に作用する力のつり合いを取ると、深さが増すほど上の液体の重さが加わる。結果として <code>p = ρgh</code>（深さに比例）。</p>
-    </div>
-    <div class="example-box">
-      <h4>例題</h4>
-      <p>水面下 5m のゲージ圧：<code>p = 1000 × 9.81 × 5 = 49.1 kPa</code><br>
-      絶対圧：<code>P = 101.3 + 49.1 = 150.4 kPa</code><br>
-      水銀換算：<code>760 mmHg = 13600 × 9.81 × 0.760 = 101.4 kPa</code></p>
+      <p>深さ h の微小要素に作用する力のつり合い → 上の液体の重さが加わる → p = ρgh（深さに比例）。</p>
     </div>
   </div>
-
 </section>
 
 <div class="divider"></div>
@@ -455,14 +341,99 @@
     <h2>液柱計（マノメータ）</h2>
   </div>
 
-  <div class="note-box" style="margin-bottom:16px;">
-    💡 <strong>基本原理：</strong>連通した静止液体では、同一水平面上の圧力は等しい。基準面（A面）での左右の圧力を等値して解く。
+  <div class="note-box" style="margin-bottom:14px;">
+    💡 <strong>基本原理：</strong>同一水平面上の圧力は等しい。基準面 A での左右圧力を等値して解く。
+  </div>
+
+  <!-- SVG: U字管 / 逆U字管 並列 -->
+  <div class="grid-2">
+    <div class="formula-card">
+      <div class="fc-title">U字管マノメータ <span class="tag tag-key">頻出</span></div>
+      <div class="diagram">
+        <svg viewBox="0 0 200 195" width="200" height="195" xmlns="http://www.w3.org/2000/svg">
+          <!-- U-tube outline -->
+          <path d="M30,20 L30,140 Q30,160 50,160 L150,160 Q170,160 170,140 L170,20" fill="none" stroke="#6060a0" stroke-width="2"/>
+          <!-- fluid 1 (left, blue) -->
+          <path d="M32,80 L32,140 Q32,158 50,158 L98,158 L98,105 Z" fill="rgba(59,79,216,0.30)" stroke="none"/>
+          <!-- fluid 2 (right, lighter) -->
+          <path d="M102,158 L150,158 Q168,158 168,140 L168,90 L102,90 Z" fill="rgba(59,79,216,0.20)" stroke="none"/>
+          <!-- manometer fluid ρ' (denser, bottom) -->
+          <path d="M32,140 Q32,158 50,158 L150,158 Q168,158 168,140 L168,105 L102,105 L102,140 Q102,150 98,150 L98,140 Z" fill="rgba(200,100,50,0.40)" stroke="none"/>
+          <!-- left level y1 -->
+          <line x1="30" y1="80" x2="100" y2="80" stroke="#a5b4fc" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <!-- right level y2 -->
+          <line x1="100" y1="90" x2="172" y2="90" stroke="#56cfb2" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <!-- base A line -->
+          <line x1="28" y1="105" x2="172" y2="105" stroke="#f0c040" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="174" y="109" font-size="10" fill="#f0c040" font-family="monospace">A</text>
+          <!-- h label -->
+          <line x1="88" y1="90" x2="88" y2="106" stroke="#ff9a4a" stroke-width="1.5"/>
+          <text x="68" y="100" font-size="11" fill="#ff9a4a" font-family="monospace">h</text>
+          <!-- P1 P2 labels -->
+          <text x="22" y="15" font-size="12" fill="#a5b4fc" font-family="monospace">P₁</text>
+          <text x="160" y="15" font-size="12" fill="#56cfb2" font-family="monospace">P₂</text>
+          <!-- ρ' label -->
+          <text x="65" y="152" font-size="10" fill="#ff9a4a" font-family="monospace">ρ'</text>
+          <!-- y1 y2 labels -->
+          <text x="3" y="94" font-size="10" fill="#a5b4fc" font-family="monospace">y₁</text>
+          <text x="175" y="99" font-size="10" fill="#56cfb2" font-family="monospace">y₂</text>
+        </svg>
+      </div>
+      <div class="formula-box" style="font-size:.93rem">
+        <div class="mf">P₁−P₂ = ρ₂gy₂ + ρ'gh − ρ₁gy₁</div>
+        <div class="af">同液体(ρ₁=ρ₂=ρ)：P₁−P₂ = ρg(y₂−y₁) + ρ'gh</div>
+      </div>
+      <div class="derive-box">
+        <h4>導出（A面で等値）</h4>
+        <p>左：<code>P_A = P₁ + ρ₁gy₁</code><br>
+        右：<code>P_A = P₂ + ρ₂gy₂ + ρ'gh</code></p>
+      </div>
+    </div>
+
+    <div class="formula-card">
+      <div class="fc-title">逆U字管マノメータ</div>
+      <div class="diagram">
+        <svg viewBox="0 0 200 195" width="200" height="195" xmlns="http://www.w3.org/2000/svg">
+          <!-- inverted U-tube outline -->
+          <path d="M30,175 L30,55 Q30,35 50,35 L150,35 Q170,35 170,55 L170,175" fill="none" stroke="#6060a0" stroke-width="2"/>
+          <!-- fluid 1 (left) -->
+          <path d="M32,175 L32,90 L98,90 L98,175 Z" fill="rgba(59,79,216,0.30)" stroke="none"/>
+          <!-- fluid 2 (right) -->
+          <path d="M102,175 L102,100 L168,100 L168,175 Z" fill="rgba(59,79,216,0.20)" stroke="none"/>
+          <!-- ρ' (lighter fluid at top) -->
+          <path d="M32,90 L32,55 Q32,37 50,37 L150,37 Q168,37 168,55 L168,100 L102,100 L102,90 Z" fill="rgba(50,180,100,0.30)" stroke="none"/>
+          <!-- left level -->
+          <line x1="30" y1="90" x2="102" y2="90" stroke="#a5b4fc" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <!-- right level -->
+          <line x1="100" y1="100" x2="172" y2="100" stroke="#56cfb2" stroke-width="1.5" stroke-dasharray="4,2"/>
+          <!-- base A line -->
+          <line x1="28" y1="90" x2="172" y2="90" stroke="#f0c040" stroke-width="1" stroke-dasharray="3,2"/>
+          <text x="174" y="94" font-size="10" fill="#f0c040" font-family="monospace">A</text>
+          <!-- h label -->
+          <text x="96" y="68" font-size="11" fill="#66cc88" font-family="monospace">h</text>
+          <line x1="90" y1="90" x2="90" y2="100" stroke="#66cc88" stroke-width="1.5"/>
+          <!-- P1 P2 labels -->
+          <text x="22" y="183" font-size="12" fill="#a5b4fc" font-family="monospace">P₁</text>
+          <text x="162" y="183" font-size="12" fill="#56cfb2" font-family="monospace">P₂</text>
+          <!-- ρ' label -->
+          <text x="78" y="56" font-size="10" fill="#66cc88" font-family="monospace">ρ'(軽)</text>
+        </svg>
+      </div>
+      <div class="formula-box" style="font-size:.93rem">
+        <div class="mf">P₁−P₂ = ρ₁gy₁ − ρ'gh − ρ₂gy₂</div>
+        <div class="af">ρ' &lt; ρ（軽い流体が上部に）</div>
+      </div>
+      <div class="derive-box">
+        <h4>導出（符号注意）</h4>
+        <p>上部の軽い流体(ρ')が圧力を下げる方向に働く → ρ'gh の符号がマイナス。</p>
+      </div>
+    </div>
   </div>
 
   <div class="formula-card">
-    <div class="fc-title">単純マノメータ（液柱計）</div>
+    <div class="fc-title">単純マノメータ</div>
     <div class="formula-box">
-      <div class="main-formula">P = P₀ + ρ'gh − ρgy　…(2.13)</div>
+      <div class="mf">P = P₀ + ρ'gh − ρgy　…(2.13)</div>
     </div>
     <table class="vars-table">
       <tr><th>記号</th><th>説明</th></tr>
@@ -471,47 +442,7 @@
       <tr><td>h</td><td>細管内液面の高さ</td></tr>
       <tr><td>y</td><td>基準面から容器液面までの距離</td></tr>
     </table>
-    <div class="derive-box">
-      <h4>導出</h4>
-      <p>基準面 A での左右圧力を等値：<br>
-      左：<code>P_A = P + ρgy</code>　右：<code>P_A = P₀ + ρ'gh</code><br>
-      ①=② → <code>P = P₀ + ρ'gh − ρgy</code></p>
-    </div>
   </div>
-
-  <div class="grid-2">
-    <div class="formula-card">
-      <div class="fc-title">U字管マノメータ <span class="tag tag-key">頻出</span></div>
-      <div class="formula-box" style="font-size:0.95rem;">
-        <div class="main-formula">P₁ − P₂ = ρ₂gy₂ + ρ'gh − ρ₁gy₁　…(2.14)</div>
-        <div class="alt-formula">同液体（ρ₁=ρ₂=ρ）の場合：<br>P₁ − P₂ = ρg(y₂ − y₁) + ρ'gh</div>
-      </div>
-      <div class="derive-box">
-        <h4>導出</h4>
-        <p>基準面 A の圧力等値：<br>
-        左：<code>P_A = P₁ + ρ₁gy₁</code><br>
-        右：<code>P_A = P₂ + ρ₂gy₂ + ρ'gh</code></p>
-      </div>
-    </div>
-
-    <div class="formula-card">
-      <div class="fc-title">逆U字管マノメータ</div>
-      <div class="formula-box" style="font-size:0.95rem;">
-        <div class="main-formula">P₁ − P₂ = ρ₁gy₁ − ρ'gh − ρ₂gy₂　…(2.15)</div>
-      </div>
-      <div class="derive-box">
-        <h4>導出</h4>
-        <p>上部管の流体密度が小さい（ρ' &lt; ρ）。<br>
-        基準面 A の圧力等値（符号が逆になることに注意）。</p>
-      </div>
-    </div>
-  </div>
-
-  <div class="example-box" style="margin-top:0; border-radius:6px;">
-    <h4>例題（逆U字管、水 ρ=1000、油 ρ'=850）</h4>
-    <p><code>P_B − P_A = (ρ − ρ')gh = (1000 − 850) × 9.81 × 0.075 = 110 Pa</code></p>
-  </div>
-
 </section>
 
 <div class="divider"></div>
@@ -526,83 +457,132 @@
   </div>
 
   <div class="formula-card">
-    <div class="fc-title">平面板に作用する全静水圧力 <span class="tag tag-key">重要</span></div>
+    <div class="fc-title">平面板への全静水圧力 <span class="tag tag-key">重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">F = ρg h<sub>G</sub> A　　[N]　…(2.21)</div>
-      <div class="alt-formula">= ρg y<sub>G</sub> sinθ · A　（傾斜面表記）</div>
+      <div class="mf">F = ρg h<sub>G</sub> A　　[N]　…(2.21)</div>
+      <div class="af">傾斜面：h<sub>G</sub> = y<sub>G</sub> sinθ　→　y<sub>G</sub> = h<sub>G</sub>/sinθ</div>
+    </div>
+    <!-- SVG: 傾斜平板 -->
+    <div class="diagram">
+      <svg viewBox="0 0 320 220" width="320" height="220" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="af1" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#a5b4fc"/></marker>
+          <marker id="af2" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#56cfb2"/></marker>
+        </defs>
+        <!-- water surface -->
+        <line x1="20" y1="30" x2="300" y2="30" stroke="#56cfb2" stroke-width="2"/>
+        <text x="22" y="26" font-size="10" fill="#56cfb2">水面</text>
+        <!-- water fill -->
+        <polygon points="20,30 300,30 300,210 20,210" fill="rgba(59,79,216,0.15)" stroke="none"/>
+        <!-- inclined plate -->
+        <line x1="80" y1="30" x2="230" y2="200" stroke="#a5b4fc" stroke-width="3"/>
+        <!-- O point at water surface -->
+        <circle cx="80" cy="30" r="4" fill="#f0c040"/>
+        <text x="60" y="27" font-size="12" fill="#f0c040" font-family="monospace">O</text>
+        <!-- G (centroid) at mid-plate -->
+        <circle cx="155" cy="115" r="5" fill="#56cfb2"/>
+        <text x="162" y="119" font-size="12" fill="#56cfb2" font-family="monospace">G</text>
+        <!-- C (pressure center) below G -->
+        <circle cx="177" cy="143" r="5" fill="#ff9a4a"/>
+        <text x="184" y="147" font-size="12" fill="#ff9a4a" font-family="monospace">C</text>
+        <!-- h_G vertical arrow from surface to G -->
+        <line x1="40" y1="30" x2="40" y2="115" stroke="#f0c040" stroke-width="1.5" marker-end="url(#af1)"/>
+        <line x1="35" y1="30" x2="45" y2="30" stroke="#f0c040" stroke-width="1"/>
+        <text x="8" y="77" font-size="11" fill="#f0c040" font-family="monospace">h_G</text>
+        <!-- y_G along plate -->
+        <line x1="80" y1="30" x2="155" y2="115" stroke="#56cfb2" stroke-width="1" stroke-dasharray="4,2"/>
+        <text x="88" y="72" font-size="11" fill="#56cfb2" font-family="monospace">y_G</text>
+        <!-- F arrow at C perpendicular to plate -->
+        <line x1="240" y1="110" x2="184" y2="148" stroke="#ff9a4a" stroke-width="2" marker-end="url(#af1)"/>
+        <text x="245" y="108" font-size="12" fill="#ff9a4a" font-family="monospace">F</text>
+        <!-- θ angle -->
+        <path d="M80,50 A20,20 0 0,1 95,36" fill="none" stroke="#9ca3af" stroke-width="1"/>
+        <text x="97" y="53" font-size="11" fill="#9ca3af" font-family="monospace">θ</text>
+      </svg>
     </div>
     <table class="vars-table">
-      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
-      <tr><td>h<sub>G</sub></td><td>水面から平面板の図心 G までの鉛直深さ</td><td>m</td></tr>
-      <tr><td>A</td><td>平面板の面積</td><td>m²</td></tr>
-      <tr><td>y<sub>G</sub></td><td>基準点 O から図心 G までの斜面に沿った距離</td><td>m</td></tr>
-      <tr><td>θ</td><td>平面板と水平面のなす角</td><td>°</td></tr>
+      <tr><th>記号</th><th>説明</th></tr>
+      <tr><td>h<sub>G</sub></td><td>水面から図心 G までの鉛直深さ</td></tr>
+      <tr><td>A</td><td>板の面積</td></tr>
+      <tr><td>y<sub>G</sub></td><td>O から G までの斜面距離</td></tr>
+      <tr><td>θ</td><td>板と水平面のなす角</td></tr>
     </table>
     <div class="derive-box">
       <h4>導出のポイント</h4>
-      <p>圧力は深さに比例する（p = ρgh）。板全体の合力 = 板の各微小面積に作用する圧力の積分 → 図心での圧力 × 全面積。</p>
-    </div>
-    <div class="note-box">
-      傾斜角と深さの関係：<code>h<sub>G</sub> = y<sub>G</sub> sinθ</code>　→　<code>y<sub>G</sub> = h<sub>G</sub> / sinθ</code>
+      <p>合力 = 各微小面積に作用する圧力 p = ρgh の積分 → 結局 <strong>図心での圧力 × 全面積</strong>。</p>
     </div>
   </div>
 
   <div class="formula-card">
     <div class="fc-title">圧力中心（力の作用点） <span class="tag tag-key">重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">y<sub>C</sub> = I<sub>G</sub> / (y<sub>G</sub> · A) + y<sub>G</sub>　…(2.25)</div>
+      <div class="mf">y<sub>C</sub> = I<sub>G</sub>/(y<sub>G</sub>·A) + y<sub>G</sub>　…(2.25)</div>
+      <div class="af">円（直径d）：I<sub>G</sub>=πd⁴/64　→　y<sub>C</sub> = d²/(16y<sub>G</sub>) + y<sub>G</sub></div>
+      <div class="af">長方形（a×b）：I<sub>G</sub>=ab³/12　→　y<sub>C</sub> = b²/(12y<sub>G</sub>) + y<sub>G</sub></div>
     </div>
-    <table class="vars-table">
-      <tr><th>記号</th><th>説明</th></tr>
-      <tr><td>y<sub>C</sub></td><td>基準点 O から圧力中心 C までの斜面距離</td></tr>
-      <tr><td>I<sub>G</sub></td><td>図心 G まわりの断面 2 次モーメント</td></tr>
-    </table>
-    <div class="note-box">圧力中心は常に図心より深い側（y<sub>C</sub> &gt; y<sub>G</sub>）。圧力が深くなるほど大きいため。</div>
-
-    <div style="padding:0 16px 16px;">
-      <strong style="font-size:0.9rem; color:var(--accent2);">断面 2 次モーメント I<sub>G</sub></strong>
-      <div class="formula-box" style="margin:8px 0 0;">
-        <div class="main-formula">円（直径 d）：I<sub>G</sub> = πd⁴ / 64　→　y<sub>C</sub> = d² / (16y<sub>G</sub>) + y<sub>G</sub></div>
-        <div class="alt-formula">長方形（幅 a, 高さ b）：I<sub>G</sub> = ab³ / 12　→　y<sub>C</sub> = b² / (12y<sub>G</sub>) + y<sub>G</sub></div>
-      </div>
-    </div>
-
+    <div class="note-box">圧力中心 C は常に図心 G より深い側（y<sub>C</sub> &gt; y<sub>G</sub>）。深いほど圧力が大きいため、合力の作用点は下にずれる。</div>
     <div class="example-box">
-      <h4>例題（傾斜した円板、θ = 36°、d = 1.8m、h = 0.75m）</h4>
+      <h4>例題（傾斜円板 θ=36°、d=1.8m、上端深さ h=0.75m）</h4>
       <p><code>h<sub>G</sub> = 0.75 + (1.8/2)×sin36° = 1.279 m</code><br>
-      <code>y<sub>G</sub> = 1.279 / sin36° = 2.176 m</code><br>
-      <code>F = 1000 × 9.81 × 1.279 × π×1.8²/4 = 31.9 kN</code><br>
-      <code>y<sub>C</sub> = 1.8² / (16×2.176) + 2.176 = 2.269 m</code></p>
+      <code>y<sub>G</sub> = 1.279/sin36° = 2.176 m</code><br>
+      <code>F = ρg·h<sub>G</sub>·A = 31.9 kN</code><br>
+      <code>y<sub>C</sub> = 1.8²/(16×2.176) + 2.176 = 2.269 m</code></p>
     </div>
   </div>
 
   <div class="formula-card">
     <div class="fc-title">曲面板に作用する力 <span class="tag tag-key">重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">F<sub>x</sub> = ρg z̄ A<sub>x</sub>　（水平分力）　…(2.26)</div>
-      <div class="main-formula" style="margin-top:8px;">F<sub>y</sub> = ρg V　　（鉛直分力）　…(2.27)</div>
-      <div class="alt-formula" style="margin-top:8px;">F = √(F<sub>x</sub>² + F<sub>y</sub>²)　…(2.28)</div>
-      <div class="alt-formula">α = tan⁻¹(F<sub>y</sub> / F<sub>x</sub>)　（合力の方向角）　…(2.29)</div>
+      <div class="mf">F<sub>x</sub> = ρg z̄ A<sub>x</sub>　（水平分力）　…(2.26)</div>
+      <div class="mf" style="margin-top:6px">F<sub>y</sub> = ρg V　　　（鉛直分力）　…(2.27)</div>
+      <div class="af" style="margin-top:6px">F = √(F<sub>x</sub>²+F<sub>y</sub>²)　…(2.28)　　α = tan⁻¹(F<sub>y</sub>/F<sub>x</sub>)　…(2.29)</div>
+    </div>
+    <!-- SVG: 曲面板（1/4円） -->
+    <div class="diagram">
+      <svg viewBox="0 0 260 200" width="260" height="200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="acx" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#a5b4fc"/></marker>
+          <marker id="acy" markerWidth="6" markerHeight="6" refX="3" refY="5" orient="auto"><path d="M0,0 L6,0 L3,6 z" fill="#56cfb2"/></marker>
+        </defs>
+        <!-- water surface -->
+        <line x1="20" y1="40" x2="200" y2="40" stroke="#56cfb2" stroke-width="2"/>
+        <!-- water fill -->
+        <path d="M60,40 L60,170 A100,100 0 0,0 160,70 L160,40 Z" fill="rgba(59,79,216,0.25)" stroke="none"/>
+        <!-- quarter circle curve -->
+        <path d="M60,170 A100,100 0 0,0 160,70" fill="none" stroke="#a5b4fc" stroke-width="3"/>
+        <!-- Ax projection line (vertical face) -->
+        <line x1="160" y1="40" x2="160" y2="170" stroke="#f0c040" stroke-width="1.5" stroke-dasharray="5,3"/>
+        <text x="165" y="108" font-size="11" fill="#f0c040" font-family="monospace">A_x</text>
+        <!-- V label in water region -->
+        <text x="80" y="120" font-size="14" fill="#9ca3af" font-family="monospace">V</text>
+        <!-- Fx arrow (horizontal, pointing left = water pushes left on the curve) -->
+        <line x1="220" y1="108" x2="175" y2="108" stroke="#a5b4fc" stroke-width="2.5" marker-end="url(#acx)"/>
+        <text x="226" y="113" font-size="12" fill="#a5b4fc" font-family="monospace">F_x</text>
+        <!-- Fy arrow (vertical, downward = weight of water above) -->
+        <line x1="110" y1="178" x2="110" y2="155" stroke="#56cfb2" stroke-width="2.5" marker-end="url(#acy)"/>
+        <text x="116" y="195" font-size="12" fill="#56cfb2" font-family="monospace">F_y</text>
+        <!-- water surface label -->
+        <text x="22" y="36" font-size="10" fill="#56cfb2">水面</text>
+      </svg>
     </div>
     <table class="vars-table">
       <tr><th>記号</th><th>説明</th></tr>
-      <tr><td>A<sub>x</sub></td><td>曲面を水平方向に投影した面積</td></tr>
-      <tr><td>z̄</td><td>水平投影面の図心深さ</td></tr>
-      <tr><td>V</td><td>曲面板の上に乗っている液体の体積</td></tr>
+      <tr><td>A<sub>x</sub></td><td>曲面の水平投影面積（鉛直面）</td></tr>
+      <tr><td>z̄</td><td>その投影面の図心深さ</td></tr>
+      <tr><td>V</td><td>曲面上部の液体体積</td></tr>
     </table>
     <div class="derive-box">
       <h4>導出のポイント</h4>
-      <p>水平分力 Fx：曲面を横から見た「投影平板」への静水圧と同じ。<br>
-      鉛直分力 Fy：曲面板の上の液体の重量（重さ = 浮力の反作用）。</p>
+      <p>水平分力 F<sub>x</sub>：曲面を横から投影した面積への静水圧と同じ。<br>
+      鉛直分力 F<sub>y</sub>：曲面の上に乗っている液体の重量（浮力の反作用）。</p>
     </div>
     <div class="example-box">
-      <h4>例題（1/4 円筒、半径 r = 1.2m、幅 b = 4m）</h4>
-      <p><code>F<sub>x</sub> = ρg(r/2) × br = 1000×9.81×0.6×4×1.2 = 28.25 kN</code><br>
-      <code>F<sub>y</sub> = ρg(πr²/4)×b = 1000×9.81×π×1.44/4×4 = 44.38 kN</code><br>
-      <code>F = √(28.25² + 44.38²) = 52.6 kN、α = 57.5°</code></p>
+      <h4>例題（1/4円筒 r=1.2m、幅 b=4m）</h4>
+      <p><code>F<sub>x</sub> = ρg(r/2)·br = 28.25 kN</code><br>
+      <code>F<sub>y</sub> = ρg(πr²/4)·b = 44.38 kN</code><br>
+      <code>F = 52.6 kN、α = 57.5°</code></p>
     </div>
   </div>
-
 </section>
 
 <div class="divider"></div>
@@ -619,30 +599,45 @@
   <div class="formula-card">
     <div class="fc-title">浮力 <span class="tag tag-key">重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">F = ρ<sub>流体</sub> · g · V<sub>排除</sub>　…(2.30)</div>
+      <div class="mf">F = ρ<sub>流体</sub> · g · V<sub>排除</sub>　…(2.30)</div>
+    </div>
+    <!-- SVG: 浮力 -->
+    <div class="diagram">
+      <svg viewBox="0 0 240 180" width="240" height="180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="abup" markerWidth="6" markerHeight="6" refX="3" refY="0" orient="auto"><path d="M0,6 L6,6 L3,0 z" fill="#56cfb2"/></marker>
+          <marker id="abdn" markerWidth="6" markerHeight="6" refX="3" refY="5" orient="auto"><path d="M0,0 L6,0 L3,6 z" fill="#a5b4fc"/></marker>
+        </defs>
+        <!-- water -->
+        <rect x="30" y="50" width="180" height="120" fill="rgba(59,79,216,0.2)" stroke="#6060a0" stroke-width="1.5" rx="3"/>
+        <!-- water surface -->
+        <line x1="30" y1="70" x2="210" y2="70" stroke="#56cfb2" stroke-width="2"/>
+        <text x="34" y="66" font-size="10" fill="#56cfb2">液面</text>
+        <!-- floating object (partially submerged) -->
+        <rect x="85" y="50" width="70" height="60" rx="4" fill="#3a3a6a" stroke="#a5b4fc" stroke-width="2"/>
+        <text x="105" y="85" font-size="11" fill="#e8eaf6" font-family="monospace">物体</text>
+        <!-- submerged part indicator -->
+        <line x1="85" y1="70" x2="155" y2="70" stroke="#f0c040" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="160" y="74" font-size="10" fill="#f0c040">V_排除</text>
+        <!-- buoyancy arrow up -->
+        <line x1="120" y1="130" x2="120" y2="115" stroke="#56cfb2" stroke-width="2.5" marker-end="url(#abup)"/>
+        <text x="130" y="138" font-size="11" fill="#56cfb2" font-family="monospace">F(浮力)</text>
+        <!-- gravity arrow down -->
+        <line x1="120" y1="48" x2="120" y2="30" stroke="#a5b4fc" stroke-width="2.5" marker-end="url(#abdn)"/>
+        <text x="130" y="26" font-size="11" fill="#a5b4fc" font-family="monospace">mg</text>
+      </svg>
     </div>
     <table class="vars-table">
       <tr><th>記号</th><th>説明</th></tr>
-      <tr><td>ρ<sub>流体</sub></td><td>流体（液体）の密度（物体の密度ではない！）</td></tr>
-      <tr><td>V<sub>排除</sub></td><td>物体が液体中に沈んでいる部分の体積</td></tr>
+      <tr><td>ρ<sub>流体</sub></td><td>液体の密度（物体の密度ではない）</td></tr>
+      <tr><td>V<sub>排除</sub></td><td>液体中に沈んでいる部分の体積</td></tr>
     </table>
-    <div class="derive-box">
-      <h4>アルキメデスの原理</h4>
-      <p>液体中に沈んだ物体は、排除した液体の重量に等しい上向きの力（浮力）を受ける。</p>
-    </div>
     <div class="example-box">
-      <h4>重量＝浮力のつり合い式</h4>
-      <p>物体の重量：<code>mg = ρ<sub>物体</sub> V g</code><br>
-      浮力：<code>F = ρ<sub>流体</sub> V<sub>沈</sub> g</code><br>
-      つり合い：<code>ρ<sub>物体</sub> V g = ρ<sub>流体</sub> (V − V<sub>1</sub>) g</code><br>
-      → <code>V = ρ<sub>流体</sub> V<sub>1</sub> / (ρ<sub>流体</sub> − ρ<sub>物体</sub>)</code>　（氷山の全体積）</p>
-    </div>
-    <div class="example-box">
-      <h4>直方体が水面に浮く場合の沈む深さ</h4>
-      <p><code>mg = ρ<sub>水</sub> g a b h</code> → <code>h = m / (ρ<sub>水</sub> a b)</code></p>
+      <h4>重量 = 浮力のつり合い</h4>
+      <p>浮く条件：<code>ρ<sub>物体</sub>Vg = ρ<sub>流体</sub>V<sub>沈</sub>g</code><br>
+      直方体（a×b）が浮く深さ：<code>h = m/(ρ<sub>流体</sub>·a·b)</code></p>
     </div>
   </div>
-
 </section>
 
 <div class="divider"></div>
@@ -657,62 +652,112 @@
   </div>
 
   <div class="formula-card">
-    <div class="fc-title">連続の式（定常非圧縮流れ） <span class="tag tag-key">重要</span></div>
+    <div class="fc-title">連続の式 <span class="tag tag-key">重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">A₁u₁ = A₂u₂ = Q = 一定　…(3.7)</div>
-      <div class="alt-formula">直径表記：u₂ = (d₁/d₂)² × u₁</div>
+      <div class="mf">A₁u₁ = A₂u₂ = Q　…(3.7)</div>
+      <div class="af">直径表記：u₂ = (d₁/d₂)² × u₁</div>
+      <div class="af">Q = Au = πd²u/4　[m³/s]　　G = ρQ　[kg/s]</div>
     </div>
-    <table class="vars-table">
-      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
-      <tr><td>A</td><td>断面積</td><td>m²</td></tr>
-      <tr><td>u</td><td>断面平均流速</td><td>m/s</td></tr>
-      <tr><td>Q</td><td>体積流量</td><td>m³/s</td></tr>
-      <tr><td>d</td><td>内径</td><td>m</td></tr>
-    </table>
+    <!-- SVG: 縮小管 -->
+    <div class="diagram">
+      <svg viewBox="0 0 340 130" width="340" height="130" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="au" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#a5b4fc"/></marker>
+        </defs>
+        <!-- pipe upper wall -->
+        <path d="M20,30 L130,30 Q160,30 170,50 L300,50" fill="none" stroke="#6060a0" stroke-width="2"/>
+        <!-- pipe lower wall -->
+        <path d="M20,100 L130,100 Q160,100 170,80 L300,80" fill="none" stroke="#6060a0" stroke-width="2"/>
+        <!-- fluid fill -->
+        <path d="M20,30 L130,30 Q160,30 170,50 L300,50 L300,80 L170,80 Q160,100 130,100 L20,100 Z" fill="rgba(59,79,216,0.2)" stroke="none"/>
+        <!-- u1 arrow -->
+        <line x1="40" y1="65" x2="90" y2="65" stroke="#a5b4fc" stroke-width="2.5" marker-end="url(#au)"/>
+        <text x="32" y="82" font-size="12" fill="#a5b4fc" font-family="monospace">u₁</text>
+        <!-- u2 arrow -->
+        <line x1="215" y1="65" x2="270" y2="65" stroke="#a5b4fc" stroke-width="2.5" marker-end="url(#au)"/>
+        <text x="280" y="70" font-size="12" fill="#a5b4fc" font-family="monospace">u₂</text>
+        <!-- d1 brace -->
+        <line x1="12" y1="30" x2="12" y2="100" stroke="#56cfb2" stroke-width="1"/>
+        <text x="1" y="68" font-size="11" fill="#56cfb2" font-family="monospace">d₁</text>
+        <!-- d2 brace -->
+        <line x1="308" y1="50" x2="308" y2="80" stroke="#56cfb2" stroke-width="1"/>
+        <text x="314" y="68" font-size="11" fill="#56cfb2" font-family="monospace">d₂</text>
+        <!-- Q label -->
+        <text x="150" y="122" font-size="12" fill="#f0c040" font-family="monospace">Q = A₁u₁ = A₂u₂</text>
+      </svg>
+    </div>
     <div class="derive-box">
       <h4>導出のポイント</h4>
-      <p>非圧縮性（密度一定）の定常流では、単位時間に断面を通過する体積は変化しない（質量保存）。断面積が小さくなれば流速が大きくなる。</p>
+      <p>非圧縮性（密度一定）の定常流では、単位時間に通過する体積 Q は変わらない（質量保存）。<br>
+      断面積↓ → 流速↑</p>
     </div>
     <div class="example-box">
-      <h4>例題（管径が変わる場合）</h4>
-      <p>d₁ = 80mm → d₂ = 40mm、u₁ = 6 m/s のとき：<br>
-      <code>u₂ = (80/40)² × 6 = 4 × 6 = 24 m/s</code></p>
-    </div>
-  </div>
-
-  <div class="formula-card">
-    <div class="fc-title">流量・質量流量</div>
-    <div class="formula-box">
-      <div class="main-formula">Q = Au = (πd²/4) u　[m³/s]</div>
-      <div class="alt-formula">G = ρQ = ρAu　　　　[kg/s]（質量流量）</div>
-      <div class="alt-formula">u<sub>a</sub> = Q / A　　　　　[m/s]（平均流速）　…(3.8)</div>
-    </div>
-    <div class="example-box">
-      <h4>分岐管（Y字管）の連続の式</h4>
-      <p><code>Q₁ = Q₂ + Q₃</code><br>
-      等量分岐（Q₂ = Q₃）の場合：<code>u₂ = (1/2)(d₁/d₂)² u₁</code><br>
-      タンク充填時間：<code>T = (D/d)² × (h/u)</code></p>
+      <h4>例題</h4>
+      <p>d₁=80mm → d₂=40mm、u₁=6 m/s：<br>
+      <code>u₂ = (80/40)² × 6 = 24 m/s</code></p>
     </div>
   </div>
 
   <div class="formula-card">
     <div class="fc-title">速度分布と平均流速 <span class="tag tag-derive">積分</span></div>
     <div class="formula-box">
-      <div class="main-formula">【円管・放物線分布】</div>
-      <div class="alt-formula">u = u<sub>max</sub> (1 − r²/R²)</div>
-      <div class="alt-formula">平均流速：u<sub>a</sub> = u<sub>max</sub> / 2</div>
-      <div class="main-formula" style="margin-top:12px;">【平板間・放物線分布】</div>
-      <div class="alt-formula">v = 2v<sub>max</sub> (y/Y)(1 − y/Y)</div>
-      <div class="alt-formula">流量（幅 b）：Q = bv<sub>max</sub>Y / 3</div>
+      <div class="mf">【円管 — 放物線分布】</div>
+      <div class="af">u = u<sub>max</sub>(1 − r²/R²)　　u<sub>a</sub> = u<sub>max</sub>/2　　…(3.8)</div>
+      <div class="mf" style="margin-top:8px">【平板間 — 放物線分布】</div>
+      <div class="af">v = 2v<sub>max</sub>(y/Y)(1 − y/Y)　　Q = bv<sub>max</sub>Y/3</div>
+    </div>
+    <!-- SVG: 速度分布 -->
+    <div class="diagram">
+      <svg viewBox="0 0 340 130" width="340" height="130" xmlns="http://www.w3.org/2000/svg">
+        <!-- 円管（左）-->
+        <circle cx="80" cy="65" r="50" fill="rgba(59,79,216,0.15)" stroke="#6060a0" stroke-width="1.5"/>
+        <text x="55" y="120" font-size="10" fill="#9ca3af">円管断面</text>
+        <!-- parabolic profile arrows in circle -->
+        <g stroke="#a5b4fc" stroke-width="1.5">
+          <line x1="80" y1="65" x2="120" y2="65"/> <!-- center: max -->
+          <line x1="80" y1="50" x2="110" y2="50"/>
+          <line x1="80" y1="35" x2="88" y2="35"/>
+          <line x1="80" y1="80" x2="110" y2="80"/>
+          <line x1="80" y1="95" x2="88" y2="95"/>
+        </g>
+        <text x="104" y="62" font-size="10" fill="#f0c040" font-family="monospace">u_max</text>
+        <!-- u_a = u_max/2 -->
+        <line x1="80" y1="65" x2="80" y2="15" stroke="#9ca3af" stroke-width="1" stroke-dasharray="3,2"/>
+        <text x="50" y="12" font-size="10" fill="#9ca3af">中心軸</text>
+        <!-- 平板間（右）-->
+        <line x1="200" y1="15" x2="330" y2="15" stroke="#6060a0" stroke-width="2"/>
+        <line x1="200" y1="115" x2="330" y2="115" stroke="#6060a0" stroke-width="2"/>
+        <text x="203" y="12" font-size="10" fill="#9ca3af">平板</text>
+        <!-- parabolic profile (平板間) -->
+        <path d="M200,15 Q260,65 200,115" fill="rgba(165,180,252,0.15)" stroke="none"/>
+        <path d="M200,15 Q260,65 200,115" fill="none" stroke="#a5b4fc" stroke-width="2"/>
+        <!-- arrows -->
+        <g stroke="#a5b4fc" stroke-width="1.5">
+          <line x1="200" y1="65" x2="258" y2="65"/>
+          <line x1="200" y1="45" x2="234" y2="45"/>
+          <line x1="200" y1="85" x2="234" y2="85"/>
+          <line x1="200" y1="25" x2="207" y2="25"/>
+          <line x1="200" y1="105" x2="207" y2="105"/>
+        </g>
+        <text x="260" y="62" font-size="10" fill="#f0c040" font-family="monospace">v_max</text>
+        <text x="205" y="130" font-size="10" fill="#9ca3af">平板間断面</text>
+        <!-- Y label -->
+        <line x1="334" y1="15" x2="334" y2="115" stroke="#56cfb2" stroke-width="1"/>
+        <text x="338" y="68" font-size="11" fill="#56cfb2" font-family="monospace">Y</text>
+      </svg>
     </div>
     <div class="derive-box">
-      <h4>放物線（円管）の積分</h4>
-      <p>微小環状面積 <code>dA = 2πr dr</code> に速度 <code>u</code> を掛けて積分：<br>
+      <h4>円管の積分</h4>
+      <p>微小環状面積 <code>dA = 2πr dr</code> で積分：<br>
       <code>Q = ∫₀ᴿ 2πr·u<sub>max</sub>(1−r²/R²)dr = πR²u<sub>max</sub>/2</code><br>
       → <code>u<sub>a</sub> = Q/A = u<sub>max</sub>/2</code></p>
     </div>
+    <div class="example-box">
+      <h4>分岐管（Y字管）</h4>
+      <p><code>Q₁ = Q₂ + Q₃</code><br>
+      タンク充填時間：<code>T = (D/d)²·(h/u)</code></p>
+    </div>
   </div>
-
 </section>
 
 <div class="divider"></div>
@@ -727,90 +772,198 @@
   </div>
 
   <div class="formula-card">
-    <div class="fc-title">ベルヌーイの定理（定常非圧縮流れ） <span class="tag tag-key">最重要</span></div>
+    <div class="fc-title">ベルヌーイの定理 <span class="tag tag-key">最重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">p + ρu²/2 + ρgz = 一定　[Pa]　…(4.8)</div>
-      <div class="alt-formula">2点間：p₁ + ρu₁²/2 + ρgz₁ = p₂ + ρu₂²/2 + ρgz₂</div>
-      <br>
-      <div class="alt-formula">比エネルギー形式：p/ρ + u²/2 + gz = 一定　[J/kg]　…(4.7)</div>
-      <div class="alt-formula">ヘッド形式：p/(ρg) + u²/(2g) + z = 一定　[m]　…(4.9)</div>
+      <div class="mf">p + ρu²/2 + ρgz = const　[Pa]　…(4.8)</div>
+      <div class="af">p/ρ + u²/2 + gz = const　[J/kg]　…(4.7)</div>
+      <div class="af">p/(ρg) + u²/(2g) + z = const　[m]　…(4.9)</div>
+      <div class="af" style="margin-top:8px">2点間：p₁ + ρu₁²/2 + ρgz₁ = p₂ + ρu₂²/2 + ρgz₂</div>
     </div>
-    <table class="vars-table">
-      <tr><th>記号</th><th>説明</th><th>単位</th></tr>
-      <tr><td>p</td><td>圧力（静圧）</td><td>Pa</td></tr>
-      <tr><td>ρu²/2</td><td>動圧（運動エネルギー密度）</td><td>Pa</td></tr>
-      <tr><td>ρgz</td><td>位置圧（位置エネルギー密度）</td><td>Pa</td></tr>
-      <tr><td>u</td><td>流速</td><td>m/s</td></tr>
-      <tr><td>z</td><td>基準面からの高さ</td><td>m</td></tr>
-    </table>
-    <div class="derive-box">
-      <h4>導出のポイント</h4>
-      <p>流体の単位体積当たりエネルギーを保存。<br>
-      運動エネルギー <code>½ρu²</code>（①）＋ 位置エネルギー <code>ρgz</code>（②）＋ 圧力による仕事 <code>pAuΔt</code>（③）の和が一定。<br>
-      連続の式 <code>A₁u₁ = A₂u₂</code> を使って AuΔt で割ると整理される。</p>
+    <!-- SVG: ベルヌーイ 2点 -->
+    <div class="diagram">
+      <svg viewBox="0 0 360 180" width="360" height="180" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="abu" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#a5b4fc"/></marker>
+        </defs>
+        <!-- pipe shape -->
+        <path d="M20,50 L110,50 Q140,50 150,70 L310,70" fill="none" stroke="#6060a0" stroke-width="2"/>
+        <path d="M20,90 L110,90 Q140,90 150,110 L310,110" fill="none" stroke="#6060a0" stroke-width="2"/>
+        <!-- fluid fill -->
+        <path d="M20,50 L110,50 Q140,50 150,70 L310,70 L310,110 L150,110 Q140,90 110,90 L20,90 Z" fill="rgba(59,79,216,0.2)" stroke="none"/>
+        <!-- u1 arrow -->
+        <line x1="30" y1="70" x2="80" y2="70" stroke="#a5b4fc" stroke-width="2" marker-end="url(#abu)"/>
+        <text x="24" y="68" font-size="11" fill="#56cfb2" font-family="monospace">①</text>
+        <!-- u2 arrow -->
+        <line x1="230" y1="90" x2="290" y2="90" stroke="#a5b4fc" stroke-width="2" marker-end="url(#abu)"/>
+        <text x="308" y="88" font-size="11" fill="#56cfb2" font-family="monospace">②</text>
+        <!-- z1 height line -->
+        <line x1="12" y1="90" x2="12" y2="165" stroke="#f0c040" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="8" y1="90" x2="16" y2="90" stroke="#f0c040" stroke-width="1"/>
+        <line x1="8" y1="165" x2="16" y2="165" stroke="#f0c040" stroke-width="1"/>
+        <text x="1" y="130" font-size="10" fill="#f0c040" font-family="monospace">z₁</text>
+        <!-- z2 height line -->
+        <line x1="320" y1="110" x2="320" y2="165" stroke="#f0c040" stroke-width="1" stroke-dasharray="3,2"/>
+        <line x1="316" y1="110" x2="324" y2="110" stroke="#f0c040" stroke-width="1"/>
+        <text x="326" y="140" font-size="10" fill="#f0c040" font-family="monospace">z₂</text>
+        <!-- datum -->
+        <line x1="0" y1="165" x2="360" y2="165" stroke="#9ca3af" stroke-width="1" stroke-dasharray="5,3"/>
+        <text x="2" y="175" font-size="10" fill="#9ca3af">基準面</text>
+        <!-- labels -->
+        <text x="24" y="112" font-size="10" fill="#a5b4fc" font-family="monospace">p₁,u₁</text>
+        <text x="232" y="128" font-size="10" fill="#a5b4fc" font-family="monospace">p₂,u₂</text>
+        <!-- label: d1 d2 -->
+        <text x="22" y="40" font-size="10" fill="#9ca3af">広管</text>
+        <text x="290" y="66" font-size="10" fill="#9ca3af">細管</text>
+      </svg>
     </div>
     <div class="note-box">
-      ⚠️ 適用条件：<strong>①定常流　②非圧縮性（密度一定）　③粘性なし（理想流体）　④同一流線上</strong>
+      ⚠️ 適用条件：①定常流　②非圧縮性（密度一定）　③粘性なし（理想流体）　④同一流線上
+    </div>
+    <div class="derive-box">
+      <h4>導出のポイント</h4>
+      <p>単位体積あたりのエネルギー保存：<br>
+      動圧 <code>½ρu²</code> ＋ 位置圧 <code>ρgz</code> ＋ 静圧 <code>p</code> = 一定<br>
+      連続式で u を消去して2点間の圧力差を求める。</p>
     </div>
     <div class="example-box">
-      <h4>例題（縮小管、d₁=80mm → d₂=40mm、h=100mm）</h4>
-      <p>まず連続式で u₂ を求める：<code>u₂ = (80/40)² × 6 = 24 m/s</code><br>
-      ①を基準面（z₁=0, z₂=h）にベルヌーイ適用：<br>
-      <code>p₂ = p₁ + ρ(u₁²−u₂²)/2 − ρgh</code><br>
-      <code>= 500×10³ + 1000(36−576)/2 − 1000×9.81×0.1 = 229 kPa</code></p>
+      <h4>例題（縮小管 d₁=80mm→d₂=40mm、p₁=500kPa）</h4>
+      <p><code>u₂ = (80/40)²×6 = 24 m/s</code><br>
+      <code>p₂ = p₁ + ρ(u₁²−u₂²)/2 − ρgh = 229 kPa</code></p>
     </div>
   </div>
 
   <div class="formula-card">
     <div class="fc-title">トリチェリーの定理 <span class="tag tag-key">重要</span></div>
     <div class="formula-box">
-      <div class="main-formula">u₂ = √(2gH)　…(4.16)</div>
+      <div class="mf">u₂ = √(2gH)　…(4.16)</div>
     </div>
-    <table class="vars-table">
-      <tr><th>記号</th><th>説明</th></tr>
-      <tr><td>u₂</td><td>小孔からの噴出速度 [m/s]</td></tr>
-      <tr><td>H</td><td>液面から小孔までの高さ [m]</td></tr>
-    </table>
+    <!-- SVG: トリチェリー -->
+    <div class="diagram">
+      <svg viewBox="0 0 260 200" width="260" height="200" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <marker id="ajet" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L0,6 L6,3 z" fill="#56cfb2"/></marker>
+          <marker id="ah2" markerWidth="5" markerHeight="5" refX="4" refY="2.5" orient="auto"><path d="M0,0 L0,5 L5,2.5 z" fill="#f0c040"/></marker>
+        </defs>
+        <!-- tank -->
+        <rect x="30" y="30" width="130" height="150" rx="4" fill="rgba(59,79,216,0.2)" stroke="#6060a0" stroke-width="2"/>
+        <!-- water surface -->
+        <line x1="32" y1="50" x2="158" y2="50" stroke="#56cfb2" stroke-width="2"/>
+        <!-- point 1 label -->
+        <text x="140" y="48" font-size="12" fill="#a5b4fc" font-family="monospace">①</text>
+        <text x="140" y="62" font-size="10" fill="#a5b4fc" font-family="monospace">u₁≈0</text>
+        <text x="36" y="63" font-size="10" fill="#a5b4fc" font-family="monospace">P₀</text>
+        <!-- small hole -->
+        <rect x="156" y="160" width="6" height="14" rx="1" fill="#0f1117" stroke="#6060a0" stroke-width="1"/>
+        <!-- point 2 label -->
+        <text x="166" y="170" font-size="12" fill="#56cfb2" font-family="monospace">②</text>
+        <text x="166" y="182" font-size="10" fill="#56cfb2" font-family="monospace">P₀</text>
+        <!-- jet -->
+        <path d="M162,167 Q200,167 230,175" fill="none" stroke="#56cfb2" stroke-width="2" stroke-dasharray="5,3" marker-end="url(#ajet)"/>
+        <text x="220" y="162" font-size="11" fill="#56cfb2" font-family="monospace">u₂</text>
+        <!-- H arrow -->
+        <line x1="18" y1="50" x2="18" y2="167" stroke="#f0c040" stroke-width="1.5"/>
+        <line x1="13" y1="50" x2="23" y2="50" stroke="#f0c040" stroke-width="1"/>
+        <line x1="13" y1="167" x2="23" y2="167" stroke="#f0c040" stroke-width="1"/>
+        <text x="2" y="113" font-size="13" fill="#f0c040" font-family="monospace">H</text>
+      </svg>
+    </div>
     <div class="derive-box">
       <h4>導出</h4>
-      <p>タンク液面①（u₁≈0、p₁=P₀）と小孔出口②（p₂=P₀）にベルヌーイを適用：<br>
-      <code>P₀ + ρgH = P₀ + ρu₂²/2</code><br>
-      → <code>u₂² = 2gH</code>　→　<code>u₂ = √(2gH)</code><br>
-      ※タンク断面積が大きく水面速度 u₁ ≈ 0 と仮定。</p>
-    </div>
-    <div class="example-box">
-      <h4>例題</h4>
-      <p>H = 2m のとき：<code>u₂ = √(2 × 9.81 × 2) = 6.26 m/s</code></p>
+      <p>①（液面）と②（小孔）にベルヌーイ適用（どちらも P₀、u₁≈0）：<br>
+      <code>P₀ + ρgH = P₀ + ρu₂²/2</code>　→　<code>u₂ = √(2gH)</code></p>
     </div>
   </div>
 
   <div class="formula-card">
-    <div class="fc-title">ピエゾメータ（圧力測定管）</div>
+    <div class="fc-title">ピエゾメータ</div>
     <div class="formula-box">
-      <div class="main-formula">p = P₀ + ρgH₂</div>
-      <div class="alt-formula">H₂ = (p − P₀) / (ρg)</div>
+      <div class="mf">p = P₀ + ρgH₂</div>
+      <div class="af">H₂ = (p − P₀) / (ρg)</div>
     </div>
     <div class="derive-box">
       <h4>ポイント</h4>
-      <p>ピエゾメータ（管壁に穴を開けた静圧測定管）の液面は静止しているので、液面高さは静水圧の式で決まる。</p>
+      <p>管壁に細管を立てると液面が静止し、静水圧の式で圧力を読める。</p>
     </div>
   </div>
-
 </section>
 
-<!-- 定数一覧 -->
 <div class="divider"></div>
-<div class="formula-card">
-  <div class="fc-title">📌 よく使う定数・物性値</div>
-  <table class="vars-table">
-    <tr><th>物質・量</th><th>値</th><th>単位</th></tr>
-    <tr><td>重力加速度 g</td><td>9.81</td><td>m/s²</td></tr>
-    <tr><td>水の密度 ρ<sub>w</sub></td><td>1000</td><td>kg/m³</td></tr>
-    <tr><td>海水の密度</td><td>≈ 1025</td><td>kg/m³</td></tr>
-    <tr><td>水銀の密度 ρ<sub>Hg</sub></td><td>13600</td><td>kg/m³</td></tr>
-    <tr><td>大気圧 P₀</td><td>101325 ≈ 101.3×10³</td><td>Pa</td></tr>
-    <tr><td>760 mmHg</td><td>= 13600 × 9.81 × 0.760 ≈ 101.4 kPa</td><td>Pa</td></tr>
-  </table>
+
+<!-- ============================================================ -->
+<!-- 公式まとめ -->
+<!-- ============================================================ -->
+<div class="summary-section" id="summary">
+  <div class="ss-header">
+    <span style="font-size:1.4rem">★</span>
+    <h2>公式まとめ（一覧）</h2>
+  </div>
+
+  <div class="ss-ch">
+    <h3>第1章 — 流体の基本性質</h3>
+    <div class="ss-row">ρ = m/V <span>[kg/m³]</span></div>
+    <div class="ss-row">γ = ρg <span>[N/m³]　比重量</span></div>
+    <div class="ss-row">v = 1/ρ <span>[m³/kg]　比体積</span></div>
+    <div class="ss-row">s = ρ/ρ_w <span>比重（無次元）</span></div>
+    <div class="ss-row">τ = μ(du/dy) <span>[Pa]　ニュートン粘性法則</span></div>
+    <div class="ss-row">F = μA(U/Y) <span>平板1面せん断力</span></div>
+    <div class="ss-row">F = μAU(1/Y₁ + 1/Y₂) <span>両面せん断力</span></div>
+    <div class="ss-row">U_max = δmg sinθ / (μA) <span>傾斜面滑落最大速度</span></div>
+    <div class="ss-row ss-last">ν = μ/ρ <span>[m²/s]　動粘度</span></div>
+  </div>
+
+  <div class="ss-ch">
+    <h3>第2章① — 静水圧・パスカル</h3>
+    <div class="ss-row">P = F/A <span>[Pa]　圧力の定義</span></div>
+    <div class="ss-row">F₁/A₁ = F₂/A₂　→　F₂ = (d₂/d₁)²F₁ <span>パスカルの原理</span></div>
+    <div class="ss-row">P = P₀ + ρgh <span>[Pa]　絶対圧　(2.9)</span></div>
+    <div class="ss-row">p = ρgh <span>[Pa]　ゲージ圧　(2.10)</span></div>
+    <div class="ss-row ss-last">h = p/(ρg) <span>[m]　圧力ヘッド　(2.11)</span></div>
+  </div>
+
+  <div class="ss-ch">
+    <h3>第2章② — マノメータ</h3>
+    <div class="ss-row">P = P₀ + ρ'gh − ρgy <span>単純マノメータ　(2.13)</span></div>
+    <div class="ss-row">P₁−P₂ = ρ₂gy₂ + ρ'gh − ρ₁gy₁ <span>U字管　(2.14)</span></div>
+    <div class="ss-row ss-last">P₁−P₂ = ρ₁gy₁ − ρ'gh − ρ₂gy₂ <span>逆U字管　(2.15)</span></div>
+  </div>
+
+  <div class="ss-ch">
+    <h3>第2章③ — 平面板・曲面板</h3>
+    <div class="ss-row">F = ρg h_G A <span>平面板合力　(2.21)</span></div>
+    <div class="ss-row">h_G = y_G sinθ <span>傾斜面の図心深さ</span></div>
+    <div class="ss-row">y_C = I_G/(y_G·A) + y_G <span>圧力中心　(2.25)</span></div>
+    <div class="ss-row">I_G = πd⁴/64　→　y_C = d²/(16y_G) + y_G <span>円板</span></div>
+    <div class="ss-row">I_G = ab³/12　→　y_C = b²/(12y_G) + y_G <span>長方形板</span></div>
+    <div class="ss-row">F_x = ρg z̄ A_x <span>曲面板・水平分力　(2.26)</span></div>
+    <div class="ss-row">F_y = ρg V <span>曲面板・鉛直分力　(2.27)</span></div>
+    <div class="ss-row">F = √(F_x²+F_y²) <span>(2.28)</span></div>
+    <div class="ss-row ss-last">α = tan⁻¹(F_y/F_x) <span>合力の方向角　(2.29)</span></div>
+  </div>
+
+  <div class="ss-ch">
+    <h3>第2章④ — 浮力</h3>
+    <div class="ss-row ss-last">F = ρ_流体·g·V_排除 <span>アルキメデスの原理　(2.30)</span></div>
+  </div>
+
+  <div class="ss-ch">
+    <h3>第3章 — 連続の式</h3>
+    <div class="ss-row">Q = Au = πd²u/4 <span>[m³/s]　体積流量</span></div>
+    <div class="ss-row">G = ρQ = ρAu <span>[kg/s]　質量流量</span></div>
+    <div class="ss-row">A₁u₁ = A₂u₂　　u₂ = (d₁/d₂)²u₁ <span>連続の式　(3.7)</span></div>
+    <div class="ss-row">u_a = Q/A = u_max/2 <span>円管の平均流速　(3.8)</span></div>
+    <div class="ss-row">u = u_max(1−r²/R²) <span>円管速度分布（放物線）</span></div>
+    <div class="ss-row">v = 2v_max(y/Y)(1−y/Y) <span>平板間速度分布</span></div>
+    <div class="ss-row ss-last">Q = bv_max·Y/3 <span>平板間流量（積分）</span></div>
+  </div>
+
+  <div class="ss-ch">
+    <h3>第4章 — ベルヌーイの定理</h3>
+    <div class="ss-row">p + ρu²/2 + ρgz = const <span>[Pa]　圧力形式　(4.8)</span></div>
+    <div class="ss-row">p/ρ + u²/2 + gz = const <span>[J/kg]　比エネルギー形式　(4.7)</span></div>
+    <div class="ss-row">p/(ρg) + u²/(2g) + z = const <span>[m]　ヘッド形式　(4.9)</span></div>
+    <div class="ss-row">u₂ = √(2gH) <span>トリチェリーの定理　(4.16)</span></div>
+    <div class="ss-row ss-last">p = P₀ + ρgH₂ <span>ピエゾメータ圧力</span></div>
+  </div>
 </div>
 
 </main>
