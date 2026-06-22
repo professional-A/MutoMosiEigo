@@ -3222,16 +3222,32 @@ async function openPairModal() {
   _pairGroupCount = 0;
   document.getElementById('pair-modal-pairs').innerHTML = '';
   document.getElementById('pair-modal-msg').textContent = '';
-  // 現在のアクティブレースを取得
-  const rd = await fetch('/api/races/current').then(r => r.json()).catch(() => ({}));
-  if (!rd.race) { alert('アクティブなレースがありません'); return; }
-  _pairRaceId = rd.race.id;
-  document.getElementById('pair-modal-race-name').textContent = `対象レース: ${rd.race.name}`;
-  // 既存ペアを描画
-  const data = await fetch('/api/admin/users', { headers: { Authorization: authToken } }).then(r => r.json());
-  _pairModalUsers = data.users || data || [];
-  if (rd.pairs && rd.pairs.length) {
-    rd.pairs.forEach(p => pairAddGroup(p.name, p.members.map(m => m.user_id)));
+  // 全レース一覧から選択
+  const races = await fetch('/api/races').then(r => r.json()).catch(() => []);
+  if (!races.length) { alert('レースがまだありません'); return; }
+  const raceList = races.map((r, i) => `${i + 1}. ${r.name}${r.active ? ' ★' : ''}`).join('\n');
+  const pick = prompt(`ペアを設定するレースを番号で選択\n\n${raceList}`);
+  const idx = parseInt(pick) - 1;
+  if (isNaN(idx) || !races[idx]) return;
+  const selectedRace = races[idx];
+  _pairRaceId = selectedRace.id;
+  document.getElementById('pair-modal-race-name').textContent = `対象レース: ${selectedRace.name}`;
+  // 既存ペアを取得
+  const [userData, currentData] = await Promise.all([
+    fetch('/api/admin/users', { headers: { Authorization: authToken } }).then(r => r.json()),
+    fetch('/api/races/current').then(r => r.json()).catch(() => ({}))
+  ]);
+  _pairModalUsers = userData.users || userData || [];
+  // 選択レースがアクティブなら current から、そうでなければ別途取得
+  let existingPairs = [];
+  if (currentData.race && currentData.race.id === selectedRace.id) {
+    existingPairs = currentData.pairs || [];
+  } else {
+    const pairRes = await fetch(`/api/races/${selectedRace.id}/pairs`).then(r => r.json()).catch(() => []);
+    existingPairs = Array.isArray(pairRes) ? pairRes : [];
+  }
+  if (existingPairs.length) {
+    existingPairs.forEach(p => pairAddGroup(p.name, p.members.map(m => m.user_id)));
   } else {
     pairAddGroup(); pairAddGroup();
   }

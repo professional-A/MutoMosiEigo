@@ -1302,6 +1302,23 @@ app.put('/api/races/:id/study', auth, async (req, res) => {
   } catch(e) { res.status(500).json({ error: e.message }); }
 });
 
+// ペア取得（任意レース）
+app.get('/api/races/:id/pairs', async (req, res) => {
+  try {
+    const raceId = parseInt(req.params.id);
+    const { rows: pairs } = await pool.query("SELECT * FROM race_pairs WHERE race_id=$1 ORDER BY id", [raceId]);
+    if (!pairs.length) return res.json([]);
+    const { rows: members } = await pool.query(
+      `SELECT rpm.pair_id, u.id AS user_id, u.username, u.season_points
+       FROM race_pair_members rpm
+       JOIN users u ON u.id = rpm.user_id
+       WHERE rpm.pair_id = ANY($1)`,
+      [pairs.map(p => p.id)]
+    );
+    res.json(pairs.map(p => ({ ...p, members: members.filter(m => m.pair_id === p.id) })));
+  } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
 // ペア設定（管理者）— レースのペアを一括登録・上書き
 app.post('/api/admin/races/:id/pairs', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
