@@ -373,21 +373,22 @@ app.post('/api/points', auth, async (req, res) => {
     return res.json({ ok: true, points: dsp(rows[0]), lifetime_points: dp(rows[0]), delta: amount });
   }
 
-  // dedup モード: 初回正解+100 / 復習正解+20 / 復習不正解-50 / 初回不正解=0
+  // dedup モード: 初回正解+amount / 復習正解+amount*20% / 初回不正解=0
   const answerKey = `${quizKey}:${questionKey}`;
   const { rows: ex } = await pool.query(
     'SELECT 1 FROM quiz_answers WHERE user_id=$1 AND answer_key=$2', [req.user.id, answerKey]
   );
   const isRepeat = ex.length > 0;
+  const baseAmount = Number.isInteger(amount) && amount > 0 && amount <= 500 ? amount : 100;
 
   let delta = 0;
   if (!isRepeat) {
     if (correct !== false) {
       await pool.query('INSERT INTO quiz_answers (user_id, answer_key) VALUES ($1, $2) ON CONFLICT DO NOTHING', [req.user.id, answerKey]);
-      delta = Number.isInteger(amount) && amount > 0 && amount <= 200 ? amount : 100;
+      delta = baseAmount;
     }
   } else {
-    delta = correct !== false ? 20 : 0;
+    delta = correct !== false ? Math.round(baseAmount * 0.2) : 0;
   }
 
   if (delta !== 0) {
@@ -395,6 +396,22 @@ app.post('/api/points', auth, async (req, res) => {
       await pool.query('UPDATE users SET points = GREATEST(0, points + $1), season_points = GREATEST(0, season_points + $1) WHERE id = $2', [delta, req.user.id]);
     } else {
       await pool.query('UPDATE users SET points = GREATEST(0, points + $1) WHERE id = $2', [delta, req.user.id]);
+    }
+    // ペア応援ボーナス: 同ペアに20%付与（season_ptのみ、レース教科フィルタ適用）
+    if (addSeason) {
+      const pairBonus = Math.round(delta * 0.2);
+      if (pairBonus > 0) {
+        const { rows: pairMembers } = await pool.query(
+          `SELECT rpm.user_id FROM race_pair_members rpm
+           WHERE rpm.pair_id IN (SELECT pair_id FROM race_pair_members WHERE user_id=$1)
+             AND rpm.user_id != $1
+             AND (SELECT race_id FROM race_pairs WHERE id=rpm.pair_id) IS NULL`,
+          [req.user.id]
+        );
+        for (const pm of pairMembers) {
+          await pool.query('UPDATE users SET season_points = season_points + $1 WHERE id = $2', [pairBonus, pm.user_id]);
+        }
+      }
     }
   }
   const { rows } = await pool.query('SELECT points, test_bet, season_points FROM users WHERE id = $1', [req.user.id]);
