@@ -2858,16 +2858,27 @@ function closeClrankPage() {
 async function loadClrankPage() {
   try {
     const data = await fetch('/api/class-rank').then(r => r.json());
+    const newMax      = data.max_score || 300;
+    const newConf     = data.confirmed || {};
+    const prevMax     = parseInt(localStorage.getItem('clrank_max_score') || '0');
+
     _clrankPositions = (data.positions && !Array.isArray(data.positions)) ? data.positions : {};
-    _clrankConfirmed = data.confirmed || {};
-    _clrankMaxScore  = data.max_score  || 300;
-    // 確定済みユーザーをpositionsから削除（ブロック化防止）
-    let posChanged = false;
-    Object.keys(_clrankConfirmed).forEach(n => {
-      if (_clrankPositions[n] !== undefined) { delete _clrankPositions[n]; posChanged = true; }
-    });
-    if (posChanged) _saveClrankPositions();
-    // 確定点の最小値からステップ単位で下端を自動算出
+
+    if (prevMax > 0 && newMax > prevMax) {
+      // 合計点が増えた → 確定線をブロックに変換して再配置
+      Object.entries(newConf).forEach(([name, score]) => {
+        const yPct = ((newMax - score) / newMax) * 100;
+        _clrankPositions[name] = { x: 50, y: Math.max(1, Math.min(99, parseFloat(yPct.toFixed(1)))) };
+      });
+      _saveClrankPositions();
+      _clrankConfirmed = {};
+    } else {
+      _clrankConfirmed = newConf;
+    }
+
+    _clrankMaxScore = newMax;
+    localStorage.setItem('clrank_max_score', newMax);
+
     const scores = Object.values(_clrankConfirmed);
     if (scores.length) {
       const step = _clrankMaxScore > 200 ? 50 : 25;

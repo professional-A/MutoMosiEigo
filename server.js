@@ -506,11 +506,12 @@ app.get('/api/class-rank', async (req, res) => {
         (COUNT(*) FILTER (WHERE ouri_score       IS NOT NULL)) > 0 AS has_ouri,
         (COUNT(*) FILTER (WHERE math_score       IS NOT NULL)) > 0 AS has_math,
         (COUNT(*) FILTER (WHERE kakougaku_score  IS NOT NULL)) > 0 AS has_kakougaku,
-        (COUNT(*) FILTER (WHERE nekku_score      IS NOT NULL)) > 0 AS has_nekku
+        (COUNT(*) FILTER (WHERE nekku_score      IS NOT NULL)) > 0 AS has_nekku,
+        (COUNT(*) FILTER (WHERE seigyo_score     IS NOT NULL)) > 0 AS has_seigyo
       FROM users
     `);
     const s = sc[0];
-    autoMaxScore = ([s.has_test, s.has_ouri, s.has_math, s.has_kakougaku, s.has_nekku].filter(Boolean).length) * 100 || 100;
+    autoMaxScore = ([s.has_test, s.has_ouri, s.has_math, s.has_kakougaku, s.has_nekku, s.has_seigyo].filter(Boolean).length) * 100 || 100;
   } catch(e) {}
   // ユーザー紐づけ：全入力済みの人を確定点に自動反映
   try {
