@@ -3272,7 +3272,7 @@ function _renderRace(data) {
       const names = p.members.map(m => esc(m.username)).join('・');
       const isMyPair = authUserId && p.members.some(m => m.user_id === authUserId);
       const nameCell = isMyPair
-        ? `${esc(p.name)} <button onclick="editPairName(${p.id},${JSON.stringify(p.name)})" title="ペア名を変更" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:.8rem;padding:0 2px">✏️</button>`
+        ? `${esc(p.name)} <button data-pid="${p.id}" data-pname="${esc(p.name)}" onclick="editPairName(this.dataset.pid,this.dataset.pname)" title="ペア名を変更" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:.8rem;padding:0 2px">✏️</button>`
         : esc(p.name);
       const factorBadge = factor > 1
         ? `<span style="font-size:.65rem;color:var(--teal);margin-left:4px">(×${maxPairSize}/${size})</span>`
