@@ -810,7 +810,10 @@ function checkPart(no, idx){
   fb.className = 'part-fb ' + (ok ? 'ok' : 'ng');
   fb.textContent = ok ? '✓ 正解' : '✗ もう一度';
   inp.style.borderColor = ok ? '#4caf50' : '#f44336';
-  if (ok && typeof addPoints === 'function') addPoints(300, 'nekku_test', no+'-'+idx, true, '熱流体工学Ⅰ');
+  if (ok) {
+    const allNowOk = prob.parts.every((_,i) => i === idx ? true : correct[no+'-'+i] === true);
+    if (allNowOk && typeof addPoints === 'function') addPoints(300, 'nekku_test', 'prob-'+no, true, '熱流体工学Ⅰ');
+  }
 
   /* カード全体のボーダー更新 */
   const card = document.getElementById('prob-'+no);
