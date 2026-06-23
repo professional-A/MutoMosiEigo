@@ -777,11 +777,12 @@ h1{
     <div style="overflow-x:auto">
       <table class="race-table">
         <thead><tr>
-          <th>#</th><th>名前</th><th>ペア</th><th>武藤模試</th><th>外部</th><th style="color:var(--dim)">🎮</th><th>合計</th><th>シーズンpt</th><th>ライバル差</th>
+          <th>#</th><th>名前</th><th>ペア</th><th>武藤模試</th><th>外部</th><th style="color:var(--dim)">🎮</th><th>合計</th><th>シーズンpt</th><th>ライバル差</th><th id="race-tool-th" style="display:none;color:var(--dim);font-size:.68rem">内容</th>
         </tr></thead>
         <tbody id="race-table-body"></tbody>
       </table>
     </div>
+    <button id="race-tool-toggle" style="display:none;font-size:.72rem;color:var(--dim);background:none;border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer;margin-bottom:6px" onclick="toggleRaceTool()">📝 内容を表示</button>
     <div id="race-pair-ranking" style="display:none;margin-top:14px">
       <div style="font-size:.72rem;font-weight:700;color:var(--amber);letter-spacing:.05em;margin-bottom:6px">👥 ペアランキング</div>
       <table class="race-table">
@@ -914,6 +915,12 @@ h1{
       <button id="ouri-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid var(--teal);border-radius:10px;background:rgba(70,214,196,.1);color:var(--teal);cursor:pointer" onclick="submitOuriScore()">⚡ 応用物理の点数を入力</button>
       <button id="math-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid var(--rose);border-radius:10px;background:rgba(240,107,142,.1);color:var(--rose);cursor:pointer" onclick="submitMathScore()">📐 応用数学の点数を入力</button>
       <button id="seigyo-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid #a78bfa;border-radius:10px;background:rgba(167,139,250,.1);color:#a78bfa;cursor:pointer" onclick="submitSeigyoScore()">🎛️ 制御工学Ⅰの点数を入力</button>
+    </div>
+    <div id="score-inline-wrap" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(70,214,196,.07);border:1px solid rgba(70,214,196,.3);border-radius:8px;align-items:center;gap:8px;flex-wrap:wrap">
+      <span id="score-inline-label" style="font-size:.85rem;color:var(--dim)"></span>
+      <input id="score-inline-val" type="number" min="0" max="100" placeholder="0〜100" style="width:80px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#0a172b;color:var(--fg);font-size:.9rem;font-family:inherit" onkeydown="if(event.key==='Enter')_confirmScoreInline()">
+      <button onclick="_confirmScoreInline()" style="padding:5px 14px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-size:.85rem">登録</button>
+      <button onclick="document.getElementById('score-inline-wrap').style.display='none'" style="padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:none;color:var(--dim);cursor:pointer;font-size:.85rem">✕</button>
     </div>
     <div class="modal-btns" style="margin-top:12px">
       <button onclick="closeScoresModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
@@ -3212,8 +3219,10 @@ function _renderRace(data) {
     const log = logMap[m.user_id] || {};
     const mutoMin = log.muto_minutes || 0;
     const manMin  = log.manual_minutes || 0;
-    const gameMin = log.game_minutes  || 0;
-    allMembers.push({ ...m, mutoMin, manMin, gameMin, total: mutoMin + manMin, gname: pairNameMap[m.user_id] || '', log });
+    const gameMin  = log.game_minutes  || 0;
+    const mutoTool = log.muto_tool   || '';
+    const manTool  = log.manual_tool || '';
+    allMembers.push({ ...m, mutoMin, manMin, gameMin, mutoTool, manTool, total: mutoMin + manMin, gname: pairNameMap[m.user_id] || '', log });
   }));
   allMembers.sort((a, b) => b.total - a.total);
 
@@ -3244,6 +3253,7 @@ function _renderRace(data) {
       <td style="font-weight:700;color:#d4e8ff">${_fmtMin(m.total)}</td>
       <td style="color:var(--amber);font-size:.72rem">${spt}</td>
       <td>${rivalHtml}</td>
+      <td class="race-tool-cell" style="display:none;font-size:.68rem;color:var(--dim);max-width:120px;white-space:pre-wrap">${[m.mutoTool, m.manTool].filter(Boolean).join(' / ') || '—'}</td>
     </tr>`;
   }).join('');
 
@@ -3294,6 +3304,20 @@ function _renderRace(data) {
   const isActive = race.status === 'active';
   document.getElementById('race-self-report').style.display = (inRace && isActive) ? '' : 'none';
 
+  // 管理者のみ内容表示ボタンを表示
+  const isAdmin = authToken && (authEmail === 'kabu6113450@gmail.com');
+  const toolBtn = document.getElementById('race-tool-toggle');
+  if (toolBtn) toolBtn.style.display = isAdmin ? '' : 'none';
+}
+
+function toggleRaceTool() {
+  const th   = document.getElementById('race-tool-th');
+  const cells = document.querySelectorAll('.race-tool-cell');
+  const btn   = document.getElementById('race-tool-toggle');
+  const show  = th.style.display === 'none';
+  th.style.display = show ? '' : 'none';
+  cells.forEach(c => c.style.display = show ? '' : 'none');
+  btn.textContent = show ? '📝 内容を隠す' : '📝 内容を表示';
 }
 
 // ── ペア設定モーダル ─────────────────────────────────────────
@@ -3406,30 +3430,39 @@ function toggleRaceBody() {
 
 async function submitRaceAll() {
   if (!_currentRace || !authToken) return;
-  const mutoMin  = (parseInt(document.getElementById('race-muto-h').value) || 0) * 60
-                 + (parseInt(document.getElementById('race-muto-m').value) || 0);
+  const mutoH = Math.max(0, parseInt(document.getElementById('race-muto-h').value) || 0);
+  const mutoM = Math.max(0, Math.min(59, parseInt(document.getElementById('race-muto-m').value) || 0));
+  const mutoMin  = mutoH * 60 + mutoM;
   const mutoTool = document.getElementById('race-muto-tool').value.trim();
-  const manMin   = (parseInt(document.getElementById('race-manual-h').value) || 0) * 60
-                 + (parseInt(document.getElementById('race-manual-m').value) || 0);
+  const manH  = Math.max(0, parseInt(document.getElementById('race-manual-h').value) || 0);
+  const manM  = Math.max(0, Math.min(59, parseInt(document.getElementById('race-manual-m').value) || 0));
+  const manMin   = manH * 60 + manM;
   const manTool  = document.getElementById('race-manual-tool').value.trim();
-  const gameMin  = (parseInt(document.getElementById('race-game-h').value) || 0) * 60
-                 + (parseInt(document.getElementById('race-game-m').value) || 0);
-  await fetch(`/api/races/${_currentRace.id}/study`, {
-    method: 'PUT',
-    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-    body: JSON.stringify({
-      muto_minutes: mutoMin, muto_tool: mutoTool,
-      manual_minutes: manMin, manual_tool: manTool,
-      game_minutes: gameMin
-    })
-  });
-  // 記録後は入力欄をリセット（積み重ね方式なので誤重複防止）
-  ['race-muto-h','race-muto-m','race-muto-tool','race-manual-h','race-manual-m','race-manual-tool','race-game-h','race-game-m'].forEach(id => {
-    const el = document.getElementById(id);
-    if (el) el.value = '';
-  });
-  showPointToast('💾 勉強時間を記録しました');
-  loadRaceSection();
+  const gameMin  = Math.max(0, (parseInt(document.getElementById('race-game-h').value) || 0) * 60
+                 + Math.max(0, parseInt(document.getElementById('race-game-m').value) || 0));
+  // 3文字バリデーション
+  if (mutoMin > 0 && mutoTool.length < 3) { alert('武藤模試の内容を3文字以上入力してください'); return; }
+  if (manMin  > 0 && manTool.length  < 3) { alert('外部勉強の内容を3文字以上入力してください'); return; }
+  if (mutoMin === 0 && manMin === 0 && gameMin === 0) { alert('時間を入力してください'); return; }
+  // スピナー
+  const btn = document.querySelector('#race-self-report button[onclick="submitRaceAll()"]');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 記録中…'; }
+  try {
+    const res = await fetch(`/api/races/${_currentRace.id}/study`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ muto_minutes: mutoMin, muto_tool: mutoTool, manual_minutes: manMin, manual_tool: manTool, game_minutes: gameMin })
+    });
+    const data = await res.json();
+    if (!res.ok) { alert('❌ ' + (data.error || 'エラー')); return; }
+    ['race-muto-h','race-muto-m','race-muto-tool','race-manual-h','race-manual-m','race-manual-tool','race-game-h','race-game-m'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    showPointToast('💾 勉強時間を記録しました');
+    loadRaceSection();
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '💾 記録'; }
+  }
 }
 
 // ── レース発行モーダル ───────────────────────────────────────────
@@ -3507,16 +3540,23 @@ async function adminCreateRace() {
   }
 }
 
+let _scoreEndpoint = '';
 async function _submitScore(label, endpoint) {
   if (!authToken) { alert('ログインしてください'); return; }
-  const s = prompt(`${label}の点数を入力してください（0〜100）`);
-  if (s === null) return;
-  const n = parseInt(s, 10);
+  _scoreEndpoint = endpoint;
+  const wrap = document.getElementById('score-inline-wrap');
+  document.getElementById('score-inline-label').textContent = `${label}（0〜100点）:`;
+  document.getElementById('score-inline-val').value = '';
+  wrap.style.display = 'flex';
+  setTimeout(() => document.getElementById('score-inline-val').focus(), 50);
+}
+async function _confirmScoreInline() {
+  const n = parseInt(document.getElementById('score-inline-val').value, 10);
   if (isNaN(n) || n < 0 || n > 100) { alert('0〜100の整数で入力してください'); return; }
   try {
-    const res  = await fetch(endpoint, { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body: JSON.stringify({ score: n }) });
+    const res  = await fetch(_scoreEndpoint, { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body: JSON.stringify({ score: n }) });
     const data = await res.json();
-    if (data.ok) { alert(`✅ ${label} ${data.score}点 を登録しました`); await openScoresModal(); }
+    if (data.ok) { document.getElementById('score-inline-wrap').style.display = 'none'; await openScoresModal(); }
     else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー'); }
 }

@@ -1233,8 +1233,13 @@ app.post('/api/admin/battles/settle', auth, async (req, res) => {
         }
       }
       const odds = winTotal > 0 ? (totalPool / winTotal).toFixed(2) : '∞';
+      // 賭けられた勝者にもボーナス（プール総額の10%）
+      const winnerBonus = Math.floor(totalPool * 0.1);
+      if (winnerBonus > 0) {
+        await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [winnerBonus, winnerId]);
+      }
       await pool.query("UPDATE battles SET status='settled', winner_id=$1 WHERE id=$2", [winnerId, b.id]);
-      results.push({ result: `${wName}(${wScore}点) > ${lName}(${lScore}点) → ${wName}派に ${odds}倍 配分 (計${totalPool}pt)` });
+      results.push({ result: `${wName}(${wScore}点) > ${lName}(${lScore}点) → ${wName}派に ${odds}倍 配分 (計${totalPool}pt) + ${wName}に${winnerBonus}ptボーナス` });
     }
   }
   res.json({ ok: true, results });
