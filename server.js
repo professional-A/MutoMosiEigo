@@ -1233,13 +1233,8 @@ app.post('/api/admin/battles/settle', auth, async (req, res) => {
         }
       }
       const odds = winTotal > 0 ? (totalPool / winTotal).toFixed(2) : '∞';
-      // 賭けられた勝者にもボーナス（プール総額の10%）
-      const winnerBonus = Math.floor(totalPool * 0.1);
-      if (winnerBonus > 0) {
-        await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [winnerBonus, winnerId]);
-      }
       await pool.query("UPDATE battles SET status='settled', winner_id=$1 WHERE id=$2", [winnerId, b.id]);
-      results.push({ result: `${wName}(${wScore}点) > ${lName}(${lScore}点) → ${wName}派に ${odds}倍 配分 (計${totalPool}pt) + ${wName}に${winnerBonus}ptボーナス` });
+      results.push({ result: `${wName}(${wScore}点) > ${lName}(${lScore}点) → ${wName}派に ${odds}倍 配分 (計${totalPool}pt)` });
     }
   }
   res.json({ ok: true, results });
@@ -1336,9 +1331,9 @@ app.put('/api/races/:id/study', auth, async (req, res) => {
   const raceId = parseInt(req.params.id);
   const userId = req.user.id;
   const { muto_minutes, muto_tool, manual_minutes, manual_tool, game_minutes } = req.body;
-  const mm  = Math.max(0, parseInt(muto_minutes)   || 0);
-  const man = Math.max(0, parseInt(manual_minutes) || 0);
-  const gm  = Math.max(0, parseInt(game_minutes)   || 0);
+  const mm  = parseInt(muto_minutes)   || 0;
+  const man = parseInt(manual_minutes) || 0;
+  const gm  = parseInt(game_minutes)   || 0;
   try {
     // statusがactiveでなければ拒否
     const { rows: raceCheck } = await pool.query("SELECT status FROM races WHERE id=$1", [raceId]);
@@ -1348,11 +1343,11 @@ app.put('/api/races/:id/study', auth, async (req, res) => {
       INSERT INTO race_study_log(race_id, user_id, muto_minutes, muto_tool, manual_minutes, manual_tool, game_minutes, updated_at)
       VALUES($1,$2,$3,$4,$5,$6,$7,$8)
       ON CONFLICT(race_id, user_id) DO UPDATE SET
-        muto_minutes   = race_study_log.muto_minutes   + $3,
-        muto_tool      = CASE WHEN $3 > 0 THEN $4 ELSE race_study_log.muto_tool END,
-        manual_minutes = race_study_log.manual_minutes + $5,
-        manual_tool    = CASE WHEN $5 > 0 THEN $6 ELSE race_study_log.manual_tool END,
-        game_minutes   = race_study_log.game_minutes   + $7,
+        muto_minutes   = GREATEST(0, race_study_log.muto_minutes   + $3),
+        muto_tool      = CASE WHEN $3 <> 0 THEN $4 ELSE race_study_log.muto_tool END,
+        manual_minutes = GREATEST(0, race_study_log.manual_minutes + $5),
+        manual_tool    = CASE WHEN $5 <> 0 THEN $6 ELSE race_study_log.manual_tool END,
+        game_minutes   = GREATEST(0, race_study_log.game_minutes   + $7),
         updated_at     = $8
     `, [raceId, userId,
         mm,  muto_tool   || '',

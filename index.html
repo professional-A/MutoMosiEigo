@@ -263,6 +263,14 @@ h1{
 .race-table td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.04)}
 .race-table tr:last-child td{border-bottom:none}
 .race-table .rank-me{background:rgba(70,214,196,.06)}
+@media(max-width:520px){
+  .race-table{font-size:.69rem}
+  .race-table th,.race-table td{padding:4px 4px}
+  #race-pair-ranking .race-table th:nth-child(3),#race-pair-ranking .race-table td:nth-child(3){display:none}
+  .race-report{flex-direction:column;align-items:flex-start;gap:6px}
+  .race-report input[type=text]{width:100%!important;box-sizing:border-box}
+  #race-muto-h,#race-muto-m,#race-manual-h,#race-manual-m,#race-game-h,#race-game-m{width:56px!important}
+}
 .race-rival{font-size:.68rem;color:var(--rose)}
 .race-rival.ahead{color:var(--teal)}
 .race-report{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:10px;border-top:1px solid var(--line)}
@@ -795,21 +803,21 @@ h1{
     <div id="race-self-report" style="display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:12px">
       <div class="race-report">
         <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📖 武藤模試:</span>
-        <input id="race-muto-h" type="number" min="0" placeholder="時間" style="width:52px">
-        <input id="race-muto-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
+        <input id="race-muto-h" type="number" placeholder="時間" style="width:52px">
+        <input id="race-muto-m" type="number" placeholder="分" style="width:44px">
         <input id="race-muto-tool" type="text" placeholder="内容（例: Unit1語彙）" style="width:140px">
         <button onclick="submitRaceAll()">💾 記録</button>
       </div>
       <div class="race-report" style="margin-top:6px">
         <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📚 外部勉強:</span>
-        <input id="race-manual-h" type="number" min="0" placeholder="時間" style="width:52px">
-        <input id="race-manual-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
+        <input id="race-manual-h" type="number" placeholder="時間" style="width:52px">
+        <input id="race-manual-m" type="number" placeholder="分" style="width:44px">
         <input id="race-manual-tool" type="text" placeholder="内容（例: 教科書p.12）" style="width:140px">
       </div>
       <div class="race-report" style="margin-top:6px">
         <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">🎮 ゲーム:</span>
-        <input id="race-game-h" type="number" min="0" placeholder="時間" style="width:52px">
-        <input id="race-game-m" type="number" min="0" max="59" placeholder="分" style="width:44px">
+        <input id="race-game-h" type="number" placeholder="時間" style="width:52px">
+        <input id="race-game-m" type="number" placeholder="分" style="width:44px">
       </div>
     </div>
   </div>
@@ -3304,10 +3312,8 @@ function _renderRace(data) {
   const isActive = race.status === 'active';
   document.getElementById('race-self-report').style.display = (inRace && isActive) ? '' : 'none';
 
-  // 管理者のみ内容表示ボタンを表示
-  const isAdmin = authToken && (authEmail === 'kabu6113450@gmail.com');
   const toolBtn = document.getElementById('race-tool-toggle');
-  if (toolBtn) toolBtn.style.display = isAdmin ? '' : 'none';
+  if (toolBtn) toolBtn.style.display = '';
 }
 
 function toggleRaceTool() {
@@ -3430,17 +3436,17 @@ function toggleRaceBody() {
 
 async function submitRaceAll() {
   if (!_currentRace || !authToken) return;
-  const mutoH = Math.max(0, parseInt(document.getElementById('race-muto-h').value) || 0);
-  const mutoM = Math.max(0, Math.min(59, parseInt(document.getElementById('race-muto-m').value) || 0));
+  const mutoH    = parseInt(document.getElementById('race-muto-h').value) || 0;
+  const mutoM    = parseInt(document.getElementById('race-muto-m').value) || 0;
   const mutoMin  = mutoH * 60 + mutoM;
   const mutoTool = document.getElementById('race-muto-tool').value.trim();
-  const manH  = Math.max(0, parseInt(document.getElementById('race-manual-h').value) || 0);
-  const manM  = Math.max(0, Math.min(59, parseInt(document.getElementById('race-manual-m').value) || 0));
+  const manH     = parseInt(document.getElementById('race-manual-h').value) || 0;
+  const manM     = parseInt(document.getElementById('race-manual-m').value) || 0;
   const manMin   = manH * 60 + manM;
   const manTool  = document.getElementById('race-manual-tool').value.trim();
-  const gameMin  = Math.max(0, (parseInt(document.getElementById('race-game-h').value) || 0) * 60
-                 + Math.max(0, parseInt(document.getElementById('race-game-m').value) || 0));
-  // 3文字バリデーション
+  const gameMin  = (parseInt(document.getElementById('race-game-h').value) || 0) * 60
+                 + (parseInt(document.getElementById('race-game-m').value) || 0);
+  // 3文字バリデーション（時間入力がある場合のみ）
   if (mutoMin > 0 && mutoTool.length < 3) { alert('武藤模試の内容を3文字以上入力してください'); return; }
   if (manMin  > 0 && manTool.length  < 3) { alert('外部勉強の内容を3文字以上入力してください'); return; }
   if (mutoMin === 0 && manMin === 0 && gameMin === 0) { alert('時間を入力してください'); return; }

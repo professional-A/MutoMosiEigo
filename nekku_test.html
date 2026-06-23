@@ -526,253 +526,251 @@ SVG[23]=`<svg viewBox="0 0 220 195" xmlns="http://www.w3.org/2000/svg">
 const PROBS = [
   {
     no:1, ch:'第1章', chN:1, tag:'動粘度', svg:SVG[1],
-    q:'間隙 <code>Y = 1.0 mm</code>、比重 <code>s = 0.90</code> の油が満たされたシリンダを、速度 <code>U = 5.0 m/s</code> でピストンが動いている。シリンダ面のせん断応力が <code>τ = 3.60 Pa</code> のとき、この油の動粘度 <code>ν</code> を求めよ。<br><span style="font-size:.8rem;color:#9ca3af">（小さい数は <code>8e-7</code> のように入力可）</span>',
-    hint:'① τ = μ(U/Y) → μ = τY/U\n② ρ = s × 1000\n③ ν = μ/ρ',
-    reveal:['μ = 3.60 × 0.001 / 5.0 = 7.20×10⁻⁴ Pa·s','ρ = 0.90 × 1000 = 900 kg/m³','ν = 7.20×10⁻⁴ / 900 = 8.00×10⁻⁷ m²/s'],
+    q:'間隙 $Y = 1.0\\ \\mathrm{mm}$、比重 $s = 0.90$ の油が満たされたシリンダを、速度 $U = 5.0\\ \\mathrm{m/s}$ でピストンが動いている。せん断応力 $\\tau = 3.60\\ \\mathrm{Pa}$ のとき、動粘度 $\\nu$ を求めよ。<br><span style="font-size:.8rem;color:#9ca3af">（小さい数は <code>8e-7</code> のように入力可）</span>',
+    hint:'① $\\tau = \\mu(U/Y) \\Rightarrow \\mu = \\tau Y/U$\n② $\\rho = s \\times 1000$\n③ $\\nu = \\mu/\\rho$',
+    reveal:['$\\mu = 3.60 \\times 0.001 / 5.0 = 7.20\\times10^{-4}\\ \\mathrm{Pa{\\cdot}s}$','$\\rho = 0.90 \\times 1000 = 900\\ \\mathrm{kg/m^3}$','$\\nu = 7.20\\times10^{-4} / 900 = 8.00\\times10^{-7}\\ \\mathrm{m^2/s}$'],
     parts:[{label:'', unit:'m²/s', ans:8.00e-7, isAngle:false}]
   },
   {
     no:2, ch:'第1章', chN:1, tag:'両面せん断', svg:SVG[2],
-    q:'間隔 <code>h = 20 mm</code> の固定平行2平面に <code>μ = 0.80 Pa·s</code> の油が満たされている。面積 <code>A = 0.30 m²</code> の薄い板を、固定面から <code>Y₁ = 8.0 mm</code> の位置に置き、速度 <code>U = 0.50 m/s</code> で引くのに必要な力 <code>F</code> を求めよ。',
-    hint:'F = μAU(1/Y₁ + 1/Y₂)　（Y₂ = h − Y₁ = 12 mm）',
-    reveal:['Y₂ = 20 − 8.0 = 12.0 mm','F = 0.80 × 0.30 × 0.50 × (1/0.008 + 1/0.012)','= 0.12 × (125 + 83.3) = 0.12 × 208.3 = 25.0 N'],
+    q:'間隔 $h = 20\\ \\mathrm{mm}$ の固定平行2平面に $\\mu = 0.80\\ \\mathrm{Pa{\\cdot}s}$ の油が満たされている。面積 $A = 0.30\\ \\mathrm{m^2}$ の薄い板を固定面から $Y_1 = 8.0\\ \\mathrm{mm}$ の位置に置き、速度 $U = 0.50\\ \\mathrm{m/s}$ で引くのに必要な力 $F$ を求めよ。',
+    hint:'$F = \\mu A U\\left(\\dfrac{1}{Y_1} + \\dfrac{1}{Y_2}\\right)$　$(Y_2 = h - Y_1 = 12\\ \\mathrm{mm})$',
+    reveal:['$Y_2 = 20 - 8.0 = 12.0\\ \\mathrm{mm}$','$F = 0.80 \\times 0.30 \\times 0.50 \\times (1/0.008 + 1/0.012)$','$= 0.12 \\times (125 + 83.3) = 0.12 \\times 208.3 = 25.0\\ \\mathrm{N}$'],
     parts:[{label:'', unit:'N', ans:25.0, isAngle:false}]
   },
   {
     no:3, ch:'第1章', chN:1, tag:'傾斜面滑落', svg:SVG[3],
-    q:'底面積 <code>A = 0.04 m²</code>、質量 <code>m = 40 kg</code> の物体が、傾斜角 <code>θ = 30°</code> の斜面上を油膜（厚さ <code>δ = 0.020 mm</code>、粘性係数 <code>μ = 0.020 Pa·s</code>）の上を滑落する。到達できる最大速度 <code>U<sub>max</sub></code> を求めよ。',
-    hint:'つり合い: mgsinθ = μA(U_max/δ)\n→ U_max = δmgsinθ/(μA)',
-    reveal:['U_max = δmgsinθ/(μA)','= (0.020×10⁻³ × 40 × 9.81 × sin30°) / (0.020 × 0.04)','= (2.0×10⁻⁵ × 196.2) / 8.0×10⁻⁴ = 4.91 m/s'],
+    q:'底面積 $A = 0.04\\ \\mathrm{m^2}$、質量 $m = 40\\ \\mathrm{kg}$ の物体が傾斜角 $\\theta = 30°$ の斜面上を油膜（厚さ $\\delta = 0.020\\ \\mathrm{mm}$、粘性係数 $\\mu = 0.020\\ \\mathrm{Pa{\\cdot}s}$）の上を滑落する。最大速度 $U_{\\mathrm{max}}$ を求めよ。',
+    hint:'つり合い: $mg\\sin\\theta = \\mu A(U_{\\mathrm{max}}/\\delta)$\n$\\Rightarrow U_{\\mathrm{max}} = \\dfrac{\\delta\\, mg\\sin\\theta}{\\mu A}$',
+    reveal:['$U_{\\mathrm{max}} = \\dfrac{0.020\\times10^{-3} \\times 40 \\times 9.81 \\times \\sin30°}{0.020 \\times 0.04}$','$= \\dfrac{2.0\\times10^{-5} \\times 196.2}{8.0\\times10^{-4}} = 4.91\\ \\mathrm{m/s}$'],
     parts:[{label:'', unit:'m/s', ans:4.905, isAngle:false}]
   },
   {
     no:4, ch:'第2章', chN:2, tag:'静水圧', svg:SVG[4],
-    q:'水面下 <code>h = 12 m</code> における水の圧力を求めよ。ただし大気圧 <code>P₀ = 101 kPa</code> とする。',
-    hint:'ゲージ圧: p = ρgh\n絶対圧: P = P₀ + p',
-    reveal:['p = 1000 × 9.81 × 12 = 117 720 Pa ≈ 117.7 kPa','P = 101 + 117.7 = 218.7 kPa ≈ 219 kPa'],
+    q:'水面下 $h = 12\\ \\mathrm{m}$ における水の圧力を求めよ。大気圧 $P_0 = 101\\ \\mathrm{kPa}$ とする。',
+    hint:'ゲージ圧: $p = \\rho g h$\n絶対圧: $P = P_0 + p$',
+    reveal:['$p = 1000 \\times 9.81 \\times 12 = 117720\\ \\mathrm{Pa} \\approx 117.7\\ \\mathrm{kPa}$','$P = 101 + 117.7 = 218.7\\ \\mathrm{kPa}$'],
     parts:[
-      {label:'(1) ゲージ圧 p', unit:'kPa', ans:117.7, isAngle:false},
-      {label:'(2) 絶対圧 P',   unit:'kPa', ans:218.7, isAngle:false}
+      {label:'(1) ゲージ圧 $p$', unit:'kPa', ans:117.7, isAngle:false},
+      {label:'(2) 絶対圧 $P$',   unit:'kPa', ans:218.7, isAngle:false}
     ]
   },
   {
     no:5, ch:'第2章', chN:2, tag:'パスカルの原理', svg:SVG[5],
-    q:'小ピストン直径 <code>d₁ = 20 mm</code> に <code>F₁ = 10 N</code> を加えた。液体の圧力 <code>P</code> と大ピストン直径 <code>d₂ = 80 mm</code> に生じる力 <code>F₂</code> を求めよ。',
-    hint:'P = F₁/A₁ = 4F₁/(πd₁²)\nF₂ = (d₂/d₁)² × F₁',
-    reveal:['P = 4×10/(π×0.02²) = 31 831 Pa ≈ 31.8 kPa','F₂ = (80/20)² × 10 = 16 × 10 = 160 N'],
+    q:'小ピストン直径 $d_1 = 20\\ \\mathrm{mm}$ に $F_1 = 10\\ \\mathrm{N}$ を加えた。液体の圧力 $P$ と大ピストン直径 $d_2 = 80\\ \\mathrm{mm}$ に生じる力 $F_2$ を求めよ。',
+    hint:'$P = F_1/A_1 = 4F_1/(\\pi d_1^2)$\n$F_2 = (d_2/d_1)^2 \\times F_1$',
+    reveal:['$P = 4\\times10/(\\pi\\times0.02^2) = 31831\\ \\mathrm{Pa} \\approx 31.8\\ \\mathrm{kPa}$','$F_2 = (80/20)^2 \\times 10 = 16 \\times 10 = 160\\ \\mathrm{N}$'],
     parts:[
-      {label:'(1) 圧力 P', unit:'kPa', ans:31.83, isAngle:false},
-      {label:'(2) 力 F₂',  unit:'N',   ans:160,   isAngle:false}
+      {label:'(1) 圧力 $P$', unit:'kPa', ans:31.83, isAngle:false},
+      {label:'(2) 力 $F_2$', unit:'N',   ans:160,   isAngle:false}
     ]
   },
   {
     no:6, ch:'第2章', chN:2, tag:'レバー付きパスカル', svg:SVG[6],
-    q:'レバーのA端（アーム長 <code>l₁ = 150 mm</code>）に <code>f = 300 N</code> を加えたとき、B端（アーム長 <code>l₂ = 50 mm</code>）の小ピストン（<code>d₁ = 40 mm</code>）に力が伝わる。大ピストン（<code>d₂ = 160 mm</code>）に生じる力 <code>F₂</code> を求めよ。',
-    hint:'① てこ: F₁ = f × l₁/l₂\n② パスカル: F₂ = (d₂/d₁)² × F₁',
-    reveal:['F₁ = 300 × 150/50 = 900 N','F₂ = (160/40)² × 900 = 16 × 900 = 14 400 N = 14.4 kN'],
+    q:'レバーのA端（$l_1 = 150\\ \\mathrm{mm}$）に $f = 300\\ \\mathrm{N}$ を加えたとき、B端（$l_2 = 50\\ \\mathrm{mm}$）の小ピストン（$d_1 = 40\\ \\mathrm{mm}$）に力が伝わる。大ピストン（$d_2 = 160\\ \\mathrm{mm}$）に生じる力 $F_2$ を求めよ。',
+    hint:'① てこ: $F_1 = f \\times l_1/l_2$\n② パスカル: $F_2 = (d_2/d_1)^2 \\times F_1$',
+    reveal:['$F_1 = 300 \\times 150/50 = 900\\ \\mathrm{N}$','$F_2 = (160/40)^2 \\times 900 = 16 \\times 900 = 14400\\ \\mathrm{N} = 14.4\\ \\mathrm{kN}$'],
     parts:[{label:'', unit:'kN', ans:14.4, isAngle:false}]
   },
   {
     no:7, ch:'第2章', chN:2, tag:'U字管マノメータ', svg:SVG[7],
-    q:'U字管マノメータで、両腕の液体は水（<code>ρ = 1000 kg/m³</code>）、底部の液体は水銀（<code>ρ\' = 13 600 kg/m³</code>）。各高さは <code>h = 0.50 m</code>、<code>y₁ = 0.80 m</code>、<code>y₂ = 0.30 m</code>。圧力差 <code>P₁ − P₂</code> を求めよ。',
-    hint:'基準面Aで等値:\nP_A = P₁ + ρgy₁　（左）\nP_A = P₂ + ρgy₂ + ρ\'gh　（右）\n→ P₁−P₂ = ρg(y₂−y₁) + ρ\'gh',
-    reveal:["P₁−P₂ = 1000×9.81×(0.30−0.80) + 13600×9.81×0.50","= 9810×(−0.50) + 66708 = −4905 + 66708 = 61 803 Pa ≈ 61.8 kPa"],
+    q:'U字管マノメータで両腕は水（$\\rho = 1000\\ \\mathrm{kg/m^3}$）、底部は水銀（$\\rho\' = 13600\\ \\mathrm{kg/m^3}$）。$h = 0.50\\ \\mathrm{m}$、$y_1 = 0.80\\ \\mathrm{m}$、$y_2 = 0.30\\ \\mathrm{m}$。圧力差 $P_1 - P_2$ を求めよ。',
+    hint:'基準面Aで等値:\n左: $P_A = P_1 + \\rho g y_1$\n右: $P_A = P_2 + \\rho g y_2 + \\rho\' g h$\n$\\Rightarrow P_1-P_2 = \\rho g(y_2-y_1) + \\rho\' g h$',
+    reveal:['$P_1-P_2 = 1000\\times9.81\\times(0.30-0.80) + 13600\\times9.81\\times0.50$','$= 9810\\times(-0.50) + 66708 = -4905 + 66708 = 61803\\ \\mathrm{Pa} \\approx 61.8\\ \\mathrm{kPa}$'],
     parts:[{label:'', unit:'kPa', ans:61.8, isAngle:false}]
   },
   {
     no:8, ch:'第2章', chN:2, tag:'逆U字管マノメータ', svg:SVG[8],
-    q:'逆U字管マノメータで、両腕は水（<code>ρ = 1000 kg/m³</code>）、上部は軽い液体（<code>ρ\' = 800 kg/m³</code>）。<code>h = 0.20 m</code>、<code>y₁ = 0.70 m</code>、<code>y₂ = 0.30 m</code>。圧力差 <code>P₁ − P₂</code> を求めよ。',
-    hint:'逆U字管の基準面Aで等値（上部液体で−）:\nP₁−P₂ = ρ₁gy₁ − ρ\'gh − ρ₂gy₂',
-    reveal:['P₁−P₂ = 1000×9.81×0.70 − 800×9.81×0.20 − 1000×9.81×0.30','= 9.81×(700 − 160 − 300) = 9.81×240 = 2354 Pa ≈ 2.35 kPa'],
+    q:'逆U字管マノメータで両腕は水（$\\rho = 1000\\ \\mathrm{kg/m^3}$）、上部は軽い液体（$\\rho\' = 800\\ \\mathrm{kg/m^3}$）。$h = 0.20\\ \\mathrm{m}$、$y_1 = 0.70\\ \\mathrm{m}$、$y_2 = 0.30\\ \\mathrm{m}$。圧力差 $P_1 - P_2$ を求めよ。',
+    hint:'逆U字管の基準面Aで等値:\n$P_1-P_2 = \\rho_1 g y_1 - \\rho\' g h - \\rho_2 g y_2$',
+    reveal:['$P_1-P_2 = 1000\\times9.81\\times0.70 - 800\\times9.81\\times0.20 - 1000\\times9.81\\times0.30$','$= 9.81\\times(700 - 160 - 300) = 9.81\\times240 = 2354\\ \\mathrm{Pa} \\approx 2.35\\ \\mathrm{kPa}$'],
     parts:[{label:'', unit:'kPa', ans:2.354, isAngle:false}]
   },
   {
     no:9, ch:'第2章', chN:2, tag:'平面板への力', svg:SVG[9],
-    q:'水面に対して垂直な円板（直径 <code>d = 1.0 m</code>）が、図心深さ <code>h_G = 1.5 m</code> の位置にある。この板に作用する合力 <code>F</code> を求めよ。',
-    hint:'F = ρg h_G A　（A = πd²/4）',
-    reveal:['A = π×1.0²/4 = 0.7854 m²','F = 1000×9.81×1.5×0.7854 = 11 554 N ≈ 11.6 kN'],
+    q:'水面に対して垂直な円板（直径 $d = 1.0\\ \\mathrm{m}$）が図心深さ $h_G = 1.5\\ \\mathrm{m}$ の位置にある。板に作用する合力 $F$ を求めよ。',
+    hint:'$F = \\rho g\\, h_G A$　$(A = \\pi d^2/4)$',
+    reveal:['$A = \\pi\\times1.0^2/4 = 0.7854\\ \\mathrm{m^2}$','$F = 1000\\times9.81\\times1.5\\times0.7854 = 11554\\ \\mathrm{N} \\approx 11.6\\ \\mathrm{kN}$'],
     parts:[{label:'', unit:'kN', ans:11.55, isAngle:false}]
   },
   {
     no:10, ch:'第2章', chN:2, tag:'曲面板', svg:SVG[10],
-    q:'タンクの壁面 AB が半径 <code>r = 0.8 m</code>、幅 <code>b = 1.5 m</code> の 1/4 円筒面。水面から A までの深さ <code>h = 0.5 m</code>。壁面 AB に作用する力の水平分力 <code>F<sub>x</sub></code>・鉛直分力 <code>F<sub>y</sub></code>・合力 <code>F</code>・方向角 <code>α</code> を求めよ。',
-    hint:'Fx = ρg(h + r/2)×br　（鉛直投影面への静水圧）\nFy = ρg(πr²/4 + hr)×b　（上部液体の重量）\nF = √(Fx²+Fy²)、α = arctan(Fy/Fx)',
+    q:'壁面 AB が半径 $r = 0.8\\ \\mathrm{m}$、幅 $b = 1.5\\ \\mathrm{m}$ の 1/4 円筒面。水面から A までの深さ $h = 0.5\\ \\mathrm{m}$。水平分力 $F_x$・鉛直分力 $F_y$・合力 $F$・方向角 $\\alpha$ を求めよ。',
+    hint:'$F_x = \\rho g(h + r/2)\\cdot b r$　（鉛直投影面への静水圧）\n$F_y = \\rho g(\\pi r^2/4 + hr)\\cdot b$　（上部液体の重量）\n$F = \\sqrt{F_x^2+F_y^2}$、$\\alpha = \\arctan(F_y/F_x)$',
     reveal:[
-      'Fx = 1000×9.81×(0.5+0.4)×1.5×0.8 = 9810×0.9×1.2 = 10 595 N ≈ 10.6 kN',
-      'Fy = 1000×9.81×(π×0.8²/4 + 0.5×0.8)×1.5 = 9810×(0.5027+0.4)×1.5 = 13 283 N ≈ 13.3 kN',
-      'F = √(10.6²+13.3²) = √(112.4+176.9) = √289.3 ≈ 17.0 kN',
-      'α = arctan(13.3/10.6) ≈ 51.4°'
+      '$F_x = 1000\\times9.81\\times(0.5+0.4)\\times1.5\\times0.8 = 10595\\ \\mathrm{N} \\approx 10.6\\ \\mathrm{kN}$',
+      '$F_y = 1000\\times9.81\\times(\\pi\\times0.8^2/4 + 0.5\\times0.8)\\times1.5 = 13283\\ \\mathrm{N} \\approx 13.3\\ \\mathrm{kN}$',
+      '$F = \\sqrt{10.6^2+13.3^2} = \\sqrt{289.3} \\approx 17.0\\ \\mathrm{kN}$',
+      '$\\alpha = \\arctan(13.3/10.6) \\approx 51.4°$'
     ],
     parts:[
-      {label:'(1) F<sub>x</sub>', unit:'kN', ans:10.595, isAngle:false},
-      {label:'(2) F<sub>y</sub>', unit:'kN', ans:13.283, isAngle:false},
-      {label:'(3) F',            unit:'kN', ans:16.99,  isAngle:false},
-      {label:'(4) α',            unit:'°',  ans:51.4,   isAngle:true}
+      {label:'(1) $F_x$', unit:'kN', ans:10.595, isAngle:false},
+      {label:'(2) $F_y$', unit:'kN', ans:13.283, isAngle:false},
+      {label:'(3) $F$',   unit:'kN', ans:16.99,  isAngle:false},
+      {label:'(4) $\\alpha$', unit:'°', ans:51.4, isAngle:true}
     ]
   },
   {
     no:11, ch:'第2章', chN:2, tag:'浮力', svg:SVG[11],
-    q:'密度 <code>ρ = 800 kg/m³</code>、一辺 <code>L = 0.40 m</code> の立方体の木材が水（<code>ρ<sub>w</sub> = 1000 kg/m³</code>）に浮いている。水面下に沈んでいる深さ <code>h</code> を求めよ。',
-    hint:'浮力 = 重力：ρ_w × g × L² × h = ρ_wood × g × L³\n→ h = ρ_wood × L / ρ_w',
-    reveal:['h = ρ_wood × L / ρ_w = 800 × 0.40 / 1000 = 0.320 m'],
+    q:'密度 $\\rho = 800\\ \\mathrm{kg/m^3}$、一辺 $L = 0.40\\ \\mathrm{m}$ の立方体の木材が水（$\\rho_w = 1000\\ \\mathrm{kg/m^3}$）に浮いている。水面下に沈んでいる深さ $h$ を求めよ。',
+    hint:'浮力 = 重力：$\\rho_w g L^2 h = \\rho_\\mathrm{wood} g L^3$\n$\\Rightarrow h = \\dfrac{\\rho_\\mathrm{wood}\\cdot L}{\\rho_w}$',
+    reveal:['$h = \\rho_\\mathrm{wood} \\times L / \\rho_w = 800 \\times 0.40 / 1000 = 0.320\\ \\mathrm{m}$'],
     parts:[{label:'', unit:'m', ans:0.320, isAngle:false}]
   },
   {
     no:12, ch:'第3章', chN:3, tag:'連続の式', svg:SVG[12],
-    q:'内径 <code>d₁ = 120 mm</code> の管を平均流速 <code>u₁ = 2.0 m/s</code> で流れる水が、内径 <code>d₂ = 40 mm</code> に縮小した。断面②での流速 <code>u₂</code> を求めよ。',
-    hint:'u₂ = (d₁/d₂)² × u₁',
-    reveal:['u₂ = (120/40)² × 2.0 = 9 × 2.0 = 18.0 m/s'],
+    q:'内径 $d_1 = 120\\ \\mathrm{mm}$ の管を流速 $u_1 = 2.0\\ \\mathrm{m/s}$ で流れる水が内径 $d_2 = 40\\ \\mathrm{mm}$ に縮小した。断面②での流速 $u_2$ を求めよ。',
+    hint:'$u_2 = (d_1/d_2)^2 \\times u_1$',
+    reveal:['$u_2 = (120/40)^2 \\times 2.0 = 9 \\times 2.0 = 18.0\\ \\mathrm{m/s}$'],
     parts:[{label:'', unit:'m/s', ans:18.0, isAngle:false}]
   },
   {
     no:13, ch:'第3章', chN:3, tag:'分岐管', svg:SVG[13],
-    q:'内径 <code>d₁ = 80 mm</code> の管を流速 <code>u₁ = 4.0 m/s</code> で流れる水が、<code>d₂ = 60 mm</code>（管②）と <code>d₃ = 40 mm</code>（管③）に等量分岐する。流量 <code>Q₁</code>、管②の流速 <code>u₂</code>、管③の流速 <code>u₃</code> を求めよ。',
-    hint:'Q₁ = A₁u₁　　Q₂=Q₃=Q₁/2\nu₂=Q₂/A₂、u₃=Q₃/A₃',
+    q:'内径 $d_1 = 80\\ \\mathrm{mm}$、流速 $u_1 = 4.0\\ \\mathrm{m/s}$ の流れが $d_2 = 60\\ \\mathrm{mm}$（管②）と $d_3 = 40\\ \\mathrm{mm}$（管③）に等量分岐する。流量 $Q_1$、流速 $u_2$、$u_3$ を求めよ。',
+    hint:'$Q_1 = A_1 u_1$、$Q_2=Q_3=Q_1/2$\n$u_2=Q_2/A_2$、$u_3=Q_3/A_3$',
     reveal:[
-      'Q₁ = π×0.08²/4 × 4.0 = 0.005027×4.0 = 2.01×10⁻² m³/s',
-      'Q₂ = Q₃ = 1.005×10⁻² m³/s',
-      'u₂ = Q₂/(π×0.06²/4) = 0.01005/0.002827 = 3.56 m/s',
-      'u₃ = Q₃/(π×0.04²/4) = 0.01005/0.001257 = 8.00 m/s'
+      '$Q_1 = \\pi\\times0.08^2/4 \\times 4.0 = 2.01\\times10^{-2}\\ \\mathrm{m^3/s}$',
+      '$Q_2 = Q_3 = 1.005\\times10^{-2}\\ \\mathrm{m^3/s}$',
+      '$u_2 = 0.01005/0.002827 = 3.56\\ \\mathrm{m/s}$',
+      '$u_3 = 0.01005/0.001257 = 8.00\\ \\mathrm{m/s}$'
     ],
     parts:[
-      {label:'(1) Q₁', unit:'×10⁻² m³/s', ans:2.011e-2, isAngle:false, mult:1e-2},
-      {label:'(2) u₂', unit:'m/s',          ans:3.556, isAngle:false},
-      {label:'(3) u₃', unit:'m/s',          ans:8.00,  isAngle:false}
+      {label:'(1) $Q_1$', unit:'×10⁻² m³/s', ans:2.011e-2, isAngle:false, mult:1e-2},
+      {label:'(2) $u_2$', unit:'m/s', ans:3.556, isAngle:false},
+      {label:'(3) $u_3$', unit:'m/s', ans:8.00,  isAngle:false}
     ]
   },
   {
     no:14, ch:'第4章', chN:4, tag:'ベルヌーイ（2点間）', svg:SVG[14],
-    q:'水平管が <code>d₁ = 60 mm</code> から <code>d₂ = 30 mm</code> に縮小している。断面①の流速 <code>u₁ = 3.0 m/s</code>、圧力 <code>p₁ = 180 kPa</code>（高さは同じ）。断面②の流速 <code>u₂</code> と圧力 <code>p₂</code> を求めよ。',
-    hint:'① 連続の式: u₂ = (d₁/d₂)²u₁\n② ベルヌーイ: p₂ = p₁ + ρ(u₁²−u₂²)/2',
+    q:'水平管が $d_1 = 60\\ \\mathrm{mm}$ から $d_2 = 30\\ \\mathrm{mm}$ に縮小している。断面①の流速 $u_1 = 3.0\\ \\mathrm{m/s}$、圧力 $p_1 = 180\\ \\mathrm{kPa}$（高さは同じ）。断面②の流速 $u_2$ と圧力 $p_2$ を求めよ。',
+    hint:'① 連続の式: $u_2 = (d_1/d_2)^2 u_1$\n② ベルヌーイ: $p_2 = p_1 + \\rho(u_1^2-u_2^2)/2$',
     reveal:[
-      'u₂ = (60/30)² × 3.0 = 4 × 3.0 = 12.0 m/s',
-      'p₂ = 180 000 + 1000×(3.0²−12.0²)/2',
-      '= 180 000 + 1000×(9−144)/2 = 180 000 − 67 500 = 112 500 Pa = 112.5 kPa'
+      '$u_2 = (60/30)^2 \\times 3.0 = 4 \\times 3.0 = 12.0\\ \\mathrm{m/s}$',
+      '$p_2 = 180000 + 1000\\times(3.0^2-12.0^2)/2$',
+      '$= 180000 - 67500 = 112500\\ \\mathrm{Pa} = 112.5\\ \\mathrm{kPa}$'
     ],
     parts:[
-      {label:'(1) u₂', unit:'m/s', ans:12.0,  isAngle:false},
-      {label:'(2) p₂', unit:'kPa', ans:112.5, isAngle:false}
+      {label:'(1) $u_2$', unit:'m/s', ans:12.0,  isAngle:false},
+      {label:'(2) $p_2$', unit:'kPa', ans:112.5, isAngle:false}
     ]
   },
   {
     no:15, ch:'第4章', chN:4, tag:'トリチェリーの定理', svg:SVG[15],
-    q:'十分大きいタンクの液面から <code>H = 5.0 m</code> 下の小孔からの噴出速度 <code>u</code> を求めよ。（液面速度は無視してよい）',
-    hint:'液面①と小孔②にベルヌーイ適用（どちらも P₀）:\nP₀ + ρgH = P₀ + ρu²/2\n→ u = √(2gH)',
-    reveal:['u = √(2 × 9.81 × 5.0) = √98.1 = 9.90 m/s'],
+    q:'液面から $H = 5.0\\ \\mathrm{m}$ 下の小孔からの噴出速度 $u$ を求めよ。（液面速度は無視してよい）',
+    hint:'液面①と小孔②にベルヌーイ適用（どちらも $P_0$）:\n$P_0 + \\rho gH = P_0 + \\rho u^2/2$\n$\\Rightarrow u = \\sqrt{2gH}$',
+    reveal:['$u = \\sqrt{2 \\times 9.81 \\times 5.0} = \\sqrt{98.1} = 9.90\\ \\mathrm{m/s}$'],
     parts:[{label:'', unit:'m/s', ans:9.904, isAngle:false}]
   },
   /* ── 演習JPG 追加問題 ── */
   {
     no:16, ch:'第1章', chN:1, tag:'密度・比容積・粘性係数', svg:SVG[16],
-    q:'動粘度 <code>ν = 2.00×10⁻⁵ m²/s</code> の油の体積が <code>V = 30×10⁻³ m³</code>、質量が <code>m = 24.0 kg</code> である。密度 <code>ρ</code>、比容積 <code>v</code>（= V/m）、粘性係数 <code>μ</code> を求めよ。',
-    hint:'ρ = m/V\nv = 1/ρ（または V/m）\nμ = ν × ρ',
+    q:'動粘度 $\\nu = 2.00\\times10^{-5}\\ \\mathrm{m^2/s}$ の油の体積 $V = 30\\times10^{-3}\\ \\mathrm{m^3}$、質量 $m = 24.0\\ \\mathrm{kg}$。密度 $\\rho$、比容積 $v$（= V/m）、粘性係数 $\\mu$ を求めよ。',
+    hint:'$\\rho = m/V$\n$v = 1/\\rho$（または $V/m$）\n$\\mu = \\nu \\times \\rho$',
     reveal:[
-      'ρ = 24.0 / 0.030 = 800 kg/m³',
-      'v = 1/800 = 1.25×10⁻³ m³/kg',
-      'μ = 2.00×10⁻⁵ × 800 = 1.60×10⁻² Pa·s'
+      '$\\rho = 24.0 / 0.030 = 800\\ \\mathrm{kg/m^3}$',
+      '$v = 1/800 = 1.25\\times10^{-3}\\ \\mathrm{m^3/kg}$',
+      '$\\mu = 2.00\\times10^{-5} \\times 800 = 1.60\\times10^{-2}\\ \\mathrm{Pa{\\cdot}s}$'
     ],
     parts:[
-      {label:'(1) ρ', unit:'kg/m³',   ans:800,    isAngle:false},
-      {label:'(2) v', unit:'×10⁻³ m³/kg', ans:1.25e-3, isAngle:false, mult:1e-3},
-      {label:'(3) μ', unit:'×10⁻² Pa·s',  ans:1.60e-2, isAngle:false, mult:1e-2}
+      {label:'(1) $\\rho$', unit:'kg/m³',       ans:800,    isAngle:false},
+      {label:'(2) $v$',     unit:'×10⁻³ m³/kg', ans:1.25e-3, isAngle:false, mult:1e-3},
+      {label:'(3) $\\mu$',  unit:'×10⁻² Pa·s',  ans:1.60e-2, isAngle:false, mult:1e-2}
     ]
   },
   {
     no:17, ch:'第2章', chN:2, tag:'圧力→水柱高さ換算', svg:SVG[17],
-    q:'圧力 <code>P = 80 kPa</code> は水柱何 m に相当するか求めよ。',
-    hint:'P = ρgh → h = P/(ρg)',
-    reveal:['h = 80 000 / (1000 × 9.81) = 8.155 ≈ 8.16 m'],
+    q:'圧力 $P = 80\\ \\mathrm{kPa}$ は水柱何 m に相当するか求めよ。',
+    hint:'$P = \\rho g h \\Rightarrow h = P/(\\rho g)$',
+    reveal:['$h = 80000 / (1000 \\times 9.81) = 8.155 \\approx 8.16\\ \\mathrm{m}$'],
     parts:[{label:'', unit:'m', ans:8.155, isAngle:false}]
   },
   {
     no:18, ch:'第2章', chN:2, tag:'U字管（液面高さを求める）', svg:SVG[18],
-    q:'U字管マノメータで2容器が接続されている。液体は水（<code>ρ=1000 kg/m³</code>）、底部は水銀（<code>ρ\'=13 600 kg/m³</code>）。左容器の圧力が右より <code>P₁−P₂=50 kPa</code> 高い。水銀柱の高さ <code>h=0.40 m</code>、右管の水銀面からの水位 <code>y₀=0.25 m</code>。左管の水銀面からの水位 <code>y₁</code> を求めよ。',
-    hint:'左水銀面で圧力を等値:\nP₁ + ρg·y₁ = P₂ + ρg·y₀ + ρ\'g·h\n→ y₁ = y₀ + (P₂−P₁)/(ρg) + (ρ\'/ρ)·h',
+    q:'U字管で液体は水（$\\rho=1000\\ \\mathrm{kg/m^3}$）、底部は水銀（$\\rho\'=13600\\ \\mathrm{kg/m^3}$）。$P_1-P_2=50\\ \\mathrm{kPa}$、$h=0.40\\ \\mathrm{m}$、$y_0=0.25\\ \\mathrm{m}$。左管の水銀面からの水位 $y_1$ を求めよ。',
+    hint:'左水銀面で圧力を等値:\n$P_1 + \\rho g y_1 = P_2 + \\rho g y_0 + \\rho\' g h$\n$\\Rightarrow y_1 = y_0 + (P_2-P_1)/(\\rho g) + (\\rho\'/\\rho)h$',
     reveal:[
-      'y₁ = 0.25 + (−50 000)/(1000×9.81) + (13 600/1000)×0.40',
-      '= 0.25 − 5.097 + 5.440 = 0.593 m'
+      '$y_1 = 0.25 + (-50000)/(1000\\times9.81) + (13600/1000)\\times0.40$',
+      '$= 0.25 - 5.097 + 5.440 = 0.593\\ \\mathrm{m}$'
     ],
     parts:[{label:'', unit:'m', ans:0.593, isAngle:false}]
   },
   {
     no:19, ch:'第2章', chN:2, tag:'傾斜平面板（合力・作用点）', svg:SVG[19],
-    q:'傾斜した円板（直径 <code>d=2.0 m</code>）が水中に置かれている。上端の水深 <code>h₁=0.80 m</code>、下端の水深 <code>h₂=2.0 m</code>。この円板に作用する合力 <code>F</code> と、水面から板面に沿った作用点距離 <code>y_c</code> を求めよ。',
-    hint:'hG = (h₁+h₂)/2, A = πd²/4\nF = ρg·hG·A\nsinθ = (h₂−h₁)/d, s_G = hG/sinθ\ny_c = s_G + IG/(A·s_G)   [IG = πd⁴/64]',
+    q:'傾斜した円板（$d=2.0\\ \\mathrm{m}$）が水中に置かれている。上端の水深 $h_1=0.80\\ \\mathrm{m}$、下端 $h_2=2.0\\ \\mathrm{m}$。合力 $F$ と水面から板面に沿った作用点距離 $y_c$ を求めよ。',
+    hint:'$h_G = (h_1+h_2)/2$、$A = \\pi d^2/4$\n$F = \\rho g h_G A$\n$\\sin\\theta = (h_2-h_1)/d$、$s_G = h_G/\\sin\\theta$\n$y_c = s_G + I_G/(A s_G)$　$[I_G = \\pi d^4/64]$',
     reveal:[
-      'hG = (0.80+2.0)/2 = 1.40 m',
-      'A = π×1² = 3.1416 m²',
-      'F = 1000×9.81×1.40×3.1416 = 43 100 N ≈ 43.1 kN',
-      'sinθ = (2.0−0.80)/2.0 = 0.600',
-      's_G = 1.40/0.600 = 2.333 m',
-      'IG = π×2⁴/64 = 0.7854 m⁴',
-      'y_c = 2.333 + 0.7854/(3.1416×2.333) = 2.333 + 0.107 = 2.44 m'
+      '$h_G = (0.80+2.0)/2 = 1.40\\ \\mathrm{m}$',
+      '$A = \\pi\\times1^2 = 3.1416\\ \\mathrm{m^2}$',
+      '$F = 1000\\times9.81\\times1.40\\times3.1416 = 43100\\ \\mathrm{N} \\approx 43.1\\ \\mathrm{kN}$',
+      '$\\sin\\theta = (2.0-0.80)/2.0 = 0.600$、$s_G = 1.40/0.600 = 2.333\\ \\mathrm{m}$',
+      '$I_G = \\pi\\times2^4/64 = 0.7854\\ \\mathrm{m^4}$',
+      '$y_c = 2.333 + 0.7854/(3.1416\\times2.333) = 2.333 + 0.107 = 2.44\\ \\mathrm{m}$'
     ],
     parts:[
-      {label:'(1) F',   unit:'kN', ans:43.1,  isAngle:false},
-      {label:'(2) y_c', unit:'m',  ans:2.440, isAngle:false}
+      {label:'(1) $F$',   unit:'kN', ans:43.1,  isAngle:false},
+      {label:'(2) $y_c$', unit:'m',  ans:2.440, isAngle:false}
     ]
   },
   {
     no:20, ch:'第2章', chN:2, tag:'浮力（木片＋鉛）', svg:SVG[20],
-    q:'比重 <code>s=0.70</code>、長さ <code>L=1.5 m</code>、一辺 <code>a=6.0 cm</code> の正方形断面の木片の一端に、質量 <code>m_pb=1.2 kg</code>（比重11.5）の鉛を付けて水中に入れたところ鉛を下にして浮いた。水面から突き出た部分の長さ <code>h</code> を求めよ。',
-    hint:'全重力 W = (m_wood + m_pb)g\n沈み長さ = L−h\n浮力 B = ρ_w·g·[a²(L−h) + V_pb]\nW = B を解く',
+    q:'比重 $s=0.70$、長さ $L=1.5\\ \\mathrm{m}$、一辺 $a=6.0\\ \\mathrm{cm}$ の木片の一端に質量 $m_{\\mathrm{pb}}=1.2\\ \\mathrm{kg}$（比重11.5）の鉛を付けて水中に入れたところ浮いた。水面から突き出た長さ $h$ を求めよ。',
+    hint:'全重力 $W = (m_\\mathrm{wood} + m_\\mathrm{pb})g$\n沈み長さ $= L-h$\n浮力 $B = \\rho_w g[a^2(L-h) + V_\\mathrm{pb}]$\n$W = B$ を解く',
     reveal:[
-      'm_wood = 700×(1.5×0.06²) = 3.78 kg',
-      'V_pb = 1.2/11500 = 1.043×10⁻⁴ m³',
-      'W = (3.78+1.2)×9.81 = 48.84 N',
-      '48.84/9810 = 0.0036(1.5−h) + 1.043×10⁻⁴',
-      '0.0036h = 5.40×10⁻³ + 1.043×10⁻⁴ − 4.978×10⁻³',
-      'h = 0.526×10⁻³/0.0036 = 0.146 m'
+      '$m_\\mathrm{wood} = 700\\times(1.5\\times0.06^2) = 3.78\\ \\mathrm{kg}$',
+      '$V_\\mathrm{pb} = 1.2/11500 = 1.043\\times10^{-4}\\ \\mathrm{m^3}$',
+      '$W = (3.78+1.2)\\times9.81 = 48.84\\ \\mathrm{N}$',
+      '$48.84/9810 = 0.0036(1.5-h) + 1.043\\times10^{-4}$',
+      '$h = 0.526\\times10^{-3}/0.0036 = 0.146\\ \\mathrm{m}$'
     ],
     parts:[{label:'', unit:'m', ans:0.146, isAngle:false}]
   },
   {
     no:21, ch:'第4章', chN:4, tag:'下向き3断面ベルヌーイ', svg:SVG[21],
-    q:'大きなタンクの底面に下向きで直径 <code>d=60 mm</code> の円管が取り付けられている（ρ=1000 kg/m³）。タンク底面から水面までの高さ <code>H₁=1.2 m</code>、円管の出口②はタンク底面から <code>H₂=0.5 m</code> 下方（断面②の圧力は大気圧）。断面①はタンク底面の管入口。出口②からさらに <code>H₃=0.8 m</code> 下方が断面③（自由噴流）。<br>（1）出口②の流速 <code>u₂</code>　（2）断面①のゲージ圧 <code>p₁</code>　（3）断面③の流速 <code>u₃</code>　（4）断面③の水柱の直径 <code>d₃</code>',
-    hint:'液面→②ベルヌーイ: u₂=√(2g(H₁+H₂))\n液面→①ベルヌーイ: p₁=ρg·H₁−ρu₁²/2　(u₁=u₂)\n液面→③ベルヌーイ: u₃=√(2g(H₁+H₂+H₃))\nd₃=d√(u₂/u₃)',
+    q:'大きなタンクの底面に $d=60\\ \\mathrm{mm}$ の円管（$\\rho=1000\\ \\mathrm{kg/m^3}$）。底面から水面 $H_1=1.2\\ \\mathrm{m}$、出口②は底面から $H_2=0.5\\ \\mathrm{m}$ 下方（大気圧）。断面①はタンク底面の管入口。②からさらに $H_3=0.8\\ \\mathrm{m}$ 下方が断面③（自由噴流）。<br>（1）出口②の流速 $u_2$　（2）断面①のゲージ圧 $p_1$　（3）断面③の流速 $u_3$　（4）断面③の直径 $d_3$',
+    hint:'液面→②: $u_2=\\sqrt{2g(H_1+H_2)}$\n液面→①: $p_1=\\rho g H_1 - \\rho u_1^2/2$　$(u_1=u_2)$\n液面→③: $u_3=\\sqrt{2g(H_1+H_2+H_3)}$\n$d_3=d\\sqrt{u_2/u_3}$',
     reveal:[
-      'u₂ = √(2×9.81×1.7) = √33.35 = 5.78 m/s',
-      'p₁ = 1000×9.81×1.2 − 1000×5.78²/2 = 11772 − 16705 = −4933 Pa ≈ −4.93 kPa',
-      'u₃ = √(2×9.81×2.5) = √49.05 = 7.00 m/s',
-      'd₃ = 60×√(5.78/7.00) = 60×0.909 = 54.5 mm ≈ 5.45 cm'
+      '$u_2 = \\sqrt{2\\times9.81\\times1.7} = \\sqrt{33.35} = 5.78\\ \\mathrm{m/s}$',
+      '$p_1 = 1000\\times9.81\\times1.2 - 1000\\times5.78^2/2 = 11772 - 16705 = -4933\\ \\mathrm{Pa} \\approx -4.93\\ \\mathrm{kPa}$',
+      '$u_3 = \\sqrt{2\\times9.81\\times2.5} = \\sqrt{49.05} = 7.00\\ \\mathrm{m/s}$',
+      '$d_3 = 60\\times\\sqrt{5.78/7.00} = 60\\times0.909 = 54.5\\ \\mathrm{mm} \\approx 5.45\\ \\mathrm{cm}$'
     ],
     parts:[
-      {label:'(1) u₂', unit:'m/s',  ans:5.776,  isAngle:false},
-      {label:'(2) p₁', unit:'kPa',  ans:-4.91,  isAngle:false},
-      {label:'(3) u₃', unit:'m/s',  ans:7.004,  isAngle:false},
-      {label:'(4) d₃', unit:'cm',   ans:5.45,   isAngle:false}
+      {label:'(1) $u_2$', unit:'m/s', ans:5.776, isAngle:false},
+      {label:'(2) $p_1$', unit:'kPa', ans:-4.91, isAngle:false},
+      {label:'(3) $u_3$', unit:'m/s', ans:7.004, isAngle:false},
+      {label:'(4) $d_3$', unit:'cm',  ans:5.45,  isAngle:false}
     ]
   },
   {
     no:22, ch:'第4章', chN:4, tag:'傾斜拡大管ベルヌーイ', svg:SVG[22],
-    q:'左側から右側へ流れる傾斜した拡大管。内径は断面① <code>d₁=60 mm</code>、断面② <code>d₂=90 mm</code>。基準面からの高さは <code>z₁=20 cm</code>、<code>z₂=50 cm</code>。断面①の流速 <code>v₁=1.5 m/s</code>。<br>（1）流量 <code>Q</code>　（2）断面②の流速 <code>v₂</code>　（3）断面①の圧力が <code>P₁=8.0 kPa</code>（ゲージ）のとき断面②の圧力 <code>P₂</code>',
-    hint:'Q=A₁v₁, v₂=Q/A₂\nベルヌーイ: P₂=P₁+ρ(v₁²−v₂²)/2 − ρg(z₂−z₁)',
+    q:'傾斜拡大管。$d_1=60\\ \\mathrm{mm}$（断面①）、$d_2=90\\ \\mathrm{mm}$（断面②）、高さ $z_1=20\\ \\mathrm{cm}$、$z_2=50\\ \\mathrm{cm}$、$v_1=1.5\\ \\mathrm{m/s}$。<br>（1）流量 $Q$　（2）流速 $v_2$　（3）$P_1=8.0\\ \\mathrm{kPa}$ のとき $P_2$',
+    hint:'$Q=A_1 v_1$、$v_2=Q/A_2$\nベルヌーイ: $P_2=P_1+\\rho(v_1^2-v_2^2)/2 - \\rho g(z_2-z_1)$',
     reveal:[
-      'A₁=π×0.06²/4=2.827×10⁻³ m²',
-      'Q=2.827×10⁻³×1.5=4.24×10⁻³ m³/s',
-      'v₂=v₁×(d₁/d₂)²=1.5×(6/9)²=0.667 m/s',
-      'P₂=8000+1000(1.5²−0.667²)/2−1000×9.81×0.30',
-      '=8000+903−2943=5960 Pa≈5.96 kPa'
+      '$A_1=\\pi\\times0.06^2/4=2.827\\times10^{-3}\\ \\mathrm{m^2}$',
+      '$Q=2.827\\times10^{-3}\\times1.5=4.24\\times10^{-3}\\ \\mathrm{m^3/s}$',
+      '$v_2=1.5\\times(6/9)^2=0.667\\ \\mathrm{m/s}$',
+      '$P_2=8000+1000(1.5^2-0.667^2)/2-1000\\times9.81\\times0.30$',
+      '$=8000+903-2943=5960\\ \\mathrm{Pa}\\approx5.96\\ \\mathrm{kPa}$'
     ],
     parts:[
-      {label:'(1) Q',  unit:'×10⁻³ m³/s', ans:4.241e-3, isAngle:false, mult:1e-3},
-      {label:'(2) v₂', unit:'m/s',          ans:0.6667, isAngle:false},
-      {label:'(3) P₂', unit:'kPa',          ans:5.960,  isAngle:false}
+      {label:'(1) $Q$',  unit:'×10⁻³ m³/s', ans:4.241e-3, isAngle:false, mult:1e-3},
+      {label:'(2) $v_2$', unit:'m/s',         ans:0.6667,  isAngle:false},
+      {label:'(3) $P_2$', unit:'kPa',         ans:5.960,   isAngle:false}
     ]
   },
   {
     no:23, ch:'第2章', chN:2, tag:'曲面板（タンク内側）', svg:SVG[23],
-    q:'タンクの 1/4 円弧面 AB（半径 <code>r=1.2 m</code>、タンク幅 <code>b=1.2 m</code>）に水が作用している。A は水面から <code>h=0.8 m</code> 下方、B は A の鉛直下 r の位置。合力 <code>F</code> と水平方向からの角度 <code>α</code> を求めよ。',
-    hint:'Fx=ρg(h+r/2)·r·b　（鉛直投影面）\nFy=ρg·b·(h·r + πr²/4)　（上方液体重量）\nF=√(Fx²+Fy²), α=arctan(Fy/Fx)',
+    q:'1/4 円弧面 AB（$r=1.2\\ \\mathrm{m}$、タンク幅 $b=1.2\\ \\mathrm{m}$）に水が作用。A は水面から $h=0.8\\ \\mathrm{m}$ 下方、B は A の鉛直下 $r$ の位置。合力 $F$ と水平方向からの角度 $\\alpha$ を求めよ。',
+    hint:'$F_x=\\rho g(h+r/2)\\cdot r\\cdot b$　（鉛直投影面）\n$F_y=\\rho g b(hr + \\pi r^2/4)$　（上方液体重量）\n$F=\\sqrt{F_x^2+F_y^2}$、$\\alpha=\\arctan(F_y/F_x)$',
     reveal:[
-      'Fx=1000×9.81×(0.8+0.6)×1.2×1.2=9810×1.4×1.44=19 755 N≈19.8 kN',
-      'Fy=9810×1.2×(0.8×1.2+π×1.44/4)=11 772×(0.96+1.131)=24 615 N≈24.6 kN',
-      'F=√(19.8²+24.6²)≈31.6 kN',
-      'α=arctan(24.6/19.8)=arctan(1.242)≈51.2°'
+      '$F_x=1000\\times9.81\\times(0.8+0.6)\\times1.2\\times1.2=19755\\ \\mathrm{N}\\approx19.8\\ \\mathrm{kN}$',
+      '$F_y=9810\\times1.2\\times(0.8\\times1.2+\\pi\\times1.44/4)=24615\\ \\mathrm{N}\\approx24.6\\ \\mathrm{kN}$',
+      '$F=\\sqrt{19.8^2+24.6^2}\\approx31.6\\ \\mathrm{kN}$',
+      '$\\alpha=\\arctan(24.6/19.8)\\approx51.2°$'
     ],
     parts:[
-      {label:'(1) F', unit:'kN', ans:31.56,  isAngle:false},
-      {label:'(2) α', unit:'°',  ans:51.2,   isAngle:true}
+      {label:'(1) $F$',       unit:'kN', ans:31.56, isAngle:false},
+      {label:'(2) $\\alpha$', unit:'°',  ans:51.2,  isAngle:true}
     ]
   }
 ];
@@ -887,10 +885,7 @@ updateScore();
 </script>
 <script src="./js/points.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="renderMathInElement(document.body,{delimiters:[{left:'$',right:'$',display:true},{left:'
-</html>
-,right:'
-</html>
-,display:false}]})"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
 </body>
 </html>
