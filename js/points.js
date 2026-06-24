@@ -20,7 +20,10 @@
 
   window.addPoints = async function(amount, quizKey, questionKey, correct, subject) {
     const token = await getToken();
-    if (!token) return;
+    if (!token) {
+      showPointsToast('ログインしてポイントを獲得', false, true);
+      return;
+    }
     try {
       const body = { amount };
       if (quizKey && questionKey) {
@@ -39,17 +42,22 @@
       if (data.ok && data.delta != null) {
         if (data.delta > 0) showPointsToast(`+${data.delta.toLocaleString()}pt`);
         else if (data.delta < 0) showPointsToast(`${data.delta.toLocaleString()}pt`, true);
+        // delta === 0 (dedup already recorded) → no toast
       } else if (data.ok && !quizKey) {
         showPointsToast(`+${amount.toLocaleString()}pt`);
+      } else if (!data.ok) {
+        showPointsToast(data.error || 'エラー', true);
       }
     } catch (e) {}
   };
 
-  window.showPointsToast = function(msg, isNeg) {
+  window.showPointsToast = function(msg, isNeg, isWarn) {
+    const bg = isWarn ? '#f59e0b' : isNeg ? '#ef4444' : '#46d6c4';
+    const fg = isWarn ? '#0a1626' : isNeg ? '#fff' : '#0a1626';
     const t = document.createElement('div');
     t.textContent = msg;
-    t.style.cssText = `position:fixed;bottom:24px;right:24px;background:${isNeg ? '#ef4444' : '#46d6c4'};color:${isNeg ? '#fff' : '#0a1626'};font-weight:700;padding:10px 20px;border-radius:99px;font-size:1rem;z-index:9999;pointer-events:none;transition:opacity .4s`;
+    t.style.cssText = `position:fixed;bottom:24px;right:24px;background:${bg};color:${fg};font-weight:700;padding:10px 20px;border-radius:99px;font-size:1rem;z-index:9999;pointer-events:none;transition:opacity .4s`;
     document.body.appendChild(t);
-    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 1800);
+    setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2200);
   };
 })();

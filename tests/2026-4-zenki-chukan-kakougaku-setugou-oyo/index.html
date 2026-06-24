@@ -452,16 +452,6 @@ function loadState(){try{return JSON.parse(localStorage.getItem(STORAGE_KEY)||"{
 function saveState(s){try{localStorage.setItem(STORAGE_KEY,JSON.stringify(s))}catch{}}
 let state=loadState();
 
-function addPoints(pts,key){
-  try{
-    const sk=JSON.parse(localStorage.getItem("supabase_state")||"{}");
-    const now=Date.now();
-    if(!sk.points){sk.points=0;sk.last=now;}
-    if(now-sk.last>86400000){sk.points=0;sk.last=now;}
-    sk.points+=pts;
-    localStorage.setItem("supabase_state",JSON.stringify(sk));
-  }catch{}
-}
 
 // ===== Score =====
 function updateScore(){
@@ -554,6 +544,8 @@ function resetAll(){
 
 render();
 </script>
+<script>window.QUIZ_SUBJECT='加工学';</script>
+<script src="../../js/points.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous" onload="renderMathInElement(document.body,{delimiters:[{left:'$',right:'$',display:true},{left:'
 </html>
