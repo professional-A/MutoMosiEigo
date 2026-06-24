@@ -1186,12 +1186,8 @@ app.post('/api/admin/battles/create', auth, async (req, res) => {
 // バトルにペア追加（管理者）
 app.post('/api/admin/battles/add-pair', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
-  const { username1, username2 } = req.body;
-  if (!username1 || !username2) return res.status(400).json({ error: 'username1とusername2が必要' });
-  // 現在openのバトルからsubject/race_idを取得
-  const { rows: open } = await pool.query("SELECT subject, race_id FROM battles WHERE status='open' ORDER BY id DESC LIMIT 1");
-  if (!open[0]) return res.status(400).json({ error: '現在openのバトルがありません' });
-  const { subject, race_id } = open[0];
+  const { username1, username2, subject, race_id } = req.body;
+  if (!username1 || !username2 || !subject) return res.status(400).json({ error: 'username1・username2・subjectが必要' });
   const { rows: u1 } = await pool.query('SELECT id, username FROM users WHERE username=$1', [username1]);
   const { rows: u2 } = await pool.query('SELECT id, username FROM users WHERE username=$1', [username2]);
   if (!u1[0]) return res.status(404).json({ error: `ユーザーが見つかりません: ${username1}` });

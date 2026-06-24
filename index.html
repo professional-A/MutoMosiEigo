@@ -2527,7 +2527,12 @@ async function adminCloseRace() {
   else alert(res.error || 'エラー');
 }
 
+let _lastBattleSubject = '';
 async function adminAddBattlePair() {
+  const subjectChoices = Object.entries(BATTLE_SUBJ_LABEL).map(([k,v]) => `${k} = ${v}`).join('\n');
+  const subject = prompt(`教科コードを入力\n${subjectChoices}`, _lastBattleSubject);
+  if (!subject) return;
+  _lastBattleSubject = subject;
   const u1 = prompt('1人目のユーザー名');
   if (!u1) return;
   const u2 = prompt('2人目のユーザー名');
@@ -2536,12 +2541,12 @@ async function adminAddBattlePair() {
     const res = await fetch('/api/admin/battles/add-pair', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
-      body: JSON.stringify({ username1: u1, username2: u2 })
+      body: JSON.stringify({ username1: u1, username2: u2, subject })
     });
     const data = await res.json();
     if (data.ok) {
       alert(`✅ ${data.pair[0]} vs ${data.pair[1]} を追加しました（教科: ${data.subject}）`);
-      await reloadAdminContent();
+      await reloadAdminContent(); loadBattleContent();
     } else {
       alert('❌ ' + (data.error || 'エラー'));
     }
