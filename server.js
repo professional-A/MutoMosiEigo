@@ -1167,7 +1167,14 @@ app.post('/api/admin/battles/create', auth, async (req, res) => {
     `SELECT id, username FROM users WHERE username NOT IN ('seijuro_dummy','honari2') ORDER BY id`
   );
 
-  // 3ラウンド方式: 各ユーザーがランダムに3試合（対戦相手かぶりなし）
+  // 20ペア固定: スロット方式（かぶりなし・自己対戦なし）
+  // 12人×40スロット → 4人が4試合、8人が3試合
+  const TARGET_PAIRS = 20;
+  const totalSlots = TARGET_PAIRS * 2;
+  const n = users.length;
+  const base = Math.floor(totalSlots / n);
+  const extra = totalSlots % n;
+
   function shuffled(arr) {
     const a = [...arr];
     for (let i = a.length - 1; i > 0; i--) {
@@ -1177,35 +1184,33 @@ app.post('/api/admin/battles/create', auth, async (req, res) => {
     return a;
   }
 
-  const usedPairs = new Set();
-  const allPairs = [];
-  const byes = [];
-
-  for (let round = 0; round < 3; round++) {
-    let found = false;
-    for (let attempt = 0; attempt < 1000; attempt++) {
-      const s = shuffled(users);
-      const roundPairs = [];
-      let valid = true;
-      for (let i = 0; i + 1 < s.length; i += 2) {
-        const a = s[i].id, b = s[i + 1].id;
-        const key = a < b ? `${a}:${b}` : `${b}:${a}`;
-        if (usedPairs.has(key)) { valid = false; break; }
-        roundPairs.push([s[i], s[i + 1]]);
-      }
-      if (valid) {
-        for (const [a, b] of roundPairs) {
-          const key = a.id < b.id ? `${a.id}:${b.id}` : `${b.id}:${a.id}`;
-          usedPairs.add(key);
-        }
-        allPairs.push(...roundPairs);
-        if (s.length % 2 === 1) byes.push({ round: round + 1, user: s[s.length - 1].username });
-        found = true;
-        break;
-      }
-    }
-    if (!found) return res.status(500).json({ error: `ラウンド${round + 1}の対戦表生成に失敗しました` });
+  // スロットリスト生成（誰が多めかはシャッフルで毎回ランダム）
+  function makeSlots() {
+    const ord = shuffled(users);
+    const s = [];
+    ord.forEach((u, i) => {
+      const cnt = i < extra ? base + 1 : base;
+      for (let k = 0; k < cnt; k++) s.push(u);
+    });
+    return s;
   }
+
+  let allPairs = null;
+  for (let attempt = 0; attempt < 3000; attempt++) {
+    const s = shuffled(makeSlots());
+    const pairs = [];
+    const seen = new Set();
+    let valid = true;
+    for (let i = 0; i + 1 < s.length; i += 2) {
+      const a = s[i].id, b = s[i + 1].id;
+      const key = a < b ? `${a}:${b}` : `${b}:${a}`;
+      if (a === b || seen.has(key)) { valid = false; break; }
+      seen.add(key);
+      pairs.push([s[i], s[i + 1]]);
+    }
+    if (valid && pairs.length === TARGET_PAIRS) { allPairs = pairs; break; }
+  }
+  if (!allPairs) return res.status(500).json({ error: '対戦表の生成に失敗しました（リトライ上限）' });
 
   await pool.query("DELETE FROM battles WHERE subject = $1 AND status = 'open'", [subject]);
   const now = new Date().toISOString();
@@ -1213,7 +1218,7 @@ app.post('/api/admin/battles/create', auth, async (req, res) => {
     await pool.query('INSERT INTO battles (subject, p1_id, p2_id, race_id, created_at) VALUES ($1, $2, $3, $4, $5)',
       [subject, p1.id, p2.id, raceId, now]);
   }
-  res.json({ ok: true, pairs: allPairs.map(([a, b]) => [a.username, b.username]), byes });
+  res.json({ ok: true, pairs: allPairs.map(([a, b]) => [a.username, b.username]) });
 });
 
 // バトル決着（管理者）— 全員参加型オッズ配分
