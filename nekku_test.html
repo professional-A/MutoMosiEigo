@@ -777,11 +777,14 @@ const PROBS = [
 
 /* ── スコア管理 ── */
 const TOTAL = PROBS.reduce((s,p)=>s+p.parts.length, 0);
+const STORAGE_KEY='nekku_test';
 const correct = {}; // 'probNo-partIdx': true/false
+try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');Object.keys(s).forEach(k=>{if(s[k]===true)correct[k]=true;});}catch(e){}
 
 function countOk(){
   return Object.values(correct).filter(v=>v).length;
 }
+function save(){const d={};Object.keys(correct).forEach(k=>{if(correct[k]===true)d[k]=true;});localStorage.setItem(STORAGE_KEY,JSON.stringify(d));if(window.progressSave)progressSave(STORAGE_KEY,d);}
 function updateScore(){
   const c = countOk();
   document.getElementById('score-fill').style.width = (c/TOTAL*100)+'%';
@@ -819,6 +822,7 @@ function checkPart(no, idx){
   card.className = 'prob' + (allOk ? ' all-ok' : hasNg ? ' has-ng' : '');
 
   updateScore();
+  if(ok) save();
 }
 
 function toggleHint(no){
@@ -829,6 +833,9 @@ function showReveal(no){
 }
 function resetAll(){
   Object.keys(correct).forEach(k=>delete correct[k]);
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.setItem(STORAGE_KEY+'_reset','1');
+  if(window.progressSaveNow) progressSaveNow(STORAGE_KEY,{});
   PROBS.forEach(p=>{
     p.parts.forEach((_,i)=>{
       const inp = document.getElementById('inp-'+p.no+'-'+i);
@@ -880,10 +887,32 @@ function render(){
   `).join('');
 }
 
-render();
-updateScore();
+function restoreState(){
+  PROBS.forEach(p=>{
+    p.parts.forEach((_,i)=>{
+      if(correct[p.no+'-'+i]===true){
+        const fb=document.getElementById('fb-'+p.no+'-'+i);
+        if(fb){fb.className='part-fb ok';fb.textContent='✓ 正解';}
+      }
+    });
+    if(p.parts.every((_,i)=>correct[p.no+'-'+i]===true)){
+      const c=document.getElementById('prob-'+p.no);if(c)c.className='prob all-ok';
+    }
+  });
+}
+render();restoreState();updateScore();
+window._quizSync=async function(){
+  if(localStorage.getItem(STORAGE_KEY+'_reset')){localStorage.removeItem(STORAGE_KEY+'_reset');return;}
+  const s=await progressLoad(STORAGE_KEY);
+  if(!s||!Object.keys(s).length)return;
+  let chg=false;
+  for(const k in s){if(s[k]===true&&!correct[k]){correct[k]=true;chg=true;}}
+  if(chg){save();restoreState();updateScore();}
+};
 </script>
 <script src="./js/points.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./js/progress.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
   onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>

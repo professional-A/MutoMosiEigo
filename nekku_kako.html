@@ -378,10 +378,10 @@ const PROBS = [
   },
   {
     no:7, ch:'第2章', chN:2, tag:'U字管（水銀）', pts:8, svg:SVG[7],
-    q:'図のような状態における2つの容器内の圧力差 $\\Delta P = P_1 - P_2$ を求めよ。ただし $y_1 = 1.0\\ \\mathrm{m}$（左水柱高さ）、$y_2 = 0.5\\ \\mathrm{m}$（水銀柱高さ差）、$\\rho = 1000\\ \\mathrm{kg/m^3}$、$\\rho' = 13.6\\times10^3\\ \\mathrm{kg/m^3}$。',
-    hint:'左右のマノメータ基準面で圧力平衡:\n$P_1 + \\rho g y_2\\text{側} = P_2 + \\rho g y_1\\text{側} + \\rho\\'g y_2$? 図の形状に注意\n$\\Delta P = \\rho\\'g y_2 - \\rho g y_1$',
+    q:'図のような状態における2つの容器内の圧力差 $\\Delta P = P_1 - P_2$ を求めよ。ただし $y_1 = 1.0\\ \\mathrm{m}$（左水柱高さ）、$y_2 = 0.5\\ \\mathrm{m}$（水銀柱高さ差）、$\\rho = 1000\\ \\mathrm{kg/m^3}$、$\\rho\' = 13.6\\times10^3\\ \\mathrm{kg/m^3}$。',
+    hint:'左右のマノメータ基準面で圧力平衡:\n$P_1 + \\rho g y_2\\text{側} = P_2 + \\rho g y_1\\text{側} + \\rho\'g y_2$? 図の形状に注意\n$\\Delta P = \\rho\'g y_2 - \\rho g y_1$',
     reveal:[
-      '$\\Delta P = \\rho\\'g y_2 - \\rho g y_1$',
+      '$\\Delta P = \\rho\'g y_2 - \\rho g y_1$',
       '$= 13600 \\times 9.81 \\times 0.5 - 1000 \\times 9.81 \\times 1.0$',
       '$= 66708 - 9810 = 56898\\ \\mathrm{Pa} \\approx 56.9\\ \\mathrm{kPa}$'
     ],
@@ -389,10 +389,10 @@ const PROBS = [
   },
   {
     no:8, ch:'第2章', chN:2, tag:'U字管（2液体）', pts:8, svg:SVG[8],
-    q:'図のような状態における2つの容器内の圧力差 $\\Delta P = P_2 - P_1$ を求めよ。ただし $y_1 = 0.3\\ \\mathrm{m}$、$y_2 = 0.4\\ \\mathrm{m}$、$\\rho = 865\\ \\mathrm{kg/m^3}$（容器内流体）、$\\rho' = 942\\ \\mathrm{kg/m^3}$（マノメータ流体）。',
-    hint:'下部基準面で平衡:\n$P_1 + \\rho g y_1 = P_2 + \\rho g(y_1 - \\text{...}) + ...$\n$\\Delta P = \\rho\\'g y_2 - \\rho g y_1$',
+    q:'図のような状態における2つの容器内の圧力差 $\\Delta P = P_2 - P_1$ を求めよ。ただし $y_1 = 0.3\\ \\mathrm{m}$、$y_2 = 0.4\\ \\mathrm{m}$、$\\rho = 865\\ \\mathrm{kg/m^3}$（容器内流体）、$\\rho\' = 942\\ \\mathrm{kg/m^3}$（マノメータ流体）。',
+    hint:'下部基準面で平衡:\n$P_1 + \\rho g y_1 = P_2 + \\rho g(y_1 - \\text{...}) + ...$\n$\\Delta P = \\rho\'g y_2 - \\rho g y_1$',
     reveal:[
-      '$\\Delta P = \\rho\\'g y_2 - \\rho g y_1$',
+      '$\\Delta P = \\rho\'g y_2 - \\rho g y_1$',
       '$= 942 \\times 9.81 \\times 0.4 - 865 \\times 9.81 \\times 0.3$',
       '$= 3697 - 2545 = 1152\\ \\mathrm{Pa} \\approx 1.15\\ \\mathrm{kPa}$'
     ],
@@ -468,9 +468,12 @@ const PROBS = [
 ];
 
 const TOTAL = PROBS.reduce((s,p)=>s+p.parts.length,0);
-const correct = {};
+const STORAGE_KEY='nekku_kako';
+const correct={};
+try{const s=JSON.parse(localStorage.getItem(STORAGE_KEY)||'{}');Object.keys(s).forEach(k=>{if(s[k]===true)correct[k]=true;});}catch(e){}
 
 function countOk(){ return Object.values(correct).filter(v=>v).length; }
+function save(){const d={};Object.keys(correct).forEach(k=>{if(correct[k]===true)d[k]=true;});localStorage.setItem(STORAGE_KEY,JSON.stringify(d));if(window.progressSave)progressSave(STORAGE_KEY,d);}
 function updateScore(){
   const c = countOk();
   document.getElementById('score-fill').style.width=(c/TOTAL*100)+'%';
@@ -498,6 +501,7 @@ function checkPart(no,idx){
   const hasNg=prob.parts.some((_,i)=>correct[no+'-'+i]===false);
   card.className='prob'+(allOk?' all-ok':hasNg?' has-ng':'');
   updateScore();
+  if(ok) save();
 }
 
 function toggleHint(no){ document.getElementById('hint-'+no).classList.toggle('show'); }
@@ -505,6 +509,9 @@ function showReveal(no){ document.getElementById('reveal-'+no).classList.add('sh
 
 function resetAll(){
   Object.keys(correct).forEach(k=>delete correct[k]);
+  localStorage.removeItem(STORAGE_KEY);
+  localStorage.setItem(STORAGE_KEY+'_reset','1');
+  if(window.progressSaveNow) progressSaveNow(STORAGE_KEY,{});
   PROBS.forEach(p=>{
     p.parts.forEach((_,i)=>{
       const inp=document.getElementById('inp-'+p.no+'-'+i);
@@ -556,11 +563,33 @@ function render(){
   `).join('');
 }
 
-render();
-updateScore();
+function restoreState(){
+  PROBS.forEach(p=>{
+    p.parts.forEach((_,i)=>{
+      if(correct[p.no+'-'+i]===true){
+        const fb=document.getElementById('fb-'+p.no+'-'+i);
+        if(fb){fb.className='part-fb ok';fb.textContent='✓ 正解';}
+      }
+    });
+    if(p.parts.every((_,i)=>correct[p.no+'-'+i]===true)){
+      const c=document.getElementById('prob-'+p.no);if(c)c.className='prob all-ok';
+    }
+  });
+}
+render();restoreState();updateScore();
+window._quizSync=async function(){
+  if(localStorage.getItem(STORAGE_KEY+'_reset')){localStorage.removeItem(STORAGE_KEY+'_reset');return;}
+  const s=await progressLoad(STORAGE_KEY);
+  if(!s||!Object.keys(s).length)return;
+  let chg=false;
+  for(const k in s){if(s[k]===true&&!correct[k]){correct[k]=true;chg=true;}}
+  if(chg){save();restoreState();updateScore();}
+};
 </script>
 <script>window.QUIZ_SUBJECT='熱流体工学Ⅰ';</script>
 <script src="./js/points.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="./js/progress.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
   onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
