@@ -1,0 +1,544 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css" crossorigin="anonymous">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>熱流体工学Ⅰ 前期中間 改変版</title>
+<style>
+  :root{--bg:#0f1117;--card:#1a1d2e;--card2:#242740;--accent:#56cfb2;--accent2:#7c6af7;--text:#e8eaf6;--muted:#9ca3af;--border:#2d3154;}
+  *{box-sizing:border-box;margin:0;padding:0}
+  body{background:var(--bg);color:var(--text);font-family:'Segoe UI','Noto Sans JP',sans-serif;font-size:15px;line-height:1.7;padding-bottom:60px}
+  header{background:linear-gradient(135deg,#1a1d2e,#0d0f1a);border-bottom:2px solid var(--accent);padding:16px 20px;display:flex;align-items:center;gap:12px;position:sticky;top:0;z-index:100}
+  header h1{font-size:1.2rem;color:var(--accent)}
+  header small{color:var(--muted);font-size:.8rem}
+  .back-btn{margin-left:auto;background:var(--card2);border:1px solid var(--border);color:var(--text);padding:6px 14px;border-radius:6px;text-decoration:none;font-size:.85rem;white-space:nowrap}
+  .score-wrap{max-width:860px;margin:14px auto;padding:0 16px}
+  .score-card{background:var(--card);border:1px solid var(--border);border-radius:10px;padding:12px 18px;display:flex;align-items:center;gap:14px}
+  .score-track{flex:1;height:10px;background:var(--card2);border-radius:99px;overflow:hidden}
+  .score-fill{height:100%;background:var(--accent);border-radius:99px;transition:width .4s}
+  .score-num{font-size:1.05rem;font-weight:700;color:var(--accent);white-space:nowrap}
+  .score-label{font-size:.78rem;color:var(--muted);white-space:nowrap}
+  .reset-btn{background:none;border:1px solid var(--border);color:var(--muted);font-size:.76rem;padding:4px 12px;border-radius:6px;cursor:pointer;font-family:inherit}
+  .reset-btn:hover{border-color:var(--accent);color:var(--accent)}
+  main{max-width:860px;margin:0 auto;padding:0 16px}
+  .prob{background:var(--card);border:1px solid var(--border);border-radius:12px;margin-bottom:14px;overflow:hidden;transition:border-color .2s}
+  .prob.all-ok{border-color:#4caf50}
+  .prob.has-ng{border-color:#f44336}
+  .prob-head{background:var(--card2);padding:9px 16px;display:flex;align-items:center;gap:8px;border-bottom:1px solid var(--border)}
+  .prob-no{font-weight:700;color:var(--accent);min-width:30px;font-size:.9rem}
+  .badge{font-size:.7rem;padding:2px 8px;border-radius:20px;font-weight:600}
+  .b1{background:#3b4fd8;color:#fff}.b2{background:#2e7d32;color:#fff}.b3{background:#e65100;color:#fff}.b4{background:#6a1b9a;color:#fff}
+  .prob-tag{font-size:.8rem;color:var(--muted);margin-left:auto}
+  .pts{font-size:.75rem;color:#fbbf24;margin-left:6px;white-space:nowrap}
+  .prob-body{padding:14px 16px}
+  .prob-q{font-size:.93rem;line-height:1.8;margin-bottom:12px}
+  .prob-q code{font-family:monospace;background:var(--card2);padding:1px 6px;border-radius:3px;font-size:.88em;color:#a5b4fc}
+  .part{margin-bottom:8px}
+  .part-label{font-size:.82rem;color:var(--accent);font-weight:600;margin-bottom:4px}
+  .input-row{display:flex;align-items:center;gap:7px;flex-wrap:wrap}
+  .ans-input{background:var(--card2);border:1px solid var(--border);color:var(--text);font-size:.95rem;padding:7px 10px;border-radius:7px;width:140px;font-family:monospace;outline:none;transition:border-color .2s}
+  .ans-input:focus{border-color:var(--accent)}
+  .unit{color:var(--muted);font-size:.85rem;font-family:monospace;white-space:nowrap}
+  .chk-btn{background:var(--accent);border:none;color:#0f1117;padding:7px 14px;border-radius:7px;cursor:pointer;font-size:.82rem;font-weight:700;font-family:inherit;white-space:nowrap}
+  .chk-btn:hover{opacity:.85}
+  .part-fb{font-size:.82rem;font-weight:600;margin-top:3px;min-height:18px}
+  .part-fb.ok{color:#a5d6a7}.part-fb.ng{color:#ef9a9a}
+  .prob-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+  .hint-btn{background:none;border:1px solid var(--border);color:var(--muted);padding:6px 14px;border-radius:7px;cursor:pointer;font-size:.8rem;font-family:inherit;transition:.15s}
+  .hint-btn:hover{border-color:var(--accent);color:var(--accent)}
+  .reveal-btn{background:none;border:1px solid #333;color:#777;padding:6px 14px;border-radius:7px;cursor:pointer;font-size:.8rem;font-family:inherit;transition:.15s}
+  .reveal-btn:hover{border-color:#666;color:var(--text)}
+  .hint-box{background:#1a1a2a;border-left:3px solid var(--accent);padding:9px 14px;border-radius:0 6px 6px 0;font-family:monospace;font-size:.85rem;color:#a5b4fc;margin-top:10px;display:none;line-height:1.8}
+  .hint-box.show{display:block}
+  .ans-box{background:#1a2a1a;border-left:3px solid #4caf50;padding:9px 14px;border-radius:0 6px 6px 0;font-size:.85rem;color:#a5d6a7;margin-top:8px;display:none;line-height:1.85}
+  .ans-box.show{display:block}
+  .prob-svg{margin:0 0 10px;overflow-x:auto}
+  .prob-svg svg{max-width:100%;height:auto;display:block}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1>🔄 熱流体工学Ⅰ 前期中間 改変版</h1>
+    <small>過去問の数値・条件を変えた練習問題 ｜ 答えは有効数字3桁で入力</small>
+  </div>
+  <a class="back-btn" href="javascript:history.back()">← 戻る</a>
+</header>
+<div class="score-wrap">
+  <div class="score-card">
+    <span class="score-label">正解</span>
+    <div class="score-track"><div class="score-fill" id="score-fill" style="width:0%"></div></div>
+    <span class="score-num" id="score-num">0 / --</span>
+    <button class="reset-btn" onclick="resetAll()">リセット</button>
+  </div>
+</div>
+<main id="main"></main>
+<script>
+const _W='stroke-width',_F='font-family="sans-serif"';
+const SVG={};
+
+/* 問1 改変: V=2.5m³, W=22kN */
+SVG[1]=`<svg viewBox="0 0 260 130" xmlns="http://www.w3.org/2000/svg">
+<rect x="60" y="20" width="140" height="85" rx="4" fill="rgba(86,207,178,.15)" stroke="#56cfb2" ${_W}="2"/>
+<line x1="60" y1="20" x2="200" y2="20" stroke="#56cfb2" ${_W}="2.5"/>
+<text x="130" y="66" fill="#a5b4fc" font-size="13" ${_F} text-anchor="middle">液体</text>
+<text x="130" y="84" fill="#9ca3af" font-size="11" ${_F} text-anchor="middle">V = 2.5 m³</text>
+<line x1="50" y1="105" x2="210" y2="105" stroke="#9ca3af" ${_W}="1.5"/>
+<line x1="100" y1="105" x2="100" y2="118" stroke="#9ca3af" ${_W}="2"/>
+<line x1="160" y1="105" x2="160" y2="118" stroke="#9ca3af" ${_W}="2"/>
+<line x1="100" y1="113" x2="160" y2="113" stroke="#9ca3af" ${_W}="2"/>
+<text x="130" y="128" fill="#f87171" font-size="11" ${_F} text-anchor="middle">W = 22 kN</text>
+</svg>`;
+
+/* 問2 改変: ν=1.50×10⁻⁴, s=0.870 */
+SVG[2]=`<svg viewBox="0 0 260 100" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="15" width="220" height="70" rx="3" fill="rgba(86,207,178,.10)" stroke="#56cfb2" ${_W}="1.5"/>
+<text x="130" y="52" fill="#e8eaf6" font-size="12" ${_F} text-anchor="middle">液体（s=0.870）</text>
+<text x="130" y="70" fill="#9ca3af" font-size="11" ${_F} text-anchor="middle">ν = 1.50×10⁻⁴ m²/s  →  μ = ?</text>
+</svg>`;
+
+/* 問3 改変: 650mmHg */
+SVG[3]=`<svg viewBox="0 0 200 160" xmlns="http://www.w3.org/2000/svg">
+<rect x="80" y="20" width="30" height="120" rx="4" fill="none" stroke="#9ca3af" ${_W}="2"/>
+<rect x="82" y="22" width="26" height="118" rx="3" fill="rgba(200,200,200,.15)"/>
+<rect x="82" y="72" width="26" height="68" rx="2" fill="rgba(180,180,200,.7)"/>
+<text x="118" y="30" fill="#9ca3af" font-size="10" ${_F}>真空</text>
+<line x1="108" y1="72" x2="138" y2="72" stroke="#56cfb2" ${_W}="1.2"/>
+<line x1="108" y1="140" x2="138" y2="140" stroke="#56cfb2" ${_W}="1.2"/>
+<line x1="133" y1="72" x2="133" y2="140" stroke="#56cfb2" ${_W}="1.2"/>
+<text x="140" y="110" fill="#56cfb2" font-size="11" ${_F}>650 mm</text>
+<text x="60" y="155" fill="#9ca3af" font-size="10" ${_F} text-anchor="middle">水銀</text>
+</svg>`;
+
+/* 問4 改変: A=0.04, m=25, θ=45°, μ=0.03, δ=0.02mm */
+SVG[4]=`<svg viewBox="0 0 280 160" xmlns="http://www.w3.org/2000/svg">
+<line x1="20" y1="140" x2="240" y2="40" stroke="#9ca3af" ${_W}="2.5"/>
+<line x1="18" y1="145" x2="242" y2="45" stroke="#9ca3af" ${_W}="5" stroke-opacity=".3"/>
+<rect x="95" y="70" width="70" height="40" rx="3" transform="rotate(-22,130,90)" fill="#1e2235" stroke="#56cfb2" ${_W}="1.5"/>
+<text x="130" y="87" fill="#e8eaf6" font-size="10" ${_F} text-anchor="middle" transform="rotate(-22,130,90)">金属板</text>
+<text x="130" y="99" fill="#9ca3af" font-size="8" ${_F} text-anchor="middle" transform="rotate(-22,130,90)">A=0.04m²</text>
+<text x="30" y="138" fill="#56cfb2" font-size="10" ${_F}>θ=45°</text>
+<line x1="165" y1="88" x2="183" y2="78" stroke="#f87171" ${_W}="1.5"/>
+<polygon points="179,74 187,80 181,85" fill="#f87171"/>
+<text x="187" y="77" fill="#f87171" font-size="9" ${_F}>U=?</text>
+<text x="14" y="46" fill="#9ca3af" font-size="8" ${_F}>δ=0.02mm, μ=0.03 Pa·s</text>
+</svg>`;
+
+/* 問5 改変: h=1.5m, θ=60°, F=8kN */
+SVG[5]=`<svg viewBox="0 0 280 200" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="20" width="160" height="170" fill="rgba(59,130,246,.12)" stroke="#60a5fa" ${_W}="1"/>
+<line x1="20" y1="20" x2="180" y2="20" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="100" y="14" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<line x1="180" y1="20" x2="260" y2="190" stroke="#56cfb2" ${_W}="3"/>
+<rect x="182" y="65" width="14" height="70" rx="2" transform="rotate(23,189,100)" fill="#56cfb2" stroke="#7c6af7" ${_W}="1.5"/>
+<text x="222" y="108" fill="#56cfb2" font-size="10" ${_F}>a×a</text>
+<line x1="182" y1="20" x2="195" y2="20" stroke="#a5b4fc" ${_W}="1"/>
+<line x1="207" y1="90" x2="217" y2="90" stroke="#a5b4fc" ${_W}="1"/>
+<line x1="193" y1="20" x2="215" y2="90" stroke="#a5b4fc" ${_W}="1"/>
+<text x="222" y="60" fill="#a5b4fc" font-size="9" ${_F}>h=1.5m</text>
+<text x="186" y="188" fill="#9ca3af" font-size="9" ${_F}>θ=60°</text>
+<line x1="188" y1="70" x2="172" y2="75" stroke="#f87171" ${_W}="1.5"/>
+<polygon points="168,71 175,78 165,82" fill="#f87171"/>
+<text x="148" y="68" fill="#f87171" font-size="9" ${_F}>F=8kN</text>
+</svg>`;
+
+/* 問6 改変: r=0.5m, h=1.2m, b=1.5m */
+SVG[6]=`<svg viewBox="0 0 260 220" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="15" width="175" height="195" fill="rgba(59,130,246,.12)" stroke="#60a5fa" ${_W}="1.2"/>
+<line x1="20" y1="15" x2="195" y2="15" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="108" y="10" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">水面</text>
+<path d="M 195,70 A 125,125 0 0,1 70,195" fill="rgba(30,34,53,.9)" stroke="#56cfb2" ${_W}="2.5"/>
+<text x="198" y="69" fill="#56cfb2" font-size="10" ${_F}>A</text>
+<text x="58" y="208" fill="#56cfb2" font-size="10" ${_F}>B</text>
+<line x1="197" y1="15" x2="210" y2="15" stroke="#a5b4fc" ${_W}="1"/>
+<line x1="197" y1="70" x2="210" y2="70" stroke="#a5b4fc" ${_W}="1"/>
+<line x1="206" y1="15" x2="206" y2="70" stroke="#a5b4fc" ${_W}="1"/>
+<text x="213" y="46" fill="#a5b4fc" font-size="9" ${_F}>h=1.2m</text>
+<line x1="197" y1="70" x2="210" y2="70" stroke="#a5b4fc" ${_W}="1"/>
+<line x1="197" y1="195" x2="210" y2="195" stroke="#a5b4fc" ${_W}="1"/>
+<line x1="205" y1="70" x2="205" y2="195" stroke="#a5b4fc" ${_W}="1"/>
+<text x="213" y="136" fill="#a5b4fc" font-size="9" ${_F}>r=0.5m</text>
+</svg>`;
+
+/* 問7 改変: y₁=0.8m, y₂=0.6m */
+SVG[7]=`<svg viewBox="0 0 300 210" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="20" width="50" height="60" rx="3" fill="rgba(86,207,178,.12)" stroke="#56cfb2" ${_W}="1.5"/>
+<text x="45" y="54" fill="#56cfb2" font-size="10" ${_F} text-anchor="middle">P₂</text>
+<rect x="230" y="20" width="50" height="60" rx="3" fill="rgba(86,207,178,.12)" stroke="#56cfb2" ${_W}="1.5"/>
+<text x="255" y="54" fill="#56cfb2" font-size="10" ${_F} text-anchor="middle">P₁</text>
+<path d="M 45,80 L 45,165 Q 45,175 55,175 L 245,175 Q 255,175 255,165 L 255,80" fill="none" stroke="#9ca3af" ${_W}="2"/>
+<path d="M 55,80 L 55,165 Q 55,170 60,170 L 240,170 Q 245,170 245,165 L 245,80" fill="none" stroke="#9ca3af" ${_W}="2"/>
+<rect x="55" y="120" width="190" height="50" fill="rgba(180,160,180,.6)"/>
+<text x="150" y="149" fill="#e8eaf6" font-size="9" ${_F} text-anchor="middle">水銀（ρ'=13.6×10³）</text>
+<rect x="45" y="80" width="10" height="40" fill="rgba(59,130,246,.3)"/>
+<rect x="245" y="80" width="10" height="40" fill="rgba(59,130,246,.3)"/>
+<line x1="36" y1="80" x2="44" y2="80" stroke="#56cfb2" ${_W}="1"/>
+<line x1="36" y1="120" x2="44" y2="120" stroke="#56cfb2" ${_W}="1"/>
+<line x1="40" y1="80" x2="40" y2="120" stroke="#56cfb2" ${_W}="1"/>
+<text x="14" y="103" fill="#56cfb2" font-size="9" ${_F}>y₁</text>
+<text x="12" y="111" fill="#56cfb2" font-size="8" ${_F}>0.8m</text>
+<line x1="256" y1="80" x2="264" y2="80" stroke="#56cfb2" ${_W}="1"/>
+<line x1="256" y1="120" x2="264" y2="120" stroke="#56cfb2" ${_W}="1"/>
+<line x1="260" y1="80" x2="260" y2="120" stroke="#56cfb2" ${_W}="1"/>
+<text x="266" y="103" fill="#56cfb2" font-size="9" ${_F}>y₂</text>
+<text x="264" y="111" fill="#56cfb2" font-size="8" ${_F}>0.6m</text>
+</svg>`;
+
+/* 問8 改変: y₁=0.25m, y₂=0.35m, ρ=830, ρ'=910 */
+SVG[8]=`<svg viewBox="0 0 300 210" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="20" width="50" height="60" rx="3" fill="rgba(86,207,178,.12)" stroke="#56cfb2" ${_W}="1.5"/>
+<text x="45" y="48" fill="#56cfb2" font-size="10" ${_F} text-anchor="middle">P₁</text>
+<rect x="230" y="20" width="50" height="60" rx="3" fill="rgba(86,207,178,.12)" stroke="#56cfb2" ${_W}="1.5"/>
+<text x="255" y="48" fill="#56cfb2" font-size="10" ${_F} text-anchor="middle">P₂</text>
+<path d="M 45,80 L 45,165 Q 45,175 55,175 L 245,175 Q 255,175 255,165 L 255,80" fill="none" stroke="#9ca3af" ${_W}="2"/>
+<path d="M 55,80 L 55,165 Q 55,170 60,170 L 240,170 Q 245,170 245,165 L 245,80" fill="none" stroke="#9ca3af" ${_W}="2"/>
+<rect x="55" y="125" width="190" height="45" fill="rgba(150,130,100,.5)"/>
+<text x="150" y="152" fill="#e8eaf6" font-size="9" ${_F} text-anchor="middle">ρ'=910 kg/m³</text>
+<rect x="45" y="80" width="10" height="45" fill="rgba(59,130,246,.22)"/>
+<rect x="245" y="80" width="10" height="45" fill="rgba(59,130,246,.22)"/>
+<text x="150" y="108" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">ρ=830 kg/m³</text>
+<line x1="36" y1="80" x2="44" y2="80" stroke="#56cfb2" ${_W}="1"/>
+<line x1="36" y1="125" x2="44" y2="125" stroke="#56cfb2" ${_W}="1"/>
+<line x1="40" y1="80" x2="40" y2="125" stroke="#56cfb2" ${_W}="1"/>
+<text x="10" y="105" fill="#56cfb2" font-size="9" ${_F}>y₁</text>
+<text x="8" y="113" fill="#56cfb2" font-size="8" ${_F}>0.25m</text>
+<line x1="256" y1="80" x2="264" y2="80" stroke="#56cfb2" ${_W}="1"/>
+<line x1="256" y1="125" x2="264" y2="125" stroke="#56cfb2" ${_W}="1"/>
+<line x1="260" y1="80" x2="260" y2="125" stroke="#56cfb2" ${_W}="1"/>
+<text x="266" y="105" fill="#56cfb2" font-size="9" ${_F}>y₂</text>
+<text x="264" y="113" fill="#56cfb2" font-size="8" ${_F}>0.35m</text>
+</svg>`;
+
+/* 問9 改変: V_above=450m³, ρ_ice=917, ρ_sea=1025 */
+SVG[9]=`<svg viewBox="0 0 260 180" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="80" width="220" height="90" fill="rgba(59,130,246,.18)" stroke="#60a5fa" ${_W}="1.5"/>
+<line x1="20" y1="80" x2="240" y2="80" stroke="#60a5fa" ${_W}="2.5"/>
+<text x="130" y="74" fill="#60a5fa" font-size="10" ${_F} text-anchor="middle">海面（ρ=1025）</text>
+<polygon points="80,20 180,20 200,80 60,80" fill="rgba(200,230,255,.7)" stroke="#e8eaf6" ${_W}="2"/>
+<polygon points="90,80 170,80 190,130 70,130" fill="rgba(180,210,240,.5)" stroke="#9ca3af" ${_W}="1.5" stroke-dasharray="4,3"/>
+<text x="130" y="52" fill="#1e2235" font-size="10" ${_F} text-anchor="middle">氷山</text>
+<text x="130" y="112" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">ρ_ice=917 kg/m³</text>
+<line x1="202" y1="20" x2="216" y2="20" stroke="#56cfb2" ${_W}="1"/>
+<line x1="202" y1="80" x2="216" y2="80" stroke="#56cfb2" ${_W}="1"/>
+<line x1="210" y1="20" x2="210" y2="80" stroke="#56cfb2" ${_W}="1"/>
+<text x="218" y="54" fill="#56cfb2" font-size="9" ${_F}>450m³</text>
+</svg>`;
+
+/* 問10 改変: d₁=80mm, d₂=30mm, v₂=20m/s */
+SVG[10]=`<svg viewBox="0 0 280 130" xmlns="http://www.w3.org/2000/svg">
+<path d="M20,20 L115,20 L165,42 L250,42 L250,88 L165,88 L115,110 L20,110 Z" fill="rgba(86,207,178,.09)" stroke="#9ca3af" ${_W}="1.5"/>
+<line x1="38" y1="65" x2="62" y2="65" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="60,61 60,69 68,65" fill="#56cfb2"/>
+<text x="24" y="60" fill="#56cfb2" font-size="9" ${_F}>v₁?</text>
+<text x="20" y="118" fill="#9ca3af" font-size="9" ${_F}>① d₁=80mm</text>
+<line x1="196" y1="65" x2="220" y2="65" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="218,61 218,69 226,65" fill="#56cfb2"/>
+<text x="185" y="60" fill="#56cfb2" font-size="9" ${_F}>v₂=20m/s</text>
+<text x="188" y="80" fill="#9ca3af" font-size="9" ${_F}>② d₂=30mm</text>
+<text x="130" y="14" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">ρ=1.2 kg/m³（空気）</text>
+</svg>`;
+
+/* 問11 改変: F₁=5N, d₁=3cm, d₂=15cm */
+SVG[11]=`<svg viewBox="0 0 280 175" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="90" width="230" height="60" rx="3" fill="rgba(86,207,178,.18)" stroke="#56cfb2" ${_W}="1.5"/>
+<rect x="25" y="50" width="32" height="40" rx="2" fill="#1e2235" stroke="#56cfb2" ${_W}="2"/>
+<text x="41" y="45" fill="#56cfb2" font-size="8" ${_F} text-anchor="middle">d₁=3cm</text>
+<rect x="207" y="28" width="40" height="62" rx="2" fill="#1e2235" stroke="#56cfb2" ${_W}="2"/>
+<text x="227" y="24" fill="#56cfb2" font-size="8" ${_F} text-anchor="middle">d₂=15cm</text>
+<line x1="41" y1="50" x2="41" y2="35" stroke="#f87171" ${_W}="2"/>
+<polygon points="37,37 45,37 41,28" fill="#f87171"/>
+<text x="49" y="32" fill="#f87171" font-size="9" ${_F}>F₁=5N</text>
+<line x1="227" y1="28" x2="227" y2="8" stroke="#f87171" ${_W}="2"/>
+<polygon points="223,10 231,10 227,2" fill="#f87171"/>
+<text x="235" y="12" fill="#f87171" font-size="9" ${_F}>F₂=?</text>
+</svg>`;
+
+/* 問12 改変: P₁=-5kPa, u₁=8m/s */
+SVG[12]=`<svg viewBox="0 0 240 240" xmlns="http://www.w3.org/2000/svg">
+<rect x="20" y="10" width="130" height="80" fill="rgba(86,207,178,.12)" stroke="#56cfb2" ${_W}="1.5" rx="2"/>
+<line x1="20" y1="10" x2="150" y2="10" stroke="#56cfb2" ${_W}="2.5"/>
+<text x="85" y="5" fill="#56cfb2" font-size="9" ${_F} text-anchor="middle">水面③</text>
+<rect x="75" y="90" width="20" height="60" fill="rgba(86,207,178,.18)" stroke="#9ca3af" ${_W}="1.5"/>
+<circle cx="85" cy="90" r="4" fill="#a5b4fc"/>
+<text x="97" y="89" fill="#a5b4fc" font-size="8" ${_F}>① P₁=-5kPa,u₁=8m/s</text>
+<line x1="155" y1="90" x2="170" y2="90" stroke="#56cfb2" ${_W}="1"/>
+<line x1="155" y1="10" x2="170" y2="10" stroke="#56cfb2" ${_W}="1"/>
+<line x1="165" y1="10" x2="165" y2="90" stroke="#56cfb2" ${_W}="1"/>
+<text x="172" y="53" fill="#56cfb2" font-size="9" ${_F}>H₂</text>
+<rect x="75" y="150" width="20" height="60" fill="rgba(86,207,178,.18)" stroke="#9ca3af" ${_W}="1.5"/>
+<circle cx="85" cy="150" r="4" fill="#56cfb2"/>
+<text x="97" y="149" fill="#56cfb2" font-size="8" ${_F}>② 出口（大気圧）</text>
+<line x1="97" y1="90" x2="115" y2="90" stroke="#56cfb2" ${_W}="1"/>
+<line x1="97" y1="150" x2="115" y2="150" stroke="#56cfb2" ${_W}="1"/>
+<line x1="111" y1="90" x2="111" y2="150" stroke="#56cfb2" ${_W}="1"/>
+<text x="118" y="123" fill="#56cfb2" font-size="9" ${_F}>H₁</text>
+<line x1="85" y1="210" x2="85" y2="225" stroke="#56cfb2" ${_W}="2"/>
+<polygon points="81,223 89,223 85,230" fill="#56cfb2"/>
+<text x="97" y="222" fill="#9ca3af" font-size="8" ${_F}>d=12cm</text>
+<line x1="20" y1="10" x2="6" y2="10" stroke="#a5b4fc" ${_W}="1"/>
+<line x1="20" y1="150" x2="6" y2="150" stroke="#a5b4fc" ${_W}="1"/>
+<line x1="10" y1="10" x2="10" y2="150" stroke="#a5b4fc" ${_W}="1"/>
+<text x="12" y="84" fill="#a5b4fc" font-size="8" ${_F}>H₃</text>
+</svg>`;
+
+/* 問13 改変: d=4mm, m=3.5g, ρ₁=780, h=30mm */
+SVG[13]=`<svg viewBox="0 0 200 200" xmlns="http://www.w3.org/2000/svg">
+<rect x="60" y="60" width="80" height="130" rx="4" fill="rgba(86,207,178,.10)" stroke="#56cfb2" ${_W}="1.5"/>
+<line x1="60" y1="60" x2="140" y2="60" stroke="#56cfb2" ${_W}="2.5"/>
+<text x="100" y="54" fill="#56cfb2" font-size="10" ${_F} text-anchor="middle">液面</text>
+<ellipse cx="100" cy="155" rx="20" ry="28" fill="#1e2235" stroke="#56cfb2" ${_W}="2"/>
+<rect x="94" y="60" width="12" height="95" rx="3" fill="#2d3154" stroke="#56cfb2" ${_W}="1.5"/>
+<text x="100" y="156" fill="#56cfb2" font-size="8" ${_F} text-anchor="middle">錘</text>
+<line x1="142" y1="60" x2="158" y2="60" stroke="#56cfb2" ${_W}="1"/>
+<line x1="142" y1="90" x2="158" y2="90" stroke="#f87171" ${_W}="1" stroke-dasharray="3,2"/>
+<line x1="152" y1="60" x2="152" y2="90" stroke="#56cfb2" ${_W}="1"/>
+<text x="160" y="78" fill="#56cfb2" font-size="9" ${_F}>h=30mm</text>
+<text x="100" y="126" fill="#9ca3af" font-size="8" ${_F} text-anchor="middle">m=3.5g, d=4mm</text>
+<text x="100" y="188" fill="#9ca3af" font-size="9" ${_F} text-anchor="middle">ρ₁=780 kg/m³（エタノール）</text>
+</svg>`;
+
+const PROBS = [
+  {
+    no:1, ch:'第1章', chN:1, tag:'密度・比重', pts:9, svg:SVG[1],
+    q:'体積 $V = 2.5\\ \\mathrm{m^3}$ の液体の重さを測定したところ $W = 22\\ \\mathrm{kN}$ であった。この液体の質量 $m$、密度 $\\rho$、比重 $s$ を求めよ。',
+    hint:'$m = W/g$、$\\rho = m/V$、$s = \\rho/1000$',
+    reveal:[
+      '$m = 22000/9.81 = 2243\\ \\mathrm{kg} \\approx 2.24\\times10^3\\ \\mathrm{kg}$',
+      '$\\rho = 2243/2.5 = 897\\ \\mathrm{kg/m^3}$',
+      '$s = 897/1000 = 0.897$'
+    ],
+    parts:[
+      {label:'(1) $m$',    unit:'kg',     ans:2243, isAngle:false},
+      {label:'(2) $\\rho$',unit:'kg/m³',  ans:897,  isAngle:false},
+      {label:'(3) $s$',    unit:'',       ans:0.897,isAngle:false}
+    ]
+  },
+  {
+    no:2, ch:'第1章', chN:1, tag:'粘性係数', pts:3, svg:SVG[2],
+    q:'動粘度 $\\nu = 1.50\\times10^{-4}\\ \\mathrm{m^2/s}$、比重 $s = 0.870$ の液体の粘性係数 $\\mu$ を求めよ。',
+    hint:'$\\rho = s \\times 1000$、$\\mu = \\nu \\times \\rho$',
+    reveal:[
+      '$\\rho = 0.870 \\times 1000 = 870\\ \\mathrm{kg/m^3}$',
+      '$\\mu = 1.50\\times10^{-4} \\times 870 = 0.1305\\ \\mathrm{Pa{\\cdot}s}$'
+    ],
+    parts:[{label:'', unit:'Pa·s', ans:0.1305, isAngle:false}]
+  },
+  {
+    no:3, ch:'第1章', chN:1, tag:'単位変換（圧力）', pts:3, svg:SVG[3],
+    q:'圧力 $650\\ \\mathrm{mmHg}$ を $\\mathrm{kPa}$ に換算せよ。（$\\rho_{Hg} = 13.6\\times10^3\\ \\mathrm{kg/m^3}$）',
+    hint:'$1\\ \\mathrm{mmHg} = 133.4\\ \\mathrm{Pa}$\n$P = 650 \\times 133.4\\ \\mathrm{Pa}$',
+    reveal:['$P = 650 \\times 133.4 = 86{,}710\\ \\mathrm{Pa} \\approx 86.7\\ \\mathrm{kPa}$'],
+    parts:[{label:'', unit:'kPa', ans:86.7, isAngle:false}]
+  },
+  {
+    no:4, ch:'第1章', chN:1, tag:'斜面滑落・最大速度', pts:6, svg:SVG[4],
+    q:'底面積 $A = 0.04\\ \\mathrm{m^2}$、質量 $m = 25\\ \\mathrm{kg}$ の金属板が傾斜角 $\\theta = 45°$ の斜面上の油膜（$\\mu = 0.03\\ \\mathrm{Pa{\\cdot}s}$、$\\delta = 0.02\\ \\mathrm{mm}$）の上を滑り落ちる。最大速度 $U_{\\max}$ を求めよ。',
+    hint:'$mg\\sin45° = \\mu A (U_{\\max}/\\delta)$\n$U_{\\max} = \\dfrac{\\delta\\, mg\\sin45°}{\\mu A}$',
+    reveal:[
+      '$mg\\sin45° = 25 \\times 9.81 \\times 0.7071 = 173.3\\ \\mathrm{N}$',
+      '$U_{\\max} = \\dfrac{0.02\\times10^{-3} \\times 173.3}{0.03 \\times 0.04} = \\dfrac{3.466\\times10^{-3}}{1.2\\times10^{-3}} = 2.89\\ \\mathrm{m/s}$'
+    ],
+    parts:[{label:'', unit:'m/s', ans:2.889, isAngle:false}]
+  },
+  {
+    no:5, ch:'第2章', chN:2, tag:'傾斜面ゲート', pts:10, svg:SVG[5],
+    q:'一辺 $a$ の正方形ゲートが水面と $60°$ の傾斜面にある。ゲート重心の水深 $h = 1.5\\ \\mathrm{m}$ のとき $F = 8\\ \\mathrm{kN}$ が作用した。$a$ と作用点 $y_c$ を求めよ。（$F = \\rho g h A$、$y_c = I_G/(y_G A) + y_G$、$I_G = a^4/12$）',
+    hint:'$a^2 = F/(\\rho g h)$\n$y_G = h/\\sin60°$\n$y_c = a^2/(12 y_G) + y_G$',
+    reveal:[
+      '$a^2 = 8000/(1000 \\times 9.81 \\times 1.5) = 0.5437\\ \\mathrm{m^2} \\Rightarrow a = 0.737\\ \\mathrm{m}$',
+      '$y_G = 1.5/\\sin60° = 1.732\\ \\mathrm{m}$',
+      '$y_c = 0.5437/(12 \\times 1.732) + 1.732 = 0.02617 + 1.732 = 1.758\\ \\mathrm{m}$'
+    ],
+    parts:[
+      {label:'(1) $a$',   unit:'m', ans:0.7373, isAngle:false},
+      {label:'(2) $y_c$', unit:'m', ans:1.758,  isAngle:false}
+    ]
+  },
+  {
+    no:6, ch:'第2章', chN:2, tag:'曲面板（1/4円弧）', pts:10, svg:SVG[6],
+    q:'AB は半径 $r = 0.5\\ \\mathrm{m}$ の円弧面（1/4円弧）で、A までの水深 $h = 1.2\\ \\mathrm{m}$、タンクの幅 $b = 1.5\\ \\mathrm{m}$。<br>(1) 鉛直方向成分 $F_v$　(2) 水平方向成分 $F_h$ を求めよ。',
+    hint:'$F_v = \\rho g (h r + \\pi r^2/4) b$\n$F_h = \\rho g (h + r/2) r b$',
+    reveal:[
+      '$F_v = 9810 \\times (1.2 \\times 0.5 + \\pi \\times 0.25/4) \\times 1.5$',
+      '$= 9810 \\times (0.600 + 0.1963) \\times 1.5 = 9810 \\times 0.7963 \\times 1.5 = 11714\\ \\mathrm{N} \\approx 11.7\\ \\mathrm{kN}$',
+      '$F_h = 9810 \\times (1.2 + 0.25) \\times 0.5 \\times 1.5 = 9810 \\times 1.45 \\times 0.75 = 10669\\ \\mathrm{N} \\approx 10.7\\ \\mathrm{kN}$'
+    ],
+    parts:[
+      {label:'(1) $F_v$', unit:'kN', ans:11.71, isAngle:false},
+      {label:'(2) $F_h$', unit:'kN', ans:10.67, isAngle:false}
+    ]
+  },
+  {
+    no:7, ch:'第2章', chN:2, tag:'U字管（水銀）', pts:8, svg:SVG[7],
+    q:'$y_1 = 0.8\\ \\mathrm{m}$、$y_2 = 0.6\\ \\mathrm{m}$、$\\rho = 1000\\ \\mathrm{kg/m^3}$、$\\rho' = 13.6\\times10^3\\ \\mathrm{kg/m^3}$ のとき、$\\Delta P = P_1 - P_2$ を求めよ。',
+    hint:'$\\Delta P = \\rho\\'g y_2 - \\rho g y_1$',
+    reveal:[
+      '$\\Delta P = 13600 \\times 9.81 \\times 0.6 - 1000 \\times 9.81 \\times 0.8$',
+      '$= 80006 - 7848 = 72158\\ \\mathrm{Pa} \\approx 72.2\\ \\mathrm{kPa}$'
+    ],
+    parts:[{label:'', unit:'kPa', ans:72.16, isAngle:false}]
+  },
+  {
+    no:8, ch:'第2章', chN:2, tag:'U字管（2液体）', pts:8, svg:SVG[8],
+    q:'$y_1 = 0.25\\ \\mathrm{m}$、$y_2 = 0.35\\ \\mathrm{m}$、$\\rho = 830\\ \\mathrm{kg/m^3}$、$\\rho' = 910\\ \\mathrm{kg/m^3}$ のとき、$\\Delta P = P_2 - P_1$ を求めよ。',
+    hint:'$\\Delta P = \\rho\\'g y_2 - \\rho g y_1$',
+    reveal:[
+      '$\\Delta P = 910 \\times 9.81 \\times 0.35 - 830 \\times 9.81 \\times 0.25$',
+      '$= 3122 - 2035 = 1087\\ \\mathrm{Pa} \\approx 1.09\\ \\mathrm{kPa}$'
+    ],
+    parts:[{label:'', unit:'kPa', ans:1.087, isAngle:false}]
+  },
+  {
+    no:9, ch:'第2章', chN:2, tag:'浮力（氷山）', pts:3, svg:SVG[9],
+    q:'海水に突き出た部分 $450\\ \\mathrm{m^3}$ の氷山の全体積 $V$ を求めよ。$\\rho_{ice} = 917\\ \\mathrm{kg/m^3}$、$\\rho_{sea} = 1025\\ \\mathrm{kg/m^3}$。',
+    hint:'$V = V_{above} \\times \\rho_{sea}/(\\rho_{sea} - \\rho_{ice})$',
+    reveal:[
+      '$V = 450 \\times 1025/(1025 - 917) = 450 \\times 1025/108$',
+      '$= 450 \\times 9.491 = 4271\\ \\mathrm{m^3}$'
+    ],
+    parts:[{label:'', unit:'m³', ans:4271, isAngle:false}]
+  },
+  {
+    no:10, ch:'第3章', chN:3, tag:'連続の式・ベルヌーイ（空気）', pts:10, svg:SVG[10],
+    q:'$\\rho = 1.2\\ \\mathrm{kg/m^3}$、$d_1 = 80\\ \\mathrm{mm}$、$d_2 = 30\\ \\mathrm{mm}$、断面②の流速 $v_2 = 20\\ \\mathrm{m/s}$。<br>(1) 断面①の流速 $v_1$　(2) 圧力差 $\\Delta P = P_1 - P_2$',
+    hint:'$v_1 = v_2(d_2/d_1)^2$\n$\\Delta P = \\rho(v_2^2-v_1^2)/2$',
+    reveal:[
+      '$v_1 = 20 \\times (30/80)^2 = 20 \\times 0.1406 = 2.81\\ \\mathrm{m/s}$',
+      '$\\Delta P = 1.2 \\times (400 - 7.91)/2 = 1.2 \\times 196.0 = 235\\ \\mathrm{Pa}$'
+    ],
+    parts:[
+      {label:'(1) $v_1$',       unit:'m/s', ans:2.813, isAngle:false},
+      {label:'(2) $\\Delta P$', unit:'Pa',  ans:235.4, isAngle:false}
+    ]
+  },
+  {
+    no:11, ch:'第2章', chN:2, tag:'パスカルの原理', pts:4, svg:SVG[11],
+    q:'小ピストン $d_1 = 3\\ \\mathrm{cm}$ を $F_1 = 5\\ \\mathrm{N}$ で押すとき、大ピストン $d_2 = 15\\ \\mathrm{cm}$ に生じる力 $F_2$ を求めよ。',
+    hint:'$F_2 = F_1 \\times (d_2/d_1)^2$',
+    reveal:['$F_2 = 5 \\times (15/3)^2 = 5 \\times 25 = 125\\ \\mathrm{N}$'],
+    parts:[{label:'', unit:'N', ans:125, isAngle:false}]
+  },
+  {
+    no:12, ch:'第4章', chN:4, tag:'鉛直管ベルヌーイ', pts:16, svg:SVG[12],
+    q:'断面①: $P_1 = -5.00\\ \\mathrm{kPa}$（ゲージ）、$u_1 = 8\\ \\mathrm{m/s}$。断面②: 出口（大気圧）。管径一定（$d = 12\\ \\mathrm{cm}$）。<br>(1) $H_1$（①と②の高さ差）　(2) $H_2$（水面③と①の高さ差）　(3) $u_2$　(4) $H_3$（水面③と②の高さ差）',
+    hint:'(1) $H_1 = -P_1/(\\rho g)$\n(2) $\\rho g H_2 = -P_1 + \\rho u_1^2/2$（水面→①ベルヌーイ）\n(3) $u_2 = u_1$（同径）\n(4) $H_3 = H_1+H_2 = u_2^2/(2g)$',
+    reveal:[
+      '$H_1 = 5000/(1000 \\times 9.81) = 0.510\\ \\mathrm{m}$',
+      '$H_2 = (5000 + 1000 \\times 64/2)/9810 = (5000+32000)/9810 = 3.77$... 待って:',
+      '水面→①: $\\rho g H_2 = -P_1 + \\rho u_1^2/2$? → $\\rho g H_2 = \\rho u_1^2/2 + P_1$',
+      '実は $P_1<0$ なので: $H_2 = (\\rho u_1^2/2 + P_1)/(\\rho g) = (32000-5000)/9810 = 27000/9810 = 2.75\\ \\mathrm{m}$',
+      '$u_2 = u_1 = 8.00\\ \\mathrm{m/s}$',
+      '$H_3 = 0.510 + 2.75 = 3.26\\ \\mathrm{m}$（または $8^2/(2\\times9.81) = 3.26\\ \\mathrm{m}$）'
+    ],
+    parts:[
+      {label:'(1) $H_1$', unit:'m',   ans:0.5097, isAngle:false},
+      {label:'(2) $H_2$', unit:'m',   ans:2.752,  isAngle:false},
+      {label:'(3) $u_2$', unit:'m/s', ans:8.00,   isAngle:false},
+      {label:'(4) $H_3$', unit:'m',   ans:3.262,  isAngle:false}
+    ]
+  },
+  {
+    no:13, ch:'第2章', chN:2, tag:'比重計', pts:8, svg:SVG[13],
+    q:'目盛管の直径 $d = 4\\ \\mathrm{mm}$、質量 $m = 3.5\\ \\mathrm{g}$ の比重計。密度 $\\rho_1 = 780\\ \\mathrm{kg/m^3}$ のエタノールに浮かべ、別の液体に浮かべると目盛管が $h = 30\\ \\mathrm{mm}$ だけ深く沈んだ。その液体の密度 $\\rho_2$ を求めよ。',
+    hint:'$m/\\rho_2 = m/\\rho_1 + A_{stem} h$\n$A_{stem} = \\pi d^2/4$\n$\\rho_2 = m/(m/\\rho_1 + A_{stem} h)$',
+    reveal:[
+      '$A_{stem} = \\pi \\times 0.004^2/4 = 1.257\\times10^{-5}\\ \\mathrm{m^2}$',
+      '$m/\\rho_1 = 0.0035/780 = 4.487\\times10^{-6}\\ \\mathrm{m^3}$',
+      '$A_{stem} h = 1.257\\times10^{-5} \\times 0.030 = 3.770\\times10^{-7}\\ \\mathrm{m^3}$',
+      '$m/\\rho_2 = 4.487\\times10^{-6} + 3.770\\times10^{-7} = 4.864\\times10^{-6}\\ \\mathrm{m^3}$',
+      '$\\rho_2 = 0.0035/4.864\\times10^{-6} = 719\\ \\mathrm{kg/m^3}$'
+    ],
+    parts:[{label:'', unit:'kg/m³', ans:719, isAngle:false}]
+  }
+];
+
+const TOTAL=PROBS.reduce((s,p)=>s+p.parts.length,0);
+const correct={};
+function countOk(){return Object.values(correct).filter(v=>v).length;}
+function updateScore(){
+  const c=countOk();
+  document.getElementById('score-fill').style.width=(c/TOTAL*100)+'%';
+  document.getElementById('score-num').textContent=c+' / '+TOTAL;
+}
+function checkPart(no,idx){
+  const prob=PROBS.find(p=>p.no===no);
+  const part=prob.parts[idx];
+  const inp=document.getElementById('inp-'+no+'-'+idx);
+  const fb=document.getElementById('fb-'+no+'-'+idx);
+  let val=parseFloat(inp.value);
+  if(isNaN(val)){inp.style.borderColor='#f44336';return;}
+  if(part.mult) val*=part.mult;
+  const ok=part.isAngle
+    ?Math.abs(val-part.ans)<=2
+    :Math.abs(val-part.ans)/Math.abs(part.ans)<=0.02;
+  correct[no+'-'+idx]=ok;
+  fb.className='part-fb '+(ok?'ok':'ng');
+  fb.textContent=ok?'✓ 正解':'✗ もう一度';
+  inp.style.borderColor=ok?'#4caf50':'#f44336';
+  const card=document.getElementById('prob-'+no);
+  const allOk=prob.parts.every((_,i)=>correct[no+'-'+i]===true);
+  const hasNg=prob.parts.some((_,i)=>correct[no+'-'+i]===false);
+  card.className='prob'+(allOk?' all-ok':hasNg?' has-ng':'');
+  updateScore();
+}
+function toggleHint(no){document.getElementById('hint-'+no).classList.toggle('show');}
+function showReveal(no){document.getElementById('reveal-'+no).classList.add('show');}
+function resetAll(){
+  Object.keys(correct).forEach(k=>delete correct[k]);
+  PROBS.forEach(p=>{
+    p.parts.forEach((_,i)=>{
+      const inp=document.getElementById('inp-'+p.no+'-'+i);
+      if(inp){inp.value='';inp.style.borderColor='';}
+      const fb=document.getElementById('fb-'+p.no+'-'+i);
+      if(fb){fb.className='part-fb';fb.textContent='';}
+    });
+    document.getElementById('hint-'+p.no)?.classList.remove('show');
+    document.getElementById('reveal-'+p.no)?.classList.remove('show');
+    document.getElementById('prob-'+p.no).className='prob';
+  });
+  updateScore();
+}
+const BADGE={1:'b1',2:'b2',3:'b3',4:'b4'};
+function render(){
+  document.getElementById('main').innerHTML=PROBS.map(p=>`
+    <div class="prob" id="prob-${p.no}">
+      <div class="prob-head">
+        <span class="prob-no">問${p.no}</span>
+        <span class="badge ${BADGE[p.chN]}">${p.ch}</span>
+        <span class="pts">（${p.pts}点）</span>
+        <span class="prob-tag">${p.tag}</span>
+      </div>
+      <div class="prob-body">
+        ${p.svg?`<div class="prob-svg">${p.svg}</div>`:''}
+        <div class="prob-q">${p.q}</div>
+        ${p.parts.map((pt,i)=>`
+          <div class="part">
+            ${pt.label?`<div class="part-label">${pt.label}</div>`:''}
+            <div class="input-row">
+              <input class="ans-input" id="inp-${p.no}-${i}" type="number" step="any" placeholder="答え"
+                onkeydown="if(event.key==='Enter')checkPart(${p.no},${i})">
+              <span class="unit">${pt.unit}</span>
+              <button class="chk-btn" onclick="checkPart(${p.no},${i})">確認</button>
+            </div>
+            <div class="part-fb" id="fb-${p.no}-${i}"></div>
+          </div>
+        `).join('')}
+        <div class="prob-actions">
+          <button class="hint-btn" onclick="toggleHint(${p.no})">💡 ヒント</button>
+          <button class="reveal-btn" onclick="showReveal(${p.no})">解答を見る</button>
+        </div>
+        <div class="hint-box" id="hint-${p.no}">${p.hint.replace(/\n/g,'<br>')}</div>
+        <div class="ans-box" id="reveal-${p.no}">${p.reveal.join('<br>')}</div>
+      </div>
+    </div>
+  `).join('');
+}
+render();
+updateScore();
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
+  onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
+</body>
+</html>
