@@ -476,6 +476,7 @@ function checkPart(no,idx){
   fb.className='part-fb '+(ok?'ok':'ng');
   fb.textContent=ok?'✓ 正解':'✗ もう一度';
   inp.style.borderColor=ok?'#4caf50':'#f44336';
+  if(ok && typeof addPoints==='function') addPoints(300,'nekku_kako_kai',no+'-'+idx,true,'熱流体工学Ⅰ');
   const card=document.getElementById('prob-'+no);
   const allOk=prob.parts.every((_,i)=>correct[no+'-'+i]===true);
   const hasNg=prob.parts.some((_,i)=>correct[no+'-'+i]===false);
@@ -537,6 +538,8 @@ function render(){
 render();
 updateScore();
 </script>
+<script>window.QUIZ_SUBJECT='熱流体工学Ⅰ';</script>
+<script src="./js/points.js"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js" crossorigin="anonymous"></script>
 <script defer src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js" crossorigin="anonymous"
   onload="renderMathInElement(document.getElementById('main'),{delimiters:[{left:'$$',right:'$$',display:true},{left:'$',right:'$',display:false}],throwOnError:false})"></script>
