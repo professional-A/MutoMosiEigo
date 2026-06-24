@@ -967,7 +967,7 @@ app.post('/api/admin/grant-all', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { amount } = req.body;
   if (!Number.isInteger(amount) || amount <= 0 || amount > 10000) return res.status(400).json({ error: '不正なポイント数（1〜10000）' });
-  const { rows } = await pool.query('UPDATE users SET points = points + $1 RETURNING id, username', [amount]);
+  const { rows } = await pool.query('UPDATE users SET points = points + $1, season_points = season_points + $1 RETURNING id, username', [amount]);
   res.json({ ok: true, count: rows.length, amount });
   syncWorstFrame();
 });
@@ -1164,18 +1164,56 @@ app.post('/api/admin/battles/create', auth, async (req, res) => {
   if (!subject) return res.status(400).json({ error: 'subjectが必要' });
   const raceId = race_id ? parseInt(race_id) : null;
   const { rows: users } = await pool.query(
-    `SELECT id, username FROM users WHERE username NOT IN ('seijuro_dummy','honari2') ORDER BY RANDOM()`
+    `SELECT id, username FROM users WHERE username NOT IN ('seijuro_dummy','honari2') ORDER BY id`
   );
+
+  // 3ラウンド方式: 各ユーザーがランダムに3試合（対戦相手かぶりなし）
+  function shuffled(arr) {
+    const a = [...arr];
+    for (let i = a.length - 1; i > 0; i--) {
+      const j = Math.floor(Math.random() * (i + 1));
+      [a[i], a[j]] = [a[j], a[i]];
+    }
+    return a;
+  }
+
+  const usedPairs = new Set();
+  const allPairs = [];
+  const byes = [];
+
+  for (let round = 0; round < 3; round++) {
+    let found = false;
+    for (let attempt = 0; attempt < 1000; attempt++) {
+      const s = shuffled(users);
+      const roundPairs = [];
+      let valid = true;
+      for (let i = 0; i + 1 < s.length; i += 2) {
+        const a = s[i].id, b = s[i + 1].id;
+        const key = a < b ? `${a}:${b}` : `${b}:${a}`;
+        if (usedPairs.has(key)) { valid = false; break; }
+        roundPairs.push([s[i], s[i + 1]]);
+      }
+      if (valid) {
+        for (const [a, b] of roundPairs) {
+          const key = a.id < b.id ? `${a.id}:${b.id}` : `${b.id}:${a.id}`;
+          usedPairs.add(key);
+        }
+        allPairs.push(...roundPairs);
+        if (s.length % 2 === 1) byes.push({ round: round + 1, user: s[s.length - 1].username });
+        found = true;
+        break;
+      }
+    }
+    if (!found) return res.status(500).json({ error: `ラウンド${round + 1}の対戦表生成に失敗しました` });
+  }
+
   await pool.query("DELETE FROM battles WHERE subject = $1 AND status = 'open'", [subject]);
-  const pairs = [];
-  for (let i = 0; i + 1 < users.length; i += 2) pairs.push([users[i], users[i + 1]]);
-  const bye = users.length % 2 === 1 ? users[users.length - 1] : null;
   const now = new Date().toISOString();
-  for (const [p1, p2] of pairs) {
+  for (const [p1, p2] of allPairs) {
     await pool.query('INSERT INTO battles (subject, p1_id, p2_id, race_id, created_at) VALUES ($1, $2, $3, $4, $5)',
       [subject, p1.id, p2.id, raceId, now]);
   }
-  res.json({ ok: true, pairs: pairs.map(([a, b]) => [a.username, b.username]), bye: bye?.username });
+  res.json({ ok: true, pairs: allPairs.map(([a, b]) => [a.username, b.username]), byes });
 });
 
 // バトル決着（管理者）— 全員参加型オッズ配分
