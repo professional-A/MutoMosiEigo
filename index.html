@@ -757,6 +757,7 @@ h1{
       <button id="reg-lock-btn" onclick="toggleRegistrationLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🚫 新規登録制限</button>
       <button id="lock-btn" onclick="toggleSiteLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🔒 アクセス制限</button>
       <button id="score-lock-btn" onclick="toggleScoreLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">✏️ 得点入力締め切り</button>
+      <button onclick="adjustStudyLog()" style="background:#0f766e;color:#fff;border:none;font-weight:700">⏱️ 勉強時間修正</button>
       <button onclick="grantAll()" style="background:#7c3aed;color:#fff;border:none;font-weight:700">🎁 全員配布</button>
       <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 配分</button>
       <button onclick="viewSurveyResults()" style="background:#0ea5e9;color:#fff;border:none;font-weight:700">📊 アンケート結果</button>
@@ -2283,6 +2284,7 @@ async function loadBattleContent() {
         const p2Win   = b.winner_name === b.p2_name;
         const myBet   = Number(b.my_bet) || 0;
         const mySide  = b.my_side;
+        if (myBet > 0 && mySide) _battleSides[b.id] = mySide;
         html += `<div class="battle-card">`;
         // VS 表示
         html += `<div class="battle-vs">
@@ -2586,6 +2588,24 @@ async function restorePointsManual() {
     } else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー: ' + e.message); }
 }
+async function adjustStudyLog() {
+  const username = prompt('ユーザー名を入力');
+  if (!username) return;
+  const delta = parseInt(prompt('武藤模試時間の加減算（分）\n例: -180 で3時間減らす'));
+  if (isNaN(delta)) return;
+  if (!confirm(`${username} の武藤模試時間を ${delta}分 調整しますか？`)) return;
+  try {
+    const res = await fetch('/api/admin/adjust-study-log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ username, muto_delta: delta })
+    });
+    const data = await res.json();
+    if (data.ok) alert(`✅ ${username} の武藤模試時間: ${Math.floor(data.muto_minutes/60)}h${data.muto_minutes%60}m`);
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
 async function grantAll() {
   const input = prompt('全プレイヤーに配布するポイント数を入力');
   const amount = parseInt(input);

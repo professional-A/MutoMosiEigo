@@ -962,6 +962,21 @@ app.post('/api/admin/restore-points-manual', auth, async (req, res) => {
   res.json({ ok: true, results, dbUsers: dbNames });
 });
 
+// 管理者：レース勉強時間を直接加減算
+app.post('/api/admin/adjust-study-log', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { username, muto_delta } = req.body;
+  if (!username || !Number.isInteger(muto_delta)) return res.status(400).json({ error: 'username と muto_delta(整数分)が必要' });
+  const { rows: u } = await pool.query('SELECT id FROM users WHERE username=$1', [username]);
+  if (!u[0]) return res.status(404).json({ error: 'ユーザーが見つかりません' });
+  const { rows } = await pool.query(
+    `UPDATE race_study_log SET muto_minutes = GREATEST(0, muto_minutes + $1) WHERE user_id=$2 RETURNING muto_minutes`,
+    [muto_delta, u[0].id]
+  );
+  if (!rows[0]) return res.status(404).json({ error: 'レース勉強ログが見つかりません' });
+  res.json({ ok: true, username, muto_minutes: rows[0].muto_minutes });
+});
+
 // 管理者：全プレイヤー一斉ポイント配布
 app.post('/api/admin/grant-all', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
