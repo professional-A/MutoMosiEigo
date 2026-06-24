@@ -1254,13 +1254,22 @@ app.post('/api/admin/battles/add-pair', auth, async (req, res) => {
   res.json({ ok: true, pair: [u1[0].username, u2[0].username], subject });
 });
 
+// バトル終了（賭け締め切り）— open → closed
+app.post('/api/admin/battles/close', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { subject } = req.body;
+  if (!subject) return res.status(400).json({ error: 'subjectが必要' });
+  const { rows } = await pool.query("UPDATE battles SET status='closed' WHERE subject=$1 AND status='open' RETURNING id", [subject]);
+  res.json({ ok: true, closed: rows.length });
+});
+
 // バトル決着（管理者）— 全員参加型オッズ配分
 app.post('/api/admin/battles/settle', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { subject } = req.body;
   const scoreCol = BATTLE_SUBJ_COL[subject];
   if (!scoreCol) return res.status(400).json({ error: '無効な教科: ' + subject });
-  const { rows: battles } = await pool.query("SELECT * FROM battles WHERE subject=$1 AND status='open'", [subject]);
+  const { rows: battles } = await pool.query("SELECT * FROM battles WHERE subject=$1 AND status='closed'", [subject]);
   const results = [];
   for (const b of battles) {
     const { rows: r1 } = await pool.query(`SELECT ${scoreCol} AS score, username FROM users WHERE id=$1`, [b.p1_id]);

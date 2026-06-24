@@ -766,6 +766,7 @@ h1{
       <button onclick="adminAddBanner()" style="background:#1e3320;color:#86efac;border:1px solid #4ade80;font-weight:700">📢 バナー追加</button>
       <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
       <button onclick="adminAddBattlePair()" style="background:#1a2e1a;color:#86efac;border:1px solid #22c55e;font-weight:700">➕ ペア追加</button>
+      <button onclick="adminCloseBattles()" style="background:#2a1a0a;color:#fbbf24;border:1px solid #d97706;font-weight:700">🔒 バトル終了</button>
       <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
       <button onclick="openRaceModal()" style="background:#0f2a1a;color:#6ee7b7;border:1px solid #34d399;font-weight:700">🏁 レース発行</button>
       <button onclick="adminCloseRace()" style="background:#2a1a0a;color:#fcd34d;border:1px solid #f59e0b;font-weight:700">🔒 レース終了</button>
@@ -2280,7 +2281,8 @@ async function loadBattleContent() {
         const total   = p1Total + p2Total;
         const p1Odds  = total > 0 && p1Total > 0 ? (total / p1Total).toFixed(2) : '—';
         const p2Odds  = total > 0 && p2Total > 0 ? (total / p2Total).toFixed(2) : '—';
-        const isOpen  = b.status === 'open';
+        const isOpen   = b.status === 'open';
+        const isClosed = b.status === 'closed';
         const p1Win   = b.winner_name === b.p1_name;
         const p2Win   = b.winner_name === b.p2_name;
         const myBet   = Number(b.my_bet) || 0;
@@ -2326,7 +2328,14 @@ async function loadBattleContent() {
               style="padding:6px 14px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-weight:700;font-size:.82rem;cursor:pointer;font-family:inherit;flex-shrink:0">賭ける</button>
           </div>
           <div style="font-size:.68rem;color:var(--dim);margin-top:3px">所持: ${authPoints.toLocaleString()}pt　プール合計: ${total.toLocaleString()}pt</div>`;
-        } else if (!isOpen) {
+        } else if (isClosed) {
+          html += `<div style="font-size:.78rem;color:var(--amber);margin-top:4px">🔒 締め切り済み — 結果待ち</div>`;
+          if (myBet > 0) {
+            const sideName = mySide === 1 ? esc(tu(b.p1_name)) : esc(tu(b.p2_name));
+            html += `<div style="font-size:.72rem;color:var(--dim);margin-top:2px">${sideName}派に ${myBet.toLocaleString()}pt 賭け中</div>`;
+          }
+          html += `<div style="font-size:.68rem;color:var(--dim);margin-top:3px">プール合計: ${total.toLocaleString()}pt</div>`;
+        } else if (!isOpen && !isClosed) {
           const result = b.winner_name
             ? `🏆 ${esc(tu(b.winner_name))}の勝ち`
             : '🤝 引き分け';
@@ -2537,6 +2546,22 @@ async function adminAddBattlePair() {
       alert('❌ ' + (data.error || 'エラー'));
     }
   } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
+async function adminCloseBattles() {
+  const subject = prompt('締め切る教科コードを入力\neigo / ouri / math / kakougaku / nekku / seigyo');
+  if (!subject) return;
+  if (!confirm(`「${BATTLE_SUBJ_LABEL[subject] || subject}」のバトルを締め切ります（賭け不可になります）。`)) return;
+  try {
+    const res = await fetch('/api/admin/battles/close', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject })
+    });
+    const data = await res.json();
+    if (data.ok) { alert(`✅ ${data.closed}件のバトルを締め切りました`); await reloadAdminContent(); loadBattleContent(); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
 }
 
 async function adminSettleBattles() {
