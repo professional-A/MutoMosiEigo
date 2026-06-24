@@ -766,7 +766,9 @@ h1{
       <button onclick="adminAddBanner()" style="background:#1e3320;color:#86efac;border:1px solid #4ade80;font-weight:700">📢 バナー追加</button>
       <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
       <button onclick="adminAddBattlePair()" style="background:#1a2e1a;color:#86efac;border:1px solid #22c55e;font-weight:700">➕ ペア追加</button>
+      <button onclick="adminRefundAllBattles()" style="background:#2a0a0a;color:#fca5a5;border:1px solid #ef4444;font-weight:700">💸 全返金</button>
       <button onclick="adminCloseBattles()" style="background:#2a1a0a;color:#fbbf24;border:1px solid #d97706;font-weight:700">🔒 バトル終了</button>
+      <button onclick="adminSettleManual()" style="background:#1a1a2e;color:#c4b5fd;border:1px solid #8b5cf6;font-weight:700">🎯 手動決着</button>
       <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
       <button onclick="openRaceModal()" style="background:#0f2a1a;color:#6ee7b7;border:1px solid #34d399;font-weight:700">🏁 レース発行</button>
       <button onclick="adminCloseRace()" style="background:#2a1a0a;color:#fcd34d;border:1px solid #f59e0b;font-weight:700">🔒 レース終了</button>
@@ -2545,6 +2547,38 @@ async function adminAddBattlePair() {
     } else {
       alert('❌ ' + (data.error || 'エラー'));
     }
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
+async function adminRefundAllBattles() {
+  if (!confirm('現在openまたはclosedのバトルを全て削除し、賭けポイントを全員に返金しますか？')) return;
+  try {
+    const res = await fetch('/api/admin/battles/refund-all', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': authToken }
+    });
+    const data = await res.json();
+    if (data.ok) { alert(`✅ ${data.refunded}件のベットを返金し、${data.deleted}件のバトルを削除しました`); await reloadAdminContent(); loadBattleContent(); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
+async function adminSettleManual() {
+  const battleId = prompt('バトルIDを入力（バトル一覧から確認）');
+  if (!battleId) return;
+  const score1 = prompt('P1（左の選手）の点数');
+  if (score1 === null) return;
+  const score2 = prompt('P2（右の選手）の点数');
+  if (score2 === null) return;
+  if (!confirm(`バトル#${battleId}: P1=${score1}点 vs P2=${score2}点 で決着しますか？`)) return;
+  try {
+    const res = await fetch('/api/admin/battles/settle-manual', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ battleId: parseInt(battleId), score1: parseFloat(score1), score2: parseFloat(score2) })
+    });
+    const data = await res.json();
+    if (data.ok) { alert('✅ ' + data.result); loadBattleContent(); }
+    else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー: ' + e.message); }
 }
 

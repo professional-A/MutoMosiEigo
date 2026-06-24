@@ -1254,6 +1254,70 @@ app.post('/api/admin/battles/add-pair', auth, async (req, res) => {
   res.json({ ok: true, pair: [u1[0].username, u2[0].username], subject });
 });
 
+// バトル全返金・削除（管理者）
+app.post('/api/admin/battles/refund-all', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  // open / closed 状態のバトルのベットを全て返金
+  const { rows: bets } = await pool.query(
+    `SELECT bb.user_id, bb.amount FROM battle_bets bb
+     JOIN battles b ON b.id = bb.battle_id
+     WHERE b.status IN ('open','closed')`
+  );
+  for (const bet of bets) {
+    await pool.query('UPDATE users SET season_points = season_points + $1 WHERE id = $2', [bet.amount, bet.user_id]);
+  }
+  const { rows: deleted } = await pool.query("DELETE FROM battles WHERE status IN ('open','closed') RETURNING id");
+  res.json({ ok: true, refunded: bets.length, deleted: deleted.length });
+});
+
+// バトル手動決着（管理者）— 点数直接入力
+app.post('/api/admin/battles/settle-manual', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { battleId, score1, score2 } = req.body;
+  const { rows } = await pool.query('SELECT * FROM battles WHERE id=$1', [battleId]);
+  const b = rows[0];
+  if (!b) return res.status(404).json({ error: 'バトルが見つかりません' });
+  if (!['open','closed'].includes(b.status)) return res.status(400).json({ error: '既に決着済みです' });
+  const s1 = Number(score1), s2 = Number(score2);
+  if (isNaN(s1) || isNaN(s2)) return res.status(400).json({ error: '点数が不正です' });
+  const { rows: bets } = await pool.query('SELECT * FROM battle_bets WHERE battle_id=$1', [battleId]);
+  const totalPool = bets.reduce((s, bet) => s + bet.amount, 0);
+  const { rows: r1 } = await pool.query('SELECT username FROM users WHERE id=$1', [b.p1_id]);
+  const { rows: r2 } = await pool.query('SELECT username FROM users WHERE id=$1', [b.p2_id]);
+  let resultMsg;
+  if (s1 === s2) {
+    for (const bet of bets) await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [bet.amount, bet.user_id]);
+    await pool.query("UPDATE battles SET status='settled' WHERE id=$1", [battleId]);
+    resultMsg = `引き分け (${s1}点) → 全員返還`;
+  } else {
+    const winningSide = s1 > s2 ? 1 : 2;
+    const winnerId = winningSide === 1 ? b.p1_id : b.p2_id;
+    const wName = winningSide === 1 ? r1[0].username : r2[0].username;
+    const lName = winningSide === 1 ? r2[0].username : r1[0].username;
+    const winBets = bets.filter(bet => bet.side === winningSide);
+    const winTotal = winBets.reduce((s, bet) => s + bet.amount, 0);
+    if (totalPool > 0 && winTotal > 0) {
+      let distributed = 0;
+      for (const bet of winBets) {
+        const payout = Math.floor((bet.amount / winTotal) * totalPool);
+        await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [payout, bet.user_id]);
+        distributed += payout;
+      }
+      const remainder = totalPool - distributed;
+      if (remainder > 0) {
+        const top = winBets.sort((a, b) => b.amount - a.amount)[0];
+        await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [remainder, top.user_id]);
+      }
+    } else if (winTotal === 0 && totalPool > 0) {
+      for (const bet of bets) await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [bet.amount, bet.user_id]);
+    }
+    const odds = winTotal > 0 ? (totalPool / winTotal).toFixed(2) : '∞';
+    await pool.query("UPDATE battles SET status='settled', winner_id=$1 WHERE id=$2", [winnerId, battleId]);
+    resultMsg = `${wName}(${s1 > s2 ? s1 : s2}点) > ${lName}(${s1 > s2 ? s2 : s1}点) → ${wName}派に ${odds}倍 (計${totalPool}pt)`;
+  }
+  res.json({ ok: true, result: resultMsg });
+});
+
 // バトル終了（賭け締め切り）— open → closed
 app.post('/api/admin/battles/close', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
