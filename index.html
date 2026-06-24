@@ -2511,10 +2511,8 @@ async function adminCreateBattles() {
     });
     const data = await res.json();
     if (data.ok) {
-      let msg = `✅ ${data.pairs.length}ペア作成\n`;
-      data.pairs.forEach(([a, b]) => { msg += `  ${a}  vs  ${b}\n`; });
-      if (data.bye) msg += `\n（${data.bye} は今回バイ）`;
-      alert(msg);
+      alert(`✅ バトルをリセットしました（教科: ${data.subject}）\n「➕ ペア追加」でペアを追加してください`);
+      await reloadAdminContent(); loadBattleContent();
     } else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー'); }
 }
