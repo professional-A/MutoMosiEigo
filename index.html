@@ -920,6 +920,7 @@ h1{
     <div style="margin-top:14px;display:flex;gap:8px;flex-wrap:wrap">
       <button id="ouri-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid var(--teal);border-radius:10px;background:rgba(70,214,196,.1);color:var(--teal);cursor:pointer" onclick="submitOuriScore()">⚡ 応用物理の点数を入力</button>
       <button id="math-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid var(--rose);border-radius:10px;background:rgba(240,107,142,.1);color:var(--rose);cursor:pointer" onclick="submitMathScore()">📐 応用数学の点数を入力</button>
+      <button id="kakougaku-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid #f59e0b;border-radius:10px;background:rgba(245,158,11,.1);color:#f59e0b;cursor:pointer" onclick="submitKakougakuScore()">⚙️ 加工学の点数を入力</button>
       <button id="seigyo-input-btn" style="display:none;font-family:inherit;font-size:.85rem;padding:8px 16px;border:1px solid #a78bfa;border-radius:10px;background:rgba(167,139,250,.1);color:#a78bfa;cursor:pointer" onclick="submitSeigyoScore()">🎛️ 制御工学Ⅰの点数を入力</button>
     </div>
     <div id="score-inline-wrap" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(70,214,196,.07);border:1px solid rgba(70,214,196,.3);border-radius:8px;align-items:center;gap:8px;flex-wrap:wrap">
@@ -2729,6 +2730,8 @@ async function openScoresModal() {
   if (btn) btn.style.display = authToken ? 'inline-block' : 'none';
   const btn2 = document.getElementById('math-input-btn');
   if (btn2) btn2.style.display = authToken ? 'inline-block' : 'none';
+  const btn4 = document.getElementById('kakougaku-input-btn');
+  if (btn4) btn4.style.display = authToken ? 'inline-block' : 'none';
   const btn3 = document.getElementById('seigyo-input-btn');
   if (btn3) btn3.style.display = (authToken && seigyoActive) ? 'inline-block' : 'none';
   await loadScores();
@@ -2752,7 +2755,7 @@ async function loadScores() {
 
     // 平均点・合計点を計算（入力済み科目のみ）
     data.forEach(r => {
-      const vals = [r.test_score, r.ouri_score, r.math_score, ...(seigyoActive ? [r.seigyo_score] : [])].filter(v => v != null);
+      const vals = [r.test_score, r.ouri_score, r.math_score, r.kakougaku_score, ...(seigyoActive ? [r.seigyo_score] : [])].filter(v => v != null);
       r._avg   = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
       r._total = vals.length ? vals.reduce((s, v) => s + v, 0) : null;
     });
@@ -2836,11 +2839,12 @@ async function loadScores() {
         <td style="text-align:center">${sc(r.test_score)}</td>
         <td style="text-align:center">${sc(r.ouri_score)}</td>
         <td style="text-align:center">${sc(r.math_score)}</td>
+        <td style="text-align:center">${sc(r.kakougaku_score)}</td>
         ${seigyoActive ? `<td style="text-align:center">${sc(r.seigyo_score)}</td>` : ''}
         ${r._total != null ? `<td style="text-align:center;font-weight:700;color:var(--rose)">${r._total}</td>` : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`}
         ${avgTd}
       </tr>`;
-      const colspan = seigyoActive ? 8 : 7;
+      const colspan = seigyoActive ? 9 : 8;
       if (i === lineIdx) {
         return row + `<tr><td colspan="${colspan}" style="padding:0;border:none">
           <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 5px;background:rgba(239,68,68,.12)">
@@ -2860,6 +2864,7 @@ async function loadScores() {
         ${th('test_score', '📘 英語')}
         ${th('ouri_score', '⚡ 応用物理')}
         ${th('math_score', '📐 応用数学')}
+        ${th('kakougaku_score', '⚙️ 加工学')}
         ${seigyoActive ? th('seigyo_score', '🎛️ 制御工学') : ''}
         ${th('_total', '合計')}
         ${th('_avg', '平均')}
@@ -3566,6 +3571,7 @@ async function _confirmScoreInline() {
 }
 async function submitOuriScore() { await _submitScore('応用物理', '/api/ouri/score'); }
 async function submitMathScore() { await _submitScore('応用数学', '/api/math/score'); }
+async function submitKakougakuScore() { await _submitScore('加工学', '/api/kakougaku/score'); }
 async function submitSeigyoScore() { await _submitScore('制御工学Ⅰ', '/api/seigyo/score'); }
 
 // ── アンケート（終了済み）───────────────────────────────────────────
