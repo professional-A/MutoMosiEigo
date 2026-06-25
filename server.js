@@ -105,6 +105,9 @@ async function initDB() {
   await pool.query(`ALTER TABLE banners ADD COLUMN IF NOT EXISTS user_id INTEGER REFERENCES users(id) ON DELETE SET NULL`).catch(()=>{});
   await pool.query(`ALTER TABLE banners ADD COLUMN IF NOT EXISTS author TEXT`).catch(()=>{});
   await pool.query(`ALTER TABLE battles ADD COLUMN IF NOT EXISTS race_id INTEGER REFERENCES races(id) ON DELETE SET NULL`).catch(()=>{});
+  await pool.query(`ALTER TABLE battles ADD COLUMN IF NOT EXISTS p1_name TEXT`).catch(()=>{});
+  await pool.query(`ALTER TABLE battles ADD COLUMN IF NOT EXISTS p2_name TEXT`).catch(()=>{});
+  await pool.query(`ALTER TABLE battles ADD COLUMN IF NOT EXISTS winner_label TEXT`).catch(()=>{});
   await pool.query(`
     CREATE TABLE IF NOT EXISTS battles (
       id         SERIAL PRIMARY KEY,
@@ -1122,13 +1125,13 @@ app.get('/api/battles', async (req, res) => {
   }
   const { rows } = await pool.query(`
     SELECT b.id, b.subject, b.status, b.p1_bet, b.p2_bet, b.created_at,
-      u1.username AS p1_name, u1.avatar AS p1_avatar,
-      u2.username AS p2_name, u2.avatar AS p2_avatar,
-      uw.username AS winner_name,
+      COALESCE(u1.username, b.p1_name) AS p1_name, u1.avatar AS p1_avatar,
+      COALESCE(u2.username, b.p2_name) AS p2_name, u2.avatar AS p2_avatar,
+      COALESCE(uw.username, b.winner_label) AS winner_name,
       bb.side AS my_side, bb.amount AS my_bet
     FROM battles b
-    JOIN users u1 ON b.p1_id = u1.id
-    JOIN users u2 ON b.p2_id = u2.id
+    LEFT JOIN users u1 ON b.p1_id = u1.id
+    LEFT JOIN users u2 ON b.p2_id = u2.id
     LEFT JOIN users uw ON b.winner_id = uw.id
     LEFT JOIN battle_bets bb ON bb.battle_id = b.id AND bb.user_id = $1
     ORDER BY b.created_at DESC, b.id
@@ -1188,13 +1191,11 @@ app.post('/api/admin/battles/add-pair', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
   const { username1, username2, subject, race_id } = req.body;
   if (!username1 || !username2 || !subject) return res.status(400).json({ error: 'username1・username2・subjectが必要' });
-  const { rows: u1 } = await pool.query('SELECT id, username FROM users WHERE username=$1', [username1]);
-  const { rows: u2 } = await pool.query('SELECT id, username FROM users WHERE username=$1', [username2]);
-  if (!u1[0]) return res.status(404).json({ error: `ユーザーが見つかりません: ${username1}` });
-  if (!u2[0]) return res.status(404).json({ error: `ユーザーが見つかりません: ${username2}` });
-  await pool.query('INSERT INTO battles (subject, p1_id, p2_id, race_id, created_at) VALUES ($1,$2,$3,$4,$5)',
-    [subject, u1[0].id, u2[0].id, race_id, new Date().toISOString()]);
-  res.json({ ok: true, pair: [u1[0].username, u2[0].username], subject });
+  await pool.query(
+    'INSERT INTO battles (subject, p1_name, p2_name, race_id, created_at) VALUES ($1,$2,$3,$4,$5)',
+    [subject, username1, username2, race_id || null, new Date().toISOString()]
+  );
+  res.json({ ok: true, pair: [username1, username2], subject });
 });
 
 // バトル全返金・削除（管理者）
@@ -1225,8 +1226,8 @@ app.post('/api/admin/battles/settle-manual', auth, async (req, res) => {
   if (isNaN(s1) || isNaN(s2)) return res.status(400).json({ error: '点数が不正です' });
   const { rows: bets } = await pool.query('SELECT * FROM battle_bets WHERE battle_id=$1', [battleId]);
   const totalPool = bets.reduce((s, bet) => s + bet.amount, 0);
-  const { rows: r1 } = await pool.query('SELECT username FROM users WHERE id=$1', [b.p1_id]);
-  const { rows: r2 } = await pool.query('SELECT username FROM users WHERE id=$1', [b.p2_id]);
+  const n1 = b.p1_id ? (await pool.query('SELECT username FROM users WHERE id=$1', [b.p1_id])).rows[0]?.username : b.p1_name;
+  const n2 = b.p2_id ? (await pool.query('SELECT username FROM users WHERE id=$1', [b.p2_id])).rows[0]?.username : b.p2_name;
   let resultMsg;
   if (s1 === s2) {
     for (const bet of bets) await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [bet.amount, bet.user_id]);
@@ -1235,8 +1236,8 @@ app.post('/api/admin/battles/settle-manual', auth, async (req, res) => {
   } else {
     const winningSide = s1 > s2 ? 1 : 2;
     const winnerId = winningSide === 1 ? b.p1_id : b.p2_id;
-    const wName = winningSide === 1 ? r1[0].username : r2[0].username;
-    const lName = winningSide === 1 ? r2[0].username : r1[0].username;
+    const wName = winningSide === 1 ? n1 : n2;
+    const lName = winningSide === 1 ? n2 : n1;
     const winBets = bets.filter(bet => bet.side === winningSide);
     const winTotal = winBets.reduce((s, bet) => s + bet.amount, 0);
     if (totalPool > 0 && winTotal > 0) {
@@ -1255,7 +1256,7 @@ app.post('/api/admin/battles/settle-manual', auth, async (req, res) => {
       for (const bet of bets) await pool.query('UPDATE users SET season_points=season_points+$1 WHERE id=$2', [bet.amount, bet.user_id]);
     }
     const odds = winTotal > 0 ? (totalPool / winTotal).toFixed(2) : '∞';
-    await pool.query("UPDATE battles SET status='settled', winner_id=$1 WHERE id=$2", [winnerId, battleId]);
+    await pool.query("UPDATE battles SET status='settled', winner_id=$1, winner_label=$2 WHERE id=$3", [winnerId, wName, battleId]);
     resultMsg = `${wName}(${s1 > s2 ? s1 : s2}点) > ${lName}(${s1 > s2 ? s2 : s1}点) → ${wName}派に ${odds}倍 (計${totalPool}pt)`;
   }
   res.json({ ok: true, result: resultMsg });
