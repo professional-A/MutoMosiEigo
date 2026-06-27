@@ -1,0 +1,338 @@
+{
+  "title": "熱流体工学Ⅰ 前期中間 改変版",
+  "subtitle": "数値・条件を変えた練習問題 全13問 ｜ ⚠️ 答えは有効数字3桁で入力",
+  "storageKey": "nekku_kako_kai",
+  "subject": "熱流体工学Ⅰ",
+  "pointsPerPart": 300,
+  "problems": [
+    {
+      "no": 1,
+      "ch": "第1章",
+      "chN": 1,
+      "tag": "密度・比重",
+      "q": "体積 $V = 2.5\\ \\mathrm{m^3}$ の液体の重さを測定したところ $W = 22\\ \\mathrm{kN}$ であった。この液体の質量 $m$、密度 $\\rho$、比重 $s$ を求めよ。",
+      "svg": "<svg viewBox=\"0 0 260 130\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"60\" y=\"20\" width=\"140\" height=\"85\" rx=\"4\" fill=\"rgba(86,207,178,.15)\" stroke=\"#56cfb2\" stroke-width=\"2\"/>\n<line x1=\"60\" y1=\"20\" x2=\"200\" y2=\"20\" stroke=\"#56cfb2\" stroke-width=\"2.5\"/>\n<text x=\"130\" y=\"66\" fill=\"#a5b4fc\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">液体</text>\n<text x=\"130\" y=\"84\" fill=\"#9ca3af\" font-size=\"11\" font-family=\"sans-serif\" text-anchor=\"middle\">V = 2.5 m³</text>\n<line x1=\"50\" y1=\"105\" x2=\"210\" y2=\"105\" stroke=\"#9ca3af\" stroke-width=\"1.5\"/>\n<line x1=\"100\" y1=\"105\" x2=\"100\" y2=\"118\" stroke=\"#9ca3af\" stroke-width=\"2\"/>\n<line x1=\"160\" y1=\"105\" x2=\"160\" y2=\"118\" stroke=\"#9ca3af\" stroke-width=\"2\"/>\n<line x1=\"100\" y1=\"113\" x2=\"160\" y2=\"113\" stroke=\"#9ca3af\" stroke-width=\"2\"/>\n<text x=\"130\" y=\"128\" fill=\"#f87171\" font-size=\"11\" font-family=\"sans-serif\" text-anchor=\"middle\">W = 22 kN</text>\n</svg>",
+      "hint": "$m = W/g$、$\\rho = m/V$、$s = \\rho/1000$",
+      "reveal": [
+        "$m = 22000/9.81 = 2243\\ \\mathrm{kg} \\approx 2.24\\times10^3\\ \\mathrm{kg}$",
+        "$\\rho = 2243/2.5 = 897\\ \\mathrm{kg/m^3}$",
+        "$s = 897/1000 = 0.897$"
+      ],
+      "parts": [
+        {
+          "label": "(1) $m$",
+          "unit": "kg",
+          "ans": 2243,
+          "isAngle": false
+        },
+        {
+          "label": "(2) $\\rho$",
+          "unit": "kg/m³",
+          "ans": 897,
+          "isAngle": false
+        },
+        {
+          "label": "(3) $s$",
+          "unit": "",
+          "ans": 0.897,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 2,
+      "ch": "第1章",
+      "chN": 1,
+      "tag": "粘性係数",
+      "q": "動粘度 $\\nu = 1.50\\times10^{-4}\\ \\mathrm{m^2/s}$、比重 $s = 0.870$ の液体の粘性係数 $\\mu$ を求めよ。",
+      "svg": "<svg viewBox=\"0 0 260 100\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"20\" y=\"15\" width=\"220\" height=\"70\" rx=\"3\" fill=\"rgba(86,207,178,.10)\" stroke=\"#56cfb2\" stroke-width=\"1.5\"/>\n<text x=\"130\" y=\"52\" fill=\"#e8eaf6\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">液体（s=0.870）</text>\n<text x=\"130\" y=\"70\" fill=\"#9ca3af\" font-size=\"11\" font-family=\"sans-serif\" text-anchor=\"middle\">ν = 1.50×10⁻⁴ m²/s  →  μ = ?</text>\n</svg>",
+      "hint": "$\\rho = s \\times 1000$、$\\mu = \\nu \\times \\rho$",
+      "reveal": [
+        "$\\rho = 0.870 \\times 1000 = 870\\ \\mathrm{kg/m^3}$",
+        "$\\mu = 1.50\\times10^{-4} \\times 870 = 0.1305\\ \\mathrm{Pa{\\cdot}s}$"
+      ],
+      "parts": [
+        {
+          "label": "",
+          "unit": "Pa·s",
+          "ans": 0.1305,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 3,
+      "ch": "第1章",
+      "chN": 1,
+      "tag": "単位変換（圧力）",
+      "q": "圧力 $650\\ \\mathrm{mmHg}$ を $\\mathrm{kPa}$ に換算せよ。（$\\rho_{Hg} = 13.6\\times10^3\\ \\mathrm{kg/m^3}$）",
+      "svg": "<svg viewBox=\"0 0 200 160\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"80\" y=\"20\" width=\"30\" height=\"120\" rx=\"4\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"2\"/>\n<rect x=\"82\" y=\"22\" width=\"26\" height=\"118\" rx=\"3\" fill=\"rgba(200,200,200,.15)\"/>\n<rect x=\"82\" y=\"72\" width=\"26\" height=\"68\" rx=\"2\" fill=\"rgba(180,180,200,.7)\"/>\n<text x=\"118\" y=\"30\" fill=\"#9ca3af\" font-size=\"10\" font-family=\"sans-serif\">真空</text>\n<line x1=\"108\" y1=\"72\" x2=\"138\" y2=\"72\" stroke=\"#56cfb2\" stroke-width=\"1.2\"/>\n<line x1=\"108\" y1=\"140\" x2=\"138\" y2=\"140\" stroke=\"#56cfb2\" stroke-width=\"1.2\"/>\n<line x1=\"133\" y1=\"72\" x2=\"133\" y2=\"140\" stroke=\"#56cfb2\" stroke-width=\"1.2\"/>\n<text x=\"140\" y=\"110\" fill=\"#56cfb2\" font-size=\"11\" font-family=\"sans-serif\">650 mm</text>\n<text x=\"60\" y=\"155\" fill=\"#9ca3af\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">水銀</text>\n</svg>",
+      "hint": "$1\\ \\mathrm{mmHg} = 133.4\\ \\mathrm{Pa}$\n$P = 650 \\times 133.4\\ \\mathrm{Pa}$",
+      "reveal": [
+        "$P = 650 \\times 133.4 = 86{,}710\\ \\mathrm{Pa} \\approx 86.7\\ \\mathrm{kPa}$"
+      ],
+      "parts": [
+        {
+          "label": "",
+          "unit": "kPa",
+          "ans": 86.7,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 4,
+      "ch": "第1章",
+      "chN": 1,
+      "tag": "斜面滑落・最大速度",
+      "q": "底面積 $A = 0.04\\ \\mathrm{m^2}$、質量 $m = 25\\ \\mathrm{kg}$ の金属板が傾斜角 $\\theta = 45°$ の斜面上の油膜（$\\mu = 0.03\\ \\mathrm{Pa{\\cdot}s}$、$\\delta = 0.02\\ \\mathrm{mm}$）の上を滑り落ちる。最大速度 $U_{\\max}$ を求めよ。",
+      "svg": "<svg viewBox=\"0 0 280 160\" xmlns=\"http://www.w3.org/2000/svg\">\n<line x1=\"20\" y1=\"140\" x2=\"240\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2.5\"/>\n<line x1=\"18\" y1=\"145\" x2=\"242\" y2=\"45\" stroke=\"#9ca3af\" stroke-width=\"5\" stroke-opacity=\".3\"/>\n<rect x=\"95\" y=\"70\" width=\"70\" height=\"40\" rx=\"3\" transform=\"rotate(-22,130,90)\" fill=\"#1e2235\" stroke=\"#56cfb2\" stroke-width=\"1.5\"/>\n<text x=\"130\" y=\"87\" fill=\"#e8eaf6\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\" transform=\"rotate(-22,130,90)\">金属板</text>\n<text x=\"130\" y=\"99\" fill=\"#9ca3af\" font-size=\"8\" font-family=\"sans-serif\" text-anchor=\"middle\" transform=\"rotate(-22,130,90)\">A=0.04m²</text>\n<text x=\"30\" y=\"138\" fill=\"#56cfb2\" font-size=\"10\" font-family=\"sans-serif\">θ=45°</text>\n<line x1=\"165\" y1=\"88\" x2=\"183\" y2=\"78\" stroke=\"#f87171\" stroke-width=\"1.5\"/>\n<polygon points=\"179,74 187,80 181,85\" fill=\"#f87171\"/>\n<text x=\"187\" y=\"77\" fill=\"#f87171\" font-size=\"9\" font-family=\"sans-serif\">U=?</text>\n<text x=\"14\" y=\"46\" fill=\"#9ca3af\" font-size=\"8\" font-family=\"sans-serif\">δ=0.02mm, μ=0.03 Pa·s</text>\n</svg>",
+      "hint": "$mg\\sin45° = \\mu A (U_{\\max}/\\delta)$\n$U_{\\max} = \\dfrac{\\delta\\, mg\\sin45°}{\\mu A}$",
+      "reveal": [
+        "$mg\\sin45° = 25 \\times 9.81 \\times 0.7071 = 173.3\\ \\mathrm{N}$",
+        "$U_{\\max} = \\dfrac{0.02\\times10^{-3} \\times 173.3}{0.03 \\times 0.04} = \\dfrac{3.466\\times10^{-3}}{1.2\\times10^{-3}} = 2.89\\ \\mathrm{m/s}$"
+      ],
+      "parts": [
+        {
+          "label": "",
+          "unit": "m/s",
+          "ans": 2.889,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 5,
+      "ch": "第2章",
+      "chN": 2,
+      "tag": "傾斜面ゲート",
+      "q": "一辺 $a$ の正方形ゲートが水面と $60°$ の傾斜面にある。ゲート重心の水深 $h = 1.5\\ \\mathrm{m}$ のとき $F = 8\\ \\mathrm{kN}$ が作用した。$a$ と作用点 $y_c$ を求めよ。（$F = \\rho g h A$、$y_c = I_G/(y_G A) + y_G$、$I_G = a^4/12$）",
+      "svg": "<svg viewBox=\"0 0 280 200\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"20\" y=\"20\" width=\"160\" height=\"170\" fill=\"rgba(59,130,246,.12)\" stroke=\"#60a5fa\" stroke-width=\"1\"/>\n<line x1=\"20\" y1=\"20\" x2=\"180\" y2=\"20\" stroke=\"#60a5fa\" stroke-width=\"2.5\"/>\n<text x=\"100\" y=\"14\" fill=\"#60a5fa\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">水面</text>\n<line x1=\"180\" y1=\"20\" x2=\"260\" y2=\"190\" stroke=\"#56cfb2\" stroke-width=\"3\"/>\n<rect x=\"182\" y=\"65\" width=\"14\" height=\"70\" rx=\"2\" transform=\"rotate(23,189,100)\" fill=\"#56cfb2\" stroke=\"#7c6af7\" stroke-width=\"1.5\"/>\n<text x=\"222\" y=\"108\" fill=\"#56cfb2\" font-size=\"10\" font-family=\"sans-serif\">a×a</text>\n<line x1=\"182\" y1=\"20\" x2=\"195\" y2=\"20\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<line x1=\"207\" y1=\"90\" x2=\"217\" y2=\"90\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<line x1=\"193\" y1=\"20\" x2=\"215\" y2=\"90\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<text x=\"222\" y=\"60\" fill=\"#a5b4fc\" font-size=\"9\" font-family=\"sans-serif\">h=1.5m</text>\n<text x=\"186\" y=\"188\" fill=\"#9ca3af\" font-size=\"9\" font-family=\"sans-serif\">θ=60°</text>\n<line x1=\"188\" y1=\"70\" x2=\"172\" y2=\"75\" stroke=\"#f87171\" stroke-width=\"1.5\"/>\n<polygon points=\"168,71 175,78 165,82\" fill=\"#f87171\"/>\n<text x=\"148\" y=\"68\" fill=\"#f87171\" font-size=\"9\" font-family=\"sans-serif\">F=8kN</text>\n</svg>",
+      "hint": "$a^2 = F/(\\rho g h)$\n$y_G = h/\\sin60°$\n$y_c = a^2/(12 y_G) + y_G$",
+      "reveal": [
+        "$a^2 = 8000/(1000 \\times 9.81 \\times 1.5) = 0.5437\\ \\mathrm{m^2} \\Rightarrow a = 0.737\\ \\mathrm{m}$",
+        "$y_G = 1.5/\\sin60° = 1.732\\ \\mathrm{m}$",
+        "$y_c = 0.5437/(12 \\times 1.732) + 1.732 = 0.02617 + 1.732 = 1.758\\ \\mathrm{m}$"
+      ],
+      "parts": [
+        {
+          "label": "(1) $a$",
+          "unit": "m",
+          "ans": 0.7373,
+          "isAngle": false
+        },
+        {
+          "label": "(2) $y_c$",
+          "unit": "m",
+          "ans": 1.758,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 6,
+      "ch": "第2章",
+      "chN": 2,
+      "tag": "曲面板（1/4円弧）",
+      "q": "AB は半径 $r = 0.5\\ \\mathrm{m}$ の円弧面（1/4円弧）で、A までの水深 $h = 1.2\\ \\mathrm{m}$、タンクの幅 $b = 1.5\\ \\mathrm{m}$。<br>(1) 鉛直方向成分 $F_v$　(2) 水平方向成分 $F_h$ を求めよ。",
+      "svg": "<svg viewBox=\"0 0 260 220\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"20\" y=\"15\" width=\"175\" height=\"195\" fill=\"rgba(59,130,246,.12)\" stroke=\"#60a5fa\" stroke-width=\"1.2\"/>\n<line x1=\"20\" y1=\"15\" x2=\"195\" y2=\"15\" stroke=\"#60a5fa\" stroke-width=\"2.5\"/>\n<text x=\"108\" y=\"10\" fill=\"#60a5fa\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">水面</text>\n<path d=\"M 195,70 A 125,125 0 0,1 70,195\" fill=\"rgba(30,34,53,.9)\" stroke=\"#56cfb2\" stroke-width=\"2.5\"/>\n<text x=\"198\" y=\"69\" fill=\"#56cfb2\" font-size=\"10\" font-family=\"sans-serif\">A</text>\n<text x=\"58\" y=\"208\" fill=\"#56cfb2\" font-size=\"10\" font-family=\"sans-serif\">B</text>\n<line x1=\"197\" y1=\"15\" x2=\"210\" y2=\"15\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<line x1=\"197\" y1=\"70\" x2=\"210\" y2=\"70\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<line x1=\"206\" y1=\"15\" x2=\"206\" y2=\"70\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<text x=\"213\" y=\"46\" fill=\"#a5b4fc\" font-size=\"9\" font-family=\"sans-serif\">h=1.2m</text>\n<line x1=\"197\" y1=\"70\" x2=\"210\" y2=\"70\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<line x1=\"197\" y1=\"195\" x2=\"210\" y2=\"195\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<line x1=\"205\" y1=\"70\" x2=\"205\" y2=\"195\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<text x=\"213\" y=\"136\" fill=\"#a5b4fc\" font-size=\"9\" font-family=\"sans-serif\">r=0.5m</text>\n</svg>",
+      "hint": "$F_v = \\rho g (h r + \\pi r^2/4) b$\n$F_h = \\rho g (h + r/2) r b$",
+      "reveal": [
+        "$F_v = 9810 \\times (1.2 \\times 0.5 + \\pi \\times 0.25/4) \\times 1.5$",
+        "$= 9810 \\times (0.600 + 0.1963) \\times 1.5 = 9810 \\times 0.7963 \\times 1.5 = 11714\\ \\mathrm{N} \\approx 11.7\\ \\mathrm{kN}$",
+        "$F_h = 9810 \\times (1.2 + 0.25) \\times 0.5 \\times 1.5 = 9810 \\times 1.45 \\times 0.75 = 10669\\ \\mathrm{N} \\approx 10.7\\ \\mathrm{kN}$"
+      ],
+      "parts": [
+        {
+          "label": "(1) $F_v$",
+          "unit": "kN",
+          "ans": 11.71,
+          "isAngle": false
+        },
+        {
+          "label": "(2) $F_h$",
+          "unit": "kN",
+          "ans": 10.67,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 7,
+      "ch": "第2章",
+      "chN": 2,
+      "tag": "U字管（水銀）",
+      "q": "$y_1 = 0.8\\ \\mathrm{m}$、$y_2 = 0.6\\ \\mathrm{m}$、$\\rho = 1000\\ \\mathrm{kg/m^3}$、$\\rho' = 13.6\\times10^3\\ \\mathrm{kg/m^3}$ のとき、$\\Delta P = P_1 - P_2$ を求めよ。",
+      "svg": "<svg viewBox=\"0 0 300 210\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"20\" y=\"20\" width=\"50\" height=\"60\" rx=\"3\" fill=\"rgba(86,207,178,.12)\" stroke=\"#56cfb2\" stroke-width=\"1.5\"/>\n<text x=\"45\" y=\"54\" fill=\"#56cfb2\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">P₂</text>\n<rect x=\"230\" y=\"20\" width=\"50\" height=\"60\" rx=\"3\" fill=\"rgba(86,207,178,.12)\" stroke=\"#56cfb2\" stroke-width=\"1.5\"/>\n<text x=\"255\" y=\"54\" fill=\"#56cfb2\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">P₁</text>\n<path d=\"M 45,80 L 45,165 Q 45,175 55,175 L 245,175 Q 255,175 255,165 L 255,80\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"2\"/>\n<path d=\"M 55,80 L 55,165 Q 55,170 60,170 L 240,170 Q 245,170 245,165 L 245,80\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"2\"/>\n<rect x=\"55\" y=\"120\" width=\"190\" height=\"50\" fill=\"rgba(180,160,180,.6)\"/>\n<text x=\"150\" y=\"149\" fill=\"#e8eaf6\" font-size=\"9\" font-family=\"sans-serif\" text-anchor=\"middle\">水銀（ρ'=13.6×10³）</text>\n<rect x=\"45\" y=\"80\" width=\"10\" height=\"40\" fill=\"rgba(59,130,246,.3)\"/>\n<rect x=\"245\" y=\"80\" width=\"10\" height=\"40\" fill=\"rgba(59,130,246,.3)\"/>\n<line x1=\"36\" y1=\"80\" x2=\"44\" y2=\"80\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"36\" y1=\"120\" x2=\"44\" y2=\"120\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"40\" y1=\"80\" x2=\"40\" y2=\"120\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<text x=\"14\" y=\"103\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">y₁</text>\n<text x=\"12\" y=\"111\" fill=\"#56cfb2\" font-size=\"8\" font-family=\"sans-serif\">0.8m</text>\n<line x1=\"256\" y1=\"80\" x2=\"264\" y2=\"80\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"256\" y1=\"120\" x2=\"264\" y2=\"120\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"260\" y1=\"80\" x2=\"260\" y2=\"120\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<text x=\"266\" y=\"103\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">y₂</text>\n<text x=\"264\" y=\"111\" fill=\"#56cfb2\" font-size=\"8\" font-family=\"sans-serif\">0.6m</text>\n</svg>",
+      "hint": "$\\Delta P = \\rho'g y_2 - \\rho g y_1$",
+      "reveal": [
+        "$\\Delta P = 13600 \\times 9.81 \\times 0.6 - 1000 \\times 9.81 \\times 0.8$",
+        "$= 80006 - 7848 = 72158\\ \\mathrm{Pa} \\approx 72.2\\ \\mathrm{kPa}$"
+      ],
+      "parts": [
+        {
+          "label": "",
+          "unit": "kPa",
+          "ans": 72.16,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 8,
+      "ch": "第2章",
+      "chN": 2,
+      "tag": "U字管（2液体）",
+      "q": "$y_1 = 0.25\\ \\mathrm{m}$、$y_2 = 0.35\\ \\mathrm{m}$、$\\rho = 830\\ \\mathrm{kg/m^3}$、$\\rho' = 910\\ \\mathrm{kg/m^3}$ のとき、$\\Delta P = P_2 - P_1$ を求めよ。",
+      "svg": "<svg viewBox=\"0 0 300 210\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"20\" y=\"20\" width=\"50\" height=\"60\" rx=\"3\" fill=\"rgba(86,207,178,.12)\" stroke=\"#56cfb2\" stroke-width=\"1.5\"/>\n<text x=\"45\" y=\"48\" fill=\"#56cfb2\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">P₁</text>\n<rect x=\"230\" y=\"20\" width=\"50\" height=\"60\" rx=\"3\" fill=\"rgba(86,207,178,.12)\" stroke=\"#56cfb2\" stroke-width=\"1.5\"/>\n<text x=\"255\" y=\"48\" fill=\"#56cfb2\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">P₂</text>\n<path d=\"M 45,80 L 45,165 Q 45,175 55,175 L 245,175 Q 255,175 255,165 L 255,80\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"2\"/>\n<path d=\"M 55,80 L 55,165 Q 55,170 60,170 L 240,170 Q 245,170 245,165 L 245,80\" fill=\"none\" stroke=\"#9ca3af\" stroke-width=\"2\"/>\n<rect x=\"55\" y=\"125\" width=\"190\" height=\"45\" fill=\"rgba(150,130,100,.5)\"/>\n<text x=\"150\" y=\"152\" fill=\"#e8eaf6\" font-size=\"9\" font-family=\"sans-serif\" text-anchor=\"middle\">ρ'=910 kg/m³</text>\n<rect x=\"45\" y=\"80\" width=\"10\" height=\"45\" fill=\"rgba(59,130,246,.22)\"/>\n<rect x=\"245\" y=\"80\" width=\"10\" height=\"45\" fill=\"rgba(59,130,246,.22)\"/>\n<text x=\"150\" y=\"108\" fill=\"#9ca3af\" font-size=\"9\" font-family=\"sans-serif\" text-anchor=\"middle\">ρ=830 kg/m³</text>\n<line x1=\"36\" y1=\"80\" x2=\"44\" y2=\"80\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"36\" y1=\"125\" x2=\"44\" y2=\"125\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"40\" y1=\"80\" x2=\"40\" y2=\"125\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<text x=\"10\" y=\"105\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">y₁</text>\n<text x=\"8\" y=\"113\" fill=\"#56cfb2\" font-size=\"8\" font-family=\"sans-serif\">0.25m</text>\n<line x1=\"256\" y1=\"80\" x2=\"264\" y2=\"80\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"256\" y1=\"125\" x2=\"264\" y2=\"125\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"260\" y1=\"80\" x2=\"260\" y2=\"125\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<text x=\"266\" y=\"105\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">y₂</text>\n<text x=\"264\" y=\"113\" fill=\"#56cfb2\" font-size=\"8\" font-family=\"sans-serif\">0.35m</text>\n</svg>",
+      "hint": "$\\Delta P = \\rho'g y_2 - \\rho g y_1$",
+      "reveal": [
+        "$\\Delta P = 910 \\times 9.81 \\times 0.35 - 830 \\times 9.81 \\times 0.25$",
+        "$= 3122 - 2035 = 1087\\ \\mathrm{Pa} \\approx 1.09\\ \\mathrm{kPa}$"
+      ],
+      "parts": [
+        {
+          "label": "",
+          "unit": "kPa",
+          "ans": 1.087,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 9,
+      "ch": "第2章",
+      "chN": 2,
+      "tag": "浮力（氷山）",
+      "q": "海水に突き出た部分 $450\\ \\mathrm{m^3}$ の氷山の全体積 $V$ を求めよ。$\\rho_{ice} = 917\\ \\mathrm{kg/m^3}$、$\\rho_{sea} = 1025\\ \\mathrm{kg/m^3}$。",
+      "svg": "<svg viewBox=\"0 0 260 180\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"20\" y=\"80\" width=\"220\" height=\"90\" fill=\"rgba(59,130,246,.18)\" stroke=\"#60a5fa\" stroke-width=\"1.5\"/>\n<line x1=\"20\" y1=\"80\" x2=\"240\" y2=\"80\" stroke=\"#60a5fa\" stroke-width=\"2.5\"/>\n<text x=\"130\" y=\"74\" fill=\"#60a5fa\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">海面（ρ=1025）</text>\n<polygon points=\"80,20 180,20 200,80 60,80\" fill=\"rgba(200,230,255,.7)\" stroke=\"#e8eaf6\" stroke-width=\"2\"/>\n<polygon points=\"90,80 170,80 190,130 70,130\" fill=\"rgba(180,210,240,.5)\" stroke=\"#9ca3af\" stroke-width=\"1.5\" stroke-dasharray=\"4,3\"/>\n<text x=\"130\" y=\"52\" fill=\"#1e2235\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">氷山</text>\n<text x=\"130\" y=\"112\" fill=\"#9ca3af\" font-size=\"9\" font-family=\"sans-serif\" text-anchor=\"middle\">ρ_ice=917 kg/m³</text>\n<line x1=\"202\" y1=\"20\" x2=\"216\" y2=\"20\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"202\" y1=\"80\" x2=\"216\" y2=\"80\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"210\" y1=\"20\" x2=\"210\" y2=\"80\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<text x=\"218\" y=\"54\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">450m³</text>\n</svg>",
+      "hint": "$V = V_{above} \\times \\rho_{sea}/(\\rho_{sea} - \\rho_{ice})$",
+      "reveal": [
+        "$V = 450 \\times 1025/(1025 - 917) = 450 \\times 1025/108$",
+        "$= 450 \\times 9.491 = 4271\\ \\mathrm{m^3}$"
+      ],
+      "parts": [
+        {
+          "label": "",
+          "unit": "m³",
+          "ans": 4271,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 10,
+      "ch": "第3章",
+      "chN": 3,
+      "tag": "連続の式・ベルヌーイ（空気）",
+      "q": "$\\rho = 1.2\\ \\mathrm{kg/m^3}$、$d_1 = 80\\ \\mathrm{mm}$、$d_2 = 30\\ \\mathrm{mm}$、断面②の流速 $v_2 = 20\\ \\mathrm{m/s}$。<br>(1) 断面①の流速 $v_1$　(2) 圧力差 $\\Delta P = P_1 - P_2$",
+      "svg": "<svg viewBox=\"0 0 280 130\" xmlns=\"http://www.w3.org/2000/svg\">\n<path d=\"M20,20 L115,20 L165,42 L250,42 L250,88 L165,88 L115,110 L20,110 Z\" fill=\"rgba(86,207,178,.09)\" stroke=\"#9ca3af\" stroke-width=\"1.5\"/>\n<line x1=\"38\" y1=\"65\" x2=\"62\" y2=\"65\" stroke=\"#56cfb2\" stroke-width=\"2\"/>\n<polygon points=\"60,61 60,69 68,65\" fill=\"#56cfb2\"/>\n<text x=\"24\" y=\"60\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">v₁?</text>\n<text x=\"20\" y=\"118\" fill=\"#9ca3af\" font-size=\"9\" font-family=\"sans-serif\">① d₁=80mm</text>\n<line x1=\"196\" y1=\"65\" x2=\"220\" y2=\"65\" stroke=\"#56cfb2\" stroke-width=\"2\"/>\n<polygon points=\"218,61 218,69 226,65\" fill=\"#56cfb2\"/>\n<text x=\"185\" y=\"60\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">v₂=20m/s</text>\n<text x=\"188\" y=\"80\" fill=\"#9ca3af\" font-size=\"9\" font-family=\"sans-serif\">② d₂=30mm</text>\n<text x=\"130\" y=\"14\" fill=\"#9ca3af\" font-size=\"9\" font-family=\"sans-serif\" text-anchor=\"middle\">ρ=1.2 kg/m³（空気）</text>\n</svg>",
+      "hint": "$v_1 = v_2(d_2/d_1)^2$\n$\\Delta P = \\rho(v_2^2-v_1^2)/2$",
+      "reveal": [
+        "$v_1 = 20 \\times (30/80)^2 = 20 \\times 0.1406 = 2.81\\ \\mathrm{m/s}$",
+        "$\\Delta P = 1.2 \\times (400 - 7.91)/2 = 1.2 \\times 196.0 = 235\\ \\mathrm{Pa}$"
+      ],
+      "parts": [
+        {
+          "label": "(1) $v_1$",
+          "unit": "m/s",
+          "ans": 2.813,
+          "isAngle": false
+        },
+        {
+          "label": "(2) $\\Delta P$",
+          "unit": "Pa",
+          "ans": 235.4,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 11,
+      "ch": "第2章",
+      "chN": 2,
+      "tag": "パスカルの原理",
+      "q": "小ピストン $d_1 = 3\\ \\mathrm{cm}$ を $F_1 = 5\\ \\mathrm{N}$ で押すとき、大ピストン $d_2 = 15\\ \\mathrm{cm}$ に生じる力 $F_2$ を求めよ。",
+      "svg": "<svg viewBox=\"0 0 280 175\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"20\" y=\"90\" width=\"230\" height=\"60\" rx=\"3\" fill=\"rgba(86,207,178,.18)\" stroke=\"#56cfb2\" stroke-width=\"1.5\"/>\n<rect x=\"25\" y=\"50\" width=\"32\" height=\"40\" rx=\"2\" fill=\"#1e2235\" stroke=\"#56cfb2\" stroke-width=\"2\"/>\n<text x=\"41\" y=\"45\" fill=\"#56cfb2\" font-size=\"8\" font-family=\"sans-serif\" text-anchor=\"middle\">d₁=3cm</text>\n<rect x=\"207\" y=\"28\" width=\"40\" height=\"62\" rx=\"2\" fill=\"#1e2235\" stroke=\"#56cfb2\" stroke-width=\"2\"/>\n<text x=\"227\" y=\"24\" fill=\"#56cfb2\" font-size=\"8\" font-family=\"sans-serif\" text-anchor=\"middle\">d₂=15cm</text>\n<line x1=\"41\" y1=\"50\" x2=\"41\" y2=\"35\" stroke=\"#f87171\" stroke-width=\"2\"/>\n<polygon points=\"37,37 45,37 41,28\" fill=\"#f87171\"/>\n<text x=\"49\" y=\"32\" fill=\"#f87171\" font-size=\"9\" font-family=\"sans-serif\">F₁=5N</text>\n<line x1=\"227\" y1=\"28\" x2=\"227\" y2=\"8\" stroke=\"#f87171\" stroke-width=\"2\"/>\n<polygon points=\"223,10 231,10 227,2\" fill=\"#f87171\"/>\n<text x=\"235\" y=\"12\" fill=\"#f87171\" font-size=\"9\" font-family=\"sans-serif\">F₂=?</text>\n</svg>",
+      "hint": "$F_2 = F_1 \\times (d_2/d_1)^2$",
+      "reveal": [
+        "$F_2 = 5 \\times (15/3)^2 = 5 \\times 25 = 125\\ \\mathrm{N}$"
+      ],
+      "parts": [
+        {
+          "label": "",
+          "unit": "N",
+          "ans": 125,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 12,
+      "ch": "第4章",
+      "chN": 4,
+      "tag": "鉛直管ベルヌーイ",
+      "q": "断面①: $P_1 = -5.00\\ \\mathrm{kPa}$（ゲージ）、$u_1 = 8\\ \\mathrm{m/s}$。断面②: 出口（大気圧）。管径一定（$d = 12\\ \\mathrm{cm}$）。<br>(1) $H_1$（①と②の高さ差）　(2) $H_2$（水面③と①の高さ差）　(3) $u_2$　(4) $H_3$（水面③と②の高さ差）",
+      "svg": "<svg viewBox=\"0 0 240 240\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"20\" y=\"10\" width=\"130\" height=\"80\" fill=\"rgba(86,207,178,.12)\" stroke=\"#56cfb2\" stroke-width=\"1.5\" rx=\"2\"/>\n<line x1=\"20\" y1=\"10\" x2=\"150\" y2=\"10\" stroke=\"#56cfb2\" stroke-width=\"2.5\"/>\n<text x=\"85\" y=\"5\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\" text-anchor=\"middle\">水面③</text>\n<rect x=\"75\" y=\"90\" width=\"20\" height=\"60\" fill=\"rgba(86,207,178,.18)\" stroke=\"#9ca3af\" stroke-width=\"1.5\"/>\n<circle cx=\"85\" cy=\"90\" r=\"4\" fill=\"#a5b4fc\"/>\n<text x=\"97\" y=\"89\" fill=\"#a5b4fc\" font-size=\"8\" font-family=\"sans-serif\">① P₁=-5kPa,u₁=8m/s</text>\n<line x1=\"155\" y1=\"90\" x2=\"170\" y2=\"90\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"155\" y1=\"10\" x2=\"170\" y2=\"10\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"165\" y1=\"10\" x2=\"165\" y2=\"90\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<text x=\"172\" y=\"53\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">H₂</text>\n<rect x=\"75\" y=\"150\" width=\"20\" height=\"60\" fill=\"rgba(86,207,178,.18)\" stroke=\"#9ca3af\" stroke-width=\"1.5\"/>\n<circle cx=\"85\" cy=\"150\" r=\"4\" fill=\"#56cfb2\"/>\n<text x=\"97\" y=\"149\" fill=\"#56cfb2\" font-size=\"8\" font-family=\"sans-serif\">② 出口（大気圧）</text>\n<line x1=\"97\" y1=\"90\" x2=\"115\" y2=\"90\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"97\" y1=\"150\" x2=\"115\" y2=\"150\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"111\" y1=\"90\" x2=\"111\" y2=\"150\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<text x=\"118\" y=\"123\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">H₁</text>\n<line x1=\"85\" y1=\"210\" x2=\"85\" y2=\"225\" stroke=\"#56cfb2\" stroke-width=\"2\"/>\n<polygon points=\"81,223 89,223 85,230\" fill=\"#56cfb2\"/>\n<text x=\"97\" y=\"222\" fill=\"#9ca3af\" font-size=\"8\" font-family=\"sans-serif\">d=12cm</text>\n<line x1=\"20\" y1=\"10\" x2=\"6\" y2=\"10\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<line x1=\"20\" y1=\"150\" x2=\"6\" y2=\"150\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<line x1=\"10\" y1=\"10\" x2=\"10\" y2=\"150\" stroke=\"#a5b4fc\" stroke-width=\"1\"/>\n<text x=\"12\" y=\"84\" fill=\"#a5b4fc\" font-size=\"8\" font-family=\"sans-serif\">H₃</text>\n</svg>",
+      "hint": "(1) $H_1 = -P_1/(\\rho g)$\n(2) $\\rho g H_2 = -P_1 + \\rho u_1^2/2$（水面→①ベルヌーイ）\n(3) $u_2 = u_1$（同径）\n(4) $H_3 = H_1+H_2 = u_2^2/(2g)$",
+      "reveal": [
+        "$H_1 = 5000/(1000 \\times 9.81) = 0.510\\ \\mathrm{m}$",
+        "$H_2 = (5000 + 1000 \\times 64/2)/9810 = (5000+32000)/9810 = 3.77$... 待って:",
+        "水面→①: $\\rho g H_2 = -P_1 + \\rho u_1^2/2$? → $\\rho g H_2 = \\rho u_1^2/2 + P_1$",
+        "実は $P_1<0$ なので: $H_2 = (\\rho u_1^2/2 + P_1)/(\\rho g) = (32000-5000)/9810 = 27000/9810 = 2.75\\ \\mathrm{m}$",
+        "$u_2 = u_1 = 8.00\\ \\mathrm{m/s}$",
+        "$H_3 = 0.510 + 2.75 = 3.26\\ \\mathrm{m}$（または $8^2/(2\\times9.81) = 3.26\\ \\mathrm{m}$）"
+      ],
+      "parts": [
+        {
+          "label": "(1) $H_1$",
+          "unit": "m",
+          "ans": 0.5097,
+          "isAngle": false
+        },
+        {
+          "label": "(2) $H_2$",
+          "unit": "m",
+          "ans": 2.752,
+          "isAngle": false
+        },
+        {
+          "label": "(3) $u_2$",
+          "unit": "m/s",
+          "ans": 8,
+          "isAngle": false
+        },
+        {
+          "label": "(4) $H_3$",
+          "unit": "m",
+          "ans": 3.262,
+          "isAngle": false
+        }
+      ]
+    },
+    {
+      "no": 13,
+      "ch": "第2章",
+      "chN": 2,
+      "tag": "比重計",
+      "q": "目盛管の直径 $d = 4\\ \\mathrm{mm}$、質量 $m = 3.5\\ \\mathrm{g}$ の比重計。密度 $\\rho_1 = 780\\ \\mathrm{kg/m^3}$ のエタノールに浮かべ、別の液体に浮かべると目盛管が $h = 30\\ \\mathrm{mm}$ だけ深く沈んだ。その液体の密度 $\\rho_2$ を求めよ。",
+      "svg": "<svg viewBox=\"0 0 200 200\" xmlns=\"http://www.w3.org/2000/svg\">\n<rect x=\"60\" y=\"60\" width=\"80\" height=\"130\" rx=\"4\" fill=\"rgba(86,207,178,.10)\" stroke=\"#56cfb2\" stroke-width=\"1.5\"/>\n<line x1=\"60\" y1=\"60\" x2=\"140\" y2=\"60\" stroke=\"#56cfb2\" stroke-width=\"2.5\"/>\n<text x=\"100\" y=\"54\" fill=\"#56cfb2\" font-size=\"10\" font-family=\"sans-serif\" text-anchor=\"middle\">液面</text>\n<ellipse cx=\"100\" cy=\"155\" rx=\"20\" ry=\"28\" fill=\"#1e2235\" stroke=\"#56cfb2\" stroke-width=\"2\"/>\n<rect x=\"94\" y=\"60\" width=\"12\" height=\"95\" rx=\"3\" fill=\"#2d3154\" stroke=\"#56cfb2\" stroke-width=\"1.5\"/>\n<text x=\"100\" y=\"156\" fill=\"#56cfb2\" font-size=\"8\" font-family=\"sans-serif\" text-anchor=\"middle\">錘</text>\n<line x1=\"142\" y1=\"60\" x2=\"158\" y2=\"60\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<line x1=\"142\" y1=\"90\" x2=\"158\" y2=\"90\" stroke=\"#f87171\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/>\n<line x1=\"152\" y1=\"60\" x2=\"152\" y2=\"90\" stroke=\"#56cfb2\" stroke-width=\"1\"/>\n<text x=\"160\" y=\"78\" fill=\"#56cfb2\" font-size=\"9\" font-family=\"sans-serif\">h=30mm</text>\n<text x=\"100\" y=\"126\" fill=\"#9ca3af\" font-size=\"8\" font-family=\"sans-serif\" text-anchor=\"middle\">m=3.5g, d=4mm</text>\n<text x=\"100\" y=\"188\" fill=\"#9ca3af\" font-size=\"9\" font-family=\"sans-serif\" text-anchor=\"middle\">ρ₁=780 kg/m³（エタノール）</text>\n</svg>",
+      "hint": "$m/\\rho_2 = m/\\rho_1 + A_{stem} h$\n$A_{stem} = \\pi d^2/4$\n$\\rho_2 = m/(m/\\rho_1 + A_{stem} h)$",
+      "reveal": [
+        "$A_{stem} = \\pi \\times 0.004^2/4 = 1.257\\times10^{-5}\\ \\mathrm{m^2}$",
+        "$m/\\rho_1 = 0.0035/780 = 4.487\\times10^{-6}\\ \\mathrm{m^3}$",
+        "$A_{stem} h = 1.257\\times10^{-5} \\times 0.030 = 3.770\\times10^{-7}\\ \\mathrm{m^3}$",
+        "$m/\\rho_2 = 4.487\\times10^{-6} + 3.770\\times10^{-7} = 4.864\\times10^{-6}\\ \\mathrm{m^3}$",
+        "$\\rho_2 = 0.0035/4.864\\times10^{-6} = 719\\ \\mathrm{kg/m^3}$"
+      ],
+      "parts": [
+        {
+          "label": "",
+          "unit": "kg/m³",
+          "ans": 719,
+          "isAngle": false
+        }
+      ]
+    }
+  ]
+}
