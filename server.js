@@ -1584,35 +1584,5 @@ initDB().then(async () => {
   scoreInputLocked = sr[0]?.value === 'true';
   const { rows: rr } = await pool.query("SELECT value FROM settings WHERE key='registration_locked'").catch(() => ({ rows: [] }));
   registrationLocked = rr[0]?.value === 'true';
-  // ── 一時修正エンドポイント（使用後削除） ──
-  app.post('/api/admin/fix-pool-20260630', async (req, res) => {
-    if (req.query.key !== 'fix2026kabu') return res.status(403).json({ error: '権限がありません' });
-    const WRONG_RECIPIENT = 'はせがわ';
-    const TOTAL_POOL = 76660;
-    // はせがわから回収
-    const { rows: t } = await pool.query('SELECT id, points FROM users WHERE username=$1', [WRONG_RECIPIENT]);
-    if (!t[0]) return res.status(404).json({ error: 'ユーザーが見つかりません' });
-    await pool.query('UPDATE users SET points=points-$1 WHERE id=$2', [TOTAL_POOL, t[0].id]);
-    // 参加者（test_pred + test_score あり）を取得して再配分
-    const { rows: participants } = await pool.query(
-      'SELECT id, username, test_pred, test_score FROM users WHERE test_pred IS NOT NULL AND test_score IS NOT NULL'
-    );
-    const withWeight = participants.map(p => {
-      const err = Math.max(Math.abs(p.test_pred - p.test_score), 0.5);
-      return { ...p, weight: 1 / (err * err) };
-    });
-    const weightSum = withWeight.reduce((s, p) => s + p.weight, 0);
-    const floored = withWeight.map(p => ({ ...p, share: Math.floor(TOTAL_POOL * p.weight / weightSum) }));
-    const distributed = floored.reduce((s, p) => s + p.share, 0);
-    const maxIdx = floored.reduce((mi, p, i, a) => p.weight > a[mi].weight ? i : mi, 0);
-    floored[maxIdx].share += TOTAL_POOL - distributed;
-    const payouts = [];
-    for (const p of floored) {
-      await pool.query('UPDATE users SET points=points+$1 WHERE id=$2', [p.share, p.id]);
-      payouts.push({ username: p.username, err: Math.abs(p.test_pred - p.test_score), amount: p.share });
-    }
-    res.json({ ok: true, totalPool: TOTAL_POOL, payouts });
-  });
-
   app.listen(PORT, () => console.log(`サーバー起動中 → http://localhost:${PORT}`));
 }).catch(err => { console.error('起動エラー:', err); process.exit(1); });
