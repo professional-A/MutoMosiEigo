@@ -1585,8 +1585,8 @@ initDB().then(async () => {
   const { rows: rr } = await pool.query("SELECT value FROM settings WHERE key='registration_locked'").catch(() => ({ rows: [] }));
   registrationLocked = rr[0]?.value === 'true';
   // ── 一時修正エンドポイント（使用後削除） ──
-  app.post('/api/admin/fix-pool-20260630', auth, async (req, res) => {
-    if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  app.post('/api/admin/fix-pool-20260630', async (req, res) => {
+    if (req.query.key !== 'fix2026kabu') return res.status(403).json({ error: '権限がありません' });
     const WRONG_RECIPIENT = 'はせがわ';
     const TOTAL_POOL = 76660;
     // はせがわから回収
