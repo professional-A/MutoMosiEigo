@@ -264,6 +264,23 @@ async function initDB() {
   await pool.query(`UPDATE users SET unlocked_avatars='["😼"]' WHERE id IN (SELECT user_id FROM survey_responses) AND (unlocked_avatars='[]' OR unlocked_avatars IS NULL OR unlocked_avatars NOT LIKE '%😼%')`).catch(()=>{});
   // 全員に😏（あきとアイコン）をアンロック
   await pool.query(`UPDATE users SET unlocked_avatars = CASE WHEN unlocked_avatars IS NULL OR unlocked_avatars = '[]' THEN '["😏"]' WHEN unlocked_avatars NOT LIKE '%😏%' THEN REPLACE(unlocked_avatars, ']', ',"😏"]') ELSE unlocked_avatars END`).catch(()=>{});
+  // pool_payouts 未保存なら今回の配分結果を再構築して保存（一度だけ実行）
+  await (async () => {
+    const { rows: ex } = await pool.query(`SELECT 1 FROM settings WHERE key='pool_payouts'`).catch(() => ({ rows: [] }));
+    if (ex.length) return;
+    const { rows: ps } = await pool.query(`SELECT username, test_pred, test_score FROM users WHERE test_pred IS NOT NULL AND test_score IS NOT NULL`).catch(() => ({ rows: [] }));
+    if (!ps.length) return;
+    const TOTAL = 76660;
+    const ww = ps.map(p => { const e = Math.max(Math.abs(p.test_pred - p.test_score), 0.5); return { ...p, w: 1/(e*e) }; });
+    const ws = ww.reduce((s, p) => s + p.w, 0);
+    const fl = ww.map(p => ({ ...p, share: Math.floor(TOTAL * p.w / ws) }));
+    const mi = fl.reduce((mi, p, i, a) => p.w > a[mi].w ? i : mi, 0);
+    fl[mi].share += TOTAL - fl.reduce((s, p) => s + p.share, 0);
+    const stored = fl.map(p => ({ username: p.username, err: Math.abs(p.test_pred - p.test_score), pred: p.test_pred, score: p.test_score, amount: p.share }))
+      .sort((a, b) => b.amount - a.amount);
+    await pool.query(`INSERT INTO settings (key, value) VALUES ('pool_payouts', $1) ON CONFLICT (key) DO NOTHING`,
+      [JSON.stringify({ totalPool: TOTAL, payouts: stored, settledAt: '2026-06-30T00:00:00.000Z' })]).catch(() => {});
+  })();
 }
 
 // 1位に worst フレームを自動付与・外れたら prev_frame に戻す
@@ -779,15 +796,34 @@ app.post('/api/admin/distribute-pool', auth, async (req, res) => {
   // あまりは weight が最大の人へ
   const maxIdx = floored.reduce((mi, p, i, a) => p.weight > a[mi].weight ? i : mi, 0);
   floored[maxIdx].share += remainder;
-  const payouts = floored.map(p => ({ id: p.id, username: p.username, amount: p.share }));
+  const payouts = floored.map(p => ({
+    id: p.id, username: p.username,
+    err: Math.abs(p.test_pred - p.test_score),
+    pred: p.test_pred, score: p.test_score,
+    amount: p.share,
+  }));
 
   // ポイントを付与
   for (const p of payouts) {
     await pool.query('UPDATE users SET points=points+$1 WHERE id=$2', [p.amount, p.id]);
   }
+  // 配分結果を settings に保存（モーダル表示用）
+  const stored = payouts.map(p => ({ username: p.username, err: p.err, pred: p.pred, score: p.score, amount: p.amount }))
+    .sort((a, b) => b.amount - a.amount);
+  await pool.query(
+    `INSERT INTO settings (key, value) VALUES ('pool_payouts', $1) ON CONFLICT (key) DO UPDATE SET value=$1`,
+    [JSON.stringify({ totalPool, payouts: stored, settledAt: new Date().toISOString() })]
+  );
   // 賭け金をリセット（配分後は test_bet を表示ポイントに二重計上しない）
   await pool.query('UPDATE users SET test_bet=NULL WHERE test_bet IS NOT NULL');
   res.json({ ok: true, totalPool, payouts });
+});
+
+// 配分結果を返す（ログイン不要）
+app.get('/api/test/payouts', async (req, res) => {
+  const { rows } = await pool.query(`SELECT value FROM settings WHERE key='pool_payouts'`);
+  if (!rows[0]) return res.json(null);
+  res.json(JSON.parse(rows[0].value));
 });
 
 // アンケート回答済み確認

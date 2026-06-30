@@ -702,6 +702,13 @@ h1{
       <div id="test-results-table"></div>
     </div>
 
+    <!-- 配分結果ランキング -->
+    <div id="test-payouts-wrap" style="margin-top:14px;display:none">
+      <h3 style="font-size:.9rem;color:var(--teal);margin-bottom:4px;letter-spacing:.1em">🏆 配分結果</h3>
+      <p id="test-payouts-meta" style="font-size:.78rem;color:var(--muted);margin-bottom:8px"></p>
+      <div id="test-payouts-table"></div>
+    </div>
+
     <div class="modal-btns" style="margin-top:14px">
       <button onclick="closeTestModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
@@ -1790,6 +1797,36 @@ async function loadTestResults() {
           <td style="text-align:center;font-weight:600">${r.test_score}</td>
           <td style="text-align:center;color:${err<=5?'var(--teal)':err<=15?'var(--amber)':'#f87171'}">${err}</td>
           <td style="text-align:center;color:var(--teal)">${r.test_bet != null ? r.test_bet.toLocaleString()+'pt' : '―'}</td>
+        </tr>`;
+      }).join('')}</tbody>
+    </table></div>`;
+  } catch(e) { wrap.style.display = 'none'; }
+  await loadTestPayouts();
+}
+
+async function loadTestPayouts() {
+  const wrap = document.getElementById('test-payouts-wrap');
+  const tbl  = document.getElementById('test-payouts-table');
+  const meta = document.getElementById('test-payouts-meta');
+  try {
+    const res  = await fetch('/api/test/payouts');
+    const data = await res.json();
+    if (!data || !data.payouts?.length) { wrap.style.display = 'none'; return; }
+    wrap.style.display = 'block';
+    const d = new Date(data.settledAt);
+    meta.textContent = `プール合計 ${data.totalPool.toLocaleString()}pt ／ 配分日時: ${d.toLocaleDateString('ja-JP')} ${d.toLocaleTimeString('ja-JP', {hour:'2-digit',minute:'2-digit'})}`;
+    tbl.innerHTML = `<div class="table-scroll"><table class="ranking-table">
+      <thead><tr><th>#</th><th>名前</th><th>予測</th><th>実際</th><th>誤差</th><th>獲得pt</th></tr></thead>
+      <tbody>${data.payouts.map((r, i) => {
+        const isMe = r.username === authUser;
+        const errColor = r.err === 0 ? 'var(--teal)' : r.err <= 5 ? 'var(--teal)' : r.err <= 15 ? 'var(--amber)' : '#f87171';
+        return `<tr${isMe ? ' style="background:rgba(70,214,196,.06)"' : ''}>
+          <td class="rank-num">${i + 1}</td>
+          <td class="rank-name">${esc(tu(r.username))}${isMe ? ' 👈' : ''}</td>
+          <td style="text-align:center;color:var(--muted)">${r.pred ?? '―'}</td>
+          <td style="text-align:center;font-weight:600">${r.score ?? '―'}</td>
+          <td style="text-align:center;color:${errColor}">${r.err}</td>
+          <td style="text-align:center;color:var(--teal);font-weight:700">+${r.amount.toLocaleString()}</td>
         </tr>`;
       }).join('')}</tbody>
     </table></div>`;
