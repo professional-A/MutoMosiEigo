@@ -766,32 +766,20 @@ app.post('/api/admin/distribute-pool', auth, async (req, res) => {
   const { rows: poolRow } = await pool.query('SELECT COALESCE(SUM(test_bet),0) AS total FROM users WHERE test_bet IS NOT NULL');
   const totalPool = Number(poolRow[0].total);
 
-  // 誤差0（完全的中）の人を探す
-  const perfect = participants.filter(p => Math.abs(p.test_pred - p.test_score) === 0);
-
-  let payouts; // [{id, username, amount}]
-
-  if (perfect.length > 0) {
-    // 完全的中組で均等分配、あまりは最初の人へ
-    const share = Math.floor(totalPool / perfect.length);
-    const remainder = totalPool - share * perfect.length;
-    payouts = perfect.map((p, i) => ({ id: p.id, username: p.username, amount: share + (i === 0 ? remainder : 0) }));
-  } else {
-    // weight_i = 1 / err²、浮動小数で計算
-    const withWeight = participants.map(p => {
-      const err = Math.abs(p.test_pred - p.test_score);
-      return { ...p, weight: 1 / (err * err) };
-    });
-    const weightSum = withWeight.reduce((s, p) => s + p.weight, 0);
-    // floor 配分
-    const floored = withWeight.map(p => ({ ...p, share: Math.floor(totalPool * p.weight / weightSum) }));
-    const distributed = floored.reduce((s, p) => s + p.share, 0);
-    const remainder = totalPool - distributed;
-    // あまりは weight が最大の人へ
-    const maxIdx = floored.reduce((mi, p, i, a) => p.weight > a[mi].weight ? i : mi, 0);
-    floored[maxIdx].share += remainder;
-    payouts = floored.map(p => ({ id: p.id, username: p.username, amount: p.share }));
-  }
+  // weight_i = 1 / max(誤差, 0.5)²  ← 誤差0でも全独占しない（誤差1の4倍の重み）
+  const withWeight = participants.map(p => {
+    const err = Math.max(Math.abs(p.test_pred - p.test_score), 0.5);
+    return { ...p, weight: 1 / (err * err) };
+  });
+  const weightSum = withWeight.reduce((s, p) => s + p.weight, 0);
+  // floor 配分
+  const floored = withWeight.map(p => ({ ...p, share: Math.floor(totalPool * p.weight / weightSum) }));
+  const distributed = floored.reduce((s, p) => s + p.share, 0);
+  const remainder = totalPool - distributed;
+  // あまりは weight が最大の人へ
+  const maxIdx = floored.reduce((mi, p, i, a) => p.weight > a[mi].weight ? i : mi, 0);
+  floored[maxIdx].share += remainder;
+  const payouts = floored.map(p => ({ id: p.id, username: p.username, amount: p.share }));
 
   // ポイントを付与
   for (const p of payouts) {
