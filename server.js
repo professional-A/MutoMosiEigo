@@ -1620,5 +1620,11 @@ initDB().then(async () => {
   scoreInputLocked = sr[0]?.value === 'true';
   const { rows: rr } = await pool.query("SELECT value FROM settings WHERE key='registration_locked'").catch(() => ({ rows: [] }));
   registrationLocked = rr[0]?.value === 'true';
+  // ── 一時修正エンドポイント（使用後削除） ──
+  app.post('/api/admin/fix-honari-nekku-20260709', async (req, res) => {
+    if (req.query.key !== 'fix2026kabu') return res.status(403).json({ error: '権限がありません' });
+    await pool.query(`UPDATE users SET nekku_score=11 WHERE username='honari'`);
+    res.json({ ok: true });
+  });
   app.listen(PORT, () => console.log(`サーバー起動中 → http://localhost:${PORT}`));
 }).catch(err => { console.error('起動エラー:', err); process.exit(1); });
