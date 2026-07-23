@@ -51,6 +51,16 @@
   {
     "year": 2026,
     "grade": 4,
+    "exam": "再試験",
+    "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ 軽い総合演習（再試験対策）",
+    "path": "tests/2026-4-zenki-chukan-saishiken/",
+    "storageKey": "mutou_saishiken",
+    "totalItems": 29
+  },
+  {
+    "year": 2026,
+    "grade": 4,
     "exam": "前期中間試験",
     "subject": "科学技術英語Ⅰ",
     "title": "科学技術英語Ⅰ ・ 本文理解 (Step 4)",
