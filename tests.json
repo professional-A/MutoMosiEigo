@@ -11,7 +11,7 @@
   {
     "year": 2026,
     "grade": 4,
-    "exam": "前期中間試験",
+    "exam": "再試験",
     "subject": "科学技術英語Ⅰ",
     "title": "科学技術英語Ⅰ ・ 単語 (Step 1)",
     "path": "tests/2026-4-zenki-chukan-step1/",
@@ -21,7 +21,7 @@
   {
     "year": 2026,
     "grade": 4,
-    "exam": "前期中間試験",
+    "exam": "再試験",
     "subject": "科学技術英語Ⅰ",
     "title": "科学技術英語Ⅰ ・ 熟語 (Step 2)",
     "path": "tests/2026-4-zenki-chukan-step2/",
