@@ -35,6 +35,27 @@ body{
 .archived-toggle:hover{color:var(--teal);border-color:var(--teal)}
 .wrap{max-width:920px;margin:0 auto;padding:0 18px}
 
+/* 試験時間割 */
+.tt-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:12px}
+.tt-eyebrow{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);font-weight:600}
+.tt-title{font-size:1.1rem;font-weight:600;color:var(--ink);font-family:"Fraunces",serif}
+.tt-day{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:10px}
+.tt-day.tt-next{border-color:var(--teal);box-shadow:0 0 0 1px rgba(70,214,196,.25)}
+.tt-day.tt-done{opacity:.45}
+.tt-dayhead{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
+.tt-date{font-size:.9rem;font-weight:700;color:var(--ink)}
+.tt-left{font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:99px;background:rgba(70,214,196,.14);color:var(--teal)}
+.tt-left.soon{background:rgba(240,113,110,.16);color:var(--rose)}
+.tt-left.done{background:rgba(255,255,255,.05);color:var(--dim)}
+.tt-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.tt-row:first-of-type{border-top:none}
+.tt-time{font-size:.75rem;color:var(--dim);font-variant-numeric:tabular-nums;min-width:88px}
+.tt-subject{font-size:.95rem;font-weight:600;color:var(--ink);flex:1;min-width:120px}
+.tt-teacher{font-size:.72rem;color:var(--muted)}
+.tt-min{font-size:.66rem;color:var(--dim);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
+.tt-link{font-size:.72rem;font-weight:600;text-decoration:none;padding:3px 10px;border-radius:6px;border:1px solid var(--teal);color:var(--teal);background:rgba(70,214,196,.1);transition:.15s;white-space:nowrap}
+.tt-link:hover{background:var(--teal);color:#0a1626}
+
 /* Header */
 header{
   padding:46px 0 30px;
@@ -758,6 +779,7 @@ h1{
     <div id="admin-content" style="flex:1;overflow-y:auto;min-height:0;padding-right:2px"></div>
     <div class="modal-btns" style="margin-top:12px;flex-shrink:0;flex-wrap:wrap;gap:8px">
       <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
+      <button onclick="openTimetableModal()" style="background:#1e2333;color:#8ec5ff;border:1px solid #4a8fd6;font-weight:700">🗓 時間割</button>
       <button onclick="restorePointsManual()" style="background:#0f766e;color:#fff;border:none;font-weight:700">♻️ ポイント復元</button>
       <button onclick="debugPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔍 DB確認</button>
       <button onclick="resetSeasonPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔄 シーズンリセット</button>
@@ -880,6 +902,19 @@ h1{
     <div class="modal-btns" style="margin-top:12px;flex-shrink:0;flex-wrap:wrap;gap:8px">
       <button onclick="archiveAllTests()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📦 全部アーカイブ</button>
       <button onclick="closeScheduleModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<!-- 試験時間割モーダル -->
+<div class="modal-bg" id="timetable-modal-bg">
+  <div class="modal" style="width:min(560px,95vw);max-height:90vh;display:flex;flex-direction:column">
+    <button onclick="closeTimetableModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2>🗓 試験時間割の登録</h2>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;flex-shrink:0">ここで登録した内容がトップページに掲示されます。リンク欄に対策ページのURLを入れると「対策 →」ボタンが出ます</p>
+    <div id="timetable-content" style="flex:1;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:8px"></div>
+    <div class="modal-btns" style="margin-top:12px;flex-shrink:0">
+      <button onclick="closeTimetableModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
     </div>
   </div>
 </div>
@@ -1186,6 +1221,18 @@ h1{
 </header>
 
 <div class="wrap">
+  <!-- 試験時間割 -->
+  <section id="timetable-card" style="display:none;margin-bottom:26px">
+    <div class="tt-head">
+      <div>
+        <div class="tt-eyebrow">Exam Schedule</div>
+        <div class="tt-title" id="tt-title">試験時間割</div>
+      </div>
+      <button class="archived-toggle" id="tt-toggle" onclick="toggleTimetable()">たたむ</button>
+    </div>
+    <div id="tt-body"></div>
+  </section>
+
   <!-- フォルダビュー（デフォルト） -->
   <div id="folder-view">
     <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
@@ -1248,6 +1295,163 @@ function applyExamArchive() {
   });
 }
 
+// ── 試験時間割 ────────────────────────────────────────────────
+let _timetable = [];
+const TT_WD = ['日','月','火','水','木','金','土'];
+function ttEsc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
+function ttToday() { const d = new Date(); d.setHours(0,0,0,0); return d; }
+function ttDaysLeft(ymd) {
+  const [y,m,d] = ymd.split('-').map(Number);
+  return Math.round((new Date(y, m-1, d) - ttToday()) / 86400000);
+}
+function ttLeftLabel(n) {
+  if (n < 0)  return { text: '終了',      cls: 'done' };
+  if (n === 0) return { text: '今日',      cls: 'soon' };
+  if (n === 1) return { text: '明日',      cls: 'soon' };
+  if (n <= 3)  return { text: 'あと' + n + '日', cls: 'soon' };
+  return { text: 'あと' + n + '日', cls: '' };
+}
+// DBは "HH:MM"（time inputがゼロ埋めを要求する）、表示は先頭0を落とす
+function ttPad(t) {
+  if (!t) return '';
+  const m = String(t).match(/^(\d{1,2}):(\d{2})/);
+  return m ? String(m[1]).padStart(2, '0') + ':' + m[2] : '';
+}
+function ttShow(t) { return ttPad(t).replace(/^0/, ''); }
+function ttMinutes(st, et) {
+  if (!st || !et) return '';
+  const [sh,sm] = st.split(':').map(Number), [eh,em] = et.split(':').map(Number);
+  const n = (eh*60+em) - (sh*60+sm);
+  return n > 0 ? n + '分' : '';
+}
+
+async function loadTimetable() {
+  try {
+    const data = await fetch('/api/exam-timetable').then(r => r.json());
+    _timetable = Array.isArray(data) ? data : [];
+  } catch(e) { _timetable = []; }
+  renderTimetable();
+}
+
+function renderTimetable() {
+  const card = document.getElementById('timetable-card');
+  const body = document.getElementById('tt-body');
+  if (!card || !body) return;
+  if (!_timetable.length) { card.style.display = 'none'; return; }
+  card.style.display = '';
+
+  const examName = _timetable[0].exam || '試験';
+  document.getElementById('tt-title').textContent = examName + ' 時間割';
+
+  // 日付ごとにまとめる
+  const days = [];
+  _timetable.forEach(r => {
+    let g = days.find(x => x.date === r.exam_date);
+    if (!g) { g = { date: r.exam_date, rows: [] }; days.push(g); }
+    g.rows.push(r);
+  });
+  days.sort((a,b) => a.date < b.date ? -1 : 1);
+
+  const nextDate = (days.find(g => ttDaysLeft(g.date) >= 0) || {}).date;
+
+  body.innerHTML = days.map(g => {
+    const n = ttDaysLeft(g.date);
+    const lb = ttLeftLabel(n);
+    const [y,m,d] = g.date.split('-').map(Number);
+    const wd = TT_WD[new Date(y, m-1, d).getDay()];
+    const cls = n < 0 ? ' tt-done' : (g.date === nextDate ? ' tt-next' : '');
+    const rows = g.rows.map(r => {
+      const mins = ttMinutes(r.start_time, r.end_time);
+      return `<div class="tt-row">
+        <span class="tt-time">${ttEsc(ttShow(r.start_time))}${r.end_time ? '–' + ttEsc(ttShow(r.end_time)) : ''}</span>
+        <span class="tt-subject">${ttEsc(r.subject)}</span>
+        ${mins ? `<span class="tt-min">${mins}</span>` : ''}
+        ${r.teacher ? `<span class="tt-teacher">${ttEsc(r.teacher)}</span>` : ''}
+        ${r.note ? `<span class="tt-teacher">${ttEsc(r.note)}</span>` : ''}
+        ${r.link ? `<a class="tt-link" href="${ttEsc(r.link)}">対策 →</a>` : ''}
+      </div>`;
+    }).join('');
+    return `<div class="tt-day${cls}">
+      <div class="tt-dayhead">
+        <span class="tt-date">${m}/${d}（${wd}）</span>
+        <span class="tt-left ${lb.cls}">${lb.text}</span>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+}
+
+function toggleTimetable() {
+  const body = document.getElementById('tt-body');
+  const btn  = document.getElementById('tt-toggle');
+  const open = body.style.display !== 'none';
+  body.style.display = open ? 'none' : '';
+  btn.textContent = open ? '開く' : 'たたむ';
+}
+
+async function openTimetableModal() {
+  document.getElementById('admin-modal-bg').classList.remove('open');
+  lockScroll();
+  document.getElementById('timetable-modal-bg').classList.add('open');
+  await loadTimetable();
+  const el = document.getElementById('timetable-content');
+  const rowHtml = (r, i) => `<div style="background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px">
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <input id="tt-exam-${i}" value="${ttEsc(r.exam || '')}" placeholder="試験名" style="flex:1;min-width:110px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <input id="tt-subject-${i}" value="${ttEsc(r.subject || '')}" placeholder="科目" style="flex:1;min-width:110px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+      <input type="date" id="tt-date-${i}" value="${ttEsc(r.exam_date || '')}" style="padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <input type="time" id="tt-start-${i}" value="${ttEsc(ttPad(r.start_time))}" style="padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <input type="time" id="tt-end-${i}" value="${ttEsc(ttPad(r.end_time))}" style="padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <input id="tt-teacher-${i}" value="${ttEsc(r.teacher || '')}" placeholder="担当" style="flex:1;min-width:80px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+      <input id="tt-link-${i}" value="${ttEsc(r.link || '')}" placeholder="対策ページのリンク（任意）" style="flex:1;min-width:150px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <button onclick="saveTimetableRow(${i})" style="padding:4px 12px;border:1px solid var(--teal);border-radius:5px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.75rem;cursor:pointer;font-family:inherit">保存</button>
+      ${r.id ? `<button onclick="deleteTimetableRow(${r.id})" style="padding:4px 8px;border:1px solid var(--line);border-radius:5px;background:none;color:var(--dim);font-size:.72rem;cursor:pointer;font-family:inherit">削除</button>` : ''}
+    </div>
+  </div>`;
+  const blank = { exam: (_timetable[0] || {}).exam || '前期末試験' };
+  el.innerHTML = _timetable.map(rowHtml).join('')
+    + '<div style="font-size:.72rem;color:var(--dim);margin-top:4px">＋ 新規追加</div>'
+    + rowHtml(blank, _timetable.length);
+}
+function closeTimetableModal() {
+  unlockScroll();
+  document.getElementById('timetable-modal-bg').classList.remove('open');
+}
+
+async function saveTimetableRow(i) {
+  const v = k => (document.getElementById('tt-' + k + '-' + i) || {}).value || '';
+  const payload = {
+    id: (_timetable[i] || {}).id || null,
+    exam: v('exam'), subject: v('subject'), exam_date: v('date'),
+    start_time: v('start'), end_time: v('end'), teacher: v('teacher'), link: v('link'),
+  };
+  if (!payload.exam || !payload.subject || !payload.exam_date) { alert('試験名・科目・日付は必須です'); return; }
+  try {
+    const res = await fetch('/api/admin/exam-timetable', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!data.ok) { alert('❌ ' + (data.error || 'エラー')); return; }
+    await openTimetableModal();
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function deleteTimetableRow(id) {
+  if (!confirm('この行を削除しますか？')) return;
+  try {
+    await fetch('/api/admin/exam-timetable/' + id, {
+      method: 'DELETE', headers: { 'Authorization': authToken }
+    });
+    await openTimetableModal();
+  } catch(e) { alert('通信エラー'); }
+}
+
 async function openScheduleModal() {
   document.getElementById('admin-modal-bg').classList.remove('open');
   lockScroll();
@@ -1294,6 +1498,9 @@ function closeScheduleModal() {
 }
 document.getElementById('schedule-modal-bg').addEventListener('click', e => {
   if (e.target === e.currentTarget) closeScheduleModal();
+});
+document.getElementById('timetable-modal-bg').addEventListener('click', e => {
+  if (e.target === e.currentTarget) closeTimetableModal();
 });
 
 async function archiveAllTests() {
@@ -1530,6 +1737,7 @@ document.getElementById("exam-filters").addEventListener("click", e => {
 });
 
 loadTheme();
+loadTimetable();
 
 fetch("tests.json")
   .then(r => r.json())

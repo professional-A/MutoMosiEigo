@@ -93,6 +93,40 @@ async function initDB() {
     )
   `).catch(()=>{});
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS exam_timetable (
+      id         SERIAL PRIMARY KEY,
+      exam       TEXT NOT NULL,
+      subject    TEXT NOT NULL,
+      exam_date  TEXT NOT NULL,
+      start_time TEXT,
+      end_time   TEXT,
+      teacher    TEXT,
+      link       TEXT,
+      note       TEXT,
+      UNIQUE(exam, subject)
+    )
+  `).catch(()=>{});
+  // 初回のみ 4S 前期末試験の時間割を投入（以降は管理UIから編集）
+  try {
+    const { rows } = await pool.query('SELECT COUNT(*)::int AS n FROM exam_timetable');
+    if (rows[0].n === 0) {
+      const seed = [
+        ['前期末試験', '応用数学',       '2026-09-11', '09:00', '09:50',  '奥村、降旗'],
+        ['前期末試験', '人工知能概論',   '2026-09-14', '09:00', '10:30', 'ユーハラシェット'],
+        ['前期末試験', '加工学',         '2026-09-14', '10:50', '11:40', '堀川'],
+        ['前期末試験', '応用物理Ⅱ',     '2026-09-15', '09:00', '10:30', '松井'],
+        ['前期末試験', '熱流体工学Ⅰ',   '2026-09-15', '10:50', '12:20', '阿部（晶）'],
+        ['前期末試験', '制御工学Ⅰ',     '2026-09-16', '09:00', '10:30', '森川'],
+        ['前期末試験', '科学技術英語Ⅰ', '2026-09-17', '09:00', '10:30', '鈴木'],
+      ];
+      for (const s of seed) {
+        await pool.query(
+          `INSERT INTO exam_timetable (exam, subject, exam_date, start_time, end_time, teacher)
+           VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (exam, subject) DO NOTHING`, s).catch(()=>{});
+      }
+    }
+  } catch(e) {}
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS banners (
       id         SERIAL PRIMARY KEY,
       date       TEXT,
@@ -1087,6 +1121,44 @@ app.post('/api/admin/exam-schedule', auth, async (req, res) => {
      ON CONFLICT (subject, exam) DO UPDATE SET archive_after = $3`,
     [subject, exam, archive_after || null]
   );
+  res.json({ ok: true });
+});
+
+// ── 試験時間割 ────────────────────────────────────────────────
+app.get('/api/exam-timetable', async (req, res) => {
+  const { rows } = await pool.query(
+    'SELECT * FROM exam_timetable ORDER BY exam_date, start_time, subject'
+  );
+  res.json(rows);
+});
+
+app.post('/api/admin/exam-timetable', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { id, exam, subject, exam_date, start_time, end_time, teacher, link, note } = req.body;
+  if (id) {
+    await pool.query(
+      `UPDATE exam_timetable
+       SET exam=$2, subject=$3, exam_date=$4, start_time=$5, end_time=$6, teacher=$7, link=$8, note=$9
+       WHERE id=$1`,
+      [id, exam, subject, exam_date, start_time || null, end_time || null, teacher || null, link || null, note || null]
+    );
+    return res.json({ ok: true, id });
+  }
+  if (!exam || !subject || !exam_date) return res.status(400).json({ error: 'exam, subject, exam_dateが必要' });
+  const { rows } = await pool.query(
+    `INSERT INTO exam_timetable (exam, subject, exam_date, start_time, end_time, teacher, link, note)
+     VALUES ($1,$2,$3,$4,$5,$6,$7,$8)
+     ON CONFLICT (exam, subject) DO UPDATE SET
+       exam_date=$3, start_time=$4, end_time=$5, teacher=$6, link=$7, note=$8
+     RETURNING id`,
+    [exam, subject, exam_date, start_time || null, end_time || null, teacher || null, link || null, note || null]
+  );
+  res.json({ ok: true, id: rows[0].id });
+});
+
+app.delete('/api/admin/exam-timetable/:id', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  await pool.query('DELETE FROM exam_timetable WHERE id=$1', [req.params.id]);
   res.json({ ok: true });
 });
 
