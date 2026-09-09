@@ -1,0 +1,64 @@
+{
+  "updated": "2026-09-09",
+  "documents": [
+    {
+      "file": "findings/short-term-exam-prep.json",
+      "title": "短期テスト勉強（残り数日〜2週間）の学習科学",
+      "question": "試験まで日数が少ない現実的な状況で、何をどう出題・再出題すれば点と定着の両方が取れるか",
+      "count": 15,
+      "date": "2026-09-09"
+    }
+  ],
+  "source_documents": [
+    {
+      "file": "../武藤模試v2 開発のための2大テーマ・ディープリサーチ.md",
+      "title": "武藤模試v2 開発のための2大テーマ・ディープリサーチ",
+      "note": "読み物としての元リサーチ。長期保持前提の記述が多く、短期テスト勉強には findings/short-term-exam-prep.json を優先する"
+    },
+    {
+      "file": "../mutomoshi_engine_仕様書_v2.1.md",
+      "title": "mutomoshi engine 仕様書 v2.1"
+    }
+  ],
+  "tags": {
+    "spacing": ["optimal-gap-is-20-40-percent-of-days-left", "sleep-is-the-active-ingredient-in-spacing", "within-session-lag-still-matters", "spacing-beats-cramming-almost-always"],
+    "scheduling": ["optimal-gap-is-20-40-percent-of-days-left", "three-relearning-sessions-is-enough", "sleep-is-the-active-ingredient-in-spacing", "equal-interval-is-fine-no-need-for-expanding", "cap-interval-at-exam-date"],
+    "short-window": ["optimal-gap-is-20-40-percent-of-days-left", "three-relearning-sessions-is-enough", "spread-correct-recalls-across-sessions", "sleep-is-the-active-ingredient-in-spacing", "cap-interval-at-exam-date"],
+    "successive-relearning": ["three-relearning-sessions-is-enough", "spread-correct-recalls-across-sessions"],
+    "criterion": ["three-relearning-sessions-is-enough", "keep-testing-after-first-correct"],
+    "session-design": ["spread-correct-recalls-across-sessions", "within-session-lag-still-matters", "pretesting-beats-posttesting"],
+    "retrieval-practice": ["keep-testing-after-first-correct"],
+    "dropout": ["keep-testing-after-first-correct"],
+    "wrong-answer-requeue": ["within-session-lag-still-matters"],
+    "interleaving": ["interleaving-beats-blocked-after-a-day"],
+    "problem-solving": ["interleaving-beats-blocked-after-a-day"],
+    "question-selection": ["interleaving-beats-blocked-after-a-day", "optimal-difficulty-85-percent"],
+    "question-format": ["immediate-feedback-halves-lure-intrusions", "competitive-lures-make-mcq-generative"],
+    "distractors": ["competitive-lures-make-mcq-generative"],
+    "authoring": ["competitive-lures-make-mcq-generative"],
+    "feedback": ["pretesting-beats-posttesting", "immediate-feedback-halves-lure-intrusions", "feedback-required-when-accuracy-below-50"],
+    "pretesting": ["pretesting-beats-posttesting"],
+    "difficulty": ["optimal-difficulty-85-percent", "feedback-required-when-accuracy-below-50"],
+    "algorithm-choice": ["equal-interval-is-fine-no-need-for-expanding"],
+    "simplicity": ["equal-interval-is-fine-no-need-for-expanding"],
+    "sleep": ["sleep-is-the-active-ingredient-in-spacing"],
+    "guardrail": ["cap-interval-at-exam-date"],
+    "core-claim": ["spacing-beats-cramming-almost-always"]
+  },
+  "unimplemented": [
+    "optimal-gap-is-20-40-percent-of-days-left",
+    "three-relearning-sessions-is-enough",
+    "spread-correct-recalls-across-sessions",
+    "sleep-is-the-active-ingredient-in-spacing",
+    "within-session-lag-still-matters",
+    "keep-testing-after-first-correct",
+    "interleaving-beats-blocked-after-a-day",
+    "equal-interval-is-fine-no-need-for-expanding",
+    "pretesting-beats-posttesting",
+    "competitive-lures-make-mcq-generative",
+    "optimal-difficulty-85-percent",
+    "feedback-required-when-accuracy-below-50",
+    "spacing-beats-cramming-almost-always",
+    "cap-interval-at-exam-date"
+  ]
+}

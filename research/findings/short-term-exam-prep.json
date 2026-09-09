@@ -1,0 +1,227 @@
+[
+  {
+    "id": "optimal-gap-is-20-40-percent-of-days-left",
+    "claim": "最適な復習間隔は「試験までの残り日数の20〜40%」で、残りが短いほど間隔も短くてよい。",
+    "numbers": {
+      "1週間後テスト": "最適間隔は残り期間の20〜40% → 残り7日なら約1.5〜3日",
+      "数週間後テスト": "約10〜20%",
+      "1年後テスト": "約5〜10%",
+      "被験者数": "1350人超"
+    },
+    "strength": "high",
+    "sources": [
+      { "cite": "Cepeda, Vul, Rohrer, Wixted & Pashler (2008) Psychological Science 19:1095-1102", "url": "https://laplab.ucsd.edu/articles/Cepeda%20et%20al%202008_psychsci.pdf" }
+    ],
+    "applies_to": ["all"],
+    "implication": "「何日も空ける」は長期保持用の設定であって、短期テスト勉強では間違い。試験日を入力させ、残り日数×0.2〜0.4 を間隔の基準にする。残り3日なら間隔は半日〜1日でよい。",
+    "caveat": "最適値の周辺はかなり平ら（ridgeline）なので、厳密な最適化より「massedにしない」ことのほうが重要。残り1日を切ると間隔の取りようがなく、この知見は適用外。",
+    "implemented_in": [],
+    "tags": ["spacing", "scheduling", "short-window"]
+  },
+  {
+    "id": "three-relearning-sessions-is-enough",
+    "claim": "別日セッションでの再学習は3回でほぼ頭打ちになり、そこまでで保持率が20%→80%まで上がる。",
+    "numbers": {
+      "再学習0回": "約20%",
+      "1回": "約50%",
+      "2回": "約70%",
+      "3回": "約80%"
+    },
+    "strength": "high",
+    "sources": [
+      { "cite": "Rawson & Dunlosky (2022) Current Directions in Psychological Science 31(4):362-368", "url": "https://journals.sagepub.com/doi/full/10.1177/09637214221100484" },
+      { "cite": "Rawson, Dunlosky & Sciartelli (2013) Educational Psychology Review 25:523-548", "url": "https://link.springer.com/article/10.1007/s10648-013-9240-4" }
+    ],
+    "applies_to": ["vocab", "concept", "grammar"],
+    "implication": "短期テスト勉強で必要なのは「3セッション」だけ。試験まで3日あれば十分に成立する。UIの目標を「全問3セッションぶん正解する」に置けば、学習量の設計がそのまま完了条件になる。",
+    "caveat": "何セッション必要かは学習〜試験の間隔で変わり、研究はまだ強い一般化を許していない。3は上限ではなく費用対効果の折り返し点。",
+    "implemented_in": [],
+    "tags": ["successive-relearning", "scheduling", "short-window", "criterion"]
+  },
+  {
+    "id": "spread-correct-recalls-across-sessions",
+    "claim": "同じ「3回正解」でも、1セッションで3回正解するより、3つの別セッションで1回ずつ正解するほうが2倍以上覚えている。",
+    "numbers": { "保持量の差": "2倍以上", "1セッションあたりの必要正解数": "1回で足りる" },
+    "strength": "high",
+    "sources": [
+      { "cite": "Rawson & Dunlosky (2022) Current Directions in Psychological Science 31(4)", "url": "https://journals.sagepub.com/doi/full/10.1177/09637214221100484" }
+    ],
+    "applies_to": ["vocab", "concept"],
+    "implication": "1回のセッションで同じ問題を何度も出すのは無駄。セッション内は各問1正解で打ち切り、残りの労力を別セッションに回す。これは学習時間を増やさずに効果を上げられる、いちばん割のいい変更。",
+    "caveat": "セッションが実質連続（休憩なし・同日連打）だと別セッション扱いにならない。区切りの定義が必要。",
+    "implemented_in": [],
+    "tags": ["successive-relearning", "session-design", "short-window"]
+  },
+  {
+    "id": "sleep-is-the-active-ingredient-in-spacing",
+    "claim": "分散学習の効き目の主因は「時間の長さ」より「間に睡眠が入ること」で、睡眠を含む12時間間隔は24時間間隔とほぼ同等。",
+    "numbers": { "12時間(睡眠含む) vs 24時間": "長期保持はほぼ同等" },
+    "strength": "moderate",
+    "sources": [
+      { "cite": "Bell, Kawadri, Simone & Wiseheart (2014) 'Long-term memory, sleep, and the spacing effect', Memory", "url": "https://www.yorku.ca/ncepeda/publications/BKSW2014.pdf" }
+    ],
+    "applies_to": ["all"],
+    "implication": "残り日数が足りない短期戦の切り札。『夜に1セッション → 翌朝に1セッション』で、丸1日待たずに1セッションぶんの分散効果が取れる。残り2日でも実質3〜4セッション組める。",
+    "caveat": "睡眠不足だと効果が削られる。徹夜と併用したら意味がない。宣言的記憶（単語・用語）で確認された話で、手続き的記憶には別のパターンがある。",
+    "implemented_in": [],
+    "tags": ["spacing", "sleep", "short-window", "scheduling"]
+  },
+  {
+    "id": "within-session-lag-still-matters",
+    "claim": "同一セッション内でも、間を空けて再出題したほうが直後に再出題するより記憶に残る。",
+    "numbers": { "例": "1分後の再出題より5分後の再出題のほうが良い" },
+    "strength": "moderate",
+    "sources": [
+      { "cite": "Kapler, Weston & Wiseheart / Cepeda et al. のlag effect研究群", "url": "https://link.springer.com/article/10.1007/s11251-013-9285-2" }
+    ],
+    "applies_to": ["vocab", "concept"],
+    "implication": "間違えた問題をその場で即もう一度出すのは最悪の再出題タイミング。同一セッション内で再出題するなら最低でも数問〜十数問はさむ（キューの末尾に戻す）。",
+    "caveat": "セッション内lagの最適値は研究間で一貫していない。『0ではなくす』程度の強さの主張にとどめる。",
+    "implemented_in": [],
+    "tags": ["spacing", "session-design", "wrong-answer-requeue"]
+  },
+  {
+    "id": "keep-testing-after-first-correct",
+    "claim": "一度正解した項目を出題から外すと保持が大きく落ちる。正解後も検索練習を続けることが効く一方、正解後の「再読」はほぼ何も足さない。",
+    "numbers": { "1週間後の再生率": "テスト継続群 約80% / 再学習のみの群 約1/3" },
+    "strength": "high",
+    "sources": [
+      { "cite": "Karpicke & Roediger (2008) Science 319:966-968", "url": "http://psychnet.wustl.edu/memory/wp-content/uploads/2018/04/Karpicke-Roediger-2008_Sci.pdf" }
+    ],
+    "applies_to": ["vocab", "concept", "grammar"],
+    "implication": "『正解した問題は消える』設計にしない。正解しても次セッションには必ず再登場させる（3セッション到達までは卒業させない）。逆に、正解済みの解説を読み直させるモードには価値がない。",
+    "caveat": "『外さない』のはセッション間の話。同一セッション内では1正解で打ち切ってよい（spread-correct-recalls-across-sessions を参照）。",
+    "implemented_in": [],
+    "tags": ["retrieval-practice", "dropout", "criterion"]
+  },
+  {
+    "id": "interleaving-beats-blocked-after-a-day",
+    "claim": "同種の問題を固めて解く（ブロック型）より、種類を混ぜて解く（交互型）ほうが、1日以上あとのテストで圧倒的に強い。",
+    "numbers": {
+      "1週間後テスト": "交互 63% vs ブロック 20%",
+      "1日後テスト(4年生・数学)": "交互 77% vs ブロック 38%（効果量1.21）"
+    },
+    "strength": "high",
+    "sources": [
+      { "cite": "Rohrer, Dedrick & Burgess (2014) Psychonomic Bulletin & Review", "url": "https://www.ncbi.nlm.nih.gov/pmc/articles/PMC8589969/" },
+      { "cite": "Taylor & Rohrer (2010) Applied Cognitive Psychology", "url": "https://ctl.wustl.edu/learningcenter/articles/a-beginners-guide-to-interleaving-by-tanisha-paul/" }
+    ],
+    "applies_to": ["procedure", "concept"],
+    "implication": "加工学・制御工学のような「解法を選ぶ」教科では、単元ごとにテストを分けるより、複数単元を混ぜた出題モードを用意すべき。効くのは『どの解法を使うか自分で決める』練習になるから。",
+    "caveat": "練習直後のテストではブロック型のほうが良く見える。試験まで1日を切っている場面では交互化のメリットは出ない。また学習者本人は交互型を『効いていない』と感じる（主観と実効果が逆行する）ので、UIで説明が要る。",
+    "implemented_in": [],
+    "tags": ["interleaving", "problem-solving", "question-selection"]
+  },
+  {
+    "id": "equal-interval-is-fine-no-need-for-expanding",
+    "claim": "間隔を徐々に広げる（拡張間隔）方式が等間隔方式より優れているという頑健な証拠はない。",
+    "numbers": { "24時間後の最終再生": "拡張間隔の優位は消失", "メタ分析": "拡張 vs 等間隔に頑健な差なし" },
+    "strength": "moderate",
+    "sources": [
+      { "cite": "Karpicke & Roediger (2007) / Latimier, Peyre & Ramus (2021) Educational Psychology Review メタ分析", "url": "http://www.lscp.net/persons/ramus/docs/EPR20.pdf" }
+    ],
+    "applies_to": ["all"],
+    "implication": "実装をシンプルにしてよい根拠。SM-2やFSRSのような複雑な間隔拡張アルゴリズムを短期テスト勉強に持ち込む必要はない。『残り日数を3セッションに等分する』で十分。",
+    "caveat": "長期保持（数ヶ月〜年）まで面倒を見る場合は話が別。ここは短期テスト勉強に限った結論。",
+    "implemented_in": [],
+    "tags": ["scheduling", "algorithm-choice", "simplicity"]
+  },
+  {
+    "id": "pretesting-beats-posttesting",
+    "claim": "学習前に解かせて間違えさせ、そのあと正解を見せる（事前テスト）ほうが、学習後にテストするより総合点が高い。",
+    "numbers": { "実験数": "5実験 / 計1573人", "測定時点": "5分後・48時間後の両方で無テスト群を上回る" },
+    "strength": "high",
+    "sources": [
+      { "cite": "Pan & Sana (2021) Journal of Experimental Psychology: Applied", "url": "https://sc-pan.github.io/pdf/PS_2021.pdf" }
+    ],
+    "applies_to": ["concept", "grammar", "vocab"],
+    "implication": "新単元の1セッション目は『まず解かせる（間違えて当然）→即解説』にする。解説を先に読ませるより強い。短期戦では最初の1セッションを事前テストにできるぶん、時間の使い方が効率化する。",
+    "caveat": "正解フィードバックを必ず出すことが条件。出さないと誤答が定着する。",
+    "implemented_in": [],
+    "tags": ["pretesting", "session-design", "feedback"]
+  },
+  {
+    "id": "immediate-feedback-halves-lure-intrusions",
+    "claim": "多肢選択の直後に正解を出すと、あとの記述テストで誤選択肢が答えとして紛れ込む率が半減する。",
+    "numbers": { "誤選択肢の混入率": "即時フィードバックで約半減" },
+    "strength": "high",
+    "sources": [
+      { "cite": "Butler & Roediger (2008) Memory & Cognition / Kang, McDermott & Roediger (2007)", "url": "https://www.lifescied.org/doi/10.1187/cbe.14-11-0208" }
+    ],
+    "applies_to": ["all"],
+    "implication": "1問ごとの即時正誤＋短い解説を必須にする。まとめて最後に採点する形式は誤答定着のリスクがある。",
+    "caveat": "遅延フィードバックが有利に見える研究もあるが、間隔効果と交絡している可能性が指摘されている。実用上は即時で安全側に倒す。",
+    "implemented_in": ["js/quiz-engine.js（要確認）"],
+    "tags": ["feedback", "question-format"]
+  },
+  {
+    "id": "competitive-lures-make-mcq-generative",
+    "claim": "誤選択肢を『もっともらしく』作ると、多肢選択でも「なぜ他が違うか」を検索するため生成的検索が起き、出題していない関連情報の保持まで上がる。",
+    "numbers": {},
+    "strength": "high",
+    "sources": [
+      { "cite": "Little, E.L. Bjork, R.A. Bjork & Angello (2012) Psychological Science", "url": "https://bjorklab.psych.ucla.edu/wp-content/uploads/sites/13/2016/07/Little_EBjork_RBjork_Angello_2012.pdf" }
+    ],
+    "applies_to": ["all"],
+    "implication": "選択肢作りの品質基準。ダミーを適当に埋めた4択は多肢選択の利点を捨てている。誤選択肢は『あり得る誤解』から作る。",
+    "caveat": "紛らわしすぎて正答率が下がりすぎると逆効果（optimal-difficulty-85-percent と併せて調整）。",
+    "implemented_in": [],
+    "tags": ["question-format", "distractors", "authoring"]
+  },
+  {
+    "id": "optimal-difficulty-85-percent",
+    "claim": "学習が最も速く進むのは正答率85%前後のとき。",
+    "numbers": { "最適正答率": "85%（誤答率15.87%）" },
+    "strength": "moderate",
+    "sources": [
+      { "cite": "Wilson, Shenhav, Straccia & Cohen (2019) Nature Communications 10:4646", "url": "https://www.nature.com/articles/s41467-019-12552-4" }
+    ],
+    "applies_to": ["all"],
+    "implication": "出題の難易度配分の目標値。全問正解が続くセットは時間の無駄、正答率50%を切るセットは挫折と誤答定着を招く。",
+    "caveat": "二値分類課題の数理的な結論であり、あらゆる学習課題にそのまま当てはまるわけではない。設計原則の目安として使い、エビデンスとして強く主張しない。",
+    "implemented_in": [],
+    "tags": ["difficulty", "question-selection"]
+  },
+  {
+    "id": "feedback-required-when-accuracy-below-50",
+    "claim": "フィードバックなしのテスト効果は、練習時の正答率が50%を超えている場合にしか現れない。",
+    "numbers": { "閾値": "練習時正答率 50%" },
+    "strength": "moderate",
+    "sources": [
+      { "cite": "Rowland (2014) Psychological Bulletin 140(6):1432-1463", "url": "https://psycnet.apa.org/record/2014-32441-001" }
+    ],
+    "applies_to": ["all"],
+    "implication": "初見の単元でいきなり難問を出すなら、解説の充実が必須条件になる。正答率が低いセットほど解説に投資する。",
+    "caveat": "メタ分析上の傾向であり、個人単位の閾値ではない。",
+    "implemented_in": [],
+    "tags": ["feedback", "difficulty"]
+  },
+  {
+    "id": "spacing-beats-cramming-almost-always",
+    "claim": "分散学習と一夜漬けの直接比較では、271研究中259研究（約96%）で分散が勝っている。",
+    "numbers": { "分散が勝った研究": "259 / 271（約96%）", "平均的な保持向上": "約15%" },
+    "strength": "high",
+    "sources": [
+      { "cite": "Cepeda, Pashler, Vul, Wixted & Rohrer (2006) Psychological Bulletin 132(3):354-380", "url": "https://citl.indiana.edu/teaching-resources/evidence-based/spaced-practice.html" }
+    ],
+    "applies_to": ["all"],
+    "implication": "『時間がないから一夜漬け』は、同じ総学習時間なら常に損。短期戦でも総時間を分割するだけで得をする、というのがユーザーに伝えるべき核。",
+    "caveat": "テストが学習直後（数時間以内）の場合は集中学習でも点は取れる。ただしその知識は数日で消える。試験当日の朝しか残っていない場面では分散の出番はない。",
+    "implemented_in": [],
+    "tags": ["spacing", "core-claim"]
+  },
+  {
+    "id": "cap-interval-at-exam-date",
+    "claim": "試験に向けた運用では、復習間隔の上限を試験日までの日数でキャップし、全項目が試験前に最低1回は出るようにする。",
+    "numbers": { "目標保持率(desired retention)": "短期集中では85〜90%" },
+    "strength": "practice",
+    "sources": [
+      { "cite": "FSRS / Anki コミュニティの運用ガイド", "url": "https://github.com/open-spaced-repetition/fsrs4anki/blob/main/docs/tutorial.md" }
+    ],
+    "applies_to": ["all"],
+    "implication": "スケジューラの必須ガード。どんなアルゴリズムを使っても『試験日を越える間隔を出さない』を上書きルールとして持つ。未出題の項目が残ったまま試験日を迎える事故を防ぐ。",
+    "caveat": "これは実務慣行であって実験的エビデンスではない。ユーザーに『研究で示された』とは言わないこと。",
+    "implemented_in": [],
+    "tags": ["scheduling", "guardrail", "short-window"]
+  }
+]

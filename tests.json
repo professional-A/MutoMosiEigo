@@ -212,4 +212,66 @@
     "storageKey": "seigyo_ruiji2025_v2",
     "totalItems": 46
   }
+,
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "単元テスト",
+    "subject": "電気電子工学Ⅱ",
+    "title": "電気電子工学Ⅱ ・ フォーム完全再現 問題集",
+    "path": "/quiz.html?d=tests/2026-9-denki-tangen-form/data.json",
+    "storageKey": "denki_tangen_form_v1",
+    "totalItems": 29
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "単元テスト",
+    "subject": "電気電子工学Ⅱ",
+    "title": "電気電子工学Ⅱ ・ 授業スライド融合版 問題集",
+    "path": "/quiz.html?d=tests/2026-9-denki-tangen-slide/data.json",
+    "storageKey": "denki_tangen_slide_v1",
+    "totalItems": 38
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "熱流体工学Ⅰ",
+    "title": "熱流体工学Ⅰ ・ 公式集",
+    "path": "nekku/formula.html",
+    "storageKey": null,
+    "totalItems": 0,
+    "type": "summary"
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "熱流体工学Ⅰ",
+    "title": "熱流体工学Ⅰ ・ 中間試験対策",
+    "path": "/quiz.html?d=tests/2026-4-zenki-chukan-nekku/data.json",
+    "storageKey": "nekku_test",
+    "totalItems": 23
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "熱流体工学Ⅰ",
+    "title": "熱流体工学Ⅰ ・ 前期中間 過去問",
+    "path": "/quiz.html?d=tests/2026-4-zenki-chukan-nekku-kako/data.json",
+    "storageKey": "nekku_kako",
+    "totalItems": 13
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "熱流体工学Ⅰ",
+    "title": "熱流体工学Ⅰ ・ 前期中間 改変版",
+    "path": "/quiz.html?d=tests/2026-4-zenki-chukan-nekku-kako-kai/data.json",
+    "storageKey": "nekku_kako_kai",
+    "totalItems": 13
+  }
 ]

@@ -1264,6 +1264,7 @@ const SUBJECT_ICONS = {
   '加工学':         '⚙️',
   '制御工学Ⅰ':     '🎛️',
   '熱流体工学Ⅰ':   '🔥',
+  '電気電子工学Ⅱ': '⚡',
 };
 
 let tests = [];
@@ -1582,8 +1583,9 @@ function toggleShowArchived() {
 function getProgress(storageKey, totalItems) {
   try {
     const state = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    const done = Object.values(state).filter(v => v === 1 || (v && v.done)).length;
-    return { done, total: totalItems };
+    // quiz-engine.js は 1、nekku-engine.js は true で正解を記録する
+    const done = Object.values(state).filter(v => v === 1 || v === true || (v && v.done)).length;
+    return { done: Math.min(done, totalItems), total: totalItems };
   } catch {
     return { done: 0, total: totalItems };
   }
@@ -1614,23 +1616,7 @@ function renderFolders() {
     </div>`;
   }).join("");
 
-  const nekku = `<div class="folder-card" onclick="openNekkuMenu()">
-    <div class="folder-icon">🔥</div>
-    <div class="folder-name">熱流体工学Ⅰ</div>
-    <div class="folder-count">公式集・問題集</div>
-    <div class="progress-bar-wrap" style="margin-top:6px"><div class="progress-bar" style="width:100%;background:var(--teal)"></div></div>
-    <div class="progress-text">メニューを開く →</div>
-  </div>`;
-
-  const denki = `<div class="folder-card" onclick="openDenkiMenu()">
-    <div class="folder-icon">⚡</div>
-    <div class="folder-name">電気電子工学Ⅱ</div>
-    <div class="folder-count">単元テスト対策</div>
-    <div class="progress-bar-wrap" style="margin-top:6px"><div class="progress-bar" style="width:100%;background:var(--amber)"></div></div>
-    <div class="progress-text">メニューを開く →</div>
-  </div>`;
-
-  document.getElementById("folder-grid").innerHTML = cards + denki + nekku;
+  document.getElementById("folder-grid").innerHTML = cards;
 }
 
 function openSubject(s) {
@@ -4072,88 +4058,5 @@ supabaseClient.auth.getSession().then(async ({ data: { session } }) => {
 });
 </script>
 <script>if("serviceWorker" in navigator) navigator.serviceWorker.register("./sw.js");</script>
-
-<!-- 熱流体工学Ⅰ メニューモーダル -->
-<div id="nekku-modal-bg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;align-items:center;justify-content:center" onclick="closeNekkuMenu()">
-  <div onclick="event.stopPropagation()" style="background:#1a1d2e;border:1px solid #2d3154;border-radius:16px;padding:28px 28px 24px;max-width:320px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.6)">
-    <div style="text-align:center;font-size:2rem;margin-bottom:6px">🔥</div>
-    <h2 style="text-align:center;font-size:1.05rem;color:#e8eaf6;margin-bottom:20px">熱流体工学Ⅰ</h2>
-    <a href="nekku/formula.html" style="display:flex;align-items:center;gap:12px;background:#242740;border:1px solid #3b4fd8;border-radius:10px;padding:14px 18px;text-decoration:none;color:#a5b4fc;margin-bottom:12px;transition:.15s;font-weight:600"
-      onmouseover="this.style.background='#2d3560'" onmouseout="this.style.background='#242740'">
-      <span style="font-size:1.5rem">📘</span>
-      <div>
-        <div style="font-size:.95rem">公式集</div>
-        <div style="font-size:.75rem;color:#9ca3af;font-weight:400">第1〜4章・全公式・導出・図解</div>
-      </div>
-    </a>
-<a href="/quiz.html?d=tests/2026-4-zenki-chukan-nekku/data.json" style="display:flex;align-items:center;gap:12px;background:#242740;border:1px solid #7c6af7;border-radius:10px;padding:14px 18px;text-decoration:none;color:#c4b5fd;transition:.15s;font-weight:600"
-      onmouseover="this.style.background='#2a2050'" onmouseout="this.style.background='#242740'">
-      <span style="font-size:1.5rem">🎯</span>
-      <div>
-        <div style="font-size:.95rem">中間試験対策テスト</div>
-        <div style="font-size:.75rem;color:#9ca3af;font-weight:400">演習・課題全問対応 23問・40部分点</div>
-      </div>
-    </a>
-    <a href="/quiz.html?d=tests/2026-4-zenki-chukan-nekku-kako/data.json" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:#242740;border:1px solid #c084fc;border-radius:10px;text-decoration:none;color:#e8eaf6;font-weight:600;margin-top:8px;transition:.15s"
-      onmouseover="this.style.background='#2a1a40'" onmouseout="this.style.background='#242740'">
-      <span style="font-size:1.5rem">📋</span>
-      <div>
-        <div style="font-size:.95rem">前期中間 過去問</div>
-        <div style="font-size:.75rem;color:#9ca3af;font-weight:400">実際の試験問題 全13問・図付き</div>
-      </div>
-    </a>
-    <a href="/quiz.html?d=tests/2026-4-zenki-chukan-nekku-kako-kai/data.json" style="display:flex;align-items:center;gap:14px;padding:14px 16px;background:#242740;border:1px solid #34d399;border-radius:10px;text-decoration:none;color:#e8eaf6;font-weight:600;margin-top:8px;transition:.15s"
-      onmouseover="this.style.background='#1a2a20'" onmouseout="this.style.background='#242740'">
-      <span style="font-size:1.5rem">🔄</span>
-      <div>
-        <div style="font-size:.95rem">前期中間 改変版</div>
-        <div style="font-size:.75rem;color:#9ca3af;font-weight:400">数値・条件を変えた練習問題 全13問</div>
-      </div>
-    </a>
-    <button onclick="closeNekkuMenu()" style="display:block;width:100%;margin-top:16px;background:none;border:1px solid #2d3154;color:#9ca3af;padding:8px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.85rem">閉じる</button>
-  </div>
-</div>
-
-<!-- 電気電子工学Ⅱ メニューモーダル -->
-<div id="denki-modal-bg" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,.65);z-index:300;align-items:center;justify-content:center" onclick="closeDenkiMenu()">
-  <div onclick="event.stopPropagation()" style="background:#1a1d2e;border:1px solid #2d3154;border-radius:16px;padding:28px 28px 24px;max-width:340px;width:90%;box-shadow:0 20px 60px rgba(0,0,0,.6)">
-    <div style="text-align:center;font-size:2rem;margin-bottom:6px">⚡</div>
-    <h2 style="text-align:center;font-size:1.05rem;color:#e8eaf6;margin-bottom:6px">電気電子工学Ⅱ ・ 単元テスト対策</h2>
-    <p style="text-align:center;font-size:.75rem;color:#9ca3af;margin-bottom:18px;line-height:1.5">範囲：6/8以降の前提知識Form・理解度確認テスト＋これまで配布したプリント</p>
-    <a href="/quiz.html?d=tests/2026-9-denki-tangen-form/data.json" style="display:flex;align-items:center;gap:12px;background:#242740;border:1px solid #f6b352;border-radius:10px;padding:14px 18px;text-decoration:none;color:#fcd9a3;margin-bottom:12px;transition:.15s;font-weight:600"
-      onmouseover="this.style.background='#2f2a1c'" onmouseout="this.style.background='#242740'">
-      <span style="font-size:1.5rem">📝</span>
-      <div>
-        <div style="font-size:.95rem">フォーム完全再現 問題集</div>
-        <div style="font-size:.75rem;color:#9ca3af;font-weight:400">写真のフォーム設問をそのまま収録・全29問</div>
-      </div>
-    </a>
-    <a href="/quiz.html?d=tests/2026-9-denki-tangen-slide/data.json" style="display:flex;align-items:center;gap:12px;background:#242740;border:1px solid #46d6c4;border-radius:10px;padding:14px 18px;text-decoration:none;color:#a8efe6;transition:.15s;font-weight:600"
-      onmouseover="this.style.background='#1c2f2c'" onmouseout="this.style.background='#242740'">
-      <span style="font-size:1.5rem">📚</span>
-      <div>
-        <div style="font-size:.95rem">授業スライド融合版 問題集</div>
-        <div style="font-size:.75rem;color:#9ca3af;font-weight:400">スライドの導出・計算も織り込んだ全38問</div>
-      </div>
-    </a>
-    <button onclick="closeDenkiMenu()" style="display:block;width:100%;margin-top:16px;background:none;border:1px solid #2d3154;color:#9ca3af;padding:8px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.85rem">閉じる</button>
-  </div>
-</div>
-
-<script>
-function openNekkuMenu(){
-  const m = document.getElementById('nekku-modal-bg');
-  m.style.display = 'flex';
-}
-function closeNekkuMenu(){
-  document.getElementById('nekku-modal-bg').style.display = 'none';
-}
-function openDenkiMenu(){
-  document.getElementById('denki-modal-bg').style.display = 'flex';
-}
-function closeDenkiMenu(){
-  document.getElementById('denki-modal-bg').style.display = 'none';
-}
-</script>
 </body>
 </html>

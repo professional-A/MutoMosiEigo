@@ -23,3 +23,19 @@ npm start        # サーバー起動（ポート: PORT env or 3000）
 - [race-system.md](.claude/skills/race-system.md) — レースイベント・勉強時間記録・season_points
 - [index-html-structure.md](.claude/skills/index-html-structure.md) — 英語模試データ層・採点ロジック
 - [test-creation-workflow.md](.claude/skills/test-creation-workflow.md) — **テスト新規作成はdata.jsonのみ**（HTMLは作らない）・quiz-engine.js共通レンダラー
+
+## クイズ実装の3ステップ（必須）
+
+テスト・クイズを1つ実装するときは、**いきなり作らず必ずこの順で進める**。
+
+1. **リサーチ** — その題材・出題形式について学習科学のリサーチを行う
+2. **過去文献の確認** — `research/index.json` を引き、該当する finding を実際に読む
+3. **実装計画と根拠をユーザーに確認** — 「何を作るか」＋「なぜ効くか（出典付き）」を提示し、**承認を得てから実装**
+
+前提：**復習間隔は「何日も空ける」ではなく、試験までの残り日数を基準にした短期設計にする**（`research/findings/short-term-exam-prep.json` の `optimal-gap-is-20-40-percent-of-days-left`）。
+
+## リサーチストア（research/）
+
+- [research/README.md](research/README.md) — スキーマと運用ルール
+- [research/index.json](research/index.json) — 索引・タグ逆引き・未実装findingの一覧
+- 実装したら該当 finding の `implemented_in` と `index.json` の `unimplemented` を更新する
