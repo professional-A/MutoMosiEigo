@@ -1,0 +1,125 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>ログイン ・ 武藤模試</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/styles/theme.css">
+<style>
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Fraunces',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  #app-shell-bar{position:fixed;top:0;left:0;right:0;z-index:100}
+  main{max-width:400px;margin:0 auto;padding:80px 16px 40px}
+  main h1{font-size:1.15rem;margin:8px 0 18px}
+  main label{font-size:.78rem;color:var(--muted);display:block;margin-bottom:4px}
+  main input{width:100%;box-sizing:border-box;padding:7px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card2);color:var(--ink);font-family:inherit;font-size:.95rem;margin-bottom:10px}
+  #login-msg{margin-top:10px;font-size:.85rem;min-height:1.2em}
+</style>
+</head>
+<body>
+<div id="app-shell-bar"></div>
+<main>
+  <h1>ログイン / 新規登録</h1>
+  <div style="display:flex;gap:0;margin-bottom:16px;border:1px solid var(--line);border-radius:8px;overflow:hidden">
+    <button id="tab-login" onclick="showLoginTab('login')" style="flex:1;padding:7px;border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;background:var(--teal);color:#0a1626;transition:.15s">ログイン</button>
+    <button id="tab-register" onclick="showLoginTab('register')" style="flex:1;padding:7px;border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600;background:var(--card);color:var(--muted);transition:.15s">新規登録</button>
+  </div>
+  <div id="login-form">
+    <label>ユーザー名</label>
+    <input id="pw-username" type="text" maxlength="20" placeholder="ユーザー名">
+    <label>パスワード</label>
+    <input id="pw-password" type="password" placeholder="パスワード">
+    <button onclick="doPasswordLogin()" style="width:100%;padding:9px;border:none;border-radius:8px;background:var(--teal);color:#0a1626;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer">ログイン</button>
+  </div>
+  <div id="register-form" style="display:none">
+    <label>ユーザー名（2〜20文字）</label>
+    <input id="reg-username" type="text" maxlength="20" placeholder="ユーザー名">
+    <label>パスワード（4文字以上）</label>
+    <input id="reg-password" type="password" placeholder="パスワード">
+    <label>パスワード確認</label>
+    <input id="reg-password2" type="password" placeholder="もう一度入力">
+    <button onclick="doRegister()" style="width:100%;padding:9px;border:none;border-radius:8px;background:var(--teal);color:#0a1626;font-family:inherit;font-size:.95rem;font-weight:700;cursor:pointer">登録する</button>
+  </div>
+  <div id="login-msg"></div>
+</main>
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/app-shell.js"></script>
+<script src="/js/util.js"></script>
+<script>
+let authToken=null, authUser=null, authEmail=null, authAvatar='🐸', authFrame='default', authPoints=0, authLifetimePoints=0, authUnlockedAvatars=[];
+
+appShell.mount(document.getElementById('app-shell-bar'), {
+  nav: window.APP_NAV,
+  onNotif: () => { location.href = '/'; }
+});
+
+// index.html:showLoginTab を VERBATIM コピー
+function showLoginTab(tab) {
+  document.getElementById('login-form').style.display    = tab === 'login'    ? 'block' : 'none';
+  document.getElementById('register-form').style.display = tab === 'register' ? 'block' : 'none';
+  const tl = document.getElementById('tab-login'), tr = document.getElementById('tab-register');
+  tl.style.background = tab === 'login'    ? 'var(--teal)' : 'var(--card)';
+  tl.style.color      = tab === 'login'    ? '#0a1626'     : 'var(--muted)';
+  tr.style.background = tab === 'register' ? 'var(--teal)' : 'var(--card)';
+  tr.style.color      = tab === 'register' ? '#0a1626'     : 'var(--muted)';
+  document.getElementById('login-msg').textContent = '';
+}
+
+// index.html の applyPasswordLogin を移植。末尾のモーダル閉じ + updateAuthBar +
+// アンケートバナー初期化の3呼び出しを location.href = '/'; に置換。
+// localStorage 書き込みはそのまま（トップに戻れば app-shell の resolveAuth が
+// muto_session を読む）。ログインボーナスの通知行は残すが、直後に画面遷移するため
+// 実質見えない。残しても害はないので残す。
+function applyPasswordLogin(data) {
+  authToken  = data.token;
+  authUser   = data.username;
+  authEmail  = '';
+  authAvatar = data.avatar || '🐸';
+  authFrame  = data.frame  || 'default';
+  authPoints = data.points || 0; authLifetimePoints = data.lifetime_points || 0;
+  authUnlockedAvatars = data.unlockedAvatars || [];
+  localStorage.setItem('muto_session',           data.token);
+  localStorage.setItem('muto_user',              data.username);
+  localStorage.setItem('muto_avatar',            authAvatar);
+  localStorage.setItem('muto_frame',             authFrame);
+  localStorage.setItem('muto_points',            String(authPoints));
+  localStorage.setItem('muto_unlocked_avatars',  JSON.stringify(authUnlockedAvatars));
+  if (data.loginBonus) showPointToast(`ログインボーナス +${data.loginBonus.toLocaleString()}pt`);
+  location.href = '/';
+}
+
+// index.html:doPasswordLogin と doRegister を VERBATIM コピー
+async function doPasswordLogin() {
+  const username = document.getElementById('pw-username').value.trim();
+  const password = document.getElementById('pw-password').value;
+  const msgEl    = document.getElementById('login-msg');
+  if (!username || !password) { msgEl.style.color = 'red'; msgEl.textContent = 'ユーザー名とパスワードを入力してください'; return; }
+  msgEl.style.color = 'var(--muted)'; msgEl.textContent = 'ログイン中...';
+  try {
+    const res  = await fetch('/api/login', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username, password }) });
+    const data = await res.json();
+    if (data.error) { msgEl.style.color = 'red'; msgEl.textContent = data.error; return; }
+    applyPasswordLogin(data);
+  } catch(e) { msgEl.style.color = 'red'; msgEl.textContent = 'エラーが発生しました'; }
+}
+async function doRegister() {
+  const username  = document.getElementById('reg-username').value.trim();
+  const password  = document.getElementById('reg-password').value;
+  const password2 = document.getElementById('reg-password2').value;
+  const msgEl     = document.getElementById('login-msg');
+  if (!username || !password) { msgEl.style.color = 'red'; msgEl.textContent = 'ユーザー名とパスワードを入力してください'; return; }
+  if (password !== password2) { msgEl.style.color = 'red'; msgEl.textContent = 'パスワードが一致しません'; return; }
+  msgEl.style.color = 'var(--muted)'; msgEl.textContent = '登録中...';
+  try {
+    const res  = await fetch('/api/register', { method:'POST', headers:{'Content-Type':'application/json'}, body: JSON.stringify({ username, password }) });
+    const data = await res.json();
+    if (data.error) { msgEl.style.color = 'red'; msgEl.textContent = data.error; return; }
+    applyPasswordLogin(data);
+  } catch(e) { msgEl.style.color = 'red'; msgEl.textContent = 'エラーが発生しました'; }
+}
+
+showLoginTab('login');
+</script>
+</body>
+</html>
