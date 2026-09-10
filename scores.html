@@ -230,11 +230,11 @@ async function _confirmScoreInline() {
     else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー'); }
 }
-async function submitOuriScore() { await _submitScore('応用物理', '/api/ouri/score'); }
-async function submitMathScore() { await _submitScore('応用数学', '/api/math/score'); }
-async function submitKakougakuScore() { await _submitScore('加工学', '/api/kakougaku/score'); }
-async function submitNekkuScore() { await _submitScore('熱流体工学Ⅰ', '/api/nekku/score'); }
-async function submitSeigyoScore() { await _submitScore('制御工学Ⅰ', '/api/seigyo/score'); }
+async function submitOuriScore() { await _submitScore('応用物理', '/api/score/ouri'); }
+async function submitMathScore() { await _submitScore('応用数学', '/api/score/math'); }
+async function submitKakougakuScore() { await _submitScore('加工学', '/api/score/kakougaku'); }
+async function submitNekkuScore() { await _submitScore('熱流体工学Ⅰ', '/api/score/nekku'); }
+async function submitSeigyoScore() { await _submitScore('制御工学Ⅰ', '/api/score/seigyo'); }
 
 function onAuthReady() { refreshScoresPage(); }
 loadScores();   // 認証解決前でも表本体は出す

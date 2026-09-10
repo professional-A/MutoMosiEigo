@@ -524,43 +524,14 @@ app.get('/api/scores', async (req, res) => {
   res.json(rows);
 });
 
-// 応用物理得点入力（自己申告・再入力可）
-app.post('/api/ouri/score', auth, async (req, res) => {
+// 科目別得点入力（自己申告・再入力可）— 旧 /api/{ouri,math,kakougaku,nekku,seigyo}/score を1本に統合
+const SCORE_COL = { ouri: 'ouri_score', math: 'math_score', kakougaku: 'kakougaku_score', nekku: 'nekku_score', seigyo: 'seigyo_score' };
+app.post('/api/score/:subject', auth, async (req, res) => {
+  const col = SCORE_COL[req.params.subject];
+  if (!col) return res.status(404).json({ error: '不明な科目です' });
   const s = parseInt(req.body.score, 10);
   if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
-  await pool.query('UPDATE users SET ouri_score=$1 WHERE id=$2', [s, req.user.id]);
-  res.json({ ok: true, score: s });
-});
-
-// 応用数学得点入力（自己申告・再入力可）
-app.post('/api/math/score', auth, async (req, res) => {
-  const s = parseInt(req.body.score, 10);
-  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
-  await pool.query('UPDATE users SET math_score=$1 WHERE id=$2', [s, req.user.id]);
-  res.json({ ok: true, score: s });
-});
-
-// 加工学得点入力
-app.post('/api/kakougaku/score', auth, async (req, res) => {
-  const s = parseInt(req.body.score, 10);
-  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
-  await pool.query('UPDATE users SET kakougaku_score=$1 WHERE id=$2', [s, req.user.id]);
-  res.json({ ok: true, score: s });
-});
-
-// 熱流体工学Ⅰ得点入力
-app.post('/api/nekku/score', auth, async (req, res) => {
-  const s = parseInt(req.body.score, 10);
-  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
-  await pool.query('UPDATE users SET nekku_score=$1 WHERE id=$2', [s, req.user.id]);
-  res.json({ ok: true, score: s });
-});
-
-// 制御工学Ⅰ得点入力
-app.post('/api/seigyo/score', auth, async (req, res) => {
-  const s = parseInt(req.body.score, 10);
-  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
-  await pool.query('UPDATE users SET seigyo_score=$1 WHERE id=$2', [s, req.user.id]);
+  await pool.query(`UPDATE users SET ${col}=$1 WHERE id=$2`, [s, req.user.id]);
   res.json({ ok: true, score: s });
 });
 
