@@ -1,12 +1,15 @@
-// 武藤模試 共通シェル（ヘッダーバー＋ハンバーガードロワー）
-// ダムなビュー。認証状態は各ページ側が保持し update() で流し込む。fetch はしない。
+// 武藤模試 共通シェル（ヘッダーバー＋ハンバーガードロワー＋認証）
 //
 // 使い方:
 //   appShell.mount(document.getElementById('app-shell-bar'), {
-//     nav: [{ key, icon, label, href?, onClick?, id?, adminOnly? }],
-//     onGoogleLogin, onIdLogin, onLogout, onNotif, onAvatar   // すべて既存関数を渡す
+//     nav: window.APP_NAV,          // js/nav.js。省略時は空
+//     manageAuth: true,            // 既定 true。false にすると認証はページ側の責務（index.html 用）
+//     onGoogleLogin, onIdLogin, onLogout, onNotif, onAvatar  // 省略時は既定動作
 //   });
-//   appShell.update({ loggedIn, name, points, avatar, frame, isAdmin });
+//   appShell.user   // null | { id, username, email, avatar, frame, points, lifetimePoints, isAdmin, ... }
+//   window.addEventListener('appshell:auth', e => { /* e.detail = appShell.user */ });
+//   appShell.refreshAuth()  // /api/me を取り直す（ポイント変動後など）
+//   appShell.update({ loggedIn, name, points, avatar, frame, isAdmin })  // 表示だけ手動更新したい場合
 //
 // nav 項目の描画規則:
 //   - href があり onClick が無ければ <a href>（通常遷移）
@@ -14,9 +17,22 @@
 //   - key !== 'home' && key !== 'race' の項目は [data-auth] 付き（未ログイン時に隠す）
 //   - adminOnly の項目は [data-admin] 付き（管理者以外は隠す）
 (function () {
+  var SUPABASE_URL      = 'https://gwknnqceiozbmxrqjcae.supabase.co';
+  var SUPABASE_ANON_KEY = 'sb_publishable_4MgSWSr8bbuUf5Vp_LSD6Q_SI-ciZ2B';
+  var ADMIN_EMAIL = 'kabu6113450@gmail.com';
+
   var opts = null;
   var els = {};
   var drawer = null, backdrop = null;
+  var _sb = null;
+  var user = null, token = null;
+
+  function sbClient() {
+    if (_sb) return _sb;
+    if (!window.supabase) return null;
+    try { _sb = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY); } catch (e) { _sb = null; }
+    return _sb;
+  }
 
   function h(tag, attrs, children) {
     var el = document.createElement(tag);
@@ -137,13 +153,85 @@
   }
   function onKey(e) { if (e.key === 'Escape') closeDrawer(); }
 
+  // ── 認証 ──────────────────────────────────────────────
+  function applyUser() {
+    window.appShell.user = user;
+    window.appShell.token = token;
+    window.appShell.update({
+      loggedIn: !!user,
+      name:     user && user.username,
+      points:   user && user.points,
+      avatar:   user && user.avatar,
+      frame:    user && user.frame,
+      isAdmin:  !!(user && user.isAdmin)
+    });
+    try { window.dispatchEvent(new CustomEvent('appshell:auth', { detail: user })); } catch (e) {}
+  }
+
+  function resolveAuth() {
+    token = null; user = null;
+    var p = Promise.resolve(localStorage.getItem('muto_session'));
+    if (!localStorage.getItem('muto_session')) {
+      var c = sbClient();
+      if (c) p = c.auth.getSession().then(function (r) {
+        return (r && r.data && r.data.session && r.data.session.access_token) || null;
+      }).catch(function () { return null; });
+    }
+    return p.then(function (t) {
+      token = t || null;
+      if (!token || !window.api) { applyUser(); return; }
+      return window.api.get('/api/me').then(function (me) {
+        user = {
+          id: me.id, username: me.username, email: me.email || '',
+          avatar: me.avatar || '🐸', frame: me.frame || 'default',
+          points: me.points || 0, lifetimePoints: me.lifetime_points || 0,
+          unlockedAvatars: me.unlockedAvatars || [], title: me.title || '',
+          isAdmin: (me.email || '') === ADMIN_EMAIL
+        };
+        applyUser();
+      }).catch(function (e) {
+        if (e && e.status === 401) localStorage.removeItem('muto_session');
+        token = null; user = null; applyUser();
+      });
+    });
+  }
+
+  function defaultGoogleLogin() {
+    var c = sbClient();
+    if (!c) { alert('ログイン機能を読み込めませんでした'); return; }
+    c.auth.signInWithOAuth({ provider: 'google', options: { redirectTo: location.origin, skipBrowserRedirect: true } })
+      .then(function (r) {
+        if (r.error) { alert('Supabaseエラー: ' + r.error.message); return; }
+        if (r.data && r.data.url) location.href = r.data.url;
+      });
+  }
+  function defaultIdLogin() { location.href = '/login.html'; }
+
   window.appShell = {
+    user: null,
+    token: null,
     mount: function (host, options) {
       if (!host) { console.warn('[app-shell] mount: host element not found'); return; }
       opts = options || {};
+      if (!opts.onGoogleLogin) opts.onGoogleLogin = defaultGoogleLogin;
+      if (!opts.onIdLogin)     opts.onIdLogin     = defaultIdLogin;
+      if (!opts.onLogout)      opts.onLogout      = function () { window.appShell.logout(); };
       buildBar(host);
       buildDrawer();
       this.update({ loggedIn: false });
+      if (opts.manageAuth !== false) resolveAuth();
+    },
+    refreshAuth: function () { return resolveAuth(); },
+    logout: function () {
+      var c = sbClient();
+      var done = function () {
+        localStorage.removeItem('muto_session');
+        localStorage.removeItem('muto_user');
+        localStorage.removeItem('muto_points');
+        token = null; user = null; applyUser();
+      };
+      if (c && c.auth && c.auth.signOut) c.auth.signOut().then(done, done);
+      else done();
     },
     update: function (state) {
       state = state || {};

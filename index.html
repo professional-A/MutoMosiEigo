@@ -1811,6 +1811,7 @@ appShell.mount(document.getElementById('app-shell-bar'), {
     { key: 'members', icon: '👥', label: 'メンバー',     onClick: openMembersModal },
     { key: 'admin',   icon: '🛠', label: '管理',         onClick: openAdminModal, adminOnly: true }
   ],
+  manageAuth: false,           // index.html は独自の認証ブートストラップを維持（syncUser 等）
   onGoogleLogin: loginWithGoogle,
   onIdLogin:     openLoginModal,
   onLogout:      doLogout,
