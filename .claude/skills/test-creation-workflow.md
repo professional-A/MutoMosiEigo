@@ -15,9 +15,10 @@ metadata:
 
 1. フォルダを作る: `tests/YYYY-M-テスト名/`（**科目に関わらず全テストを `tests/` に置く**）
 2. `data.json` を作る（スキーマは下記）
-3. `index.html` にリンクを追加する場合は `/quiz.html?d=tests/YYYY-M-テスト名/data.json`
+3. リンクの追記は不要。`GET /api/tests` が `tests/*/data.json` を走査して自動で拾う（`year`／`grade`／`exam`／`subject`／`storageKey` 必須）
 
 `index.html` は**作成しない**。URLは `/quiz.html?d=...` を直接使う。
+`tests.json` は廃止済み（`/api/tests` が代替）。手編集するファイルは無い。
 
 ### フォルダ命名規則
 
@@ -35,6 +36,9 @@ nekku 系も含め、**すべてのテストデータは `tests/` に集約す�
 
 ```json
 {
+  "year": 2026,
+  "grade": 4,
+  "exam": "前期末試験",
   "title": "テストタイトル",
   "subtitle": "サブタイトル（省略可）",
   "eyebrow": "科目名 ・ テスト種別",

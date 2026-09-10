@@ -40,6 +40,10 @@ npm start        # サーバー起動（ポート: PORT env or 3000）
 - [index-html-structure.md](.claude/skills/index-html-structure.md) — 英語模試データ層・採点ロジック
 - [test-creation-workflow.md](.claude/skills/test-creation-workflow.md) — **テスト新規作成はdata.jsonのみ**（HTMLは作らない）・quiz-engine.js共通レンダラー
 
+## テスト索引（`/api/tests`）
+
+新しいテストの `data.json` には `year`（数値）・`grade`（数値）・`exam`（文字列）が必須。`GET /api/tests` が `tests/*/data.json` を走査してホーム画面のテスト索引を自動生成する（`tests.json` は廃止済み・手編集ファイルなし）。旧 `index.html` 方式のテストだけ `tests/_legacy.json` に暫定登録。
+
 ## クイズ実装の3ステップ（必須）
 
 テスト・クイズを1つ実装するときは、**いきなり作らず必ずこの順で進める**。
