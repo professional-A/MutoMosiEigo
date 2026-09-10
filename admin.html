@@ -148,6 +148,31 @@ function _syncAuthGlobals() {
 function closeAdminModal(){}   // ページ自体が管理画面。サブモーダルを開く導線が呼ぶので no-op で残す。
 function updateAuthBar(){ if (window.appShell) window.appShell.refreshAuth(); }
 
+// ── index.html 由来の未定義ヘルパを補完（admin.html には対応画面が無いので最小移植 / no-op）──
+let tests = [];              // トップの試験一覧。admin では未使用（clearSchedule の forEach が空回るだけ）
+let _currentRace = null;     // adminCloseRace / adminCreateRace が参照。loadRaceSection で設定
+function lockScroll(){}      // サブモーダルはページ内オーバーレイ。iOS スクロールロックは admin では省略
+function unlockScroll(){}
+function ttEsc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }  // index.html:1254 と同一
+function ttPad(t) {          // index.html:1268 と同一
+  if (!t) return '';
+  const m = String(t).match(/^(\d{1,2}):(\d{2})/);
+  return m ? String(m[1]).padStart(2, '0') + ':' + m[2] : '';
+}
+function applyExamArchive(){}   // トップの試験フォルダ一覧が admin に無いので no-op
+function renderFolders(){}      // 同上
+async function loadExamSchedule() {   // index.html:1230 から末尾の applyExamArchive()/renderFolders() を除いた版
+  try {
+    const data = await fetch('/api/exam-schedule').then(r => r.json());
+    _examSchedule = {};
+    if (Array.isArray(data)) data.forEach(row => { _examSchedule[row.subject + '||' + row.exam] = row.archive_after; });
+  } catch(e) {}
+}
+async function loadRaceSection() {    // _currentRace を埋める最小版（トップのレース掲示は admin に無い）
+  try { const d = await fetch('/api/races/current').then(r => r.json()); _currentRace = d.race || null; }
+  catch(e) { _currentRace = null; }
+}
+
 window.addEventListener('appshell:auth', function () {
   _syncAuthGlobals();
   var isAdmin = !!(window.appShell && window.appShell.user && window.appShell.user.isAdmin);
@@ -162,7 +187,7 @@ appShell.mount(document.getElementById('app-shell-bar'), {
 });
 
 async function refreshAdminPage() {
-  await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn()]);
+  await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn(), loadExamSchedule(), loadRaceSection()]);
 }
 
 async function reloadAdminContent() {
