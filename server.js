@@ -2,6 +2,7 @@ const express = require('express');
 const { Pool } = require('pg');
 const { createClient } = require('@supabase/supabase-js');
 const crypto = require('crypto');
+const { buildTestsIndex } = require('./tests-index');
 
 function genSalt()  { return crypto.randomBytes(16).toString('hex'); }
 function genToken() { return crypto.randomBytes(32).toString('hex'); }
@@ -1679,6 +1680,15 @@ app.post('/api/admin/races/:id/settle', auth, async (req, res) => {
     await pool.query("UPDATE races SET status='closed', active=0 WHERE id=$1", [raceId]);
     res.json({ ok: true, result: resultMsg });
   } catch(e) { res.status(500).json({ error: e.message }); }
+});
+
+app.get('/api/tests', (req, res) => {
+  try {
+    res.json(buildTestsIndex());
+  } catch (e) {
+    console.error('[api/tests] ' + ((e && e.stack) || e));
+    res.status(500).json({ error: String(e) });
+  }
 });
 
 app.use(express.static('.'));
