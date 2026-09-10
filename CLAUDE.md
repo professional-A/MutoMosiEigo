@@ -15,6 +15,22 @@ npm start        # サーバー起動（ポート: PORT env or 3000）
 
 テストフレームワーク・リントツールなし。フロントは `index.html` をブラウザで直接開いて確認。
 
+## 科目の扱い（重要）
+
+- **英語（科学技術英語）も他科目と完全に同等に扱う。** プロジェクト名に "Eigo" と入っているが、現在は全科目対応。英語模試の作問を `index.html` に埋め込まない。英語のテストも他科目と同じく `tests/*/data.json` として作る。
+- `index.html` は全科目の目次／ランディングのみ（作問データを持たせない方向へ移行中）。
+
+## アーキテクチャ改善（進行中 / 2026-09-10〜）
+
+「テスト追加のたびに `tests.json` 手編集」「`index.html` が4000行超の1枚岩」「ヘッダーにボタン12個」「なんでもモーダル（直リンク不可）」を解消する大規模リファクタリングを、独立した4フェーズで順に実施中。詳細 spec: `docs/superpowers/specs/2026-09-10-architecture-refactor-design.md`。
+
+1. **共有基盤** — `styles/theme.css`（テーマ変数の唯一の定義）・`js/api.js`・`js/app-shell.js`（共通ヘッダー＋ハンバーガーメニュー）
+2. **コンテンツ・パイプライン** — `/api/tests` で索引を自動生成（`tests.json` 手編集を廃止）・クイズエンジン統合（nekku → quiz 1本）・旧 per-test HTML を data.json 化
+3. **モーダル→独立ページ** — 成績・バトル・レース・管理・アンケートをマルチページ化
+4. **サーバー整理（任意）** — 科目ごとの採点API を1本化・`server.js` 分割
+
+実装方式は**マルチページ**（各機能を独立した `.html`、`express.static` のまま、ビルドツールなし）。
+
 ## 詳細ドキュメント（.claude/skills/）
 
 - [project-architecture.md](.claude/skills/project-architecture.md) — 全体構造・DBテーブル・ファイル一覧
