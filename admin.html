@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>管理 ・ 武藤模試</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/styles/theme.css">
+<style>
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Fraunces',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  #app-shell-bar{position:fixed;top:0;left:0;right:0;z-index:100}
+  main{max-width:720px;margin:0 auto;padding:72px 16px 48px}
+  main h1{font-size:1.15rem;margin:8px 0 14px}
+  #admin-actions{display:flex;flex-wrap:wrap;gap:8px;margin:16px 0}
+  #admin-actions button{padding:10px 12px;border-radius:8px;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600}
+  #admin-guard-msg{color:var(--dim);font-size:.9rem;padding:24px 0}
+</style>
+</head>
+<body>
+<div id="app-shell-bar"></div>
+<main>
+  <div id="admin-guard-msg" hidden>権限がありません。管理者アカウントでログインしてください。</div>
+  <div id="admin-root" hidden>
+    <h1>登録ユーザー一覧 <span id="admin-count" style="font-size:.8rem;color:var(--muted);font-weight:400"></span></h1>
+    <div id="admin-content" style="margin-top:8px"></div>
+    <div id="admin-actions">
+      <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
+      <button onclick="openTimetableModal()" style="background:#1e2333;color:#8ec5ff;border:1px solid #4a8fd6;font-weight:700">🗓 時間割</button>
+      <button onclick="restorePointsManual()" style="background:#0f766e;color:#fff;border:none;font-weight:700">♻️ ポイント復元</button>
+      <button onclick="debugPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔍 DB確認</button>
+      <button onclick="resetSeasonPoints()" style="background:#374151;color:#9ca3af;border:none;font-weight:700">🔄 シーズンリセット</button>
+      <button id="reg-lock-btn" onclick="toggleRegistrationLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🚫 新規登録制限</button>
+      <button id="lock-btn" onclick="toggleSiteLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">🔒 アクセス制限</button>
+      <button id="score-lock-btn" onclick="toggleScoreLock()" style="background:#dc2626;color:#fff;border:none;font-weight:700">✏️ 得点入力締め切り</button>
+      <button onclick="adjustStudyLog()" style="background:#0f766e;color:#fff;border:none;font-weight:700">⏱️ 勉強時間修正</button>
+      <button onclick="grantAll()" style="background:#7c3aed;color:#fff;border:none;font-weight:700">🎁 全員配布</button>
+      <button onclick="distributePool()" style="background:#d97706;color:#fff;border:none;font-weight:700">💰 配分</button>
+      <button onclick="viewSurveyResults()" style="background:#0ea5e9;color:#fff;border:none;font-weight:700">📊 アンケート結果</button>
+      <button onclick="awardWorstFrame()" style="background:#ff3333;color:#fff;border:none;font-weight:700">🔴 1位に付与</button>
+      <button onclick="awardBakaFrame()" style="background:linear-gradient(90deg,#ff00ff,#ff6600);color:#fff;border:none;font-weight:700">🔥 下位3フレーム付与</button>
+      <button onclick="adminAddBanner()" style="background:#1e3320;color:#86efac;border:1px solid #4ade80;font-weight:700">📢 バナー追加</button>
+      <button onclick="adminCreateBattles()" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6;font-weight:700">⚔️ バトル作成</button>
+      <button onclick="adminAddBattlePair()" style="background:#1a2e1a;color:#86efac;border:1px solid #22c55e;font-weight:700">➕ ペア追加</button>
+      <button onclick="adminRefundAllBattles()" style="background:#2a0a0a;color:#fca5a5;border:1px solid #ef4444;font-weight:700">💸 全返金</button>
+      <button onclick="adminCloseBattles()" style="background:#2a1a0a;color:#fbbf24;border:1px solid #d97706;font-weight:700">🔒 バトル終了</button>
+      <button onclick="adminSettleManual()" style="background:#1a1a2e;color:#c4b5fd;border:1px solid #8b5cf6;font-weight:700">🎯 手動決着</button>
+      <button onclick="adminSettleBattles()" style="background:#1e1e3f;color:#a78bfa;border:1px solid #7c3aed;font-weight:700">🏆 バトル決着</button>
+      <button onclick="openRaceModal()" style="background:#0f2a1a;color:#6ee7b7;border:1px solid #34d399;font-weight:700">🏁 レース発行</button>
+      <button onclick="adminCloseRace()" style="background:#2a1a0a;color:#fcd34d;border:1px solid #f59e0b;font-weight:700">🔒 レース終了</button>
+      <button onclick="openPairModal()" style="background:#1a2a1a;color:#86efac;border:1px solid #4ade80;font-weight:700">👥 ペア設定</button>
+    </div>
+  </div>
+</main>
+
+<!-- サブモーダルは Task 3 -->
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/app-shell.js"></script>
+<script src="/js/util.js"></script>
+<script>
+let authToken = null, authUser = null, authEmail = null, authUserId = null;
+function _syncAuthGlobals() {
+  var u = window.appShell && window.appShell.user;
+  authToken  = (window.appShell && window.appShell.token) || null;
+  authUser   = u ? u.username : null;
+  authEmail  = u ? (u.email || '') : null;
+  authUserId = u ? u.id : null;
+}
+function closeAdminModal(){}   // ページ自体が管理画面。サブモーダルを開く導線が呼ぶので no-op で残す。
+function updateAuthBar(){ if (window.appShell) window.appShell.refreshAuth(); }
+
+window.addEventListener('appshell:auth', function () {
+  _syncAuthGlobals();
+  var isAdmin = !!(window.appShell && window.appShell.user && window.appShell.user.isAdmin);
+  document.getElementById('admin-guard-msg').hidden = isAdmin;
+  document.getElementById('admin-root').hidden = !isAdmin;
+  if (isAdmin) refreshAdminPage();
+});
+
+appShell.mount(document.getElementById('app-shell-bar'), {
+  nav: window.APP_NAV,
+  onNotif: function () { location.href = '/'; }
+});
+
+async function refreshAdminPage() {
+  await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn()]);
+}
+
+async function reloadAdminContent() {
+  const el = document.getElementById('admin-content');
+  el.innerHTML = '<p style="color:var(--muted);padding:12px 0">読み込み中...</p>';
+  const res  = await fetch('/api/admin/users', { headers: { 'Authorization': authToken } });
+  const data = await res.json();
+  if (!Array.isArray(data)) { el.innerHTML = '<p style="color:red">エラー</p>'; return; }
+  document.getElementById('admin-count').textContent = `${data.length}人`;
+  el.innerHTML = data.map((u, i) => `
+    <div class="admin-card">
+      <div class="admin-card-top">
+        <span class="avatar frame-${u.frame||'default'}" style="width:32px;height:32px;font-size:1.1rem;flex-shrink:0">${u.avatar||'🐸'}</span>
+        <div style="min-width:0">
+          <div class="admin-card-name">${i+1}. ${esc(tu(u.username))}</div>
+          <div class="admin-card-email">${esc(u.email||'（IDログイン）')}</div>
+        </div>
+      </div>
+      <div class="admin-card-stats">
+        <div class="admin-stat">💰 <span>${(u.points||0).toLocaleString()}</span>pt</div>
+        <div class="admin-stat">予測 <span>${u.test_pred != null ? u.test_pred+'点' : '―'}</span></div>
+        <div class="admin-stat">賭け金 <span>${u.test_bet != null ? u.test_bet.toLocaleString()+'pt' : '―'}</span></div>
+      </div>
+      <div class="admin-card-grant">
+        <input type="number" id="grant-amt-${u.id}" value="500" placeholder="pt">
+        <button onclick="grantPoints(${u.id})">付与</button>
+        <button onclick="setPoints(${u.id})" style="background:#1e3a5f;color:#7dd3fc;border:1px solid #3b82f6">設定</button>
+      </div>
+    </div>`).join('');
+}
+async function grantPoints(userId) {
+  const amt = parseInt(document.getElementById(`grant-amt-${userId}`).value);
+  if (isNaN(amt) || amt === 0) return;
+  const res = await fetch('/api/admin/grant-points', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+    body: JSON.stringify({ userId, amount: amt })
+  });
+  const data = await res.json();
+  if (data.ok) { showPointToast(`+${amt.toLocaleString()}pt 付与完了`); await reloadAdminContent(); }
+}
+async function distributePool() {
+  if (!confirm('プールを配分しますか？この操作は取り消せません。')) return;
+  const res  = await fetch('/api/admin/distribute-pool', { method:'POST', headers:{'Authorization':authToken} });
+  const data = await res.json();
+  if (!data.ok) { alert(data.error || 'エラー'); return; }
+  const lines = data.payouts.map(p => `${p.username}: +${p.amount.toLocaleString()}pt`).join('\n');
+  alert(`配分完了！ プール合計: ${data.totalPool.toLocaleString()}pt\n\n${lines}`);
+}
+async function awardWorstFrame() {
+  if (!confirm('ポイント1位の人に🔴ワーストフレームを付与しますか？')) return;
+  try {
+    const res  = await fetch('/api/admin/award-worst', { method:'POST', headers:{'Authorization':authToken} });
+    const data = await res.json();
+    if (data.ok) { alert(`✅ ${data.username} にワーストフレームを付与しました`); await reloadAdminContent(); }
+    else alert(`❌ エラー (${res.status}): ${data.error || JSON.stringify(data)}`);
+  } catch(e) { alert('❌ 通信エラー: ' + e.message); }
+}
+async function viewSurveyResults() {
+  try {
+    const res  = await fetch('/api/admin/survey', { headers: { 'Authorization': authToken } });
+    const data = await res.json();
+    if (!Array.isArray(data)) { alert('エラー: ' + (data.error || 'unknown')); return; }
+    if (!data.length) { alert('まだ回答がありません'); return; }
+    const qLabels = {
+      sq1:'Q1.クリアしたセクション', sq2:'Q2.主に使ったセクション',
+      sq3:'Q3.役立ち度', sq4:'Q4.自信度', sq5:'Q5.テスト難易度',
+      sq6:'Q6.難易度比較', sq7:'Q7.勉強時間', sq8:'Q8.他の勉強法',
+      sq8_other:'Q8.その他(自由)', sq9:'Q9.自由記述'
+    };
+    const rows = data.map(r => {
+      const a = r.answers;
+      const cells = Object.entries(qLabels).map(([k, label]) => {
+        const v = a[k];
+        return `<td style="padding:4px 8px;border:1px solid var(--line);font-size:.78rem;max-width:160px;white-space:pre-wrap;word-break:break-all">${Array.isArray(v) ? v.join(', ') : (v ?? '―')}</td>`;
+      }).join('');
+      return `<tr><td style="padding:4px 8px;border:1px solid var(--line);font-weight:600;white-space:nowrap">${esc(tu(r.username))}</td><td style="padding:4px 8px;border:1px solid var(--line);text-align:center">${r.test_score ?? '―'}</td>${cells}</tr>`;
+    }).join('');
+    const headers = ['名前','得点',...Object.values(qLabels)].map(h => `<th style="padding:4px 8px;border:1px solid var(--line);background:var(--card2);font-size:.75rem;white-space:nowrap">${h}</th>`).join('');
+    const w = window.open('', '_blank');
+    w.document.write(`<!DOCTYPE html><html><head><meta charset="utf-8"><title>アンケート結果 (${data.length}件)</title>
+    <style>body{font-family:sans-serif;padding:16px;background:#0a1626;color:#e2e8f0}table{border-collapse:collapse}h2{margin-bottom:12px}</style></head>
+    <body><h2>📊 アンケート結果（${data.length}件）</h2>
+    <div style="overflow-x:auto"><table><thead><tr>${headers}</tr></thead><tbody>${rows}</tbody></table></div></body></html>`);
+    w.document.close();
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
+async function adminAddBanner() {
+  const title = prompt('バナータイトル');
+  if (!title) return;
+  const body  = prompt('バナー本文（HTMLタグ可）');
+  if (!body) return;
+  const date  = prompt('日付 (YYYY-MM-DD)', new Date().toISOString().slice(0,10));
+  try {
+    const res  = await fetch('/api/admin/banners', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ title, body, date, is_new: true })
+    });
+    const data = await res.json();
+    if (data.ok) { showPointToast('バナーを追加しました'); loadBanners(); }
+    else showPointToast('❌ ' + (data.error || 'エラー'));
+  } catch(e) { showPointToast('通信エラー'); }
+}
+
+async function adminCreateBattles() {
+  // レース一覧を取得して選択
+  let races = [];
+  try { races = await fetch('/api/races').then(r => r.json()); } catch(e) {}
+
+  let raceId = null, raceName = '（なし）';
+  if (races.length) {
+    const raceList = races.map((r, i) => `${i + 1}. ${r.name}${r.active ? ' ★' : ''}`).join('\n');
+    const pick = prompt(`紐づけるレースを番号で選択（Enter でスキップ）\n\n${raceList}`);
+    const idx = parseInt(pick) - 1;
+    if (!isNaN(idx) && races[idx]) { raceId = races[idx].id; raceName = races[idx].name; }
+  }
+
+  const subjectChoices = Object.entries(BATTLE_SUBJ_LABEL).map(([k,v]) => `${k} = ${v}`).join('\n');
+  const subject = prompt(`教科コードを入力\n${subjectChoices}`);
+  if (!subject) return;
+  const label = BATTLE_SUBJ_LABEL[subject] || subject;
+  if (!confirm(`「${label}」のバトルを作成します。\nレース: 「${raceName}」\n既存のopen状態バトルは削除されます。`)) return;
+  try {
+    const res = await fetch('/api/admin/battles/create', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject, race_id: raceId })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      alert(`✅ バトルをリセットしました（教科: ${data.subject}）\n「➕ ペア追加」でペアを追加してください`);
+      await reloadAdminContent(); loadBattleContent();
+    } else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function adminCloseRace() {
+  if (!_currentRace) { alert('アクティブなレースがありません'); return; }
+  if (!confirm(`「${_currentRace.name}」を終了しますか？\n終了後は勉強時間の申告ができなくなります。`)) return;
+  const res = await fetch(`/api/admin/races/${_currentRace.id}/close`, {
+    method: 'POST', headers: { Authorization: authToken }
+  }).then(r => r.json());
+  if (res.ok) { showPointToast('🔒 レースを終了しました'); closeAdminModal(); loadRaceSection(); }
+  else alert(res.error || 'エラー');
+}
+
+let _lastBattleSubject = '';
+async function adminAddBattlePair() {
+  const subjectChoices = Object.entries(BATTLE_SUBJ_LABEL).map(([k,v]) => `${k} = ${v}`).join('\n');
+  const subject = prompt(`教科コードを入力\n${subjectChoices}`, _lastBattleSubject);
+  if (!subject) return;
+  _lastBattleSubject = subject;
+  const u1 = prompt('1人目のユーザー名');
+  if (!u1) return;
+  const u2 = prompt('2人目のユーザー名');
+  if (!u2) return;
+  try {
+    const res = await fetch('/api/admin/battles/add-pair', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ username1: u1, username2: u2, subject })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      alert(`✅ ${data.pair[0]} vs ${data.pair[1]} を追加しました（教科: ${data.subject}）`);
+      await reloadAdminContent(); loadBattleContent();
+    } else {
+      alert('❌ ' + (data.error || 'エラー'));
+    }
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
+async function adminRefundAllBattles() {
+  if (!confirm('現在openまたはclosedのバトルを全て削除し、賭けポイントを全員に返金しますか？')) return;
+  try {
+    const res = await fetch('/api/admin/battles/refund-all', {
+      method: 'POST', headers: { 'Content-Type': 'application/json', 'Authorization': authToken }
+    });
+    const data = await res.json();
+    if (data.ok) { alert(`✅ ${data.refunded}件のベットを返金し、${data.deleted}件のバトルを削除しました`); await reloadAdminContent(); loadBattleContent(); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
+async function adminSettleManual() {
+  const battleId = prompt('バトルIDを入力（バトル一覧から確認）');
+  if (!battleId) return;
+  const score1 = prompt('P1（左の選手）の点数');
+  if (score1 === null) return;
+  const score2 = prompt('P2（右の選手）の点数');
+  if (score2 === null) return;
+  if (!confirm(`バトル#${battleId}: P1=${score1}点 vs P2=${score2}点 で決着しますか？`)) return;
+  try {
+    const res = await fetch('/api/admin/battles/settle-manual', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ battleId: parseInt(battleId), score1: parseFloat(score1), score2: parseFloat(score2) })
+    });
+    const data = await res.json();
+    if (data.ok) { alert('✅ ' + data.result); loadBattleContent(); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
+async function adminCloseBattles() {
+  const subject = prompt('締め切る教科コードを入力\neigo / ouri / math / kakougaku / nekku / seigyo');
+  if (!subject) return;
+  if (!confirm(`「${BATTLE_SUBJ_LABEL[subject] || subject}」のバトルを締め切ります（賭け不可になります）。`)) return;
+  try {
+    const res = await fetch('/api/admin/battles/close', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject })
+    });
+    const data = await res.json();
+    if (data.ok) { alert(`✅ ${data.closed}件のバトルを締め切りました`); await reloadAdminContent(); loadBattleContent(); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function adminSettleBattles() {
+  const subject = prompt('決着教科コードを入力\neigo / ouri / math / kakougaku / nekku / seigyo');
+  if (!subject) return;
+  if (!confirm(`「${BATTLE_SUBJ_LABEL[subject] || subject}」のバトルを決着しますか？`)) return;
+  try {
+    const res  = await fetch('/api/admin/battles/settle', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      let msg = '✅ 決着完了\n\n';
+      data.results.forEach(r => { msg += r.result + '\n'; });
+      alert(msg);
+    } else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function resetSeasonPoints() {
+  if (!confirm('シーズンポイントを全員リセットしますか？この操作は取り消せません。')) return;
+  try {
+    const res = await fetch('/api/admin/reset-season-points', {
+      method: 'POST',
+      headers: { 'Authorization': authToken }
+    });
+    const data = await res.json();
+    if (data.ok) { showPointToast('シーズンポイントをリセットしました'); await reloadAdminContent(); }
+    else alert('❌ エラー: ' + (data.error || 'unknown'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+async function restoreSeasonPoints() {
+  if (!confirm('各メンバーのシーズンポイントを累計ポイントから復元しますか？')) return;
+  try {
+    const res = await fetch('/api/admin/restore-season-points', {
+      method: 'POST',
+      headers: { 'Authorization': authToken }
+    });
+    const data = await res.json();
+    if (data.ok) {
+      const lines = data.users.map(u => `${u.username}: ${u.season_points}pt`).join('\n');
+      alert('✅ 復元完了\n\n' + lines);
+      await reloadAdminContent();
+    } else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+async function debugPoints() {
+  try {
+    const res = await fetch('/api/admin/debug-points', { headers: { 'Authorization': authToken } });
+    const data = await res.json();
+    if (!Array.isArray(data)) { alert('エラー: ' + JSON.stringify(data)); return; }
+    alert(data.map(u => `${u.username}: points=${u.points} season=${u.season_points} bet=${u.test_bet}`).join('\n'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+async function restorePointsManual() {
+  if (!confirm('リセット前のポイントを全員に設定しますか？')) return;
+  try {
+    const res = await fetch('/api/admin/restore-points-manual', {
+      method: 'POST',
+      headers: { 'Authorization': authToken }
+    });
+    const data = await res.json();
+    if (data.ok) {
+      alert('✅ 復元完了\n\n' + data.results.join('\n') + '\n\n--- DB上のユーザー名 ---\n' + (data.dbUsers||[]).join(', '));
+      // 自分の表示ポイントをリフレッシュ
+      const me = await fetch('/api/me', { headers: { 'Authorization': authToken } }).then(r => r.json()).catch(()=>({}));
+      if (me.lifetime_points != null) { authLifetimePoints = me.lifetime_points; updateAuthBar(); }
+      await reloadAdminContent();
+    } else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+async function adjustStudyLog() {
+  const username = prompt('ユーザー名を入力');
+  if (!username) return;
+  const delta = parseInt(prompt('武藤模試時間の加減算（分）\n例: -180 で3時間減らす'));
+  if (isNaN(delta)) return;
+  if (!confirm(`${username} の武藤模試時間を ${delta}分 調整しますか？`)) return;
+  try {
+    const res = await fetch('/api/admin/adjust-study-log', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ username, muto_delta: delta })
+    });
+    const data = await res.json();
+    if (data.ok) alert(`✅ ${username} の武藤模試時間: ${Math.floor(data.muto_minutes/60)}h${data.muto_minutes%60}m`);
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
+async function grantAll() {
+  const input = prompt('全プレイヤーに配布するポイント数を入力');
+  const amount = parseInt(input);
+  if (!amount || isNaN(amount) || amount <= 0) return;
+  if (!confirm(`全プレイヤーに ${amount.toLocaleString()}pt を配布しますか？`)) return;
+  try {
+    const res = await fetch('/api/admin/grant-all', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ amount })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      alert(`✅ ${data.count}人に ${amount.toLocaleString()}pt を配布しました`);
+      await reloadAdminContent();
+    } else {
+      alert('❌ エラー: ' + (data.error || 'unknown'));
+    }
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+async function awardBakaFrame() {
+  if (!confirm('全科目入力済みの下位3人にフレームを付与しますか？')) return;
+  try {
+    const res  = await fetch('/api/admin/award-baka', { method:'POST', headers:{'Authorization':authToken} });
+    const data = await res.json();
+    if (data.ok) {
+      const msg = data.assigned.map(a => `${a.username}（平均${a.avg}点） → ${a.frame}`).join('\n');
+      alert(`✅ フレーム付与完了\n${msg}`);
+      await reloadAdminContent();
+    } else alert(`❌ エラー (${res.status}): ${data.error || JSON.stringify(data)}`);
+  } catch(e) { alert('❌ 通信エラー: ' + e.message); }
+}
+
+let _siteLocked = false;
+let _registrationLocked = false;
+async function updateLockBtn() {
+  try {
+    const res = await fetch('/api/site-status');
+    const data = await res.json();
+    _siteLocked = data.locked;
+    _registrationLocked = data.registrationLocked;
+  } catch(e) {}
+  const btn = document.getElementById('lock-btn');
+  if (btn) {
+    btn.textContent = _siteLocked ? '🔓 制限解除' : '🔒 アクセス制限';
+    btn.style.background = _siteLocked ? '#16a34a' : '#dc2626';
+  }
+  const rBtn = document.getElementById('reg-lock-btn');
+  if (rBtn) {
+    rBtn.textContent = _registrationLocked ? '✅ 新規登録を再開' : '🚫 新規登録制限';
+    rBtn.style.background = _registrationLocked ? '#16a34a' : '#dc2626';
+  }
+}
+async function toggleSiteLock() {
+  const endpoint = _siteLocked ? '/api/admin/unlock' : '/api/admin/lock';
+  const label    = _siteLocked ? '制限を解除' : 'アクセスを制限（管理者以外のクイズページを遮断）';
+  if (!confirm(`${label}しますか？`)) return;
+  try {
+    const res  = await fetch(endpoint, { method:'POST', headers:{'Authorization':authToken} });
+    const data = await res.json();
+    if (data.ok) await updateLockBtn();
+    else alert('エラー: ' + (data.error || 'unknown'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+let _scoreLocked = false;
+async function updateScoreLockBtn() {
+  try {
+    const res = await fetch('/api/score-status');
+    const data = await res.json();
+    _scoreLocked = data.locked;
+  } catch(e) {}
+  const btn = document.getElementById('score-lock-btn');
+  if (!btn) return;
+  btn.textContent = _scoreLocked ? '✏️ 得点入力を再開' : '✏️ 得点入力締め切り';
+  btn.style.background = _scoreLocked ? '#16a34a' : '#dc2626';
+}
+async function toggleRegistrationLock() {
+  const label = _registrationLocked ? '新規登録を再開' : '新規登録を制限（既存ユーザーはログイン可）';
+  if (!confirm(`${label}しますか？`)) return;
+  try {
+    const endpoint = _registrationLocked ? '/api/admin/unlock-registration' : '/api/admin/lock-registration';
+    const res  = await fetch(endpoint, { method:'POST', headers:{'Authorization':authToken} });
+    const data = await res.json();
+    if (data.ok) await updateLockBtn();
+    else alert('エラー: ' + (data.error || 'unknown'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+async function toggleScoreLock() {
+  const endpoint = _scoreLocked ? '/api/admin/unlock-score' : '/api/admin/lock-score';
+  const label    = _scoreLocked ? '得点入力を再開' : '得点入力を締め切り（配分直前に押す）';
+  if (!confirm(`${label}しますか？`)) return;
+  try {
+    const res  = await fetch(endpoint, { method:'POST', headers:{'Authorization':authToken} });
+    const data = await res.json();
+    if (data.ok) await updateScoreLockBtn();
+    else alert('エラー: ' + (data.error || 'unknown'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
+}
+</script>
+</body>
+</html>
