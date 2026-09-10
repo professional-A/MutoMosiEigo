@@ -3,7 +3,7 @@
 //   title, subtitle?, eyebrow, description, subject, storageKey,
 //   pointsPerQ?(=100), katex?(=false), tip?, footer?,
 //   sections: [{ id, no, title, qs: [question] }]
-// question types: single | multi | sort | input
+// question types: single | multi | sort | input | numeric
 (function () {
 
 const CSS = `
@@ -74,6 +74,22 @@ section{margin-top:44px;scroll-margin-top:64px}
 .tip b{color:var(--amber)}
 footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:var(--dim);font-size:.82rem;text-align:center}
 @media(max-width:560px){.q-top{flex-direction:column;gap:7px}}
+.num-tag{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:.72rem;color:var(--teal);background:rgba(70,214,196,.1);border:1px solid var(--line);border-radius:6px;padding:2px 8px;margin-bottom:8px}
+.num-svg{margin:10px 0;overflow-x:auto}
+.num-svg svg{max-width:100%;height:auto;display:block}
+.num-part{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-top:10px}
+.num-label{font-size:.9rem;color:var(--muted);min-width:1.5em}
+.num-input{font-family:inherit;font-size:.98rem;color:var(--ink);background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:9px 12px;width:150px;outline:none;transition:.2s}
+.num-input:focus{border-color:var(--teal-d)}
+.num-input.ok{border-color:var(--good);background:rgba(95,224,168,.08)}
+.num-input.ng{border-color:var(--bad);background:rgba(240,107,142,.07)}
+.num-unit{font-size:.85rem;color:var(--muted);white-space:nowrap}
+.num-fb{font-size:.85rem;font-weight:600}
+.num-fb.g{color:var(--good)}
+.num-fb.b{color:var(--bad)}
+.num-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
+.num-hint{background:var(--bg2);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:9px 13px;margin-top:10px;font-size:.86rem;color:var(--muted);white-space:pre-line;line-height:1.8}
+.num-reveal{background:rgba(95,224,168,.06);border-left:3px solid var(--good);border-radius:0 8px 8px 0;padding:9px 13px;margin-top:8px;font-size:.86rem;color:#cdfbe5;line-height:1.85}
 `;
 
 // Module-level state
@@ -232,11 +248,43 @@ function buildQuestion(q, qi, key, secId) {
     if (q.hint && _state[key] === undefined) {
       inner += `<div class="note" style="margin-top:6px">💡 ヒント: ${q.hint}</div>`;
     }
+
+  } else if (q.type === 'numeric') {
+    const parts = Array.isArray(q.parts) ? q.parts : [];
+    if (q.tag) inner += `<div class="num-tag">${q.tag}</div>`;
+    if (q.svg) inner += `<div class="num-svg">${q.svg}</div>`;
+    parts.forEach((pt, pi) => {
+      const pk = key + '_p' + pi;
+      const st = _state[pk];
+      const cls = st === 1 ? 'ok' : st === -1 ? 'ng' : '';
+      const dis = st === 1 ? 'disabled' : '';
+      inner += `<div class="num-part">
+        ${pt.label ? `<span class="num-label">${pt.label}</span>` : ''}
+        <input class="num-input ${cls}" id="ni_${pk}" inputmode="decimal" ${dis} placeholder="答え"
+          onkeydown="if(event.key==='Enter')numCheck('${key}','${secId}',${pi})">
+        ${pt.unit ? `<span class="num-unit">${pt.unit}</span>` : ''}
+        ${st === 1 ? '' : `<button class="btn" onclick="numCheck('${key}','${secId}',${pi})">確認</button>`}
+        <span class="num-fb ${st === 1 ? 'g' : st === -1 ? 'b' : ''}" id="nf_${pk}">${st === 1 ? '✓ 正解' : st === -1 ? '✗ もう一度' : ''}</span>
+      </div>`;
+    });
+    if (q.hint || q.reveal) {
+      inner += `<div class="num-actions">`;
+      if (q.hint) inner += `<button class="btn ghost" onclick="numHint('${key}')">💡 ヒント</button>`;
+      if (q.reveal) inner += `<button class="btn ghost" onclick="numReveal('${key}','${secId}')">📖 解答を見る</button>`;
+      inner += `</div>`;
+    }
+    if (q.hint) inner += `<div class="num-hint" id="nh_${key}" hidden>${q.hint}</div>`;
+    if (q.reveal) {
+      const rv = Array.isArray(q.reveal) ? q.reveal : [q.reveal];
+      inner += `<div class="num-reveal" id="nr_${key}" ${_state[key + '_revealed'] ? '' : 'hidden'}>${rv.map(s => `<div>${s}</div>`).join('')}</div>`;
+    }
   }
 
-  const fbShow = _state[key] !== undefined ? 'show' : '';
-  const ok = _state[key] === 1;
-  inner += `<div class="fb ${fbShow}"><span class="verdict ${ok ? 'g' : 'b'}">${ok ? '✓ 正解' : '✗ 不正解'}</span>${q.note ? `<div class="note">${q.note}</div>` : ''}</div>`;
+  if (q.type !== 'numeric') {
+    const fbShow = _state[key] !== undefined ? 'show' : '';
+    const ok = _state[key] === 1;
+    inner += `<div class="fb ${fbShow}"><span class="verdict ${ok ? 'g' : 'b'}">${ok ? '✓ 正解' : '✗ 不正解'}</span>${q.note ? `<div class="note">${q.note}</div>` : ''}</div>`;
+  }
   inner += `</div></div>`;
   div.innerHTML = inner;
   return div;
@@ -328,6 +376,41 @@ window.revealInput = function (key, secId) {
   const q = getQ(secId, key); if (!q) return;
   _state[key + '_val'] = Array.isArray(q.ans) ? q.ans[0] : q.ans;
   _state[key] = -1;
+  save(); refreshQ(key, secId);
+};
+
+window.numCheck = function (key, secId, pi) {
+  const q = getQ(secId, key); if (!q) return;
+  const part = (q.parts || [])[pi]; if (!part) return;
+  const pk = key + '_p' + pi;
+  if (_state[pk] === 1) return; // 正解済みはロック
+  const inp = document.getElementById('ni_' + pk);
+  let v = parseFloat((inp || {}).value);
+  if (isNaN(v)) { if (inp) inp.classList.add('ng'); return; }
+  if (part.mult) v = v * part.mult;
+  const ok = part.angle
+    ? Math.abs(v - part.ans) <= 2
+    : Math.abs(v - part.ans) / Math.abs(part.ans) <= 0.02;
+  _state[pk] = ok ? 1 : -1;
+  if (ok && window.addPoints) {
+    addPoints(_data.pointsPerPart || _data.pointsPerQ || 100, _storageKey, pk, true, _data.subject);
+  }
+  const parts = q.parts || [];
+  const allOk = parts.length > 0 && parts.every((_, i) => _state[key + '_p' + i] === 1);
+  const anyNg = parts.some((_, i) => _state[key + '_p' + i] === -1);
+  if (allOk) _state[key] = 1;
+  else if (anyNg) _state[key] = -1;
+  else delete _state[key];
+  save(); refreshQ(key, secId);
+};
+
+window.numHint = function (key) {
+  const el = document.getElementById('nh_' + key);
+  if (el) el.hidden = !el.hidden;
+};
+
+window.numReveal = function (key, secId) {
+  _state[key + '_revealed'] = 1;
   save(); refreshQ(key, secId);
 };
 
