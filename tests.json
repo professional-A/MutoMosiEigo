@@ -273,5 +273,25 @@
     "path": "/quiz.html?d=tests/2026-4-zenki-chukan-nekku-kako-kai/data.json",
     "storageKey": "nekku_kako_kai",
     "totalItems": 13
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期末試験",
+    "subject": "人工知能概論",
+    "title": "人工知能概論 ・ 期末 練習問題集（過去問）",
+    "path": "/quiz.html?d=tests/2026-9-ai-kakomon/data.json",
+    "storageKey": "ai_kakomon_v1",
+    "totalItems": 90
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期末試験",
+    "subject": "人工知能概論",
+    "title": "人工知能概論 ・ 期末 類似問題",
+    "path": "/quiz.html?d=tests/2026-9-ai-ruiji/data.json",
+    "storageKey": "ai_ruiji_v1",
+    "totalItems": 90
   }
 ]

@@ -1,12 +1,13 @@
 {
-  "updated": "2026-09-09",
+  "updated": "2026-09-10",
   "documents": [
     {
       "file": "findings/short-term-exam-prep.json",
       "title": "短期テスト勉強（残り数日〜2週間）の学習科学",
       "question": "試験まで日数が少ない現実的な状況で、何をどう出題・再出題すれば点と定着の両方が取れるか",
-      "count": 15,
-      "date": "2026-09-09"
+      "count": 18,
+      "date": "2026-09-09",
+      "updated": "2026-09-10 — 出題言語・不確実な解答の扱い・類似問題の作り方の3件を追加"
     }
   ],
   "source_documents": [
@@ -43,7 +44,11 @@
     "simplicity": ["equal-interval-is-fine-no-need-for-expanding"],
     "sleep": ["sleep-is-the-active-ingredient-in-spacing"],
     "guardrail": ["cap-interval-at-exam-date"],
-    "core-claim": ["spacing-beats-cramming-almost-always"]
+    "core-claim": ["spacing-beats-cramming-almost-always"],
+    "language": ["match-the-language-of-the-real-exam"],
+    "transfer": ["match-the-language-of-the-real-exam", "vary-surface-keep-deep-structure"],
+    "uncertainty": ["errors-are-fine-if-feedback-is-immediate"],
+    "variants": ["vary-surface-keep-deep-structure"]
   },
   "unimplemented": [
     "optimal-gap-is-20-40-percent-of-days-left",
@@ -55,7 +60,6 @@
     "interleaving-beats-blocked-after-a-day",
     "equal-interval-is-fine-no-need-for-expanding",
     "pretesting-beats-posttesting",
-    "competitive-lures-make-mcq-generative",
     "optimal-difficulty-85-percent",
     "feedback-required-when-accuracy-below-50",
     "spacing-beats-cramming-almost-always",
