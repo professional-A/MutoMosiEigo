@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>レース ・ 武藤模試</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/styles/theme.css">
+<style>
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Fraunces',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  #app-shell-bar{position:fixed;top:0;left:0;right:0;z-index:100}
+  main{max-width:720px;margin:0 auto;padding:72px 16px 40px}
+  main h1{font-size:1.15rem;margin:8px 0 2px}
+</style>
+</head>
+<body>
+<div id="app-shell-bar"></div>
+<main>
+    <h1 id="race-hd-title" style="margin-bottom:2px">🏁 レース</h1>
+    <div id="race-hd-date" style="font-size:.78rem;color:var(--dim);margin-bottom:12px"></div>
+    <div class="race-groups" id="race-groups"></div>
+    <div style="overflow-x:auto">
+      <table class="race-table">
+        <thead><tr>
+          <th>#</th><th>名前</th><th>ペア</th><th>武藤模試</th><th>外部</th><th style="color:var(--dim)">🎮</th><th>合計</th><th>シーズンpt</th><th>ライバル差</th><th id="race-tool-th" style="display:none;color:var(--dim);font-size:.68rem">内容</th>
+        </tr></thead>
+        <tbody id="race-table-body"></tbody>
+      </table>
+    </div>
+    <button id="race-tool-toggle" style="display:none;font-size:.72rem;color:var(--dim);background:none;border:1px solid var(--line);border-radius:6px;padding:3px 10px;cursor:pointer;margin-bottom:6px" onclick="toggleRaceTool()">📝 内容を表示</button>
+    <div id="race-pair-ranking" style="display:none;margin-top:14px">
+      <div style="font-size:.72rem;font-weight:700;color:var(--amber);letter-spacing:.05em;margin-bottom:6px">👥 ペアランキング</div>
+      <table class="race-table">
+        <thead><tr>
+          <th>#</th><th>ペア名</th><th>メンバー</th><th>合計勉強</th><th>合計シーズンpt</th>
+        </tr></thead>
+        <tbody id="race-pair-tbody"></tbody>
+      </table>
+    </div>
+    <div id="race-self-report" style="display:none;margin-top:14px;border-top:1px solid var(--line);padding-top:12px">
+      <div class="race-report">
+        <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📖 武藤模試:</span>
+        <input id="race-muto-h" type="number" placeholder="時間" style="width:52px">
+        <input id="race-muto-m" type="number" placeholder="分" style="width:44px">
+        <input id="race-muto-tool" type="text" placeholder="内容（例: Unit1語彙）" style="width:140px">
+        <button onclick="submitRaceAll()">💾 記録</button>
+      </div>
+      <div class="race-report" style="margin-top:6px">
+        <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">📚 外部勉強:</span>
+        <input id="race-manual-h" type="number" placeholder="時間" style="width:52px">
+        <input id="race-manual-m" type="number" placeholder="分" style="width:44px">
+        <input id="race-manual-tool" type="text" placeholder="内容（例: 教科書p.12）" style="width:140px">
+      </div>
+      <div class="race-report" style="margin-top:6px">
+        <span style="font-size:.72rem;color:var(--dim);white-space:nowrap">🎮 ゲーム:</span>
+        <input id="race-game-h" type="number" placeholder="時間" style="width:52px">
+        <input id="race-game-m" type="number" placeholder="分" style="width:44px">
+      </div>
+    </div>
+</main>
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/app-shell.js"></script>
+<script src="/js/util.js"></script>
+<script>
+let authToken = null, authUser = null, authUserId = null, authEmail = null, authPoints = 0, authLifetimePoints = 0;
+function _syncAuthGlobals() {
+  const u = window.appShell && window.appShell.user;
+  authToken          = (window.appShell && window.appShell.token) || null;
+  authUser           = u ? u.username : null;
+  authUserId         = u ? u.id : null;
+  authEmail          = u ? (u.email || '') : null;
+  authPoints         = u ? (u.points || 0) : 0;
+  authLifetimePoints = u ? (u.lifetimePoints || 0) : 0;
+}
+function updateAuthBar() { if (window.appShell) window.appShell.refreshAuth(); }
+window.addEventListener('appshell:auth', () => { _syncAuthGlobals(); onAuthReady(); });
+
+appShell.mount(document.getElementById('app-shell-bar'), {
+  nav: window.APP_NAV,
+  onNotif: () => { location.href = '/'; }
+});
+
+let _currentRace = null;
+
+// index.html:loadRaceSection を独立ページ向けに書き換え：
+//   - #race-view-btn の表示制御を撤去（ヘッダーボタンは無い）
+//   - #race-view-bg の表示チェックを撤去し、常に _renderRace(data) する
+//   - レースが無いときは race-hd-title にメッセージ
+async function loadRaceSection() {
+  try {
+    const data = await fetch('/api/races/current').then(r => r.json());
+    if (!data.race) { _currentRace = null; document.getElementById('race-hd-title').textContent = '🏁 開催中のレースはありません'; return; }
+    _currentRace = data.race;
+    _renderRace(data);
+  } catch(e) {}
+}
+
+function _fmtMin(totalMin) {
+  const h = Math.floor(totalMin / 60), m = totalMin % 60;
+  return h > 0 ? `${h}h${m > 0 ? m + 'm' : ''}` : `${m}m`;
+}
+function _fmtSec(sec) { return _fmtMin(Math.floor(sec / 60)); }
+
+function _renderRace(data) {
+  const { race, groups, study_logs } = data;
+  document.getElementById('race-hd-title').textContent = '🏁 ' + race.name;
+  const subjectPart = race.subject ? `[${race.subject}]` : '';
+  const _fmtDt = s => s ? s.replace('T', ' ').replace(/-(\d{2})-(\d{2})/, '/$1/$2') : '';
+  const datePart = [race.start_date, race.end_date].filter(Boolean).map(_fmtDt).join(' 〜 ');
+  const statusLabel = race.status === 'closed' ? ' ✅終了' : '';
+  document.getElementById('race-hd-date').textContent = [subjectPart, datePart].filter(Boolean).join(' ') + statusLabel;
+
+  document.getElementById('race-groups').innerHTML = '';
+
+  // 各ユーザーの合計分数を計算
+  const logMap = {};
+  study_logs.forEach(l => { logMap[l.user_id] = l; });
+  // グループ列はペア名を使用
+  const pairNameMap = {};
+  (data.pairs || []).forEach(p => p.members.forEach(m => { pairNameMap[m.user_id] = p.name; }));
+
+  // 全メンバーを収集してソート
+  const allMembers = [];
+  groups.forEach(g => g.members.forEach(m => {
+    const log = logMap[m.user_id] || {};
+    const mutoMin = log.muto_minutes || 0;
+    const manMin  = log.manual_minutes || 0;
+    const gameMin  = log.game_minutes  || 0;
+    const mutoTool = log.muto_tool   || '';
+    const manTool  = log.manual_tool || '';
+    allMembers.push({ ...m, mutoMin, manMin, gameMin, mutoTool, manTool, total: mutoMin + manMin, gname: pairNameMap[m.user_id] || '', log });
+  }));
+  allMembers.sort((a, b) => b.total - a.total);
+
+  // 同順位対応
+  let _rank = 1;
+  allMembers.forEach((m, i) => {
+    if (i > 0 && m.total === allMembers[i - 1].total) { m.rank = allMembers[i - 1].rank; }
+    else { m.rank = _rank; }
+    _rank = m.rank + 1;
+  });
+
+  const tbody = document.getElementById('race-table-body');
+  tbody.innerHTML = allMembers.map((m, i) => {
+    const isMe = m.user_id === authUserId;
+    const prev = allMembers.slice(0, i).reverse().find(p => p.rank < m.rank);
+    const rivalDiff = prev ? (m.total - prev.total) : null;
+    const rivalHtml = rivalDiff !== null
+      ? `<span class="race-rival${rivalDiff >= 0 ? ' ahead' : ''}">${rivalDiff >= 0 ? '+' : ''}${_fmtMin(rivalDiff)}</span>`
+      : '<span style="color:var(--teal);font-size:.7rem">👑</span>';
+    const spt = m.season_points != null ? m.season_points.toLocaleString() + 'pt' : '―';
+    return `<tr class="${isMe ? 'rank-me' : ''}">
+      <td style="color:var(--dim)">${m.rank}</td>
+      <td style="font-weight:${isMe ? '700' : '400'};color:${isMe ? 'var(--teal)' : 'var(--fg)'}">${esc(m.username)}${isMe ? ' 👤' : ''}</td>
+      <td style="color:var(--dim);font-size:.7rem">${esc(m.gname)}</td>
+      <td>${m.mutoMin > 0 ? _fmtMin(m.mutoMin) : '—'}</td>
+      <td>${m.manMin > 0 ? _fmtMin(m.manMin) : '—'}</td>
+      <td style="color:var(--dim);font-size:.72rem">${m.gameMin > 0 ? _fmtMin(m.gameMin) : '—'}</td>
+      <td style="font-weight:700;color:#d4e8ff">${_fmtMin(m.total)}</td>
+      <td style="color:var(--amber);font-size:.72rem">${spt}</td>
+      <td>${rivalHtml}</td>
+      <td class="race-tool-cell" style="display:none;font-size:.68rem;color:var(--dim);max-width:120px;white-space:pre-wrap">${[m.mutoTool, m.manTool].filter(Boolean).join(' / ') || '—'}</td>
+    </tr>`;
+  }).join('');
+
+  // ペアランキング
+  const pairs = data.pairs || [];
+  const pairSection = document.getElementById('race-pair-ranking');
+  const pairTbody = document.getElementById('race-pair-tbody');
+  if (pairs.length) {
+    pairSection.style.display = '';
+    // 人数補正: 最大ペア人数に合わせてスコアを正規化
+    const maxPairSize = Math.max(...pairs.map(p => p.members.length), 1);
+    const pairRows = pairs.map(p => {
+      const size = p.members.length || 1;
+      const factor = maxPairSize / size;
+      const mutoTotal = p.members.reduce((s, m) => s + ((logMap[m.user_id] || {}).muto_minutes || 0), 0);
+      const manTotal  = p.members.reduce((s, m) => s + ((logMap[m.user_id] || {}).manual_minutes || 0), 0);
+      const rawStudy = mutoTotal + manTotal;
+      const rawSpt   = p.members.reduce((s, m) => s + (m.season_points || 0), 0);
+      return { p, size, factor,
+        studyTotal: Math.round(rawStudy * factor),
+        sptTotal:   Math.round(rawSpt   * factor) };
+    });
+    // 正規化後の合計勉強時間でソート
+    pairRows.sort((a, b) => b.studyTotal - a.studyTotal);
+    pairTbody.innerHTML = pairRows.map(({ p, size, factor, studyTotal, sptTotal }, i) => {
+      const names = p.members.map(m => esc(m.username)).join('・');
+      const isMyPair = authUserId && p.members.some(m => m.user_id === authUserId);
+      const nameCell = isMyPair
+        ? `${esc(p.name)} <button data-pid="${p.id}" data-pname="${esc(p.name)}" onclick="editPairName(this.dataset.pid,this.dataset.pname)" title="ペア名を変更" style="background:none;border:none;color:var(--dim);cursor:pointer;font-size:.8rem;padding:0 2px">✏️</button>`
+        : esc(p.name);
+      const factorBadge = factor > 1
+        ? `<span style="font-size:.65rem;color:var(--teal);margin-left:4px">(×${maxPairSize}/${size})</span>`
+        : '';
+      return `<tr>
+        <td style="color:var(--dim)">${i + 1}</td>
+        <td style="font-weight:700">${nameCell}${factorBadge}</td>
+        <td style="font-size:.7rem;color:var(--dim)">${names}</td>
+        <td style="font-weight:700;color:#d4e8ff">${studyTotal > 0 ? _fmtMin(studyTotal) : '—'}</td>
+        <td style="color:var(--amber)">${sptTotal.toLocaleString()}pt</td>
+      </tr>`;
+    }).join('');
+  } else {
+    pairSection.style.display = 'none';
+  }
+
+  // 自己申告フォーム（active中かつレース参加者）
+  const inRace = authUserId && allMembers.some(m => m.user_id === authUserId);
+  const isActive = race.status === 'active';
+  document.getElementById('race-self-report').style.display = (inRace && isActive) ? '' : 'none';
+
+  const toolBtn = document.getElementById('race-tool-toggle');
+  if (toolBtn) toolBtn.style.display = '';
+}
+
+function toggleRaceTool() {
+  const th   = document.getElementById('race-tool-th');
+  const cells = document.querySelectorAll('.race-tool-cell');
+  const btn   = document.getElementById('race-tool-toggle');
+  const show  = th.style.display === 'none';
+  th.style.display = show ? '' : 'none';
+  cells.forEach(c => c.style.display = show ? '' : 'none');
+  btn.textContent = show ? '📝 内容を隠す' : '📝 内容を表示';
+}
+
+function editPairName(pairId, currentName) {
+  // インライン編集UI
+  const existing = document.getElementById('pair-name-edit-row');
+  if (existing) existing.remove();
+  const wrap = document.createElement('div');
+  wrap.id = 'pair-name-edit-row';
+  wrap.style.cssText = 'display:flex;gap:6px;align-items:center;margin:8px 0;padding:8px;background:rgba(70,214,196,.08);border-radius:8px;border:1px solid rgba(70,214,196,.3)';
+  wrap.innerHTML = `<input id="pair-name-input" value="${esc(currentName)}" style="flex:1;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#0a172b;color:var(--fg);font-size:.85rem;font-family:inherit">
+    <button onclick="savePairName(${pairId})" style="padding:5px 12px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-size:.8rem">保存</button>
+    <button onclick="document.getElementById('pair-name-edit-row').remove()" style="padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:none;color:var(--dim);cursor:pointer;font-size:.8rem">✕</button>`;
+  const pairSection = document.getElementById('race-pair-ranking');
+  pairSection.insertBefore(wrap, pairSection.firstChild);
+  document.getElementById('pair-name-input').focus();
+}
+async function savePairName(pairId) {
+  const input = document.getElementById('pair-name-input');
+  if (!input) return;
+  const newName = input.value.trim();
+  if (!newName) return;
+  const res = await fetch(`/api/pairs/${pairId}/name`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json', Authorization: authToken },
+    body: JSON.stringify({ name: newName })
+  }).then(r => r.json());
+  if (res.ok) { document.getElementById('pair-name-edit-row')?.remove(); loadRaceSection(); }
+  else alert('❌ ' + (res.error || 'エラー'));
+}
+
+function toggleRaceBody() {
+  const body = document.getElementById('race-body');
+  const arrow = document.getElementById('race-hd-arrow');
+  const collapsed = body.style.display === 'none';
+  body.style.display = collapsed ? '' : 'none';
+  arrow.textContent = collapsed ? '▼' : '▶';
+}
+
+async function submitRaceAll() {
+  if (!_currentRace || !authToken) return;
+  const mutoH    = parseInt(document.getElementById('race-muto-h').value) || 0;
+  const mutoM    = parseInt(document.getElementById('race-muto-m').value) || 0;
+  const mutoMin  = mutoH * 60 + mutoM;
+  const mutoTool = document.getElementById('race-muto-tool').value.trim();
+  const manH     = parseInt(document.getElementById('race-manual-h').value) || 0;
+  const manM     = parseInt(document.getElementById('race-manual-m').value) || 0;
+  const manMin   = manH * 60 + manM;
+  const manTool  = document.getElementById('race-manual-tool').value.trim();
+  const gameMin  = (parseInt(document.getElementById('race-game-h').value) || 0) * 60
+                 + (parseInt(document.getElementById('race-game-m').value) || 0);
+  // 3文字バリデーション（時間入力がある場合のみ）
+  if (mutoMin > 0 && mutoTool.length < 3) { alert('武藤模試の内容を3文字以上入力してください'); return; }
+  if (manMin  > 0 && manTool.length  < 3) { alert('外部勉強の内容を3文字以上入力してください'); return; }
+  if (mutoMin === 0 && manMin === 0 && gameMin === 0) { alert('時間を入力してください'); return; }
+  // スピナー
+  const btn = document.querySelector('#race-self-report button[onclick="submitRaceAll()"]');
+  if (btn) { btn.disabled = true; btn.textContent = '⏳ 記録中…'; }
+  try {
+    const res = await fetch(`/api/races/${_currentRace.id}/study`, {
+      method: 'PUT',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ muto_minutes: mutoMin, muto_tool: mutoTool, manual_minutes: manMin, manual_tool: manTool, game_minutes: gameMin })
+    });
+    const data = await res.json();
+    if (!res.ok) { alert('❌ ' + (data.error || 'エラー')); return; }
+    ['race-muto-h','race-muto-m','race-muto-tool','race-manual-h','race-manual-m','race-manual-tool','race-game-h','race-game-m'].forEach(id => {
+      const el = document.getElementById(id); if (el) el.value = '';
+    });
+    showPointToast('💾 勉強時間を記録しました');
+    loadRaceSection();
+  } finally {
+    if (btn) { btn.disabled = false; btn.textContent = '💾 記録'; }
+  }
+}
+
+function onAuthReady() { loadRaceSection(); }
+loadRaceSection();  // 認証前でも一覧描画（自己申告フォームは inRace && active のときだけ表示）
+</script>
+</body>
+</html>
