@@ -451,24 +451,7 @@ h1{
 
 <!-- ヘッダースタック（auth-bar + ticker を一括fixed） -->
 <div id="header-stack">
-<div class="auth-bar" id="auth-bar">
-  <div class="auth-bar-left">
-    <button class="notif-btn" onclick="toggleNotif()" title="お知らせ">
-      🔔<span class="notif-badge" id="notif-badge">2</span>
-    </button>
-  </div>
-  <span id="auth-status">ログインしていません</span>
-  <button class="auth-btn" id="admin-btn" style="display:none" onclick="openAdminModal()">管理</button>
-  <button class="auth-btn" id="members-btn" style="display:none" onclick="openMembersModal()">メンバー</button>
-  <button class="auth-btn" id="scores-btn" style="display:none" onclick="openScoresModal()">📊成績</button>
-  <button class="auth-btn" id="battle-btn" style="display:none" onclick="openBattleModal()">⚔️バトル</button>
-  <button class="auth-btn" id="clrank-btn" style="display:none" onclick="openClrankPage()">🏆順位</button>
-  <button class="auth-btn" id="race-view-btn" style="display:none" onclick="openRaceView()">🏁レース</button>
-  <div class="avatar" id="auth-avatar" style="display:none" onclick="openAvatarModal()" title="アイコン変更">🐸</div>
-  <button class="auth-btn" id="test-btn" style="display:none" onclick="openTestModal()">📋テスト</button>
-  <button class="auth-btn" id="pw-open-btn" onclick="openLoginModal()">IDでログイン</button>
-  <button class="auth-btn primary" id="auth-open-btn" onclick="loginWithGoogle()">Googleでログイン</button>
-</div>
+<div id="app-shell-bar"></div>
 <div class="ticker-wrap" id="ticker-wrap" style="display:none">
   <div class="ticker-track" id="ticker-track"></div>
 </div>
@@ -1727,6 +1710,8 @@ fetch("tests.json")
       `<div class="empty">模試データを読み込めませんでした。<br>tests.json が存在するか確認してください。</div>`;
   });
 </script>
+<script src="/js/api.js"></script>
+<script src="/js/app-shell.js"></script>
 <script>
 // ── 絵文字アイコン一覧 ──────────────────────────────────
 const AVATAR_NAMES = { '😼':'ひろと', '😏':'考え方やな' };
@@ -1816,48 +1801,44 @@ function applyFrame(el, frame) {
 }
 
 function updateAuthBar() {
-  const bar   = document.getElementById('auth-status');
-  const btn   = document.getElementById('auth-open-btn');
-  const pwBtn = document.getElementById('pw-open-btn');
-  const avEl  = document.getElementById('auth-avatar');
+  appShell.update({
+    loggedIn: !!authToken,
+    name:     tu(authUser),
+    points:   authPoints,
+    avatar:   authAvatar,
+    frame:    authFrame,
+    isAdmin:  authEmail === 'kabu6113450@gmail.com'
+  });
   if (authToken) {
-    bar.innerHTML = `<strong>${esc(tu(authUser))}</strong> <span style="color:var(--teal);font-size:.85rem">${authPoints.toLocaleString()}pt</span>`;
-    avEl.textContent = authAvatar;
-    avEl.style.display = 'inline-flex';
-    applyFrame(avEl, authFrame);
-    btn.textContent = 'ログアウト';
-    btn.classList.remove('primary');
-    btn.onclick = doLogout;
-    pwBtn.style.display = 'none';
-    document.getElementById('test-btn').style.display = 'inline-block';
-    document.getElementById('admin-btn').style.display = authEmail === 'kabu6113450@gmail.com' ? 'inline-block' : 'none';
-    document.getElementById('members-btn').style.display = 'inline-block';
-    document.getElementById('scores-btn').style.display = 'inline-block';
-    document.getElementById('clrank-btn').style.display = 'inline-block';
-    document.getElementById('battle-btn').style.display = 'inline-block';
     document.getElementById('notif-post-section').style.display = 'block';
     loadRanking();
     loadBanners();
     loadRaceSection();
   } else {
-    bar.textContent = 'ログインしていません';
-    avEl.style.display = 'none';
-    loadRaceSection();
-    btn.textContent = 'Googleでログイン';
-    btn.classList.add('primary');
-    btn.onclick = loginWithGoogle;
-    pwBtn.style.display = 'inline-block';
-    document.getElementById('test-btn').style.display = 'none';
-    document.getElementById('admin-btn').style.display = 'none';
-    document.getElementById('members-btn').style.display = 'none';
-    document.getElementById('scores-btn').style.display = 'none';
-    document.getElementById('clrank-btn').style.display = 'none';
-    document.getElementById('battle-btn').style.display = 'none';
     document.getElementById('notif-post-section').style.display = 'none';
+    loadRaceSection();
     loadBanners();
   }
   requestAnimationFrame(syncLayout);
 }
+
+appShell.mount(document.getElementById('app-shell-bar'), {
+  nav: [
+    { key: 'home',    icon: '🏠', label: 'ホーム',       href: '/' },
+    { key: 'test',    icon: '📋', label: 'テスト予測',   onClick: openTestModal },
+    { key: 'scores',  icon: '📊', label: '成績',         onClick: openScoresModal },
+    { key: 'clrank',  icon: '🏆', label: 'クラス順位',   onClick: openClrankPage },
+    { key: 'battle',  icon: '⚔️', label: 'バトル',       onClick: openBattleModal },
+    { key: 'race',    icon: '🏁', label: 'レース',       onClick: openRaceView, id: 'race-view-btn' },
+    { key: 'members', icon: '👥', label: 'メンバー',     onClick: openMembersModal },
+    { key: 'admin',   icon: '🛠', label: '管理',         onClick: openAdminModal, adminOnly: true }
+  ],
+  onGoogleLogin: loginWithGoogle,
+  onIdLogin:     openLoginModal,
+  onLogout:      doLogout,
+  onNotif:       toggleNotif,
+  onAvatar:      openAvatarModal
+});
 
 function syncLayout() {
   const h = document.getElementById('header-stack').getBoundingClientRect().height;
