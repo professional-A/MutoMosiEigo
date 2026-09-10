@@ -284,3 +284,19 @@ html{scroll-behavior:smooth}
 .battle-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700}
 .battle-badge-open{background:rgba(70,214,196,.15);color:var(--teal);border:1px solid rgba(70,214,196,.3)}
 .battle-badge-settled{background:rgba(255,255,255,.07);color:var(--dim);border:1px solid var(--line)}
+
+/* --- 管理カード（index.html:210-219） --- */
+.admin-card{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--card)}
+.admin-card-top{display:flex;align-items:center;gap:8px}
+.admin-card-name{font-weight:600;font-size:.9rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-card-email{font-size:.7rem;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.admin-card-stats{display:flex;gap:10px;flex-wrap:wrap}
+.admin-stat{background:var(--card2);border-radius:6px;padding:4px 10px;font-size:.78rem}
+.admin-stat span{color:var(--teal);font-weight:700}
+.admin-card-grant{display:flex;gap:6px;align-items:center}
+.admin-card-grant input{flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:.9rem;font-family:inherit;min-width:0}
+.admin-card-grant button{padding:8px 14px;border-radius:8px;border:none;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-size:.88rem;white-space:nowrap}
+
+/* --- 時間割行（index.html:40-41） --- */
+.tt-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);flex-wrap:wrap}
+.tt-row:first-of-type{border-top:none}
