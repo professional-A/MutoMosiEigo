@@ -8,16 +8,11 @@ const TESTS_DIR = path.join(__dirname, 'tests');
 const LEGACY_FILE = path.join(TESTS_DIR, '_legacy.json');
 
 function countItems(data) {
-  if (Array.isArray(data.sections)) {
-    return data.sections.reduce(
-      (sum, sec) => sum + (Array.isArray(sec.qs) ? sec.qs.length : 0),
-      0
-    );
-  }
-  // nekku 系（js/nekku-engine.js）は sections ではなく problems スキーマ。
-  // 旧 tests.json の totalItems は problem 数だったのでそれに合わせる。
-  if (Array.isArray(data.problems)) return data.problems.length;
-  return 0;
+  if (!Array.isArray(data.sections)) return 0;
+  return data.sections.reduce(
+    (sum, sec) => sum + (Array.isArray(sec.qs) ? sec.qs.length : 0),
+    0
+  );
 }
 
 function readLegacy() {

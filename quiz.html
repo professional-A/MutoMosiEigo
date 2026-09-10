@@ -14,11 +14,9 @@ if (!d) {
   fetch('/' + d)
     .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
     .then(data => {
-      const src = data.problems ? '/js/nekku-engine.js' : '/js/quiz-engine.js';
-      const fn  = data.problems ? 'initNekku' : 'initQuiz';
       const s = document.createElement('script');
-      s.src = src;
-      s.onload = () => window[fn](data);
+      s.src = '/js/quiz-engine.js';
+      s.onload = () => window.initQuiz(data);
       document.head.appendChild(s);
     })
     .catch(e => { document.body.style.cssText = 'font:1rem sans-serif;padding:40px;color:#e7eef7;background:#0a1626'; document.body.textContent = 'データ読み込みエラー: ' + e.message; });
