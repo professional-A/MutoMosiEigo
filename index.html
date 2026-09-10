@@ -1691,6 +1691,7 @@ fetch("/api/tests")
 <script src="/js/api.js"></script>
 <script src="/js/app-shell.js"></script>
 <script src="/js/util.js"></script>
+<script src="/js/nav.js"></script>
 <script>
 // ── 絵文字アイコン一覧 ──────────────────────────────────
 const AVATAR_NAMES = { '😼':'ひろと', '😏':'考え方やな' };
@@ -1760,16 +1761,7 @@ function updateAuthBar() {
 }
 
 appShell.mount(document.getElementById('app-shell-bar'), {
-  nav: [
-    { key: 'home',    icon: '🏠', label: 'ホーム',       href: '/' },
-    { key: 'test',    icon: '📋', label: 'テスト予測',   onClick: openTestModal },
-    { key: 'scores',  icon: '📊', label: '成績',         onClick: openScoresModal },
-    { key: 'clrank',  icon: '🏆', label: 'クラス順位',   onClick: openClrankPage },
-    { key: 'battle',  icon: '⚔️', label: 'バトル',       onClick: openBattleModal },
-    { key: 'race',    icon: '🏁', label: 'レース',       onClick: openRaceView, id: 'race-view-btn' },
-    { key: 'members', icon: '👥', label: 'メンバー',     onClick: openMembersModal },
-    { key: 'admin',   icon: '🛠', label: '管理',         onClick: openAdminModal, adminOnly: true }
-  ],
+  nav: window.APP_NAV,         // js/nav.js。各機能ページへの実 href（旧 onClick モーダルは撤去済み）
   manageAuth: false,           // index.html は独自の認証ブートストラップを維持（syncUser 等）
   onGoogleLogin: loginWithGoogle,
   onIdLogin:     openLoginModal,
