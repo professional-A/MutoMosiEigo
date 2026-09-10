@@ -1535,7 +1535,7 @@ function toggleShowArchived() {
 function getProgress(storageKey, totalItems) {
   try {
     const state = JSON.parse(localStorage.getItem(storageKey) || "{}");
-    // quiz-engine.js は 1、nekku-engine.js は true で正解を記録する
+    // quiz-engine.js は 1 で正解を記録（旧 nekku-engine の true も後方互換で許容）
     const done = Object.values(state).filter(v => v === 1 || v === true || (v && v.done)).length;
     return { done: Math.min(done, totalItems), total: totalItems };
   } catch {
