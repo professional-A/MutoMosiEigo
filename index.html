@@ -138,22 +138,8 @@ h1{
 /* Hidden */
 [hidden]{display:none!important}
 
-/* Auth bar */
+/* ヘッダースタック（app-shell のバーは styles/theme.css の .appshell-* が担当） */
 #header-stack{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;flex-direction:column}
-.auth-bar{
-  background:rgba(10,22,38,.92);backdrop-filter:blur(8px);
-  border-bottom:1px solid var(--line);
-  padding:6px 10px;display:flex;align-items:center;gap:6px;
-  font-size:.82rem;overflow-x:auto;flex-wrap:nowrap;
-  -webkit-overflow-scrolling:touch;
-}
-.auth-bar-left{margin-right:auto;display:flex;align-items:center;gap:6px;flex-shrink:0}
-.auth-btn{white-space:nowrap;flex-shrink:0}
-@media(max-width:480px){
-  .auth-bar{padding:5px 8px;gap:5px;font-size:.75rem}
-  .auth-btn{font-size:.72rem;padding:3px 10px}
-  #auth-status{font-size:.75rem;white-space:nowrap}
-}
 
 /* アンケート */
 .survey-q{margin-bottom:18px}
@@ -195,14 +181,6 @@ h1{
 .ticker-track{display:flex;white-space:nowrap;animation:ticker-scroll 22s linear infinite}
 .ticker-item{font-size:.76rem;color:var(--teal);font-weight:600;padding:0 60px;letter-spacing:.02em}
 @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
-.auth-bar span{color:var(--muted)}
-.auth-bar strong{color:var(--teal)}
-.auth-btn{
-  font-size:.8rem;padding:4px 14px;border-radius:99px;border:1px solid var(--line);
-  background:var(--card);color:var(--muted);cursor:pointer;font-family:inherit;transition:.15s;
-}
-.auth-btn:hover{border-color:var(--teal);color:var(--teal)}
-.auth-btn.primary{background:var(--teal);color:#0a1626;border-color:var(--teal);font-weight:600}
 
 
 /* Modal */
@@ -449,7 +427,7 @@ h1{
 </head>
 <body>
 
-<!-- ヘッダースタック（auth-bar + ticker を一括fixed） -->
+<!-- ヘッダースタック（app-shell バー + ticker を一括fixed） -->
 <div id="header-stack">
 <div id="app-shell-bar"></div>
 <div class="ticker-wrap" id="ticker-wrap" style="display:none">
