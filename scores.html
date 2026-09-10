@@ -14,20 +14,25 @@
   #scores-content{font-size:.85rem;margin-top:8px}
   /* 横スクロール時に「#」列と「名前」列を固定表示 */
   #scores-content .ranking-table th:first-child,
-  #scores-content .ranking-table td:first-child,
+  #scores-content .ranking-table td:first-child:not([colspan]),
   #scores-content .ranking-table th:nth-child(2),
-  #scores-content .ranking-table td:nth-child(2){
+  #scores-content .ranking-table td:nth-child(2):not([colspan]){
     position:sticky;z-index:3;background:var(--bg);
     box-shadow:inset 0 -1px 0 var(--line);
   }
   #scores-content .ranking-table th:first-child,
-  #scores-content .ranking-table td:first-child{
+  #scores-content .ranking-table td:first-child:not([colspan]){
     left:0;box-sizing:border-box;width:38px;min-width:38px;
     padding-left:10px;padding-right:4px;
   }
   #scores-content .ranking-table th:nth-child(2),
-  #scores-content .ranking-table td:nth-child(2){
+  #scores-content .ranking-table td:nth-child(2):not([colspan]){
     left:38px;border-right:1px solid var(--line);
+  }
+  /* みっつー波多野ライン: 横スクロールせず表示領域の端から端まで固定 */
+  #scores-content .mh-line{
+    position:sticky;left:0;z-index:4;
+    background:linear-gradient(rgba(239,68,68,.12),rgba(239,68,68,.12)),var(--bg);
   }
   .score-input-row{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
   .score-input-row button{font-family:inherit;font-size:.85rem;padding:8px 16px;border-radius:10px;cursor:pointer}
@@ -177,7 +182,7 @@ async function loadScores() {
       const colspan = seigyoActive ? 10 : 9;
       if (i === lineIdx) {
         return row + `<tr><td colspan="${colspan}" style="padding:0;border:none">
-          <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 5px;background:rgba(239,68,68,.12)">
+          <div class="mh-line" style="display:flex;align-items:center;gap:8px;padding:4px 10px 5px">
             <div style="flex:1;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,#ef4444)"></div>
             <span style="font-size:.7rem;color:#ef4444;font-weight:900;letter-spacing:.1em;white-space:nowrap;text-shadow:0 0 8px rgba(239,68,68,.6)">みっつー波多野ライン</span>
             <div style="flex:1;height:3px;border-radius:2px;background:linear-gradient(90deg,#ef4444,transparent)"></div>
@@ -202,8 +207,17 @@ async function loadScores() {
       </tr></thead>
       <tbody>${rows}</tbody>
     </table></div>`;
+    _fitMHLine();
   } catch(e) { el.innerHTML = '<p style="color:var(--muted)">読み込みエラー</p>'; }
 }
+// みっつー波多野ラインの帯を、横スクロール領域の表示幅ぴったりに合わせる
+function _fitMHLine() {
+  const el = document.getElementById('scores-content');
+  const ts = el && el.querySelector('.table-scroll');
+  if (!ts) return;
+  el.querySelectorAll('.mh-line').forEach(line => { line.style.width = ts.clientWidth + 'px'; });
+}
+window.addEventListener('resize', _fitMHLine);
 function sortScores(key) {
   if (_scSort.key === key) _scSort.dir *= -1;
   else { _scSort.key = key; _scSort.dir = 1; }
