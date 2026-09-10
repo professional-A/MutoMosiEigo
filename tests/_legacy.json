@@ -1,0 +1,71 @@
+[
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "科学技術英語Ⅰ",
+    "path": "tests/2026-4-zenki-chukan-eigo/",
+    "storageKey": "mutou_u12",
+    "totalItems": 121
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "再試験",
+    "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ 単語 (Step 1)",
+    "path": "tests/2026-4-zenki-chukan-step1/",
+    "storageKey": "vocab_known_u12",
+    "totalItems": 60
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "再試験",
+    "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ 熟語 (Step 2)",
+    "path": "tests/2026-4-zenki-chukan-step2/",
+    "storageKey": "idiom_known_u12",
+    "totalItems": 26
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ 文法 (Step 3)",
+    "path": "tests/2026-4-zenki-chukan-step3/",
+    "storageKey": "gram3_known",
+    "totalItems": 31
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ ハンドアウト演習",
+    "path": "tests/2026-4-zenki-chukan-handout/",
+    "storageKey": "mutou_handout_u12",
+    "totalItems": 19
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "再試験",
+    "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ 軽い総合演習（再試験対策）",
+    "path": "tests/2026-4-zenki-chukan-saishiken/",
+    "storageKey": "mutou_saishiken",
+    "totalItems": 29
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期中間試験",
+    "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ 本文理解 (Step 4)",
+    "path": "tests/2026-4-zenki-chukan-step4/",
+    "storageKey": "mutou_step4",
+    "totalItems": 45
+  }
+]
