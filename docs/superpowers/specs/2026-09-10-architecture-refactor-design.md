@@ -46,10 +46,10 @@ tests/*/data.json  ← コンテンツのみ
 
 **やる:**
 
-- `styles/theme.css` を新規作成。テーマ変数・`data-theme` 別テーマ・共通プリミティブ（reset / body / `.wrap` / ボタン / フォーム / `.modal-bg`・`.modal`）・app-shell 用スタイルを集約。
-- `js/api.js` を新規作成。`window.api` に `get/post/put/del` を生やす。
-- `js/app-shell.js` を新規作成。`<div id="app-shell">` にヘッダー（ロゴ / 🔔 / アバター＋名前 / ☰）とドロワーを描画。
-- `index.html` を上記3点に載せ替え。手書き `auth-bar` と inline のテーマCSSを撤去。ドロワー項目は既存モーダルを開く。
+- `styles/theme.css` を新規作成。**テーマ変数（`index.html` の現状値）＋ reset 2行 ＋ `data-theme` 別テーマ3ブロック ＋ app-shell 用スタイル**のみ。`.wrap` 等の共通プリミティブは P1 では移さない。
+- `js/api.js` を新規作成。`window.api` に `get/post/put/del` を生やす（P1 では配置のみ、呼び出し元は後フェーズ）。
+- `js/app-shell.js` を新規作成。ダムなビュー（`appShell.mount/update/setBadge`）。ヘッダーバー（ロゴ / 🔔 / アバター＋名前 / ☰）とドロワーを描画。
+- `index.html` を載せ替え。手書き `auth-bar` を `#app-shell-bar` に、inline の `:root`＋reset＋テーマ3ブロックを `theme.css` に。ドロワー項目は既存モーダルを開く。認証状態の管理は `updateAuthBar()` に残す。
 
 **やらない（後フェーズ）:**
 
@@ -58,20 +58,21 @@ tests/*/data.json  ← コンテンツのみ
 - `server.js` の変更（一切触らない）。
 - `index.html` の本体（英語模試・各モーダルのマークアップ・167関数）の移動やリファクタ。ガワだけ差し替える。
 - `quiz.html` / `quiz-engine.js` / `nekku-engine.js` / `tests/*` の変更。`theme.css` はこれらが後で `:root` ブロックを捨てられる形で書くが、P1 では読み込ませない。
-- `index.html` の他の fetch 呼び出し（167関数側）の `api.js` への移行。P1 では app-shell が使う認証・`/api/me` 周りのみ。
+- `index.html` の fetch 呼び出し（167関数側）の `api.js` への移行。P1 では `api.js` は配置するだけで呼び出さない。認証復元も現状コードのまま。
 
 ## コンポーネント
 
 ### `styles/theme.css`
 
 - **役割:** テーマとレイアウト共通部品の唯一の定義。全ページが `<link rel="stylesheet" href="/styles/theme.css">` で読む（P1 では `index.html` のみ）。
-- **内容:**
-  - `:root` にテーマ変数（現状 `quiz-engine.js` のパレットを正とする）:
-    `--bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#1b2f4d; --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c; --teal:#46d6c4; --teal-d:#1f9e90; --amber:#f6b352; --rose:#f06b8e; --good:#5fe0a8; --bad:#f06b8e`
-  - `:root[data-theme="purple"]` / `[data-theme="forest"]` / `[data-theme="charcoal"]` の変数上書き（現状 `index.html` の `<style>` にある3ブロックをそのまま移設。navy は無属性）。
-  - 共通プリミティブ: `*{box-sizing:border-box;margin:0;padding:0}`、`body` の背景・フォント、`.wrap`（`max-width` コンテナ）、ボタン基本、フォームコントロール、`.modal-bg` / `.modal`（P3 まで残るモーダル用）。
-  - app-shell 用: ヘッダーバー、`☰` ボタン、ドロワー（右からスライド）、バックドロップ。
-- **`index.html` 側:** inline `<style>` からテーマ変数と上記プリミティブ・4テーマブロックを削除。`index.html` 固有ルール（フォルダカード、ticker、各モーダル固有の見た目など）だけ残す。視覚的な結果は変わらないこと。
+- **内容（P1 では最小限に留める）:**
+  - `:root` にテーマ変数を **`index.html` の現状値そのまま**（`quiz-engine.js` とは値が微妙に違うが、P1 は「`index.html` の見た目を変えない」が最優先。エンジンとの統一は P2）:
+    `--bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#0e1d33; --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c; --fg:#e7eef7; --teal:#46d6c4; --amber:#f6b352; --rose:#f0716e;`
+  - `*{box-sizing:border-box;margin:0;padding:0}` と `html{scroll-behavior:smooth}`（`index.html` 冒頭にある2行）。
+  - `[data-theme="purple"]` / `[data-theme="forest"]` / `[data-theme="charcoal"]` の変数上書き3ブロック（現状 `index.html` の `<style>` 20〜22行をそのまま移設。navy は無属性）。
+  - app-shell 用スタイル（新規）: ヘッダーバー、`☰` ボタン、ドロワー（右からスライド）、バックドロップ、ドロワー項目。
+  - **`.wrap` / `body` / `.modal-bg` / ボタン等の共通プリミティブは P1 では移動しない**（`index.html` の `<style>` に残す）。他ページが必要になる P2/P3 で、そのとき触るページの CSS を見ながら `theme.css` へ昇格させる。
+- **`index.html` 側:** inline `<style>` から `:root` ブロック（12〜16行）・`*{...}`・`html{...}`（17〜18行）・3テーマブロック（20〜22行）だけを削除し、先頭で `theme.css` を `<link>`。他の CSS ルールは一切動かさない。視覚的な結果は変わらないこと。
 
 ### `js/api.js`
 
@@ -82,53 +83,63 @@ tests/*/data.json  ← コンテンツのみ
 
 ### `js/app-shell.js`
 
-- **役割:** 全ページ共通のヘッダーとナビゲーション、ログイン状態の管理。
-- **描画:** DOMContentLoaded で `#app-shell` を探し（無ければ `<body>` 先頭に生成）ヘッダーを描画。
-  - **ロゴ** 「武藤模試」→ `/` へのリンク。
-  - **右クラスタ（未ログイン）:** `[IDでログイン]` `[Googleでログイン]` `☰`（ドロワーは「🏠 ホーム」のみ）。
-  - **右クラスタ（ログイン中）:** `🔔`（バッジ付き）/ `🐸 名前` / `☰`。
+**設計方針（P1）:** app-shell は「見た目の入れ物（ヘッダーバー＋ドロワー）」だけを持つ**ダムなビュー**。認証状態の取得・保持は現状どおり `index.html` の `updateAuthBar()` 側に残し、そこから app-shell の描画メソッドを呼ぶ。`index.html` の `#header-stack` / `syncLayout()` / ResizeObserver / `ticker-wrap` / `notif-panel` には**触らない**（app-shell の DOM は `#header-stack` 内の差し替え済みノードに描画される）。
+
+- **公開 API:** `window.appShell = { mount(el, opts), update(state), setBadge(n) }`
+  - `mount(el, opts)`: `el`（`#app-shell-bar`）にヘッダーバー DOM を構築し、ドロワーとバックドロップを `<body>` 直下に追加。`opts`:
+    - `opts.nav`: ドロワー項目の配列 `[{ key, icon, label, href?, onClick?, adminOnly? }]`
+    - `opts.onGoogleLogin` / `opts.onIdLogin` / `opts.onLogout` / `opts.onNotif` / `opts.onAvatar`: 各ハンドラ（すべて `index.html` の既存関数を渡す）
+  - `update(state)`: `state = { loggedIn, name, points, avatar, isAdmin }`。ヘッダー右側（未ログイン: `[IDでログイン][Googleでログイン]`／ログイン中: `🔔` + `🐸名前` + `☰`）とドロワー先頭行（`🐸 名前 ・ N pt`）、`adminOnly` 項目の表示可否を切り替える。
+  - `setBadge(n)`: 🔔 のバッジ数。
 - **ドロワー:** 右からスライドイン + バックドロップ。全幅で同じ挙動（デスクトップでも `☰`）。
-  - 先頭行: `🐸 名前 ・ N pt`
-  - 項目: `🏠 ホーム` `/` / `📋 テスト予測` / `📊 成績` / `🏆 クラス順位` / `⚔️ バトル` / `🏁 レース` / `👥 メンバー`
-  - 管理者のみ: `🛠 管理`（`authEmail === 'kabu6113450@gmail.com'`）
-  - `ログアウト`
-  - Esc で閉じる / バックドロップクリックで閉じる / `aria-expanded` を反映 / フォーカストラップ。
-- **ナビの遷移先（重要・移行方式）:** `app-shell.js` は項目を「キー付き設定」として持つ。既定は将来の `href`（`/scores.html` 等）。ただし各ページは読み込み前に `window.APP_SHELL_NAV_OVERRIDES = { scores: () => openScoresModal(), battle: () => openBattleModal(), ... }` を定義でき、その場合はクリックで `href` 遷移せずハンドラを呼ぶ。→ P1 の `index.html` は全項目に既存モーダル開閉関数を割り当てる。P3 で各ページ実体ができたら override を外す。
-- **認証:**
-  - `api.get('/api/me')` でユーザー情報を取得し、名前 / ポイント / アバター / 管理者フラグを反映。失敗時は未ログイン表示に戻し `muto_session` を消す（現状 `index.html` の挙動を踏襲）。
-  - `window.appShell = { user, refresh(), on(evt, cb) }` を公開。`'authchange'` イベントで `index.html` 側が既存UI（スコアバー等）を更新できる。
-  - `[Googleでログイン]` は既存 `loginWithGoogle()` を呼ぶ（Supabase OAuth）。`[IDでログイン]` は既存 `openLoginModal()` を呼ぶ（ログインモーダルのマークアップは P1 では `index.html` に残す）。P1 では app-shell は「トリガーするだけ」。
-  - `🔔` は既存 `toggleNotif()`、アバターは既存 `openAvatarModal()`、`ログアウト` は既存のログアウト処理を呼ぶ（override 機構と同じ方式で `index.html` から関数を渡す）。
+  - 項目クリック: `onClick` があれば呼ぶ（＝ P1 では既存モーダルを開く）。無ければ `href` に遷移。どちらの場合もドロワーを閉じる。
+  - Esc で閉じる / バックドロップクリックで閉じる / `☰` に `aria-expanded` を反映 / 開いている間は最初の項目にフォーカス。
+- **`api.js` 依存なし。** app-shell 自身は fetch しない（認証は index 側）。
 
 ### `index.html`（P1 での変更）
 
-- `<head>` に `<link rel="stylesheet" href="/styles/theme.css">` を追加。
-- inline `<style>` からテーマ変数・4テーマブロック・共通プリミティブを削除（`theme.css` へ移設済みのもの）。
-- `<div id="header-stack">` 内の `auth-bar` マークアップを `<div id="app-shell"></div>` に置換。`ticker-wrap` / `notif-panel` / 全モーダルは現状維持。
-- `<script src="/js/api.js">` → `<script src="/js/app-shell.js">` を主 inline スクリプトの前に追加。
-- 主 inline スクリプト内の「`auth-bar` のボタン表示切替」ブロック（`document.getElementById('scores-btn').style.display = ...` 等、1841〜1864行付近）を削除し、`appShell.on('authchange', …)` で残りのUI（スコアバー・管理セクション表示）だけ更新するよう最小改修。
-- `window.APP_SHELL_NAV_OVERRIDES` と、`🔔`・アバター・ログアウト用のハンドラを定義。
-- `loadTheme()` / `applyTheme()` は残す（テーマ切替UIは管理モーダル内にあるため P1 では現状維持。`applyTheme` が触る `data-theme` 属性は `theme.css` 側の定義と一致させる）。
+1. `<head>` の `<style>` の**直前**に `<link rel="stylesheet" href="/styles/theme.css">` を追加。
+2. inline `<style>` から次だけを削除（他は一切動かさない）: `:root{…}`（12〜16行）、`*{box-sizing…}`（17行）、`html{scroll-behavior…}`（18行）、`[data-theme="purple"|"forest"|"charcoal"]` の3行（20〜22行）。※19行のコメント `/* テーマプリセット */` も削除。
+3. `<div class="auth-bar" id="auth-bar"> … </div>`（463〜481行）を丸ごと `<div id="app-shell-bar"></div>` に置換。`#header-stack` の開始/終了タグ、`ticker-wrap`、`notif-panel` はそのまま。
+4. 主 inline スクリプトの**前**に `<script src="/js/app-shell.js"></script>` を追加（`api.js` は P1 の app-shell では不要。ただし今後のために `<script src="/js/api.js"></script>` も同時に追加してよい。読み込むだけで副作用なし）。
+5. `updateAuthBar()`（1830〜1866行付近）を改修:
+   - 冒頭の `getElementById('auth-status'|'auth-open-btn'|'pw-open-btn'|'auth-avatar')` と、それらへの `innerHTML`/`textContent`/`style.display`/`onclick` 代入、`test-btn`/`admin-btn`/`members-btn`/`scores-btn`/`clrank-btn`/`battle-btn` の `style.display` 行を削除。
+   - 代わりに `appShell.update({ loggedIn: !!authToken, name: tu(authUser), points: authPoints, avatar: authAvatar, isAdmin: authEmail === 'kabu6113450@gmail.com' })` を呼ぶ。
+   - `loadRanking()` / `loadBanners()` / `loadRaceSection()` / `notif-post-section` の `style.display` / 末尾の `requestAnimationFrame(syncLayout)` は**そのまま残す**。
+6. 初期化（`updateAuthBar` を最初に呼ぶ場所の前）で1回だけ `appShell.mount(document.getElementById('app-shell-bar'), { nav: [...], onGoogleLogin: loginWithGoogle, onIdLogin: openLoginModal, onLogout: doLogout, onNotif: toggleNotif, onAvatar: openAvatarModal })` を実行。`nav` は下記。
+   - `{ key:'home',   icon:'🏠', label:'ホーム',        href:'/' }`
+   - `{ key:'test',   icon:'📋', label:'テスト予測',    onClick: openTestModal }`
+   - `{ key:'scores', icon:'📊', label:'成績',          onClick: openScoresModal }`
+   - `{ key:'clrank', icon:'🏆', label:'クラス順位',    onClick: openClrankPage }`
+   - `{ key:'battle', icon:'⚔️', label:'バトル',        onClick: openBattleModal }`
+   - `{ key:'race',   icon:'🏁', label:'レース',        onClick: openRaceView }`
+   - `{ key:'members',icon:'👥', label:'メンバー',      onClick: openMembersModal }`
+   - `{ key:'admin',  icon:'🛠', label:'管理',          onClick: openAdminModal, adminOnly:true }`
+7. `notif-badge` の更新箇所があれば `appShell.setBadge(n)` も呼ぶ（無ければ初期値のまま。P1 では必須でない）。
+8. `loadTheme()` / `applyTheme()` は変更しない（`data-theme` 値は `theme.css` のセレクタと一致させる）。
 
 ## データフロー（P1）
 
 ```
 ページ読込
-  → theme.css 適用（+ applyTheme が localStorage.mutou_theme を data-theme に）
-  → api.js ロード（window.api）
-  → app-shell.js: #app-shell 描画 → api.get('/api/me')
-      ├ 成功: ヘッダーをログイン状態に / appShell.user 設定 / 'authchange' 発火
-      └ 失敗: 未ログイン表示 / muto_session 削除 / 'authchange' 発火
-  → index.html 主スクリプト: 'authchange' を受けてスコアバー・管理セクションを更新
-  → ☰ クリック: ドロワー開閉。項目クリックは APP_SHELL_NAV_OVERRIDES 経由で既存モーダルを開く
+  → theme.css 適用（+ 既存 loadTheme が localStorage.mutou_theme を data-theme に）
+  → app-shell.js ロード（window.appShell、副作用なし）
+  → api.js ロード（window.api、P1 では未使用だが配置）
+  → index.html 主スクリプト初期化:
+       appShell.mount(#app-shell-bar, { nav, onGoogleLogin: loginWithGoogle, ... })
+  → 既存の認証復元処理（/api/me 等）→ authToken/authUser/authEmail/authPoints を設定
+  → updateAuthBar():
+       appShell.update({ loggedIn, name, points, avatar, isAdmin })   ← ヘッダー右側＋ドロワー先頭行＋管理項目
+       loadRanking() / loadBanners() / loadRaceSection() / notif-post-section 表示 / syncLayout()  ← 従来どおり
+  → ☰ クリック: ドロワー開閉。項目クリックは nav[].onClick（既存モーダル）を呼ぶ or href 遷移
 ```
 
 ## エラー処理
 
-- `api.*` は 2xx 以外で `Error`（`status` / `body` 付き）を throw。呼び出し側で捕捉。
-- `/api/me` 失敗・トークン無効: 未ログイン表示にフォールバック、`muto_session` 削除。例外を投げない。
-- `#app-shell` が存在しないページ: `<body>` 先頭に生成（安全側）。
-- `theme.css` が 404: ページは素の色で表示されるだけ（機能は動く）。デプロイ確認で担保。
+- `api.*` は 2xx 以外で `Error`（`status` / `body` 付き）を throw。呼び出し側で捕捉。P1 では呼び出し元がまだ無い（配置のみ）。
+- 認証復元（`/api/me` 等）の失敗時挙動は**現状の `index.html` のまま**（P1 で変更しない）。app-shell は `updateAuthBar()` が渡す `loggedIn:false` を表示するだけ。
+- `appShell.mount` に渡す要素が `null`: 何もしない（コンソール警告のみ）。P1 では `index.html` に必ず `#app-shell-bar` があるので通らない。
+- `theme.css` が 404: ページは素の色で表示されるだけ（機能は動く）。`npm start` での確認で担保。
 
 ## テスト / 検証（テストフレームワークなし・手動チェックリスト）
 
