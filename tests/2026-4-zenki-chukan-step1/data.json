@@ -1,0 +1,378 @@
+{
+  "title": "科学技術英語Ⅰ ・ 単語 (Step 1)",
+  "subject": "科学技術英語Ⅰ",
+  "year": 2026,
+  "grade": 4,
+  "exam": "再試験",
+  "storageKey": "vocab_known_u12",
+  "pointsPerQ": 100,
+  "sections": [
+    {
+      "id": "s1",
+      "no": "01",
+      "title": "Word List（Unit 1・2）",
+      "qs": [
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "publish",
+          "back": "出版する（v）<br><span style=\"color:var(--dim)\">to make information available to the public</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "pollution",
+          "back": "公害・汚染（n）<br><span style=\"color:var(--dim)\">the action of making land, water, or air dirty and unsafe</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "risk",
+          "back": "〜する恐れがある（v）<br><span style=\"color:var(--dim)\">to put something in a situation where it could be lost or damaged</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "confuse",
+          "back": "混乱させる（v）<br><span style=\"color:var(--dim)\">to make someone unable to understand something</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "disrupt",
+          "back": "妨害する（v）<br><span style=\"color:var(--dim)\">to cause something to be unable to continue normally</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "behavior",
+          "back": "行動・行為（n）<br><span style=\"color:var(--dim)\">the way one acts, especially toward others</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "stretch",
+          "back": "伸びる・広がる（v）<br><span style=\"color:var(--dim)\">to extend or spread over an area or period of time</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "structure",
+          "back": "構造（n）<br><span style=\"color:var(--dim)\">something built from parts that stands on its own</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "penetrate",
+          "back": "届く・浸透する（v）<br><span style=\"color:var(--dim)\">to go through or into something</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "artificial",
+          "back": "人工の（adj）<br><span style=\"color:var(--dim)\">made by human beings rather than occurring naturally</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "affect",
+          "back": "影響を与える（v）<br><span style=\"color:var(--dim)\">to have an effect on someone or something</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "prevent",
+          "back": "妨げる（v）<br><span style=\"color:var(--dim)\">to stop something from happening</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "pollination",
+          "back": "受粉（n）<br><span style=\"color:var(--dim)\">the process of pollen entering a flower so it produces seeds</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "bright",
+          "back": "明るい（adj）<br><span style=\"color:var(--dim)\">emitting or reflecting a lot of light</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "assess",
+          "back": "評価する（v）<br><span style=\"color:var(--dim)\">to evaluate or estimate the nature or quality of something</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "interact",
+          "back": "関わり合う（v）<br><span style=\"color:var(--dim)\">to come together and have an effect on each other</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "colleague",
+          "back": "同僚（n）<br><span style=\"color:var(--dim)\">a person who works with you in a profession or business</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "atmosphere",
+          "back": "大気（n）<br><span style=\"color:var(--dim)\">the whole mass of air that surrounds the Earth</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "measurement",
+          "back": "計測（n）<br><span style=\"color:var(--dim)\">the act of finding the size, quantity, or degree of something</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "satellite",
+          "back": "人工衛星（n）<br><span style=\"color:var(--dim)\">a machine sent into space that moves around a planet</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "estimate",
+          "back": "推定する（v）<br><span style=\"color:var(--dim)\">to roughly calculate or judge the value or extent</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "vary",
+          "back": "変化する・異なる（v）<br><span style=\"color:var(--dim)\">to be different in size, amount, degree, or nature</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "simulate",
+          "back": "シミュレーションをする（v）<br><span style=\"color:var(--dim)\">to create real-life conditions using computers or models</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "wavelength",
+          "back": "波長（n）<br><span style=\"color:var(--dim)\">the distance between two similar points on a wave of energy</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "species",
+          "back": "種（n）<br><span style=\"color:var(--dim)\">a group of similar animals or plants that can produce young</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "sensitive",
+          "back": "敏感な（adj）<br><span style=\"color:var(--dim)\">easily affected or damaged</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "focus",
+          "back": "焦点を当てる（v）<br><span style=\"color:var(--dim)\">to concentrate one's attention or effort</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "seek",
+          "back": "探す・求める（v）<br><span style=\"color:var(--dim)\">to try to find or obtain</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "surface",
+          "back": "表面・海面（n）<br><span style=\"color:var(--dim)\">the outside part or uppermost layer of something</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "intense",
+          "back": "強烈な（adj）<br><span style=\"color:var(--dim)\">very great in degree; very strong</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "ignore",
+          "back": "無視する（v）<br><span style=\"color:var(--dim)\">to pay no attention to something or someone</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "fairly",
+          "back": "かなり（adv）<br><span style=\"color:var(--dim)\">to a moderate or acceptable extent; moderately</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "common",
+          "back": "共通の・ありふれた（adj）<br><span style=\"color:var(--dim)\">happening often; not rare</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "tune out",
+          "back": "〜を無視する（p.v.）<br><span style=\"color:var(--dim)\">to stop paying attention to someone or something</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "findings",
+          "back": "発見（n）<br><span style=\"color:var(--dim)\">the results or conclusions reached through research</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "scan",
+          "back": "(fMRIで)スキャンする（v）<br><span style=\"color:var(--dim)\">to examine something closely or quickly to find information</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "unfamiliar",
+          "back": "馴染のない・見知らぬ（adj）<br><span style=\"color:var(--dim)\">not known or recognized; not often seen or heard</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "nonsense",
+          "back": "無意味な言葉（n）<br><span style=\"color:var(--dim)\">words or language that has no meaning</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "allow",
+          "back": "〜することを可能にする（v）<br><span style=\"color:var(--dim)\">to make it possible for someone to do something</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "region",
+          "back": "領域・地域（n）<br><span style=\"color:var(--dim)\">a particular area separate from other parts</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "detect",
+          "back": "検出する・感知する（v）<br><span style=\"color:var(--dim)\">to discover or notice something not easily seen</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "reward",
+          "back": "報酬（n）<br><span style=\"color:var(--dim)\">something given in return for good behavior or effort</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "colleague",
+          "back": "同僚（n）<br><span style=\"color:var(--dim)\">a person who works with others in the same profession</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "respond",
+          "back": "反応する（v）<br><span style=\"color:var(--dim)\">to react to something that has been said or done</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "midst",
+          "back": "最中・中間（n）<br><span style=\"color:var(--dim)\">the middle or central part of something</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "puberty",
+          "back": "思春期（n）<br><span style=\"color:var(--dim)\">the stage when a person's body starts to develop sexually</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "decade",
+          "back": "10年（n）<br><span style=\"color:var(--dim)\">a period of ten years</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "transition",
+          "back": "移行・変化（n）<br><span style=\"color:var(--dim)\">the process of changing from one state to another</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "worthy",
+          "back": "〜の価値がある（adj）<br><span style=\"color:var(--dim)\">having enough good qualities to be considered useful</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "expand",
+          "back": "拡大する（v）<br><span style=\"color:var(--dim)\">to become larger in size, scope, or importance</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "reflection",
+          "back": "反映（n）<br><span style=\"color:var(--dim)\">something that shows the effect or character of something else</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "stress out",
+          "back": "(ストレスで)疲れる（p.v.）<br><span style=\"color:var(--dim)\">to make someone feel very anxious, tense, or worried</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "text",
+          "back": "テキストメッセージ（n）<br><span style=\"color:var(--dim)\">a short message sent electronically to a phone</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "adapt",
+          "back": "適応する（v）<br><span style=\"color:var(--dim)\">to change in order to fit new conditions; to adjust</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "mature",
+          "back": "成熟する・成長する（v）<br><span style=\"color:var(--dim)\">to become fully developed in body and mind</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "survival",
+          "back": "生存・生き残ること（n）<br><span style=\"color:var(--dim)\">the state of continuing to live despite difficult conditions</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "maternal",
+          "back": "母親の（adj）<br><span style=\"color:var(--dim)\">relating to or characteristic of a mother</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "carry out",
+          "back": "成し遂げる・実施する（p.v.）<br><span style=\"color:var(--dim)\">to complete or perform a task or duty</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "peer",
+          "back": "仲間（n）<br><span style=\"color:var(--dim)\">a person equal to another in age, status, or ability</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "frustrated",
+          "back": "イライラした（adj）<br><span style=\"color:var(--dim)\">upset because of being unable to do something</span>"
+        }
+      ]
+    }
+  ]
+}

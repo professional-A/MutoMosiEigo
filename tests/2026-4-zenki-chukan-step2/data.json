@@ -1,0 +1,174 @@
+{
+  "title": "科学技術英語Ⅰ ・ 熟語 (Step 2)",
+  "subject": "科学技術英語Ⅰ",
+  "year": 2026,
+  "grade": 4,
+  "exam": "再試験",
+  "storageKey": "idiom_known_u12",
+  "pointsPerQ": 100,
+  "sections": [
+    {
+      "id": "s1",
+      "no": "01",
+      "title": "Idioms & Phrases（Unit 1・2）",
+      "qs": [
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "fight off",
+          "back": "撃退する・追い払う<br><span style=\"color:var(--dim)\">例: make it harder for sparrows to <b>fight off</b> West Nile virus</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "focus on",
+          "back": "焦点を当てる・集中する<br><span style=\"color:var(--dim)\">例: stop <b>focusing on</b> unimportant details</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "interact with",
+          "back": "関わり合う・相互作用する<br><span style=\"color:var(--dim)\">例: how life in the oceans <b>interacts with</b> the environment</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "start with",
+          "back": "〜から始める／始まる<br><span style=\"color:var(--dim)\">例: Smyth <b>started with</b> a world atlas</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "vary from",
+          "back": "〜によって異なる<br><span style=\"color:var(--dim)\">例: these factors <b>vary from</b> place to place</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "mess up",
+          "back": "台無しにする・混乱させる<br><span style=\"color:var(--dim)\">例: too much light can <b>mess up</b> their usual patterns</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "stretch over",
+          "back": "〜の上に広がる<br><span style=\"color:var(--dim)\">例: haloes of light that <b>stretch over</b> the ocean</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "be safe from",
+          "back": "〜から安全だ<br><span style=\"color:var(--dim)\">例: Not even the sea is <b>safe from</b> the glare</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "be known to do",
+          "back": "〜することで知られる<br><span style=\"color:var(--dim)\">例: Artificial lights are <b>known to</b> affect land dwellers</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "a key part of",
+          "back": "〜の重要な一部<br><span style=\"color:var(--dim)\">例: copepods are <b>a key part of</b> ocean food webs</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "seek safety from",
+          "back": "〜から安全を求める<br><span style=\"color:var(--dim)\">例: <b>seeking safety from</b> surface predators</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "tune out",
+          "back": "〜を無視する<br><span style=\"color:var(--dim)\">例: why teens <b>tune out</b> their mom's voice</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "tune in to",
+          "back": "〜に耳を傾ける<br><span style=\"color:var(--dim)\">例: kids' brains are <b>tuned in to</b> their mothers' voices</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "morph into",
+          "back": "〜に姿を変える<br><span style=\"color:var(--dim)\">例: as kids <b>morph into</b> teens</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "pay attention to",
+          "back": "〜に注意を払う<br><span style=\"color:var(--dim)\">例: brains <b>pay more attention to</b> the wider world</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "respond to",
+          "back": "〜に反応する<br><span style=\"color:var(--dim)\">例: brains <b>respond</b> more <b>to</b> unfamiliar voices</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "adapt to",
+          "back": "〜に適応する<br><span style=\"color:var(--dim)\">例: the brain seems to <b>adapt to</b> new needs</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "come with",
+          "back": "〜と共に生じる<br><span style=\"color:var(--dim)\">例: new needs that <b>come with</b> adolescence</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "carry out",
+          "back": "実施する・成し遂げる<br><span style=\"color:var(--dim)\">例: she <b>carried out</b> that 2011 study</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "depend on",
+          "back": "〜に頼る<br><span style=\"color:var(--dim)\">例: our survival <b>depends on</b> maternal support</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "rely on",
+          "back": "〜に頼る<br><span style=\"color:var(--dim)\">例: we <b>rely</b> more <b>on</b> our peers</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "stress out",
+          "back": "(ストレスで)疲れさせる<br><span style=\"color:var(--dim)\">例: <b>stressed-out</b> girls heard their moms' voices</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "in the midst of",
+          "back": "〜の最中で<br><span style=\"color:var(--dim)\">例: in the <b>midst of</b> puberty</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "in times of",
+          "back": "〜の時に<br><span style=\"color:var(--dim)\">例: especially <b>in times of</b> stress</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "a reflection of",
+          "back": "〜の反映<br><span style=\"color:var(--dim)\">例: just purely <b>a reflection of</b> this</span>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "be frustrated by",
+          "back": "〜にイライラする<br><span style=\"color:var(--dim)\">例: feel <b>frustrated by</b> missed messages</span>"
+        }
+      ]
+    }
+  ]
+}

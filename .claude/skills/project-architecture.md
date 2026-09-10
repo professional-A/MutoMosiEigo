@@ -20,14 +20,11 @@ metadata:
 |----------|------|
 | `server.js` | Express API サーバー、DB初期化、全エンドポイント |
 | `index.html` | メインフロント（英語模試 + 管理者UI + レース + バトル） |
-| `js/quiz-engine.js` | data.json 駆動の共通クイズレンダラー（`single`/`multi`/`sort`/`input`/`numeric`） |
-| `js/points.js` | 共有ポイント送信スクリプト（全テストページから読み込む） |
+| `js/quiz-engine.js` | data.json 駆動の共通クイズレンダラー（`single`/`multi`/`sort`/`input`/`numeric`/`flashcard`） |
+| `js/points.js` | 共有ポイント送信スクリプト（quiz-engine から読み込む） |
 | `js/progress.js` | 進捗管理 |
-| `tests/*/index.html` | 科目別過去問テストページ群 |
-
-## テストページのパス規則
-- ルート直下ページ → `<script src="./js/points.js">`
-- `tests/*/` サブディレクトリ → `<script src="../../js/points.js">`
+| `tests-index.js` | `tests/*/data.json` を走査して `GET /api/tests` の索引を組み立てる純関数 |
+| `tests/*/data.json` | 全テストのデータ（`quiz.html?d=…` で quiz-engine がレンダリング）。per-test の HTML は無い |
 
 ## 主要DBテーブル
 

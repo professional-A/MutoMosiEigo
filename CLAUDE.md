@@ -42,7 +42,7 @@ npm start        # サーバー起動（ポート: PORT env or 3000）
 
 ## テスト索引（`/api/tests`）
 
-新しいテストの `data.json` には `year`（数値）・`grade`（数値）・`exam`（文字列）が必須。`GET /api/tests` が `tests/*/data.json` を走査してホーム画面のテスト索引を自動生成する（`tests.json` は廃止済み・手編集ファイルなし）。旧 `index.html` 方式のテストだけ `tests/_legacy.json` に暫定登録。
+新しいテストの `data.json` には `year`（数値）・`grade`（数値）・`exam`（文字列）が必須。`GET /api/tests` が `tests/*/data.json` を走査してホーム画面のテスト索引を自動生成する（`tests.json` は廃止済み・手編集ファイルなし）。全テストが `data.json`＋`quiz.html?d=…` に移行済みで、per-test の `index.html` や `nekku-engine.js`・`_legacy.json` は存在しない。
 
 ## クイズ実装の3ステップ（必須）
 

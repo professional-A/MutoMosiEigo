@@ -1,0 +1,397 @@
+{
+  "title": "科学技術英語Ⅰ ・ 文法 (Step 3)",
+  "subject": "科学技術英語Ⅰ",
+  "year": 2026,
+  "grade": 4,
+  "exam": "前期中間試験",
+  "storageKey": "gram3_known",
+  "pointsPerQ": 100,
+  "sections": [
+    {
+      "id": "s1",
+      "no": "01",
+      "title": "文法カード",
+      "qs": [
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "01. 倒置①<div class=\"fc-hint\">否定語が文頭 → 強調倒置</div>",
+          "back": "<b>ルール:</b> 否定語（Not / Never / Not even など）が文頭に出ると、後ろが〈助動詞＋S＋V〉の語順になる（強調効果）。<br><b>例:</b> Not even the sea is safe from the glare of humans' light at night.<br><span style=\"color:var(--dim)\">夜、人工光のまぶしさから海でさえ安全ではない。</span><br><b>ヒント:</b> 通常語順：The sea is not even safe... → 否定語を前に出すと強調倒置が起きる。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "02. 倒置②<div class=\"fc-hint\">So＋V＋S ＝ 〜もまた同じだ</div>",
+          "back": "<b>ルール:</b> 「AもBと同じだ」＝ So＋助動詞/be動詞＋主語。前文の動詞の種類に合わせて do / am / is / are / did を選ぶ。<br><b>例:</b> So do offshore oil rigs and other structures.<br><span style=\"color:var(--dim)\">沖合の石油掘削装置や他の構造物もまた（光の暈を投げかける）。</span><br><b>例2:</b> A: I like pasta. → B: So do I.  ／  A: I'm hungry. → B: So am I.<br><b>ヒント:</b> do は代動詞（前の一般動詞の代わり）。be動詞の文なら am / is / are を使う。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "U1・U2",
+          "front": "03. 部分否定<div class=\"fc-hint\">Not all ＝ すべてが〜なわけではない</div>",
+          "back": "<b>ルール:</b> Not all / Not every / Not always ＝「すべてが〜なわけではない」（一部のみを否定）。No species... とは違う全否定。<br><b>例:</b> Not all species will be equally sensitive.<br><span style=\"color:var(--dim)\">すべての種が等しく敏感なわけではない（一部は敏感でない）。</span><br><b>ヒント:</b> 「No species」＝ 全否定（どの種も〜ない）。「Not all species」＝ 部分否定（一部が〜ない）。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "U1・U2",
+          "front": "04. 間接疑問文<div class=\"fc-hint\">疑問文を埋め込む → S＋V の語順</div>",
+          "back": "<b>ルール:</b> 疑問文を名詞節として動詞の目的語に組み込む。「?」が消え、〈疑問詞＋S＋V〉の語順になる。助動詞 do/does/did も消える。<br><b>例:</b> assess where this glow is strongest<br><span style=\"color:var(--dim)\">Where is this glow strongest? → where this glow is strongest</span><br><b>例2:</b> I don't know who she is.（← who is she? の語順ではない）<br><b>ヒント:</b> 直接疑問と間接疑問を比較する。Who is she? → who she is ← S＋V に逆転。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "05. of＋抽象名詞＝形容詞<div class=\"fc-hint\">of use ＝ useful</div>",
+          "back": "<b>ルール:</b> 〈be＋of＋抽象名詞〉は形容詞的に働く（補語になる）。and は同品詞をつなぐため rewarding（形容詞）and ___ → ___ も形容詞相当。<br><b>例:</b> unfamiliar voices become more rewarding and worthy of attention<br><span style=\"color:var(--dim)\">見知らぬ声はより充実感をもたらし、注意を払う価値を持つようになる。</span><br><b>例2:</b> This tool is of use.  ＝  This tool is useful.<br><b>ヒント:</b> of use = useful / of importance = important / of value = valuable と変換できる。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "06. 接続詞 as ＝ 〜するにつれて<div class=\"fc-hint\">比例・進行の as（変化動詞が目印）</div>",
+          "back": "<b>ルール:</b> as＋S＋V（変化を表す動詞）＝「〜するにつれて」。grow / mature / expand など変化・推移の動詞があれば「につれて」と判断できる。<br><b>例:</b> As kids grow up, they expand their social connections way beyond their family.<br><span style=\"color:var(--dim)\">子供たちが成長するにつれて、社会的なつながりを家族をはるかに超えて広げていく。</span><br><b>例2:</b> As we mature, our survival depends less and less on maternal support.<br><b>ヒント:</b> 変化・推移の動詞（grow up / mature / increase...）があれば「につれて」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "07. way ＝ はるかに（強調副詞）<div class=\"fc-hint\">way beyond / way above</div>",
+          "back": "<b>ルール:</b> way は比較表現・前置詞句の前に置いて「はるかに・ずっと」を表す強調副詞。比較級の前にも使える（way bigger）。<br><b>例:</b> they expand their social connections way beyond their family<br><span style=\"color:var(--dim)\">社会的なつながりをはるかに家族を超えて広げていく</span><br><b>例2:</b> The top of the mountain was way above the clouds.<br><b>ヒント:</b> far beyond と同義だがカジュアルな印象。much / far / way はいずれも比較表現の強調に使える。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "08. risk＋-ing ＝ 〜する恐れがある<div class=\"fc-hint\">動名詞のみ取る（risk to do は×）</div>",
+          "back": "<b>ルール:</b> risk doing ＝「〜する危険を冒す / 〜してしまう恐れがある」。risk の後は必ず動名詞（-ing）。<br><b>例:</b> that risks confusing or disrupting the behaviors of sea life<br><span style=\"color:var(--dim)\">海の生物の行動を混乱・妨害させる恐れがある</span><br><b>ヒント:</b> 動名詞のみ取る動詞：enjoy / avoid / finish / mind / deny / consider / risk など。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "09. 過去完了 had＋p.p.<div class=\"fc-hint\">過去の基準時点よりさらに前</div>",
+          "back": "<b>ルール:</b> 過去完了（had＋過去分詞）＝ 過去のある基準時点よりも前に完了していた出来事。2つの過去を時系列で区別するために使う。<br><b>例:</b> Smyth and his colleagues started with a world atlas that had been created in 2016.<br><span style=\"color:var(--dim)\">（2016年にすでに作成されていた）地図からスタートした</span><br><b>ヒント:</b> タイムライン：2016年に地図が作成された ──→ その後 Smyth らが started（過去形）。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 1",
+          "front": "10. 最上級の the 省略<div class=\"fc-hint\">絶対的最上（固有の性質）は the 不要</div>",
+          "back": "<b>ルール:</b> 「1つのものが持つ固有の性質を述べる（絶対的）最上級」は the が不要。相対比較（of the five など）は the が必要。<br><b>例:</b> Light pollution is strongest in the top meter.<br><span style=\"color:var(--dim)\">光害は水面付近（上1m）が最も強い。（← the なし）</span><br><b>例2:</b> He is the tallest of the five.  →  the が必要（5人の中での相対比較）<br><b>ヒント:</b> in this lake / in the world など1つの場所の固有の性質 → the 不要。of N / among N など複数と比較 → the 必要。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Unit 2",
+          "front": "11. as it should be<div class=\"fc-hint\">当然そうあるべきだ</div>",
+          "back": "<b>ルール:</b> as it should be ＝「当然そうあるべき / まさにそうあるべきだ」。should は「当然・当為」の意味（〜すべき / 〜のはず）。<br><b>例:</b> That's exactly as it should be.<br><span style=\"color:var(--dim)\">それはまさに当然のことだ。</span><br><b>例2:</b> Kids paid more attention to their close friends, as it should be.<br><b>ヒント:</b> naturally（自然に）/ as expected（予想通り）と近いニュアンス。"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "no": "02",
+      "title": "文法クイズ",
+      "qs": [
+        {
+          "type": "single",
+          "q": "「Not even the sea is safe from the glare of humans' light.」で倒置が起きている理由は？",
+          "opts": [
+            "「the sea」を強調するため",
+            "否定語 Not even が文頭に来て強調倒置が起きるため",
+            "safe は形容詞なので倒置が必要なため"
+          ],
+          "ans": "否定語 Not even が文頭に来て強調倒置が起きるため",
+          "note": "否定語 Not / Never / Not even が文頭に出ると〈助動詞＋S＋V〉の語順になる（強調倒置）。"
+        },
+        {
+          "type": "single",
+          "q": "「A: I like pasta.」に続く B の返答として正しい形は？",
+          "opts": [
+            "So I do.",
+            "So do I.",
+            "I do so."
+          ],
+          "ans": "So do I.",
+          "note": "So＋動詞＋主語 の語順。like は一般動詞（現在）なので do を使い「So do I.」"
+        },
+        {
+          "type": "single",
+          "q": "「A: I'm very hungry.」に続く B の返答として正しい形は？",
+          "opts": [
+            "So I am.",
+            "So am I.",
+            "So do I."
+          ],
+          "ans": "So am I.",
+          "note": "be動詞の文（am）が続くので「So am I.」一般動詞なら So do I、be動詞なら So am/is/are。"
+        },
+        {
+          "type": "single",
+          "q": "「So do offshore oil rigs and other structures.」の意味に最も近いのは？",
+          "opts": [
+            "沖合の石油掘削装置は光害とは無関係だ",
+            "沖合の石油掘削装置もまた光の暈を投げかける",
+            "沖合の石油掘削装置の種類は異なる"
+          ],
+          "ans": "沖合の石油掘削装置もまた光の暈を投げかける",
+          "note": "So do ... ＝「〜もまた同じことをする」。前文「Coastal cities cast haloes...」に続く倒置②。"
+        },
+        {
+          "type": "single",
+          "q": "「Not all species will be equally sensitive.」の意味として正しいのは？",
+          "opts": [
+            "どの種も等しく敏感ではない（全否定）",
+            "すべての種が等しく敏感なわけではない（部分否定）",
+            "種はすべて同じように敏感だ"
+          ],
+          "ans": "すべての種が等しく敏感なわけではない（部分否定）",
+          "note": "Not all ＝ 部分否定「すべてが〜なわけではない」。No species ＝ 全否定。"
+        },
+        {
+          "type": "single",
+          "q": "「assess where this glow is strongest」に組み込まれている疑問文は？",
+          "opts": [
+            "Where does this glow strongest?",
+            "Where is this glow strongest?",
+            "How strong this glow is?"
+          ],
+          "ans": "Where is this glow strongest?",
+          "note": "間接疑問は〈疑問詞＋S＋V〉の語順。Where is this glow strongest? → where this glow is strongest"
+        },
+        {
+          "type": "single",
+          "q": "次のうち間接疑問文として正しいのはどれ？（Who is she? を埋め込む）",
+          "opts": [
+            "I don't know who is she.",
+            "I don't know who she is.",
+            "I don't know who she."
+          ],
+          "ans": "I don't know who she is.",
+          "note": "間接疑問は疑問詞の後が〈S＋V〉。who she is が正しい（who is she は直接疑問の語順）。"
+        },
+        {
+          "type": "single",
+          "q": "「This tool is of use.」を形容詞で言い換えると？",
+          "opts": [
+            "This tool is useable.",
+            "This tool is useful.",
+            "This tool is using."
+          ],
+          "ans": "This tool is useful.",
+          "note": "of use ＝ useful。of＋抽象名詞 は形容詞として働く（補語）。"
+        },
+        {
+          "type": "single",
+          "q": "「rewarding and ___ of attention」の空欄に入るのは？（and は同品詞をつなぐ）",
+          "opts": [
+            "attentive",
+            "worthy",
+            "attentiveness"
+          ],
+          "ans": "worthy",
+          "note": "rewarding（形容詞）and ___ → ___ も形容詞相当。worthy of attention ＝ 注意を払う価値がある。"
+        },
+        {
+          "type": "single",
+          "q": "「As kids grow up, they expand their social connections...」の as の意味は？",
+          "opts": [
+            "〜として（資格・立場）",
+            "〜するにつれて（比例・進行）",
+            "〜なので（理由）"
+          ],
+          "ans": "〜するにつれて（比例・進行）",
+          "note": "変化を表す動詞 grow up と組み合わさっているので「〜するにつれて」。"
+        },
+        {
+          "type": "single",
+          "q": "「expand...way beyond their family」の way の品詞と意味は？",
+          "opts": [
+            "名詞「方法・道」",
+            "強調の副詞「はるかに」",
+            "前置詞「〜の方向へ」"
+          ],
+          "ans": "強調の副詞「はるかに」",
+          "note": "way は比較表現の前で「はるかに」を表す副詞。way beyond ＝ はるかに〜を超えて。"
+        },
+        {
+          "type": "single",
+          "q": "「risks confusing or disrupting the behaviors of sea life」の意味は？",
+          "opts": [
+            "海の生物の行動を混乱させるために試みる",
+            "海の生物の行動を混乱・妨害させる恐れがある",
+            "海の生物の行動の混乱・妨害を避ける"
+          ],
+          "ans": "海の生物の行動を混乱・妨害させる恐れがある",
+          "note": "risk doing ＝「〜する恐れがある・危険を冒す」。"
+        },
+        {
+          "type": "single",
+          "q": "risk の後ろに来る正しい形は？",
+          "opts": [
+            "risk to do",
+            "risk doing",
+            "risk that S＋V"
+          ],
+          "ans": "risk doing",
+          "note": "risk は動名詞（-ing）のみ目的語に取る。enjoy / avoid / finish / mind などと同様。"
+        },
+        {
+          "type": "single",
+          "q": "「a world atlas that had been created in 2016」で過去完了を使う理由は？",
+          "opts": [
+            "2016年は遠い昔だから",
+            "Smyth らが started した時点より前に地図が作成されていたから",
+            "受け身の文は必ず過去完了になるから"
+          ],
+          "ans": "Smyth らが started した時点より前に地図が作成されていたから",
+          "note": "過去完了 ＝ 過去の基準点（started）よりさらに前の出来事。"
+        },
+        {
+          "type": "single",
+          "q": "「Light pollution is strongest in the top meter.」に the がない理由は？",
+          "opts": [
+            "口語なので省略される",
+            "1つのものの固有の性質（絶対的最上）を述べているから",
+            "in があるときは最上級に the をつけない"
+          ],
+          "ans": "1つのものの固有の性質（絶対的最上）を述べているから",
+          "note": "相対比較ではなく、そのもの自体の性質を述べる絶対的最上は the 不要。"
+        },
+        {
+          "type": "single",
+          "q": "次のうち the が必要なのはどれか？",
+          "opts": [
+            "Light pollution is strongest in the top meter.",
+            "He is tallest of the five.",
+            "This point is deepest in this lake."
+          ],
+          "ans": "He is tallest of the five.",
+          "note": "「of the five」は5人での相対比較 → the が必要（the tallest of the five）。"
+        },
+        {
+          "type": "single",
+          "q": "「Kids paid more attention to their close friends, as it should be.」の as it should be の意味は？",
+          "opts": [
+            "残念ながら",
+            "意外にも",
+            "当然のことながら・まさにそうあるべき"
+          ],
+          "ans": "当然のことながら・まさにそうあるべき",
+          "note": "as it should be ＝ naturally / as expected。should は「当然・当為」の意味。"
+        },
+        {
+          "type": "single",
+          "q": "「Not all species are sensitive」は「どの種も敏感でない」という全否定を意味する。",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "Not all ＝ 部分否定（一部が〜ない）。全否定は No species are sensitive。"
+        },
+        {
+          "type": "single",
+          "q": "「risk to confuse」は英語として正しい表現だ。",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "risk は動名詞（-ing）のみ取る。正しくは「risk confusing」。"
+        },
+        {
+          "type": "single",
+          "q": "「This tool is of use」は「This tool is useful」と同じ意味だ。",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "of use ＝ useful。of＋抽象名詞 ＝ 形容詞 の典型例。"
+        },
+        {
+          "type": "single",
+          "q": "「Light pollution is strongest in the top meter.」で the がないのは文法的に正しい。",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "1つのものの固有の性質を述べる絶対的最上は the 不要。正しい文法。"
+        },
+        {
+          "type": "single",
+          "q": "「So do I」の do は代動詞（前の一般動詞の代わり）だ。",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "do は代動詞で、前文の一般動詞の繰り返しを避けるために使う。"
+        },
+        {
+          "type": "single",
+          "q": "「As kids grow up」の as は「〜なので（理由）」の接続詞だ。",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "grow up は変化動詞なので、ここの as は「〜するにつれて（比例・進行）」の意味。"
+        },
+        {
+          "type": "single",
+          "q": "「way beyond their family」の way は名詞（道・方法）を意味する。",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "ここの way は「はるかに」を意味する強調副詞。名詞用法ではない。"
+        },
+        {
+          "type": "single",
+          "q": "「had been created in 2016」の過去完了は、Smyth らが started した時点よりも前の出来事を表す。",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "過去完了は「過去の基準点よりもさらに前」を示す。2016年作成 → その後 started。"
+        },
+        {
+          "type": "input",
+          "q": "空欄を埋めよ。<br>A: I was tired.  →  B: So ___ I.",
+          "ans": "was",
+          "note": "be動詞（was）が前文にあるので、So のあとも was を使う。So was I."
+        },
+        {
+          "type": "input",
+          "q": "空欄を埋めよ。<br>A: She liked pasta.  →  B: So ___ she.",
+          "ans": "did",
+          "note": "liked は一般動詞の過去形。So の後は代動詞 did を使う。So did she."
+        },
+        {
+          "type": "input",
+          "q": "空欄を埋めよ。（同じ意味になるよう）<br>This tool is useful.  =  This tool is of ___.",
+          "ans": "use",
+          "note": "of＋抽象名詞 ＝ 形容詞。useful → of use。"
+        },
+        {
+          "type": "input",
+          "q": "間接疑問文の空欄を埋めよ。<br>直接疑問：Where is this glow strongest?<br>→ assess where this glow ___ strongest",
+          "ans": "is",
+          "note": "間接疑問は〈疑問詞＋S＋V〉の語順。where の後は this glow is strongest。"
+        },
+        {
+          "type": "input",
+          "q": "( ) 内の語を正しい形（動名詞）に直せ。<br>that risks (confuse) the behaviors of sea life",
+          "ans": "confusing",
+          "note": "risk は動名詞（-ing）のみ取る。risk confusing が正しい形。"
+        },
+        {
+          "type": "input",
+          "q": "部分否定を使わずに同意の文に。（空欄1語）<br>「Not all species are sensitive.」<br>→「___ species are not sensitive.」",
+          "ans": [
+            "Some",
+            "some"
+          ],
+          "note": "Not all ＝ Some ... not。「一部の種は敏感でない」が部分否定の意味。"
+        }
+      ]
+    }
+  ]
+}

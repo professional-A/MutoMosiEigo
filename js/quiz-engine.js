@@ -3,7 +3,7 @@
 //   title, subtitle?, eyebrow, description, subject, storageKey,
 //   pointsPerQ?(=100), katex?(=false), tip?, footer?,
 //   sections: [{ id, no, title, qs: [question] }]
-// question types: single | multi | sort | input | numeric
+// question types: single | multi | sort | input | numeric | flashcard
 (function () {
 
 // テーマ変数（--bg 等）と reset は /styles/theme.css で定義。initQuiz が <link> で読み込む。
@@ -88,6 +88,14 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:v
 .num-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .num-hint{background:var(--bg2);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:9px 13px;margin-top:10px;font-size:.86rem;color:var(--muted);white-space:pre-line;line-height:1.8}
 .num-reveal{background:rgba(95,224,168,.06);border-left:3px solid var(--good);border-radius:0 8px 8px 0;padding:9px 13px;margin-top:8px;font-size:.86rem;color:#cdfbe5;line-height:1.85}
+.fc{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:20px 18px;margin-top:11px;cursor:pointer;transition:border-color .2s}
+.fc:hover{border-color:var(--teal-d)}
+.fc-tag{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--teal);border:1px solid var(--line);border-radius:6px;padding:2px 7px;margin-bottom:10px}
+.fc-front{font-size:1.15rem;font-weight:600;color:var(--ink);line-height:1.5}
+.fc-hint{font-size:.8rem;color:var(--dim);margin-top:10px}
+.fc-back{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:.96rem;color:var(--muted);line-height:1.85}
+.fc-actions{display:flex;gap:8px;margin-top:12px}
+.q.correct .fc{border-color:var(--teal-d);background:rgba(70,214,196,.06)}
 `;
 
 // Module-level state
@@ -276,9 +284,22 @@ function buildQuestion(q, qi, key, secId) {
       const rv = Array.isArray(q.reveal) ? q.reveal : [q.reveal];
       inner += `<div class="num-reveal" id="nr_${key}" ${_state[key + '_revealed'] ? '' : 'hidden'}>${rv.map(s => `<div>${s}</div>`).join('')}</div>`;
     }
+
+  } else if (q.type === 'flashcard') {
+    const known = _state[key] === 1;
+    const shown = known || _state[key + '_shown'];
+    inner += `<div class="fc" onclick="fcFlip('${key}','${secId}')">`;
+    if (q.tag) inner += `<div class="fc-tag">${q.tag}</div>`;
+    inner += `<div class="fc-front">${q.front}</div>`;
+    inner += shown ? `<div class="fc-back">${q.back}</div>` : `<div class="fc-hint">タップで裏面を表示</div>`;
+    inner += `</div>`;
+    inner += `<div class="fc-actions">
+      <button class="btn ${known ? '' : 'ghost'}" onclick="fcMark('${key}','${secId}',1)">${known ? '✓ 覚えた' : '覚えた'}</button>
+      ${known ? `<button class="btn ghost" onclick="fcMark('${key}','${secId}',0)">まだ</button>` : ''}
+    </div>`;
   }
 
-  if (q.type !== 'numeric') {
+  if (q.type !== 'numeric' && q.type !== 'flashcard') {
     const fbShow = _state[key] !== undefined ? 'show' : '';
     const ok = _state[key] === 1;
     inner += `<div class="fb ${fbShow}"><span class="verdict ${ok ? 'g' : 'b'}">${ok ? '✓ 正解' : '✗ 不正解'}</span>${q.note ? `<div class="note">${q.note}</div>` : ''}</div>`;
@@ -410,6 +431,18 @@ window.numHint = function (key) {
 
 window.numReveal = function (key, secId) {
   _state[key + '_revealed'] = 1;
+  save(); refreshQ(key, secId);
+};
+
+window.fcFlip = function (key, secId) {
+  _state[key + '_shown'] = 1;
+  save(); refreshQ(key, secId);
+};
+
+window.fcMark = function (key, secId, val) {
+  if (val) _state[key] = 1;
+  else delete _state[key];
+  _state[key + '_shown'] = 1;
   save(); refreshQ(key, secId);
 };
 
