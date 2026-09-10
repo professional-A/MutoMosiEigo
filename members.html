@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>メンバー一覧 ・ 武藤模試</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/styles/theme.css">
+<style>
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Fraunces',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  #app-shell-bar{position:fixed;top:0;left:0;right:0;z-index:100}
+  main{max-width:900px;margin:0 auto;padding:72px 16px 40px}
+  main h1{font-size:1.15rem;margin:8px 0 16px}
+  #members-content{font-size:.9rem;margin-top:8px}
+</style>
+</head>
+<body>
+<div id="app-shell-bar"></div>
+<main>
+  <h1>👥 メンバー一覧</h1>
+  <div id="members-content">読み込み中...</div>
+</main>
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/app-shell.js"></script>
+<script src="/js/util.js"></script>
+<script>
+let authToken = null, authUser = null, authUserId = null, authEmail = null;
+function _syncAuthGlobals() {
+  const u = window.appShell && window.appShell.user;
+  authToken  = (window.appShell && window.appShell.token) || null;
+  authUser   = u ? u.username : null;
+  authUserId = u ? u.id : null;
+  authEmail  = u ? (u.email || '') : null;
+}
+window.addEventListener('appshell:auth', () => { _syncAuthGlobals(); onAuthReady(); });
+
+appShell.mount(document.getElementById('app-shell-bar'), {
+  nav: window.APP_NAV,
+  onNotif: () => { location.href = '/'; }
+});
+
+async function loadMembers() {
+  const el = document.getElementById('members-content');
+  try {
+    const res  = await fetch('/api/members');
+    const data = await res.json();
+    if (!Array.isArray(data)) { el.innerHTML = 'エラー'; return; }
+    el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
+        <thead><tr><th>#</th><th>名前</th></tr></thead>
+        <tbody>${data.map((u, i) => `
+          <tr>
+            <td class="rank-num${Number(u.rank)<=3?' top':''}">${u.rank}</td>
+            <td class="rank-name">
+              <span class="avatar frame-${u.frame||'default'}" style="width:24px;height:24px;font-size:.9rem;margin-right:6px;vertical-align:middle">${u.avatar||'🐸'}</span>
+              <span>
+                ${esc(tu(u.username))}
+                ${u.title ? `<br>${titleBadge(u)}` : ''}
+              </span>
+            </td>
+          </tr>`).join('')}
+        </tbody>
+      </table></div>`;
+  } catch(e) { el.innerHTML = '読み込みエラー'; }
+}
+
+function onAuthReady() {}   // メンバー一覧は認証不要
+loadMembers();
+</script>
+</body>
+</html>
