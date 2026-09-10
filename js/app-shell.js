@@ -5,6 +5,8 @@
 //     nav: window.APP_NAV,          // js/nav.js。省略時は空
 //     manageAuth: true,            // 既定 true。false にすると認証はページ側の責務（index.html 用）
 //     onGoogleLogin, onIdLogin, onLogout, onNotif, onAvatar  // 省略時は既定動作
+//                                          // onAvatar 既定＝内蔵のアバター/フレーム/名前変更モーダル
+//                                          //   （PUT /api/avatar → refreshAuth()。id は appshell- プレフィックス）
 //   });
 //   appShell.user   // null | { id, username, email, avatar, frame, points, lifetimePoints, isAdmin, ... }
 //   window.addEventListener('appshell:auth', e => { /* e.detail = appShell.user */ });
@@ -207,6 +209,144 @@
   }
   function defaultIdLogin() { location.href = '/login.html'; }
 
+  // ── アバター／フレーム／名前 変更モーダル（index.html から移設）─────────────
+  // id は index.html の #avatar-modal-bg 等と衝突しないよう appshell- プレフィックス。
+  var AVATAR_NAMES = { '😼': 'ひろと', '😏': '考え方やな' };
+  var AVATARS = [
+    '🐸','🐙','🦑','🪲','🦠','🧟','👁️','🫠','🤡','💀',
+    '👾','🫀','🧠','🪳','🦷','🐛','🫁','🤢','🕷️','🦂',
+    '🐊','🐀','🧌','👽','🫦','🦴','🩸','🧛','🧜','🧝',
+    '🎃','🪄','🌑','🌪️','🫧','🕯️','🪦','🩻','🧿','🫐',
+    '🔥','💎','👑','⚡','🌙','☠️','🎭','🗿','🌊','🍄'
+  ];
+  var FRAMES = [
+    { id: 'default', name: 'なし' }, { id: 'silver', name: 'シルバー' },
+    { id: 'gold', name: 'ゴールド' }, { id: 'teal', name: 'ティール' },
+    { id: 'red', name: 'レッド' }, { id: 'purple', name: 'パープル' },
+    { id: 'rainbow', name: 'レインボー' },
+    { id: 'worst', name: 'ワースト記念', hidden: true },
+    { id: 'baka', name: 'バカ記念', hidden: true }
+  ];
+  var avModal = null, selAvatar = '🐸', selFrame = 'default';
+
+  function escHtml(s) {
+    return String(s == null ? '' : s).replace(/&/g, '&amp;').replace(/</g, '&lt;')
+      .replace(/>/g, '&gt;').replace(/"/g, '&quot;');
+  }
+  function applyFrameEl(el, frame) {
+    el.className = el.className.replace(/frame-\S+/g, '').trim();
+    el.classList.add('avatar', 'frame-' + (frame || 'default'));
+  }
+
+  function buildAvatarModal() {
+    if (avModal) return;
+    avModal = h('div', { 'class': 'modal-bg', id: 'appshell-avatar-modal' });
+    avModal.innerHTML =
+      '<div class="modal">' +
+        '<h2>アイコンを選ぶ</h2>' +
+        '<div style="display:flex;gap:12px;margin-bottom:14px">' +
+          '<div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;flex:1;text-align:center">' +
+            '<div style="font-size:.65rem;color:var(--dim);margin-bottom:2px">🏆 シーズンpt</div>' +
+            '<div id="appshell-season-pts" style="font-size:1.1rem;font-weight:700;color:var(--teal)">―</div></div>' +
+          '<div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:8px 14px;flex:1;text-align:center">' +
+            '<div style="font-size:.65rem;color:var(--dim);margin-bottom:2px">📦 個人pt（累計）</div>' +
+            '<div id="appshell-lifetime-pts" style="font-size:1.1rem;font-weight:700;color:var(--amber)">―</div></div>' +
+        '</div>' +
+        '<div style="margin-bottom:12px"><label style="font-size:.8rem;color:var(--muted);display:block;margin-bottom:4px">プレイヤーネーム</label>' +
+          '<input id="appshell-username-input" type="text" maxlength="20" style="width:100%;padding:6px 10px;border-radius:8px;border:1px solid var(--line);background:var(--card);color:var(--ink);font-family:inherit;font-size:.95rem"></div>' +
+        '<div class="avatar avatar-lg" id="appshell-avatar-preview">🐸</div>' +
+        '<div class="avatar-grid" id="appshell-avatar-grid"></div>' +
+        '<div class="frame-section"><h3>フレームを選ぶ</h3><div class="frame-grid" id="appshell-frame-grid"></div></div>' +
+        '<div class="modal-btns" style="margin-top:16px">' +
+          '<button type="button" id="appshell-avatar-save" style="background:var(--teal);color:#0a1626">保存</button>' +
+          '<button type="button" id="appshell-avatar-close" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>' +
+        '</div>' +
+        '<div class="modal-msg" id="appshell-avatar-msg"></div>' +
+      '</div>';
+    document.body.appendChild(avModal);
+
+    avModal.addEventListener('click', function (e) { if (e.target === avModal) closeAvatarModal(); });
+    avModal.querySelector('#appshell-avatar-save').addEventListener('click', saveAvatarModal);
+    avModal.querySelector('#appshell-avatar-close').addEventListener('click', closeAvatarModal);
+    avModal.querySelector('#appshell-avatar-grid').addEventListener('click', function (e) {
+      var d = e.target.closest('[data-av]'); if (d) selectAvatar(d.getAttribute('data-av'));
+    });
+    avModal.querySelector('#appshell-frame-grid').addEventListener('click', function (e) {
+      var d = e.target.closest('[data-fr]'); if (d) selectFrame(d.getAttribute('data-fr'));
+    });
+  }
+
+  function renderAvatarGrid() {
+    var unlocked = (user && user.unlockedAvatars) || [];
+    var special = unlocked.filter(function (e) { return AVATARS.indexOf(e) < 0; });
+    var specialHtml = special.length ? (
+      '<div style="width:100%;font-size:.72rem;color:var(--teal);letter-spacing:.1em;font-weight:600;margin:8px 0 4px">⭐ アンロック済み</div>' +
+      special.map(function (e) {
+        var label = AVATAR_NAMES[e] || '';
+        return '<div class="avatar-opt avatar-opt-named' + (e === selAvatar ? ' selected' : '') + '" data-av="' + escHtml(e) +
+          '" style="border-color:var(--amber)">' + e + (label ? '<div class="avatar-opt-label">' + escHtml(label) + '</div>' : '') + '</div>';
+      }).join('') +
+      '<div style="width:100%;font-size:.72rem;color:var(--dim);letter-spacing:.1em;font-weight:600;margin:8px 0 4px">通常</div>'
+    ) : '';
+    avModal.querySelector('#appshell-avatar-grid').innerHTML = specialHtml + AVATARS.map(function (e) {
+      return '<div class="avatar-opt' + (e === selAvatar ? ' selected' : '') + '" data-av="' + escHtml(e) + '">' + e + '</div>';
+    }).join('');
+  }
+  function renderFrameGrid() {
+    avModal.querySelector('#appshell-frame-grid').innerHTML = FRAMES.filter(function (f) { return !f.hidden; }).map(function (f) {
+      return '<div class="frame-opt frame-' + f.id + (f.id === selFrame ? ' selected' : '') + '" data-fr="' + f.id + '" title="' + escHtml(f.name) +
+        '"><span style="font-size:1.1rem">😀</span></div>';
+    }).join('');
+  }
+  function selectAvatar(emoji) {
+    selAvatar = emoji;
+    var prev = avModal.querySelector('#appshell-avatar-preview');
+    prev.textContent = emoji;
+    renderAvatarGrid();
+  }
+  function selectFrame(id) {
+    selFrame = id;
+    applyFrameEl(avModal.querySelector('#appshell-avatar-preview'), id);
+    renderFrameGrid();
+  }
+  function openAvatarModal() {
+    if (!avModal) buildAvatarModal();
+    selAvatar = (user && user.avatar) || '🐸';
+    selFrame  = (user && user.frame) || 'default';
+    avModal.querySelector('#appshell-username-input').value = (user && user.username) || '';
+    avModal.querySelector('#appshell-season-pts').textContent = ((user && user.points) || 0).toLocaleString() + 'pt';
+    avModal.querySelector('#appshell-lifetime-pts').textContent = ((user && user.lifetimePoints) || 0).toLocaleString() + 'pt';
+    var prev = avModal.querySelector('#appshell-avatar-preview');
+    prev.textContent = selAvatar;
+    applyFrameEl(prev, selFrame);
+    avModal.querySelector('#appshell-avatar-msg').textContent = '';
+    renderAvatarGrid();
+    renderFrameGrid();
+    avModal.classList.add('open');
+  }
+  function closeAvatarModal() {
+    if (avModal) { avModal.classList.remove('open'); avModal.querySelector('#appshell-avatar-msg').textContent = ''; }
+  }
+  function saveAvatarModal() {
+    var msg = avModal.querySelector('#appshell-avatar-msg');
+    var newName = avModal.querySelector('#appshell-username-input').value.trim();
+    if (!newName) { msg.textContent = '名前を入力してください'; msg.style.color = 'red'; return; }
+    if (!window.api) { msg.textContent = '通信できません'; msg.style.color = 'red'; return; }
+    window.api.put('/api/avatar', { avatar: selAvatar, frame: selFrame, username: newName }).then(function (data) {
+      if (data && data.ok) {
+        try {
+          localStorage.setItem('muto_avatar', selAvatar);
+          localStorage.setItem('muto_frame', selFrame);
+        } catch (e) {}
+        msg.textContent = '保存した！'; msg.style.color = 'var(--teal)';
+        setTimeout(closeAvatarModal, 800);
+        window.appShell.refreshAuth();
+      } else {
+        msg.textContent = (data && data.error) || '保存に失敗しました'; msg.style.color = 'red';
+      }
+    }).catch(function () { msg.textContent = '通信エラー'; msg.style.color = 'red'; });
+  }
+
   window.appShell = {
     user: null,
     token: null,
@@ -216,8 +356,10 @@
       if (!opts.onGoogleLogin) opts.onGoogleLogin = defaultGoogleLogin;
       if (!opts.onIdLogin)     opts.onIdLogin     = defaultIdLogin;
       if (!opts.onLogout)      opts.onLogout      = function () { window.appShell.logout(); };
+      if (!opts.onAvatar)      opts.onAvatar      = openAvatarModal;   // 既定＝内蔵アバターピッカー
       buildBar(host);
       buildDrawer();
+      buildAvatarModal();
       this.update({ loggedIn: false });
       if (opts.manageAuth !== false) resolveAuth();
     },
