@@ -523,6 +523,13 @@ window.initQuiz = function (data) {
 
   window.QUIZ_SUBJECT = data.subject;
 
+  // 模試ページ内ナビゲーション（採点バー右上のハンバーガー）
+  addScript('/js/nav.js', function () {
+    addScript('/js/quiz-nav.js', function () {
+      if (window.quizNav) window.quizNav.mount(data);
+    });
+  });
+
   // Load external deps: supabase → points.js → progress.js
   addScript('https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2', function () {
     addScript('/js/points.js', function () {
