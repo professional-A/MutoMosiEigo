@@ -87,7 +87,7 @@
     var g1 = sameSubject.map(function (t) {
       var label = t.title || t.subject || '';
       if (entryD(t.path) === cd) {
-        return '<span aria-current="page">' + esc(label) + '（表示中）</span>';
+        return '<span aria-current="page" tabindex="-1">' + esc(label) + '（表示中）</span>';
       }
       return '<a href="' + esc(t.path) + '">' + esc(label) + '</a>';
     }).join('');
