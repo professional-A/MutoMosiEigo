@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>科目別成績 ・ 武藤模試</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/styles/theme.css">
+<style>
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Fraunces',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  #app-shell-bar{position:fixed;top:0;left:0;right:0;z-index:100}
+  main{max-width:900px;margin:0 auto;padding:72px 16px 40px}
+  main h1{font-size:1.15rem;margin:8px 0 16px}
+  #scores-content{font-size:.85rem;margin-top:8px}
+  .score-input-row{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
+  .score-input-row button{font-family:inherit;font-size:.85rem;padding:8px 16px;border-radius:10px;cursor:pointer}
+</style>
+</head>
+<body>
+<div id="app-shell-bar"></div>
+<main>
+  <h1>📊 科目別成績</h1>
+  <div id="scores-content">読み込み中...</div>
+  <div class="score-input-row" id="score-input-row">
+    <button id="ouri-input-btn" style="display:none;border:1px solid var(--teal);background:rgba(70,214,196,.1);color:var(--teal)" onclick="submitOuriScore()">⚡ 応用物理の点数を入力</button>
+    <button id="math-input-btn" style="display:none;border:1px solid var(--rose);background:rgba(240,107,142,.1);color:var(--rose)" onclick="submitMathScore()">📐 応用数学の点数を入力</button>
+    <button id="kakougaku-input-btn" style="display:none;border:1px solid #f59e0b;background:rgba(245,158,11,.1);color:#f59e0b" onclick="submitKakougakuScore()">⚙️ 加工学の点数を入力</button>
+    <button id="nekku-input-btn" style="display:none;border:1px solid #7c6af7;background:rgba(124,106,247,.1);color:#7c6af7" onclick="submitNekkuScore()">🔥 熱流体工学Ⅰの点数を入力</button>
+    <button id="seigyo-input-btn" style="display:none;border:1px solid #a78bfa;background:rgba(167,139,250,.1);color:#a78bfa" onclick="submitSeigyoScore()">🎛️ 制御工学Ⅰの点数を入力</button>
+  </div>
+  <div id="score-inline-wrap" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(70,214,196,.07);border:1px solid rgba(70,214,196,.3);border-radius:8px;align-items:center;gap:8px;flex-wrap:wrap">
+    <span id="score-inline-label" style="font-size:.85rem;color:var(--dim)"></span>
+    <input id="score-inline-val" type="number" min="0" max="100" placeholder="0〜100" style="width:80px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#0a172b;color:var(--fg);font-size:.9rem;font-family:inherit" onkeydown="if(event.key==='Enter')_confirmScoreInline()">
+    <button onclick="_confirmScoreInline()" style="padding:5px 14px;border:none;border-radius:6px;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-size:.85rem">登録</button>
+    <button onclick="document.getElementById('score-inline-wrap').style.display='none'" style="padding:5px 10px;border:1px solid var(--line);border-radius:6px;background:none;color:var(--dim);cursor:pointer;font-size:.85rem">✕</button>
+  </div>
+</main>
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/app-shell.js"></script>
+<script src="/js/util.js"></script>
+<script>
+let authToken = null, authUser = null, authUserId = null, authEmail = null;
+function _syncAuthGlobals() {
+  const u = window.appShell && window.appShell.user;
+  authToken  = (window.appShell && window.appShell.token) || null;
+  authUser   = u ? u.username : null;
+  authUserId = u ? u.id : null;
+  authEmail  = u ? (u.email || '') : null;
+}
+window.addEventListener('appshell:auth', () => { _syncAuthGlobals(); onAuthReady(); });
+
+appShell.mount(document.getElementById('app-shell-bar'), {
+  nav: window.APP_NAV,
+  onNotif: () => { location.href = '/'; }
+});
+
+// ===== index.html:3044-3181 verbatim (loadScores / sortScores / _scSort) =====
+let _scSort = { key: '_avg', dir: 1 };
+async function loadScores() {
+  const el = document.getElementById('scores-content');
+  try {
+    const res  = await fetch('/api/scores');
+    const data = await res.json();
+    if (!Array.isArray(data) || !data.length) { el.innerHTML = '<p style="color:var(--muted)">まだ点数が登録されていません</p>'; return; }
+
+    const seigyoActive = new Date() >= new Date('2026-06-23T00:00:00Z');
+
+    // 平均点・合計点を計算（入力済み科目のみ）
+    data.forEach(r => {
+      const vals = [r.test_score, r.ouri_score, r.math_score, r.kakougaku_score, r.nekku_score, ...(seigyoActive ? [r.seigyo_score] : [])].filter(v => v != null);
+      r._avg   = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
+      r._total = vals.length ? vals.reduce((s, v) => s + v, 0) : null;
+    });
+
+    // # 列: 現在のソートキーで昇順に並べた順位（ソートが変わると連動）
+    const rankBase = [...data].sort((a, b) => {
+      const k = _scSort.key;
+      const av = a[k], bv = b[k];
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      return av - bv;
+    });
+    let rnk = 0, prevV = null;
+    const rankMap = {};
+    rankBase.forEach((r, i) => {
+      const v = r[_scSort.key];
+      if (v == null) { rankMap[r.username] = null; return; }
+      if (v !== prevV) { rnk = i + 1; prevV = v; }
+      rankMap[r.username] = rnk;
+    });
+
+    // 選択キーでソート、未入力は末尾
+    const sorted = [...data].sort((a, b) => {
+      const k = _scSort.key;
+      const av = a[k], bv = b[k];
+      if (av == null && bv == null) return 0;
+      if (av == null) return 1;
+      if (bv == null) return -1;
+      return (av - bv) * _scSort.dir;
+    });
+
+    const sc = v => v != null
+      ? `<span style="font-weight:700;color:var(--teal)">${v}</span>`
+      : `<span style="color:var(--dim);font-size:.8rem">―</span>`;
+
+    const th = (key, label, extraStyle='') => {
+      const active = _scSort.key === key;
+      const arr = active ? (_scSort.dir === 1 ? ' ↑' : ' ↓') : '';
+      const col = active ? ';color:var(--amber)' : '';
+      return `<th style="text-align:center;cursor:pointer;user-select:none${col}${extraStyle}" onclick="sortScores('${key}')">${label}${arr}</th>`;
+    };
+
+    // みっつー波多野ライン: 現在のソートキーに値がある場合のみ基準に使う
+    const _lk = _scSort.key;
+    const mittsIdx  = (() => { const i = sorted.findIndex(r => r.username === 'ミッツ' && r[_lk] != null); return i >= 0 ? i : null; })();
+    const hatanoIdx = (() => { const i = sorted.findIndex(r => r.username === '波多野裏技' && r[_lk] != null); return i >= 0 ? i : null; })();
+    // lineIdx行の「後ろ」に線が描画される
+    // 降順：高い方（小さいidx）の上に線 → lineIdx = Math.min - 1
+    // 昇順：悪い方（大きいidx）の後に線  → lineIdx = Math.max
+    const _lineDesc = _scSort.dir === -1;
+    let lineIdx = null;
+    if (mittsIdx != null && hatanoIdx != null) {
+      lineIdx = _lineDesc ? Math.min(mittsIdx, hatanoIdx) - 1 : Math.max(mittsIdx, hatanoIdx);
+    } else if (mittsIdx != null) {
+      lineIdx = _lineDesc ? mittsIdx - 1 : mittsIdx;
+    } else if (hatanoIdx != null) {
+      lineIdx = _lineDesc ? hatanoIdx - 1 : hatanoIdx;
+    }
+
+    const rows = sorted.map((r, i) => {
+      const isMe = r.username === authUser;
+      const inZone = lineIdx !== null && (_lineDesc ? i > lineIdx : i <= lineIdx);
+      const ar = rankMap[r.username];
+      const rankTd = ar != null
+        ? `<td class="rank-num${ar <= 3 ? ' top' : ''}">${ar}</td>`
+        : `<td class="rank-num" style="color:var(--dim)">―</td>`;
+      const avgTd = r._avg != null
+        ? `<td style="text-align:center;font-weight:700;color:var(--amber)">${Math.round(r._avg * 10) / 10}</td>`
+        : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`;
+      const styles = [];
+      if (isMe) styles.push('background:rgba(70,214,196,.06)');
+      else if (inZone) styles.push('background:rgba(239,68,68,.08)');
+      const rowAttr = styles.length ? ` style="${styles.join(';')}"` : '';
+      const row = `<tr${rowAttr}>
+        ${rankTd}
+        <td class="rank-name">
+          <span class="avatar frame-${r.frame||'default'}" style="width:20px;height:20px;font-size:.78rem;margin-right:5px;vertical-align:middle">${r.avatar||'🐸'}</span>
+          <span>${esc(tu(r.username))}${isMe ? ' 👈' : ''}</span>
+        </td>
+        <td style="text-align:center">${sc(r.test_score)}</td>
+        <td style="text-align:center">${sc(r.ouri_score)}</td>
+        <td style="text-align:center">${sc(r.math_score)}</td>
+        <td style="text-align:center">${sc(r.kakougaku_score)}</td>
+        <td style="text-align:center">${sc(r.nekku_score)}</td>
+        ${seigyoActive ? `<td style="text-align:center">${sc(r.seigyo_score)}</td>` : ''}
+        ${r._total != null ? `<td style="text-align:center;font-weight:700;color:var(--rose)">${r._total}</td>` : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`}
+        ${avgTd}
+      </tr>`;
+      const colspan = seigyoActive ? 10 : 9;
+      if (i === lineIdx) {
+        return row + `<tr><td colspan="${colspan}" style="padding:0;border:none">
+          <div style="display:flex;align-items:center;gap:8px;padding:4px 10px 5px;background:rgba(239,68,68,.12)">
+            <div style="flex:1;height:3px;border-radius:2px;background:linear-gradient(90deg,transparent,#ef4444)"></div>
+            <span style="font-size:.7rem;color:#ef4444;font-weight:900;letter-spacing:.1em;white-space:nowrap;text-shadow:0 0 8px rgba(239,68,68,.6)">みっつー波多野ライン</span>
+            <div style="flex:1;height:3px;border-radius:2px;background:linear-gradient(90deg,#ef4444,transparent)"></div>
+          </div>
+        </td></tr>`;
+      }
+      return row;
+    }).join('');
+
+    el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
+      <thead><tr>
+        <th>#</th>
+        <th>名前</th>
+        ${th('test_score', '📘 英語')}
+        ${th('ouri_score', '⚡ 応用物理')}
+        ${th('math_score', '📐 応用数学')}
+        ${th('kakougaku_score', '⚙️ 加工学')}
+        ${th('nekku_score', '🔥 熱流体')}
+        ${seigyoActive ? th('seigyo_score', '🎛️ 制御工学') : ''}
+        ${th('_total', '合計')}
+        ${th('_avg', '平均')}
+      </tr></thead>
+      <tbody>${rows}</tbody>
+    </table></div>`;
+  } catch(e) { el.innerHTML = '<p style="color:var(--muted)">読み込みエラー</p>'; }
+}
+function sortScores(key) {
+  if (_scSort.key === key) _scSort.dir *= -1;
+  else { _scSort.key = key; _scSort.dir = 1; }
+  loadScores();
+}
+
+// ===== index.html:3021-3036 modal opener, adapted: renamed refreshScoresPage, modal-open lines removed =====
+async function refreshScoresPage() {
+  const seigyoActive = new Date() >= new Date('2026-06-23T00:00:00Z');
+  const btn = document.getElementById('ouri-input-btn');
+  if (btn) btn.style.display = authToken ? 'inline-block' : 'none';
+  const btn2 = document.getElementById('math-input-btn');
+  if (btn2) btn2.style.display = authToken ? 'inline-block' : 'none';
+  const btn4 = document.getElementById('kakougaku-input-btn');
+  if (btn4) btn4.style.display = authToken ? 'inline-block' : 'none';
+  const btn5 = document.getElementById('nekku-input-btn');
+  if (btn5) btn5.style.display = authToken ? 'inline-block' : 'none';
+  const btn3 = document.getElementById('seigyo-input-btn');
+  if (btn3) btn3.style.display = (authToken && seigyoActive) ? 'inline-block' : 'none';
+  await loadScores();
+}
+
+// ===== index.html:3852-3876 verbatim, EXCEPT _confirmScoreInline now awaits refreshScoresPage() instead of the modal opener =====
+let _scoreEndpoint = '';
+async function _submitScore(label, endpoint) {
+  if (!authToken) { alert('ログインしてください'); return; }
+  _scoreEndpoint = endpoint;
+  const wrap = document.getElementById('score-inline-wrap');
+  document.getElementById('score-inline-label').textContent = `${label}（0〜100点）:`;
+  document.getElementById('score-inline-val').value = '';
+  wrap.style.display = 'flex';
+  setTimeout(() => document.getElementById('score-inline-val').focus(), 50);
+}
+async function _confirmScoreInline() {
+  const n = parseInt(document.getElementById('score-inline-val').value, 10);
+  if (isNaN(n) || n < 0 || n > 100) { alert('0〜100の整数で入力してください'); return; }
+  try {
+    const res  = await fetch(_scoreEndpoint, { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body: JSON.stringify({ score: n }) });
+    const data = await res.json();
+    if (data.ok) { document.getElementById('score-inline-wrap').style.display = 'none'; await refreshScoresPage(); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+async function submitOuriScore() { await _submitScore('応用物理', '/api/ouri/score'); }
+async function submitMathScore() { await _submitScore('応用数学', '/api/math/score'); }
+async function submitKakougakuScore() { await _submitScore('加工学', '/api/kakougaku/score'); }
+async function submitNekkuScore() { await _submitScore('熱流体工学Ⅰ', '/api/nekku/score'); }
+async function submitSeigyoScore() { await _submitScore('制御工学Ⅰ', '/api/seigyo/score'); }
+
+function onAuthReady() { refreshScoresPage(); }
+loadScores();   // 認証解決前でも表本体は出す
+</script>
+</body>
+</html>
