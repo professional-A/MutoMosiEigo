@@ -12,6 +12,23 @@
   main{max-width:900px;margin:0 auto;padding:72px 16px 40px}
   main h1{font-size:1.15rem;margin:8px 0 16px}
   #scores-content{font-size:.85rem;margin-top:8px}
+  /* 横スクロール時に「#」列と「名前」列を固定表示 */
+  #scores-content .ranking-table th:first-child,
+  #scores-content .ranking-table td:first-child,
+  #scores-content .ranking-table th:nth-child(2),
+  #scores-content .ranking-table td:nth-child(2){
+    position:sticky;z-index:3;background:var(--bg);
+    box-shadow:inset 0 -1px 0 var(--line);
+  }
+  #scores-content .ranking-table th:first-child,
+  #scores-content .ranking-table td:first-child{
+    left:0;box-sizing:border-box;width:38px;min-width:38px;
+    padding-left:10px;padding-right:4px;
+  }
+  #scores-content .ranking-table th:nth-child(2),
+  #scores-content .ranking-table td:nth-child(2){
+    left:38px;border-right:1px solid var(--line);
+  }
   .score-input-row{margin-top:14px;display:flex;gap:8px;flex-wrap:wrap}
   .score-input-row button{font-family:inherit;font-size:.85rem;padding:8px 16px;border-radius:10px;cursor:pointer}
 </style>
