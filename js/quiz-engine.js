@@ -354,7 +354,8 @@ window.removeSortItem = function (key, secId, idx) {
 window.submitSort = function (key, secId) {
   const q = getQ(secId, key); if (!q || _state[key] !== undefined) return;
   const placed = _state[key + '_placed'] || [];
-  const correct = q.ans.every((a, i) => placed[i] === a);
+  // norm() で比較（語群と正解の大文字小文字・句読点の揺れを吸収）
+  const correct = placed.length === q.ans.length && q.ans.every((a, i) => norm(placed[i] || '') === norm(a));
   if (correct) award(key);
   _state[key] = correct ? 1 : -1;
   save(); refreshQ(key, secId);

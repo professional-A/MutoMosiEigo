@@ -1,0 +1,413 @@
+{
+  "title": "科学技術英語Ⅰ ・ 軽い総合演習（再試験対策）",
+  "subject": "科学技術英語Ⅰ",
+  "year": 2026,
+  "grade": 4,
+  "exam": "再試験",
+  "storageKey": "mutou_saishiken",
+  "pointsPerQ": 100,
+  "sections": [
+    {
+      "id": "gram",
+      "no": "01",
+      "title": "文法クルー — what と as の用法",
+      "qs": [
+        {
+          "type": "single",
+          "q": "\"This shift in what voice piques interest most seems to happen between ages 13 and 14.\" の what の用法として正しいものは？",
+          "opts": [
+            "疑問代名詞（「何」とたずねる）",
+            "関係代名詞（先行詞を含み「〜こと・もの」）",
+            "疑問形容詞（「どんな」）",
+            "関係副詞"
+          ],
+          "ans": "関係代名詞（先行詞を含み「〜こと・もの」）",
+          "note": "Clue to Usageより。このwhatは関係代名詞で、先行詞を含み「私たちが目にしているもの」＝「興味をそそるもの」という意味を作る。"
+        },
+        {
+          "type": "single",
+          "q": "\"As kids grow up, they expand their social connections.\" の as の意味として最も適切なものは？",
+          "opts": [
+            "〜として",
+            "〜するにつれて／〜するとき",
+            "〜なので",
+            "〜のように"
+          ],
+          "ans": "〜するにつれて／〜するとき",
+          "note": "「時」を表すas。「子どもが成長するにつれて」という意味。"
+        },
+        {
+          "type": "single",
+          "q": "\"That's exactly as it should be,\" Abrams adds. の as の用法に最も近いものは？",
+          "opts": [
+            "Do in Rome as the Romans do（様態：〜するように）",
+            "As kids grow up（時：〜するにつれて）",
+            "As a result（結果）",
+            "As far as I know（範囲）"
+          ],
+          "ans": "Do in Rome as the Romans do（様態：〜するように）",
+          "note": "「まさにあるべき姿の通りだ」という「様態」を表すas。"
+        }
+      ]
+    },
+    {
+      "id": "u1notes",
+      "no": "02",
+      "title": "Unit 1 文法・語法ノート",
+      "qs": [
+        {
+          "type": "single",
+          "q": "\"Nearly 2 million square kilometers of ocean get such intense night light.\" の nearly の意味に最も近い語句はどれか。",
+          "opts": [
+            "more or less（およそ）",
+            "at least（少なくとも）",
+            "no more than（〜にすぎない）",
+            "hardly（ほとんど〜ない）"
+          ],
+          "ans": "more or less（およそ）",
+          "note": "nearly ≒ about / around / roughly / more or less / or so、すべて「およそ」を表す表現。"
+        },
+        {
+          "type": "single",
+          "q": "\"That's an area ( ) is roughly the size of Mexico.\" 空所に入る関係代名詞として正しいものは？",
+          "opts": [
+            "which",
+            "who",
+            "whom",
+            "whose"
+          ],
+          "ans": "which",
+          "note": "areaという「もの」を先行詞とする関係代名詞。thatに置き換えも可。"
+        },
+        {
+          "type": "single",
+          "q": "\"Farther down, the light gets weaker.\" の Farther down の品詞・意味として正しいものは？",
+          "opts": [
+            "副詞句：さらに下の方では",
+            "形容詞：より遠い",
+            "名詞：遠方",
+            "動詞：遠ざかる"
+          ],
+          "ans": "副詞句：さらに下の方では",
+          "note": "文頭に置かれ文全体を修飾する副詞句。「（水面から）さらに下では」の意味。"
+        },
+        {
+          "type": "single",
+          "q": "\"The team described its findings December 13 in Elementa...\" 本来 December 13 の前に置くべき前置詞はどれか。",
+          "opts": [
+            "on",
+            "in",
+            "at",
+            "by"
+          ],
+          "ans": "on",
+          "note": "日付にはonを使う。ニュース記事の見出し・要約調の文体ではonが省略されることがある。"
+        }
+      ]
+    },
+    {
+      "id": "u1ws",
+      "no": "03",
+      "title": "Unit 1 英文完成（並べ替え）",
+      "qs": [
+        {
+          "type": "sort",
+          "q": "人工の光がどのように海洋生物の正常な行動に影響を与えるのかを知るために、研究者たちはデータを集めた。<br>Researchers collected data to decide ___ of sea creatures.",
+          "items": [
+            "affect",
+            "artificial",
+            "behavior",
+            "can",
+            "how",
+            "light",
+            "normal"
+          ],
+          "ans": [
+            "how",
+            "artificial",
+            "light",
+            "can",
+            "affect",
+            "normal",
+            "behavior"
+          ]
+        },
+        {
+          "type": "sort",
+          "q": "「すべての種が光の輝きに等しく敏感だ、というわけではない」と、その科学者は言った。<br>\" ___ the glow of light,\" said the scientist.",
+          "items": [
+            "all",
+            "are",
+            "equally",
+            "not",
+            "sensitive",
+            "species",
+            "to"
+          ],
+          "ans": [
+            "not",
+            "all",
+            "species",
+            "are",
+            "equally",
+            "sensitive",
+            "to"
+          ]
+        }
+      ]
+    },
+    {
+      "id": "u2choice",
+      "no": "04",
+      "title": "Unit 2 Word Choice",
+      "qs": [
+        {
+          "type": "single",
+          "q": "have a ( ) good command of English ― かなり英語を使いこなす",
+          "opts": [
+            "adolescence",
+            "detect",
+            "fairly",
+            "region"
+          ],
+          "ans": "fairly",
+          "note": "fairly＝かなり。distractorのadolescence（青年期）・detect（気づく）・region（領域）は別の空所用。"
+        },
+        {
+          "type": "single",
+          "q": "examine a particular ( ) of the brain ― 脳の特定領域を調べる",
+          "opts": [
+            "adolescence",
+            "detect",
+            "region",
+            "transition"
+          ],
+          "ans": "region",
+          "note": "region＝領域・特定分野。"
+        },
+        {
+          "type": "single",
+          "q": "( ) a subtle change in her attitude ― 彼女の態度の微妙な変化に気づく",
+          "opts": [
+            "detect",
+            "fairly",
+            "region",
+            "transition"
+          ],
+          "ans": "detect",
+          "note": "detect＝気づく・検出する。"
+        },
+        {
+          "type": "single",
+          "q": "finally pass through ( ) ― ようやく青年期を通過する",
+          "opts": [
+            "adolescence",
+            "detect",
+            "fairly",
+            "transition"
+          ],
+          "ans": "adolescence",
+          "note": "adolescence＝青年期・思春期。"
+        },
+        {
+          "type": "single",
+          "q": "experience a ( ) into a new life ― 新生活への移行を経験する",
+          "opts": [
+            "adolescence",
+            "detect",
+            "region",
+            "transition"
+          ],
+          "ans": "transition",
+          "note": "transition＝移行・変化。"
+        },
+        {
+          "type": "single",
+          "q": "regard the book as ( ) of purchasing ― その本は買う価値があるとみなす",
+          "opts": [
+            "biological",
+            "maternal",
+            "missed",
+            "worthy"
+          ],
+          "ans": "worthy",
+          "note": "worthy of〜＝〜の価値がある。"
+        },
+        {
+          "type": "single",
+          "q": "consider the trend to be a ( ) of the unstable society ― その傾向を不安定な社会の反映と考える",
+          "opts": [
+            "biological",
+            "maternal",
+            "missed",
+            "reflection"
+          ],
+          "ans": "reflection",
+          "note": "reflection＝反映。"
+        },
+        {
+          "type": "single",
+          "q": "( ) as a person over the years ― 時間をかけて人間として成長する",
+          "opts": [
+            "biological",
+            "maternal",
+            "missed",
+            "mature"
+          ],
+          "ans": "mature",
+          "note": "mature＝成熟する・成長する。"
+        },
+        {
+          "type": "single",
+          "q": "monitor the rate of the ( ) death in childbirth ― 母親の出産時死亡率を測定する",
+          "opts": [
+            "biological",
+            "maternal",
+            "missed",
+            "worthy"
+          ],
+          "ans": "maternal",
+          "note": "maternal＝母親の。"
+        },
+        {
+          "type": "single",
+          "q": "regret the ( ) opportunities ― 逃した機会を悔やむ",
+          "opts": [
+            "biological",
+            "missed",
+            "reflection",
+            "worthy"
+          ],
+          "ans": "missed",
+          "note": "missed＝逃した。"
+        }
+      ]
+    },
+    {
+      "id": "defq",
+      "no": "05",
+      "title": "英英定義クイズ",
+      "qs": [
+        {
+          "type": "single",
+          "q": "Which definition best matches \"a marine biogeochemist\"?",
+          "opts": [
+            "A person who studies how life in the oceans interacts with the environment using biology, chemistry and geology.",
+            "A person who designs satellites for tracking ocean currents.",
+            "A person who protects sea creatures from fishing boats.",
+            "A person who studies rocks and minerals found underwater."
+          ],
+          "ans": "A person who studies how life in the oceans interacts with the environment using biology, chemistry and geology.",
+          "note": "本文「That means he studies how life in the oceans interacts with the environment using biology, chemistry and geology.」より。Tim Smythの職業を説明する一文。"
+        },
+        {
+          "type": "single",
+          "q": "本文にある \"findings\" の意味として正しい定義はどれか。",
+          "opts": [
+            "the results or conclusions reached through research, investigation, or study",
+            "a rare discovery of hidden treasure",
+            "the equipment used in a laboratory experiment",
+            "a formal complaint filed with authorities"
+          ],
+          "ans": "the results or conclusions reached through research, investigation, or study",
+          "note": "Word List Unit 2 より。研究や調査によって得られた「発見・結果」。"
+        }
+      ]
+    },
+    {
+      "id": "wordquiz",
+      "no": "06",
+      "title": "Word List 即答クイズ",
+      "qs": [
+        {
+          "type": "single",
+          "q": "a person who works with you, especially in a profession or business",
+          "opts": [
+            "colleague",
+            "structure",
+            "species",
+            "surface"
+          ],
+          "ans": "colleague"
+        },
+        {
+          "type": "single",
+          "q": "to create particular conditions that exist in real life using computers, models, etc.",
+          "opts": [
+            "simulate",
+            "estimate",
+            "assess",
+            "interact"
+          ],
+          "ans": "simulate"
+        },
+        {
+          "type": "single",
+          "q": "to be different in size, amount, degree, or nature",
+          "opts": [
+            "vary",
+            "measure",
+            "penetrate",
+            "affect"
+          ],
+          "ans": "vary"
+        },
+        {
+          "type": "single",
+          "q": "to discover or notice something, especially something that is not easily seen, heard, or known about",
+          "opts": [
+            "detect",
+            "respond",
+            "reward",
+            "adapt"
+          ],
+          "ans": "detect"
+        },
+        {
+          "type": "single",
+          "q": "to become fully developed in the body and mind",
+          "opts": [
+            "mature",
+            "expand",
+            "survival",
+            "adapt"
+          ],
+          "ans": "mature"
+        },
+        {
+          "type": "single",
+          "q": "the process or period of changing from one state or condition to another",
+          "opts": [
+            "transition",
+            "decade",
+            "midst",
+            "puberty"
+          ],
+          "ans": "transition"
+        },
+        {
+          "type": "single",
+          "q": "not known or recognized; not frequently seen, heard, or experienced",
+          "opts": [
+            "unfamiliar",
+            "nonsense",
+            "region",
+            "common"
+          ],
+          "ans": "unfamiliar"
+        },
+        {
+          "type": "single",
+          "q": "to cause (something) to be unable to continue in the normal way",
+          "opts": [
+            "disrupt",
+            "confuse",
+            "prevent",
+            "risk"
+          ],
+          "ans": "disrupt"
+        }
+      ]
+    }
+  ]
+}

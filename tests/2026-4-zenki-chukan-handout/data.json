@@ -1,0 +1,250 @@
+{
+  "title": "科学技術英語Ⅰ ・ ハンドアウト演習",
+  "subject": "科学技術英語Ⅰ",
+  "year": 2026,
+  "grade": 4,
+  "exam": "前期中間試験",
+  "storageKey": "mutou_handout_u12",
+  "pointsPerQ": 100,
+  "sections": [
+    {
+      "id": "f1",
+      "no": "01",
+      "title": "Unit 1 — 語彙文脈選択",
+      "qs": [
+        {
+          "type": "single",
+          "q": "人工の光は陸上の植物や動物の正常な行動を___する可能性がある。",
+          "opts": [
+            "enhance",
+            "amplify",
+            "interfere with"
+          ],
+          "ans": "interfere with",
+          "note": "interfere with = 〜を妨げる・干渉する。enhance/amplify は「増強・拡大」で意味が逆。"
+        },
+        {
+          "type": "single",
+          "q": "強い人工光にさらされたスズメはウエストナイルウイルスを___することが難しくなる。",
+          "opts": [
+            "resist",
+            "endure",
+            "recover"
+          ],
+          "ans": "resist",
+          "note": "resist = 抵抗・撃退する。endure（耐え忍ぶ）はウイルスへの抵抗の意味にならない。recover（回復）も意味がずれる。"
+        },
+        {
+          "type": "single",
+          "q": "植物は人工光のまぶしさのために受粉が___になると気付く。",
+          "opts": [
+            "difficult",
+            "difficulty",
+            "difficulties"
+          ],
+          "ans": "difficult",
+          "note": "find O C（第5文型）のCには形容詞 difficult が入る。difficulty/difficulties は名詞なので不可。"
+        }
+      ]
+    },
+    {
+      "id": "q1",
+      "no": "02",
+      "title": "Unit 1 — 本文Q&A",
+      "qs": [
+        {
+          "type": "single",
+          "q": "Tim Smythの職業は何か。<br>What is Tim Smyth's occupation?",
+          "opts": [
+            "A marine biogeochemist who studies how life in the oceans interacts with the environment.",
+            "A satellite engineer who designs ocean monitoring systems.",
+            "A marine biologist focusing specifically on the behavior of copepods."
+          ],
+          "ans": "A marine biogeochemist who studies how life in the oceans interacts with the environment.",
+          "note": "He is a marine biogeochemist who studies how life in the oceans interacts with the environment.（ハンドアウトQ8）"
+        },
+        {
+          "type": "single",
+          "q": "Smythのチームが研究で使用した2種類のデータとは何か。<br>What two types of data did Tim Smyth's team use in their research?",
+          "opts": [
+            "Shipboard measurements and satellite images",
+            "Drone footage and weather station data",
+            "Underwater cameras and sonar recordings"
+          ],
+          "ans": "Shipboard measurements and satellite images",
+          "note": "船上計測(shipboard measurements)＋衛星画像(satellite images)の2種類。（ハンドアウトQ11）"
+        },
+        {
+          "type": "single",
+          "q": "異なる波長の光が水中をどのように進むかを調べるために何を使ったか。<br>What method did Smyth and his team use to examine how different wavelengths of light travel through the water?",
+          "opts": [
+            "A computer simulation",
+            "Direct sensors placed on the ocean floor",
+            "Satellite spectral analysis"
+          ],
+          "ans": "A computer simulation",
+          "note": "コンピュータシミュレーションを実施して波長ごとの光の到達深度を調べた。（ハンドアウトQ13）"
+        }
+      ]
+    },
+    {
+      "id": "f2",
+      "no": "03",
+      "title": "Unit 2 — 語彙文脈選択",
+      "qs": [
+        {
+          "type": "single",
+          "q": "幼児の脳が母の声に強く反応するのは、発達初期の___のために母親に大きく依存しているからだ。",
+          "opts": [
+            "survival",
+            "entertainment",
+            "socializing"
+          ],
+          "ans": "survival",
+          "note": "幼児にとって母の声＝生存(survival)のための支援。（ハンドアウトQ3、選択肢: survival / entertainment / socializing）"
+        },
+        {
+          "type": "single",
+          "q": "見知らぬ声がより充実感をもたらし、注意を払う___になったということだ。",
+          "opts": [
+            "worthy",
+            "capable",
+            "deserving"
+          ],
+          "ans": "worthy",
+          "note": "worthy of attention = 注意を払う価値がある。\"be worthy of 〜\" の形。（ハンドアウトP15）"
+        },
+        {
+          "type": "single",
+          "q": "子供たちが成長するにつれて、社会的なつながりを家族の___に広げていく。",
+          "opts": [
+            "beyond",
+            "beside",
+            "behind"
+          ],
+          "ans": "beyond",
+          "note": "way beyond = はるかに〜を超えて。家族の枠をはるかに超えた社会的広がりを表す。（ハンドアウトP16）"
+        },
+        {
+          "type": "single",
+          "q": "私たちが成熟するにつれて、生存のための母親の支援への依存は___なっていく。",
+          "opts": [
+            "less and less",
+            "more and more",
+            "just as much"
+          ],
+          "ans": "less and less",
+          "note": "本文: \"our survival depends less and less on maternal support\" = 成熟とともに母の支援への依存は減っていく。（ハンドアウトP21）"
+        }
+      ]
+    },
+    {
+      "id": "q2",
+      "no": "04",
+      "title": "Unit 2 — 本文Q&A",
+      "qs": [
+        {
+          "type": "single",
+          "q": "Daniel Abramsの脳スキャン実験の被験者は誰か。<br>Who were the subjects of Daniel Abrams' brain-scanning experiment?",
+          "opts": [
+            "7-to-15-year-old boys and girls",
+            "University students aged 18 to 22",
+            "Mothers and their young children"
+          ],
+          "ans": "7-to-15-year-old boys and girls",
+          "note": "実験の被験者は7〜15歳の少年少女(boys and girls)。（ハンドアウトQ6/Q8）"
+        },
+        {
+          "type": "single",
+          "q": "Abramsのチームはいつ・どこで研究結果を発表したか。<br>When and where did Daniel Abrams' team share their findings?",
+          "opts": [
+            "April 28 in the Journal of Neuroscience",
+            "December 13 in Elementa: Science of the Anthropocene",
+            "March 5 in Nature Neuroscience"
+          ],
+          "ans": "April 28 in the Journal of Neuroscience",
+          "note": "Unit 2の発表先はJournal of Neuroscience (April 28)。Elementa はUnit 1の発表先なので混同注意。（ハンドアウトP7）"
+        },
+        {
+          "type": "single",
+          "q": "本文L.9の「全く別のクラスの音や声」とは何を指すか。<br>What does \"this whole other class of sounds and voices\" (L.9) refer to?",
+          "opts": [
+            "Unfamiliar voices (strangers' voices)",
+            "Their parents' voices",
+            "Music and sounds of nature"
+          ],
+          "ans": "Unfamiliar voices (strangers' voices)",
+          "note": "思春期の若者がtune intoする「別クラスの声」= unfamiliar voices（見知らぬ人の声）。（ハンドアウトP6）"
+        },
+        {
+          "type": "single",
+          "q": "思春期の脳が見知らぬ声により敏感になる理由は何か。<br>Why do teenage brains become more sensitive to unfamiliar voices?",
+          "opts": [
+            "Their brains are programmed to tune in to unfamiliar voices to help expand social connections.",
+            "Their mothers' voices have become too loud and overwhelming to process.",
+            "Their schools force them to interact with many new people."
+          ],
+          "ans": "Their brains are programmed to tune in to unfamiliar voices to help expand social connections.",
+          "note": "脳が自然に見知らぬ声に注意を向けるようプログラムされている = 社会的繋がりの拡大のため。（ハンドアウトQ1/Q2）"
+        }
+      ]
+    },
+    {
+      "id": "tf",
+      "no": "05",
+      "title": "T/F Questions",
+      "qs": [
+        {
+          "type": "single",
+          "q": "Smyth and his colleagues started their project with a world atlas of artificial night-sky brightness that had been created in 2016.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "2016年に作成された夜空の明るさの世界地図からスタートした。（ハンドアウトQ10）"
+        },
+        {
+          "type": "single",
+          "q": "Tim Smyth's team used three types of data: shipboard measurements, satellite images, and drone footage.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "使用したデータは船上計測と衛星画像の2種類のみ。ドローン映像は使っていない。（ハンドアウトQ11）"
+        },
+        {
+          "type": "single",
+          "q": "Daniel Abrams and his colleagues shared their findings on April 28 in the Journal of Neuroscience.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "Journal of Neuroscienceに4月28日に発表。（ハンドアウトP7）"
+        },
+        {
+          "type": "single",
+          "q": "The subjects of Abrams' experiment were 7-to-16-year-old boys and girls.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "正しくは7〜15歳(7-to-15-year-old)。16歳は含まれない。"
+        },
+        {
+          "type": "single",
+          "q": "As we mature, we rely on our mothers more and more for survival.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文: \"our survival depends less and less on maternal support\" = 成熟とともに母への依存は減る。"
+        }
+      ]
+    }
+  ]
+}

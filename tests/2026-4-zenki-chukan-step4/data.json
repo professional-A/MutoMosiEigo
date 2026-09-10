@@ -1,0 +1,526 @@
+{
+  "title": "科学技術英語Ⅰ ・ 本文理解 (Step 4)",
+  "subject": "科学技術英語Ⅰ",
+  "year": 2026,
+  "grade": 4,
+  "exam": "前期中間試験",
+  "storageKey": "mutou_step4",
+  "pointsPerQ": 100,
+  "sections": [
+    {
+      "id": "tf1",
+      "no": "01",
+      "title": "T/F — Unit 1（海の光害）",
+      "qs": [
+        {
+          "type": "single",
+          "q": "Researchers published the first global atlas of ocean light pollution, showing large chunks of the sea lit up at night.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "第1段落の通り。大きな塊(large chunks)の海が照らされている。"
+        },
+        {
+          "type": "single",
+          "q": "Artificial lights at night affect only marine creatures, not land animals.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "「Artificial lights are known to affect land dwellers.」と本文にある。"
+        },
+        {
+          "type": "single",
+          "q": "Offshore oil rigs can contribute to light pollution stretching over the ocean.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "「So do offshore oil rigs and other structures.」より、沖合の油田掘削装置も光害の一因。"
+        },
+        {
+          "type": "single",
+          "q": "Tim Smyth is a marine biogeochemist who works at Plymouth Marine Laboratory.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "「Smyth is a marine biogeochemist. He works at Plymouth Marine Laboratory on the southern coast of England.」"
+        },
+        {
+          "type": "single",
+          "q": "Smyth's team gathered data using only satellite images.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "船上測定(shipboard measurements)と衛星画像(satellite images)の両方を使用。さらにコンピュータシミュレーションも実施。"
+        },
+        {
+          "type": "single",
+          "q": "Copepods normally use the sun or the winter moon as their light cue.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "「Normally they use the sun or the winter moon as their cue.」"
+        },
+        {
+          "type": "single",
+          "q": "Light pollution in the ocean is strongest about 10 meters below the surface.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "「Light pollution is strongest in the top meter (about three feet) of the water.」水面から約1m（3フィート）が最も強い。"
+        },
+        {
+          "type": "single",
+          "q": "The team published its findings in Elementa: Science of the Anthropocene.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "「The team described its findings December 13 in Elementa: Science of the Anthropocene.」"
+        }
+      ]
+    },
+    {
+      "id": "tf2",
+      "no": "02",
+      "title": "T/F — Unit 2（ティーンと声）",
+      "qs": [
+        {
+          "type": "single",
+          "q": "Young children's brains are very tuned in to their mothers' voices.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "「Young kids' brains are very tuned in to their mothers' voices, science has shown.」"
+        },
+        {
+          "type": "single",
+          "q": "The researchers used simple, meaningful sentences to study children's voice responses.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "無意味語(nonsense words / gibberish)を使った。意味の影響を排除するため。"
+        },
+        {
+          "type": "single",
+          "q": "The brains of 7- to 16-year-olds were scanned in the experiment.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "「The researchers scanned the brains of 7- to 16-year-olds」"
+        },
+        {
+          "type": "single",
+          "q": "The shift in voice preference seems to happen between ages 13 and 14.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "「This shift in what voice piques interest most seems to happen between ages 13 and 14.」"
+        },
+        {
+          "type": "single",
+          "q": "Stress hormones dropped when stressed girls received text messages from their moms.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "電話(on the phone)では低下したが、「The same wasn't true for texts from the moms.」テキストでは効果なし。"
+        },
+        {
+          "type": "single",
+          "q": "As teens grow up, their brains need to pay less attention to the wider world.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "「their brains need to begin paying more attention to that wider world.」より反対。"
+        },
+        {
+          "type": "single",
+          "q": "Leslie Seltzer is a biological anthropologist at the University of Wisconsin-Madison.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "「She's a biological anthropologist at the University of Wisconsin-Madison.」"
+        },
+        {
+          "type": "single",
+          "q": "Abrams says teens should try harder to listen to their mothers' voices.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "「This is the way the brain is wired, and there's a good reason for it.」―自然なことであり問題ないと述べている。"
+        }
+      ]
+    },
+    {
+      "id": "sel1",
+      "no": "03",
+      "title": "内容選択 — Unit 1",
+      "qs": [
+        {
+          "type": "single",
+          "q": "What does the global atlas of ocean light pollution show?",
+          "opts": [
+            "how to measure ocean depth",
+            "large chunks of the sea lit up at night",
+            "the routes of satellites over the ocean",
+            "the locations of all offshore oil rigs"
+          ],
+          "ans": "large chunks of the sea lit up at night",
+          "note": "「It shows large chunks of the sea lit up at night.」"
+        },
+        {
+          "type": "single",
+          "q": "According to the text, what can bright lights near shores do?",
+          "opts": [
+            "help fish navigate safely at night",
+            "spread the glow out to sea",
+            "improve the accuracy of satellite images",
+            "reduce the effect of sediment in water"
+          ],
+          "ans": "spread the glow out to sea",
+          "note": "「Bright lights near shores can spread the glow out to sea.」"
+        },
+        {
+          "type": "single",
+          "q": "Which best describes Tim Smyth's field of work?",
+          "opts": [
+            "He designs offshore oil rigs.",
+            "He operates weather satellites.",
+            "He studies how ocean life interacts with the environment.",
+            "He creates world atlases of night-sky brightness."
+          ],
+          "ans": "He studies how ocean life interacts with the environment.",
+          "note": "「That means he studies how life in the oceans interacts with the environment using biology, chemistry and geology.」"
+        },
+        {
+          "type": "single",
+          "q": "Which type of data is NOT mentioned as being used by Smyth's team?",
+          "opts": [
+            "shipboard measurements of artificial light",
+            "satellite images estimating water clarity",
+            "computer simulations of light wavelengths",
+            "direct underwater camera recordings"
+          ],
+          "ans": "direct underwater camera recordings",
+          "note": "本文で言及されるのは①船上測定、②衛星画像、③コンピュータシミュレーションの3つ。水中カメラの記録は登場しない。"
+        },
+        {
+          "type": "single",
+          "q": "Why are copepods important in this research?",
+          "opts": [
+            "They produce their own bioluminescence.",
+            "They are a key part of many ocean food webs.",
+            "They can survive at any depth of water.",
+            "They help predict seasonal weather changes."
+          ],
+          "ans": "They are a key part of many ocean food webs.",
+          "note": "「These common shrimplike creatures are a key part of many ocean food webs.」"
+        },
+        {
+          "type": "single",
+          "q": "According to the article, how large an area of ocean gets intense night light?",
+          "opts": [
+            "About 1 million square kilometers",
+            "Nearly 2 million square kilometers (770,000 square miles)",
+            "About 840,000 square kilometers (325,000 square miles)",
+            "More than 5 million square kilometers"
+          ],
+          "ans": "Nearly 2 million square kilometers (770,000 square miles)",
+          "note": "「Nearly 2 million square kilometers (770,000 square miles) of ocean get such intense night light.」―約840万km²は「20m深での範囲」で別の数値。"
+        }
+      ]
+    },
+    {
+      "id": "sel2",
+      "no": "04",
+      "title": "内容選択 — Unit 2",
+      "qs": [
+        {
+          "type": "single",
+          "q": "What does new research show about teenagers' brains?",
+          "opts": [
+            "Teens respond more strongly to their mothers' voices than strangers'.",
+            "Teens' brains respond more to unfamiliar voices than to their mothers'.",
+            "Teens lose the ability to recognize their mothers' voices over time.",
+            "Teens' brains are physically smaller than younger children's."
+          ],
+          "ans": "Teens' brains respond more to unfamiliar voices than to their mothers'.",
+          "note": "「Teenagers' brains are now more tuned in to strangers' voices than to their own moms'.」"
+        },
+        {
+          "type": "single",
+          "q": "Why did the researchers use nonsense words like 'teebudieshawlt'?",
+          "opts": [
+            "To test the children's vocabulary size.",
+            "To confuse children on purpose.",
+            "To study voices without being influenced by meaning.",
+            "To make the experiment more entertaining."
+          ],
+          "ans": "To study voices without being influenced by meaning.",
+          "note": "「Using such nonsense words allowed the scientists to study voices on their own, not what they were saying.」"
+        },
+        {
+          "type": "single",
+          "q": "Which brain regions became active when children listened to voices in the experiment?",
+          "opts": [
+            "regions that help with long-term memory storage",
+            "regions that help detect rewards and pay attention",
+            "regions that control physical movement",
+            "regions linked to language production"
+          ],
+          "ans": "regions that help detect rewards and pay attention",
+          "note": "「certain parts of their brains became active. This was especially true in brain regions that help us to detect rewards and pay attention.」"
+        },
+        {
+          "type": "single",
+          "q": "What did the 2011 study on stressed-out girls find?",
+          "opts": [
+            "Text messages from their moms reduced stress hormones.",
+            "Hearing their moms' voices on the phone reduced stress hormones.",
+            "Neither phone calls nor texts had any measurable effect.",
+            "Video calls were the most effective method of calming them down."
+          ],
+          "ans": "Hearing their moms' voices on the phone reduced stress hormones.",
+          "note": "「Levels of stress hormones dropped when these stressed-out girls heard their moms' voices on the phone. The same wasn't true for texts from the moms.」"
+        },
+        {
+          "type": "single",
+          "q": "According to Abrams, why do teens tune out their mothers?",
+          "opts": [
+            "They are too busy with schoolwork.",
+            "The brain is naturally wired to respond more to unfamiliar voices.",
+            "They have not yet developed enough to appreciate family bonds.",
+            "They are negatively influenced by social media."
+          ],
+          "ans": "The brain is naturally wired to respond more to unfamiliar voices.",
+          "note": "「This is the way the brain is wired, and there's a good reason for it.」"
+        },
+        {
+          "type": "single",
+          "q": "What does Abrams mean when he says it is 'just purely a reflection of this'?",
+          "opts": [
+            "It reflects teens' natural dislike of their mothers.",
+            "It reflects the brain's natural shift to pay more attention to the wider world.",
+            "It reflects the stress teens feel during puberty.",
+            "It reflects poor communication habits formed in childhood."
+          ],
+          "ans": "It reflects the brain's natural shift to pay more attention to the wider world.",
+          "note": "直前の文「So their brains need to begin paying more attention to that wider world.」を受けて「これの反映に過ぎない」と述べている。"
+        }
+      ]
+    },
+    {
+      "id": "ref",
+      "no": "05",
+      "title": "指示語・語句",
+      "qs": [
+        {
+          "type": "single",
+          "q": "\"And that risks confusing or disrupting the behaviors of sea life.\" (Unit 1, Par. 1)  What does \"that\" refer to?",
+          "opts": [
+            "the global atlas of ocean light pollution",
+            "large chunks of the sea lit up at night",
+            "the research published by scientists",
+            "the risks of offshore oil rigs"
+          ],
+          "ans": "large chunks of the sea lit up at night",
+          "note": "直前の文「It shows large chunks of the sea lit up at night.」を受ける。"
+        },
+        {
+          "type": "single",
+          "q": "\"They even make it harder for sparrows to fight off West Nile virus.\" (Unit 1)  What does \"They\" refer to?",
+          "opts": [
+            "Researchers",
+            "Sparrows",
+            "Bright lights / night lighting",
+            "Land dwellers"
+          ],
+          "ans": "Bright lights / night lighting",
+          "note": "「Night lighting can prevent plant pollination and foil fireflies' flashes. They even make it harder…」―主語は night lighting（人工の夜間照明）。"
+        },
+        {
+          "type": "single",
+          "q": "\"Others came from satellite images that estimate how clear the water is.\" (Unit 1, Part 2)  What does \"Others\" refer to?",
+          "opts": [
+            "Other researchers on the team",
+            "Other satellites in orbit",
+            "Other pieces / sources of data",
+            "Other types of particles in water"
+          ],
+          "ans": "Other pieces / sources of data",
+          "note": "「Some data came from shipboard measurements… Others came from satellite images…」—一部のデータ↔その他のデータ。"
+        },
+        {
+          "type": "single",
+          "q": "\"This shift in what voice piques interest most seems to happen between ages 13 and 14.\" (Unit 2)  What does \"this shift\" specifically mean?",
+          "opts": [
+            "The change in brain size during puberty",
+            "The change from responding more to mom's voice to responding more to strangers' voices",
+            "The increase in stress hormones during adolescence",
+            "The change from childhood to adulthood in general"
+          ],
+          "ans": "The change from responding more to mom's voice to responding more to strangers' voices",
+          "note": "直前で「For teens, these brain regions respond more to unfamiliar voices than to their mom's.」と述べており、声への反応の逆転を指す。"
+        },
+        {
+          "type": "single",
+          "q": "\"That's exactly as it should be, Abrams adds.\" (Unit 2)  What does Abrams say \"should be\"?",
+          "opts": [
+            "Teens ignoring their mothers completely",
+            "The brain paying more attention to the wider world",
+            "Stress hormones dropping when teens hear their moms",
+            "Research findings being published in journals"
+          ],
+          "ans": "The brain paying more attention to the wider world",
+          "note": "「So their brains need to begin paying more attention to that wider world. That's exactly as it should be.」―脳がより広い世界に注意を向けることが本来あるべき姿だと述べている。"
+        }
+      ]
+    },
+    {
+      "id": "fill",
+      "no": "06",
+      "title": "要約穴埋め",
+      "qs": [
+        {
+          "type": "input",
+          "q": "Tim Smyth is a marine ___ who studies how life in the oceans interacts with the environment.",
+          "ans": "biogeochemist",
+          "note": "「Smyth is a marine biogeochemist.」"
+        },
+        {
+          "type": "input",
+          "q": "The team used computers to ___ how different wavelengths of light move through water.",
+          "ans": "simulate",
+          "note": "「The team also used computers to simulate how different wavelengths of light move through water.」"
+        },
+        {
+          "type": "input",
+          "q": "These common shrimplike creatures are a key part of many ocean food ___ .",
+          "ans": "webs",
+          "note": "「These common shrimplike creatures are a key part of many ocean food webs.」"
+        },
+        {
+          "type": "input",
+          "q": "Light pollution is strongest in the top ___ (about three feet) of the water.",
+          "ans": "meter",
+          "note": "「Light pollution is strongest in the top meter (about three feet) of the water.」"
+        },
+        {
+          "type": "input",
+          "q": "The researchers scanned the brains of 7- to 16-year-olds as they listened to things said by their mothers or by ___ women.",
+          "ans": "unfamiliar",
+          "note": "「things said by their mothers or by unfamiliar women」"
+        },
+        {
+          "type": "input",
+          "q": "In ___ , we show the exact opposite — teens respond more to strangers' voices.",
+          "ans": "adolescence",
+          "note": "「In adolescence, we show the exact opposite of that.」"
+        },
+        {
+          "type": "input",
+          "q": "Mothers' voices still have a special ___ , especially in times of stress.",
+          "ans": "power",
+          "note": "「mothers' voices still have a special power, especially in times of stress」"
+        },
+        {
+          "type": "input",
+          "q": "\"This is the way the brain is ___ , and there's a good reason for it.\"",
+          "ans": "wired",
+          "note": "「This is the way the brain is wired, and there's a good reason for it.」"
+        }
+      ]
+    },
+    {
+      "id": "ws",
+      "no": "07",
+      "title": "英文完成（並べ替え）",
+      "qs": [
+        {
+          "type": "sort",
+          "q": "ティム・スミスは、水中でこの輝きが最も強い場所を評価するために研究チームを率いた。<br>Tim Smyth led a research team to assess ___ is strongest.",
+          "items": [
+            "glow",
+            "in",
+            "the",
+            "this",
+            "water",
+            "where"
+          ],
+          "ans": [
+            "where",
+            "in",
+            "the",
+            "water",
+            "this",
+            "glow"
+          ]
+        },
+        {
+          "type": "input",
+          "q": "コペポッドは通常、太陽か冬の月を手がかりとして使う。<br>Normally they use ___ as their cue.（英文で入力）",
+          "ans": "the sun or the winter moon"
+        },
+        {
+          "type": "sort",
+          "q": "（脳の）ある部分が活発になった。特に、報酬を検出し注意を払う助けをする脳の領野において。<br>certain parts of their brains became active. This was especially true in brain regions that ___ .",
+          "items": [
+            "and",
+            "attention",
+            "detect",
+            "help",
+            "pay",
+            "rewards",
+            "to",
+            "us"
+          ],
+          "ans": [
+            "help",
+            "us",
+            "to",
+            "detect",
+            "rewards",
+            "and",
+            "pay",
+            "attention"
+          ]
+        },
+        {
+          "type": "input",
+          "q": "私たちが成熟するにつれ、生存は母親の支援にますます依存しなくなる。<br>As we mature, our survival depends ___ maternal support.（英文で入力）",
+          "ans": "less and less on"
+        }
+      ]
+    }
+  ]
+}
