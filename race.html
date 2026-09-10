@@ -78,7 +78,6 @@ window.addEventListener('appshell:auth', () => { _syncAuthGlobals(); onAuthReady
 
 appShell.mount(document.getElementById('app-shell-bar'), {
   nav: window.APP_NAV,
-  onNotif: () => { location.href = '/'; }
 });
 
 let _currentRace = null;

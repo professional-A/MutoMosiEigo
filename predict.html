@@ -120,7 +120,6 @@ window.addEventListener('appshell:auth', () => { _syncAuthGlobals(); onAuthReady
 
 appShell.mount(document.getElementById('app-shell-bar'), {
   nav: window.APP_NAV,
-  onNotif: () => { location.href = '/'; }
 });
 
 const PRED_DEADLINE = new Date('2026-06-16T00:00:00Z'); // JST 9:00 AM

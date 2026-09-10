@@ -382,7 +382,9 @@
 
       els.idBtn.hidden     = on;
       els.googleBtn.hidden = on;
-      els.notifBtn.hidden  = !on;
+      // お知らせベルは onNotif を渡したページ（index.html）だけに出す。
+      // 独立ページはお知らせパネルを持たないので非表示。
+      els.notifBtn.hidden  = !on || !opts.onNotif;
       els.nameWrap.hidden  = !on;
       els.logout.hidden    = !on;
       els.drawerHead.hidden = !on;
