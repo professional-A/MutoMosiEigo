@@ -1690,6 +1690,7 @@ fetch("/api/tests")
 </script>
 <script src="/js/api.js"></script>
 <script src="/js/app-shell.js"></script>
+<script src="/js/util.js"></script>
 <script>
 // ── 絵文字アイコン一覧 ──────────────────────────────────
 const AVATAR_NAMES = { '😼':'ひろと', '😏':'考え方やな' };
@@ -1705,48 +1706,6 @@ const AVATARS = [
 const SUPABASE_URL      = 'https://gwknnqceiozbmxrqjcae.supabase.co';
 const SUPABASE_ANON_KEY = 'sb_publishable_4MgSWSr8bbuUf5Vp_LSD6Q_SI-ciZ2B';
 const supabaseClient    = window.supabase.createClient(SUPABASE_URL, SUPABASE_ANON_KEY);
-
-function esc(s){ return String(s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function tu(s){ const str = s ? String(s) : ''; return str.length > 10 ? str.slice(0,10)+'…' : str; }
-function titleBadge(u){
-  const cls = u.title_class || '';
-  const syms = {
-    'title-tanaka':'✦','title-hiroto':'❄','title-hasegawa':'♡',
-    'title-pro':'♟','title-arashi':'⚠','title-eye':'☠',
-    'title-hatano':'☣','title-honari':'…','title-mitts':'»',
-    'title-kawakami':'〜','title-yoshi':'☁','title-shimesaba':'🌾',
-    'title-ya':'⛔','title-masami':'♛'
-  };
-  const sym = syms[cls] || '◆';
-  const rotateCls = new Set(['title-masami','title-pro']);
-  let inner;
-  if (cls === 'title-mitts') {
-    inner = `<span class="ti-scroll">${sym} ${esc(u.title)}</span>`;
-  } else if (rotateCls.has(cls) && u.title && u.title.includes('/')) {
-    const parts = u.title.split('/');
-    const items = parts.map((p, i) =>
-      `<span class="ti-rotate-item${i===0?' active':''}">${esc(p.trim())}</span>`
-    ).join('');
-    const rotateMod = cls === 'title-pro' ? ' ti-instant' : '';
-    inner = `${sym} <span class="ti-rotate${rotateMod}">${items}</span>`;
-  } else {
-    inner = `${sym} ${esc(u.title)}`;
-  }
-  return `<span class="shogou${cls?' '+cls:''}">${inner}</span>`;
-}
-
-function _rotateTick(sel) {
-  document.querySelectorAll(sel).forEach(el => {
-    const items = el.querySelectorAll('.ti-rotate-item');
-    if (!items.length) return;
-    let cur = 0;
-    items.forEach((it, i) => { if (it.classList.contains('active')) cur = i; });
-    items.forEach(it => it.classList.remove('active'));
-    items[(cur + 1) % items.length].classList.add('active');
-  });
-}
-setInterval(() => _rotateTick('.ti-rotate:not(.ti-instant)'), 3000);
-setInterval(() => _rotateTick('.ti-instant'), 2250);
 
 // ── 認証 ──────────────────────────────────────────────
 let authToken  = null;
@@ -1822,14 +1781,6 @@ appShell.mount(document.getElementById('app-shell-bar'), {
 function syncLayout() {
   const h = document.getElementById('header-stack').getBoundingClientRect().height;
   document.body.style.paddingTop = h + 'px';
-}
-
-function showPointToast(msg) {
-  const t = document.createElement('div');
-  t.textContent = msg;
-  t.style.cssText = 'position:fixed;bottom:24px;right:24px;background:#46d6c4;color:#0a1626;font-weight:700;padding:10px 20px;border-radius:99px;font-size:1rem;z-index:9999;pointer-events:none;transition:opacity .4s';
-  document.body.appendChild(t);
-  setTimeout(() => { t.style.opacity = '0'; setTimeout(() => t.remove(), 400); }, 2500);
 }
 
 async function loginWithGoogle() {
