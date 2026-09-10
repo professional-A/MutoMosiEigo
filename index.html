@@ -1411,16 +1411,16 @@ async function openScheduleModal() {
   const el = document.getElementById('schedule-content');
   document.getElementById('schedule-modal-bg').classList.add('open');
   el.innerHTML = '<p style="color:var(--muted);font-size:.85rem;padding:8px">読み込み中...</p>';
-  // tests.json を直接フェッチして確実に最新データを使う
+  // /api/tests を直接フェッチして確実に最新データを使う
   let pairs = [];
   try {
-    const data = await fetch('tests.json').then(r => r.json());
+    const data = await fetch('/api/tests').then(r => r.json());
     pairs = [...new Map(
       data.map(t => [t.subject + '||' + t.exam, { subject: t.subject, exam: t.exam }])
     ).values()];
     _schedulePairs = pairs;
   } catch(e) {
-    el.innerHTML = '<p style="color:red;font-size:.85rem;padding:8px">tests.json の読み込みに失敗しました</p>';
+    el.innerHTML = '<p style="color:red;font-size:.85rem;padding:8px">/api/tests の読み込みに失敗しました</p>';
     return;
   }
   if (!pairs.length) {
@@ -1460,7 +1460,7 @@ async function archiveAllTests() {
   if (!confirm('全ての試験問題をアーカイブに移動しますか？')) return;
   const today = new Date().toISOString().slice(0, 10);
   try {
-    const data = await fetch('tests.json').then(r => r.json());
+    const data = await fetch('/api/tests').then(r => r.json());
     const pairs = [...new Map(data.map(t => [t.subject+'||'+t.exam, {subject:t.subject,exam:t.exam}])).values()];
     for (const p of pairs) {
       await fetch('/api/admin/exam-schedule', {
@@ -1677,7 +1677,7 @@ document.getElementById("exam-filters").addEventListener("click", e => {
 loadTheme();
 loadTimetable();
 
-fetch("tests.json")
+fetch("/api/tests")
   .then(r => r.json())
   .then(data => {
     tests = data;
@@ -1685,7 +1685,7 @@ fetch("tests.json")
   })
   .catch(() => {
     document.getElementById("folder-grid").innerHTML =
-      `<div class="empty">模試データを読み込めませんでした。<br>tests.json が存在するか確認してください。</div>`;
+      `<div class="empty">模試データを読み込めませんでした。<br>/api/tests の応答を確認してください。</div>`;
   });
 </script>
 <script src="/js/api.js"></script>
