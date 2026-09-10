@@ -135,9 +135,6 @@ h1{
 .subject-back-btn:hover{border-color:var(--teal);color:var(--teal)}
 .subject-nav-title{font-size:1rem;font-weight:700;color:var(--ink)}
 
-/* Hidden */
-[hidden]{display:none!important}
-
 /* ヘッダースタック（app-shell のバーは styles/theme.css の .appshell-* が担当） */
 #header-stack{position:fixed;top:0;left:0;right:0;z-index:100;display:flex;flex-direction:column}
 
@@ -183,42 +180,6 @@ h1{
 @keyframes ticker-scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
 
 
-/* Modal */
-.modal-bg{
-  display:none;position:fixed;inset:0;z-index:200;
-  background:rgba(0,0,0,.6);backdrop-filter:blur(4px);
-  align-items:flex-start;justify-content:center;
-  overflow-y:auto;-webkit-overflow-scrolling:touch;
-  padding:20px 0;
-}
-.modal-bg.open{display:flex}
-.modal{
-  background:var(--bg2);border:1px solid var(--line);border-radius:16px;
-  padding:28px;width:min(360px,90vw);
-  position:relative;margin:auto;flex-shrink:0;
-  overscroll-behavior:contain;
-}
-.modal h2{font-size:1.1rem;margin-bottom:16px}
-.modal input{
-  display:block;width:100%;padding:9px 12px;margin-bottom:10px;
-  background:var(--bg);border:1px solid var(--line);border-radius:8px;
-  color:var(--ink);font-family:inherit;font-size:.9rem;
-}
-.modal input:focus{outline:none;border-color:var(--teal)}
-.modal-btns{display:flex;gap:8px;margin-top:4px;flex-wrap:wrap}
-.modal-btns button{flex:1 1 auto;min-width:80px;padding:10px 12px;border-radius:8px;border:none;cursor:pointer;font-family:inherit;font-size:.88rem;font-weight:600}
-.admin-card{display:flex;flex-direction:column;gap:6px;padding:12px;border:1px solid var(--line);border-radius:10px;margin-bottom:8px;background:var(--card)}
-.admin-card-top{display:flex;align-items:center;gap:8px}
-.admin-card-name{font-weight:600;font-size:.9rem;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.admin-card-email{font-size:.7rem;color:var(--dim);overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
-.admin-card-stats{display:flex;gap:10px;flex-wrap:wrap}
-.admin-stat{background:var(--card2);border-radius:6px;padding:4px 10px;font-size:.78rem}
-.admin-stat span{color:var(--teal);font-weight:700}
-.admin-card-grant{display:flex;gap:6px;align-items:center}
-.admin-card-grant input{flex:1;padding:8px 10px;border-radius:8px;border:1px solid var(--line);background:var(--bg);color:var(--ink);font-size:.9rem;font-family:inherit;min-width:0}
-.admin-card-grant button{padding:8px 14px;border-radius:8px;border:none;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-size:.88rem;white-space:nowrap}
-.modal-msg{font-size:.82rem;margin-top:10px;min-height:1.2em}
-
 /* Ranking */
 .ranking-section{margin-top:48px;padding-top:32px;border-top:1px solid var(--line)}
 .ranking-section h2{font-size:.78rem;letter-spacing:.28em;text-transform:uppercase;color:var(--dim);font-weight:600;margin-bottom:16px}
@@ -238,191 +199,10 @@ h1{
   .modal{padding:20px 16px}
 }
 
-/* レースセクション */
-#race-section{margin:0 0 8px;border:1px solid rgba(70,214,196,.3);border-radius:12px;background:rgba(10,23,40,.7);overflow:hidden}
-.race-hd{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(70,214,196,.15);cursor:pointer;user-select:none}
-.race-hd-title{font-weight:700;font-size:.9rem;color:#d4e8ff;flex:1}
-.race-hd-date{font-size:.68rem;color:var(--dim)}
-.race-body{padding:10px 14px 14px}
-.race-groups{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
-.race-group-chip{background:rgba(70,214,196,.08);border:1px solid rgba(70,214,196,.22);border-radius:8px;padding:4px 10px;font-size:.72rem;color:var(--teal)}
-.race-group-chip span{color:var(--fg);margin-left:4px}
-.race-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-bottom:10px}
-.race-table th{text-align:left;color:var(--dim);font-weight:600;padding:3px 6px;border-bottom:1px solid var(--line)}
-.race-table td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.04)}
-.race-table tr:last-child td{border-bottom:none}
-.race-table .rank-me{background:rgba(70,214,196,.06)}
-@media(max-width:520px){
-  .race-table{font-size:.69rem}
-  .race-table th,.race-table td{padding:4px 4px}
-  #race-pair-ranking .race-table th:nth-child(3),#race-pair-ranking .race-table td:nth-child(3){display:none}
-#race-muto-h,#race-muto-m,#race-manual-h,#race-manual-m,#race-game-h,#race-game-m{width:56px!important}
-}
-.race-rival{font-size:.68rem;color:var(--rose)}
-.race-rival.ahead{color:var(--teal)}
-.race-report{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:10px;border-top:1px solid var(--line)}
-.race-report input{padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#0a172b;color:var(--fg);font-size:.78rem;font-family:inherit}
-.race-report button{padding:5px 12px;border:1px solid var(--teal);border-radius:6px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.74rem;cursor:pointer;font-family:inherit;white-space:nowrap}
-/* レース発行モーダル */
-#race-modal-bg .modal{width:min(500px,96vw);max-height:90vh;display:flex;flex-direction:column;padding:20px 16px}
-.race-group-row{display:flex;align-items:center;gap:8px;margin-bottom:6px;flex-wrap:wrap}
-.race-group-row input{flex:1;min-width:80px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.84rem;font-family:inherit}
 /* 再挑戦ボタン */
 .card-wrap{position:relative}
 .retry-btn{position:absolute;bottom:8px;right:8px;padding:3px 8px;border:1px solid rgba(70,214,196,.4);border-radius:5px;background:rgba(70,214,196,.08);color:var(--teal);font-size:.65rem;cursor:pointer;font-family:inherit;z-index:1}
 
-/* クラス順位フルスクリーンページ */
-#clrank-page{display:none;position:fixed;inset:0;z-index:200;background:#050f1e;flex-direction:column;overflow:hidden}
-#clrank-page.open{display:flex}
-.clrank-ph{display:flex;align-items:center;gap:8px;padding:7px 10px;border-bottom:1px solid rgba(255,255,255,.1);flex-shrink:0;min-height:46px;background:#071424}
-.clrank-board-wrap{flex:1;display:flex;min-height:0;overflow-y:auto;overflow-x:hidden}
-.clrank-yaxis{width:30px;flex-shrink:0;position:relative;border-right:1px solid rgba(255,255,255,.07);min-height:2400px}
-.clrank-board{flex:1;position:relative;min-height:2400px;touch-action:manipulation}
-.clrank-pool-area{flex-shrink:0;border-top:1px solid rgba(255,255,255,.1);padding:6px 10px 8px;background:#071424;max-height:200px;overflow-y:auto}
-.clrank-pool-row{display:flex;flex-wrap:wrap;gap:4px;margin-top:4px}
-.clrank-block{position:absolute;transform:translate(-50%,-50%);padding:3px 7px;border-radius:5px;font-size:.7rem;font-weight:600;white-space:nowrap;cursor:pointer;border:1px solid rgba(255,255,255,.18);background:rgba(15,35,65,.92);color:#d4e8ff;user-select:none;z-index:2;transition:box-shadow .12s,border-color .12s;box-shadow:0 1px 4px rgba(0,0,0,.5)}
-.clrank-block.selected{background:rgba(70,214,196,.22);border-color:var(--teal);color:var(--teal);box-shadow:0 0 10px rgba(70,214,196,.4);z-index:3}
-/* バトルモーダル */
-.battle-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
-.battle-vs{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
-.battle-player{flex:1;text-align:center}
-.battle-player-name{font-size:.95rem;font-weight:700}
-.battle-player-bet{font-size:.72rem;color:var(--amber);margin-top:2px}
-.battle-vs-label{font-size:1.3rem;color:var(--rose);font-weight:900;flex-shrink:0}
-.battle-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
-.battle-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700}
-.battle-badge-open{background:rgba(70,214,196,.15);color:var(--teal);border:1px solid rgba(70,214,196,.3)}
-.battle-badge-settled{background:rgba(255,255,255,.07);color:var(--dim);border:1px solid var(--line)}
-.clrank-block-conf{background:rgba(0,55,45,.92);border-color:rgba(70,214,196,.6);color:var(--teal)}
-.clrank-block-conf.selected{background:rgba(70,214,196,.32);border-color:var(--teal);color:#fff;box-shadow:0 0 12px rgba(70,214,196,.5)}
-.clrank-conf-line-b{position:absolute;left:0;right:0;pointer-events:none;z-index:1}
-.clrank-conf-line-b::before{content:'';position:absolute;left:0;right:0;top:0;height:1px;background:rgba(70,214,196,.6)}
-.clrank-grid-b{position:absolute;left:0;right:0;height:1px;background:rgba(255,255,255,.06);pointer-events:none}
-.clrank-yaxis-lbl{position:absolute;right:3px;font-size:.55rem;color:rgba(255,255,255,.28);line-height:1;transform:translateY(50%)}
-.clrank-chip{display:inline-flex;align-items:center;padding:4px 8px;border-radius:5px;font-size:.72rem;cursor:pointer;border:1px solid rgba(255,255,255,.12);background:rgba(255,255,255,.05);transition:all .12s;white-space:nowrap;color:var(--fg)}
-.clrank-chip:hover{background:rgba(70,214,196,.1)}
-.clrank-chip.selected{border-color:var(--teal);background:rgba(70,214,196,.2);color:var(--teal);font-weight:700}
-
-/* 称号バッジ */
-.shogou{
-  display:inline-block;position:relative;overflow:hidden;
-  font-size:.68rem;font-weight:800;letter-spacing:.13em;white-space:nowrap;
-  padding:2px 10px;margin-top:3px;border-radius:4px;
-  border:1px solid rgba(251,191,36,.7);
-  background:linear-gradient(110deg,rgba(120,80,10,.55) 0%,rgba(251,191,36,.28) 40%,rgba(255,220,80,.18) 55%,rgba(251,191,36,.28) 70%,rgba(120,80,10,.55) 100%);
-  color:#fde68a;
-  text-shadow:0 0 10px rgba(251,191,36,1),0 0 3px rgba(255,255,180,.6);
-  box-shadow:0 0 8px rgba(251,191,36,.35),inset 0 1px 0 rgba(255,255,200,.18),inset 0 -1px 0 rgba(100,60,0,.3);
-}
-.shogou::before{
-  content:'';position:absolute;inset:0;
-  background:linear-gradient(90deg,transparent 0%,rgba(255,255,200,.22) 50%,transparent 100%);
-  transform:translateX(-100%);
-  animation:shogou-shimmer 2.8s ease-in-out infinite;
-}
-@keyframes shogou-shimmer{
-  0%{transform:translateX(-100%)}
-  60%{transform:translateX(200%)}
-  100%{transform:translateX(200%)}
-}
-/* 個人称号スタイル */
-/* 田中謙佑 "ちょおちょおちょお" — 金箔シマー・印章型 ✦ */
-.title-tanaka{background:linear-gradient(110deg,rgba(120,80,10,.55) 0%,rgba(251,191,36,.28) 40%,rgba(255,220,80,.18) 55%,rgba(251,191,36,.28) 70%,rgba(120,80,10,.55) 100%);border-color:rgba(251,191,36,.7);color:#fde68a;text-shadow:0 0 10px rgba(251,191,36,1),0 0 3px rgba(255,255,180,.6);box-shadow:0 0 8px rgba(251,191,36,.35);border-radius:2px}
-/* 高橋ヒロト "ほりきた" — 氷の結晶・平行四辺形スラント ❄ */
-.title-hiroto{background:linear-gradient(110deg,#0c1a3a,#1d4ed8,#93c5fd 50%,#1d4ed8,#0c1a3a);border-color:rgba(147,197,253,.6);color:#e0f2fe;text-shadow:0 0 8px rgba(147,197,253,.9),0 0 2px #fff;animation:hiroto-ice 2.5s ease-in-out infinite;border-radius:0;clip-path:polygon(8px 0%,100% 0%,calc(100% - 8px) 100%,0% 100%)}
-.title-hiroto::before{display:none}
-@keyframes hiroto-ice{0%,100%{box-shadow:0 0 6px rgba(59,130,246,.5),0 0 14px rgba(147,197,253,.2);filter:brightness(1)}50%{box-shadow:0 0 16px rgba(147,197,253,.9),0 0 32px rgba(59,130,246,.4);filter:brightness(1.25)}}
-/* はせがわ "多頭飼い" — 女の園・多彩グラデーション・波型角丸 ♡ */
-.title-hasegawa{background:linear-gradient(110deg,#3b0764,#7c2d9b,#d946ef 35%,#ec4899 55%,#a855f7,#3b0764);border-color:rgba(217,70,239,.65);color:#fae8ff;text-shadow:0 0 8px rgba(217,70,239,.9),0 0 3px rgba(244,114,182,.5);box-shadow:0 0 10px rgba(217,70,239,.35),inset 0 1px 0 rgba(255,220,255,.2);animation:hasegawa-garden 4s ease-in-out infinite;border-radius:18px 4px 18px 4px}
-.title-hasegawa::before{display:none}
-@keyframes hasegawa-garden{0%{background-position:0%}50%{background-position:100%;box-shadow:0 0 18px rgba(244,114,182,.6),0 0 32px rgba(217,70,239,.3)}100%{background-position:0%}}
-/* professional-A "女使われ/…" — 夜の紫・テキスト切り替え ♟ */
-.title-pro{background:linear-gradient(110deg,#0d001a,#2e1065,#6d28d9 45%,#7c3aed 55%,#2e1065,#0d001a);border-color:rgba(109,40,217,.75);color:#ede9fe;text-shadow:0 0 8px rgba(139,92,246,1),0 0 3px rgba(221,214,254,.5);box-shadow:0 0 10px rgba(109,40,217,.4),inset 0 1px 0 rgba(200,180,255,.15);border-radius:2px 12px 2px 12px}
-.title-pro::before{display:none}
-/* 荒らし乙 "ほんまごめん" — 震え謝罪・不均等角丸 ⚠ */
-.title-arashi{background:linear-gradient(110deg,#7f1d1d,#dc2626,#ef4444 50%,#dc2626,#7f1d1d);border-color:rgba(239,68,68,.7);color:#fff;text-shadow:0 0 6px rgba(255,100,100,.8);animation:arashi-shake .09s linear infinite;border-radius:2px 12px 2px 12px}
-.title-arashi::before{display:none}
-@keyframes arashi-shake{0%{transform:translate(0,0) rotate(0deg)}20%{transform:translate(-1px,1px) rotate(-.3deg)}40%{transform:translate(1px,-1px) rotate(.4deg)}60%{transform:translate(-1px,-1px) rotate(.2deg)}80%{transform:translate(1px,1px) rotate(-.3deg)}100%{transform:translate(0,0) rotate(0deg)}}
-/* ꙮꙮꙮꙮꙮꙮꙮꙮ "俺は〇〇をい〇めたい" — 闇脈動・角切りシェイプ ☠ */
-.title-eye{background:linear-gradient(110deg,#000,#3b0000,#1a0000);border-color:rgba(220,38,38,.45);color:#ff3333;font-weight:900;letter-spacing:.04em;text-shadow:0 0 8px #ff0000,0 0 20px rgba(200,0,0,.5);animation:eye-pulse 1.6s ease-in-out infinite;border-radius:0;clip-path:polygon(0 0,100% 0,100% 100%,14px 100%,0 calc(100% - 8px))}
-.title-eye::before{display:none}
-@keyframes eye-pulse{0%,100%{box-shadow:0 0 4px #dc2626,inset 0 0 3px rgba(180,0,0,.2)}50%{box-shadow:0 0 20px #ff0000,0 0 40px rgba(220,38,38,.45),inset 0 0 10px rgba(200,0,0,.35)}}
-/* 波多野裏技 "ハンタウイルス" — バイオハザード・対角角丸 ☣ */
-.title-hatano{background:linear-gradient(110deg,#052e16,#16a34a,#4ade80 50%,#16a34a,#052e16);border-color:rgba(74,222,128,.6);color:#dcfce7;text-shadow:0 0 8px rgba(74,222,128,.9),0 0 2px rgba(200,255,200,.4);animation:hatano-bio .9s ease-in-out infinite alternate;border-radius:0 10px 0 10px}
-.title-hatano::before{display:none}
-@keyframes hatano-bio{0%{box-shadow:0 0 6px rgba(74,222,128,.4),0 0 2px #4ade80;filter:saturate(1)}100%{box-shadow:0 0 20px rgba(74,222,128,.95),0 0 36px rgba(34,197,94,.45),inset 0 0 6px rgba(74,222,128,.15);filter:saturate(1.5)}}
-/* honari "じゃあいいよぉもう" — ふてくされ淡紫・逆対角角丸 … */
-.title-honari{background:linear-gradient(110deg,#2e1065,#4c1d95,#7c3aed 50%,#4c1d95,#2e1065);border-color:rgba(124,58,237,.45);color:#c4b5fd;text-shadow:0 0 6px rgba(167,139,250,.7);animation:honari-sulk 4.5s ease-in-out infinite;border-radius:12px 2px 12px 2px}
-.title-honari::before{display:none}
-@keyframes honari-sulk{0%,100%{opacity:.45;transform:translateX(4px)}25%{opacity:.9;transform:translateX(-3px)}55%{opacity:.55;transform:translateX(2px)}80%{opacity:.85;transform:translateX(-1px)}}
-/* ミッツ "そもそもそんなこと言ってるけど、" — スクロール・薄角 » */
-.title-mitts{background:linear-gradient(110deg,#1c1917,#44403c,#78716c 50%,#44403c,#1c1917);border-color:rgba(120,113,108,.5);color:#e7e5e4;text-shadow:0 0 4px rgba(231,229,228,.3);max-width:180px;padding-left:4px;padding-right:4px;vertical-align:middle;border-radius:3px}
-.title-mitts::before{display:none}
-.ti-scroll{display:inline-block;animation:mitts-scroll 7s linear infinite;white-space:nowrap;padding-right:16px}
-@keyframes mitts-scroll{0%{transform:translateX(180px)}100%{transform:translateX(-100%)}}
-/* 川上晃弥 "ママぁ～" — 黄緑ぷよぷよ・波型角丸 〜 */
-.title-kawakami{background:linear-gradient(110deg,#1a2e05,#4d7c0f,#a3e635 50%,#4d7c0f,#1a2e05);border-color:rgba(163,230,53,.5);color:#ecfccb;text-shadow:0 0 6px rgba(163,230,53,.7);animation:kawakami-fart 2.2s ease-in-out infinite;border-radius:0 16px 0 16px}
-.title-kawakami::before{display:none}
-@keyframes kawakami-fart{0%,100%{transform:skewX(0deg) scaleY(1);filter:blur(0px)}15%{transform:skewX(-1.5deg) scaleY(1.04)}30%{transform:skewX(2deg) scaleY(.96);filter:blur(.4px)}50%{transform:skewX(-1deg) scaleY(1.03)}70%{transform:skewX(1.5deg) scaleY(.97)}85%{transform:skewX(-.5deg) scaleY(1.01)}}
-
-/* SHIMESABA "当麻村の中学生" — 田舎ブラウン+中学生ピンクフラッシュ 田 */
-.title-shimesaba{background:linear-gradient(110deg,#1c1005,#4a3000,#8b6914 50%,#4a3000,#1c1005);border-color:rgba(139,105,20,.7);color:#d4b483;text-shadow:0 0 6px rgba(139,105,20,.9);box-shadow:0 0 8px rgba(100,70,10,.4),inset 0 1px 0 rgba(200,160,80,.15);animation:shimesaba-tilt 3s ease-in-out infinite,shimesaba-flash 6s ease-in-out infinite;border-radius:1px}
-.title-shimesaba::before{display:none}
-@keyframes shimesaba-tilt{0%,100%{transform:rotate(0deg)}25%{transform:rotate(.6deg)}75%{transform:rotate(-.6deg)}}
-@keyframes shimesaba-flash{0%,55%,100%{color:#d4b483;text-shadow:0 0 6px rgba(139,105,20,.9)}65%{color:#ffaadd;text-shadow:0 0 12px rgba(255,100,200,1),0 0 24px rgba(255,150,220,.5)}75%{color:#d4b483;text-shadow:0 0 6px rgba(139,105,20,.9)}}
-/* やー "喋んな触んなきもちわりー" — 赤敵意・平行四辺形・拒絶ジャーク ⛔ */
-.title-ya{background:linear-gradient(110deg,#1a0000,#5c0a0a,#b91c1c 50%,#5c0a0a,#1a0000);border-color:rgba(220,38,38,.85);color:#fca5a5;text-shadow:0 0 8px rgba(220,38,38,1),0 0 2px rgba(255,180,180,.5);box-shadow:0 0 12px rgba(220,38,38,.5),inset 0 1px 0 rgba(255,200,200,.1);animation:ya-repulse .9s ease-in-out infinite;clip-path:polygon(8px 0,100% 0,calc(100% - 8px) 100%,0 100%);border-radius:0}
-.title-ya::before{display:none}
-@keyframes ya-repulse{0%,100%{transform:translateX(0) skewX(0deg);filter:brightness(1)}20%{transform:translateX(-2px) skewX(-1.8deg);filter:brightness(1.5)}50%{transform:translateX(1px) skewX(.9deg);filter:brightness(.85)}75%{transform:translateX(-1px) skewX(-1deg);filter:brightness(1.2)}}
-/* 福澤まさみ "膝枕/…" — エロ感ピンク・テキスト切り替え ♛ */
-.title-masami{background:linear-gradient(110deg,#4a0028,#9d1753,#ec4899 40%,#f472b6 55%,#9d1753,#4a0028);border-color:rgba(244,114,182,.75);color:#fce7f3;text-shadow:0 0 10px rgba(236,72,153,1),0 0 4px rgba(255,182,215,.6);box-shadow:0 0 14px rgba(236,72,153,.5),inset 0 1px 0 rgba(255,200,240,.2);border-radius:12px 2px 12px 2px}
-.title-masami::before{display:none}
-.ti-rotate{display:inline-block}
-.ti-rotate-item{display:none}
-.ti-rotate-item.active{display:inline;animation:ti-fade-in .6s ease}
-.ti-instant .ti-rotate-item.active{animation:none}
-@keyframes ti-fade-in{from{opacity:0}to{opacity:1}}
-
-/* よしよしぎゅー "ひざまくら" — あったか琥珀・ふんわり大丸角 ☁ */
-.title-yoshi{background:linear-gradient(110deg,#78350f,#c2701f,#fcd9a0 50%,#c2701f,#78350f);border-color:rgba(251,191,96,.55);color:#fff7e6;text-shadow:0 0 8px rgba(253,186,116,.9),0 0 3px rgba(255,237,213,.6);animation:yoshi-warm 3.5s ease-in-out infinite;border-radius:18px}
-.title-yoshi::before{display:none}
-@keyframes yoshi-warm{0%,100%{box-shadow:0 0 6px rgba(251,146,60,.35),0 0 12px rgba(253,186,116,.15);opacity:.88}50%{box-shadow:0 0 14px rgba(251,146,60,.65),0 0 26px rgba(253,186,116,.3),inset 0 0 5px rgba(255,220,150,.12);opacity:1}}
-
-/* Avatar */
-.avatar{display:inline-flex;align-items:center;justify-content:center;font-size:1.5rem;width:38px;height:38px;border-radius:50%;background:var(--bg2);border:2px solid var(--line);cursor:pointer;flex-shrink:0;transition:.15s}
-.avatar:hover{transform:scale(1.1)}
-.avatar-lg{font-size:2.8rem;width:68px;height:68px;margin:0 auto 16px}
-.avatar-grid{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0;max-height:180px;overflow-y:auto}
-.avatar-opt{font-size:1.5rem;width:42px;height:42px;border-radius:50%;border:2px solid transparent;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;transition:.15s}
-.avatar-opt:hover{border-color:var(--teal)}
-.avatar-opt.selected{border-color:var(--teal);background:var(--bg2)}
-.avatar-opt-named{border-radius:8px;flex-direction:column;height:auto;min-height:54px;width:44px;padding:4px 2px;gap:1px}
-.avatar-opt-label{font-size:.5rem;color:var(--dim);line-height:1;white-space:nowrap;margin-top:1px}
-.avatar-opt-named.selected .avatar-opt-label{color:var(--teal)}
-
-/* Frames */
-.frame-section{margin-top:14px}
-.frame-section h3{font-size:.78rem;color:var(--dim);letter-spacing:.1em;margin-bottom:8px}
-.frame-grid{display:flex;flex-wrap:wrap;gap:8px}
-.frame-opt{width:42px;height:42px;border-radius:50%;background:var(--bg);cursor:pointer;display:flex;align-items:center;justify-content:center;font-size:1.2rem;transition:.15s;position:relative}
-.frame-opt.selected::after{content:'✓';position:absolute;bottom:-4px;right:-4px;font-size:.6rem;background:var(--teal);color:#0a1626;border-radius:50%;width:14px;height:14px;display:flex;align-items:center;justify-content:center}
-
-/* フレームスタイル定義 */
-.frame-default{border:2px solid var(--line)}
-.frame-silver {border:2px solid #a0a0a0;box-shadow:0 0 6px #a0a0a060}
-.frame-gold   {border:2px solid #f6b352;box-shadow:0 0 8px #f6b35260}
-.frame-teal   {border:2px solid #46d6c4;box-shadow:0 0 8px #46d6c460}
-.frame-red    {border:2px solid #f87171;box-shadow:0 0 8px #f8717160}
-.frame-purple {border:2px solid #a78bfa;box-shadow:0 0 8px #a78bfa60}
-.frame-rainbow{border:3px solid transparent;background:linear-gradient(var(--bg2),var(--bg2)) padding-box,linear-gradient(135deg,#f87171,#f6b352,#46d6c4,#a78bfa) border-box}
-.frame-worst{border:3px dashed #ff3333;box-shadow:0 0 0 1px #ff6600,0 0 14px rgba(255,50,50,.8);animation:worst-flash 1s infinite}
-@keyframes worst-flash{0%,100%{box-shadow:0 0 0 1px #ff3333,0 0 14px rgba(255,50,50,.8);border-color:#ff3333}50%{box-shadow:0 0 0 1px #ff6600,0 0 22px rgba(255,102,0,.9);border-color:#ffcc00}}
-.frame-baka{border:4px dashed #ffff00;box-shadow:0 0 0 2px #ff00ff,0 0 18px #ffff0099;animation:baka-spin .25s steps(1) infinite}
-@keyframes baka-spin{0%{border-color:#ffff00;box-shadow:0 0 0 2px #ff00ff,0 0 18px #ffff0099}25%{border-color:#ff00ff;box-shadow:0 0 0 2px #00ffff,0 0 18px #ff00ff99}50%{border-color:#00ff88;box-shadow:0 0 0 2px #ffff00,0 0 18px #00ff8899}75%{border-color:#ff6600;box-shadow:0 0 0 2px #00ff88,0 0 18px #ff660099}}
-.frame-moeru{border:3px solid #ff6600;box-shadow:0 0 0 1px #ff4400,0 0 16px rgba(255,100,0,.85);animation:moeru-flame .35s alternate infinite}
-@keyframes moeru-flame{0%{border-color:#ff6600;box-shadow:0 0 0 1px #ff3300,0 0 10px rgba(255,80,0,.7)}100%{border-color:#ffcc00;box-shadow:0 0 0 2px #ff8800,0 0 26px rgba(255,200,0,.95)}}
-.frame-kusai{border:3px solid #88dd33;box-shadow:0 0 0 1px #55aa00,0 0 14px rgba(120,220,60,.7);animation:kusai-stink .9s ease-in-out infinite}
-@keyframes kusai-stink{0%,100%{border-color:#88dd33;box-shadow:0 0 0 1px #55aa00,0 0 10px rgba(100,200,40,.55)}50%{border-color:#ccff44;box-shadow:0 0 0 2px #88cc00,0 0 22px rgba(180,255,60,.9)}}
 </style>
 </head>
 <body>
