@@ -9,3 +9,6 @@ materials/
 # ブレインストーミング用ビジュアルコンパニオン
 .superpowers/
 AI/
+
+# git worktree（superpowers / EnterWorktree が作成）
+.claude/worktrees/
