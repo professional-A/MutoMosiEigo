@@ -93,6 +93,19 @@ html{scroll-behavior:smooth}
 .appshell-drawer-logout{
   margin-top:auto;border-top:1px solid var(--line);color:var(--dim);
 }
+.appshell-drawer-group{
+  padding:14px 18px 4px;
+  font-size:.72rem;letter-spacing:.08em;text-transform:uppercase;
+  color:var(--dim);
+}
+.appshell-drawer span[aria-current="page"]{
+  display:flex;align-items:center;gap:12px;width:100%;
+  padding:11px 18px;font-size:.92rem;
+  color:var(--dim);cursor:default;
+}
+.scoreboard .appshell-hamburger{
+  font-size:1.15rem;padding:2px 2px 2px 6px;
+}
 
 @media(max-width:480px){
   .appshell-bar{padding:5px 8px;gap:6px;font-size:.75rem}
