@@ -16,19 +16,25 @@
     return new URLSearchParams(location.search).get('d') || '';
   }
 
+  // 前提: /api/tests の path は d= が唯一かつ未エンコードのクエリ（server が /quiz.html?d=tests/<dir>/data.json を発行）。
   // /api/tests のエントリ path（/quiz.html?d=tests/xxx/data.json）から d= を取り出す
   function entryD(path) {
     var m = /[?&]d=([^&]+)/.exec(path || '');
     return m ? decodeURIComponent(m[1]) : '';
   }
 
-  var drawer, backdrop, burger, onKeyRef;
+  var drawer, backdrop, burger, onKeyRef, _prevFocus;
 
   function openDrawer() {
+    if (drawer.classList.contains('open')) return;
     drawer.classList.add('open');
     backdrop.classList.add('open');
+    drawer.inert = false;
     drawer.setAttribute('aria-hidden', 'false');
     burger.setAttribute('aria-expanded', 'true');
+    _prevFocus = document.activeElement;
+    var firstFocusable = drawer.querySelector('a, [aria-current="page"], button');
+    if (firstFocusable) firstFocusable.focus();
     onKeyRef = function (e) { if (e.key === 'Escape') closeDrawer(); };
     document.addEventListener('keydown', onKeyRef);
   }
@@ -39,6 +45,9 @@
     drawer.setAttribute('aria-hidden', 'true');
     burger.setAttribute('aria-expanded', 'false');
     if (onKeyRef) { document.removeEventListener('keydown', onKeyRef); onKeyRef = null; }
+    drawer.inert = true;
+    if (_prevFocus && typeof _prevFocus.focus === 'function') _prevFocus.focus();
+    _prevFocus = null;
   }
 
   function toggleDrawer() {
@@ -52,11 +61,12 @@
   // グループ3: APP_NAV の分離ページ（adminOnly は除外）
   function menuHtml() {
     var nav = window.APP_NAV || [];
-    return nav.filter(function (it) { return !it.adminOnly; }).map(function (it) {
+    var items = nav.filter(function (it) { return !it.adminOnly; }).map(function (it) {
       return '<a href="' + esc(it.href) + '">' +
         '<span class="appshell-drawer-ico">' + esc(it.icon || '') + '</span>' +
         esc(it.label || '') + '</a>';
     }).join('');
+    return items ? groupHtml('メニュー', items) : '';
   }
 
   // グループ1+2: 同じ試験（year/grade/exam 完全一致）の模試
@@ -96,7 +106,7 @@
   }
 
   function render(tests, data) {
-    drawer.innerHTML = siblingsHtml(tests, data) + groupHtml('メニュー', menuHtml());
+    drawer.innerHTML = siblingsHtml(tests, data) + menuHtml();
     var links = drawer.querySelectorAll('a');
     for (var i = 0; i < links.length; i++) {
       links[i].addEventListener('click', closeDrawer);
@@ -112,7 +122,8 @@
     burger.type = 'button';
     burger.setAttribute('aria-label', 'メニュー');
     burger.setAttribute('aria-expanded', 'false');
-    burger.textContent = '☰'; // ☰
+    burger.setAttribute('aria-controls', 'quiz-nav-drawer');
+    burger.textContent = '☰';
     burger.addEventListener('click', toggleDrawer);
     bar.appendChild(burger);
 
@@ -123,8 +134,10 @@
 
     drawer = document.createElement('nav');
     drawer.className = 'appshell-drawer';
+    drawer.id = 'quiz-nav-drawer';
     drawer.setAttribute('aria-hidden', 'true');
     document.body.appendChild(drawer);
+    drawer.inert = true;
 
     // まずメニューだけで描画 → /api/tests が返ったら3グループに差し替え
     render(null, data);
