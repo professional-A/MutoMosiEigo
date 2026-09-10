@@ -2,6 +2,10 @@
    テーマCSS変数の唯一の定義。index.html / quiz-engine.js が <link rel="stylesheet" href="/styles/theme.css"> で読む。
    （フェーズ1で index.html、フェーズ2d で quiz-engine.js を移行済み。） */
 
+/* Web フォント。index.html は自前の <link> でも読むが、独立ページ（scores.html 等）は
+   theme.css しか読まないのでヘッダーの Fraunces/Outfit が効かなかった。ここで一本化。 */
+@import url('https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&display=swap');
+
 :root{
   --bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#0e1d33;
   --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c; --fg:#e7eef7;
