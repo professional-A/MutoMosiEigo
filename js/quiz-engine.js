@@ -6,10 +6,8 @@
 // question types: single | multi | sort | input | numeric
 (function () {
 
+// テーマ変数（--bg 等）と reset は /styles/theme.css で定義。initQuiz が <link> で読み込む。
 const CSS = `
-:root{--bg:#0a1626;--bg2:#0e1d33;--card:#15263f;--card2:#1b2f4d;--line:#27406a;--ink:#e7eef7;--muted:#8aa1c0;--dim:#5f7c9c;--teal:#46d6c4;--teal-d:#1f9e90;--amber:#f6b352;--rose:#f06b8e;--good:#5fe0a8;--bad:#f06b8e}
-*{box-sizing:border-box;margin:0;padding:0}
-html{scroll-behavior:smooth}
 body{font-family:"Outfit","Noto Sans JP",sans-serif;background:radial-gradient(1100px 600px at 80% -8%,rgba(70,214,196,.10),transparent 55%),radial-gradient(900px 500px at 5% 5%,rgba(246,179,82,.07),transparent 50%),var(--bg);color:var(--ink);line-height:1.6;padding-bottom:80px}
 .wrap{max-width:880px;margin:0 auto;padding:0 18px}
 header{padding:46px 0 30px;border-bottom:1px solid var(--line);background:linear-gradient(180deg,var(--bg2),transparent)}
@@ -426,7 +424,12 @@ window.initQuiz = function (data) {
   _sections = data.sections;
   _storageKey = data.storageKey;
 
-  // Inject fonts + CSS
+  // Inject theme vars + fonts + CSS
+  const themeLink = document.createElement('link');
+  themeLink.rel = 'stylesheet';
+  themeLink.href = '/styles/theme.css';
+  document.head.appendChild(themeLink);
+
   const fontLink = document.createElement('link');
   fontLink.rel = 'stylesheet';
   fontLink.href = 'https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,500;9..144,600&family=Outfit:wght@400;500;600;700&family=Noto+Sans+JP:wght@400;500;700&family=JetBrains+Mono:wght@500&display=swap';

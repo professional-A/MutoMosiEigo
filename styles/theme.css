@@ -1,12 +1,12 @@
 /* 武藤模試 共通テーマ・共通シェル
-   テーマCSS変数の唯一の定義。全ページが <link rel="stylesheet" href="/styles/theme.css"> で読む。
-   （フェーズ1では index.html のみ。フェーズ2/3で quiz / 各機能ページも移行）
-   値は index.html の現状 :root をそのまま踏襲（quiz-engine.js とは微差あり。統一はフェーズ2）。 */
+   テーマCSS変数の唯一の定義。index.html / quiz-engine.js が <link rel="stylesheet" href="/styles/theme.css"> で読む。
+   （フェーズ1で index.html、フェーズ2d で quiz-engine.js を移行済み。） */
 
 :root{
   --bg:#0a1626; --bg2:#0e1d33; --card:#15263f; --card2:#0e1d33;
   --line:#27406a; --ink:#e7eef7; --muted:#8aa1c0; --dim:#5f7c9c; --fg:#e7eef7;
-  --teal:#46d6c4; --amber:#f6b352; --rose:#f0716e;
+  --teal:#46d6c4; --teal-d:#1f9e90; --amber:#f6b352; --rose:#f0716e;
+  --good:#5fe0a8; --bad:#f06b8e;
 }
 *{box-sizing:border-box;margin:0;padding:0}
 html{scroll-behavior:smooth}
