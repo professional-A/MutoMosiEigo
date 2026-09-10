@@ -242,3 +242,41 @@ html{scroll-behavior:smooth}
 @keyframes moeru-flame{0%{border-color:#ff6600;box-shadow:0 0 0 1px #ff3300,0 0 10px rgba(255,80,0,.7)}100%{border-color:#ffcc00;box-shadow:0 0 0 2px #ff8800,0 0 26px rgba(255,200,0,.95)}}
 .frame-kusai{border:3px solid #88dd33;box-shadow:0 0 0 1px #55aa00,0 0 14px rgba(120,220,60,.7);animation:kusai-stink .9s ease-in-out infinite}
 @keyframes kusai-stink{0%,100%{border-color:#88dd33;box-shadow:0 0 0 1px #55aa00,0 0 10px rgba(100,200,40,.55)}50%{border-color:#ccff44;box-shadow:0 0 0 2px #88cc00,0 0 22px rgba(180,255,60,.9)}}
+
+/* --- レース（index.html:242-265） --- */
+#race-section{margin:0 0 8px;border:1px solid rgba(70,214,196,.3);border-radius:12px;background:rgba(10,23,40,.7);overflow:hidden}
+.race-hd{display:flex;align-items:center;gap:8px;padding:10px 14px;border-bottom:1px solid rgba(70,214,196,.15);cursor:pointer;user-select:none}
+.race-hd-title{font-weight:700;font-size:.9rem;color:#d4e8ff;flex:1}
+.race-hd-date{font-size:.68rem;color:var(--dim)}
+.race-body{padding:10px 14px 14px}
+.race-groups{display:flex;flex-wrap:wrap;gap:6px;margin-bottom:10px}
+.race-group-chip{background:rgba(70,214,196,.08);border:1px solid rgba(70,214,196,.22);border-radius:8px;padding:4px 10px;font-size:.72rem;color:var(--teal)}
+.race-group-chip span{color:var(--fg);margin-left:4px}
+.race-table{width:100%;border-collapse:collapse;font-size:.76rem;margin-bottom:10px}
+.race-table th{text-align:left;color:var(--dim);font-weight:600;padding:3px 6px;border-bottom:1px solid var(--line)}
+.race-table td{padding:5px 6px;border-bottom:1px solid rgba(255,255,255,.04)}
+.race-table tr:last-child td{border-bottom:none}
+.race-table .rank-me{background:rgba(70,214,196,.06)}
+@media(max-width:520px){
+  .race-table{font-size:.69rem}
+  .race-table th,.race-table td{padding:4px 4px}
+  #race-pair-ranking .race-table th:nth-child(3),#race-pair-ranking .race-table td:nth-child(3){display:none}
+#race-muto-h,#race-muto-m,#race-manual-h,#race-manual-m,#race-game-h,#race-game-m{width:56px!important}
+}
+.race-rival{font-size:.68rem;color:var(--rose)}
+.race-rival.ahead{color:var(--teal)}
+.race-report{display:flex;flex-wrap:wrap;gap:8px;align-items:center;padding-top:10px;border-top:1px solid var(--line)}
+.race-report input{padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#0a172b;color:var(--fg);font-size:.78rem;font-family:inherit}
+.race-report button{padding:5px 12px;border:1px solid var(--teal);border-radius:6px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.74rem;cursor:pointer;font-family:inherit;white-space:nowrap}
+
+/* --- バトル（index.html:286-295） --- */
+.battle-card{background:var(--card2);border:1px solid var(--line);border-radius:12px;padding:14px;margin-bottom:12px}
+.battle-vs{display:flex;align-items:center;justify-content:space-between;gap:8px;margin-bottom:10px}
+.battle-player{flex:1;text-align:center}
+.battle-player-name{font-size:.95rem;font-weight:700}
+.battle-player-bet{font-size:.72rem;color:var(--amber);margin-top:2px}
+.battle-vs-label{font-size:1.3rem;color:var(--rose);font-weight:900;flex-shrink:0}
+.battle-row{display:flex;gap:6px;align-items:center;flex-wrap:wrap}
+.battle-badge{display:inline-block;padding:2px 8px;border-radius:4px;font-size:.7rem;font-weight:700}
+.battle-badge-open{background:rgba(70,214,196,.15);color:var(--teal);border:1px solid rgba(70,214,196,.3)}
+.battle-badge-settled{background:rgba(255,255,255,.07);color:var(--dim);border:1px solid var(--line)}
