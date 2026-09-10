@@ -20,9 +20,7 @@ metadata:
 |----------|------|
 | `server.js` | Express API サーバー、DB初期化、全エンドポイント |
 | `index.html` | メインフロント（英語模試 + 管理者UI + レース + バトル） |
-| `nekku_test.html` | 熱流体工学Ⅰ 中間試験対策テスト（23問） |
-| `nekku_kako.html` | 熱流体 前期中間 過去問（13問） |
-| `nekku_kako_kai.html` | 熱流体 前期中間 改変版 |
+| `js/quiz-engine.js` | data.json 駆動の共通クイズレンダラー（`single`/`multi`/`sort`/`input`/`numeric`） |
 | `js/points.js` | 共有ポイント送信スクリプト（全テストページから読み込む） |
 | `js/progress.js` | 進捗管理 |
 | `tests/*/index.html` | 科目別過去問テストページ群 |

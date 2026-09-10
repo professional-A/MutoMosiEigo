@@ -76,6 +76,7 @@ nekku 系も含め、**すべてのテストデータは `tests/` に集約す�
 | `multi` | `opts[]`, `ans[]` | 複数選択（全部選んで採点ボタン） |
 | `sort` | `items[]`, `ans[]` | 並べ替え（選んで順番を決める） |
 | `input` | `ans` (文字列or配列), `hint?` | テキスト入力（Enter or 採点ボタン） |
+| `numeric` | `parts[]`（各 `ans` は数値） | 数値解答＋許容誤差（相対2%／`angle:true` は±2）。`parts[].label?`/`unit?`/`mult?`/`angle?`、問題ごとに `tag?`/`svg?`/`hint?`/`reveal?`(string[])。`katex:true` と併用可 |
 
 ## KaTeX使用時
 
