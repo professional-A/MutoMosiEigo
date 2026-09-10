@@ -289,6 +289,16 @@
     "grade": 4,
     "exam": "前期末試験",
     "subject": "人工知能概論",
+    "title": "人工知能概論 ・ ② 一問一答",
+    "path": "/quiz.html?d=tests/2026-9-ai-ichimon/data.json",
+    "storageKey": "ai_ichimon_v1",
+    "totalItems": 90
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期末試験",
+    "subject": "人工知能概論",
     "title": "人工知能概論 ・ ③ 過去問90問",
     "path": "/quiz.html?d=tests/2026-9-ai-kakomon/data.json",
     "storageKey": "ai_kakomon_v1",

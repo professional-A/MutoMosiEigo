@@ -179,7 +179,7 @@
     "applies_to": ["all"],
     "implication": "出題の難易度配分の目標値。全問正解が続くセットは時間の無駄、正答率50%を切るセットは挫折と誤答定着を招く。",
     "caveat": "二値分類課題の数理的な結論であり、あらゆる学習課題にそのまま当てはまるわけではない。設計原則の目安として使い、エビデンスとして強く主張しない。",
-    "implemented_in": [],
+    "implemented_in": ["tests/2026-9-ai-yougo/data.json", "tests/2026-9-ai-ichimon/data.json"],
     "tags": ["difficulty", "question-selection"]
   },
   {
@@ -193,7 +193,7 @@
     "applies_to": ["all"],
     "implication": "初見の単元でいきなり難問を出すなら、解説の充実が必須条件になる。正答率が低いセットほど解説に投資する。",
     "caveat": "メタ分析上の傾向であり、個人単位の閾値ではない。",
-    "implemented_in": [],
+    "implemented_in": ["tests/2026-9-ai-yougo/data.json", "tests/2026-9-ai-ichimon/data.json"],
     "tags": ["feedback", "difficulty"]
   },
   {
