@@ -52,7 +52,85 @@
   </div>
 </main>
 
-<!-- サブモーダルは Task 3 -->
+<!-- openTimetableModal / openScheduleModal 等が getElementById('admin-modal-bg').classList を触るので、
+     壊さず no-op にするためのスタブ（本物のモーダルは index.html 側）。 -->
+<div class="modal-bg" id="admin-modal-bg" hidden></div>
+
+<div class="modal-bg" id="race-modal-bg">
+  <div class="modal" id="race-modal-inner" style="width:min(500px,96vw);max-height:90vh;display:flex;flex-direction:column;padding:20px 16px">
+    <button onclick="closeRaceModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2 style="flex-shrink:0">🏁 新規レース発行</h2>
+    <div style="overflow-y:auto;flex:1;padding-right:2px">
+      <div style="display:flex;flex-direction:column;gap:10px;margin-bottom:16px">
+        <div>
+          <label style="font-size:.78rem;color:var(--dim)">レース名</label>
+          <input id="race-name-input" type="text" placeholder="例: 前期末レース" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.9rem;font-family:inherit">
+        </div>
+        <div>
+          <label style="font-size:.78rem;color:var(--dim)">対象教科（自動計測に使用）</label>
+          <select id="race-subject-input" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
+            <option value="">（教科を選択）</option>
+          </select>
+        </div>
+        <div style="display:flex;gap:10px">
+          <div style="flex:1">
+            <label style="font-size:.78rem;color:var(--dim)">開始日時</label>
+            <input id="race-start-input" type="datetime-local" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
+          </div>
+          <div style="flex:1">
+            <label style="font-size:.78rem;color:var(--dim)">終了日時</label>
+            <input id="race-end-input" type="datetime-local" style="display:block;width:100%;box-sizing:border-box;margin-top:4px;padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.88rem;font-family:inherit">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="modal-btns" style="flex-shrink:0;margin-top:14px">
+      <button onclick="adminCreateRace()" style="background:var(--teal);color:#0a1626;font-weight:700;border:none">🏁 発行</button>
+      <button onclick="closeRaceModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">キャンセル</button>
+    </div>
+    <div id="race-modal-msg" class="modal-msg"></div>
+  </div>
+</div>
+
+<div class="modal-bg" id="schedule-modal-bg">
+  <div class="modal" style="width:min(460px,95vw);max-height:90vh;display:flex;flex-direction:column">
+    <button onclick="closeScheduleModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2>📅 試験日程管理</h2>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;flex-shrink:0">設定日以降、その試験のテストが自動でアーカイブされます</p>
+    <div id="schedule-content" style="flex:1;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:8px"></div>
+    <div class="modal-btns" style="margin-top:12px;flex-shrink:0;flex-wrap:wrap;gap:8px">
+      <button onclick="archiveAllTests()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📦 全部アーカイブ</button>
+      <button onclick="closeScheduleModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+  </div>
+</div>
+
+<div class="modal-bg" id="timetable-modal-bg">
+  <div class="modal" style="width:min(560px,95vw);max-height:90vh;display:flex;flex-direction:column">
+    <button onclick="closeTimetableModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer;line-height:1;padding:4px">✕</button>
+    <h2>🗓 試験時間割の登録</h2>
+    <p style="font-size:.78rem;color:var(--muted);margin-bottom:14px;flex-shrink:0">ここで登録した内容がトップページに掲示されます。リンク欄に対策ページのURLを入れると「対策 →」ボタンが出ます</p>
+    <div id="timetable-content" style="flex:1;overflow-y:auto;min-height:0;display:flex;flex-direction:column;gap:8px"></div>
+    <div class="modal-btns" style="margin-top:12px;flex-shrink:0">
+      <button onclick="closeTimetableModal()" style="background:transparent;color:var(--dim);border:1px solid var(--line)">閉じる</button>
+    </div>
+  </div>
+</div>
+
+
+<div class="modal-bg" id="pair-modal-bg" style="display:none">
+  <div class="modal" style="width:min(480px,96vw);max-height:90vh;display:flex;flex-direction:column;padding:20px 16px">
+    <button onclick="closePairModal()" style="position:absolute;top:14px;right:14px;background:none;border:none;color:var(--dim);font-size:1.3rem;cursor:pointer">✕</button>
+    <h2 style="flex-shrink:0">👥 ペア設定</h2>
+    <p id="pair-modal-race-name" style="font-size:.78rem;color:var(--dim);margin-bottom:12px;flex-shrink:0"></p>
+    <div id="pair-modal-pairs" style="flex:1;overflow-y:auto;display:flex;flex-direction:column;gap:10px"></div>
+    <div style="display:flex;gap:8px;margin-top:12px;flex-shrink:0">
+      <button onclick="pairAddGroup()" style="flex:1;background:var(--card2);border:1px solid var(--line)">＋ ペア追加</button>
+      <button onclick="savePairs()" style="flex:1;background:var(--teal);color:#0a1626;border:none;font-weight:700">💾 保存</button>
+    </div>
+    <div id="pair-modal-msg" style="font-size:.78rem;color:var(--teal);margin-top:8px;flex-shrink:0"></div>
+  </div>
+</div>
 
 <script src="/js/api.js"></script>
 <script src="/js/nav.js"></script>
@@ -506,6 +584,380 @@ async function toggleScoreLock() {
     if (data.ok) await updateScoreLockBtn();
     else alert('エラー: ' + (data.error || 'unknown'));
   } catch(e) { alert('通信エラー: ' + e.message); }
+}
+
+// ── サブモーダル用モジュール変数（index.html:1226-1227,1252,3584-3586,3729-3730 と同一）──
+let _examSchedule = {};
+let _schedulePairs = [];
+let _timetable = [];
+let _pairRaceId = null;
+let _pairModalUsers = [];
+let _pairGroupCount = 0;
+let _raceModalUsers = [];
+let _raceGroupCount = 0;
+
+// ── 時間割エディタ: index.html VERBATIM ──
+// loadTimetable / renderTimetable / openTimetableModal / closeTimetableModal / saveTimetableRow / deleteTimetableRow
+// （renderTimetable は #timetable-card / #tt-body が無ければ即 return するので admin.html では無害。
+//   toggleTimetable はトップ専用なのでコピーしない。）
+async function loadTimetable() {
+  try {
+    const data = await fetch('/api/exam-timetable').then(r => r.json());
+    _timetable = Array.isArray(data) ? data : [];
+  } catch(e) { _timetable = []; }
+  renderTimetable();
+}
+
+function renderTimetable() {
+  const card = document.getElementById('timetable-card');
+  const body = document.getElementById('tt-body');
+  if (!card || !body) return;
+  if (!_timetable.length) { card.style.display = 'none'; return; }
+  card.style.display = '';
+
+  const examName = _timetable[0].exam || '試験';
+  document.getElementById('tt-title').textContent = examName + ' 時間割';
+
+  // 日付ごとにまとめる
+  const days = [];
+  _timetable.forEach(r => {
+    let g = days.find(x => x.date === r.exam_date);
+    if (!g) { g = { date: r.exam_date, rows: [] }; days.push(g); }
+    g.rows.push(r);
+  });
+  days.sort((a,b) => a.date < b.date ? -1 : 1);
+
+  const nextDate = (days.find(g => ttDaysLeft(g.date) >= 0) || {}).date;
+
+  body.innerHTML = days.map(g => {
+    const n = ttDaysLeft(g.date);
+    const lb = ttLeftLabel(n);
+    const [y,m,d] = g.date.split('-').map(Number);
+    const wd = TT_WD[new Date(y, m-1, d).getDay()];
+    const cls = n < 0 ? ' tt-done' : (g.date === nextDate ? ' tt-next' : '');
+    const rows = g.rows.map(r => {
+      const mins = ttMinutes(r.start_time, r.end_time);
+      return `<div class="tt-row">
+        <span class="tt-time">${ttEsc(ttShow(r.start_time))}${r.end_time ? '–' + ttEsc(ttShow(r.end_time)) : ''}</span>
+        <span class="tt-subject">${ttEsc(r.subject)}</span>
+        ${mins ? `<span class="tt-min">${mins}</span>` : ''}
+        ${r.teacher ? `<span class="tt-teacher">${ttEsc(r.teacher)}</span>` : ''}
+        ${r.note ? `<span class="tt-teacher">${ttEsc(r.note)}</span>` : ''}
+        ${r.link ? `<a class="tt-link" href="${ttEsc(r.link)}">対策 →</a>` : ''}
+      </div>`;
+    }).join('');
+    return `<div class="tt-day${cls}">
+      <div class="tt-dayhead">
+        <span class="tt-date">${m}/${d}（${wd}）</span>
+        <span class="tt-left ${lb.cls}">${lb.text}</span>
+      </div>
+      ${rows}
+    </div>`;
+  }).join('');
+}
+
+async function openTimetableModal() {
+  document.getElementById('admin-modal-bg').classList.remove('open');
+  lockScroll();
+  document.getElementById('timetable-modal-bg').classList.add('open');
+  await loadTimetable();
+  const el = document.getElementById('timetable-content');
+  const rowHtml = (r, i) => `<div style="background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px;display:flex;flex-direction:column;gap:6px">
+    <div style="display:flex;gap:6px;flex-wrap:wrap">
+      <input id="tt-exam-${i}" value="${ttEsc(r.exam || '')}" placeholder="試験名" style="flex:1;min-width:110px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <input id="tt-subject-${i}" value="${ttEsc(r.subject || '')}" placeholder="科目" style="flex:1;min-width:110px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+      <input type="date" id="tt-date-${i}" value="${ttEsc(r.exam_date || '')}" style="padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <input type="time" id="tt-start-${i}" value="${ttEsc(ttPad(r.start_time))}" style="padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <input type="time" id="tt-end-${i}" value="${ttEsc(ttPad(r.end_time))}" style="padding:4px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <input id="tt-teacher-${i}" value="${ttEsc(r.teacher || '')}" placeholder="担当" style="flex:1;min-width:80px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+    </div>
+    <div style="display:flex;gap:6px;flex-wrap:wrap;align-items:center">
+      <input id="tt-link-${i}" value="${ttEsc(r.link || '')}" placeholder="対策ページのリンク（任意）" style="flex:1;min-width:150px;padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+      <button onclick="saveTimetableRow(${i})" style="padding:4px 12px;border:1px solid var(--teal);border-radius:5px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.75rem;cursor:pointer;font-family:inherit">保存</button>
+      ${r.id ? `<button onclick="deleteTimetableRow(${r.id})" style="padding:4px 8px;border:1px solid var(--line);border-radius:5px;background:none;color:var(--dim);font-size:.72rem;cursor:pointer;font-family:inherit">削除</button>` : ''}
+    </div>
+  </div>`;
+  const blank = { exam: (_timetable[0] || {}).exam || '前期末試験' };
+  el.innerHTML = _timetable.map(rowHtml).join('')
+    + '<div style="font-size:.72rem;color:var(--dim);margin-top:4px">＋ 新規追加</div>'
+    + rowHtml(blank, _timetable.length);
+}
+function closeTimetableModal() {
+  unlockScroll();
+  document.getElementById('timetable-modal-bg').classList.remove('open');
+}
+
+async function saveTimetableRow(i) {
+  const v = k => (document.getElementById('tt-' + k + '-' + i) || {}).value || '';
+  const payload = {
+    id: (_timetable[i] || {}).id || null,
+    exam: v('exam'), subject: v('subject'), exam_date: v('date'),
+    start_time: v('start'), end_time: v('end'), teacher: v('teacher'), link: v('link'),
+  };
+  if (!payload.exam || !payload.subject || !payload.exam_date) { alert('試験名・科目・日付は必須です'); return; }
+  try {
+    const res = await fetch('/api/admin/exam-timetable', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify(payload)
+    });
+    const data = await res.json();
+    if (!data.ok) { alert('❌ ' + (data.error || 'エラー')); return; }
+    await openTimetableModal();
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function deleteTimetableRow(id) {
+  if (!confirm('この行を削除しますか？')) return;
+  try {
+    await fetch('/api/admin/exam-timetable/' + id, {
+      method: 'DELETE', headers: { 'Authorization': authToken }
+    });
+    await openTimetableModal();
+  } catch(e) { alert('通信エラー'); }
+}
+
+// ── 日程エディタ: index.html VERBATIM ──
+async function openScheduleModal() {
+  document.getElementById('admin-modal-bg').classList.remove('open');
+  lockScroll();
+  const el = document.getElementById('schedule-content');
+  document.getElementById('schedule-modal-bg').classList.add('open');
+  el.innerHTML = '<p style="color:var(--muted);font-size:.85rem;padding:8px">読み込み中...</p>';
+  // /api/tests を直接フェッチして確実に最新データを使う
+  let pairs = [];
+  try {
+    const data = await fetch('/api/tests').then(r => r.json());
+    pairs = [...new Map(
+      data.map(t => [t.subject + '||' + t.exam, { subject: t.subject, exam: t.exam }])
+    ).values()];
+    _schedulePairs = pairs;
+  } catch(e) {
+    el.innerHTML = '<p style="color:red;font-size:.85rem;padding:8px">/api/tests の読み込みに失敗しました</p>';
+    return;
+  }
+  if (!pairs.length) {
+    el.innerHTML = '<p style="color:var(--muted);font-size:.85rem;padding:8px">試験データがありません</p>';
+    return;
+  }
+  el.innerHTML = pairs.map((p, i) => {
+    const val = _examSchedule[p.subject + '||' + p.exam] || '';
+    const archived = val && new Date().toISOString().slice(0,10) >= val;
+    return `<div style="background:var(--card2);border:1px solid var(--line);border-radius:8px;padding:10px 12px">
+      <div style="font-size:.72rem;color:var(--dim);margin-bottom:4px">${esc(p.exam)}</div>
+      <div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap">
+        <span style="font-size:.9rem;font-weight:600;flex:1">${esc(p.subject)}</span>
+        ${archived ? '<span style="font-size:.65rem;color:var(--teal)">📦 アーカイブ中</span>' : ''}
+        <input type="date" id="sch-${i}" value="${val}"
+          style="padding:4px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">
+        <button onclick="saveSchedule(${i})"
+          style="padding:4px 12px;border:1px solid var(--teal);border-radius:5px;background:rgba(70,214,196,.1);color:var(--teal);font-size:.75rem;cursor:pointer;font-family:inherit;white-space:nowrap">保存</button>
+        ${val ? `<button onclick="clearSchedule(${i})" style="padding:4px 8px;border:1px solid var(--line);border-radius:5px;background:none;color:var(--dim);font-size:.72rem;cursor:pointer;font-family:inherit">解除</button>` : ''}
+      </div>
+    </div>`;
+  }).join('');
+}
+
+function closeScheduleModal() {
+  unlockScroll();
+  document.getElementById('schedule-modal-bg').classList.remove('open');
+}
+
+async function archiveAllTests() {
+  if (!confirm('全ての試験問題をアーカイブに移動しますか？')) return;
+  const today = new Date().toISOString().slice(0, 10);
+  try {
+    const data = await fetch('/api/tests').then(r => r.json());
+    const pairs = [...new Map(data.map(t => [t.subject+'||'+t.exam, {subject:t.subject,exam:t.exam}])).values()];
+    for (const p of pairs) {
+      await fetch('/api/admin/exam-schedule', {
+        method: 'POST',
+        headers: {'Content-Type':'application/json','Authorization':authToken},
+        body: JSON.stringify({subject:p.subject, exam:p.exam, archive_after:today})
+      });
+    }
+    await loadExamSchedule();
+    await openScheduleModal();
+  } catch(e) { alert('エラー: ' + e.message); }
+}
+async function saveSchedule(idx) {
+  const p = _schedulePairs[idx];
+  const input = document.getElementById('sch-' + idx);
+  const archive_after = input?.value || null;
+  if (!archive_after) { alert('日付を選択してください'); return; }
+  try {
+    const res = await fetch('/api/admin/exam-schedule', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject: p.subject, exam: p.exam, archive_after })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      _examSchedule[p.subject + '||' + p.exam] = archive_after;
+      applyExamArchive();
+      renderFolders();
+      if (input) { input.style.borderColor = 'var(--teal)'; setTimeout(() => { input.style.borderColor = ''; }, 1500); }
+      openScheduleModal();
+    } else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function clearSchedule(idx) {
+  const p = _schedulePairs[idx];
+  try {
+    await fetch('/api/admin/exam-schedule', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ subject: p.subject, exam: p.exam, archive_after: null })
+    });
+    delete _examSchedule[p.subject + '||' + p.exam];
+    tests.forEach(t => { if (t.subject === p.subject && t.exam === p.exam) delete t.archived; });
+    applyExamArchive();
+    renderFolders();
+    openScheduleModal();
+  } catch(e) { alert('通信エラー'); }
+}
+
+// ── ペア設定: index.html VERBATIM ──
+async function openPairModal() {
+  closeAdminModal();
+  _pairGroupCount = 0;
+  document.getElementById('pair-modal-pairs').innerHTML = '';
+  document.getElementById('pair-modal-msg').textContent = '';
+  document.getElementById('pair-modal-race-name').textContent = '（レース共通のグローバル設定）';
+  const [userData, existingPairs] = await Promise.all([
+    fetch('/api/admin/users', { headers: { Authorization: authToken } }).then(r => r.json()),
+    fetch('/api/pairs').then(r => r.json()).catch(() => [])
+  ]);
+  _pairModalUsers = (userData.users || userData || []).filter(u => u.username !== 'seijuro_dummy');
+  if (existingPairs.length) {
+    existingPairs.forEach(p => pairAddGroup(p.name, p.members.map(m => m.user_id)));
+  } else {
+    pairAddGroup(); pairAddGroup();
+  }
+  document.getElementById('pair-modal-bg').style.display = 'flex';
+}
+function closePairModal() { document.getElementById('pair-modal-bg').style.display = 'none'; }
+
+function pairAddGroup(name = '', memberIds = []) {
+  _pairGroupCount++;
+  const idx = _pairGroupCount;
+  const container = document.getElementById('pair-modal-pairs');
+  const div = document.createElement('div');
+  div.id = `pair-group-${idx}`;
+  div.style.cssText = 'background:var(--card2);border:1px solid var(--line);border-radius:10px;padding:12px';
+  div.innerHTML = `
+    <div style="display:flex;gap:8px;align-items:center;margin-bottom:8px">
+      <span style="font-size:.85rem;font-weight:700;color:var(--dim)">ペア ${idx}</span>
+      <button onclick="document.getElementById('pair-group-${idx}').remove()" style="background:none;border:none;color:var(--dim);font-size:1.1rem;cursor:pointer;padding:2px 6px;margin-left:auto">✕</button>
+    </div>
+    <div id="pair-members-${idx}" style="display:flex;flex-wrap:wrap;gap:5px">
+      ${_pairModalUsers.map(u => {
+        const checked = memberIds.includes(u.id) ? 'checked' : '';
+        return `<label style="display:flex;align-items:center;gap:4px;font-size:.78rem;cursor:pointer;padding:3px 8px;border:1px solid var(--line);border-radius:6px;background:var(--bg)">
+          <input type="checkbox" data-uid="${u.id}" ${checked} style="accent-color:var(--teal)"> ${esc(u.username)}
+        </label>`;
+      }).join('')}
+    </div>`;
+  container.appendChild(div);
+}
+
+async function savePairs() {
+  const pairs = [];
+  let i = 1, pairNum = 1;
+  while (i <= _pairGroupCount) {
+    const g = document.getElementById(`pair-group-${i}`);
+    if (g) {
+      const members = [...g.querySelectorAll('input[type=checkbox]:checked')].map(cb => parseInt(cb.dataset.uid));
+      pairs.push({ name: `ペア${pairNum++}`, members });
+    }
+    i++;
+  }
+  const res = await fetch('/api/admin/pairs', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', Authorization: authToken },
+    body: JSON.stringify({ pairs })
+  }).then(r => r.json());
+  if (res.ok) {
+    document.getElementById('pair-modal-msg').textContent = '✅ 保存しました';
+    loadRaceSection();
+  } else {
+    document.getElementById('pair-modal-msg').textContent = '❌ ' + (res.error || 'エラー');
+  }
+}
+
+// ── レース発行: index.html VERBATIM ──
+async function openRaceModal() {
+  closeAdminModal();
+  document.getElementById('race-modal-msg').textContent = '';
+  document.getElementById('race-name-input').value = '';
+  // 教科一覧（固定リスト + tests.jsonの教科をマージ）
+  const sel = document.getElementById('race-subject-input');
+  const fixedSubjects = ['科学技術英語Ⅰ', '応用物理', '応用数学', '加工学', '熱流体工学Ⅰ', '制御工学Ⅰ'];
+  const testSubjects = (typeof tests !== 'undefined' ? tests : []).map(t => t.subject).filter(Boolean);
+  const subjects = [...new Set([...fixedSubjects, ...testSubjects])];
+  sel.innerHTML = '<option value="">（教科を選択）</option>' + subjects.map(s => `<option value="${esc(s)}">${esc(s)}</option>`).join('');
+  document.getElementById('race-modal-bg').style.display = 'flex';
+  const data = await fetch('/api/admin/users', { headers: { Authorization: authToken } }).then(r => r.json());
+  _raceModalUsers = (data.users || data || []).filter(u => u.username !== 'seijuro_dummy');
+}
+function closeRaceModal() { document.getElementById('race-modal-bg').style.display = 'none'; }
+
+function raceAddGroup() {
+  _raceGroupCount++;
+  const idx = _raceGroupCount;
+  const wrap = document.getElementById('race-modal-groups');
+  const row = document.createElement('div');
+  row.className = 'race-group-row';
+  row.id = `race-group-row-${idx}`;
+  row.innerHTML = `<span style="font-size:.76rem;color:var(--dim);white-space:nowrap">組${idx}</span>
+    <input type="text" id="race-group-name-${idx}" placeholder="グループ名（例: チームA）" value="チーム${String.fromCharCode(64 + idx)}">
+    <button onclick="document.getElementById('race-group-row-${idx}').remove();_renderRaceModalUsers()" style="padding:3px 8px;border:1px solid var(--line);border-radius:4px;background:none;color:var(--rose);cursor:pointer;font-size:.76rem;font-family:inherit">✕</button>`;
+  wrap.appendChild(row);
+  _renderRaceModalUsers();
+}
+
+function _renderRaceModalUsers() {
+  const wrap = document.getElementById('race-modal-users');
+  const groupRows = Array.from(document.getElementById('race-modal-groups').querySelectorAll('.race-group-row'));
+  const groupOpts = groupRows.map(r => {
+    const idx = r.id.replace('race-group-row-', '');
+    const name = document.getElementById(`race-group-name-${idx}`)?.value || `グループ${idx}`;
+    return { idx, name };
+  });
+  wrap.innerHTML = _raceModalUsers.map(u => {
+    const sel = `race-user-group-${u.id}`;
+    const opts = [`<option value="">（なし）</option>`,
+      ...groupOpts.map(g => `<option value="${g.idx}">${esc(g.name)}</option>`)].join('');
+    return `<div style="display:flex;align-items:center;gap:8px">
+      <span style="flex:1;font-size:.82rem">${esc(u.username)}</span>
+      <select id="${sel}" style="padding:3px 6px;border:1px solid var(--line);border-radius:6px;background:var(--bg);color:var(--ink);font-size:.8rem;font-family:inherit">${opts}</select>
+    </div>`;
+  }).join('');
+}
+
+async function adminCreateRace() {
+  const name = document.getElementById('race-name-input').value.trim();
+  if (!name) { document.getElementById('race-modal-msg').textContent = 'レース名を入力してください'; return; }
+  // 全メンバーを1グループとして自動参加（グループ表示はペアから取得）
+  const groups = [{ name: '全員', members: _raceModalUsers.map(u => u.id) }];
+  const start_date = document.getElementById('race-start-input').value;
+  const end_date   = document.getElementById('race-end-input').value;
+  const subject    = document.getElementById('race-subject-input').value;
+  const res = await fetch('/api/admin/races', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+    body: JSON.stringify({ name, start_date, end_date, subject, groups })
+  }).then(r => r.json());
+  if (res.ok) {
+    showPointToast('🏁 レースを発行しました');
+    closeRaceModal();
+    loadRaceSection();
+  } else {
+    document.getElementById('race-modal-msg').textContent = res.error || 'エラー';
+  }
 }
 </script>
 </body>
