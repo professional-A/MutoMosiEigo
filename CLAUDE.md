@@ -20,16 +20,15 @@ npm start        # サーバー起動（ポート: PORT env or 3000）
 - **英語（科学技術英語）も他科目と完全に同等に扱う。** プロジェクト名に "Eigo" と入っているが、現在は全科目対応。英語模試の作問を `index.html` に埋め込まない。英語のテストも他科目と同じく `tests/*/data.json` として作る。
 - `index.html` は全科目の目次／ランディングのみ（作問データを持たせない方向へ移行中）。
 
-## アーキテクチャ改善（進行中 / 2026-09-10〜）
+## アーキテクチャ（2026-09 リファクタ完了 / フェーズ1〜3）
 
-「テスト追加のたびに `tests.json` 手編集」「`index.html` が4000行超の1枚岩」「ヘッダーにボタン12個」「なんでもモーダル（直リンク不可）」を解消する大規模リファクタリングを、独立した4フェーズで順に実施中。詳細 spec: `docs/superpowers/specs/2026-09-10-architecture-refactor-design.md`。
+「テスト追加のたびに `tests.json` 手編集」「`index.html` が4000行超の1枚岩」「なんでもモーダル（直リンク不可）」を解消する大規模リファクタリングのフェーズ1〜3が完了（詳細 spec: `docs/superpowers/specs/2026-09-10-architecture-refactor-design.md`、計画: `docs/superpowers/plans/2026-09-1*-phase*`）。
 
-1. **共有基盤** — `styles/theme.css`（テーマ変数の唯一の定義）・`js/api.js`・`js/app-shell.js`（共通ヘッダー＋ハンバーガーメニュー）
-2. **コンテンツ・パイプライン** — `/api/tests` で索引を自動生成（`tests.json` 手編集を廃止）・クイズエンジン統合（nekku → quiz 1本）・旧 per-test HTML を data.json 化
-3. **モーダル→独立ページ** — 成績・バトル・レース・管理・アンケートをマルチページ化
-4. **サーバー整理（任意）** — 科目ごとの採点API を1本化・`server.js` 分割
-
-実装方式は**マルチページ**（各機能を独立した `.html`、`express.static` のまま、ビルドツールなし）。
+- **共有基盤:** `styles/theme.css`（テーマ変数・全コンポーネントCSS・`[hidden]`・Web フォント `@import` の唯一の定義）／`js/api.js`（`window.api`）・`js/nav.js`（`window.APP_NAV`）・`js/app-shell.js`（共通ヘッダー＋ハンバーガー＋認証ブートストラップ＋内蔵アバターピッカー）・`js/util.js`（`esc`/`tu`/`titleBadge`/`showPointToast`）。
+- **コンテンツ:** `GET /api/tests` が `tests/*/data.json` を走査して索引を自動生成（`tests.json` 廃止）。全テストが `data.json`＋`quiz.html?d=…`。
+- **マルチページ:** 各機能が独立 `.html`（`members`/`scores`/`clrank`/`predict`/`battle`/`race`/`login`/`admin`）。`express.static` のまま・ビルドツールなし。各ページは `theme.css`＋`api/nav/app-shell/util.js` を読み `appShell.mount({ nav: window.APP_NAV })`。認証は `appshell:auth` イベントで橋渡し。
+- **`index.html`（≈1459行）:** ホーム目次（試験フォルダ一覧・ランキング・時間割カード・お知らせ）＋共通シェル＋認証（`syncUser`/`syncPasswordUser`・`manageAuth:false`）＋自前のアバター/テーマ/お知らせモーダルのみ。
+- **残（任意）: フェーズ4 サーバー整理** — 科目別採点API 5本を1本化・`server.js` をルート単位に分割。
 
 ## 詳細ドキュメント（.claude/skills/）
 
