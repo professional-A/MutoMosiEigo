@@ -18,6 +18,10 @@ html{scroll-behavior:smooth}
 
 /* ══ 共通シェル（app-shell.js が描画）══════════════════════════ */
 
+/* app-shell.js は el.hidden で表示制御する。.appshell-* が display を明示しているので
+   [hidden] を !important で最優先にしないと隠れない（index.html は自前の <style> で同等ルールを持つ）。 */
+[hidden]{display:none!important}
+
 /* ヘッダーバー（index.html の旧 .auth-bar の見た目を踏襲） */
 .appshell-bar{
   display:flex;align-items:center;gap:8px;
