@@ -1,0 +1,269 @@
+{
+  "title": "制御工学Ⅰ ・ ① 2024年度 期末 過去問",
+  "subtitle": "2024年度 期末試験の過去問18問（本番形式）",
+  "eyebrow": "制御工学Ⅰ ・ 前期末 対策テスト",
+  "description": "2024年度期末試験の過去問をそのまま収録。問2〜問4は本番では記述式（途中式を書いて解答）なので、まず紙に解いてから選択肢で答え合わせをすること。写真に残っている丸は学生本人の解答であり、正解ではない（間違いが混じっている）。この解答キーはノートの記述から独立に導出したもの。",
+  "year": 2026,
+  "grade": 4,
+  "exam": "前期末試験",
+  "subject": "制御工学Ⅰ",
+  "storageKey": "seigyo_kakomon2024_v1",
+  "pointsPerQ": 100,
+  "katex": true,
+  "tip": "問1は選択式そのまま。問2〜問4は<b>まず紙に解いてから</b>選択肢を見ること。選択肢はすべて「ありがちな計算ミス」で作ってあるので、間違えたらどのミスをしたかが解説でわかる。写真の丸を正解だと思わないこと。",
+  "footer": "制御工学Ⅰ 前期末 対策テスト ① ｜ 2024年度期末 過去問 全18問",
+  "sections": [
+    {
+      "id": "s1",
+      "no": "01",
+      "title": "問1：選択式（10問）",
+      "qs": [
+        {
+          "type": "single",
+          "q": "(1) 定係数線形非同次微分方程式の解のうち、特解（特殊解）が物理的に対応するものはどれか",
+          "opts": [
+            "過渡解",
+            "同次解（斉次解）",
+            "初期値応答",
+            "定常解"
+          ],
+          "ans": "定常解",
+          "note": "一般解＝同次解（斉次解）＋特解。同次解は時間とともに減衰する成分で過渡解に対応し、特解は入力が続く限り残る成分で定常解に対応する。「過渡解」「同次解」を選ぶのは斉次・非斉次の対応を逆にする典型的な取り違え。"
+        },
+        {
+          "type": "single",
+          "q": "(2) $\\varepsilon^{as}F(s)$ の逆ラプラス変換として正しいものはどれか（$a>0$）",
+          "opts": [
+            "$f(t-a)$",
+            "$f(t+a)$",
+            "$\\varepsilon^{at}f(t)$",
+            "$\\varepsilon^{-at}f(t)$"
+          ],
+          "ans": "$f(t+a)$",
+          "note": "推移定理：$L[f(t-a)u(t-a)]=\\varepsilon^{-as}F(s)$（時間軸で右にずらす＝遅らせる）。符号が逆の $\\varepsilon^{+as}F(s)$ は時間軸を左にずらす、つまり $f(t+a)$ に対応する。$f(t-a)$ は符号を逆に覚えた誤り、$\\varepsilon^{\\pm at}f(t)$ は s領域の推移定理（$s$をずらす）と$t$領域の推移定理（$t$をずらす）を混同した誤り。"
+        },
+        {
+          "type": "single",
+          "q": "(3) ラプラス逆変換の定義式として正しいものはどれか",
+          "opts": [
+            "$F(s)=\\displaystyle\\int_0^\\infty f(t)\\varepsilon^{-st}dt$",
+            "$f(t)=\\displaystyle\\int_0^\\infty F(s)\\varepsilon^{st}ds$",
+            "$f(t)=\\dfrac{1}{2\\pi j}\\displaystyle\\int_{-\\infty}^{\\infty}F(s)\\varepsilon^{st}ds$",
+            "$f(t)=\\dfrac{1}{2\\pi j}\\displaystyle\\int_{\\sigma-j\\infty}^{\\sigma+j\\infty}F(s)\\varepsilon^{st}ds$"
+          ],
+          "ans": "$f(t)=\\dfrac{1}{2\\pi j}\\displaystyle\\int_{\\sigma-j\\infty}^{\\sigma+j\\infty}F(s)\\varepsilon^{st}ds$",
+          "note": "逆ラプラス変換（ブロムウィッチ積分）は積分路が複素平面上の直線 $\\sigma\\pm j\\infty$ であることが特徴。①はそもそも順変換（ラプラス変換）の定義式。②は係数 $\\frac{1}{2\\pi j}$ と複素積分路が抜けている。③は積分路を実数区間 $-\\infty\\sim\\infty$ にしてしまっており誤り（$\\sigma\\pm j\\infty$ でなければならない）。"
+        },
+        {
+          "type": "single",
+          "q": "(4) RC直列回路の時定数として正しいものはどれか",
+          "opts": [
+            "$L/R$",
+            "$RC$",
+            "$1/RC$",
+            "$R/C$"
+          ],
+          "ans": "$RC$",
+          "note": "RC回路の時定数は $\\tau=RC$。$L/R$ はRL回路の時定数であり回路の種類を取り違えている。$1/RC$・$R/C$ はそれぞれ逆数・単位の付け方を誤ったもの。"
+        },
+        {
+          "type": "single",
+          "q": "(5) $F(s)=\\dfrac{s^3+1}{s^2(s+1)^2}$ を部分分数展開するとき、正しい展開の形はどれか",
+          "opts": [
+            "$\\dfrac{a}{s}+\\dfrac{b}{s+1}$",
+            "$\\dfrac{a}{s^2}+\\dfrac{b}{(s+1)^2}$",
+            "$\\dfrac{a}{s^2}+\\dfrac{b}{s}+\\dfrac{c}{s+1}$",
+            "$\\dfrac{a}{s^2}+\\dfrac{b}{s}+\\dfrac{c}{(s+1)^2}+\\dfrac{d}{s+1}$"
+          ],
+          "ans": "$\\dfrac{a}{s^2}+\\dfrac{b}{s}+\\dfrac{c}{(s+1)^2}+\\dfrac{d}{s+1}$",
+          "note": "分母に重根 $(s+1)^2$ や $s^2$ があるときは、次数の数だけ項を立てる（$s^2$ なら $a/s^2+b/s$ の2項、$(s+1)^2$ なら $c/(s+1)^2+d/(s+1)$ の2項）。①は重根を単根扱いした誤り、②は単根成分（$b/s$・$d/(s+1)$）を落とした誤り、③は $(s+1)^2$ 側の重根処理だけを忘れた誤り。"
+        },
+        {
+          "type": "single",
+          "q": "(6) 一次進み要素の伝達関数として正しいものはどれか",
+          "opts": [
+            "$\\dfrac{K}{1+sT}$",
+            "$\\dfrac{Ks}{1+sT}$",
+            "$K(1+sT)$",
+            "$K$"
+          ],
+          "ans": "$K(1+sT)$",
+          "note": "一次進み要素は $G(s)=K(1+sT)$。①は一次<b>遅れ</b>要素との取り違え（2024年度の答案でも実際にこの間違いをしている）。②は一次微分要素、④は比例要素との取り違え。"
+        },
+        {
+          "type": "single",
+          "q": "(7) ラプラス逆変換に関する記述として最も適切なものはどれか",
+          "opts": [
+            "$L^{-1}\\left[\\dfrac{1}{s^3}\\right]=0.5t^2$",
+            "$L^{-1}\\left[\\dfrac{1}{s^2}\\right]=0.5t^2$",
+            "$L^{-1}\\left[\\dfrac{1}{s^3}\\right]=t^2$",
+            "$L^{-1}\\left[\\dfrac{1}{s+a}\\right]=\\varepsilon^{at}$"
+          ],
+          "ans": "$L^{-1}\\left[\\dfrac{1}{s^3}\\right]=0.5t^2$",
+          "note": "$L^{-1}[1/s^{n+1}]=t^n/n!$ より $L^{-1}[1/s^3]=t^2/2=0.5t^2$。②は $1/s^2\\to t$ が正しいのにここに $0.5t^2$ を当てはめた次数の取り違え。③は $1/2$（$n!=2!=2$）を掛け忘れた誤り。④は $L^{-1}[1/(s+a)]=\\varepsilon^{-at}$ が正しく、指数の符号を逆にした誤り。"
+        },
+        {
+          "type": "single",
+          "q": "(8) 伝達関数の説明として<b>間違っているもの</b>はどれか",
+          "opts": [
+            "伝達関数はすべての初期値を零として定義する",
+            "伝達関数は入力と出力の関係を表す",
+            "出力のラプラス変換は、伝達関数に入力信号のラプラス変換を乗じたものである",
+            "出力信号は、伝達関数に出力信号のラプラス変換を乗じたものである"
+          ],
+          "ans": "出力信号は、伝達関数に出力信号のラプラス変換を乗じたものである",
+          "note": "伝達関数の定義は $Y(s)=G(s)X(s)$、すなわち<b>入力信号</b>のラプラス変換に伝達関数を乗じたものが出力のラプラス変換になる。④は「出力信号」に「出力信号のラプラス変換」を乗じると書いており、乗じる相手（入力）を取り違えているうえ時間関数と変換後の量も混同している誤りの選択肢。①②③はいずれも正しい記述。"
+        },
+        {
+          "type": "single",
+          "q": "(9) 時定数2、ゲイン定数20の一次遅れ要素の伝達関数として正しいものはどれか",
+          "opts": [
+            "$\\dfrac{20}{s+2}$",
+            "$\\dfrac{10}{s+2}$",
+            "$\\dfrac{10}{s+0.5}$",
+            "$\\dfrac{20}{s+0.5}$"
+          ],
+          "ans": "$\\dfrac{10}{s+0.5}$",
+          "note": "$G(s)=\\dfrac{K}{1+sT}=\\dfrac{20}{1+2s}$。分母を$s$の係数1の形に直すため $2s$ で割ると $G(s)=\\dfrac{10}{s+0.5}$（$20/2=10$、$1/2=0.5$）。①は$K=20$のまま・時定数をそのまま分母に足しており正規化していない誤り。②は$K$だけ正しく正規化して分母の定数（$0.5$）を$T$の$2$のままにした誤り。④は逆に分母だけ正規化して分子の$K/T$計算を忘れた誤り。"
+        },
+        {
+          "type": "single",
+          "q": "(10) 伝達関数に現れる記号の説明として<b>不適切なもの</b>はどれか",
+          "opts": [
+            "$\\omega_n$ は $s$ 関数の一部を表す記号である",
+            "$\\zeta$ は減衰率（減衰係数）を表す",
+            "$T$ は時定数を表す",
+            "$K$ はゲイン定数（比例定数）を表す"
+          ],
+          "ans": "$\\omega_n$ は $s$ 関数の一部を表す記号である",
+          "note": "$\\omega_n$ は「固有角周波数」という具体的な物理量を表す記号であり、「$s$関数の一部」という説明はその意味を何も言っていない不適切な記述。②③④はそれぞれ正しい。"
+        }
+      ]
+    },
+    {
+      "id": "s2",
+      "no": "02",
+      "title": "問2：ラプラス逆変換（3問・各8点）",
+      "qs": [
+        {
+          "type": "single",
+          "q": "紙に解いてから選択肢を見てください。<br>(1) $F(s)=\\dfrac{2s+1}{s^2+5s+6}$ の逆ラプラス変換 $f(t)$ を求めよ",
+          "opts": [
+            "$-3\\varepsilon^{-2t}+5\\varepsilon^{-3t}$",
+            "$3\\varepsilon^{-2t}-5\\varepsilon^{-3t}$",
+            "$-3\\varepsilon^{-3t}+5\\varepsilon^{-2t}$",
+            "$-3\\varepsilon^{2t}+5\\varepsilon^{3t}$",
+            "$2\\varepsilon^{-2t}+\\varepsilon^{-3t}$"
+          ],
+          "ans": "$-3\\varepsilon^{-2t}+5\\varepsilon^{-3t}$",
+          "note": "分母を因数分解：$s^2+5s+6=(s+2)(s+3)$。ヘビサイド法で $A=(s+2)F(s)|_{s=-2}=\\dfrac{2(-2)+1}{-2+3}=\\dfrac{-3}{1}=-3$、$B=(s+3)F(s)|_{s=-3}=\\dfrac{2(-3)+1}{-3+2}=\\dfrac{-5}{-1}=5$。よって $f(t)=-3\\varepsilon^{-2t}+5\\varepsilon^{-3t}$。②は全体の符号を反転した誤り。③は$A$と$B$を取り違えて逆の指数に付けた誤り。④は極の符号を反転（$-2,-3$を$2,3$と誤読）した誤り。⑤はヘビサイド法を使わず分子の係数$(2,1)$をそのまま係数に流用した誤り。"
+        },
+        {
+          "type": "single",
+          "q": "紙に解いてから選択肢を見てください。<br>(2) $F(s)=\\dfrac{s+1}{s^2+4}$ の逆ラプラス変換 $f(t)$ を求めよ",
+          "opts": [
+            "$\\cos 2t+\\dfrac12\\sin 2t$",
+            "$\\cos 2t+2\\sin 2t$",
+            "$2\\cos 2t+\\sin 2t$",
+            "$\\cos t+\\dfrac12\\sin t$",
+            "$\\sin 2t+\\dfrac12\\cos 2t$"
+          ],
+          "ans": "$\\cos 2t+\\dfrac12\\sin 2t$",
+          "note": "分母 $s^2+4=s^2+\\omega^2$（$\\omega=2$）。$F(s)=\\dfrac{s}{s^2+4}+\\dfrac{1}{s^2+4}$ に分ける。$L^{-1}\\left[\\dfrac{s}{s^2+\\omega^2}\\right]=\\cos\\omega t=\\cos2t$。第2項は $\\dfrac{1}{s^2+4}=\\dfrac12\\cdot\\dfrac{2}{s^2+4}$ と分子を$\\omega=2$に合わせてから $L^{-1}\\left[\\dfrac{\\omega}{s^2+\\omega^2}\\right]=\\sin\\omega t$ を使うので $\\dfrac12\\sin2t$。よって $f(t)=\\cos2t+\\dfrac12\\sin2t$。②は$\\dfrac12$を掛け忘れた誤り。③は$\\cos$と$\\sin$それぞれの係数を取り違えた誤り。④は$\\omega=2$を使わず$\\omega=1$として計算した誤り。⑤は$\\cos$項と$\\sin$項の対応を丸ごと入れ替えた誤り。"
+        },
+        {
+          "type": "single",
+          "q": "紙に解いてから選択肢を見てください。<br>(3) $F(s)=\\dfrac{1}{s^2(s+a)}$ の逆ラプラス変換 $f(t)$ を求めよ",
+          "opts": [
+            "$-\\dfrac{1}{a^2}+\\dfrac{1}{a}t+\\dfrac{1}{a^2}\\varepsilon^{-at}$",
+            "$\\dfrac{1}{a^2}-\\dfrac{1}{a}t-\\dfrac{1}{a^2}\\varepsilon^{-at}$",
+            "$-\\dfrac{1}{a^2}-\\dfrac{1}{a}t+\\dfrac{1}{a^2}\\varepsilon^{-at}$",
+            "$-\\dfrac{1}{a}+\\dfrac{1}{a}t+\\dfrac{1}{a}\\varepsilon^{-at}$",
+            "$\\dfrac{1}{a^2}+\\dfrac{1}{a}t-\\dfrac{1}{a^2}\\varepsilon^{-at}$"
+          ],
+          "ans": "$-\\dfrac{1}{a^2}+\\dfrac{1}{a}t+\\dfrac{1}{a^2}\\varepsilon^{-at}$",
+          "note": "$\\dfrac{1}{s^2(s+a)}=\\dfrac{A}{s^2}+\\dfrac{B}{s}+\\dfrac{C}{s+a}$ とおく。$A=s^2F(s)|_{s=0}=\\dfrac{1}{a}$。$C=(s+a)F(s)|_{s=-a}=\\dfrac{1}{a^2}$。両辺を通分して$s^1$の係数を比較すると $B=-\\dfrac{1}{a^2}$。逆変換：$A/s^2\\to At=\\dfrac1a t$、$B/s\\to B=-\\dfrac{1}{a^2}$、$C/(s+a)\\to C\\varepsilon^{-at}=\\dfrac{1}{a^2}\\varepsilon^{-at}$。よって $f(t)=-\\dfrac{1}{a^2}+\\dfrac{1}{a}t+\\dfrac{1}{a^2}\\varepsilon^{-at}$。②は全体の符号反転。③は$t$項の符号だけを誤った誤り。④は$a^2$であるべき箇所を$a$のままにした次数ミス。⑤は定数項と$\\varepsilon^{-at}$項の符号を取り違えた誤り。"
+        }
+      ]
+    },
+    {
+      "id": "s3",
+      "no": "03",
+      "title": "問3：微分方程式（2問・各10点）",
+      "qs": [
+        {
+          "type": "single",
+          "q": "紙に解いてから選択肢を見てください。<br>(1) $2x''+3x'+x=1$、初期条件 $x(0)=0,\\ x'(0)=0$ のとき $x(t)$ を求めよ",
+          "opts": [
+            "$1-2\\varepsilon^{-t/2}+\\varepsilon^{-t}$",
+            "$1+2\\varepsilon^{-t/2}-\\varepsilon^{-t}$",
+            "$1-\\varepsilon^{-t/2}+2\\varepsilon^{-t}$",
+            "$1-2\\varepsilon^{-2t}+\\varepsilon^{-t}$",
+            "$-1+2\\varepsilon^{-t/2}-\\varepsilon^{-t}$"
+          ],
+          "ans": "$1-2\\varepsilon^{-t/2}+\\varepsilon^{-t}$",
+          "note": "①ラプラス変換（初期値0を代入）：$2s^2X(s)+3sX(s)+X(s)=\\dfrac{1}{s}$。②整理：$X(s)=\\dfrac{1}{s(2s^2+3s+1)}=\\dfrac{1}{s(2s+1)(s+1)}$。③部分分数：$A=X(s)\\cdot s|_{s=0}=1$、$B=X(s)(2s+1)|_{s=-1/2}=-2$、$C=X(s)(s+1)|_{s=-1}=1$（すなわち $X(s)=\\dfrac{1}{s}-\\dfrac{2}{2s+1}+\\dfrac{1}{s+1}=\\dfrac1s-\\dfrac{1}{s+1/2}+\\dfrac{1}{s+1}$）。④逆変換：$x(t)=1-2\\varepsilon^{-t/2}+\\varepsilon^{-t}$。検算：$x(0)=1-2+1=0$ ✓。②は符号を反転した誤り。③は$-2$と$1$の係数を取り違えた誤り。④は極$-1/2$を$-2$と読み違え、時定数を逆数にした誤り。⑤は全体符号反転かつ①と同じ係数ミス。"
+        },
+        {
+          "type": "single",
+          "q": "紙に解いてから選択肢を見てください。<br>(2) $\\dot x=y,\\ \\dot y=x$、初期条件 $x(0)=1,\\ y(0)=0$ のとき $x(t),\\ y(t)$ を求めよ",
+          "opts": [
+            "$x=\\cosh t,\\ y=\\sinh t$",
+            "$x=\\sinh t,\\ y=\\cosh t$",
+            "$x=\\cos t,\\ y=\\sin t$",
+            "$x=\\cosh t,\\ y=-\\sinh t$",
+            "$x=\\varepsilon^{t},\\ y=\\varepsilon^{t}$"
+          ],
+          "ans": "$x=\\cosh t,\\ y=\\sinh t$",
+          "note": "ラプラス変換：$sX(s)-1=Y(s)$、$sY(s)=X(s)$。2式目を1式目に代入して $X(s)=\\dfrac{s}{s^2-1}$、$Y(s)=\\dfrac{1}{s^2-1}$。逆変換の公式 $L^{-1}\\left[\\dfrac{s}{s^2-a^2}\\right]=\\cosh at$、$L^{-1}\\left[\\dfrac{a}{s^2-a^2}\\right]=\\sinh at$（$a=1$）より $x=\\cosh t,\\ y=\\sinh t$。検算：$x(0)=\\cosh0=1$ ✓、$y(0)=\\sinh0=0$ ✓。②は$x$と$y$を入れ替えた誤り。③は双曲線関数（$s^2-1$型）を三角関数（$s^2+1$型）と取り違えた誤り。④は$y$だけ符号を反転した誤り。⑤は初期条件の数値だけを合わせた、一般解を求めていない雑な誤り。"
+        }
+      ]
+    },
+    {
+      "id": "s4",
+      "no": "04",
+      "title": "問4：RL直列回路（3問・12点＋7点×2）",
+      "qs": [
+        {
+          "type": "single",
+          "q": "紙に解いてから選択肢を見てください。<br>(1) 下図はスイッチSWを閉じたRL直列回路である。入力を$v$、出力を$v_L$としたときの伝達関数 $G(s)=V_L(s)/V(s)$ を正規化し、要素の種類を答えよ。<br><svg viewBox=\"0 0 380 190\" xmlns=\"http://www.w3.org/2000/svg\" style=\"max-width:360px;width:100%;margin:12px auto 4px;display:block\"><rect x=\"0\" y=\"0\" width=\"380\" height=\"190\" fill=\"none\"/><line x1=\"40\" y1=\"40\" x2=\"75\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"75\" y1=\"40\" x2=\"95\" y2=\"25\" stroke=\"#f6b352\" stroke-width=\"2.2\"/><circle cx=\"75\" cy=\"40\" r=\"2.5\" fill=\"#f6b352\"/><circle cx=\"105\" cy=\"40\" r=\"2.5\" fill=\"#f6b352\"/><text x=\"85\" y=\"20\" fill=\"#f6b352\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">SW</text><line x1=\"105\" y1=\"40\" x2=\"150\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><path d=\"M150,40 l8,-10 l12,20 l12,-20 l12,20 l8,-10\" fill=\"none\" stroke=\"#60a5fa\" stroke-width=\"2.2\"/><text x=\"185\" y=\"20\" fill=\"#93c5fd\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">R</text><line x1=\"202\" y1=\"40\" x2=\"240\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><path d=\"M240,40 a8,8 0 1,1 16,0 a8,8 0 1,1 16,0 a8,8 0 1,1 16,0\" fill=\"none\" stroke=\"#5fe0a8\" stroke-width=\"2.2\"/><text x=\"272\" y=\"20\" fill=\"#5fe0a8\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">L</text><line x1=\"288\" y1=\"40\" x2=\"340\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"340\" y1=\"40\" x2=\"340\" y2=\"150\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"340\" y1=\"150\" x2=\"40\" y2=\"150\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"40\" y1=\"150\" x2=\"40\" y2=\"105\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"28\" y1=\"90\" x2=\"52\" y2=\"90\" stroke=\"#e7eef7\" stroke-width=\"3\"/><line x1=\"33\" y1=\"98\" x2=\"47\" y2=\"98\" stroke=\"#e7eef7\" stroke-width=\"1.6\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><text x=\"12\" y=\"95\" fill=\"#e7eef7\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">v</text><line x1=\"150\" y1=\"58\" x2=\"202\" y2=\"58\" stroke=\"#93c5fd\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/><text x=\"176\" y=\"72\" fill=\"#93c5fd\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">v_R</text><line x1=\"240\" y1=\"58\" x2=\"288\" y2=\"58\" stroke=\"#5fe0a8\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/><text x=\"264\" y=\"72\" fill=\"#5fe0a8\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">v_L</text><path d=\"M60,32 l6,0 l0,-4 l4,8 l4,-8 l0,4 l6,0\" fill=\"none\" stroke=\"#f6b352\" stroke-width=\"1.4\"/><text x=\"78\" y=\"10\" fill=\"#9ca3af\" font-size=\"11\" font-family=\"sans-serif\" text-anchor=\"middle\">i(t)</text></svg>",
+          "opts": [
+            "$G(s)=\\dfrac{Ls}{R+Ls}$、一次微分要素（$T=K=L/R$）",
+            "$G(s)=\\dfrac{R}{R+Ls}$、一次遅れ要素（$T=L/R$）",
+            "$G(s)=\\dfrac{Ls}{R+Ls}$、一次遅れ要素",
+            "$G(s)=\\dfrac{L}{R+Ls}$、積分要素",
+            "$G(s)=\\dfrac{R+Ls}{Ls}$、一次進み要素"
+          ],
+          "ans": "$G(s)=\\dfrac{Ls}{R+Ls}$、一次微分要素（$T=K=L/R$）",
+          "note": "回路方程式より $V=(R+Ls)I$、$V_L=LsI$ なので $G(s)=\\dfrac{V_L}{V}=\\dfrac{Ls}{R+Ls}$。分母の定数項を1にするため$R$で割ると $G(s)=\\dfrac{(L/R)s}{1+(L/R)s}=\\dfrac{Ts}{1+Ts}$（$T=L/R$）。この形は $\\dfrac{Ks}{1+sT}$ の一次微分要素で、$K=T=L/R$。②は $v_R$ 側の伝達関数（$V_R/V=R/(R+Ls)$）と取り違えた誤り。③は式は正しいが分類を一次遅れ要素と誤った（$Ks/(1+sT)$の形なのに$K/(1+sT)$の形と混同）誤り。④は分子の$s$を落とした誤り。⑤は分子分母を逆に取った誤り。"
+        },
+        {
+          "type": "single",
+          "q": "紙に解いてから選択肢を見てください。<br>(2) 上のRL直列回路で $v=Eu(t)$（単位ステップ×$E$）を加えたときの回路方程式は $L\\dfrac{di}{dt}+Ri=Eu(t)$。電流 $i(t)$ を求めよ",
+          "opts": [
+            "$\\dfrac{E}{R}\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$",
+            "$\\dfrac{E}{R}\\varepsilon^{-\\frac{R}{L}t}$",
+            "$\\dfrac{E}{L}\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$",
+            "$\\dfrac{E}{R}\\left(1-\\varepsilon^{-\\frac{L}{R}t}\\right)$",
+            "$\\dfrac{E}{R}\\left(1+\\varepsilon^{-\\frac{R}{L}t}\\right)$"
+          ],
+          "ans": "$\\dfrac{E}{R}\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$",
+          "note": "初期値0でラプラス変換：$LsI(s)+RI(s)=\\dfrac{E}{s}$ → $I(s)=\\dfrac{E}{s(Ls+R)}=\\dfrac{E/L}{s(s+R/L)}$。公式 $\\dfrac{1}{s(s+a)}=\\dfrac1a\\left(\\dfrac1s-\\dfrac{1}{s+a}\\right)$（$a=R/L$）を使うと $I(s)=\\dfrac{E}{R}\\left(\\dfrac1s-\\dfrac{1}{s+R/L}\\right)$。逆変換して $i(t)=\\dfrac{E}{R}\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$。②は$v_L$の波形（減衰する指数関数のみ）と混同した誤り。③は$R$と$L$の役割を取り違えた誤り。④は時定数 $L/R$ を逆数の $R/L$ にした誤り。⑤は定常項との足し引きの符号を誤った誤り（$t\\to\\infty$で$i\\to2E/R$になってしまい物理的に不合理）。"
+        },
+        {
+          "type": "single",
+          "q": "紙に解いてから選択肢を見てください。<br>(3) 上の $i(t)=\\dfrac{E}{R}\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$ を用いて $v_R(t)$、$v_L(t)$ を求めよ",
+          "opts": [
+            "$v_R=E\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$、$v_L=E\\varepsilon^{-\\frac{R}{L}t}$",
+            "$v_R=E\\varepsilon^{-\\frac{R}{L}t}$、$v_L=E\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$",
+            "$v_R=E\\left(1-\\varepsilon^{-\\frac{L}{R}t}\\right)$、$v_L=E\\varepsilon^{-\\frac{L}{R}t}$",
+            "$v_R=E\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$、$v_L=E\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$",
+            "$v_R=\\dfrac{E}{R}\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$、$v_L=\\dfrac{E}{R}\\varepsilon^{-\\frac{R}{L}t}$"
+          ],
+          "ans": "$v_R=E\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$、$v_L=E\\varepsilon^{-\\frac{R}{L}t}$",
+          "note": "$v_R=Ri(t)=R\\cdot\\dfrac{E}{R}\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)=E\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)$。$v_L=v-v_R$（キルヒホッフの電圧則）より $v_L=E-E\\left(1-\\varepsilon^{-\\frac{R}{L}t}\\right)=E\\varepsilon^{-\\frac{R}{L}t}$。検算：$v_R+v_L=E$（一定）になっており $v=Eu(t)$ と整合する。②は$v_R$と$v_L$を入れ替えた誤り。③は時定数を逆数にした誤り。④は両方を同じ式にしてしまい、$v_R+v_L=v$の検算をしていない誤り。⑤は$i(t)$の式をそのまま電圧として使ってしまい、$R$を掛け忘れた誤り。"
+        }
+      ]
+    }
+  ]
+}
