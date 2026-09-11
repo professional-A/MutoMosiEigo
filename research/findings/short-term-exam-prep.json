@@ -151,7 +151,7 @@
     "applies_to": ["all"],
     "implication": "1問ごとの即時正誤＋短い解説を必須にする。まとめて最後に採点する形式は誤答定着のリスクがある。",
     "caveat": "遅延フィードバックが有利に見える研究もあるが、間隔効果と交絡している可能性が指摘されている。実用上は即時で安全側に倒す。",
-    "implemented_in": ["js/quiz-engine.js", "tests/2026-9-ai-kakomon/data.json", "tests/2026-9-ai-ruiji/data.json", "tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json", "tests/2026-4-zenki-matsu-seigyogaku-step/data.json", "tests/2026-4-zenki-matsu-seigyogaku-bunrui/data.json"],
+    "implemented_in": ["js/quiz-engine.js", "tests/2026-9-ai-kakomon/data.json", "tests/2026-9-ai-ruiji/data.json", "tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json", "tests/2026-4-zenki-matsu-seigyogaku-step/data.json", "tests/2026-4-zenki-matsu-seigyogaku-bunrui/data.json", "tests/2026-4-zenki-matsu-kakougaku/data.json"],
     "tags": ["feedback", "question-format"]
   },
   {
@@ -165,7 +165,7 @@
     "applies_to": ["all"],
     "implication": "選択肢作りの品質基準。ダミーを適当に埋めた4択は多肢選択の利点を捨てている。誤選択肢は『あり得る誤解』から作る。",
     "caveat": "紛らわしすぎて正答率が下がりすぎると逆効果（optimal-difficulty-85-percent と併せて調整）。",
-    "implemented_in": ["tests/2026-9-ai-kakomon/data.json", "tests/2026-9-ai-ruiji/data.json", "tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json", "tests/2026-4-zenki-matsu-seigyogaku-step/data.json", "tests/2026-4-zenki-matsu-seigyogaku-bunrui/data.json"],
+    "implemented_in": ["tests/2026-9-ai-kakomon/data.json", "tests/2026-9-ai-ruiji/data.json", "tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json", "tests/2026-4-zenki-matsu-seigyogaku-step/data.json", "tests/2026-4-zenki-matsu-seigyogaku-bunrui/data.json", "tests/2026-4-zenki-matsu-kakougaku/data.json"],
     "tags": ["question-format", "distractors", "authoring"]
   },
   {
@@ -179,7 +179,7 @@
     "applies_to": ["all"],
     "implication": "出題の難易度配分の目標値。全問正解が続くセットは時間の無駄、正答率50%を切るセットは挫折と誤答定着を招く。",
     "caveat": "二値分類課題の数理的な結論であり、あらゆる学習課題にそのまま当てはまるわけではない。設計原則の目安として使い、エビデンスとして強く主張しない。",
-    "implemented_in": ["tests/2026-9-ai-yougo/data.json", "tests/2026-9-ai-ichimon/data.json"],
+    "implemented_in": ["tests/2026-9-ai-yougo/data.json", "tests/2026-9-ai-ichimon/data.json", "tests/2026-4-zenki-matsu-kakougaku/data.json"],
     "tags": ["difficulty", "question-selection"]
   },
   {
@@ -265,7 +265,7 @@
     "applies_to": ["concept", "procedure"],
     "implication": "過去問の類似版を作るときは、数値だけ変えるのでは足りない。題材・文脈・設問の言い回しを変えたうえで、問われている概念は同一にする。過去問と類似問題を並べて解かせると『何が同じか』が見える。",
     "caveat": "表層を変えすぎると、学習者が元の学習内容を想起できず転移が起きない。変える幅には上限がある。",
-    "implemented_in": ["tests/2026-9-ai-ruiji/data.json", "tests/2026-4-zenki-matsu-seigyogaku-bunrui/data.json"],
+    "implemented_in": ["tests/2026-9-ai-ruiji/data.json", "tests/2026-4-zenki-matsu-seigyogaku-bunrui/data.json", "tests/2026-4-zenki-matsu-kakougaku/data.json"],
     "tags": ["variants", "transfer", "authoring", "question-selection"]
   }
 ]
