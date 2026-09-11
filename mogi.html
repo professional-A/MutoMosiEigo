@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>読み込み中...</title>
+</head>
+<body>
+<script>
+// 人工知能概論 模擬試験（本番形式）
+// 教員室で聞いた出題比率をもとに、過去問90問（tests/2026-9-ai-kakomon/data.json）から
+// 毎回ランダムに抜粋して本番に近い問題数で構成する。
+//   選択問題　54問中 → 20〜25問
+//   正誤問題　27問中 → 9〜11問（「10問程度」の実測）
+//   マッチング 10問中 → 7〜8問
+// 同じタブ内でのリロードでは同じ抽選結果を保つ（sessionStorage）。
+// 「新しい模試を生成」ボタンで明示的に引き直す。
+
+const SRC = '/tests/2026-9-ai-kakomon/data.json';
+const SEED_KEY = 'ai_mogi_data_v1';
+
+function randInt(min, max) { return min + Math.floor(Math.random() * (max - min + 1)); }
+
+function shuffle(arr) {
+  const a = arr.slice();
+  for (let i = a.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i + 1));
+    [a[i], a[j]] = [a[j], a[i]];
+  }
+  return a;
+}
+
+// 「問37.」「正誤12.」「マッチング5.」のような練習問題集の通し番号ラベルを剥がす
+// （本番はこの番号を知らないので、そのまま見せると模試の緊張感を損なう）
+function stripLabel(q) {
+  return q.replace(/^(問\d+\.|正誤\d+\.|マッチング\d+\.)\s*/, '');
+}
+
+function pickQuestions(pool, n) {
+  return shuffle(pool).slice(0, Math.min(n, pool.length)).map(orig => {
+    const q = JSON.parse(JSON.stringify(orig));
+    q.q = stripLabel(q.q);
+    // 選択肢の並びもシャッフル（ans は文字列比較なので並び順を変えても採点に影響しない）
+    q.opts = shuffle(q.opts);
+    return q;
+  });
+}
+
+function buildMockData(kakomon) {
+  const mcPool = [].concat(
+    ...kakomon.sections.filter(s => s.id.startsWith('mc')).map(s => s.qs)
+  );
+  const tfPool = kakomon.sections.find(s => s.id === 'tf').qs;
+  const matchPool = kakomon.sections.find(s => s.id === 'match').qs;
+
+  const mcN = randInt(20, 25);
+  const tfN = randInt(9, 11);
+  const matchN = randInt(7, 8);
+
+  const mcQs = pickQuestions(mcPool, mcN);
+  const tfQs = pickQuestions(tfPool, tfN);
+  const matchQs = pickQuestions(matchPool, matchN);
+  const total = mcQs.length + tfQs.length + matchQs.length;
+
+  return {
+    title: '人工知能概論 ・ ⑤ 模擬試験（本番形式）',
+    subtitle: `選択${mcQs.length}問・正誤${tfQs.length}問・マッチング${matchQs.length}問 ＝ 全${total}問`,
+    eyebrow: '人工知能概論 ・ 前期末試験',
+    description: '教員室で聞いた出題比率（選択54問中20〜25問・正誤27問中10問程度・マッチング10問中7〜8問）をもとに、過去問90問から毎回ランダムに抜粋した模擬試験です。問題番号は隠してあり、選択肢の並びも毎回変わります。開くたびに新しい模試になり、前回の記録は残りません（このテストはポイント対象外です）。タブを閉じずにリロードしただけなら同じ模試のまま続けられます。',
+    subject: '人工知能概論',
+    storageKey: sessionStorage.getItem('ai_mogi_key') || ('ai_mogi_' + Date.now().toString(36) + Math.random().toString(36).slice(2, 6)),
+    pointsPerQ: 100,
+    noPoints: true,
+    katex: true,
+    tip: '本番と同じ感覚で、通しで解いてみてください。答え合わせは1問ずつその場で出ます。終わったら下の「🔀 新しい模試を生成」で違う抜粋にもう一度挑戦できます。90問すべて（①〜④）をやり込んでから力試しに使うのがおすすめです。',
+    footer: '出典：教員配布『AI Questions for students – Final exam』過去問90問からのランダム抽出。出題比率は教員室で確認した実際の本番形式（選択20〜25/54・正誤10前後/27・マッチング7〜8/10）に基づく。',
+    sections: [
+      { id: 'mc', no: '01', title: `多肢選択（${mcQs.length}問）`, qs: mcQs },
+      { id: 'tf', no: '02', title: `正誤問題（${tfQs.length}問）`, qs: tfQs },
+      { id: 'match', no: '03', title: `マッチング（${matchQs.length}問）`, qs: matchQs },
+    ],
+  };
+}
+
+function addRegenButton() {
+  const btn = document.createElement('button');
+  btn.textContent = '🔀 新しい模試を生成';
+  btn.style.cssText = 'position:fixed;bottom:20px;right:16px;background:#1f9e90;border:none;color:#0a1626;font-weight:700;padding:10px 16px;border-radius:99px;font-size:.85rem;z-index:200;cursor:pointer;box-shadow:0 4px 14px rgba(0,0,0,.3)';
+  btn.onclick = () => {
+    if (!confirm('新しい模試を生成します。今の模試の回答は消えます。よろしいですか？')) return;
+    const oldKey = sessionStorage.getItem('ai_mogi_key');
+    if (oldKey) localStorage.removeItem(oldKey);
+    sessionStorage.removeItem(SEED_KEY);
+    sessionStorage.removeItem('ai_mogi_key');
+    location.reload();
+  };
+  document.body.appendChild(btn);
+}
+
+function boot(data) {
+  sessionStorage.setItem('ai_mogi_key', data.storageKey);
+  sessionStorage.setItem(SEED_KEY, JSON.stringify(data));
+  const s = document.createElement('script');
+  s.src = '/js/quiz-engine.js';
+  s.onload = () => { window.initQuiz(data); addRegenButton(); };
+  document.head.appendChild(s);
+}
+
+const cached = sessionStorage.getItem(SEED_KEY);
+if (cached) {
+  try { boot(JSON.parse(cached)); } catch (e) { sessionStorage.removeItem(SEED_KEY); location.reload(); }
+} else {
+  fetch(SRC)
+    .then(r => { if (!r.ok) throw new Error('HTTP ' + r.status); return r.json(); })
+    .then(kakomon => boot(buildMockData(kakomon)))
+    .catch(e => {
+      document.body.style.cssText = 'font:1rem sans-serif;padding:40px;color:#e7eef7;background:#0a1626';
+      document.body.textContent = 'データ読み込みエラー: ' + e.message;
+    });
+}
+</script>
+</body>
+</html>

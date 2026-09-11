@@ -326,6 +326,7 @@ function refreshQ(key, secId) {
 }
 
 function award(key) {
+  if (_data.noPoints) return; // ランダム抽出の模試など、周回でポイントを稼がれたくないテスト用
   if (window.addPoints) addPoints(_data.pointsPerQ || 100, _storageKey, key, true, _data.subject);
 }
 
