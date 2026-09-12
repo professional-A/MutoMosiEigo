@@ -454,7 +454,52 @@ function addScript(src, onload) {
   document.body.appendChild(s);
 }
 
+// 選択肢が自前で番号を持つもの（① / (A) / A.）。並べ替えると番号と位置がずれる。
+const SELF_NUMBERED = /^\s*(?:[①-⑳]|\(?[A-Ea-e]\)[.．]?\s|[A-Ea-e][.．]\s)/;
+// 他の選択肢を参照するもの（「すべて」「上記」「AとBが正解」など）。並べ替え不可。
+const CROSS_REF = /すべて|全て|上記|下記|いずれも|どれも|両方|該当なし|正しいものはない|と.{0,4}が正解|および.{0,4}が正解/;
+
+// data.json を描画前に正規化する。
+//   (1) ans が数値（0始まりの選択肢番号）で書かれていればテキストに直す
+//   (2) 選択肢をシャッフルする（作問側が「正解を先頭」で書いても位置で当たらないように）
+// 保存済みの回答は選択肢テキストで持っているので、並べ替えても復元は壊れない。
+function prepareQuestions(data) {
+  (data.sections || []).forEach(function (sec) {
+    (sec.qs || []).forEach(function (q) {
+      if (!Array.isArray(q.opts)) return;
+
+      // (0) type 欠落の補完。opts があるのに type が無いと描画の分岐に入らず
+      //     選択肢が1つも出ない（例: seigyogaku-vocab は全64問で欠落していた）
+      if (q.type === undefined || q.type === null || q.type === '') {
+        q.type = Array.isArray(q.ans) ? 'multi' : 'single';
+      }
+
+      // (1) 数値インデックス → テキスト（並べ替えより前に行う）
+      if (typeof q.ans === 'number') {
+        if (q.opts[q.ans] !== undefined) q.ans = q.opts[q.ans];
+      } else if (Array.isArray(q.ans)) {
+        q.ans = q.ans.map(function (a) {
+          return (typeof a === 'number' && q.opts[a] !== undefined) ? q.opts[a] : a;
+        });
+      }
+
+      // (2) シャッフル
+      if (q.type !== 'single' && q.type !== 'multi') return;   // sort/input は対象外
+      if (q.noShuffle) return;                                  // 明示的な除外
+      if (q.opts.some(function (o) {
+        return SELF_NUMBERED.test(String(o)) || CROSS_REF.test(String(o));
+      })) return;
+
+      for (let i = q.opts.length - 1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i + 1));
+        const t = q.opts[i]; q.opts[i] = q.opts[j]; q.opts[j] = t;
+      }
+    });
+  });
+}
+
 window.initQuiz = function (data) {
+  prepareQuestions(data);
   _data = data;
   _sections = data.sections;
   _storageKey = data.storageKey;
