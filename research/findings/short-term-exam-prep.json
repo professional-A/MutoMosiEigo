@@ -267,5 +267,27 @@
     "caveat": "表層を変えすぎると、学習者が元の学習内容を想起できず転移が起きない。変える幅には上限がある。",
     "implemented_in": ["tests/2026-9-ai-ruiji/data.json", "tests/2026-4-zenki-matsu-seigyogaku-bunrui/data.json", "tests/2026-4-zenki-matsu-kakougaku/data.json"],
     "tags": ["variants", "transfer", "authoring", "question-selection"]
+  },
+  {
+    "id": "cheatsheet-content-what-correlates-with-scores",
+    "claim": "持ち込みカンペの中身と点数の相関を実測すると、効くのは「図・抽象表現を入れる」「整理して見つけやすくする」「授業の順に並べる」で、逆に「情報密度が高い」「手順の説明を書き込む」は点が低い側と相関する。",
+    "numbers": {
+      "低密度との相関": "情報密度が低いシートほど試験の点が高い（Ludorf & Clark 2014）",
+      "手順の書き込み": "『どう処理するか』の説明を多く含むシートほど点が低い（同）",
+      "参照時間": "ノート参照に費やした時間は得点と負の相関。上位者ほどカンペを見ない（Boniface 1985 / Burns 2014）",
+      "効く設問の層": "Bloom の comprehension レベルの設問でのみ相関。高次の設問では相関なし（Shaffer et al. 2016）"
+    },
+    "strength": "moderate",
+    "sources": [
+      { "cite": "Shaffer et al. (2016/2025) Crib Sheets and Exam Performance in a Data Structures Course, Computer Science Education", "url": "https://people.cs.vt.edu/shaffer/Papers/Crib_Sheets2016.pdf" },
+      { "cite": "de Raadt (2012) Student created cheat-sheets in examinations: Impact on student outcomes, ACE", "url": "https://dl.acm.org/doi/10.5555/2483716.2483725" },
+      { "cite": "Ludorf & Clark (2014) Help sheet content predicts test performance", "url": "https://teachpsych.org/ebooks/" },
+      { "cite": "Dickson & Bauer (2008) Do students learn course material during crib sheet construction?, Teaching of Psychology 35(2)", "url": "https://doi.org/10.1080/00986280801978343" }
+    ],
+    "applies_to": ["all"],
+    "implication": "カンペ持ち込み可の試験では、シートは『覚えるための道具』ではなく『試験中の検索装置』として設計する。図と一般形を優先し、ブロックに分けて配置を固定し、授業の順に並べる。詰め込みは逆効果なので優先順位を付けて上から書かせ、書ききれなくてよい前提にする。カンペが助けるのは理解レベルの設問だけなので、応用・分析レベルは結局あらかじめ頭に入れておく必要がある。",
+    "caveat": "密度と点数の関係は相関であって因果ではない。低密度のシートは『理解しているから書く必要がなかった』結果の可能性が高く、知識ゼロの学習者が単に量を減らしても点は上がらない。またカンペ作成自体が点を上げるという仮説を支持する文献はほとんど無く（無関係とした研究が複数）、効果が一貫して確認されているのは不安の低下のみ。シートの完成度に時間を注ぐより検索練習に回すほうが期待値が高い。",
+    "implemented_in": ["materials/2026-zenki-matsu-kakougaku/cheatsheet-layout.html", "kakougaku-cheatsheet.html"],
+    "tags": ["cheatsheet", "open-book", "authoring", "difficulty"]
   }
 ]

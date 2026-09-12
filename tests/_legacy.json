@@ -8,5 +8,16 @@
     "storageKey": null,
     "totalItems": 0,
     "path": "/mogi.html"
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期末試験",
+    "subject": "加工学",
+    "title": "加工学 ・ カンペシート 配置図",
+    "storageKey": null,
+    "totalItems": 0,
+    "type": "summary",
+    "path": "/kakougaku-cheatsheet.html"
   }
 ]

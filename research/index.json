@@ -1,13 +1,13 @@
 {
-  "updated": "2026-09-10",
+  "updated": "2026-09-12",
   "documents": [
     {
       "file": "findings/short-term-exam-prep.json",
       "title": "短期テスト勉強（残り数日〜2週間）の学習科学",
       "question": "試験まで日数が少ない現実的な状況で、何をどう出題・再出題すれば点と定着の両方が取れるか",
-      "count": 18,
+      "count": 19,
       "date": "2026-09-09",
-      "updated": "2026-09-10 — 出題言語・不確実な解答の扱い・類似問題の作り方の3件を追加"
+      "updated": "2026-09-12 — カンペシートの中身と点数の相関（cheatsheet-content-what-correlates-with-scores）を追加"
     }
   ],
   "source_documents": [
@@ -22,33 +22,114 @@
     }
   ],
   "tags": {
-    "spacing": ["optimal-gap-is-20-40-percent-of-days-left", "sleep-is-the-active-ingredient-in-spacing", "within-session-lag-still-matters", "spacing-beats-cramming-almost-always"],
-    "scheduling": ["optimal-gap-is-20-40-percent-of-days-left", "three-relearning-sessions-is-enough", "sleep-is-the-active-ingredient-in-spacing", "equal-interval-is-fine-no-need-for-expanding", "cap-interval-at-exam-date"],
-    "short-window": ["optimal-gap-is-20-40-percent-of-days-left", "three-relearning-sessions-is-enough", "spread-correct-recalls-across-sessions", "sleep-is-the-active-ingredient-in-spacing", "cap-interval-at-exam-date"],
-    "successive-relearning": ["three-relearning-sessions-is-enough", "spread-correct-recalls-across-sessions"],
-    "criterion": ["three-relearning-sessions-is-enough", "keep-testing-after-first-correct"],
-    "session-design": ["spread-correct-recalls-across-sessions", "within-session-lag-still-matters", "pretesting-beats-posttesting"],
-    "retrieval-practice": ["keep-testing-after-first-correct"],
-    "dropout": ["keep-testing-after-first-correct"],
-    "wrong-answer-requeue": ["within-session-lag-still-matters"],
-    "interleaving": ["interleaving-beats-blocked-after-a-day"],
-    "problem-solving": ["interleaving-beats-blocked-after-a-day"],
-    "question-selection": ["interleaving-beats-blocked-after-a-day", "optimal-difficulty-85-percent"],
-    "question-format": ["immediate-feedback-halves-lure-intrusions", "competitive-lures-make-mcq-generative"],
-    "distractors": ["competitive-lures-make-mcq-generative"],
-    "authoring": ["competitive-lures-make-mcq-generative"],
-    "feedback": ["pretesting-beats-posttesting", "immediate-feedback-halves-lure-intrusions", "feedback-required-when-accuracy-below-50"],
-    "pretesting": ["pretesting-beats-posttesting"],
-    "difficulty": ["optimal-difficulty-85-percent", "feedback-required-when-accuracy-below-50"],
-    "algorithm-choice": ["equal-interval-is-fine-no-need-for-expanding"],
-    "simplicity": ["equal-interval-is-fine-no-need-for-expanding"],
-    "sleep": ["sleep-is-the-active-ingredient-in-spacing"],
-    "guardrail": ["cap-interval-at-exam-date"],
-    "core-claim": ["spacing-beats-cramming-almost-always"],
-    "language": ["match-the-language-of-the-real-exam"],
-    "transfer": ["match-the-language-of-the-real-exam", "vary-surface-keep-deep-structure"],
-    "uncertainty": ["errors-are-fine-if-feedback-is-immediate"],
-    "variants": ["vary-surface-keep-deep-structure"]
+    "spacing": [
+      "optimal-gap-is-20-40-percent-of-days-left",
+      "sleep-is-the-active-ingredient-in-spacing",
+      "within-session-lag-still-matters",
+      "spacing-beats-cramming-almost-always"
+    ],
+    "scheduling": [
+      "optimal-gap-is-20-40-percent-of-days-left",
+      "three-relearning-sessions-is-enough",
+      "sleep-is-the-active-ingredient-in-spacing",
+      "equal-interval-is-fine-no-need-for-expanding",
+      "cap-interval-at-exam-date"
+    ],
+    "short-window": [
+      "optimal-gap-is-20-40-percent-of-days-left",
+      "three-relearning-sessions-is-enough",
+      "spread-correct-recalls-across-sessions",
+      "sleep-is-the-active-ingredient-in-spacing",
+      "cap-interval-at-exam-date"
+    ],
+    "successive-relearning": [
+      "three-relearning-sessions-is-enough",
+      "spread-correct-recalls-across-sessions"
+    ],
+    "criterion": [
+      "three-relearning-sessions-is-enough",
+      "keep-testing-after-first-correct"
+    ],
+    "session-design": [
+      "spread-correct-recalls-across-sessions",
+      "within-session-lag-still-matters",
+      "pretesting-beats-posttesting"
+    ],
+    "retrieval-practice": [
+      "keep-testing-after-first-correct"
+    ],
+    "dropout": [
+      "keep-testing-after-first-correct"
+    ],
+    "wrong-answer-requeue": [
+      "within-session-lag-still-matters"
+    ],
+    "interleaving": [
+      "interleaving-beats-blocked-after-a-day"
+    ],
+    "problem-solving": [
+      "interleaving-beats-blocked-after-a-day"
+    ],
+    "question-selection": [
+      "interleaving-beats-blocked-after-a-day",
+      "optimal-difficulty-85-percent"
+    ],
+    "question-format": [
+      "immediate-feedback-halves-lure-intrusions",
+      "competitive-lures-make-mcq-generative"
+    ],
+    "distractors": [
+      "competitive-lures-make-mcq-generative"
+    ],
+    "authoring": [
+      "competitive-lures-make-mcq-generative"
+    ],
+    "feedback": [
+      "pretesting-beats-posttesting",
+      "immediate-feedback-halves-lure-intrusions",
+      "feedback-required-when-accuracy-below-50"
+    ],
+    "pretesting": [
+      "pretesting-beats-posttesting"
+    ],
+    "difficulty": [
+      "optimal-difficulty-85-percent",
+      "feedback-required-when-accuracy-below-50"
+    ],
+    "algorithm-choice": [
+      "equal-interval-is-fine-no-need-for-expanding"
+    ],
+    "simplicity": [
+      "equal-interval-is-fine-no-need-for-expanding"
+    ],
+    "sleep": [
+      "sleep-is-the-active-ingredient-in-spacing"
+    ],
+    "guardrail": [
+      "cap-interval-at-exam-date"
+    ],
+    "core-claim": [
+      "spacing-beats-cramming-almost-always"
+    ],
+    "language": [
+      "match-the-language-of-the-real-exam"
+    ],
+    "transfer": [
+      "match-the-language-of-the-real-exam",
+      "vary-surface-keep-deep-structure"
+    ],
+    "uncertainty": [
+      "errors-are-fine-if-feedback-is-immediate"
+    ],
+    "variants": [
+      "vary-surface-keep-deep-structure"
+    ],
+    "cheatsheet": [
+      "cheatsheet-content-what-correlates-with-scores"
+    ],
+    "open-book": [
+      "cheatsheet-content-what-correlates-with-scores"
+    ]
   },
   "unimplemented": [
     "optimal-gap-is-20-40-percent-of-days-left",

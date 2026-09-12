@@ -1,0 +1,446 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>加工学 カンペシート配置図 ・ 武藤模試</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/styles/theme.css">
+<style>
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Fraunces',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  #app-shell-bar{position:fixed;top:0;left:0;right:0;z-index:100}
+  #cs-page{padding-top:46px;min-height:100vh;background:var(--bg)}
+
+  /* ====================================================================
+     以下は materials/2026-zenki-matsu-kakougaku/cheatsheet-layout.html を
+     そのまま移植（内容・優先順位・SVGの図は一切変更していない）。
+     変更したのは表示まわりのみ：
+       - :root のローカル変数を .cs-wrap にスコープし直し、サイト全体の
+         --ink / --line 等（theme.css の :root 定義）を汚染しないようにした
+       - ローカルの --bg 定義は削除し、ページの地は theme.css の var(--bg) を使用
+       - body{...} だった地の色指定を #cs-page / .cs-wrap 側に付け替え
+       - スマホ幅向けのメディアクエリを追加（末尾にまとめて追記）
+     ==================================================================== */
+  .cs-wrap{
+    --ink:#1a1a1a; --line:#c9c9c9; --paper:#fff;
+    --p1:#c0392b; --p2:#d97706; --p3:#6b7280;
+    color:var(--ink);font-family:"Yu Gothic","Hiragino Sans",system-ui,sans-serif;
+    padding:20px 14px 60px;line-height:1.5;
+  }
+  .cs-wrap *{box-sizing:border-box}
+  .cs-wrap .cs-inner{max-width:900px;margin:0 auto}
+  .cs-wrap h1{font-size:1.15rem;margin:0 0 4px}
+  .cs-wrap .sub{font-size:.8rem;color:#555;margin-bottom:14px}
+  .cs-wrap .legend{display:flex;gap:14px;flex-wrap:wrap;font-size:.75rem;margin-bottom:14px;padding:10px 12px;background:#fff;border:1px solid var(--line);border-radius:8px}
+  .cs-wrap .legend b{display:inline-block;width:1.4em;height:1.4em;line-height:1.4em;text-align:center;border-radius:50%;color:#fff;font-size:.7rem;margin-right:4px}
+  .cs-wrap .sheet{background:var(--paper);border:1px solid #999;box-shadow:0 2px 10px rgba(0,0,0,.35);margin-bottom:26px;padding:9px;
+         aspect-ratio:210/297;display:flex;flex-direction:column}
+  .cs-wrap .sheet-label{font-size:.78rem;font-weight:700;letter-spacing:.05em;color:#444;margin-bottom:5px;flex-shrink:0;border-bottom:2px solid #444;padding-bottom:3px}
+  .cs-wrap .cols{display:grid;grid-template-columns:1fr 1fr;gap:7px;flex:1;min-height:0}
+  .cs-wrap .col{display:flex;flex-direction:column;gap:6px}
+  .cs-wrap .blk{border:1.5px solid var(--p3);border-radius:5px;padding:4px 6px;overflow:hidden}
+  .cs-wrap .blk.p1{border-color:var(--p1);border-width:2.5px;background:#fdf3f2}
+  .cs-wrap .blk.p2{border-color:var(--p2);border-width:2px;background:#fdf8ef}
+  .cs-wrap .blk.fig{border-style:dashed;background:#f7fbff;border-color:#2563eb}
+  .cs-wrap .bt{font-size:.7rem;font-weight:700;display:flex;align-items:center;gap:5px;margin-bottom:2px}
+  .cs-wrap .num{display:inline-block;min-width:1.4em;height:1.4em;line-height:1.4em;text-align:center;border-radius:50%;background:var(--p3);color:#fff;font-size:.62rem;flex-shrink:0}
+  .cs-wrap .p1 .num{background:var(--p1)} .cs-wrap .p2 .num{background:var(--p2)} .cs-wrap .fig .num{background:#2563eb;border-radius:3px}
+  .cs-wrap .bc{font-size:.555rem;line-height:1.34;white-space:pre-wrap;font-family:"Consolas","Yu Gothic",monospace}
+  .cs-wrap .grow{flex:1}
+  .cs-wrap .namebox{border:2px dashed #333;border-radius:4px;padding:7px;text-align:center;font-size:.66rem;color:#333;font-weight:700}
+  .cs-wrap .note{font-size:.74rem;background:#fff;border-left:4px solid var(--p1);padding:10px 12px;border-radius:0 6px 6px 0;margin-bottom:16px}
+  .cs-wrap svg{display:block;width:100%;height:auto}
+  .cs-wrap svg text{font-size:7px;font-family:"Consolas",monospace}
+  .cs-wrap .figrow{display:grid;grid-template-columns:1fr 1fr;gap:4px}
+
+  /* ====== スマホ対応（追加分。紙に書きながらスマホで見る使い方を想定） ====== */
+  @media (max-width:620px){
+    .cs-wrap .bc{font-size:.62rem}
+    .cs-wrap .bt{font-size:.72rem}
+    .cs-wrap svg text{font-size:8px}
+  }
+  @media (max-width:460px){
+    .cs-wrap{padding:14px 8px 50px}
+    .cs-wrap h1{font-size:1.02rem}
+    /* 固定アスペクト比だと狭幅でblk内テキストが overflow:hidden で切れるため、
+       スマホでは高さを内容に合わせて自然に伸ばす */
+    .cs-wrap .sheet{aspect-ratio:auto}
+    /* 2カラムのブロック配置は1カラムに落として文字を潰さない
+       （2枚の表面/裏面シート自体はもともと縦並びのまま変更していない） */
+    .cs-wrap .cols{grid-template-columns:1fr}
+    .cs-wrap .bc{font-size:.66rem;line-height:1.4}
+    .cs-wrap .bt{font-size:.74rem}
+    .cs-wrap svg text{font-size:8.5px}
+  }
+</style>
+</head>
+<body>
+<div id="app-shell-bar"></div>
+
+<div id="cs-page">
+<div class="cs-wrap">
+<div class="cs-inner">
+<h1>加工学 カンペシート 配置図</h1>
+<div class="sub">A4両面・手書き／試験 9/14(月) 10:50–11:40（50分）／範囲：除去加工①〜⑥</div>
+
+<div class="legend">
+  <span><b style="background:var(--p1)">①</b>最優先</span>
+  <span><b style="background:var(--p2)">③</b>次に書く</span>
+  <span><b style="background:#2563eb;border-radius:3px">図</b>図。公式とセットで描く</span>
+  <span><b style="background:var(--p3)">⑧</b>余力があれば</span>
+</div>
+
+<div class="note">
+  <b>最初にやること：</b>裏面の右下に氏名欄の枠を引く。<br>
+  <b>図は飛ばさないこと。</b>$F_s=F_c\cosφ-F_t\sinφ$ は、φとαがどの角度か分からなければ使えない。
+  公式だけ書いて図を省くと「書いてあるのに使えない」状態になる。
+</div>
+
+<!-- ============ 表面 ============ -->
+<div class="sheet">
+  <div class="sheet-label">表面 ── 切削</div>
+  <div class="cols">
+
+    <div class="col">
+      <div class="blk p2">
+        <div class="bt"><span class="num">③</span>除去加工の分類・切削の3要素</div>
+        <div class="bc">◆特徴 削り取る／切屑が出る／高精度／長時間
+◆種類 ①切削(刃物)②研削(砥粒)
+ ③高エネルギ(放電･レーザ)
+ ④その他(溶融･気化･酸･電気分解)
+   例)エッチング=保護膜の無い部分を腐食液で溶かす
+◆機械加工=工作機械で所望の形状寸法に
+ マザーマシン:工作機械の精度≧加工部品の精度
+◆切削の3要素 ①工作機械②切削工具③切削条件
+◆切削条件 ①切削速度②送り速度③切込み量
+ →バイトの種類･形状で適正値が異なる
+ →加工時間･加工精度･工具寿命を決める</div>
+      </div>
+
+      <div class="blk p2">
+        <div class="bt"><span class="num">④</span>加工法ごとの運動</div>
+        <div class="bc">         工具       工作物
+ 旋削     直線       回転
+ 平面削り  直線       直線
+ フライス  回転       直線
+ 穴あけ   回転+直線    －
+ ブローチ  直線       －</div>
+      </div>
+
+      <div class="blk p2">
+        <div class="bt"><span class="num">⑤</span>工具材料</div>
+        <div class="bc">◆要求特性 ①切削温度下で被削材より硬い
+ ②耐欠損性(靭性) ③耐摩耗性 ④刃先の形状に成形可能
+◆①炭素工具鋼/合金工具鋼 C:0.6〜1.4%
+   合金=+Cr,Mo,W,V,Co 焼入焼戻→靭性向上
+ ②高速度工具鋼 C:0.8〜1.6% +Cr,Mo,W,V,Co
+   →高温強度向上
+ ③超硬合金 WC･TiC+Co(結合材)
+   プレス成型し焼結(粉末冶金)</div>
+      </div>
+
+      <div class="blk fig">
+        <div class="bt"><span class="num">図</span>切削の幾何 ─ ①の角度はこれ</div>
+        <svg viewBox="0 0 200 108" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+          <!-- 被削材 -->
+          <rect x="8" y="62" width="112" height="34" stroke-width="1.3"/>
+          <!-- 切り取られる層 d -->
+          <line x1="8" y1="50" x2="88" y2="50" stroke-dasharray="3 2"/>
+          <line x1="8" y1="62" x2="8" y2="50"/>
+          <text x="14" y="59">被削材</text>
+          <!-- 寸法 d -->
+          <line x1="4" y1="50" x2="4" y2="62" stroke="#c0392b"/>
+          <text x="-6" y="59" fill="#c0392b" stroke="none">d</text>
+          <!-- せん断面 φ -->
+          <line x1="88" y1="62" x2="62" y2="36" stroke="#c0392b" stroke-width="1.4"/>
+          <text x="66" y="56" fill="#c0392b" stroke="none">φ</text>
+          <path d="M104 62 A 18 18 0 0 0 88 48" stroke="#c0392b" stroke-width=".7"/>
+          <!-- 工具 -->
+          <path d="M88 62 L128 22 L150 44 L120 62 Z" stroke-width="1.4" fill="#eee"/>
+          <text x="126" y="50">工具</text>
+          <!-- すくい面と垂直線 α -->
+          <line x1="88" y1="62" x2="88" y2="14" stroke-dasharray="3 2" stroke="#2563eb"/>
+          <text x="92" y="18" fill="#2563eb" stroke="none">α</text>
+          <path d="M88 30 A 32 32 0 0 0 105 38" stroke="#2563eb" stroke-width=".7"/>
+          <!-- 切屑 -->
+          <path d="M62 36 L88 62 L118 32 L92 12 Z" fill="#fff" stroke-width="1.2"/>
+          <text x="78" y="30">切屑</text>
+          <!-- 切屑厚さ t -->
+          <line x1="88" y1="8" x2="108" y2="26" stroke="#c0392b"/>
+          <text x="110" y="18" fill="#c0392b" stroke="none">t</text>
+        </svg>
+        <div class="bc">α:すくい角（工具の傾き） φ:せん断角（切屑が分離する面）
+d:切込み t:切屑厚さ → rc=d/t（切屑は厚く短くなるのでrc&lt;1､鋼で約0.3）
+※この図がないと公式Bの Fs,Fn,F,N がどの角度か分からない</div>
+      </div>
+
+      <div class="blk" style="border-style:dotted;color:#777">
+        <div class="bt" style="color:#777"><span class="num" style="background:#bbb">余</span>予備スペース</div>
+        <div class="bc">勉強していて「これ覚えられない」と思ったものを、
+ここに後から書き足す。最初から埋めようとしない。
+
+・中間の反省で足したいこと
+・クイズで間違えた項目
+</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="blk p1">
+        <div class="bt"><span class="num">①</span>公式A ─ 切削条件・表面粗さ</div>
+        <div class="bc">V=πDN/1000  N=1000V/(πD)  V:m/min D:mm N:rpm
+F=fN  F:mm/min f:mm/rev   d:切込み量mm
+Rz=f²/(8R)  R:コーナ半径 ※Rz=R(1-cosθ)から</div>
+        <div class="figrow">
+          <svg viewBox="0 0 100 52" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+            <text x="2" y="8" stroke="none">旋削</text>
+            <circle cx="30" cy="28" r="16" stroke-width="1.3"/>
+            <text x="24" y="31" stroke="none">D</text>
+            <path d="M38 12 A 18 18 0 0 1 44 22" stroke="#c0392b"/>
+            <text x="45" y="14" fill="#c0392b" stroke="none">N</text>
+            <path d="M60 28 L74 22 L74 34 Z" fill="#eee"/>
+            <line x1="74" y1="28" x2="92" y2="28" stroke="#2563eb"/>
+            <text x="78" y="24" fill="#2563eb" stroke="none">f</text>
+            <line x1="46" y1="28" x2="60" y2="28" stroke="#c0392b"/>
+            <text x="48" y="42" fill="#c0392b" stroke="none">d</text>
+          </svg>
+          <svg viewBox="0 0 100 52" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+            <text x="2" y="8" stroke="none">表面粗さ</text>
+            <path d="M6 40 A 20 20 0 0 1 46 40" stroke-width="1.3"/>
+            <path d="M46 40 A 20 20 0 0 1 86 40" stroke-width="1.3"/>
+            <line x1="6" y1="40" x2="92" y2="40" stroke-dasharray="3 2"/>
+            <line x1="6" y1="20" x2="92" y2="20" stroke-dasharray="3 2"/>
+            <line x1="46" y1="20" x2="46" y2="40" stroke="#c0392b" stroke-width="1.4"/>
+            <text x="49" y="33" fill="#c0392b" stroke="none">Rz</text>
+            <line x1="6" y1="47" x2="46" y2="47" stroke="#2563eb"/>
+            <text x="22" y="45" fill="#2563eb" stroke="none">f</text>
+            <text x="60" y="16" stroke="none">R</text>
+          </svg>
+        </div>
+      </div>
+
+      <div class="blk p1 grow">
+        <div class="bt"><span class="num">①</span>公式B ─ 切削理論・動力</div>
+        <div class="bc">rc=切込みd/切屑厚さt=lc/l ※鋼材で約0.3
+tanφ=rc･cosα/(1-rc･sinα)
+γ=tan(φ-α)+cotφ   せん断ひずみ
+Fs=Fc･cosφ-Ft･sinφ   Fn=Fc･sinφ+Ft･cosφ
+F =Ft･cosα+Fc･sinα   N =Fc･cosα-Ft･sinα
+μ=F/N=tanβ  β:摩擦角
+R=Fc/cos(β-α)=Ft/sin(β-α)
+ →βが既知ならFc,Ftの測定でRが出る
+ls=d/sinφ   As=ls･b=db/sinφ
+τs=(Fc･cosφ-Ft･sinφ)sinφ/(bd)
+σs=(Fc･sinφ+Ft･cosφ)sinφ/(bd)
+τt=(Fc･sinα+Ft･cosα)/(lb)  すくい面
+σt=(Fc･cosα-Ft･sinα)/(lb)
+Pc=ap･ae･Vf･Kc/(60×10⁶･η)[kW]
+ ap:切込mm ae:切削幅mm Vf:mm/min Kc:MPa
+fz=Vf/(N･Z)  1刃当り送り Z:刃数</div>
+        <svg viewBox="0 0 200 96" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+          <text x="2" y="9" stroke="none">力の関係（Rを分解する）</text>
+          <!-- 原点 -->
+          <circle cx="40" cy="76" r="1.6" fill="#1a1a1a"/>
+          <!-- R -->
+          <line x1="40" y1="76" x2="132" y2="26" stroke="#c0392b" stroke-width="1.6"/>
+          <text x="122" y="22" fill="#c0392b" stroke="none">R</text>
+          <!-- Fc 水平 -->
+          <line x1="40" y1="76" x2="132" y2="76" stroke="#2563eb" stroke-width="1.4"/>
+          <text x="82" y="86" fill="#2563eb" stroke="none">Fc 主分力</text>
+          <!-- Ft 垂直 -->
+          <line x1="132" y1="76" x2="132" y2="26" stroke="#2563eb" stroke-width="1.4"/>
+          <text x="136" y="54" fill="#2563eb" stroke="none">Ft 背分力</text>
+          <!-- すくい面方向 F,N -->
+          <line x1="40" y1="76" x2="96" y2="8" stroke-dasharray="3 2" stroke="#059669"/>
+          <text x="82" y="8" fill="#059669" stroke="none">N</text>
+          <line x1="96" y1="8" x2="132" y2="26" stroke="#059669" stroke-width="1.2"/>
+          <text x="112" y="12" fill="#059669" stroke="none">F</text>
+          <!-- 角 -->
+          <path d="M62 76 A 22 22 0 0 0 55 62" stroke="#c0392b" stroke-width=".7"/>
+          <text x="58" y="72" fill="#c0392b" stroke="none">β-α</text>
+          <text x="2" y="92" stroke="none">F=μN, μ=tanβ / 直接測れるのは Fc,Ft</text>
+        </svg>
+      </div>
+
+      <div class="blk">
+        <div class="bt"><span class="num">⑨⑧</span>切削抵抗・バイト</div>
+        <div class="bc">切削力=切削に必要な力(工具側)／切削抵抗=反力R(被加工材側)
+ Fc主分力=水平分力 Ft背分力=垂直分力 Ff送り分力
+比切削抵抗Kc:断面積1mm²の切りくずを切削するのに必要な切削方向の力Fc
+バイト各部 (1)すくい面(2)主逃げ面(3)副逃げ面(4)主切れ刃(5)副切れ刃(6)コーナ(7)シャンク
+角度 αf:サイド逃げ角 γf:サイドすくい角 αp:バック逃げ角 γp:すくい角 φ:アプローチ角</div>
+      </div>
+    </div>
+
+  </div>
+</div>
+
+<!-- ============ 裏面 ============ -->
+<div class="sheet">
+  <div class="sheet-label">裏面 ── 研削</div>
+  <div class="cols">
+
+    <div class="col">
+      <div class="blk">
+        <div class="bt"><span class="num">⑥</span>砥粒加工の特徴と分類</div>
+        <div class="bc">◆砥粒による極微小な切削で目的の表面･寸法･形状を得る
+◆特徴 ①高硬度材料の加工が可能
+ ②砥粒1刃当りの切削量が少ない(切削0.05mm､研削μm未満)
+   →③高精度に適する →④加工効率が悪い(切削加工後に加工)
+ ⑤切れ味が維持される(自生作用)
+◆分類 固定砥粒:砥石(結合剤で固める･角型/丸型)
+        研摩シート(結合剤でシートに固定)
+    遊離砥粒:研磨シート･超音波･バフ仕上げ
+ 強制切込み:丸型砥石･角型砥石→研削加工
+ 定圧切込み:ホーニング･超仕上げ･ベルト研削
+◆研削 ①円筒研削:砥石回転+工作物回転
+   トラバース:切込み後、回転軸方向に往復
+   プランジ :切込みのみ、軸方向移動なし
+ ②平面研削:砥石回転+工作物直線運動</div>
+        <svg viewBox="0 0 200 54" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+          <text x="2" y="9" stroke="none">トラバース</text>
+          <circle cx="34" cy="24" r="11"/><text x="28" y="27" stroke="none">砥石</text>
+          <rect x="10" y="38" width="76" height="11"/>
+          <line x1="20" y1="16" x2="66" y2="16" stroke="#c0392b"/>
+          <path d="M66 16 l-4 -2 v4 z" fill="#c0392b" stroke="none"/>
+          <path d="M20 16 l4 -2 v4 z" fill="#c0392b" stroke="none"/>
+          <text x="36" y="13" fill="#c0392b" stroke="none">往復</text>
+          <text x="106" y="9" stroke="none">プランジ</text>
+          <circle cx="138" cy="24" r="11"/><text x="132" y="27" stroke="none">砥石</text>
+          <rect x="114" y="38" width="76" height="11"/>
+          <line x1="138" y1="6" x2="138" y2="13" stroke="#c0392b"/>
+          <path d="M138 13 l-2 -4 h4 z" fill="#c0392b" stroke="none"/>
+          <text x="142" y="11" fill="#c0392b" stroke="none">切込のみ</text>
+        </svg>
+      </div>
+
+      <div class="blk">
+        <div class="bt"><span class="num">⑦</span>研削機構</div>
+        <div class="bc">多数の砥粒毎に加工工程が混在
+①切れ刃がランダムな形状･分布→統計的な扱いを要する
+②大きな負のすくい角で切削。砥粒1個の切屑厚さが微小
+③研削速度が著しく大きい →冷却が必要</div>
+      </div>
+
+      <div class="blk p2 grow">
+        <div class="bt"><span class="num">新</span>混同しやすいペア（正誤問題対策）</div>
+        <div class="bc">切屑厚さ  切削 0.05mm  ／ 研削 μm未満
+切削速度  切削 200m/min ／ 研削 2000m/min(冷却要)
+ツルーイング=整形(重心を回転中心に)
+ドレッシング=目出し(砥粒を結合剤から突出)
+目つぶれ=砥粒の摩耗 / 目こぼれ=過剰な脱落
+目づまり=砥粒間の空孔のつまり
+固定砥粒=砥石･研摩シート / 遊離砥粒=超音波･バフ
+強制切込み=砥石 / 定圧切込み=ホーニング･超仕上げ
+トラバース=軸方向に往復 / プランジ=切込みのみ
+すくい角 切削=正 / 研削=大きな負
+g大=負荷大=脱落(目こぼれ) / g小=負荷小=摩滅(目つぶれ)
+切削力=工具側 / 切削抵抗=被加工材側の反力
+
+─────────────────────
+↓ クイズで引っかかったペアを追記する
+</div>
+      </div>
+    </div>
+
+    <div class="col">
+      <div class="blk p1">
+        <div class="bt"><span class="num">②</span>自生作用と砥石の3不具合</div>
+        <div class="bc">◆自生作用(self-sharpening)
+ 砥粒が摩耗→脱落→次の砥粒が切れ刃→切れ味が維持
+◆働かない場合
+ 目つぶれ Dulling :砥粒の摩耗
+ 目こぼれ Shedding:砥粒の過剰な脱落
+ 目づまり Loading :砥粒間の空孔のつまり
+◆砥石の再生
+ ツルーイング Truing:整形。重心を回転中心に調整
+ ドレッシング Dressing:目出し。砥粒を結合剤から突出</div>
+        <svg viewBox="0 0 200 56" stroke="#1a1a1a" fill="none" stroke-width="1">
+          <g>
+            <text x="6" y="9" stroke="none">正常</text>
+            <rect x="2" y="12" width="44" height="34"/>
+            <path d="M8 40 l5 -10 l6 10 z" fill="#ddd"/><path d="M24 40 l5 -11 l6 11 z" fill="#ddd"/>
+            <text x="6" y="53" stroke="none">突出</text>
+          </g>
+          <g>
+            <text x="56" y="9" fill="#c0392b" stroke="none">目つぶれ</text>
+            <rect x="52" y="12" width="44" height="34"/>
+            <path d="M58 40 h11 v-6 h-11 z" fill="#ddd"/><path d="M74 40 h11 v-6 h-11 z" fill="#ddd"/>
+            <text x="56" y="53" stroke="none">摩耗し平ら</text>
+          </g>
+          <g>
+            <text x="106" y="9" fill="#c0392b" stroke="none">目こぼれ</text>
+            <rect x="102" y="12" width="44" height="34"/>
+            <path d="M108 40 l5 -10 l6 10 z" fill="#ddd"/>
+            <text x="126" y="38" stroke="none">×</text>
+            <text x="106" y="53" stroke="none">脱落しすぎ</text>
+          </g>
+          <g>
+            <text x="156" y="9" fill="#c0392b" stroke="none">目づまり</text>
+            <rect x="152" y="12" width="44" height="34"/>
+            <path d="M158 40 l5 -10 l6 10 z" fill="#ddd"/><path d="M174 40 l5 -10 l6 10 z" fill="#ddd"/>
+            <path d="M158 30 h38 v10 h-38 z" fill="#bbb" opacity=".8"/>
+            <text x="156" y="53" stroke="none">空孔がつまる</text>
+          </g>
+        </svg>
+      </div>
+
+      <div class="blk p1">
+        <div class="bt"><span class="num">①</span>公式C ─ 研削</div>
+        <div class="bc">◆最大切り取り厚さ g
+ 円筒研削 g=2a(v/V)√{t(1/D+1/d)}
+ 平面研削 g=2a(v/V)√(t/D)   ※d=∞
+  D,d:砥石･工作物の直径 V,v:周速
+  t:半径方向切込み深さ a:砥粒間隔
+ ※単位幅の2次元切削を仮定</div>
+        <svg viewBox="0 0 200 76" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+          <circle cx="70" cy="26" r="26" stroke-width="1.3"/>
+          <text x="56" y="20" stroke="none">砥石 D</text>
+          <path d="M18 62 A 90 90 0 0 1 150 62" stroke-width="1.3"/>
+          <text x="70" y="72" stroke="none">工作物 d</text>
+          <line x1="70" y1="52" x2="70" y2="60" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="74" y="59" fill="#c0392b" stroke="none">t</text>
+          <line x1="96" y1="46" x2="102" y2="52" stroke="#2563eb" stroke-width="1.5"/>
+          <text x="104" y="50" fill="#2563eb" stroke="none">g</text>
+          <path d="M70 4 A 22 22 0 0 1 88 12" stroke="#c0392b"/>
+          <text x="90" y="10" fill="#c0392b" stroke="none">V</text>
+          <line x1="150" y1="62" x2="168" y2="62" stroke="#c0392b"/>
+          <text x="156" y="58" fill="#c0392b" stroke="none">v</text>
+        </svg>
+      </div>
+
+      <div class="blk grow">
+        <div class="bt"><span class="num">⑩</span>切削動力の計算例</div>
+        <div class="bc">工具鋼 ap=2 ae=80 Vf=280 V=80 D=ø250 Z=12 η=0.8
+①N=1000×80/(3.14×250)=101.91rpm
+②fz=280/(101.91×12)=0.229mm/tooth
+③表よりKc=1800MPa
+④Pc=2×80×280×1800/(60×10⁶)/0.8…=1.68kW</div>
+      </div>
+
+      <div class="namebox">4年　　番　　氏名<br><br>（最初に枠だけ引く）</div>
+    </div>
+
+  </div>
+</div>
+
+<div class="note">
+  <b>書ききれなかった場合：</b>①②と図は何があっても書く。③④⑤まで書ければ記述問題の骨格は押さえられる。
+  ⑧のバイトの角度記号は最後でよい。<br>
+  <b>正直に：</b>このシートだけで50分は戦えない。半分は頭に入れて残りを引く配分でないと時間が足りないので、除去加工クイズと併用すること。
+</div>
+</div>
+</div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/app-shell.js"></script>
+<script src="/js/util.js"></script>
+<script>
+appShell.mount(document.getElementById('app-shell-bar'), {
+  nav: window.APP_NAV,
+});
+</script>
+</body>
+</html>
