@@ -172,54 +172,91 @@ AWC(炭化タングステン)やTiC(炭化チタン)にCo(結合材)を
           <line x1="88" y1="8" x2="108" y2="26" stroke="#c0392b"/>
           <text x="110" y="18" fill="#c0392b" stroke="none">t</text>
         </svg>
-        <div class="bc">α:すくい角[度]（工具の傾き） φ:せん断角[度]（切屑が分離する面）
-d:切込み[mm] t:切屑厚さ[mm] → rc=d/t（Q12：鋼で約0.3）</div>
+        <div class="bc">α:すくい角[度]＝工具上面の傾き　φ:せん断角[度]＝材料が切屑に変わる面の傾き
+d:切込み[mm]＝削り取る層の厚さ　t:切屑厚さ[mm]＝削れた後の厚さ
+→切屑は工具に押されて厚く短くなる→rc=d/t＜1（Q12：鋼で約0.3）
+<span style="color:#c0392b">※t＝ここでは切屑厚さ。研削のtは切込み深さで別物／φ＝ここではせん断角。バイトの角度のφはアプローチ角で別物</span></div>
       </div>
 
-      <div class="blk" style="border-style:dotted;color:#777">
-        <div class="bt" style="color:#777"><span class="num" style="background:#bbb">余</span>予備スペース</div>
-        <div class="bc">勉強していて「これ覚えられない」と思ったものを、
-ここに後から書き足す。最初から埋めようとしない。
-
-・中間の反省で足したいこと
-・クイズで間違えた項目
-</div>
+      <div class="blk" style="border-style:dotted;color:#555">
+        <div class="bt" style="color:#555"><span class="num" style="background:#6b7280">早</span>記号早見表（混同注意）</div>
+        <div class="bc"><span style="color:#c0392b">d＝旋削:切込み量／研削(g式):工作物の直径
+D＝旋削:工作物の直径／研削:砥石の直径
+V/v＝研削:V=砥石の周速(大)、v=工作物の周速(小)
+R＝粗さ式:バイト先端の丸み半径[mm]／力の式:切削抵抗[N]
+t＝切削理論:切屑の厚さ／研削:切込み深さ
+φ＝切削理論:せん断角／バイトの角度:アプローチ角</span>
+V:刃が材料表面をなぞる速さ[m/min] N:1分の回転数[rpm]
+f:1回転で工具が横に進む距離[mm/rev] F:1分でfN[mm/min]
+Fc:主分力(測れる) Ft:背分力(測れる)→他は角度で計算
+ap:切込 ae:切削幅 Vf:テーブル送り Z:刃数 fz:1刃の送り
+Kc:比切削抵抗 η:機械効率</div>
       </div>
     </div>
 
     <div class="col">
       <div class="blk p2">
         <div class="bt"><span class="num">③</span>公式A ─ 切削条件・表面粗さ</div>
-        <div class="bc">V=πDN/1000  N=1000V/(πD)  V:m/min D:mm N:rpm
-F=fN  F:mm/min f:mm/rev
-Rz=f²/(8R)  Rz:最大高さ[粗さ] f:送り[mm] R:コーナ半径[mm]
- 使い方:fを半分にすると粗さは1/4。Rを大きくしても粗さは小さくなる</div>
-        <div class="figrow">
-          <svg viewBox="0 0 100 52" stroke="#1a1a1a" fill="none" stroke-width="1.1">
-            <text x="2" y="8" stroke="none">旋削</text>
-            <circle cx="30" cy="28" r="16" stroke-width="1.3"/>
-            <text x="24" y="31" stroke="none">D</text>
-            <path d="M38 12 A 18 18 0 0 1 44 22" stroke="#c0392b"/>
-            <text x="45" y="14" fill="#c0392b" stroke="none">N</text>
-            <path d="M60 28 L74 22 L74 34 Z" fill="#eee"/>
-            <line x1="74" y1="28" x2="92" y2="28" stroke="#2563eb"/>
-            <text x="78" y="24" fill="#2563eb" stroke="none">f</text>
-            <line x1="46" y1="28" x2="60" y2="28" stroke="#c0392b"/>
-            <text x="48" y="42" fill="#c0392b" stroke="none">d</text>
-          </svg>
-          <svg viewBox="0 0 100 52" stroke="#1a1a1a" fill="none" stroke-width="1.1">
-            <text x="2" y="8" stroke="none">表面粗さ</text>
-            <path d="M6 40 A 20 20 0 0 1 46 40" stroke-width="1.3"/>
-            <path d="M46 40 A 20 20 0 0 1 86 40" stroke-width="1.3"/>
-            <line x1="6" y1="40" x2="92" y2="40" stroke-dasharray="3 2"/>
-            <line x1="6" y1="20" x2="92" y2="20" stroke-dasharray="3 2"/>
-            <line x1="46" y1="20" x2="46" y2="40" stroke="#c0392b" stroke-width="1.4"/>
-            <text x="49" y="33" fill="#c0392b" stroke="none">Rz</text>
-            <line x1="6" y1="47" x2="46" y2="47" stroke="#2563eb"/>
-            <text x="22" y="45" fill="#2563eb" stroke="none">f</text>
-            <text x="60" y="16" stroke="none">R</text>
-          </svg>
-        </div>
+        <div class="bc">V=πDN/1000　N=1000V/(πD)
+ 直径D[mm]の円周はπD。1分でN回転→πDN[mm/min]。m/min化で÷1000
+ V:刃が材料表面をなぞる速さ[m/min] D:工作物の直径[mm] N:回転数[rpm]
+F=fN　F:1分で工具が進む距離[mm/min] f:1回転で工具が進む距離[mm/rev]</div>
+        <svg viewBox="0 0 260 108" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+          <text x="2" y="9" stroke="none">旋削（工作物が回る・工具は動かない）</text>
+          <!-- 工作物：正面の円＋側面の胴体 -->
+          <ellipse cx="40" cy="54" rx="13" ry="24" stroke-width="1.3"/>
+          <rect x="40" y="30" width="78" height="48" stroke-width="1.3"/>
+          <line x1="118" y1="30" x2="118" y2="78" stroke-width="1.3"/>
+          <text x="24" y="12" stroke="none">工作物</text>
+          <!-- D 直径 -->
+          <line x1="18" y1="30" x2="18" y2="78" stroke="#c0392b" stroke-width="1.3"/>
+          <path d="M15 30 l3 -4 l3 4z" fill="#c0392b" stroke="none"/>
+          <path d="M15 78 l3 4 l3 -4z" fill="#c0392b" stroke="none"/>
+          <text x="2" y="56" fill="#c0392b" stroke="none">D</text>
+          <!-- N 回転 -->
+          <path d="M40 30 A 13 24 0 0 1 53 40" stroke="#d97706" stroke-width="1.3"/>
+          <path d="M53 40 l-6 -1 l1 -6z" fill="#d97706" stroke="none"/>
+          <text x="46" y="20" fill="#d97706" stroke="none">N</text>
+          <!-- バイト -->
+          <path d="M118 54 L146 40 L160 49 L138 61 Z" fill="#eee" stroke-width="1.3"/>
+          <text x="128" y="34" stroke="none">バイト</text>
+          <!-- d 切込み -->
+          <line x1="118" y1="54" x2="138" y2="54" stroke="#c0392b" stroke-width="1.3"/>
+          <text x="120" y="68" fill="#c0392b" stroke="none">d</text>
+          <!-- f/F 送り -->
+          <line x1="160" y1="49" x2="204" y2="49" stroke="#2563eb" stroke-width="1.3"/>
+          <path d="M204 49 l-6 -3 v6z" fill="#2563eb" stroke="none"/>
+          <text x="164" y="44" fill="#2563eb" stroke="none">f(1回転) F(1分)</text>
+          <!-- V 切削速度 -->
+          <path d="M138 51 l14 -12" stroke="#059669" stroke-width="1.3"/>
+          <path d="M152 39 l-6 1 l2 6z" fill="#059669" stroke="none"/>
+          <text x="150" y="32" fill="#059669" stroke="none">V</text>
+          <!-- 単位換算バンド -->
+          <rect x="2" y="86" width="78" height="18" fill="#f7fbff" stroke="#2563eb" stroke-width=".8"/>
+          <text x="5" y="98" stroke="none">πD＝円周[mm]</text>
+          <text x="82" y="98" stroke="none">→</text>
+          <rect x="90" y="86" width="70" height="18" fill="#f7fbff" stroke="#2563eb" stroke-width=".8"/>
+          <text x="93" y="98" stroke="none">×N[回/min]</text>
+          <text x="162" y="98" stroke="none">→</text>
+          <rect x="168" y="86" width="90" height="18" fill="#f7fbff" stroke="#2563eb" stroke-width=".8"/>
+          <text x="171" y="98" stroke="none">÷1000→V[m/min]</text>
+        </svg>
+        <div class="bc"><span style="color:#c0392b">※D＝ここでは工作物の直径。研削のDは砥石の直径で別物。d＝ここでは切込み量。研削g式のdは工作物の直径で別物</span></div>
+        <svg viewBox="0 0 200 60" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+          <text x="2" y="9" stroke="none">表面粗さ（送りマークの断面）</text>
+          <path d="M6 46 A 20 20 0 0 1 46 46" stroke-width="1.3"/>
+          <path d="M46 46 A 20 20 0 0 1 86 46" stroke-width="1.3"/>
+          <line x1="6" y1="46" x2="140" y2="46" stroke-dasharray="3 2"/>
+          <line x1="6" y1="26" x2="140" y2="26" stroke-dasharray="3 2"/>
+          <line x1="46" y1="26" x2="46" y2="46" stroke="#c0392b" stroke-width="1.4"/>
+          <text x="49" y="38" fill="#c0392b" stroke="none">Rz 山と谷の高低差</text>
+          <line x1="6" y1="53" x2="46" y2="53" stroke="#2563eb"/>
+          <text x="10" y="51" fill="#2563eb" stroke="none">f 山どうしの間隔</text>
+          <text x="62" y="22" stroke="none">R バイト先端の丸み</text>
+        </svg>
+        <div class="bc">Rz=f²/(8R)　Rz:山と谷の高さの差＝表面の粗さ[µm] f:送り量[mm] R:バイト先端の丸み半径[mm]
+ fを半分にすると粗さRzは1/4に良くなる。Rを大きくしても粗さは小さくなる
+<span style="color:#c0392b">※R＝ここではバイト先端の丸み半径[mm]。力の式のRは切削抵抗[N]で別物</span></div>
       </div>
 
       <div class="blk p2">
@@ -227,26 +264,31 @@ Rz=f²/(8R)  Rz:最大高さ[粗さ] f:送り[mm] R:コーナ半径[mm]
         <div class="bc">rc=切込みd/切屑厚さt ※鋼材で約0.3（Q12）
 tanφ=rc･cosα/(1-rc･sinα)  φ:せん断角 α:すくい角
 γ=tan(φ-α)+cotφ   γ:せん断ひずみ
-Fs=Fc･cosφ-Ft･sinφ（せん断力） Fn=Fc･sinφ+Ft･cosφ（せん断面垂直力）
-F =Ft･cosα+Fc･sinα（摩擦力） N =Fc･cosα-Ft･sinα（すくい面垂直力）
+Fs=Fc･cosφ-Ft･sinφ（せん断面に沿う力） Fn=Fc･sinφ+Ft･cosφ（せん断面に垂直な力）
+F =Ft･cosα+Fc･sinα（すくい面上の摩擦力） N =Fc･cosα-Ft･sinα（すくい面上の垂直力）
 μ=F/N=tanβ  β:摩擦角
-R=Fc/cos(β-α)=Ft/sin(β-α)（Q16）
-Pc=ap･ae･Vf･Kc/(60×10⁶･η)[kW]
- ap:切込mm ae:切削幅mm Vf:送り速度mm/min Kc:比切削抵抗MPa η:機械効率
-fz=Vf/(N･Z)  1刃当り送り[mm/tooth] Z:刃数</div>
-        <svg viewBox="0 0 200 96" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+R=Fc/cos(β-α)=Ft/sin(β-α)（Q16）</div>
+        <svg viewBox="0 0 200 108" stroke="#1a1a1a" fill="none" stroke-width="1.1">
           <text x="2" y="9" stroke="none">力の関係（Rを分解する）</text>
           <!-- 原点 -->
           <circle cx="40" cy="76" r="1.6" fill="#1a1a1a"/>
+          <!-- せん断面（破線） -->
+          <line x1="14" y1="98" x2="76" y2="30" stroke-dasharray="2 2" stroke="#7c3aed" stroke-width="1"/>
+          <text x="14" y="26" fill="#7c3aed" stroke="none">せん断面(φ)</text>
+          <!-- Fs,Fn（せん断面に沿う/垂直） -->
+          <line x1="40" y1="76" x2="66" y2="48" stroke="#7c3aed" stroke-width="1.3"/>
+          <text x="46" y="46" fill="#7c3aed" stroke="none">Fs</text>
+          <line x1="40" y1="76" x2="10" y2="60" stroke="#7c3aed" stroke-width="1.1" stroke-dasharray="1 1.5"/>
+          <text x="2" y="58" fill="#7c3aed" stroke="none">Fn</text>
           <!-- R -->
           <line x1="40" y1="76" x2="132" y2="26" stroke="#c0392b" stroke-width="1.6"/>
           <text x="122" y="22" fill="#c0392b" stroke="none">R</text>
           <!-- Fc 水平 -->
           <line x1="40" y1="76" x2="132" y2="76" stroke="#2563eb" stroke-width="1.4"/>
-          <text x="82" y="86" fill="#2563eb" stroke="none">Fc 主分力</text>
+          <text x="82" y="86" fill="#2563eb" stroke="none">Fc 主分力(測れる)</text>
           <!-- Ft 垂直 -->
           <line x1="132" y1="76" x2="132" y2="26" stroke="#2563eb" stroke-width="1.4"/>
-          <text x="136" y="54" fill="#2563eb" stroke="none">Ft 背分力</text>
+          <text x="136" y="54" fill="#2563eb" stroke="none">Ft 背分力(測れる)</text>
           <!-- すくい面方向 F,N -->
           <line x1="40" y1="76" x2="96" y2="8" stroke-dasharray="3 2" stroke="#059669"/>
           <text x="82" y="8" fill="#059669" stroke="none">N</text>
@@ -255,14 +297,15 @@ fz=Vf/(N･Z)  1刃当り送り[mm/tooth] Z:刃数</div>
           <!-- 角 -->
           <path d="M62 76 A 22 22 0 0 0 55 62" stroke="#c0392b" stroke-width=".7"/>
           <text x="58" y="72" fill="#c0392b" stroke="none">β-α</text>
-          <text x="2" y="92" stroke="none">F=μN, μ=tanβ / 直接測れるのは Fc,Ft</text>
+          <text x="2" y="102" stroke="none">直接測れるのはFc,Ftだけ。他は全部この図から角度で分解して出す</text>
         </svg>
+        <div class="bc"><span style="color:#c0392b">※R＝ここでは切削抵抗[N]（Rの合力）。粗さの式のRはバイト先端の丸み半径[mm]で別物</span></div>
       </div>
 
       <div class="blk p1 grow">
         <div class="bt"><span class="num">②</span>記述Q&amp;A ─ 力と抵抗（Q12〜17）</div>
         <div class="bc">Q12切削比rcが1より小さくなる理由
-A切屑は工具に押されて元の切込みより厚く短くなるため。鋼材で約0.3。
+A切屑は工具に押されて元の切込みより厚く短くなるため。鋼材で約0.3。→切削の幾何図
 Q13切削力と切削抵抗の違い
 A切削力は切削に必要な力で工具側に働く。切削抵抗はその反力Rで
  被加工材側に働く。
@@ -270,13 +313,13 @@ Q14切削抵抗の分力を答えよ
 AFc主分力(水平分力)／Ft背分力(垂直分力)／Ff送り分力。
 Q15比切削抵抗Kcとは何か
 A断面積1mm²の切りくずを切削するのに必要な、切削方向の
- 力Fcの大きさ[MPa]。
+ 力Fcの大きさ[MPa]。→力の図
 Q16摩擦角βが既知のときFc･Ftの測定でRが求まる理由
 A実際に測定できるのはFc(主分力)とFt(背分力)だけであり、
- R=Fc/cos(β-α)=Ft/sin(β-α)の関係からRを計算できるため。
+ R=Fc/cos(β-α)=Ft/sin(β-α)の関係からRを計算できるため。→力の図
 Q17送りfを小さくすると表面粗さはどうなるか(理由も)
 ARz=f²/(8R)よりfの2乗で小さくなるので粗さは急激に良くなる。
- コーナ半径Rを大きくしても粗さは小さくなる。</div>
+ コーナ半径Rを大きくしても粗さは小さくなる。→粗さ図</div>
       </div>
 
       <div class="blk" style="border-style:dotted;color:#777">
@@ -349,7 +392,7 @@ Q30研削速度が大きいと何が問題か
 A発熱が大きくなるため冷却(研削液)が必要になる。
 Q31gが大きい場合･小さい場合に砥粒はどうなるか
 Ag大＝砥粒の負荷が大きく脱落する(過度なら目こぼれ)。
- g小＝負荷が小さく摩滅摩耗する(目つぶれ)。</div>
+ g小＝負荷が小さく摩滅摩耗する(目つぶれ)。→研削のg図</div>
       </div>
 
       <div class="blk p1 grow">
@@ -360,7 +403,7 @@ Ag大＝砥粒の負荷が大きく脱落する(過度なら目こぼれ)。
 「ツルーイング＝目出し」→誤。目出しはドレッシング。
  ツルーイングは整形(重心を回転中心に調整)
 「ドレッシング＝整形」→誤。整形はツルーイング。ドレッシングは目出し
-「研削のすくい角は正」→誤。研削は大きな負のすくい角
+「研削のすくい角は正」→誤。研削は大きな負のすくい角→切削の幾何図
 「切削速度は研削の方が遅い」→誤。研削の方が著しく速い
  (切削200m/min・研削2000m/min)
 「固定砥粒＝超音波」→誤。超音波は遊離砥粒。固定砥粒は砥石・研摩シート
@@ -419,33 +462,74 @@ Aツルーイング＝整形。砥石の重心を回転中心に合わせる。
       <div class="blk p2">
         <div class="bt"><span class="num">③</span>公式C ─ 研削の最大切り取り厚さ g</div>
         <div class="bc">円筒研削 g=2a(v/V)√{t(1/D+1/d)}
-平面研削 g=2a(v/V)√(t/D)   ※d=∞
- D,d:砥石･工作物の直径mm V,v:周速m/min
- t:半径方向切込み深さmm a:砥粒間隔mm
- ※単位幅の2次元切削を仮定（Q31：g大=脱落／g小=摩滅）</div>
-        <svg viewBox="0 0 200 76" stroke="#1a1a1a" fill="none" stroke-width="1.1">
-          <circle cx="70" cy="26" r="26" stroke-width="1.3"/>
-          <text x="56" y="20" stroke="none">砥石 D</text>
-          <path d="M18 62 A 90 90 0 0 1 150 62" stroke-width="1.3"/>
-          <text x="70" y="72" stroke="none">工作物 d</text>
-          <line x1="70" y1="52" x2="70" y2="60" stroke="#c0392b" stroke-width="1.5"/>
-          <text x="74" y="59" fill="#c0392b" stroke="none">t</text>
-          <line x1="96" y1="46" x2="102" y2="52" stroke="#2563eb" stroke-width="1.5"/>
-          <text x="104" y="50" fill="#2563eb" stroke="none">g</text>
-          <path d="M70 4 A 22 22 0 0 1 88 12" stroke="#c0392b"/>
-          <text x="90" y="10" fill="#c0392b" stroke="none">V</text>
-          <line x1="150" y1="62" x2="168" y2="62" stroke="#c0392b"/>
-          <text x="156" y="58" fill="#c0392b" stroke="none">v</text>
+平面研削 g=2a(v/V)√(t/D)   ※工作物が平らでd=∞だから1/dが消える
+ t:半径方向の切込み深さ[mm]（研削ではこれが d の役割ではない）
+ a:砥粒どうしの間隔[mm]　g:砥粒1個が削り取る最大の厚さ[mm]</div>
+        <svg viewBox="0 0 250 90" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+          <circle cx="70" cy="30" r="26" stroke-width="1.3"/>
+          <text x="52" y="24" stroke="none">砥石 D(直径)</text>
+          <path d="M18 66 A 90 90 0 0 1 150 66" stroke-width="1.3"/>
+          <text x="66" y="76" stroke="none">工作物 d(直径)</text>
+          <line x1="70" y1="56" x2="70" y2="64" stroke="#c0392b" stroke-width="1.5"/>
+          <text x="74" y="63" fill="#c0392b" stroke="none">t</text>
+          <line x1="96" y1="50" x2="102" y2="56" stroke="#2563eb" stroke-width="1.5"/>
+          <text x="104" y="54" fill="#2563eb" stroke="none">g</text>
+          <path d="M70 8 A 22 22 0 0 1 88 16" stroke="#c0392b"/>
+          <text x="90" y="14" fill="#c0392b" stroke="none">V砥石</text>
+          <line x1="150" y1="66" x2="168" y2="66" stroke="#c0392b"/>
+          <text x="156" y="62" fill="#c0392b" stroke="none">v工作物</text>
+          <!-- a・g 拡大吹き出し -->
+          <rect x="188" y="4" width="58" height="60" fill="#fff" stroke="#2563eb" stroke-width=".8" stroke-dasharray="2 1"/>
+          <text x="190" y="12" fill="#2563eb" stroke="none">拡大</text>
+          <line x1="192" y1="50" x2="242" y2="50" stroke-width="1"/>
+          <path d="M198 50 l6 -14 l6 14z" fill="#ddd" stroke-width=".8"/>
+          <path d="M216 50 l6 -14 l6 14z" fill="#ddd" stroke-width=".8"/>
+          <line x1="204" y1="53" x2="222" y2="53" stroke="#c0392b" stroke-width=".8"/>
+          <text x="206" y="60" fill="#c0392b" stroke="none">a</text>
+          <line x1="204" y1="36" x2="204" y2="44" stroke="#2563eb" stroke-width="1"/>
+          <text x="207" y="40" fill="#2563eb" stroke="none">g</text>
         </svg>
+        <div class="bc"><span style="color:#c0392b">※D＝砥石の直径、d＝工作物の直径（旋削のD,dとは意味が違う） V＝砥石の周速(大文字)、v＝工作物の周速(小文字)</span></div>
+      </div>
+
+      <div class="blk p2">
+        <div class="bt"><span class="num">③</span>公式D ─ フライスと動力</div>
+        <div class="bc">Pc=ap･ae･Vf･Kc/(60×10⁶･η) [kW]
+ ap:切込み深さ[mm] ae:切削幅[mm] Vf:テーブルの送り速度[mm/min]
+ Kc:比切削抵抗[MPa]（表から読む） η:機械効率
+fz=Vf/(N･Z)　fz:刃1枚が1回で削る送り量[mm/tooth] Z:刃数[枚]</div>
+        <svg viewBox="0 0 230 100" stroke="#1a1a1a" fill="none" stroke-width="1.1">
+          <text x="2" y="9" stroke="none">正面フライス（上から見た図）</text>
+          <circle cx="130" cy="34" r="26" stroke-width="1.3"/>
+          <path d="M130 8 l4 8 l-8 0 z" fill="#eee" stroke-width=".8"/>
+          <path d="M130 60 l4 -8 l-8 0 z" fill="#eee" stroke-width=".8"/>
+          <path d="M104 34 l8 4 l0 -8 z" fill="#eee" stroke-width=".8"/>
+          <path d="M156 34 l-8 4 l0 -8 z" fill="#eee" stroke-width=".8"/>
+          <text x="112" y="18" stroke="none">Z=刃数</text>
+          <path d="M130 8 A 26 26 0 0 1 152 20" stroke="#d97706" stroke-width="1.3"/>
+          <text x="150" y="14" fill="#d97706" stroke="none">N</text>
+          <rect x="10" y="52" width="150" height="34" stroke-width="1.3"/>
+          <text x="14" y="49" stroke="none">工作物</text>
+          <line x1="90" y1="52" x2="90" y2="60" stroke="#c0392b" stroke-width="1.4"/>
+          <text x="94" y="59" fill="#c0392b" stroke="none">ap 切込み(深さ)</text>
+          <line x1="98" y1="86" x2="160" y2="86" stroke="#059669" stroke-width="1.4"/>
+          <text x="100" y="96" fill="#059669" stroke="none">ae 切削幅(横)</text>
+          <line x1="10" y1="76" x2="70" y2="76" stroke="#2563eb" stroke-width="1.3"/>
+          <path d="M70 76 l-6 -3 v6z" fill="#2563eb" stroke="none"/>
+          <text x="14" y="72" fill="#2563eb" stroke="none">Vf テーブル送り</text>
+        </svg>
+        <div class="bc">刃1枚あたりの送り fz は Vf を「1分間に刃が通る回数(N×Z)」で割ったもの</div>
       </div>
 
       <div class="blk grow">
         <div class="bt"><span class="num">⑤</span>切削動力の計算例</div>
-        <div class="bc">工具鋼 ap=2 ae=80 Vf=280 V=80 D=ø250 Z=12 η=0.8
-①N=1000×80/(3.14×250)=101.91rpm
-②fz=280/(101.91×12)=0.229mm/tooth
-③表よりKc=1800MPa
-④Pc=2×80×280×1800/(60×10⁶)/0.8…=1.68kW</div>
+        <div class="bc">【例】正面フライス ap=2mm ae=80mm Vf=280mm/min
+      V=80m/min D=ø250mm Z=12枚 η=0.8
+①回転数Nを出す（VとDから）　N=1000×80/(3.14×250)=101.9rpm
+②刃1枚あたりの送りfz（刃が何枚で分担するか）
+   fz=280/(101.9×12)=0.229mm/tooth
+③材料と条件からKcを表で読む→1800MPa
+④動力Pcに代入　Pc=2×80×280×1800/(60×10⁶×0.8)=1.68kW</div>
       </div>
 
       <div class="namebox">4年　　番　　氏名<br><br>（最初に枠だけ引く）</div>
