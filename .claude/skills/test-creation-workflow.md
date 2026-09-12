@@ -113,3 +113,14 @@ node scripts/convert-quiz-html.js
 - `tests/2026-4-zenki-chukan-seigyogaku-summary/` — まとめノート形式
 - `tests/2026-4-zenki-chukan-step1〜4/` — フラッシュカード+クイズ形式（別デザイン）
 - `tests/2026-4-zenki-chukan-eigo/` 等 — 英語模試系
+
+## ハンバーガーメニュー（☰）の「同じ試験へのドロワー」は自動対応
+
+`quiz.html?d=...` の模試ページは `quiz-engine.js` が `quiz-nav.js` を自動ロードして採点バーに ☰（同じ試験の他科目・同科目テストへのドロワー）を付ける。`kakougaku-cheatsheet.html` のような「模試ではない独立ページ（まとめ・掲示・カンペシート等）」も、`js/app-shell.js`（`appShell.mount`）側に同等のロジックを実装済み（2026-09-12〜）。**両方とも data.json / `tests/_legacy.json` を作るだけで自動対応するので、通常のテスト追加・まとめページ追加では何もしなくてよい。**
+
+独立ページ側で必要なのは通常の app-shell 導入手順のみ：
+
+1. `js/nav.js` + `js/app-shell.js` を読み込み `appShell.mount(document.getElementById('app-shell-bar'), { nav: window.APP_NAV })` する（他の独立ページと全く同じ呼び方でよい。オプション追加は不要）。
+2. `tests/_legacy.json` に `year`/`grade`/`exam`/`subject`/`type:"summary"`/`path` を登録する（`path` が現在の URL と完全一致すると、`app-shell.js` が `/api/tests` を見て自動的に「同じ試験・科目」「同じ試験・他の科目」のグループをドロワー先頭に挿入する）。
+
+登録しないと（＝ `path` が一致するエントリが無いと）何も起きず、通常の ☰ メニューのみになるだけで壊れはしない。新しいページを作ったら、実機（本番URL）で ☰ を開いて期待通りのリンクが出るか目視確認すること。ローカルの static 配信では `/api/tests` が 404 になりこのグループが出ないので、確認は本番でしかできない（[[local-preview-static-serve]] 参照）。

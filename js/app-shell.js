@@ -97,6 +97,11 @@
     drawer.appendChild(head);
     els.drawerHead = head;
 
+    var siblingsHost = h('div', { 'class': 'appshell-drawer-siblings' });
+    drawer.appendChild(siblingsHost);
+    els.siblingsHost = siblingsHost;
+    siblingsHost.addEventListener('click', function (e) { if (e.target.closest('a')) closeDrawer(); });
+
     (opts.nav || []).forEach(function (item) {
       var inner = [
         h('span', { 'class': 'appshell-drawer-ico', text: item.icon || '' }),
@@ -131,6 +136,54 @@
 
     document.body.appendChild(backdrop);
     document.body.appendChild(drawer);
+  }
+
+  // ── 同じ試験（year/grade/exam 一致）への横断ナビ ──────────────────
+  // quiz-nav.js（quiz.html 専用）の同等機能を、data.json を持たないページ
+  // （まとめ・掲示ページ等。tests/_legacy.json に path 登録されているもの）にも出す。
+  // 現在の URL が /api/tests のどれかの path と一致した場合だけ描画するので、
+  // テストとして登録されていないページ（scores.html 等）では何も出ない＝ノーコスト。
+  function groupHtml(label, itemsHtml) {
+    return '<div class="appshell-drawer-group">' + escHtml(label) + '</div>' + itemsHtml;
+  }
+
+  function siblingsHtml(tests, self) {
+    var same = tests.filter(function (t) {
+      return t.year === self.year && t.grade === self.grade && t.exam === self.exam;
+    });
+    var sameSubject = same.filter(function (t) { return t.subject === self.subject; });
+    var otherSubject = same.filter(function (t) { return t.subject !== self.subject; });
+
+    var html = '';
+    var g1 = sameSubject.map(function (t) {
+      var label = t.title || t.subject || '';
+      if (t.path === self.path) {
+        return '<span aria-current="page" tabindex="-1">' + escHtml(label) + '（表示中）</span>';
+      }
+      return '<a href="' + escHtml(t.path) + '">' + escHtml(label) + '</a>';
+    }).join('');
+    if (g1) html += groupHtml('同じ試験・' + (self.subject || ''), g1);
+
+    if (otherSubject.length) {
+      var g2 = otherSubject.map(function (t) {
+        var label = (t.subject || '') + ' — ' + (t.title || t.subject || '');
+        return '<a href="' + escHtml(t.path) + '">' + escHtml(label) + '</a>';
+      }).join('');
+      html += groupHtml('同じ試験・他の科目', g2);
+    }
+    return html;
+  }
+
+  function loadTestSiblings() {
+    var here = location.pathname + location.search;
+    fetch('/api/tests').then(function (r) { return r.ok ? r.json() : null; })
+      .then(function (tests) {
+        if (!Array.isArray(tests) || !els.siblingsHost) return;
+        var self = tests.filter(function (t) { return t.path === here; })[0];
+        if (!self) return;
+        els.siblingsHost.innerHTML = siblingsHtml(tests, self);
+      })
+      .catch(function () { /* 登録なし/取得失敗ならメニューのみのまま */ });
   }
 
   function openDrawer() {
@@ -362,6 +415,7 @@
       buildAvatarModal();
       this.update({ loggedIn: false });
       if (opts.manageAuth !== false) resolveAuth();
+      loadTestSiblings();
     },
     refreshAuth: function () { return resolveAuth(); },
     logout: function () {
