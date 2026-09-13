@@ -1,0 +1,667 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>応用物理 総まとめノート ・ 武藤模試</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/styles/theme.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.css">
+<style>
+  body{margin:0;background:var(--bg);color:var(--fg);font-family:'Fraunces',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  #app-shell-bar{position:fixed;top:0;left:0;right:0;z-index:100}
+  #op-page{padding-top:46px;min-height:100vh;background:var(--bg)}
+
+  .op-wrap{max-width:820px;margin:0 auto;padding:22px 16px 70px}
+
+  /* ---- hero ---- */
+  .op-hero{padding:6px 2px 22px}
+  .op-eyebrow{font-size:.7rem;letter-spacing:.16em;color:var(--teal);font-weight:700}
+  .op-hero h1{margin:6px 0 4px;font-size:1.7rem;line-height:1.25}
+  .op-hero .op-sub{color:var(--muted);font-size:.92rem;margin:0 0 14px}
+  .op-author{font-size:.78rem;color:var(--dim)}
+
+  .op-scope{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;margin-top:16px}
+  .op-scope a{display:block;background:var(--card);border:1px solid var(--line);border-radius:10px;padding:9px 11px;text-decoration:none;color:var(--fg);font-size:.8rem;transition:border-color .15s}
+  .op-scope a:hover{border-color:var(--teal)}
+  .op-scope .n{display:inline-block;width:1.5em;height:1.5em;line-height:1.5em;text-align:center;border-radius:50%;background:var(--teal-d);color:#03211d;font-size:.68rem;font-weight:700;margin-right:6px}
+  .op-scope .t{font-weight:700}
+  .op-scope .d{display:block;color:var(--muted);font-size:.72rem;margin-top:2px;margin-left:1.95em}
+
+  /* ---- section header ---- */
+  .op-section{margin-top:38px;scroll-margin-top:58px}
+  .op-section-head{display:flex;align-items:baseline;gap:10px;margin-bottom:12px}
+  .op-section-num{font-size:.72rem;font-weight:800;letter-spacing:.08em;color:var(--accent,var(--teal));background:color-mix(in srgb, var(--accent,var(--teal)) 16%, transparent);border:1px solid color-mix(in srgb, var(--accent,var(--teal)) 45%, transparent);border-radius:999px;padding:3px 10px}
+  .op-section-head h2{margin:0;font-size:1.22rem}
+  .op-section-tagline{color:var(--muted);font-size:.85rem;margin:0 0 14px}
+  .op-section-intro{background:var(--card);border:1px solid var(--line);border-left:3px solid var(--accent,var(--teal));border-radius:10px;padding:12px 14px;margin-bottom:14px;font-size:.86rem;color:var(--muted)}
+  .op-section-intro li{margin:3px 0}
+
+  /* ---- note card ---- */
+  .op-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;margin-bottom:14px}
+  .op-card h3{margin:0 0 8px;font-size:1rem;color:var(--fg)}
+  .op-card ul{margin:0;padding-left:1.15em;font-size:.87rem;line-height:1.62;color:var(--ink)}
+  .op-card ul li{margin:4px 0}
+  .op-card ul li::marker{color:var(--accent,var(--teal))}
+  .op-card .lead{font-size:.85rem;color:var(--muted);margin:12px 0 6px}
+  .op-card .lead b{color:var(--ink)}
+
+  .op-callout{margin-top:12px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:.82rem;line-height:1.6;color:var(--muted)}
+  .op-callout b{display:block;color:var(--accent,var(--teal));font-size:.74rem;letter-spacing:.04em;margin-bottom:4px}
+
+  /* ---- equations (KaTeX) ---- */
+  .op-eq-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+  .op-eq{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:8px 14px;color:var(--ink);font-size:1rem}
+  .op-eq.op-eq-lg{padding:10px 16px;font-size:1.08rem}
+  .op-eq .katex{color:var(--ink)}
+
+  /* ---- hand-drawn style diagrams (inline SVG, redrawn from the lecture notes) ---- */
+  .op-fig{margin-top:14px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px 10px 10px}
+  .op-fig svg{display:block;width:100%;height:auto;overflow:visible}
+  .op-fig .cap{font-size:.7rem;color:var(--dim);margin-top:8px;text-align:center}
+  .op-svg-line{stroke:var(--muted);fill:none;stroke-width:1.4}
+  .op-svg-ink{stroke:var(--ink);fill:none;stroke-width:1.6}
+  .op-svg-accent{stroke:var(--accent,var(--teal));fill:none;stroke-width:1.8}
+  .op-svg-txt{fill:var(--muted);stroke:none;font-size:9px;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  .op-svg-txt-strong{fill:var(--ink);stroke:none;font-size:9.5px;font-weight:700;font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  .op-svg-hatch{stroke:var(--dim);stroke-width:1}
+
+  .op-footer-note{margin-top:36px;padding:14px 16px;border-radius:12px;background:var(--card2);border:1px dashed var(--line);font-size:.8rem;color:var(--muted);line-height:1.7}
+
+  @media (max-width:480px){
+    .op-hero h1{font-size:1.4rem}
+    .op-scope{grid-template-columns:1fr 1fr}
+  }
+</style>
+</head>
+<body>
+<div id="app-shell-bar"></div>
+<div id="op-page">
+<div class="op-wrap">
+
+  <div class="op-hero">
+    <div class="op-eyebrow">PHYSICS</div>
+    <h1>応用物理 ・ 試験範囲 総まとめノート</h1>
+    <p class="op-sub">トムソンの実験／ミリカンの実験／光電効果／二重スリット実験／ド・ブロイの関係／不確定性原理／シュレディンガー方程式／無限に深い井戸型ポテンシャル</p>
+    <div class="op-author">授業ノートより作成</div>
+
+    <div class="op-scope">
+      <a href="#s1"><span class="n">01</span><span class="t">トムソンの実験</span><span class="d">電子の比電荷 e/m</span></a>
+      <a href="#s2"><span class="n">02</span><span class="t">ミリカンの実験</span><span class="d">電気素量 e</span></a>
+      <a href="#s3"><span class="n">03</span><span class="t">光電効果</span><span class="d">光の粒子性</span></a>
+      <a href="#s4"><span class="n">04</span><span class="t">二重スリット実験</span><span class="d">電子の波動性</span></a>
+      <a href="#s5"><span class="n">05</span><span class="t">ド・ブロイの関係</span><span class="d">物質波の波長</span></a>
+      <a href="#s6"><span class="n">06</span><span class="t">不確定性原理</span><span class="d">位置と運動量の限界</span></a>
+      <a href="#s7"><span class="n">07</span><span class="t">シュレディンガー方程式</span><span class="d">量子力学の基礎方程式</span></a>
+      <a href="#s8"><span class="n">08</span><span class="t">無限に深い井戸型</span><span class="d">エネルギーの量子化</span></a>
+    </div>
+  </div>
+
+  <!-- ============ 01 トムソンの実験 ============ -->
+  <section class="op-section" id="s1" style="--accent:var(--teal)">
+    <div class="op-section-head">
+      <span class="op-section-num">SECTION 01</span>
+      <h2>トムソンの実験</h2>
+    </div>
+    <p class="op-section-tagline">電子の比電荷 e/m を測定する</p>
+    <ul class="op-section-intro">
+      <li>1897年、J.J.トムソンが陰極線の正体を調べる中で発見</li>
+      <li>電場中での電子ビームの「曲がり方」から e/m を求める</li>
+      <li>電子という粒子の存在を実証した歴史的な実験</li>
+    </ul>
+
+    <div class="op-card">
+      <h3>背景と実験の仕組み</h3>
+      <ul>
+        <li><b>なぜこの実験が重要か</b> ── 19世紀末、原子はそれ以上分割できないと考えられていた。トムソンは陰極線（電子の流れ）が電場・磁場で曲がることを発見し、原子より軽い負電荷の粒子＝電子の存在を示した。</li>
+        <li><b>実験の考え方</b> ── 電子を一定の速さ v で平行平板コンデンサに入射させる。極板間（領域Ⅰ）で電場により力を受けて軌道が曲がる。極板を出た後（領域Ⅱ）は直進し、スクリーンに到達する。スクリーン上の到達位置 y から、e/m を逆算する。</li>
+      </ul>
+      <div class="op-fig">
+        <svg viewBox="0 0 360 130">
+          <!-- 入射電子 -->
+          <line class="op-svg-line" x1="6" y1="60" x2="46" y2="60"/>
+          <path class="op-svg-line" d="M40 56 L46 60 L40 64" fill="none"/>
+          <circle cx="8" cy="60" r="2.2" fill="var(--ink)" stroke="none"/>
+          <text class="op-svg-txt" x="10" y="52">電子 v</text>
+          <!-- 極板（コンデンサ） -->
+          <line class="op-svg-ink" x1="46" y1="34" x2="146" y2="34"/>
+          <line class="op-svg-ink" x1="46" y1="86" x2="146" y2="86"/>
+          <text class="op-svg-txt" x="70" y="26">＋　　　　電場 E</text>
+          <text class="op-svg-txt" x="70" y="102">－</text>
+          <!-- 軌道：極板間は放物線、極板後は直線 -->
+          <path class="op-svg-accent" d="M46 60 Q 96 60 146 78" fill="none"/>
+          <path class="op-svg-accent" d="M146 78 L 320 130" fill="none" stroke-dasharray="4 3"/>
+          <!-- スクリーン -->
+          <line class="op-svg-ink" x1="320" y1="34" x2="320" y2="130"/>
+          <text class="op-svg-txt" x="300" y="26">スクリーン</text>
+          <!-- y -->
+          <line class="op-svg-line" x1="330" y1="60" x2="330" y2="130" stroke-dasharray="2 2"/>
+          <text class="op-svg-txt-strong" x="334" y="98">y</text>
+          <!-- l, L -->
+          <line class="op-svg-line" x1="46" y1="118" x2="146" y2="118"/>
+          <text class="op-svg-txt" x="90" y="128">l</text>
+          <line class="op-svg-line" x1="146" y1="118" x2="320" y2="118"/>
+          <text class="op-svg-txt" x="228" y="128">L</text>
+        </svg>
+        <div class="cap">電子ビームが極板間（長さ l）で曲げられ、直進してスクリーン（距離 L）に到達する様子</div>
+      </div>
+    </div>
+
+    <div class="op-card">
+      <h3>領域Ⅰ・Ⅱの運動方程式</h3>
+      <ul>
+        <li><b>領域Ⅰ（極板間、長さ l）：等加速度運動</b> ── x方向には力がはたらかないので等速、y方向には力 eE がはたらき等加速度運動になる（＝水平投射運動と同じ形）。</li>
+        <li><b>領域Ⅱ（極板出口〜スクリーン、距離 L）：等速直線運動</b> ── 極板を出た電子は力を受けないので、極板出口での速度の向きのまま直進する。</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq">$\vec F = q\vec E = -e\vec E$</div>
+        <div class="op-eq">$t_1 = \dfrac{l}{v}$</div>
+        <div class="op-eq">$ma_y = eE \Rightarrow a_y = \dfrac{eE}{m}$</div>
+        <div class="op-eq">$y_1 = \dfrac{1}{2}\dfrac{eE}{m}\left(\dfrac{l}{v}\right)^2$</div>
+        <div class="op-eq">$t_2 = \dfrac{L}{v}$</div>
+        <div class="op-eq">$y_2 = \dfrac{eE}{m}\cdot\dfrac{l}{v}\times\dfrac{L}{v} = \dfrac{eElL}{mv^2}$</div>
+      </div>
+      <div class="op-callout"><b>教師より</b>領域Ⅰ・Ⅱはどちらも高校物理の「放物運動」「水平投射」と全く同じ数学です。電場という言葉に惑わされず、「一定の力を受けて曲がる」＝斜方投射・水平投射のアナロジーで捉えると理解しやすくなります。</div>
+    </div>
+
+    <div class="op-card">
+      <h3>e/m の導出とまとめ</h3>
+      <ul>
+        <li>スクリーン上での全変位 y = y₁ + y₂ を求める</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq op-eq-lg">$y = y_1+y_2 = \dfrac{eEl^2}{2mv^2}+\dfrac{eElL}{mv^2} = \dfrac{eEl(l+2L)}{2mv^2}$</div>
+      </div>
+      <p class="lead">比電荷 e/m（結果）</p>
+      <div class="op-eq-row">
+        <div class="op-eq op-eq-lg">$\dfrac{e}{m} = \dfrac{2v^2y}{El(l+2L)}$</div>
+      </div>
+      <div class="op-callout"><b>ポイント</b>この式の右辺は、装置の寸法（l, L）・電場 E・電子の速さ v・スクリーン上の変位 y だけで構成されており、e や m の値を個別に知らなくても比 e/m だけは測定できる、という点がこの実験の巧妙なところです。e と m を分離するには、次の「ミリカンの実験」で電荷 e 自体を独立に測定する必要があります。</div>
+    </div>
+  </section>
+
+  <!-- ============ 02 ミリカンの実験 ============ -->
+  <section class="op-section" id="s2" style="--accent:var(--amber)">
+    <div class="op-section-head">
+      <span class="op-section-num">SECTION 02</span>
+      <h2>ミリカンの実験</h2>
+    </div>
+    <p class="op-section-tagline">電気素量 e を測定する</p>
+    <ul class="op-section-intro">
+      <li>1909年、ロバート・ミリカンが油滴を使って実施</li>
+      <li>帯電した油滴の落下・上昇の様子から電荷を測定</li>
+      <li>電荷が e の整数倍でしか存在しない（量子化）ことを実証</li>
+    </ul>
+
+    <div class="op-card">
+      <h3>実験の仕組み：2段階の測定</h3>
+      <ul>
+        <li><b>実験1：電場なし（自由落下）</b> ── 帯電した油滴を空気中で落下させると、重力と空気の粘性抵抗がつり合い、一定の速さ v₀（終端速度）に達する。</li>
+        <li><b>実験2：電場 E を加える</b> ── 上向きに電場 E をかけると、電気力が加わり、油滴は新しい終端速度 v で等速運動する。</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq">$mg = kv_0$ ……①</div>
+        <div class="op-eq">$mg + kv = qE$ ……②</div>
+      </div>
+      <p class="lead">①を②に代入して m・g を消去すると</p>
+      <div class="op-eq-row">
+        <div class="op-eq">$kv_0 + kv = qE$</div>
+        <div class="op-eq op-eq-lg">$q = \dfrac{k(v_0+v)}{E}$</div>
+      </div>
+      <div class="op-callout"><b>教師より</b>ミリカンはこの実験を何百回も繰り返し、得られる電荷 q の値が常にある最小値の整数倍（q = ne）になっていることを発見しました。これが「電荷の量子化」の直接的な証拠です。この e の値と、トムソンが求めた e/m を組み合わせることで、初めて電子の質量 m も単独で求まりました。</div>
+    </div>
+  </section>
+
+  <!-- ============ 03 光電効果 ============ -->
+  <section class="op-section" id="s3" style="--accent:var(--rose)">
+    <div class="op-section-head">
+      <span class="op-section-num">SECTION 03</span>
+      <h2>光電効果</h2>
+    </div>
+    <p class="op-section-tagline">光は粒子（光子）としてふるまう</p>
+    <ul class="op-section-intro">
+      <li>金属に光を当てると電子が飛び出す現象</li>
+      <li>波の理論では説明できない「しきい振動数」の存在</li>
+      <li>アインシュタインが光量子仮説で解決（1921年ノーベル賞）</li>
+    </ul>
+
+    <div class="op-card">
+      <h3>なぜ「波の理論」では説明できなかったか</h3>
+      <ul>
+        <li>光を波と考えると、強い光ほどエネルギーが大きいはずなので、どんな振動数の光でも十分強くすれば電子は飛び出すはずだった</li>
+        <li>しかし実際は、振動数がある値（しきい振動数 ν₀）より低い光は、どんなに強くしても電子を1個も飛び出させない</li>
+        <li>逆に、しきい振動数を超えていれば、弱い光でも即座に電子が飛び出す ⇒ 光は連続的な波ではなく、hν という決まった粒（光子）の集まりであるとアインシュタインが説明した</li>
+      </ul>
+      <p class="lead">光子1個のエネルギーとしきい値（W＝仕事関数）</p>
+      <div class="op-eq-row">
+        <div class="op-eq">$E = h\nu$</div>
+        <div class="op-eq">$h\nu = E \lt W = h\nu_0 \Rightarrow$ 電子は飛び出せない</div>
+      </div>
+      <div class="op-eq-row">
+        <div class="op-eq">$h\nu \ge W\,(=h\nu_0) \Rightarrow$ 電子は飛び出せる</div>
+      </div>
+      <div class="op-callout"><b>直感的なイメージ</b>光子1個は「1つの弾丸」のようなもの。弾丸のエネルギー（hν）が金属から電子を引き剥がすのに必要な最低エネルギー（仕事関数 W）に届かなければ、何発当てても（＝どんなに光を強くしても）電子は飛び出せません。届けば1発（1光子）で即座に飛び出します。</div>
+    </div>
+
+    <div class="op-card">
+      <h3>運動エネルギーの式と球のアナロジー</h3>
+      <ul>
+        <li>光電効果の基本式 ── 飛び出した電子の運動エネルギー K は次式で表される。また、光子自体は運動量も持つ。</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq op-eq-lg">$K = h\nu - W$</div>
+        <div class="op-eq">$p = \dfrac{h\nu}{c}$</div>
+      </div>
+      <div class="op-callout"><b>補足</b>光の強さを上げても、電子1個あたりのエネルギー K は変わらず、飛び出す電子の「数」が増えるだけです。電子1個のエネルギーは振動数 ν だけで決まり、光の色（波長）そのものとは無関係です。</div>
+
+      <p class="lead"><b>たとえ話：壁を越える球</b> ── 高さ h の壁をボールが越えられるかどうかで対応づける（mgh＝仕事関数W、v'＝飛び出した電子の速さ に対応）</p>
+      <div class="op-fig">
+        <svg viewBox="0 0 300 110">
+          <!-- 地面 -->
+          <line class="op-svg-line" x1="4" y1="96" x2="296" y2="96"/>
+          <!-- 壁 -->
+          <rect x="150" y="26" width="8" height="70" fill="var(--ink)" stroke="none"/>
+          <text class="op-svg-txt-strong" x="162" y="40">h</text>
+          <!-- v0: ちょうど壁の高さで止まる軌道（届かない） -->
+          <path class="op-svg-line" d="M20 96 Q 90 20 150 26" fill="none" stroke-dasharray="3 3"/>
+          <text class="op-svg-txt" x="30" y="60">v₀（届かない）</text>
+          <!-- v: 壁を越える軌道 -->
+          <path class="op-svg-accent" d="M20 96 Q 100 -6 158 26" fill="none"/>
+          <path class="op-svg-accent" d="M158 26 Q 200 40 260 90" fill="none"/>
+          <text class="op-svg-txt" x="190" y="16">v（越えて v' で着地）</text>
+        </svg>
+        <div class="cap">v₀ はちょうど壁の高さで力尽きる（K=0）。v はそれを上回り、壁を越えた後 v' で運動を続ける</div>
+      </div>
+      <div class="op-eq-row">
+        <div class="op-eq">$\tfrac12 mv_0^2 = mgh$</div>
+        <div class="op-eq">$\tfrac12 mv^2 &lt; mgh$</div>
+        <div class="op-eq">$\tfrac12 mv'^2 = \tfrac12 mv^2 - W$</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ============ 04 二重スリット実験 ============ -->
+  <section class="op-section" id="s4" style="--accent:var(--teal)">
+    <div class="op-section-head">
+      <span class="op-section-num">SECTION 04</span>
+      <h2>二重スリット実験</h2>
+    </div>
+    <p class="op-section-tagline">電子は波のようにふるまう</p>
+    <ul class="op-section-intro">
+      <li>光電効果は光の「粒子性」を示す証拠だった</li>
+      <li>一方この実験は、電子（粒子のはず）の「波動性」を示す</li>
+      <li>粒子性と波動性を併せ持つ＝「二重性」が量子力学の出発点</li>
+    </ul>
+
+    <div class="op-card">
+      <h3>波と電子、それぞれの結果を比較する</h3>
+      <ul>
+        <li><b>① 波の場合（予想どおり）</b> ── 2つのスリットを通った波が干渉し、スクリーン上に強め合う点・弱め合う点が交互に並ぶ「干渉縞」ができる。これは波に特有の現象。</li>
+        <li><b>② 電子の場合（驚きの結果）</b> ── 電子を1個ずつ、時間を空けて発射しても、たくさん蓄積していくと波と同じ干渉縞が浮かび上がる。電子は「粒」として1点に着弾するのに、多数集めると波の干渉パターンを描く。</li>
+      </ul>
+      <div class="op-fig">
+        <svg viewBox="0 0 320 140">
+          <!-- 障壁と2スリット -->
+          <line class="op-svg-ink" x1="60" y1="10" x2="60" y2="52"/>
+          <line class="op-svg-ink" x1="60" y1="60" x2="60" y2="80"/>
+          <line class="op-svg-ink" x1="60" y1="88" x2="60" y2="130"/>
+          <text class="op-svg-txt" x="20" y="8">波源</text>
+          <!-- 波の干渉縞（上段） -->
+          <text class="op-svg-txt-strong" x="4" y="30">① 波</text>
+          <g>
+            <rect x="260" y="10" width="6" height="18" fill="var(--accent)" stroke="none"/>
+            <rect x="260" y="34" width="6" height="6" fill="var(--muted)" opacity=".3" stroke="none"/>
+            <rect x="260" y="44" width="6" height="14" fill="var(--accent)" stroke="none" opacity=".6"/>
+            <rect x="260" y="62" width="6" height="6" fill="var(--muted)" opacity=".3" stroke="none"/>
+            <rect x="260" y="72" width="6" height="14" fill="var(--accent)" stroke="none" opacity=".6"/>
+            <rect x="260" y="90" width="6" height="6" fill="var(--muted)" opacity=".3" stroke="none"/>
+            <rect x="260" y="100" width="6" height="18" fill="var(--accent)" stroke="none"/>
+          </g>
+          <line class="op-svg-line" x1="70" y1="24" x2="256" y2="18"/>
+          <line class="op-svg-line" x1="70" y1="70" x2="256" y2="52"/>
+          <line class="op-svg-line" x1="70" y1="24" x2="256" y2="52"/>
+          <line class="op-svg-line" x1="70" y1="70" x2="256" y2="18"/>
+          <text class="op-svg-txt" x="200" y="130">干渉縞（明暗の帯）</text>
+          <line class="op-svg-hatch" x1="256" y1="4" x2="256" y2="122"/>
+        </svg>
+        <div class="cap">2つのスリットを通った波が干渉し、スクリーンに明暗の帯（干渉縞）ができる</div>
+      </div>
+      <div class="op-fig">
+        <svg viewBox="0 0 320 110">
+          <text class="op-svg-txt-strong" x="4" y="16">② 電子を1個ずつ発射</text>
+          <line class="op-svg-ink" x1="60" y1="26" x2="60" y2="94"/>
+          <circle cx="30" cy="60" r="2" fill="var(--ink)" stroke="none"/>
+          <path class="op-svg-line" d="M20 60 L46 60" stroke-dasharray="2 2"/>
+          <line class="op-svg-hatch" x1="256" y1="10" x2="256" y2="100"/>
+          <!-- 蓄積してできる同じ干渉縞（点の密度で表現） -->
+          <g stroke="none" fill="var(--accent)">
+            <circle cx="258" cy="16" r="1"/><circle cx="261" cy="14" r="1"/><circle cx="259" cy="20" r="1"/>
+            <circle cx="262" cy="18" r="1"/><circle cx="257" cy="22" r="1"/>
+            <circle cx="259" cy="38" r="1" opacity=".4"/><circle cx="261" cy="40" r="1" opacity=".4"/>
+            <circle cx="258" cy="48" r="1"/><circle cx="261" cy="50" r="1"/><circle cx="259" cy="53" r="1"/>
+            <circle cx="262" cy="47" r="1"/><circle cx="257" cy="55" r="1"/>
+            <circle cx="259" cy="68" r="1" opacity=".4"/><circle cx="261" cy="66" r="1" opacity=".4"/>
+            <circle cx="258" cy="78" r="1"/><circle cx="261" cy="80" r="1"/><circle cx="259" cy="83" r="1"/>
+            <circle cx="262" cy="76" r="1"/><circle cx="257" cy="85" r="1"/>
+          </g>
+          <text class="op-svg-txt" x="180" y="106">同じ干渉縞が浮かび上がる</text>
+        </svg>
+        <div class="cap">電子は1点ずつ「粒」として着弾するが、多数蓄積すると波と同じ干渉パターンになる</div>
+      </div>
+      <div class="op-callout"><b>教師より</b>「1個の電子が同時に2つのスリットを通り、自分自身と干渉している」──量子力学ではこのように解釈します。観測するまで電子は特定の経路を持たず、可能性が波として広がっているのです。</div>
+    </div>
+  </section>
+
+  <!-- ============ 05 ド・ブロイの関係式 ============ -->
+  <section class="op-section" id="s5" style="--accent:var(--amber)">
+    <div class="op-section-head">
+      <span class="op-section-num">SECTION 05</span>
+      <h2>ド・ブロイの関係式</h2>
+    </div>
+    <p class="op-section-tagline">すべての物質は波でもある</p>
+    <ul class="op-section-intro">
+      <li>光子の E=hν・p=h/λ を、電子などの物質粒子にも拡張</li>
+      <li>1924年、ド・ブロイが博士論文で提唱した大胆な仮説</li>
+      <li>後の電子線回折実験によって実証された</li>
+    </ul>
+
+    <div class="op-card">
+      <h3>光の式を物質粒子へ拡張する</h3>
+      <p class="lead"><b>① まず光について整理</b>（c=νλ）</p>
+      <div class="op-eq-row">
+        <div class="op-eq">$E = h\nu\;\;(\nu=E/h)$</div>
+        <div class="op-eq">$p = \dfrac{h\nu}{c} = \dfrac{h}{\lambda} \Rightarrow \lambda = \dfrac{h}{p}$</div>
+      </div>
+      <p class="lead"><b>② 同じ関係を電子にもあてはめる</b>（k = 2π/λ（波数）、ℏ = h/2π）</p>
+      <div class="op-eq-row">
+        <div class="op-eq">$\nu = E/h$</div>
+        <div class="op-eq op-eq-lg">$\lambda = \dfrac{h}{p} \Rightarrow p = \dfrac{h}{\lambda} = \dfrac{hk}{2\pi} = \hbar k$</div>
+      </div>
+      <div class="op-callout"><b>なぜこの発想が革新的だったか</b>それまで「波」と考えられていた光が粒子（光子）の性質を持つことが光電効果で分かった。ド・ブロイは、その逆に「粒子」と考えられていた電子にも波の性質があるのではないか、と自然な対称性から発想しました。<br><br>λ = h/p という式が示すのは、質量を持つあらゆる物体には対応する「波長」が存在するということ。ただし h（プランク定数）が極めて小さいため、野球ボールのような日常的な物体では波長が測定不可能なほど短く、波動性は事実上現れません。電子のように質量が非常に小さい粒子だけが、実験で観測できる波長を持ちます。</div>
+    </div>
+  </section>
+
+  <!-- ============ 06 不確定性原理 ============ -->
+  <section class="op-section" id="s6" style="--accent:var(--rose)">
+    <div class="op-section-head">
+      <span class="op-section-num">SECTION 06</span>
+      <h2>不確定性原理</h2>
+    </div>
+    <p class="op-section-tagline">位置と運動量は同時に確定できない</p>
+    <ul class="op-section-intro">
+      <li>ハイゼンベルクが1927年に定式化</li>
+      <li>測定技術の限界ではなく、波としての本質的な性質</li>
+      <li>波束（波の重ね合わせ）の考え方から導かれる</li>
+    </ul>
+
+    <div class="op-card">
+      <h3>波束のイメージで理解する</h3>
+      <ul>
+        <li><b>単一の波数を持つ波</b> ── 波数（＝運動量）が完全に1つに決まっている波は、空間全体に無限に広がっている。つまり「どこにあるか」が全く分からない。</li>
+        <li><b>波数の異なる波を重ねると…</b> ── 異なる波数の波を重ね合わせると、特定の場所だけ強め合う「波束」ができ、位置がある程度絞り込める。ただし運動量（波数）の方は逆にぼやける。</li>
+      </ul>
+      <div class="op-fig">
+        <svg viewBox="0 0 320 140">
+          <text class="op-svg-txt-strong" x="4" y="14">単一の波数（Δk 小）→ 空間に広がる（Δx 大）</text>
+          <path class="op-svg-line" d="M4 32 Q 20 16 36 32 T 68 32 T 100 32 T 132 32 T 164 32 T 196 32 T 228 32 T 260 32 T 292 32 T 316 32" fill="none"/>
+          <line class="op-svg-hatch" x1="4" y1="46" x2="316" y2="46"/>
+          <path class="op-svg-line" d="M8 50 L 312 50" marker-end="url(#arrowR)" marker-start="url(#arrowL)"/>
+          <text class="op-svg-txt" x="150" y="46">Δx（広い）</text>
+
+          <text class="op-svg-txt-strong" x="4" y="80">波数の異なる波を重ねる（Δk 大）→ 局在する波束（Δx 小）</text>
+          <path class="op-svg-accent" d="M4 108
+            Q 20 104 30 108
+            Q 50 60 70 108
+            Q 90 130 110 108
+            Q 130 60 150 108
+            Q 170 130 190 108
+            Q 210 104 230 108
+            Q 260 106 316 108" fill="none"/>
+          <path class="op-svg-line" d="M64 122 L 156 122" marker-end="url(#arrowR)" marker-start="url(#arrowL)"/>
+          <text class="op-svg-txt" x="86" y="136">Δx（狭い）</text>
+
+          <defs>
+            <marker id="arrowR" markerWidth="6" markerHeight="6" refX="5" refY="3" orient="auto"><path d="M0,0 L6,3 L0,6 Z" fill="var(--muted)"/></marker>
+            <marker id="arrowL" markerWidth="6" markerHeight="6" refX="1" refY="3" orient="auto"><path d="M6,0 L0,3 L6,6 Z" fill="var(--muted)"/></marker>
+          </defs>
+        </svg>
+        <div class="cap">単一波数の波は空間全体に広がる。波数を重ねるほど波束は狭く局在するが、その分だけ波数（運動量）の広がりは大きくなる</div>
+      </div>
+      <div class="op-eq-row">
+        <div class="op-eq">$p = \hbar k \Rightarrow \Delta p = \hbar\Delta k$</div>
+        <div class="op-eq op-eq-lg">$\Delta x\cdot\Delta p \ge \dfrac{h}{4\pi}$</div>
+      </div>
+      <div class="op-callout">位置の広がり Δx を小さくしよう（＝波束を局在させよう）とすると、必然的に運動量の広がり Δp が大きくなる。これは測定の未熟さではなく、波を重ね合わせるという数学的な構造そのものから来る、自然界の本質的な限界。</div>
+    </div>
+  </section>
+
+  <!-- ============ 07 シュレディンガー方程式 ============ -->
+  <section class="op-section" id="s7" style="--accent:var(--teal)">
+    <div class="op-section-head">
+      <span class="op-section-num">SECTION 07</span>
+      <h2>シュレディンガー方程式</h2>
+    </div>
+    <p class="op-section-tagline">量子力学の基礎方程式を導く</p>
+    <ul class="op-section-intro">
+      <li>電子を「波」として記述する波動関数 ψ(x,t) を考える</li>
+      <li>ニュートンの運動方程式 F=ma に対応する量子版の方程式</li>
+      <li>エネルギー演算子・運動量演算子を経由して導出する</li>
+    </ul>
+
+    <div class="op-card">
+      <h3>電子の波動関数を仮定する</h3>
+      <ul>
+        <li>電子を波とみなし、その波動関数を三角関数の形で仮定するところから出発する</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq">$\psi(x,t) = A\sin 2\pi\!\left(\dfrac{t}{T}-\dfrac{x}{\lambda}\right)$</div>
+      </div>
+      <p class="lead">周期 T=h/E、波長 λ=h/p を代入して整理すると（ℏ = h/2π）</p>
+      <div class="op-eq-row">
+        <div class="op-eq">$\psi(x,t) = A\sin\!\left(\dfrac{E}{\hbar}t-\dfrac{p}{\hbar}x\right)$</div>
+        <div class="op-eq">$\psi(x,t) = A\cos\!\left(\dfrac{E}{\hbar}t-\dfrac{p}{\hbar}x\right)$</div>
+      </div>
+      <div class="op-callout"><b>教師より：なぜ複素数を使うのか</b>この後の議論では、ψ を sin と cos を組み合わせた複素数の形 ψ = A[sin(...) + i cos(...)] で扱います。実在する物理量（測定結果）は常に実数ですが、波動関数 ψ 自体は直接観測される量ではなく、|ψ|² という形で初めて確率という実数の意味を持ちます。複素数を使うことで、時間微分がエネルギーを、空間微分が運動量を過不足なく取り出せる、という数学的な都合の良さがあります。</div>
+    </div>
+
+    <div class="op-card">
+      <h3>エネルギー演算子と運動量演算子</h3>
+      <div class="op-eq-row">
+        <div class="op-eq">$\psi(x,t)=A\!\left[\sin\!\left(\tfrac{E}{\hbar}t-\tfrac{p}{\hbar}x\right)+i\cos\!\left(\tfrac{E}{\hbar}t-\tfrac{p}{\hbar}x\right)\right]$</div>
+      </div>
+      <ul>
+        <li><b>① |ψ|² は一定（波が確定した運動量を持つ極限）</b> ── 運動量が完全に確定（Δp=0）すると、不確定性原理より位置は完全に不確定（Δx→∞）になる。</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq">$|\psi(x,t)|^2 = A^2\sin^2(\cdots)+A^2\cos^2(\cdots) = A^2 = \text{const}$</div>
+      </div>
+      <p class="lead"><b>② ψ を時間微分 → エネルギー演算子</b></p>
+      <div class="op-eq-row">
+        <div class="op-eq">$\dfrac{\partial\psi}{\partial t} = -i\dfrac{E}{\hbar}\psi(x,t)$</div>
+        <div class="op-eq">$E\psi = i\hbar\dfrac{\partial\psi}{\partial t} \Rightarrow E = i\hbar\dfrac{\partial}{\partial t}$</div>
+      </div>
+      <p class="lead"><b>③ ψ を空間で2階微分 → 運動量演算子</b></p>
+      <div class="op-eq-row">
+        <div class="op-eq">$\dfrac{\partial^2\psi}{\partial x^2} = -\left(\dfrac{p}{\hbar}\right)^2\!\psi(x,t)$</div>
+        <div class="op-eq">$p^2 = -\hbar^2\dfrac{\partial^2}{\partial x^2}$</div>
+        <div class="op-eq">$p = \dfrac{\hbar}{i}\dfrac{\partial}{\partial x}$</div>
+      </div>
+      <div class="op-callout"><b>この操作が意味すること</b>ψ(x,t) を t で1回微分すると係数として E が、x で2回微分すると係数として p² が現れます。これはつまり「エネルギー」や「運動量」といった物理量が、波動関数に対する微分の操作（演算子）として表現できるということ。この発想の転換こそが量子力学の核心です。</div>
+    </div>
+
+    <div class="op-card">
+      <h3>方程式の完成</h3>
+      <ul>
+        <li>古典力学のエネルギーの式 E = p²/(2m) + V(x) に、エネルギー演算子と運動量演算子をそのまま代入する</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq op-eq-lg">$E = \tfrac12 mv^2+V(x) = \dfrac{p^2}{2m}+V(x)\;\;(p=mv)$</div>
+      </div>
+      <p class="lead">→ これがシュレディンガー方程式（時間依存）</p>
+      <div class="op-eq-row">
+        <div class="op-eq op-eq-lg">$i\hbar\dfrac{\partial\psi(x,t)}{\partial t} = \left\{-\dfrac{\hbar^2}{2m}\dfrac{\partial^2}{\partial x^2}+V(x)\right\}\psi(x,t)$</div>
+      </div>
+      <div class="op-callout"><b>この方程式が持つ意味</b>ニュートン力学における F=ma が「物体の位置が時間とともにどう変化するか」を決めるように、シュレディンガー方程式は「波動関数 ψ(x,t) が時間とともにどう変化するか」を決めます。この方程式とポテンシャル V(x) さえ与えれば、原理的にはあらゆる量子系のふるまいを予言できます。</div>
+    </div>
+  </section>
+
+  <!-- ============ 08 無限に深い井戸型ポテンシャル ============ -->
+  <section class="op-section" id="s8" style="--accent:var(--amber)">
+    <div class="op-section-head">
+      <span class="op-section-num">SECTION 08</span>
+      <h2>無限に深い井戸型ポテンシャル</h2>
+    </div>
+    <p class="op-section-tagline">量子力学 最初の応用例</p>
+    <ul class="op-section-intro">
+      <li>電子を「幅2aの箱」に閉じ込めたモデル</li>
+      <li>シュレディンガー方程式を初めて実際に解いてみる</li>
+      <li>結論：エネルギーは連続でなく、とびとびの値しか取れない</li>
+    </ul>
+
+    <div class="op-card">
+      <h3>モデルの設定</h3>
+      <ul>
+        <li>-a&lt;x&lt;a の範囲だけ V=0（自由に動ける）、|x|≥a では V→∞（絶対に出られない壁）という、最も単純化されたモデルを考える。「箱の中の粒子」とも呼ばれる。</li>
+        <li><b>なぜこのモデルを最初に学ぶか</b> ── 無限井戸は数学的に最も解きやすい量子系で、量子力学特有の「エネルギーの量子化」という現象を最短距離で体感できる教材です。物理的には、金属中の自由電子や、非常に小さい半導体構造（量子ドット）などが近似的にこのモデルで扱われます。</li>
+        <li>この章の目標は、シュレディンガー方程式に実際に境界条件を当てはめて、離散的なエネルギー準位 Eₙ を導くところまでです。</li>
+      </ul>
+      <div class="op-fig">
+        <svg viewBox="0 0 260 110">
+          <!-- 軸 -->
+          <line class="op-svg-line" x1="10" y1="90" x2="250" y2="90"/>
+          <path class="op-svg-line" d="M244 86 L250 90 L244 94" fill="none"/>
+          <line class="op-svg-line" x1="130" y1="94" x2="130" y2="10"/>
+          <path class="op-svg-line" d="M126 16 L130 10 L134 16" fill="none"/>
+          <text class="op-svg-txt" x="240" y="102">x</text>
+          <text class="op-svg-txt" x="134" y="14">V(x)</text>
+          <!-- 井戸壁 -->
+          <line class="op-svg-ink" x1="80" y1="18" x2="80" y2="90"/>
+          <line class="op-svg-ink" x1="180" y1="18" x2="180" y2="90"/>
+          <line class="op-svg-ink" x1="80" y1="90" x2="180" y2="90"/>
+          <!-- ハッチング（無限大の壁） -->
+          <g class="op-svg-hatch">
+            <line x1="60" y1="20" x2="76" y2="36"/><line x1="60" y1="34" x2="76" y2="50"/>
+            <line x1="60" y1="48" x2="76" y2="64"/><line x1="60" y1="62" x2="76" y2="78"/>
+            <line x1="184" y1="20" x2="200" y2="36"/><line x1="184" y1="34" x2="200" y2="50"/>
+            <line x1="184" y1="48" x2="200" y2="64"/><line x1="184" y1="62" x2="200" y2="78"/>
+          </g>
+          <text class="op-svg-txt" x="66" y="14">V→∞</text>
+          <text class="op-svg-txt" x="188" y="14">V→∞</text>
+          <text class="op-svg-txt" x="122" y="82">V=0</text>
+          <text class="op-svg-txt" x="74" y="102">-a</text>
+          <text class="op-svg-txt" x="128" y="102">0</text>
+          <text class="op-svg-txt" x="176" y="102">a</text>
+        </svg>
+        <div class="cap">幅 2a の無限に深い井戸型ポテンシャル（「箱の中の粒子」モデル）</div>
+      </div>
+      <div class="op-eq-row">
+        <div class="op-eq">$-a&lt;x&lt;a: V(x)=0$</div>
+        <div class="op-eq">$x\ge a,\; x\le -a: V(x)\to\infty$</div>
+      </div>
+    </div>
+
+    <div class="op-card">
+      <h3>井戸の内部・外部での解</h3>
+      <ul>
+        <li><b>i）井戸の内部（-a≤x≤a）：V=0</b> ── 一般に d²χ/dx² = -k²χ の解は三角関数の重ね合わせ。</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq">$-\dfrac{\hbar^2}{2m}\dfrac{\partial^2\psi}{\partial x^2}=E\psi$</div>
+        <div class="op-eq">$\dfrac{\partial^2\psi}{\partial x^2}=-\dfrac{2mE}{\hbar^2}\psi\;\;\left(k^2=\dfrac{2mE}{\hbar^2}\right)$</div>
+      </div>
+      <div class="op-eq-row">
+        <div class="op-eq op-eq-lg">$\dfrac{d^2\chi}{dx^2}=-k^2\chi \Rightarrow \chi(x)=A\cos kx+B\sin kx$</div>
+      </div>
+      <div class="op-eq-row">
+        <div class="op-eq">$\psi(x)=A\cos kx+B\sin kx,\;\;k=\dfrac{\sqrt{2mE}}{\hbar}$</div>
+      </div>
+      <ul>
+        <li><b>ii）井戸の外部（|x|≥a）：V→∞</b> ── E は有限な値なので、方程式の左辺が発散しないためには、波動関数そのものが 0 でなければならない。＝ 電子は井戸の外には絶対に存在しない（確率0）。</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq">$\psi(x)=0$</div>
+      </div>
+      <div class="op-callout"><b>教師より</b>「V→∞ だから ψ=0」という結論は直感的にも自然です。無限に高い壁の外側に粒子が存在する確率がゼロでなければ、その粒子は無限大のポテンシャルエネルギーを持つことになってしまい、物理的にあり得ないからです。</div>
+    </div>
+
+    <div class="op-card">
+      <h3>境界条件から連立方程式へ</h3>
+      <ul>
+        <li>内部の解 ψ(x)=Acoskx+Bsinkx は、外部で ψ=0 と滑らかに繋がる必要がある（x=±a で連続）</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq">$\psi(-a)=\psi(a)=0$</div>
+      </div>
+      <div class="op-eq-row">
+        <div class="op-eq">$\psi(-a)=A\cos ka-B\sin ka=0$</div>
+        <div class="op-eq">$\psi(a)=A\cos ka+B\sin ka=0$</div>
+      </div>
+      <p class="lead">足す・引くと2つの条件に分離（一方が0でなければ、もう一方は必然的に0になる）</p>
+      <div class="op-eq-row">
+        <div class="op-eq">$A\cos ka = 0,\quad B\sin ka = 0$</div>
+      </div>
+      <ul>
+        <li><b>（Ⅰ）coska=0、B=0 の場合</b></li>
+        <li><b>（Ⅱ）A=0、sinka=0 の場合</b></li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq">$ka = \tfrac12\pi,\ \tfrac32\pi,\ \tfrac52\pi,\ \cdots = \tfrac{n}{2}\pi\;\;(n=1,3,5,\cdots)$</div>
+      </div>
+      <div class="op-eq-row">
+        <div class="op-eq">$ka = \pi,\ 2\pi,\ 3\pi,\ \cdots = \tfrac{n}{2}\pi\;\;(n=2,4,6,\cdots)$</div>
+      </div>
+      <div class="op-callout"><b>補足：試験に出やすいポイント</b>「coska・sinkaの中身は何πになりますか」という形で、この場合分けの計算そのものが問われることがあります。（Ⅰ）は n が奇数、（Ⅱ）は n が偶数のケースに対応し、まとめると ka = (n/2)π（n=1,2,3,…）という1つの式に統合できます。</div>
+    </div>
+
+    <div class="op-card">
+      <h3>エネルギー準位の量子化</h3>
+      <ul>
+        <li>（Ⅰ）（Ⅱ）をまとめた条件に、k の定義を代入して E について解く</li>
+      </ul>
+      <div class="op-eq-row">
+        <div class="op-eq">$ka = \tfrac{n}{2}\pi\;\;(n=1,2,3,\cdots)$</div>
+      </div>
+      <div class="op-eq-row">
+        <div class="op-eq">$\dfrac{\sqrt{2mE}}{\hbar}a = \dfrac{n}{2}\pi$</div>
+        <div class="op-eq">$\dfrac{2mE}{\hbar^2} = \dfrac{n^2\pi^2}{4}$</div>
+      </div>
+      <p class="lead">結論：エネルギー準位</p>
+      <div class="op-eq-row">
+        <div class="op-eq op-eq-lg">$E_n = \dfrac{n^2\pi^2\hbar^2}{8ma^2}\quad(n=1,2,3,\cdots)$</div>
+      </div>
+      <div class="op-callout"><b>この結果が示す最も重要なこと</b>古典力学では、箱の中の粒子はどんなエネルギーでも自由に取れます。ところが量子力学では、n=1,2,3,… という整数でラベル付けされた、とびとびの値 Eₙ しか許されません。これが「エネルギーの量子化」であり、量子力学という名前の由来そのものです。<br><br>さらに重要な点として、n=0 は許されないため、電子は井戸の中で完全に静止する（E=0）ことができません。これを零点エネルギーと呼び、不確定性原理（位置を箱の中に閉じ込めると運動量が完全にゼロにはなれない）と直接つながっています。この井戸モデルは、原子核内の核子や量子ドットなど、様々な閉じ込め系の出発点になります。</div>
+    </div>
+  </section>
+
+  <div class="op-footer-note">
+    <b style="color:var(--fg)">出典：</b>授業スライド「応用物理 試験範囲 総まとめノート」（武藤甲）より作成。図は授業ノートをもとに再構成、数式は同スライドの表記に準拠しています。
+  </div>
+
+</div>
+</div>
+
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/app-shell.js"></script>
+<script src="/js/util.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js"></script>
+<script>
+appShell.mount(document.getElementById('app-shell-bar'), {
+  nav: window.APP_NAV,
+});
+
+if (window.renderMathInElement) {
+  try {
+    renderMathInElement(document.getElementById('op-page'), {
+      delimiters: [
+        { left: '$$', right: '$$', display: true },
+        { left: '$', right: '$', display: false }
+      ],
+      throwOnError: false
+    });
+  } catch (e) {}
+}
+</script>
+</body>
+</html>
