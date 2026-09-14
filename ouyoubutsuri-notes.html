@@ -40,17 +40,20 @@
   /* ---- note card ---- */
   .op-card{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 16px 14px;margin-bottom:14px}
   .op-card h3{margin:0 0 8px;font-size:1rem;color:var(--fg)}
-  .op-card ul{margin:0;padding-left:1.15em;font-size:.87rem;line-height:1.62;color:var(--ink)}
+  .op-card ul{margin:0;padding-left:1.15em;font-size:.93rem;line-height:1.62;color:var(--ink)}
   .op-card ul li{margin:4px 0}
   .op-card ul li::marker{color:var(--accent,var(--teal))}
   .op-card .lead{font-size:.85rem;color:var(--muted);margin:12px 0 6px}
   .op-card .lead b{color:var(--ink)}
 
-  .op-callout{margin-top:12px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:.82rem;line-height:1.6;color:var(--muted)}
+  .op-callout{margin-top:12px;background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:10px 12px;font-size:.92rem;line-height:1.6;color:var(--ink)}
   .op-callout b{display:block;color:var(--accent,var(--teal));font-size:.74rem;letter-spacing:.04em;margin-bottom:4px}
 
   /* ---- equations (KaTeX) ---- */
-  .op-eq-row{display:flex;flex-wrap:wrap;gap:8px;margin-top:12px;align-items:center}
+  /* 導出の順序を目で追えるよう、数式は横並びではなく縦に積む。
+     横並びを使うのは対等な2式を並置して比較するときだけ（.op-eq-row.op-eq-compare） */
+  .op-eq-row{display:flex;flex-direction:column;gap:8px;margin-top:12px;align-items:flex-start}
+  .op-eq-row.op-eq-compare{flex-direction:row;flex-wrap:wrap;align-items:center}
   .op-eq{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:8px 14px;color:var(--ink);font-size:1rem}
   .op-eq.op-eq-lg{padding:10px 16px;font-size:1.08rem}
   .op-eq .katex{color:var(--ink)}
@@ -465,32 +468,42 @@
     </div>
 
     <div class="op-card">
-      <h3>エネルギー演算子と運動量演算子</h3>
+      <h3>① |ψ|² が一定になる極限</h3>
       <div class="op-eq-row">
         <div class="op-eq">$\psi(x,t)=A\!\left[\sin\!\left(\tfrac{E}{\hbar}t-\tfrac{p}{\hbar}x\right)+i\cos\!\left(\tfrac{E}{\hbar}t-\tfrac{p}{\hbar}x\right)\right]$</div>
       </div>
       <ul>
-        <li><b>① |ψ|² は一定（波が確定した運動量を持つ極限）</b> ── 運動量が完全に確定（Δp=0）すると、不確定性原理より位置は完全に不確定（Δx→∞）になる。</li>
+        <li>運動量が完全に確定（Δp=0）すると、不確定性原理より位置は完全に不確定（Δx→∞）になる。この極限で |ψ|² を計算してみる。</li>
       </ul>
       <div class="op-eq-row">
         <div class="op-eq">$|\psi(x,t)|^2 = A^2\sin^2(\cdots)+A^2\cos^2(\cdots) = A^2 = \text{const}$</div>
       </div>
-      <p class="lead"><b>② ψ を時間微分 → エネルギー演算子</b></p>
+      <div class="op-callout"><b>この式が意味すること</b>|ψ|²が場所によらず一定（＝どこにあるかまったく分からない）というのは、運動量Δp=0（＝運動量は完全に確定）に対応する極限の姿。位置の情報と運動量の情報がトレードオフになっているという不確定性原理の考え方が、ここでも顔を出しています。</div>
+    </div>
+
+    <div class="op-card">
+      <h3>② 時間微分 → エネルギー演算子</h3>
+      <p class="lead"><b>ψ を時間 t で1回微分する</b></p>
       <div class="op-eq-row">
         <div class="op-eq">$\dfrac{\partial\psi}{\partial t} = -i\dfrac{E}{\hbar}\psi(x,t)$</div>
         <div class="op-eq">$E\psi = i\hbar\dfrac{\partial\psi}{\partial t} \Rightarrow E = i\hbar\dfrac{\partial}{\partial t}$</div>
       </div>
-      <p class="lead"><b>③ ψ を空間で2階微分 → 運動量演算子</b></p>
+      <div class="op-callout"><b>この操作が意味すること</b>ψ(x,t) を t で1回微分すると、係数として E が現れます。つまり「エネルギー」という物理量が、波動関数に対する微分の操作（演算子）として表現できるということ。この発想の転換こそが量子力学の核心です。</div>
+    </div>
+
+    <div class="op-card">
+      <h3>③ 空間2階微分 → 運動量演算子</h3>
+      <p class="lead"><b>ψ を空間 x で2階微分する</b></p>
       <div class="op-eq-row">
         <div class="op-eq">$\dfrac{\partial^2\psi}{\partial x^2} = -\left(\dfrac{p}{\hbar}\right)^2\!\psi(x,t)$</div>
         <div class="op-eq">$p^2 = -\hbar^2\dfrac{\partial^2}{\partial x^2}$</div>
         <div class="op-eq">$p = \dfrac{\hbar}{i}\dfrac{\partial}{\partial x}$</div>
       </div>
-      <div class="op-callout"><b>この操作が意味すること</b>ψ(x,t) を t で1回微分すると係数として E が、x で2回微分すると係数として p² が現れます。これはつまり「エネルギー」や「運動量」といった物理量が、波動関数に対する微分の操作（演算子）として表現できるということ。この発想の転換こそが量子力学の核心です。</div>
+      <div class="op-callout"><b>この操作が意味すること</b>x で2回微分すると、係数として p² が現れます。時間微分がエネルギーを、空間の2階微分が運動量を過不足なく取り出せるという、複素数表示ならではの数学的な都合の良さがここに現れています。</div>
     </div>
 
     <div class="op-card">
-      <h3>方程式の完成</h3>
+      <h3>④ 方程式の完成</h3>
       <ul>
         <li>古典力学のエネルギーの式 E = p²/(2m) + V(x) に、エネルギー演算子と運動量演算子をそのまま代入する</li>
       </ul>
