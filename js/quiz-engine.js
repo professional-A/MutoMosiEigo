@@ -97,6 +97,9 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:v
 .fc-actions{display:flex;gap:8px;margin-top:12px}
 .q.correct .fc{border-color:var(--teal-d);background:rgba(70,214,196,.06)}
 .q.hash-highlight{outline:2px solid var(--teal);outline-offset:3px;transition:outline-color .6s}
+.q-ref{margin:6px 0 2px;font-size:.82rem}
+.q-ref a{color:var(--teal);text-decoration:none;font-weight:700}
+.q-ref a:hover{text-decoration:underline}
 `;
 
 // Module-level state
@@ -200,7 +203,7 @@ function buildQuestion(q, qi, key, secId) {
   div.className = 'q' + (_state[key] === 1 ? ' correct' : _state[key] === -1 ? ' wrong' : '');
   div.id = `q_${key}`;
 
-  let inner = `<div class="q-top"><span class="qn">Q${qi + 1}</span><div class="q-body"><div class="prompt">${q.q}</div>`;
+  let inner = `<div class="q-top"><span class="qn">Q${qi + 1}</span><div class="q-body"><div class="prompt">${q.q}</div>${q.ref ? `<div class="q-ref">${q.ref}</div>` : ''}`;
 
   if (q.type === 'single') {
     inner += `<div class="opts">`;
