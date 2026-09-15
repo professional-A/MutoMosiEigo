@@ -96,6 +96,7 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:v
 .fc-back{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:.96rem;color:var(--muted);line-height:1.85}
 .fc-actions{display:flex;gap:8px;margin-top:12px}
 .q.correct .fc{border-color:var(--teal-d);background:rgba(70,214,196,.06)}
+.q.hash-highlight{outline:2px solid var(--teal);outline-offset:3px;transition:outline-color .6s}
 `;
 
 // Module-level state
@@ -130,6 +131,16 @@ function computeScore() {
     if (_state[`${sec.id}_${qi}`] === 1) done++;
   }));
   return { done, total };
+}
+
+// #q_<secId>_<index> 付きURLで開いたとき、その問までスクロールして一時的にハイライトする
+function scrollToHash() {
+  if (!location.hash) return;
+  const el = document.getElementById(location.hash.slice(1));
+  if (!el) return;
+  el.scrollIntoView({ block: 'center' });
+  el.classList.add('hash-highlight');
+  setTimeout(() => el.classList.remove('hash-highlight'), 2200);
 }
 
 function updateScore() {
@@ -553,6 +564,7 @@ window.initQuiz = function (data) {
   try { _state = JSON.parse(localStorage.getItem(_storageKey) || '{}'); } catch (e) { _state = {}; }
 
   renderAll();
+  scrollToHash();
 
   // Set up progress sync before progress.js loads
   window._quizSync = async function () {
@@ -588,6 +600,7 @@ window.initQuiz = function (data) {
     addScript('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/katex.min.js', function () {
       addScript('https://cdn.jsdelivr.net/npm/katex@0.16.11/dist/contrib/auto-render.min.js', function () {
         typeset(document.getElementById('app'));
+        scrollToHash();
       });
     });
   }

@@ -52,14 +52,26 @@
   .sg-flow{font-size:.93rem;line-height:1.7;color:var(--ink);margin:0;padding-left:1.15em}
   .sg-flow li{margin:2px 0}
 
-  /* 1ステップ=1行。式の横に理由を添える。縦に積むのでスクロールなしで流れを追える */
+  /* 理由は数式の「上」に独立した1文で置く。1ステップに数式は1つだけ。文章が主役、数式が従 */
   .sg-steps{display:flex;flex-direction:column;gap:0;margin-top:2px}
-  .sg-step{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 12px;padding:7px 0;border-bottom:1px dashed var(--line)}
+  .sg-step{padding:10px 0;border-bottom:1px dashed var(--line)}
   .sg-step:last-child{border-bottom:none}
-  .sg-why{flex:0 0 auto;font-size:.93rem;color:var(--ink);min-width:9em;max-width:16em}
-  .sg-eq{flex:1 1 240px;font-size:1rem;color:var(--ink)}
+  .sg-why{font-size:.97rem;line-height:1.8;color:var(--ink);margin:0 0 7px}
+  .sg-eq{font-size:1.02rem;color:var(--ink);padding-left:2px}
   .sg-eq .katex{color:var(--ink)}
   .sg-eq-result{background:var(--bg2);border:1px solid var(--line);border-radius:9px;padding:8px 12px;margin-top:8px;font-size:1.05rem;color:var(--ink)}
+
+  /* ---- mechanism box：手法の名前を出したら、その場で仕組みを書く ---- */
+  .sg-mech{margin:12px 0 4px;background:var(--bg2);border-left:3px solid var(--accent,var(--teal));border-radius:0 10px 10px 0;padding:12px 14px 10px}
+  .sg-mech-title{font-weight:800;color:var(--accent,var(--teal));font-size:.83rem;letter-spacing:.02em;margin:0 0 8px}
+  .sg-mech p{font-size:.95rem;line-height:1.85;color:var(--ink);margin:0 0 9px}
+  .sg-mech p:last-child{margin-bottom:0}
+  .sg-mech .sg-eq{padding-left:0;margin:6px 0}
+
+  /* ---- 過去問⇄例題 ドリル導線 ---- */
+  .sg-drill{margin-top:10px;font-size:.88rem;color:var(--muted)}
+  .sg-drill a{color:var(--teal);text-decoration:none;font-weight:700}
+  .sg-drill a:hover{text-decoration:underline}
 
   .sg-pitfall{margin-top:12px;background:color-mix(in srgb, var(--rose,#e0607a) 10%, var(--bg2));border:1px solid color-mix(in srgb, var(--rose,#e0607a) 35%, var(--line));border-radius:9px;padding:10px 12px;font-size:.93rem;line-height:1.65;color:var(--ink)}
   .sg-pitfall .sg-pitfall-label{display:block;color:var(--rose,#c0405a);font-size:.74rem;letter-spacing:.04em;margin-bottom:4px;font-weight:800}
@@ -67,6 +79,12 @@
 
   .sg-examref{margin-top:8px;font-size:.85rem;color:var(--muted)}
   .sg-examref b{color:var(--ink);font-weight:700}
+  .sg-examref a{color:var(--teal);text-decoration:none;font-weight:700}
+  .sg-examref a:hover{text-decoration:underline}
+
+  .sg-card{scroll-margin-top:58px}
+  .sg-reftable a{color:var(--teal);text-decoration:none;border-bottom:1px dotted var(--teal)}
+  .sg-reftable a:hover{border-bottom-style:solid}
 
   /* ---- diagrams ---- */
   .sg-fig{margin:10px 0 14px;background:var(--bg2);border:1px solid var(--line);border-radius:10px;padding:14px 10px 10px}
@@ -83,7 +101,6 @@
   @media (max-width:480px){
     .sg-hero h1{font-size:1.32rem}
     .sg-scope{grid-template-columns:1fr 1fr}
-    .sg-why{min-width:7em;font-size:.93rem}
   }
 </style>
 </head>
@@ -99,6 +116,7 @@
     <div class="sg-deadline">試験 2026/9/16(水) 9:00〜10:30</div>
 
     <div class="sg-scope">
+      <a href="#s-map"><span class="n">⇄</span><span class="t">過去問⇄例題</span><span class="d">対応表</span></a>
       <a href="#s0"><span class="n">00</span><span class="t">変換表・要素表</span><span class="d">冒頭の参照表</span></a>
       <a href="#s1"><span class="n">問1</span><span class="t">選択式</span><span class="d">用語・性質</span></a>
       <a href="#s2"><span class="n">問2</span><span class="t">逆ラプラス変換</span><span class="d">部分分数展開</span></a>
@@ -107,6 +125,33 @@
       <a href="#s5"><span class="n">問5</span><span class="t">分類・特性値</span><span class="d">正規化・制動判別</span></a>
     </div>
   </div>
+
+  <!-- ============ 過去問⇄例題 対応表 ============ -->
+  <section class="sg-section" id="s-map" style="--accent:var(--amber);margin-top:0">
+    <div class="sg-section-head">
+      <span class="sg-section-num">MAP</span>
+      <h2>過去問 ⇄ 例題 対応表</h2>
+    </div>
+    <p class="sg-section-tagline">過去問を解いていて手が止まったら「例題」列のリンクから該当する解き方へ、例題を読み終えたら「過去問」列のリンクから実戦形式で確認する。両方向にリンクしている。</p>
+    <div class="sg-tablewrap">
+      <table class="sg-reftable">
+        <tr><th>過去問（2024年度）</th><th>対応する例題</th><th>練習内容</th></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_0">問1(1)</a></td><td><a href="#rei-1-1">例題1-1</a></td><td>特解と定常解の対応</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_1">問1(2)</a></td><td><a href="#rei-1-2">例題1-2</a></td><td>推移定理の符号</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_4">問1(5)</a></td><td><a href="#rei-2-3">例題2-3</a></td><td>重根の部分分数展開の形</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_5">問1(6)</a></td><td><a href="#rei-7-2">例題7-2</a></td><td>一次進み要素の式</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_8">問1(9)</a></td><td><a href="#rei-7-1">例題7-1</a>・<a href="#rei-7-4">7-4</a></td><td>正規化してK,Tを読む</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s2_0">問2(1)</a></td><td><a href="#rei-2-1">例題2-1</a></td><td>単根の部分分数展開</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s2_1">問2(2)</a></td><td><a href="#rei-2-2">例題2-2</a></td><td>三角関数形の逆変換</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s2_2">問2(3)</a></td><td><a href="#rei-2-3">例題2-3</a>（近い型）</td><td>重根の部分分数展開</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s3_0">問3(1)</a></td><td><a href="#rei-3-1">例題3-1</a></td><td>2階微分方程式</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s3_1">問3(2)</a></td><td><a href="#rei-3-2">例題3-2</a></td><td>連立微分方程式</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s4_0">問4(1)</a></td><td><a href="#rei-4-1">例題4-1</a>・<a href="#rei-6-1">6-1</a></td><td>伝達関数の求め方・分類</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s4_1">問4(2)</a></td><td><a href="#rei-4-2">例題4-2</a></td><td>回路電流の過渡解</td></tr>
+        <tr><td><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s4_2">問4(3)</a></td><td><a href="#rei-4-3">例題4-3</a></td><td>$v_R,v_L$ と時定数</td></tr>
+      </table>
+    </div>
+  </section>
 
   <!-- ============ 00 変換表・要素表 ============ -->
   <section class="sg-section" id="s0" style="--accent:var(--teal)">
@@ -183,22 +228,22 @@
     </div>
     <p class="sg-section-tagline">計算ではなく「言葉の対応」で失点しやすい。ここは丸暗記ではなく理由とセットで覚える。</p>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-1-1">
       <p class="sg-q"><span class="sg-tag">例題 1-1</span>非同次方程式（回路方程式）の特解は、物理的に過渡解・定常解のどちらに対応するか。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>回路方程式の解 ＝ 同次方程式の解（斉次解）＋ 非同次方程式の特解</li>
-          <li>時間が経つと消えていく項が過渡解、残り続ける項が定常解</li>
-          <li>「同次解＝過渡解」「特解＝定常解」という対応を覚える</li>
+          <li>回路方程式の解 ＝ 同次方程式の解（斉次解）＋ 非同次方程式の特解。これは方程式を解いて中身を確かめれば分かる分け方であり、名前だけの区分ではない。</li>
+          <li>実際に解を1つ書き出し、時間が経つとどの項が消えて、どの項が残るかを見る。</li>
+          <li>消える項が過渡解、残る項が定常解。これと「同次解／特解」の対応を1つの実例で確認する。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">RL回路の電流の例で確認する</span><span class="sg-eq">$i(t)=\dfrac{E}{R}\left(1-\varepsilon^{-\frac{R}{L}t}\right)$</span></div>
-          <div class="sg-step"><span class="sg-why">$-\varepsilon^{-\frac{R}{L}t}$ の項は $t\to\infty$ で0に消える＝斉次解＝過渡解</span><span class="sg-eq">同次方程式 $Li'+Ri=0$ の解</span></div>
-          <div class="sg-step"><span class="sg-why">$\dfrac{E}{R}$ の項は消えずに残る＝非同次方程式の特解＝定常解</span><span class="sg-eq">$t\to\infty$ で $i(t)\to \dfrac{E}{R}$</span></div>
+          <div class="sg-step"><p class="sg-why">具体例として、RL回路に一定の電圧を加えたときの電流の式で確認する。この式は「同次方程式 $Li'+Ri=0$ の解」と「非同次方程式の特解」の和になっている。</p><div class="sg-eq">$i(t)=\dfrac{E}{R}\left(1-\varepsilon^{-\frac{R}{L}t}\right)=\underbrace{\dfrac{E}{R}}_{\text{特解}}\ \underbrace{-\dfrac{E}{R}\varepsilon^{-\frac{R}{L}t}}_{\text{同次解}}$</div></div>
+          <div class="sg-step"><p class="sg-why">$\varepsilon^{-\frac{R}{L}t}$ の項は $t\to\infty$ で $0$ に近づいて消える。時間とともに消える成分が過渡解であり、この項は同次方程式の解（同次解）でもある。</p><div class="sg-eq">$t\to\infty\ \Rightarrow\ -\dfrac{E}{R}\varepsilon^{-\frac{R}{L}t}\to 0$</div></div>
+          <div class="sg-step"><p class="sg-why">$\dfrac{E}{R}$ の項は消えずに残り、$t\to\infty$ での $i(t)$ の行き先そのものになる。回路が落ち着いた後まで残る成分が定常解であり、この項は方程式の特解にあたる。</p><div class="sg-eq">$t\to\infty\ \Rightarrow\ i(t)\to \dfrac{E}{R}$</div></div>
         </div>
         <div class="sg-eq-result">正解：④ 定常解</div>
       </div>
@@ -206,25 +251,25 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         「特解」という語感から「特別な解＝過渡的な解」と誤って連想しやすい。実際は逆で、外力（入力）に対する落ち着き先＝定常解が特解にあたる。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問1(1)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_0">2024年度 問1(1)</a></p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-1-2">
       <p class="sg-q"><span class="sg-tag">例題 1-2</span>推移定理：$\varepsilon^{as}F(s)$（$a>0$、指数部の符号がプラス）のラプラス逆変換として正しいものを選べ。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>基本形 $L[f(t-a)u(t-a)]=\varepsilon^{-as}F(s)$（符号マイナス）をまず正確に思い出す</li>
-          <li>問題の指数部の符号を確認する（今回は $+as$ でプラス）</li>
-          <li>符号が逆なら、時間軸のずらす向きも逆になる</li>
+          <li>推移定理には基本形が1つだけある。$L[f(t-a)u(t-a)]=\varepsilon^{-as}F(s)$（指数部の符号はマイナス）を正確に思い出す。</li>
+          <li>問題の指数部の符号を確認する。今回は $+as$ でプラスであり、基本形とは符号が逆になっている。</li>
+          <li>基本形の $a$ を $-a$ に置き換えて、符号が逆のときにどんな式になるかを自分で導き直す。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">推移定理の基本形（右にずらす＝遅らせる）</span><span class="sg-eq">$L[f(t-a)u(t-a)]=\varepsilon^{-as}F(s)$</span></div>
-          <div class="sg-step"><span class="sg-why">両辺の $a$ を $-a$ に置き換える</span><span class="sg-eq">$L[f(t-(-a))u(t-(-a))]=\varepsilon^{-(-a)s}F(s)=\varepsilon^{as}F(s)$</span></div>
-          <div class="sg-step"><span class="sg-why">つまり $\varepsilon^{as}F(s)$ は $t$ を $-a$ だけずらした形＝左にずらす＝早める</span><span class="sg-eq">$L[f(t+a)]=\varepsilon^{as}F(s)$</span></div>
+          <div class="sg-step"><p class="sg-why">推移定理の基本形を書く。この式は $f(t)$ を右に $a$ だけずらした（遅らせた）関数のラプラス変換が $\varepsilon^{-as}F(s)$ になる、という意味である。</p><div class="sg-eq">$L[f(t-a)u(t-a)]=\varepsilon^{-as}F(s)$</div></div>
+          <div class="sg-step"><p class="sg-why">この基本形はどんな実数 $a$ に対しても成り立つ関係なので、$a$ を $-a$ に置き換えても等式として成り立つ。両辺の $a$ を $-a$ に置き換える。</p><div class="sg-eq">$L[f(t-(-a))u(t-(-a))]=\varepsilon^{-(-a)s}F(s)$</div></div>
+          <div class="sg-step"><p class="sg-why">左辺の $t-(-a)$ を計算すると $t+a$ になり、右辺の指数部 $-(-a)s$ を計算すると $as$ になる。この右辺は問題の $\varepsilon^{as}F(s)$ とちょうど同じ形である。</p><div class="sg-eq">$L[f(t+a)]=\varepsilon^{as}F(s)$</div></div>
         </div>
         <div class="sg-eq-result">正解：② $f(t+a)$</div>
       </div>
@@ -232,7 +277,7 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         符号を見た瞬間に「$\varepsilon^{as}$ だから $f(t-a)$」と機械的に答えてしまう間違いが最も多い。<b>符号がマイナスの形だけ</b>を基本形として覚え、プラスの場合は必ず符号を置き換えて導き直す。$\varepsilon^{\pm at}f(t)$（$s$ 領域の推移）と $\varepsilon^{\pm as}F(s)$（$t$ 領域の推移）を混同するのも典型ミス。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問1(2)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_1">2024年度 問1(2)</a></p>
     </div>
   </section>
 
@@ -242,85 +287,111 @@
       <span class="sg-section-num">問2</span>
       <h2>逆ラプラス変換（部分分数展開）</h2>
     </div>
-    <p class="sg-section-tagline">①分母を因数分解 → ②ヘビサイド法で係数を求める → ③変換表で戻す。この3ステップは固定。</p>
+    <p class="sg-section-tagline">分母を1次式・2次式の積に分ける → 部分分数の係数を求める → 変換表で1項ずつ$t$の世界に戻す。この3段階は共通。「なぜそれで求まるのか」を型ごとに押さえる。</p>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-2-1">
       <p class="sg-q"><span class="sg-tag">例題 2-1</span>単根：$F(s)=\dfrac{2s+1}{s^2+5s+6}$ の逆ラプラス変換を求めよ。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>分母を因数分解する</li>
-          <li>ヘビサイド法（隠す方法）で各項の係数を求める</li>
-          <li>変換表 $\varepsilon^{at}\leftrightarrow\dfrac{1}{s-a}$ で $f(t)$ に戻す</li>
+          <li>分母を1次式2つの積に分解する。部分分数に分けるには、分母がこれ以上割れない形（1次式や2次式）の積になっている必要があるため。</li>
+          <li>$F(s)=\dfrac{A}{s+2}+\dfrac{B}{s+3}$ の形を仮定し、$A,B$ の値を求める。</li>
+          <li>変換表で1項ずつ $t$ の世界に戻し、最後に足し合わせる。</li>
         </ol>
+      </div>
+      <div class="sg-mech">
+        <p class="sg-mech-title">ヘビサイド法はなぜ「隠す」と求まるのか</p>
+        <p>$F(s)=\dfrac{A}{s+2}+\dfrac{B}{s+3}$ とおく。この両辺に $(s+2)$ を掛けると、右辺は次の形になる。</p>
+        <div class="sg-eq">$(s+2)F(s)=A+\dfrac{B(s+2)}{s+3}$</div>
+        <p>ここで $s=-2$ を代入すると、右辺の第2項は分子に $(s+2)$ の因子が残っているので $0$ になって消える。だから右辺には $A$ だけが残り、$A$ の値がそのまま求まる。$(s+3)$ を掛けて $s=-3$ を代入すれば、同じ理由で $B$ が求まる。</p>
+        <p>「$(s+2)$ を指で隠して、残った式に $s=-2$ を代入する」という近道は、いま書いた掛け算と代入の計算を毎回書くのを省略しているだけであり、天下りの公式ではない。</p>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">分母を因数分解する</span><span class="sg-eq">$s^2+5s+6=(s+2)(s+3)$</span></div>
-          <div class="sg-step"><span class="sg-why">部分分数の形をおく</span><span class="sg-eq">$F(s)=\dfrac{2s+1}{(s+2)(s+3)}=\dfrac{A}{s+2}+\dfrac{B}{s+3}$</span></div>
-          <div class="sg-step"><span class="sg-why">$A$：両辺に $(s+2)$ を掛けて $s=-2$ を代入（$(s+2)$ を隠す）</span><span class="sg-eq">$A=\dfrac{2(-2)+1}{-2+3}=\dfrac{-3}{1}=-3$</span></div>
-          <div class="sg-step"><span class="sg-why">$B$：両辺に $(s+3)$ を掛けて $s=-3$ を代入（$(s+3)$ を隠す）</span><span class="sg-eq">$B=\dfrac{2(-3)+1}{-3+2}=\dfrac{-5}{-1}=5$</span></div>
-          <div class="sg-step"><span class="sg-why">部分分数の形にまとめる</span><span class="sg-eq">$F(s)=\dfrac{-3}{s+2}+\dfrac{5}{s+3}$</span></div>
-          <div class="sg-step"><span class="sg-why">変換表 $\dfrac{1}{s-a}\leftrightarrow\varepsilon^{at}$ で1項ずつ戻す（$a=-2,-3$）</span><span class="sg-eq">$f(t)=-3\varepsilon^{-2t}+5\varepsilon^{-3t}$</span></div>
+          <div class="sg-step"><p class="sg-why">分母 $s^2+5s+6$ を1次式の積に分解する。因数分解できれば、その根がそのまま部分分数の分母の候補になる。</p><div class="sg-eq">$s^2+5s+6=(s+2)(s+3)$</div></div>
+          <div class="sg-step"><p class="sg-why">部分分数の形をおく。$F(s)$ を2つの分数の和として表せると仮定し、未知の係数 $A,B$ を求める作業に持ち込む。</p><div class="sg-eq">$F(s)=\dfrac{2s+1}{(s+2)(s+3)}=\dfrac{A}{s+2}+\dfrac{B}{s+3}$</div></div>
+          <div class="sg-step"><p class="sg-why">上のヘビサイド法の仕組みのとおり、両辺に $(s+2)$ を掛けて $s=-2$ を代入すると $A$ だけが残る。</p><div class="sg-eq">$A=\dfrac{2(-2)+1}{-2+3}=\dfrac{-3}{1}=-3$</div></div>
+          <div class="sg-step"><p class="sg-why">同じ理由で、両辺に $(s+3)$ を掛けて $s=-3$ を代入すると $B$ だけが残る。</p><div class="sg-eq">$B=\dfrac{2(-3)+1}{-3+2}=\dfrac{-5}{-1}=5$</div></div>
+          <div class="sg-step"><p class="sg-why">求めた $A,B$ を部分分数の式に書き戻す。</p><div class="sg-eq">$F(s)=\dfrac{-3}{s+2}+\dfrac{5}{s+3}$</div></div>
+          <div class="sg-step"><p class="sg-why">ラプラス変換は足し算をそのまま保つ変換（線型性）なので、分けた2つの項をそれぞれ変換表で戻してから足し合わせれば、元の式をまとめて逆変換したのと同じ答えになる。変換表の $\dfrac{1}{s-a}\leftrightarrow\varepsilon^{at}$ を $a=-2$ と $a=-3$ のそれぞれに当てはめる。</p><div class="sg-eq">$f(t)=-3\varepsilon^{-2t}+5\varepsilon^{-3t}$</div></div>
         </div>
         <div class="sg-eq-result">$f(t)=-3\varepsilon^{-2t}+5\varepsilon^{-3t}$</div>
       </div>
       <div class="sg-pitfall">
         <b class="sg-pitfall-label">つまずきポイント</b>
-        $A,B$ を求めるとき、代入する $s$ の値の符号を間違える（$s=-2$ を隠すべき項に $s=2$ を代入する）、あるいは $A$ と $B$ の対応する分母を取り違えるミスが多い。「隠した分母の根をそのまま代入する」を毎回声に出して確認する。
+        $A,B$ を求めるとき、代入する $s$ の値の符号を間違える（$s=-2$ を隠すべき項に $s=2$ を代入する）、あるいは $A$ と $B$ の対応する分母を取り違えるミスが多い。「隠した分母を $0$ にする値をそのまま代入する」を毎回確認する。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問2(1)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s2_0">2024年度 問2(1)</a></p>
+      <p class="sg-drill">ここで詰まったら → <a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-step/data.json#s1">手順分解ドリル「問2(1) ステップ分解」</a></p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-2-2">
       <p class="sg-q"><span class="sg-tag">例題 2-2</span>三角関数形：$F(s)=\dfrac{s+1}{s^2+4}$ の逆ラプラス変換を求めよ。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>分母 $s^2+4=s^2+\omega^2$（$\omega=2$）の形に気づく＝三角関数の変換表を使う</li>
-          <li>分子を $s$ の項（$\cos$ 用）と定数項（$\sin$ 用）に分ける</li>
-          <li>$\dfrac{s}{s^2+\omega^2}\leftrightarrow\cos\omega t$、$\dfrac{\omega}{s^2+\omega^2}\leftrightarrow\sin\omega t$ に当てはめる</li>
+          <li>分母が $s^2+$（正の定数）の形＝実数の範囲で1次式の積に分解できない形かどうかを確認する。</li>
+          <li>その形なら、指数関数の変換表ではなく三角関数の変換表を使う。分子を $\cos$ 用と $\sin$ 用の2項に分ける。</li>
+          <li>変換表に当てはめて1項ずつ戻し、足し合わせる。</li>
         </ol>
+      </div>
+      <div class="sg-mech">
+        <p class="sg-mech-title">分母が $s^2+\omega^2$ のときだけ三角関数を使うのはなぜか</p>
+        <p>$s^2+4=0$ を解こうとすると $s^2=-4$ となり、実数の範囲では解が存在しない（$2$ 乗して負になる実数はない）。つまり $s^2+4$ は実数の1次式の積には分解できない。分解できない以上、例題2-1のように「$s-a$ の形の項に分けて $\varepsilon^{at}$ に戻す」という単根の方法は使えない。</p>
+        <p>そこで変換表の中から、分母が $s^2+\omega^2$ の形をした行を探す。$\dfrac{s}{s^2+\omega^2}\leftrightarrow\cos\omega t$ と $\dfrac{\omega}{s^2+\omega^2}\leftrightarrow\sin\omega t$ の2行がこれにあたる。分子が $s+1$ のように $s$ の項と定数項が混ざっている状態では、このどちらの行にも一致しない。そこで分子を $s$ の項（$\cos$ の行に合う形）と定数項（$\sin$ の行に合わせて後で係数を調整する）に分けて、2つの分数の和に書き直す。すると1項ずつどちらかの行に完全に一致するので、線型性を使って別々に戻してから足し合わせられる。</p>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">分母を $s^2+\omega^2$ の形と見る（$\omega^2=4\Rightarrow\omega=2$）</span><span class="sg-eq">$F(s)=\dfrac{s+1}{s^2+2^2}$</span></div>
-          <div class="sg-step"><span class="sg-why">分子を2つに分割する</span><span class="sg-eq">$F(s)=\dfrac{s}{s^2+2^2}+\dfrac{1}{s^2+2^2}$</span></div>
-          <div class="sg-step"><span class="sg-why">第2項の分子を $\omega=2$ に揃えるため $\dfrac12$ を掛けて $2$ を作る</span><span class="sg-eq">$\dfrac{1}{s^2+2^2}=\dfrac12\cdot\dfrac{2}{s^2+2^2}$</span></div>
-          <div class="sg-step"><span class="sg-why">$\dfrac{s}{s^2+\omega^2}\leftrightarrow\cos\omega t$ で第1項を戻す</span><span class="sg-eq">$\dfrac{s}{s^2+2^2}\;\to\;\cos 2t$</span></div>
-          <div class="sg-step"><span class="sg-why">$\dfrac{\omega}{s^2+\omega^2}\leftrightarrow\sin\omega t$ で第2項を戻す</span><span class="sg-eq">$\dfrac12\cdot\dfrac{2}{s^2+2^2}\;\to\;\dfrac12\sin 2t$</span></div>
+          <div class="sg-step"><p class="sg-why">分母を $s^2+\omega^2$ の形と見る。分母は $s^2+4$ で、$4=2^2$ なので $\omega=2$ に対応する。</p><div class="sg-eq">$F(s)=\dfrac{s+1}{s^2+2^2}$</div></div>
+          <div class="sg-step"><p class="sg-why">上のメカニズムのとおり、分子を $s$ の項と定数項に分けて2つの分数の和に書き直す。</p><div class="sg-eq">$F(s)=\dfrac{s}{s^2+2^2}+\dfrac{1}{s^2+2^2}$</div></div>
+          <div class="sg-step"><p class="sg-why">変換表の $\sin$ の行は、分子がちょうど $\omega$（ここでは $2$）になっていなければ使えない。今の分子は $1$ なので、$2$ を作ってから外に $\dfrac12$ を出す。</p><div class="sg-eq">$\dfrac{1}{s^2+2^2}=\dfrac12\cdot\dfrac{2}{s^2+2^2}$</div></div>
+          <div class="sg-step"><p class="sg-why">$\dfrac{s}{s^2+\omega^2}\leftrightarrow\cos\omega t$ に当てはめて第1項を戻す。</p><div class="sg-eq">$\dfrac{s}{s^2+2^2}\ \to\ \cos 2t$</div></div>
+          <div class="sg-step"><p class="sg-why">$\dfrac{\omega}{s^2+\omega^2}\leftrightarrow\sin\omega t$ に当てはめて第2項を戻す。外に出しておいた $\dfrac12$ はそのまま係数として残す。</p><div class="sg-eq">$\dfrac12\cdot\dfrac{2}{s^2+2^2}\ \to\ \dfrac12\sin 2t$</div></div>
+          <div class="sg-step"><p class="sg-why">線型性により、分けて戻した2つの項をそのまま足し合わせれば答えになる。</p><div class="sg-eq">$f(t)=\cos 2t+\dfrac12\sin 2t$</div></div>
         </div>
         <div class="sg-eq-result">$f(t)=\cos 2t+\dfrac12\sin 2t$</div>
       </div>
       <div class="sg-pitfall">
         <b class="sg-pitfall-label">つまずきポイント</b>
-        分子の定数項をそのまま「$1\to\sin$」と対応させ、$\dfrac{1}{2}$ の調整を忘れる（$\sin 2t$ になり係数が抜ける）。変換表の分子は必ず $\omega$ そのものであることを確認してから比の分だけ掛け直す。
+        分子の定数項をそのまま「$1\to\sin$」と対応させ、$\dfrac12$ の調整を忘れる（答えが $\sin 2t$ になり係数が抜ける）。変換表の $\sin$ の行の分子は必ず $\omega$ そのものであることを確認してから、比の分だけ係数を掛け直す。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問2(2)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s2_1">2024年度 問2(2)</a></p>
+      <p class="sg-drill">ここで詰まったら → <a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-step/data.json#s2">手順分解ドリル「問2(2) ステップ分解」</a></p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-2-3">
       <p class="sg-q"><span class="sg-tag">例題 2-3</span>重根：$F(s)=\dfrac{s+2}{s(s+1)^3}$ の逆ラプラス変換を求めよ。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>重根 $(s+1)^3$ があるので、次数の数だけ項を立てる（$(s+1)^3,(s+1)^2,(s+1)$ の3項）</li>
-          <li>単根の項はヘビサイド法、重根の最高次の項もヘビサイド法で求まる</li>
-          <li>重根の残りの項は「微分してから代入」。<b>微分回数は $n-k$ 回、そのあと $(n-k)!$ で割る</b></li>
+          <li>重根 $(s+1)^3$ の分だけ項を用意する（$(s+1)^3,(s+1)^2,(s+1)$ の3項）。単根 $s$ の項も合わせて4つの未知数を立てる。</li>
+          <li>最高次の項（$B$）は単根と同じヘビサイド法で求まる。それより下の項（$C,D$）は微分してから代入する。</li>
+          <li>変換表で1項ずつ戻し、足し合わせる。</li>
         </ol>
+      </div>
+      <div class="sg-mech">
+        <p class="sg-mech-title">重根でなぜ微分するのか・なぜ階乗で割るのか</p>
+        <p>$F(s)=\dfrac{A}{s}+\dfrac{B}{(s+1)^3}+\dfrac{C}{(s+1)^2}+\dfrac{D}{s+1}$ とおく。両辺に $(s+1)^3$ を掛けると、右辺の重根の部分は次の形になる。</p>
+        <div class="sg-eq">$B+C(s+1)+D(s+1)^2$</div>
+        <p>ここで $s=-1$ を代入すると、$C,D$ の項はどちらも $(s+1)$ の因子を持っているので $0$ になって消え、$B$ だけが残る。単根と同じヘビサイド法がそのまま使えるのは、この最高次の項だけである。</p>
+        <p>では $C$ はどう求めるか。上の式に $s=-1$ をこのまま代入すると、式の中にまだ $B$ という邪魔な定数が乗っている。定数を微分すると $0$ になって消えるという性質を使い、両辺を $s$ で1回微分すると次の形になる。</p>
+        <div class="sg-eq">$C+2D(s+1)$</div>
+        <p>これで $B$ の項は完全に消えた。$s=-1$ を代入すれば $D$ の項も $(s+1)$ の因子ごと消え、$C$ だけが残る。</p>
+        <p>$D$ を求めるには、もう1回微分する。$C+2D(s+1)$ をさらに $s$ で微分すると、定数 $2D$ だけが残る式になる。これは $D$ そのものではなく $D$ の $2$（$=2!$）倍なので、$2!$ で割って元の $D$ に戻す。</p>
+        <p>つまり「$(n-k)$ 回微分する」のは自分より下の次数の項を消して目的の係数だけを残すためであり、「$(n-k)!$ で割る」のは微分の過程で係数に掛かってしまう階乗を打ち消して元の値に戻すためである。</p>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">部分分数の形をおく（重根なので3項）</span><span class="sg-eq">$F(s)=\dfrac{A}{s}+\dfrac{B}{(s+1)^3}+\dfrac{C}{(s+1)^2}+\dfrac{D}{s+1}$</span></div>
-          <div class="sg-step"><span class="sg-why">$A$：$s$ を隠して $s=0$</span><span class="sg-eq">$A=sF(s)\big|_{s=0}=\dfrac{2}{1}=2$</span></div>
-          <div class="sg-step"><span class="sg-why">$B$：$(s+1)^3$ を隠して $s=-1$（最高次の項は0階微分＝そのまま代入）</span><span class="sg-eq">$B=(s+1)^3F(s)\big|_{s=-1}=\dfrac{s+2}{s}\Big|_{s=-1}=\dfrac{1}{-1}=-1$</span></div>
-          <div class="sg-step"><span class="sg-why">$C$：1段下の項は1階微分してから代入</span><span class="sg-eq">$C=\dfrac{d}{ds}\left[\dfrac{s+2}{s}\right]_{s=-1}=\dfrac{s-(s+2)}{s^2}\Big|_{s=-1}=\dfrac{-2}{1}=-2$</span></div>
-          <div class="sg-step"><span class="sg-why">$D$：さらに1段下は2階微分してから $2!=2$ で割る</span><span class="sg-eq">$D=\dfrac{1}{2!}\dfrac{d^2}{ds^2}\left[\dfrac{s+2}{s}\right]_{s=-1}=\dfrac12\cdot\dfrac{4}{s^3}\Big|_{s=-1}=\dfrac12\cdot(-4)=-2$</span></div>
-          <div class="sg-step"><span class="sg-why">部分分数の形にまとめる</span><span class="sg-eq">$F(s)=\dfrac{2}{s}-\dfrac{1}{(s+1)^3}-\dfrac{2}{(s+1)^2}-\dfrac{2}{s+1}$</span></div>
-          <div class="sg-step"><span class="sg-why">変換表 $\dfrac{1}{(s-a)^n}\leftrightarrow\dfrac{t^{n-1}}{(n-1)!}\varepsilon^{at}$ で1項ずつ戻す</span><span class="sg-eq">$\dfrac{1}{(s+1)^3}\to\dfrac{t^2}{2}\varepsilon^{-t}$、$\dfrac{1}{(s+1)^2}\to t\varepsilon^{-t}$、$\dfrac{1}{s+1}\to\varepsilon^{-t}$</span></div>
+          <div class="sg-step"><p class="sg-why">重根 $(s+1)^3$ の中には $(s+1)^3,(s+1)^2,(s+1)$ の3段分の情報が入っているので、部分分数もこの3段にそれぞれ対応する項を立てる。単根 $s$ の項も合わせておく。</p><div class="sg-eq">$F(s)=\dfrac{A}{s}+\dfrac{B}{(s+1)^3}+\dfrac{C}{(s+1)^2}+\dfrac{D}{s+1}$</div></div>
+          <div class="sg-step"><p class="sg-why">$A$ は単根の項なので、$s$ を掛けて $s=0$ を代入するヘビサイド法がそのまま使える。</p><div class="sg-eq">$A=sF(s)\big|_{s=0}=\dfrac{0+2}{(0+1)^3}=2$</div></div>
+          <div class="sg-step"><p class="sg-why">上のメカニズムのとおり、最高次の項 $B$ も同じヘビサイド法（微分0回＝そのまま代入）で求まる。</p><div class="sg-eq">$B=(s+1)^3F(s)\big|_{s=-1}=\dfrac{s+2}{s}\Big|_{s=-1}=\dfrac{1}{-1}=-1$</div></div>
+          <div class="sg-step"><p class="sg-why">1段下の $C$ は、邪魔な $B$ の項を消すために1回微分してから $s=-1$ を代入する。</p><div class="sg-eq">$C=\dfrac{d}{ds}\left[\dfrac{s+2}{s}\right]_{s=-1}=\dfrac{s-(s+2)}{s^2}\Big|_{s=-1}=\dfrac{-2}{1}=-2$</div></div>
+          <div class="sg-step"><p class="sg-why">さらに1段下の $D$ は2回微分してから $s=-1$ を代入し、微分の過程で掛かった $2!=2$ で割って元の値に戻す。</p><div class="sg-eq">$D=\dfrac{1}{2!}\dfrac{d^2}{ds^2}\left[\dfrac{s+2}{s}\right]_{s=-1}=\dfrac12\cdot\dfrac{4}{s^3}\Big|_{s=-1}=\dfrac12\cdot(-4)=-2$</div></div>
+          <div class="sg-step"><p class="sg-why">求めた4つの係数を部分分数の式に書き戻す。</p><div class="sg-eq">$F(s)=\dfrac{2}{s}-\dfrac{1}{(s+1)^3}-\dfrac{2}{(s+1)^2}-\dfrac{2}{s+1}$</div></div>
+          <div class="sg-step"><p class="sg-why">変換表 $\dfrac{1}{(s-a)^n}\leftrightarrow\dfrac{t^{n-1}}{(n-1)!}\varepsilon^{at}$ を各項に当てはめ、線型性により足し合わせる。</p><div class="sg-eq">$\dfrac{1}{(s+1)^3}\to\dfrac{t^2}{2}\varepsilon^{-t},\ \ \dfrac{1}{(s+1)^2}\to t\varepsilon^{-t},\ \ \dfrac{1}{s+1}\to\varepsilon^{-t}$</div></div>
         </div>
         <div class="sg-eq-result">$f(t)=2-\dfrac{t^2}{2}\varepsilon^{-t}-2t\varepsilon^{-t}-2\varepsilon^{-t}$</div>
       </div>
@@ -328,7 +399,8 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         採点済み演習で実際に失点した箇所と同じ型。①「微分すべき段で代入だけして終える」＝$C,D$ を求めるべき所を$B$と同じ式のまま出してしまう、②微分回数を「$n-k$回」ではなく「$k$回」と逆に数える、③$k$階微分の後に $k!$ で割るのを忘れる、の3つが連鎖しやすい。1項ごとに「今どの段か」を指で数えながら進める。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問1(5)（展開の形を選ぶ設問）</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_4">2024年度 問1(5)</a>（展開の形を選ぶ設問）／<a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s2_2">問2(3)</a>（近い型の計算問題）</p>
+      <p class="sg-drill">ここで詰まったら → <a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-step/data.json#s3">手順分解ドリル「問2(3) ステップ分解」</a>（重根に近い型）</p>
     </div>
   </section>
 
@@ -338,31 +410,37 @@
       <span class="sg-section-num">問3</span>
       <h2>微分方程式（ラプラス変換で解く）</h2>
     </div>
-    <p class="sg-section-tagline">①ラプラス変換 → ②初期値を代入 → ③式を代数整理 → ④逆変換。この4ステップは固定。</p>
+    <p class="sg-section-tagline">ラプラス変換 → 初期値を代入 → 代数方程式として解く → 逆変換。この流れが「なぜ通用するのか」を先に押さえてから、計算に入る。</p>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-3-1">
       <p class="sg-q"><span class="sg-tag">例題 3-1</span>$2x''(t)+3x'(t)+x(t)=1$、初期条件 $x(0)=0,\ x'(0)=0$ を解け。</p>
+      <div class="sg-mech">
+        <p class="sg-mech-title">ラプラス変換でなぜ微分方程式が解けるのか</p>
+        <p>微分方程式は $x(t)$ の微分を含む式なので、$t$ の世界のままでは足し算や掛け算だけで直接解くことができない。ラプラス変換には微分定理という性質がある。</p>
+        <div class="sg-eq">$L[x']=sX(s)-x(0),\qquad L[x'']=s^2X(s)-sx(0)-x'(0)$</div>
+        <p>この性質を使うと、「微分する」という操作が「$s$ を掛けて初期値を引く」という単なる掛け算・引き算に置き換わる。つまり微分方程式の両辺をラプラス変換すると、微分を一切含まない、$X(s)$ についての普通の分数式（代数方程式）になる。あとはこの代数方程式を中学・高校の要領で $X(s)=\cdots$ の形に解き、最後に逆変換で $t$ の世界に戻せば、元の微分方程式の解が得られる。</p>
+      </div>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>両辺をラプラス変換し、微分定理 $L[x']=sX-x(0)$、$L[x'']=s^2X-sx(0)-x'(0)$ を使う</li>
-          <li>初期条件（今回はすべて0）を代入して式を整理する</li>
-          <li>$X(s)$ について解き、部分分数展開してから逆変換する</li>
+          <li>両辺をラプラス変換する。上のメカニズムのとおり、微分が掛け算に置き換わる。</li>
+          <li>初期条件を代入し、$X(s)$ 以外の項を消す。</li>
+          <li>$X(s)$ について解き、部分分数に分けてから、各項を変換表で $t$ の世界に戻す。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">両辺をラプラス変換する</span><span class="sg-eq">$2\{s^2X-sx(0)-x'(0)\}+3\{sX-x(0)\}+X=\dfrac{1}{s}$</span></div>
-          <div class="sg-step"><span class="sg-why">初期条件 $x(0)=x'(0)=0$ を代入する</span><span class="sg-eq">$2s^2X+3sX+X=\dfrac{1}{s}$</span></div>
-          <div class="sg-step"><span class="sg-why">$X$ でくくって代数整理する</span><span class="sg-eq">$(2s^2+3s+1)X=\dfrac{1}{s}$</span></div>
-          <div class="sg-step"><span class="sg-why">左辺の2次式を因数分解する</span><span class="sg-eq">$2s^2+3s+1=(2s+1)(s+1)=2\left(s+\dfrac12\right)(s+1)$</span></div>
-          <div class="sg-step"><span class="sg-why">$X$ について解く</span><span class="sg-eq">$X(s)=\dfrac{1}{2\,s\left(s+\frac12\right)(s+1)}$</span></div>
-          <div class="sg-step"><span class="sg-why">部分分数の形をおく</span><span class="sg-eq">$X(s)=\dfrac{A}{s}+\dfrac{B}{s+\frac12}+\dfrac{C}{s+1}$</span></div>
-          <div class="sg-step"><span class="sg-why">$A$：$s=0$ を代入（$s$ を隠す）</span><span class="sg-eq">$A=\dfrac{1}{2\left(\frac12\right)(1)}=1$</span></div>
-          <div class="sg-step"><span class="sg-why">$B$：$s=-\frac12$ を代入（$s+\frac12$ を隠す）</span><span class="sg-eq">$B=\dfrac{1}{2\left(-\frac12\right)\left(\frac12\right)}=-2$</span></div>
-          <div class="sg-step"><span class="sg-why">$C$：$s=-1$ を代入（$s+1$ を隠す）</span><span class="sg-eq">$C=\dfrac{1}{2(-1)\left(-\frac12\right)}=1$</span></div>
-          <div class="sg-step"><span class="sg-why">部分分数の形にまとめて逆変換する</span><span class="sg-eq">$X(s)=\dfrac{1}{s}-\dfrac{2}{s+\frac12}+\dfrac{1}{s+1}$</span></div>
+          <div class="sg-step"><p class="sg-why">微分定理 $L[x'']=s^2X-sx(0)-x'(0)$、$L[x']=sX-x(0)$ をそのまま両辺に当てはめる。右辺の定数 $1$ は、定数関数のラプラス変換の公式により $\dfrac1s$ になる。</p><div class="sg-eq">$2\{s^2X-sx(0)-x'(0)\}+3\{sX-x(0)\}+X=\dfrac{1}{s}$</div></div>
+          <div class="sg-step"><p class="sg-why">初期条件 $x(0)=0,\ x'(0)=0$ を代入すると、初期値を含む項がすべて $0$ になって消える。</p><div class="sg-eq">$2s^2X+3sX+X=\dfrac{1}{s}$</div></div>
+          <div class="sg-step"><p class="sg-why">左辺のすべての項に共通する $X$ をくくり出し、$X$ について解ける形に整える。</p><div class="sg-eq">$(2s^2+3s+1)X=\dfrac{1}{s}$</div></div>
+          <div class="sg-step"><p class="sg-why">$X$ を求めるにはこの2次式で割ればよいが、部分分数に分けるには根が分かった1次式の積の形が必要になる。解の公式で $2s^2+3s+1=0$ を解くと $s=-\dfrac12,-1$ になるので、この2根から積の形を作る。</p><div class="sg-eq">$2s^2+3s+1=2\left(s+\dfrac12\right)(s+1)$</div></div>
+          <div class="sg-step"><p class="sg-why">両辺をこの因数分解した式で割り、$X(s)$ を単独の形にする。</p><div class="sg-eq">$X(s)=\dfrac{1}{2\,s\left(s+\frac12\right)(s+1)}$</div></div>
+          <div class="sg-step"><p class="sg-why">部分分数の分母には、必ず $s$ の係数が $1$ の形（$s+\frac12$）を使う。$(2s+1)$ のような係数付きの形のままヘビサイド法を使うと、代入する根の値は合っていても、式全体の値がその係数の分だけずれてしまう。</p><div class="sg-eq">$X(s)=\dfrac{A}{s}+\dfrac{B}{s+\frac12}+\dfrac{C}{s+1}$</div></div>
+          <div class="sg-step"><p class="sg-why">$A$ をヘビサイド法で求める。$s$ を掛けて $s=0$ を代入する。</p><div class="sg-eq">$A=\dfrac{1}{2\left(\frac12\right)(1)}=1$</div></div>
+          <div class="sg-step"><p class="sg-why">$B$ を求める。$s+\frac12$ を掛けて $s=-\frac12$ を代入する。</p><div class="sg-eq">$B=\dfrac{1}{2\left(-\frac12\right)\left(\frac12\right)}=-2$</div></div>
+          <div class="sg-step"><p class="sg-why">$C$ を求める。$s+1$ を掛けて $s=-1$ を代入する。</p><div class="sg-eq">$C=\dfrac{1}{2(-1)\left(-\frac12\right)}=1$</div></div>
+          <div class="sg-step"><p class="sg-why">求めた係数を部分分数の式に書き戻し、変換表 $\dfrac{1}{s-a}\leftrightarrow\varepsilon^{at}$ を各項に当てはめて逆変換する。</p><div class="sg-eq">$X(s)=\dfrac{1}{s}-\dfrac{2}{s+\frac12}+\dfrac{1}{s+1}$</div></div>
         </div>
         <div class="sg-eq-result">$x(t)=1-2\varepsilon^{-\frac12 t}+\varepsilon^{-t}$</div>
       </div>
@@ -370,39 +448,47 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         因数分解した $(2s+1)$ をそのまま部分分数の分母に使い $\dfrac{B}{2s+1}$ の形で計算してしまうと、逆変換のときに $\varepsilon^{-\frac12 t}$ の係数が2倍ずれる。$(2s+1)=2\left(s+\frac12\right)$ と<b>必ず $s$ の係数を1に直してから</b>部分分数をおく。検算は $x(0)=1-2+1=0$、$x'(0)=1-2\cdot\left(-\frac12\right)-1=0$ で確認できる。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問3(1)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s3_0">2024年度 問3(1)</a></p>
+      <p class="sg-drill">ここで詰まったら → <a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-step/data.json#s4">手順分解ドリル「問3(1) ステップ分解」</a></p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-3-2">
       <p class="sg-q"><span class="sg-tag">例題 3-2</span>連立：$\dfrac{dx}{dt}=y,\ \dfrac{dy}{dt}=x$、初期条件 $x(0)=1,\ y(0)=0$ を解け。</p>
+      <div class="sg-mech">
+        <p class="sg-mech-title">連立方程式をなぜ行列で解くのか</p>
+        <p>2つの式をそれぞれラプラス変換すると、$X(s)$ と $Y(s)$ が混ざった2本の代数方程式になる。これは中学・高校でやる連立方程式の消去法でも解けるが、係数を行列にまとめて逆行列を使う方法なら、変数の数が増えても同じ手順で機械的に解ける。</p>
+        <p>行列の式 $M\dbinom{X}{Y}=\dbinom{p}{q}$（$M$ は係数の行列）の両辺に、左から $M$ の逆行列 $M^{-1}$ を掛けると、左辺は $M^{-1}M\dbinom{X}{Y}=\dbinom{X}{Y}$ になる。$M^{-1}M$ は「何も変化させない行列」（単位行列）になるように $M^{-1}$ を定義しているためである。右辺の $M^{-1}\dbinom{p}{q}$ を計算すれば、$X,Y$ がそれぞれ求まる。$2\times2$ 行列 $\begin{pmatrix}a&b\\c&d\end{pmatrix}$ の逆行列は $\dfrac{1}{ad-bc}\begin{pmatrix}d&-b\\-c&a\end{pmatrix}$ という公式で作れる。</p>
+      </div>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>2式をそれぞれラプラス変換し、初期値を代入する</li>
-          <li>行列の形 $\begin{pmatrix}s&-1\\-1&s\end{pmatrix}\begin{pmatrix}X\\Y\end{pmatrix}=\begin{pmatrix}x(0)\\y(0)\end{pmatrix}$ にまとめ、逆行列で $X,Y$ を求める</li>
-          <li>$X(s)$ を部分分数展開して逆変換し、$y(t)=x'(t)$ でもう一方を出す</li>
+          <li>2式をそれぞれラプラス変換し、初期値を代入する。</li>
+          <li>係数を行列にまとめ、上のメカニズムの公式で逆行列を作って両辺に掛け、$X(s),Y(s)$ を取り出す。</li>
+          <li>$X(s)$ を部分分数に分けて逆変換し、$y$ は $x$ の微分で求める（もう一度部分分数をやり直さない）。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">1つ目の式をラプラス変換し初期値 $x(0)=1$ を代入</span><span class="sg-eq">$sX-1=Y$</span></div>
-          <div class="sg-step"><span class="sg-why">2つ目の式をラプラス変換し初期値 $y(0)=0$ を代入</span><span class="sg-eq">$sY-0=X\ \Rightarrow\ sY=X$</span></div>
-          <div class="sg-step"><span class="sg-why">2式を行列の形にまとめる</span><span class="sg-eq">$\begin{pmatrix}s&-1\\-1&s\end{pmatrix}\begin{pmatrix}X\\Y\end{pmatrix}=\begin{pmatrix}1\\0\end{pmatrix}$</span></div>
-          <div class="sg-step"><span class="sg-why">$2\times2$ 行列の逆行列 $\dfrac{1}{\det}\begin{pmatrix}s&1\\1&s\end{pmatrix}$（$\det=s^2-1$）を両辺に掛ける</span><span class="sg-eq">$\begin{pmatrix}X\\Y\end{pmatrix}=\dfrac{1}{s^2-1}\begin{pmatrix}s&1\\1&s\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\dfrac{1}{s^2-1}\begin{pmatrix}s\\1\end{pmatrix}$</span></div>
-          <div class="sg-step"><span class="sg-why">$X(s)$ を取り出し部分分数の形をおく</span><span class="sg-eq">$X(s)=\dfrac{s}{s^2-1}=\dfrac{s}{(s+1)(s-1)}=\dfrac{A}{s+1}+\dfrac{B}{s-1}$</span></div>
-          <div class="sg-step"><span class="sg-why">$A$：$s=-1$ を代入</span><span class="sg-eq">$A=\dfrac{-1}{-1-1}=\dfrac12$</span></div>
-          <div class="sg-step"><span class="sg-why">$B$：$s=1$ を代入</span><span class="sg-eq">$B=\dfrac{1}{1+1}=\dfrac12$</span></div>
-          <div class="sg-step"><span class="sg-why">逆変換する（$\varepsilon^{-t}$ と $\varepsilon^{t}$ の平均＝定義どおり $\cosh t$）</span><span class="sg-eq">$x(t)=\dfrac12\varepsilon^{-t}+\dfrac12\varepsilon^{t}=\cosh t$</span></div>
-          <div class="sg-step"><span class="sg-why">$y=\dfrac{dx}{dt}$ の関係を使って $y$ を求める（もう一度逆変換し直す必要がない）</span><span class="sg-eq">$y(t)=\dfrac{d}{dt}\cosh t=\sinh t$</span></div>
+          <div class="sg-step"><p class="sg-why">1つ目の式 $\dot x=y$ をラプラス変換する。微分定理 $L[x']=sX-x(0)$ を使い、初期値 $x(0)=1$ を代入する。</p><div class="sg-eq">$sX-1=Y$</div></div>
+          <div class="sg-step"><p class="sg-why">2つ目の式 $\dot y=x$ も同じように変換する。初期値 $y(0)=0$ を代入すると、引き算の項が消える。</p><div class="sg-eq">$sY=X$</div></div>
+          <div class="sg-step"><p class="sg-why">2式を、$X,Y$ を未知数とする連立の1次方程式とみなして行列の形にまとめる。</p><div class="sg-eq">$\begin{pmatrix}s&-1\\-1&s\end{pmatrix}\begin{pmatrix}X\\Y\end{pmatrix}=\begin{pmatrix}1\\0\end{pmatrix}$</div></div>
+          <div class="sg-step"><p class="sg-why">上のメカニズムの公式で逆行列を作る。$a=s,b=-1,c=-1,d=s$ なので、行列式は $ad-bc=s^2-1$ になる。</p><div class="sg-eq">$\dfrac{1}{s^2-1}\begin{pmatrix}s&1\\1&s\end{pmatrix}$</div></div>
+          <div class="sg-step"><p class="sg-why">両辺に左からこの逆行列を掛けると、左辺は $\dbinom{X}{Y}$ だけになり、右辺を計算すれば $X,Y$ が求まる。</p><div class="sg-eq">$\begin{pmatrix}X\\Y\end{pmatrix}=\dfrac{1}{s^2-1}\begin{pmatrix}s&1\\1&s\end{pmatrix}\begin{pmatrix}1\\0\end{pmatrix}=\dfrac{1}{s^2-1}\begin{pmatrix}s\\1\end{pmatrix}$</div></div>
+          <div class="sg-step"><p class="sg-why">$X(s)$ を取り出し、ヘビサイド法が使えるように分母を1次式の積に因数分解して部分分数の形をおく。</p><div class="sg-eq">$X(s)=\dfrac{s}{s^2-1}=\dfrac{s}{(s+1)(s-1)}=\dfrac{A}{s+1}+\dfrac{B}{s-1}$</div></div>
+          <div class="sg-step"><p class="sg-why">$A$ をヘビサイド法で求める。$(s+1)$ を掛けて $s=-1$ を代入する。</p><div class="sg-eq">$A=\dfrac{-1}{-1-1}=\dfrac12$</div></div>
+          <div class="sg-step"><p class="sg-why">$B$ をヘビサイド法で求める。$(s-1)$ を掛けて $s=1$ を代入する。</p><div class="sg-eq">$B=\dfrac{1}{1+1}=\dfrac12$</div></div>
+          <div class="sg-step"><p class="sg-why">変換表 $\dfrac{1}{s-a}\leftrightarrow\varepsilon^{at}$ で戻す。$\varepsilon^{-t}$ と $\varepsilon^t$ を半分ずつ足した形は、双曲線関数の定義 $\cosh t=\frac12(\varepsilon^t+\varepsilon^{-t})$ とちょうど一致する。</p><div class="sg-eq">$x(t)=\dfrac12\varepsilon^{-t}+\dfrac12\varepsilon^{t}=\cosh t$</div></div>
+          <div class="sg-step"><p class="sg-why">$y$ を求めるのに $Y(s)$ をもう一度部分分数に分ける必要はない。$y=dx/dt$ という元の式がそのまま使えるので、求めた $x(t)$ を微分するだけでよい。</p><div class="sg-eq">$y(t)=\dfrac{d}{dt}\cosh t=\sinh t$</div></div>
         </div>
         <div class="sg-eq-result">$x(t)=\cosh t,\quad y(t)=\sinh t$</div>
       </div>
       <div class="sg-pitfall">
         <b class="sg-pitfall-label">つまずきポイント</b>
-        行列を作るとき、どちらの式がどちらの行かを取り違えて符号が反転しやすい。$sX-x(0)=Y$ を「$sX-Y=x(0)$」の形に整理してから並べると係数のミスに気づきやすい。また $y(t)$ を求めるのに $Y(s)=\dfrac{1}{s^2-1}$ を改めて部分分数展開する必要はなく、$x(t)$ の微分で済むことを見落として二度手間になるミスもある。
+        行列を作るとき、どちらの式がどちらの行かを取り違えて符号が反転しやすい。$sX-x(0)=Y$ を「$sX-Y=x(0)$」の形に書き直してから並べると係数のミスに気づきやすい。また $y(t)$ を求めるのに $Y(s)=\dfrac{1}{s^2-1}$ を改めて部分分数展開する必要はなく、$x(t)$ の微分で済むことを見落として二度手間になるミスもある。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問3(2)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s3_1">2024年度 問3(2)</a></p>
+      <p class="sg-drill">ここで詰まったら → <a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-step/data.json#s5">手順分解ドリル「問3(2) ステップ分解」</a></p>
     </div>
   </section>
 
@@ -445,25 +531,29 @@
       <div class="cap">SW を閉じた RL 直列回路。入力 $v$、抵抗の電圧 $v_R$、コイルの電圧 $v_L$、電流 $i(t)$</div>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-4-1">
       <p class="sg-q"><span class="sg-tag">例題 4-1</span>$v$ を入力、$v_L$ を出力とする伝達関数を求め、基本的制御要素としての種類を答えよ。</p>
+      <div class="sg-mech">
+        <p class="sg-mech-title">回路方程式はなぜ「電圧の合計＝電源電圧」になるのか（キルヒホッフの電圧則）</p>
+        <p>電源が押し出した電圧は、回路を1周する間に、途中にある素子（抵抗・コイル）で使い切られる。$v_R$ は抵抗で使われる電圧、$v_L$ はコイルで使われる電圧なので、この2つを足すと、電源が出した電圧 $v$ にちょうど戻る。これがキルヒホッフの電圧則で、$v=v_R+v_L$ という式になる理由である。あとは各素子の電圧を電流 $i$ の式（$v_R=Ri$、$v_L=L\dfrac{di}{dt}$）で置き換えれば、回路方程式が立てられる。</p>
+      </div>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>各素子の端子電圧の式（$v_R=Ri,\ v_L=L\dfrac{di}{dt}$）を回路方程式にまとめる</li>
-          <li>ラプラス変換して $G(s)=\dfrac{L[出力]}{L[入力]}$ の形を作る</li>
-          <li>分母の定数項を1に正規化してから、基本要素の表と見比べて種類を判定する</li>
+          <li>上のメカニズムのとおり回路方程式を立て、ラプラス変換して $G(s)=\dfrac{L[出力]}{L[入力]}$ の形を作る。</li>
+          <li>分母の定数項を1に正規化する。基本要素の表の形はすべて分母の定数項が $1$ になっているため、揃えないと比較できない。</li>
+          <li>正規化した式を基本要素の表と見比べて種類を判定する。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">回路方程式（KVL）を立てる</span><span class="sg-eq">$v=v_R+v_L=Ri+L\dfrac{di}{dt}$</span></div>
-          <div class="sg-step"><span class="sg-why">両辺をラプラス変換する（初期値0とみなす）</span><span class="sg-eq">$V=RI+LsI=I(Ls+R)$</span></div>
-          <div class="sg-step"><span class="sg-why">出力 $v_L$ もラプラス変換する</span><span class="sg-eq">$V_L=LsI$</span></div>
-          <div class="sg-step"><span class="sg-why">伝達関数の定義 $G(s)=$ 出力/入力 に代入する</span><span class="sg-eq">$G(s)=\dfrac{V_L}{V}=\dfrac{LsI}{I(Ls+R)}=\dfrac{Ls}{Ls+R}$</span></div>
-          <div class="sg-step"><span class="sg-why">分母を $R$ で割り、定数項を1に正規化する</span><span class="sg-eq">$G(s)=\dfrac{\frac{L}{R}s}{1+\frac{L}{R}s}=\dfrac{Ts}{1+Ts}\quad\left(T=\dfrac{L}{R}\right)$</span></div>
-          <div class="sg-step"><span class="sg-why">$\dfrac{Ks}{1+sT}$ の形（$K=T$）と一致するか確認する</span><span class="sg-eq">$K=T=\dfrac{L}{R}$</span></div>
+          <div class="sg-step"><p class="sg-why">キルヒホッフの電圧則により、電源電圧 $v$ は抵抗の電圧 $v_R=Ri$ とコイルの電圧 $v_L=L\dfrac{di}{dt}$ の和に等しい。</p><div class="sg-eq">$v=v_R+v_L=Ri+L\dfrac{di}{dt}$</div></div>
+          <div class="sg-step"><p class="sg-why">両辺をラプラス変換する。初期値は $0$ とみなすので、微分定理の初期値の項は現れない。</p><div class="sg-eq">$V=RI+LsI=I(Ls+R)$</div></div>
+          <div class="sg-step"><p class="sg-why">出力 $v_L=L\dfrac{di}{dt}$ も同じようにラプラス変換する。</p><div class="sg-eq">$V_L=LsI$</div></div>
+          <div class="sg-step"><p class="sg-why">伝達関数の定義どおり、出力のラプラス変換を入力のラプラス変換で割る。</p><div class="sg-eq">$G(s)=\dfrac{V_L}{V}=\dfrac{LsI}{I(Ls+R)}=\dfrac{Ls}{Ls+R}$</div></div>
+          <div class="sg-step"><p class="sg-why">分母の定数項を $1$ にするため、分母・分子を $R$ で割る。</p><div class="sg-eq">$G(s)=\dfrac{\frac{L}{R}s}{1+\frac{L}{R}s}=\dfrac{Ts}{1+Ts}\quad\left(T=\dfrac{L}{R}\right)$</div></div>
+          <div class="sg-step"><p class="sg-why">基本要素の表の一次微分要素 $\dfrac{Ks}{1+sT}$ と見比べる。分子の $s$ の係数と分母の $T$ が同じ値になっている点まで一致する。</p><div class="sg-eq">$K=T=\dfrac{L}{R}$</div></div>
         </div>
         <div class="sg-eq-result">$G(s)=\dfrac{Ts}{1+Ts}\ \left(T=\dfrac{L}{R}\right)$ → <b>一次微分要素</b></div>
       </div>
@@ -471,30 +561,31 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         分母の正規化をせず $G(s)=\dfrac{Ls}{Ls+R}$ のまま「$K=L$」と読んでしまう。正規化前後で $T$ の値は変わらないが $K$ の値は変わることがあるので、必ず分母を1に揃えてから読む。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問4(1)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s4_0">2024年度 問4(1)</a></p>
+      <p class="sg-drill">ここで詰まったら → <a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-step/data.json#s6">手順分解ドリル「問4(1) ステップ分解」</a></p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-4-2">
       <p class="sg-q"><span class="sg-tag">例題 4-2</span>時刻 $t=0$ で SW を閉じたときの回路方程式を示し、ラプラス変換・逆変換を用いて途中経過を示しながら回路電流 $i(t)$ を求めよ。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>回路方程式（KVL）を立てる。入力はステップ入力 $E\,u(t)$</li>
-          <li>ラプラス変換し、初期値 $i(0)=0$ を代入して $I(s)$ について解く</li>
-          <li>部分分数展開して逆変換する</li>
+          <li>回路方程式（キルヒホッフの電圧則）を立てる。入力はステップ入力 $E\,u(t)$（$t=0$ で $0$ から $E$ に切り替わる電圧）。</li>
+          <li>ラプラス変換し、初期値 $i(0)=0$ を代入して $I(s)$ について解く。</li>
+          <li>部分分数展開して変換表で逆変換する。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">回路方程式を立てる（$v=E\,u(t)$ のステップ入力）</span><span class="sg-eq">$L\dfrac{di(t)}{dt}+Ri(t)=E\,u(t)$</span></div>
-          <div class="sg-step"><span class="sg-why">両辺をラプラス変換し、$u(t)\to\dfrac1s$、初期値 $i(0)=0$ を使う</span><span class="sg-eq">$LsI(s)+RI(s)=\dfrac{E}{s}$</span></div>
-          <div class="sg-step"><span class="sg-why">$I(s)$ について解く</span><span class="sg-eq">$I(s)=\dfrac{E}{s(Ls+R)}$</span></div>
-          <div class="sg-step"><span class="sg-why">分母を $L$ でくくり、部分分数の形をおく</span><span class="sg-eq">$I(s)=\dfrac{E}{L}\cdot\dfrac{1}{s\left(s+\frac{R}{L}\right)}=\dfrac{A}{s}+\dfrac{B}{s+\frac{R}{L}}$</span></div>
-          <div class="sg-step"><span class="sg-why">$A$：$s=0$ を代入</span><span class="sg-eq">$A=\dfrac{E}{L}\cdot\dfrac{1}{R/L}=\dfrac{E}{R}$</span></div>
-          <div class="sg-step"><span class="sg-why">$B$：$s=-\frac{R}{L}$ を代入</span><span class="sg-eq">$B=\dfrac{E}{L}\cdot\dfrac{1}{-R/L}=-\dfrac{E}{R}$</span></div>
-          <div class="sg-step"><span class="sg-why">部分分数の形にまとめる</span><span class="sg-eq">$I(s)=\dfrac{E}{R}\cdot\dfrac1s-\dfrac{E}{R}\cdot\dfrac{1}{s+\frac{R}{L}}$</span></div>
-          <div class="sg-step"><span class="sg-why">変換表で逆変換する</span><span class="sg-eq">$i(t)=\dfrac{E}{R}-\dfrac{E}{R}\varepsilon^{-\frac{R}{L}t}$</span></div>
+          <div class="sg-step"><p class="sg-why">キルヒホッフの電圧則から回路方程式を立てる。$v=Eu(t)$ はステップ入力を表す。</p><div class="sg-eq">$L\dfrac{di(t)}{dt}+Ri(t)=E\,u(t)$</div></div>
+          <div class="sg-step"><p class="sg-why">両辺をラプラス変換する。ステップ関数の変換表 $u(t)\to\dfrac1s$ を使い、初期値 $i(0)=0$ を代入する。</p><div class="sg-eq">$LsI(s)+RI(s)=\dfrac{E}{s}$</div></div>
+          <div class="sg-step"><p class="sg-why">左辺の $I(s)$ をくくり出して、$I(s)$ について解く。</p><div class="sg-eq">$I(s)=\dfrac{E}{s(Ls+R)}$</div></div>
+          <div class="sg-step"><p class="sg-why">分母を $L$ でくくって $s$ の係数を1に直し、部分分数の形をおく。</p><div class="sg-eq">$I(s)=\dfrac{E}{L}\cdot\dfrac{1}{s\left(s+\frac{R}{L}\right)}=\dfrac{A}{s}+\dfrac{B}{s+\frac{R}{L}}$</div></div>
+          <div class="sg-step"><p class="sg-why">$A$ をヘビサイド法で求める。$s$ を掛けて $s=0$ を代入する。</p><div class="sg-eq">$A=\dfrac{E}{L}\cdot\dfrac{1}{R/L}=\dfrac{E}{R}$</div></div>
+          <div class="sg-step"><p class="sg-why">$B$ をヘビサイド法で求める。$s+\frac{R}{L}$ を掛けて $s=-\frac{R}{L}$ を代入する。</p><div class="sg-eq">$B=\dfrac{E}{L}\cdot\dfrac{1}{-R/L}=-\dfrac{E}{R}$</div></div>
+          <div class="sg-step"><p class="sg-why">求めた係数を部分分数の式に書き戻す。</p><div class="sg-eq">$I(s)=\dfrac{E}{R}\cdot\dfrac1s-\dfrac{E}{R}\cdot\dfrac{1}{s+\frac{R}{L}}$</div></div>
+          <div class="sg-step"><p class="sg-why">変換表 $\dfrac1s\to1$、$\dfrac{1}{s+a}\to\varepsilon^{-at}$ を各項に当てはめ、線型性により足し合わせる。</p><div class="sg-eq">$i(t)=\dfrac{E}{R}-\dfrac{E}{R}\varepsilon^{-\frac{R}{L}t}$</div></div>
         </div>
         <div class="sg-eq-result">$i(t)=\dfrac{E}{R}\left(1-\varepsilon^{-\frac{R}{L}t}\right)$</div>
       </div>
@@ -502,26 +593,27 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         $v_L=L\dfrac{di}{dt}$ の式とここでの $i(t)$（電流そのもの）を混同し、選択肢の $\dfrac{E}{R}\varepsilon^{-\frac{R}{L}t}$（$v_L$ の形）を電流の答えとして選んでしまう。「$1-\varepsilon^{-t/\tau}$ の形＝電流や電圧が立ち上がる量」「$\varepsilon^{-t/\tau}$ 単独の形＝減っていく量」という形の違いで見分ける。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問4(2)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s4_1">2024年度 問4(2)</a></p>
+      <p class="sg-drill">ここで詰まったら → <a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-step/data.json#s7">手順分解ドリル「問4(2) ステップ分解」</a></p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-4-3">
       <p class="sg-q"><span class="sg-tag">例題 4-3</span>例題4-2で求めた $i(t)$ を用いて $v_R(t)$、$v_L(t)$ を求めよ。また時定数と特性値（63.2%/36.8%）を説明せよ。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>$v_R=Ri(t)$ に $i(t)$ を代入する</li>
-          <li>$v_L=v-v_R$（または $L\dfrac{di}{dt}$）で残りを求める</li>
-          <li>時定数 $\tau=L/R$ の意味（63.2%/36.8%点）を式で確認する</li>
+          <li>$v_R=Ri(t)$ に、例題4-2で求めた $i(t)$ を代入する。</li>
+          <li>キルヒホッフの電圧則 $v_R+v_L=v$ を使い、引き算で $v_L$ を求める。</li>
+          <li>時定数 $\tau=L/R$ の時点での値を計算し、63.2%と36.8%の意味を確認する。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">$v_R=Ri(t)$ に代入する</span><span class="sg-eq">$v_R(t)=R\cdot\dfrac{E}{R}\left(1-\varepsilon^{-\frac{R}{L}t}\right)=E\left(1-\varepsilon^{-\frac{R}{L}t}\right)$</span></div>
-          <div class="sg-step"><span class="sg-why">回路方程式 $v_R+v_L=E$（$t>0$）より残りを求める</span><span class="sg-eq">$v_L(t)=E-v_R(t)=E-E\left(1-\varepsilon^{-\frac{R}{L}t}\right)$</span></div>
-          <div class="sg-step"><span class="sg-why">整理する</span><span class="sg-eq">$v_L(t)=E\,\varepsilon^{-\frac{R}{L}t}$</span></div>
-          <div class="sg-step"><span class="sg-why">時定数 $\tau=L/R$ を代入して $t=\tau$ での値を見る</span><span class="sg-eq">$v_R(\tau)=E(1-\varepsilon^{-1})\fallingdotseq0.632E,\quad v_L(\tau)=E\varepsilon^{-1}\fallingdotseq0.368E$</span></div>
+          <div class="sg-step"><p class="sg-why">$v_R=Ri(t)$ に、例題4-2で求めた $i(t)$ を代入する。</p><div class="sg-eq">$v_R(t)=R\cdot\dfrac{E}{R}\left(1-\varepsilon^{-\frac{R}{L}t}\right)=E\left(1-\varepsilon^{-\frac{R}{L}t}\right)$</div></div>
+          <div class="sg-step"><p class="sg-why">キルヒホッフの電圧則 $v_R+v_L=E$（$t>0$ では $v=E$）を使う。$v_R$ が分かっているので、$v_L$ は引き算だけで求まる。</p><div class="sg-eq">$v_L(t)=E-v_R(t)=E-E\left(1-\varepsilon^{-\frac{R}{L}t}\right)$</div></div>
+          <div class="sg-step"><p class="sg-why">$E$ の項が打ち消し合う。右辺を計算する。</p><div class="sg-eq">$v_L(t)=E\,\varepsilon^{-\frac{R}{L}t}$</div></div>
+          <div class="sg-step"><p class="sg-why">時定数 $\tau=L/R$ を $t$ に代入すると、指数部が $-1$ になる。$\varepsilon^{-1}\fallingdotseq0.368$ を使って、その時点の値を計算する。</p><div class="sg-eq">$v_R(\tau)=E(1-\varepsilon^{-1})\fallingdotseq0.632E,\quad v_L(\tau)=E\varepsilon^{-1}\fallingdotseq0.368E$</div></div>
         </div>
         <div class="sg-eq-result">$v_R(t)=E\left(1-\varepsilon^{-\frac{R}{L}t}\right),\quad v_L(t)=E\,\varepsilon^{-\frac{R}{L}t},\quad \tau=\dfrac{L}{R}$</div>
       </div>
@@ -529,7 +621,8 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         $v_R$ と $v_L$ のグラフの形（立ち上がり／立ち下がり）が逆であることを図なしで暗記しようとして取り違える。「電源電圧 $E$ を $v_R$ と $v_L$ で分け合う（$v_R+v_L=E$）」という関係を先に書けば、片方を求めれば残りは引き算で出せる。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問4(3)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s4_2">2024年度 問4(3)</a></p>
+      <p class="sg-drill">ここで詰まったら → <a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-step/data.json#s8">手順分解ドリル「問4(3) ステップ分解」</a></p>
     </div>
   </section>
 
@@ -541,24 +634,28 @@
     </div>
     <p class="sg-section-tagline">2024年度の過去問には無いが、最終授業で追加された範囲。RLC回路の制動判別・伝達関数の定義・正規化の4パターンをまとめる。</p>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-5-1">
       <p class="sg-q"><span class="sg-tag">例題 5-1</span>RLC直列回路（$Ri+L\dfrac{di}{dt}+\dfrac1C\displaystyle\int i\,dt=Eu(t)$）の制動の種類を、$R,L,C$ の関係から判別せよ。</p>
+      <div class="sg-mech">
+        <p class="sg-mech-title">$R^2$ と $4L/C$ の大小比較が、なぜ振動するかどうかを決めるのか</p>
+        <p>2階の定数係数線形微分方程式 $L\dfrac{d^2q}{dt^2}+R\dfrac{dq}{dt}+\dfrac1C q=Eu(t)$ の解の形は、特性方程式 $Ls^2+Rs+\dfrac1C=0$ の根がどんな種類の数になるかで決まる。この根は中学で習う解の公式と同じ形で求まり、根号の中身（判別式）$R^2-4\cdot L\cdot\dfrac1C$ の符号で3通りに分かれる。判別式が正なら根は異なる2つの実数になり、解は $\varepsilon^{-\alpha t}$ の形（指数関数どうしの組み合わせ）だけで書けるので振動しない。判別式が負なら根は複素数になり、複素数の指数関数はオイラーの公式によって $\cos,\sin$ を含む形に書き直せるので、解は振動しながら減衰する形になる。判別式が $0$（重根）はちょうどその境目にあたる。</p>
+      </div>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>電荷 $q$ を使った2階微分方程式 $L\dfrac{d^2q}{dt^2}+R\dfrac{dq}{dt}+\dfrac1C q=Eu(t)$ に書き換える</li>
-          <li>特性方程式の判別式にあたる $R^2$ と $4L/C$ の大小を比較する</li>
-          <li>大小関係と制動の種類（非振動・臨界・振動）を対応づける</li>
+          <li>電流 $i$ と電荷 $q$ の関係 $i=dq/dt$ を使って、回路方程式を $q$ だけの2階微分方程式に書き換える。</li>
+          <li>特性方程式の判別式にあたる $R^2-4L/C$ の符号を、上のメカニズムに従って場合分けする。</li>
+          <li>符号と制動の種類（非振動・臨界・振動）を対応づける。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">回路方程式を $i=dq/dt$ で電荷 $q$ の式に書き換える</span><span class="sg-eq">$L\dfrac{d^2q}{dt^2}+R\dfrac{dq}{dt}+\dfrac{1}{C}q=E\,u(t)$</span></div>
-          <div class="sg-step"><span class="sg-why">2階線形の特性方程式 $Ls^2+Rs+\dfrac1C=0$ を考え、判別式の符号で場合分けする</span><span class="sg-eq">判別式 $=R^2-4\cdot L\cdot\dfrac1C=R^2-\dfrac{4L}{C}$</span></div>
-          <div class="sg-step"><span class="sg-why">判別式が正＝異なる実根2つ＝振動しない</span><span class="sg-eq">$R^2>\dfrac{4L}{C}$ → 非振動（過制動）</span></div>
-          <div class="sg-step"><span class="sg-why">判別式が0＝重根＝振動と非振動の境目</span><span class="sg-eq">$R^2=\dfrac{4L}{C}$ → 臨界制動</span></div>
-          <div class="sg-step"><span class="sg-why">判別式が負＝複素根＝振動しながら減衰</span><span class="sg-eq">$R^2<\dfrac{4L}{C}$ → 振動（不足制動）</span></div>
+          <div class="sg-step"><p class="sg-why">$i=dq/dt$ を代入して、電流 $i$ の式を電荷 $q$ だけの2階微分方程式に書き換える。</p><div class="sg-eq">$L\dfrac{d^2q}{dt^2}+R\dfrac{dq}{dt}+\dfrac{1}{C}q=E\,u(t)$</div></div>
+          <div class="sg-step"><p class="sg-why">対応する特性方程式 $Ls^2+Rs+\dfrac1C=0$ の判別式を計算する。</p><div class="sg-eq">$R^2-4\cdot L\cdot\dfrac1C=R^2-\dfrac{4L}{C}$</div></div>
+          <div class="sg-step"><p class="sg-why">上のメカニズムのとおり、判別式が正なら根は異なる実数2つになり、解は指数関数だけの組み合わせになる（振動しない）。</p><div class="sg-eq">$R^2>\dfrac{4L}{C}\ \Rightarrow\ $非振動（過制動）</div></div>
+          <div class="sg-step"><p class="sg-why">判別式がちょうど $0$ のとき、根は重根になる。これが振動する場合としない場合の境目にあたる。</p><div class="sg-eq">$R^2=\dfrac{4L}{C}\ \Rightarrow\ $臨界制動</div></div>
+          <div class="sg-step"><p class="sg-why">判別式が負なら根は複素数になり、オイラーの公式により解に $\cos,\sin$ が含まれる（振動しながら減衰する）。</p><div class="sg-eq">$R^2<\dfrac{4L}{C}\ \Rightarrow\ $振動（不足制動）</div></div>
         </div>
         <div class="sg-eq-result">$R^2>4L/C$：非振動／$R^2=4L/C$：臨界制動／$R^2<4L/C$：振動</div>
       </div>
@@ -569,23 +666,23 @@
       <p class="sg-examref"><b>対応する過去問：</b>該当なし（今年度追加範囲）</p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-6-1">
       <p class="sg-q"><span class="sg-tag">例題 6-1</span>伝達関数の定義に従って、入力 $v_s$・出力 $i$ とする回路（$v_s=L\dfrac{di}{dt}+Ri$）の伝達関数 $G(s)$ を求めよ。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>伝達関数の定義 $G(s)=\dfrac{L[出力]}{L[入力]}=\dfrac{Y(s)}{X(s)}$ を確認する</li>
-          <li>入力・出力それぞれをラプラス変換する</li>
-          <li>比を取って $G(s)$ の形にまとめる</li>
+          <li>伝達関数の定義 $G(s)=\dfrac{L[出力]}{L[入力]}$ を確認する。「出力」「入力」がどの信号にあたるかを問題文から先に決める。</li>
+          <li>入力・出力それぞれをラプラス変換する。</li>
+          <li>出力を入力で割って $G(s)$ の形にまとめる。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">伝達関数の定義を確認する</span><span class="sg-eq">$G(s)=\dfrac{Y(s)}{X(s)}=\dfrac{L[y(t)]}{L[x(t)]}$（出力／入力、それぞれラプラス変換する）</span></div>
-          <div class="sg-step"><span class="sg-why">回路方程式をラプラス変換する（初期値0）</span><span class="sg-eq">$V_s=LsI+RI=I(Ls+R)$</span></div>
-          <div class="sg-step"><span class="sg-why">出力 $i$ を入力 $v_s$ で割る（定義どおり）</span><span class="sg-eq">$G(s)=\dfrac{I}{V_s}=\dfrac{I}{I(Ls+R)}$</span></div>
-          <div class="sg-step"><span class="sg-why">$I$ を約分する</span><span class="sg-eq">$G(s)=\dfrac{1}{Ls+R}$</span></div>
+          <div class="sg-step"><p class="sg-why">伝達関数の定義を確認する。これは「出力のラプラス変換」を「入力のラプラス変換」で割った式である。</p><div class="sg-eq">$G(s)=\dfrac{Y(s)}{X(s)}=\dfrac{L[y(t)]}{L[x(t)]}$</div></div>
+          <div class="sg-step"><p class="sg-why">回路方程式を初期値0でラプラス変換する。</p><div class="sg-eq">$V_s=LsI+RI=I(Ls+R)$</div></div>
+          <div class="sg-step"><p class="sg-why">問題文の指定どおり、出力 $i$ を入力 $v_s$ で割る。</p><div class="sg-eq">$G(s)=\dfrac{I}{V_s}=\dfrac{I}{I(Ls+R)}$</div></div>
+          <div class="sg-step"><p class="sg-why">分母・分子に共通する $I$ を約分する。</p><div class="sg-eq">$G(s)=\dfrac{1}{Ls+R}$</div></div>
         </div>
         <div class="sg-eq-result">$G(s)=\dfrac{I}{V_s}=\dfrac{1}{Ls+R}$</div>
       </div>
@@ -593,25 +690,30 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         伝達関数は必ず「出力 ÷ 入力」。問題文で入力・出力が指定されているのに、慣れている形（電圧÷電流など）で逆に割ってしまうミスが起きる。式を書く前に「入力＝○○、出力＝○○」を明記してから比を取る。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問4(1)（同じ考え方）</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s4_0">2024年度 問4(1)</a>（同じ考え方）</p>
+      <p class="sg-drill">ここで詰まったら → <a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-step/data.json#s6">手順分解ドリル「問4(1) ステップ分解」</a></p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-7-1">
       <p class="sg-q"><span class="sg-tag">例題 7-1</span>正規化：$G(s)=\dfrac{10}{5+s}$ の種類と特性値 $K,T$ を答えよ。</p>
+      <div class="sg-mech">
+        <p class="sg-mech-title">「正規化してから読む」のはなぜ必要なのか</p>
+        <p>基本要素の表の形（例：一次遅れ要素 $\dfrac{K}{1+sT}$）は、すべて分母の定数項が $1$ になるように統一して書かれている。$\dfrac{10}{5+s}$ のように分母の定数項が $1$ でない式は、表の形とそのまま並べても係数の位置が対応していないので、分子の $10$ を直接 $K$ と読むことはできない。分母・分子を同じ数（ここでは分母の定数項 $5$）で割って、分母の定数項をまず $1$ に揃えてから、表の形と見比べて $K,T$ を読み取る必要がある。</p>
+      </div>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>分母 $s$ の係数はすでに1なので、分母の定数項（5）で分母・分子を割る</li>
-          <li>$\dfrac{K}{1+sT}$ の形と見比べる</li>
-          <li>正規化後の分子が $K$、$s$ の係数が $T$</li>
+          <li>分母の定数項（$5$）で分母・分子を割り、分母の定数項を $1$ に揃える。</li>
+          <li>正規化した式を $\dfrac{K}{1+sT}$ の形と見比べる。</li>
+          <li>分子が $K$、$s$ の係数が $T$ に対応する。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">分母・分子を分母の定数項 5 で割る</span><span class="sg-eq">$G(s)=\dfrac{10}{5+s}=\dfrac{10/5}{1+s/5}$</span></div>
-          <div class="sg-step"><span class="sg-why">計算する</span><span class="sg-eq">$G(s)=\dfrac{2}{1+0.2s}$</span></div>
-          <div class="sg-step"><span class="sg-why">$\dfrac{K}{1+sT}$（一次遅れ要素）の形と見比べる</span><span class="sg-eq">$K=2,\quad T=0.2$</span></div>
+          <div class="sg-step"><p class="sg-why">分母・分子を分母の定数項 $5$ で割る。分母の $s$ の係数はすでに $1$ なので、割った後も $s$ の係数は $1$ のままである。</p><div class="sg-eq">$G(s)=\dfrac{10}{5+s}=\dfrac{10/5}{1+s/5}$</div></div>
+          <div class="sg-step"><p class="sg-why">分数をそれぞれ計算する。</p><div class="sg-eq">$G(s)=\dfrac{2}{1+0.2s}$</div></div>
+          <div class="sg-step"><p class="sg-why">分母の定数項が $1$ になったので、$\dfrac{K}{1+sT}$（一次遅れ要素）の形と直接見比べられる。分子が $K$、$s$ の係数が $T$。</p><div class="sg-eq">$K=2,\quad T=0.2$</div></div>
         </div>
         <div class="sg-eq-result">一次遅れ要素、$K=2,\ T=0.2$</div>
       </div>
@@ -619,25 +721,25 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         <b>正規化前の分子 10 をそのまま $K$ と答えてしまう、これが最頻出のミス。</b>実際にノートの現物にもこのミスが残っている。分母の定数項を1に直してから分子を読む、を必ず先に行う。$T$ を $0.2$ ではなく分母の $5$（正規化前の値）と取り違えるミスもある。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問1(9)（同じ形の逆問題）</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_8">2024年度 問1(9)</a>（同じ形の逆問題）</p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-7-2">
       <p class="sg-q"><span class="sg-tag">例題 7-2</span>正規化：$G(s)=10+2s$ の種類と特性値 $K,T$ を答えよ。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>$Ks$ の項がある＝一次進み要素 $K(1+sT)$ の形を疑う</li>
-          <li>定数項でくくって $K(1+sT)$ の形を作る</li>
-          <li>くくり出した定数が $K$、$s$ の係数が $T$</li>
+          <li>分子に $Ks$ の形の項があり、分母に $s$ がない（＝分母が定数の $1$ という一次進み要素 $K(1+sT)$ の形）かどうかを確認する。</li>
+          <li>定数項でくくって $K(1+sT)$ の形を作る。</li>
+          <li>くくり出した定数が $K$、$s$ の係数が $T$ に対応する。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">定数項 10 でくくる</span><span class="sg-eq">$G(s)=10+2s=10\left(1+\dfrac{2}{10}s\right)$</span></div>
-          <div class="sg-step"><span class="sg-why">分数を約分する</span><span class="sg-eq">$G(s)=10\left(1+\dfrac15 s\right)$</span></div>
-          <div class="sg-step"><span class="sg-why">$K(1+sT)$（一次進み要素）の形と見比べる</span><span class="sg-eq">$K=10,\quad T=\dfrac15=0.2$</span></div>
+          <div class="sg-step"><p class="sg-why">$K(1+sT)$ の形を作るため、定数項 $10$ を外にくくり出す。</p><div class="sg-eq">$G(s)=10+2s=10\left(1+\dfrac{2}{10}s\right)$</div></div>
+          <div class="sg-step"><p class="sg-why">かっこの中の分数を約分する。</p><div class="sg-eq">$G(s)=10\left(1+\dfrac15 s\right)$</div></div>
+          <div class="sg-step"><p class="sg-why">$K(1+sT)$（一次進み要素）の形と見比べる。くくり出した定数が $K$、$s$ の係数が $T$。</p><div class="sg-eq">$K=10,\quad T=\dfrac15=0.2$</div></div>
         </div>
         <div class="sg-eq-result">一次進み要素、$K=10,\ T=0.2$</div>
       </div>
@@ -645,25 +747,25 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         一次進み要素 $K(1+sT)$ と一次遅れ要素 $\dfrac{K}{1+sT}$ を取り違える（2024年度の実際の失点例）。$s$ が分子にあれば「進み」、分母にあれば「遅れ」という位置で判定する。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問1(6)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_5">2024年度 問1(6)</a></p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-7-3">
       <p class="sg-q"><span class="sg-tag">例題 7-3</span>正規化：$G(s)=\dfrac{10s}{5+s}$ の種類と特性値 $K,T$ を答えよ。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>分子に $s$、分母に $s$ の1次式＝一次微分要素 $\dfrac{Ks}{1+sT}$ の形を疑う</li>
-          <li>分母を定数項1に正規化する</li>
-          <li>正規化後の分子の係数が $K$、分母の $s$ の係数が $T$</li>
+          <li>分子に $s$、分母にも $s$ を含む1次式がある（＝一次微分要素 $\dfrac{Ks}{1+sT}$ の形）かどうかを確認する。</li>
+          <li>分母を定数項1に正規化する。</li>
+          <li>正規化後の分子の係数が $K$、分母の $s$ の係数が $T$ に対応する。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">分母・分子を分母の定数項 5 で割る</span><span class="sg-eq">$G(s)=\dfrac{10s}{5+s}=\dfrac{10s/5}{1+s/5}$</span></div>
-          <div class="sg-step"><span class="sg-why">計算する</span><span class="sg-eq">$G(s)=\dfrac{2s}{1+0.2s}$</span></div>
-          <div class="sg-step"><span class="sg-why">$\dfrac{Ks}{1+sT}$（一次微分要素）の形と見比べる</span><span class="sg-eq">$K=2,\quad T=0.2$</span></div>
+          <div class="sg-step"><p class="sg-why">分母・分子を分母の定数項 $5$ で割る。</p><div class="sg-eq">$G(s)=\dfrac{10s}{5+s}=\dfrac{10s/5}{1+s/5}$</div></div>
+          <div class="sg-step"><p class="sg-why">分数をそれぞれ計算する。</p><div class="sg-eq">$G(s)=\dfrac{2s}{1+0.2s}$</div></div>
+          <div class="sg-step"><p class="sg-why">$\dfrac{Ks}{1+sT}$（一次微分要素）の形と見比べる。分子の $s$ の係数が $K$、分母の $s$ の係数が $T$。</p><div class="sg-eq">$K=2,\quad T=0.2$</div></div>
         </div>
         <div class="sg-eq-result">一次微分要素、$K=2,\ T=0.2$</div>
       </div>
@@ -674,21 +776,21 @@
       <p class="sg-examref"><b>対応する過去問：</b>該当なし（授業内反復練習と同じ形）</p>
     </div>
 
-    <div class="sg-card">
+    <div class="sg-card" id="rei-7-4">
       <p class="sg-q"><span class="sg-tag">例題 7-4</span>時定数2、ゲイン定数（比例定数）20の一次遅れ要素の伝達関数を選べ（正規化後の形で判定する）。</p>
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>一次遅れ要素の基本形 $\dfrac{K}{1+sT}$ に $K=20,T=2$ をそのまま代入する</li>
-          <li>選択肢が正規化されていない形（分母の $s$ の係数が1でない形）で並んでいる可能性を疑う</li>
-          <li>自分の式を選択肢と同じ形に変形してから比べる</li>
+          <li>一次遅れ要素の基本形 $\dfrac{K}{1+sT}$ に $K=20,T=2$ をそのまま代入する。</li>
+          <li>選択肢の分母の $s$ の係数を確認する。$1$ になっていない選択肢があれば、正規化した書き方に直さないと自分の式と見比べられない。</li>
+          <li>自分の式を選択肢と同じ形に変形してから比べる。</li>
         </ol>
       </div>
       <div class="sg-part">
         <p class="sg-part-label">② 解答</p>
         <div class="sg-steps">
-          <div class="sg-step"><span class="sg-why">基本形に $K=20,T=2$ を代入する</span><span class="sg-eq">$G(s)=\dfrac{20}{1+2s}$</span></div>
-          <div class="sg-step"><span class="sg-why">選択肢が「分母の $s$ の係数が1」の形で書かれている場合に備え、分母を $2$ でくくって書き換える</span><span class="sg-eq">$G(s)=\dfrac{20}{2\left(0.5+s\right)}=\dfrac{10}{s+0.5}$</span></div>
+          <div class="sg-step"><p class="sg-why">基本形 $\dfrac{K}{1+sT}$ に $K=20,T=2$ を代入する。</p><div class="sg-eq">$G(s)=\dfrac{20}{1+2s}$</div></div>
+          <div class="sg-step"><p class="sg-why">分母の $s$ の係数を $1$ にするため、分母を $2$ でくくって書き換える。</p><div class="sg-eq">$G(s)=\dfrac{20}{2\left(0.5+s\right)}=\dfrac{10}{s+0.5}$</div></div>
         </div>
         <div class="sg-eq-result">$G(s)=\dfrac{20}{1+2s}=\dfrac{10}{s+0.5}$</div>
       </div>
@@ -696,7 +798,7 @@
         <b class="sg-pitfall-label">つまずきポイント</b>
         $\dfrac{20}{1+2s}$ の形のまま選択肢を探すと、見た目の違う正解 $\dfrac{10}{s+0.5}$ を見落とす。同じ伝達関数でも書き方（正規化の有無・$s$の係数の置き方）が複数あることを前提に、自分の答えを選択肢の形式に合わせて変形してから照合する。
       </div>
-      <p class="sg-examref"><b>対応する過去問：</b>2024年度 問1(9)</p>
+      <p class="sg-examref"><b>対応する過去問：</b><a href="/quiz.html?d=tests/2026-4-zenki-matsu-seigyogaku-kakomon2024/data.json#q_s1_8">2024年度 問1(9)</a></p>
     </div>
   </section>
 
