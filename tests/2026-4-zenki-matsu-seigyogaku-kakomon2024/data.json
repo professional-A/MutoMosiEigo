@@ -86,7 +86,7 @@
           "q": "(6) 一次進み要素の伝達関数として正しいものはどれか",
           "opts": [
             "$\\dfrac{K}{1+sT}$",
-            "$\\dfrac{Ks}{1+sT}$",
+            "$\\dfrac{KTs}{1+Ts}$",
             "$K(1+sT)$",
             "$K$"
           ],
@@ -238,14 +238,14 @@
           "type": "single",
           "q": "紙に解いてから選択肢を見てください。<br>(1) 下図はスイッチSWを閉じたRL直列回路である。入力を$v$、出力を$v_L$としたときの伝達関数 $G(s)=V_L(s)/V(s)$ を正規化し、要素の種類を答えよ。<br><svg viewBox=\"0 0 380 190\" xmlns=\"http://www.w3.org/2000/svg\" style=\"max-width:360px;width:100%;margin:12px auto 4px;display:block\"><rect x=\"0\" y=\"0\" width=\"380\" height=\"190\" fill=\"none\"/><line x1=\"40\" y1=\"40\" x2=\"75\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"75\" y1=\"40\" x2=\"95\" y2=\"25\" stroke=\"#f6b352\" stroke-width=\"2.2\"/><circle cx=\"75\" cy=\"40\" r=\"2.5\" fill=\"#f6b352\"/><circle cx=\"105\" cy=\"40\" r=\"2.5\" fill=\"#f6b352\"/><text x=\"85\" y=\"20\" fill=\"#f6b352\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">SW</text><line x1=\"105\" y1=\"40\" x2=\"150\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><path d=\"M150,40 l8,-10 l12,20 l12,-20 l12,20 l8,-10\" fill=\"none\" stroke=\"#60a5fa\" stroke-width=\"2.2\"/><text x=\"185\" y=\"20\" fill=\"#93c5fd\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">R</text><line x1=\"202\" y1=\"40\" x2=\"240\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><path d=\"M240,40 a8,8 0 1,1 16,0 a8,8 0 1,1 16,0 a8,8 0 1,1 16,0\" fill=\"none\" stroke=\"#5fe0a8\" stroke-width=\"2.2\"/><text x=\"272\" y=\"20\" fill=\"#5fe0a8\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">L</text><line x1=\"288\" y1=\"40\" x2=\"340\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"340\" y1=\"40\" x2=\"340\" y2=\"150\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"340\" y1=\"150\" x2=\"40\" y2=\"150\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"40\" y1=\"150\" x2=\"40\" y2=\"105\" stroke=\"#9ca3af\" stroke-width=\"2\"/><line x1=\"28\" y1=\"90\" x2=\"52\" y2=\"90\" stroke=\"#e7eef7\" stroke-width=\"3\"/><line x1=\"33\" y1=\"98\" x2=\"47\" y2=\"98\" stroke=\"#e7eef7\" stroke-width=\"1.6\"/><line x1=\"40\" y1=\"90\" x2=\"40\" y2=\"40\" stroke=\"#9ca3af\" stroke-width=\"2\"/><text x=\"12\" y=\"95\" fill=\"#e7eef7\" font-size=\"13\" font-family=\"sans-serif\" text-anchor=\"middle\">v</text><line x1=\"150\" y1=\"58\" x2=\"202\" y2=\"58\" stroke=\"#93c5fd\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/><text x=\"176\" y=\"72\" fill=\"#93c5fd\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">v_R</text><line x1=\"240\" y1=\"58\" x2=\"288\" y2=\"58\" stroke=\"#5fe0a8\" stroke-width=\"1\" stroke-dasharray=\"3,2\"/><text x=\"264\" y=\"72\" fill=\"#5fe0a8\" font-size=\"12\" font-family=\"sans-serif\" text-anchor=\"middle\">v_L</text><path d=\"M60,32 l6,0 l0,-4 l4,8 l4,-8 l0,4 l6,0\" fill=\"none\" stroke=\"#f6b352\" stroke-width=\"1.4\"/><text x=\"78\" y=\"10\" fill=\"#9ca3af\" font-size=\"11\" font-family=\"sans-serif\" text-anchor=\"middle\">i(t)</text></svg>",
           "opts": [
-            "$G(s)=\\dfrac{Ls}{R+Ls}$、一次微分要素（$T=K=L/R$）",
+            "$G(s)=\\dfrac{Ls}{R+Ls}$、一次微分要素（$T=L/R,\\ K=1$）",
             "$G(s)=\\dfrac{R}{R+Ls}$、一次遅れ要素（$T=L/R$）",
             "$G(s)=\\dfrac{Ls}{R+Ls}$、一次遅れ要素",
             "$G(s)=\\dfrac{L}{R+Ls}$、積分要素",
             "$G(s)=\\dfrac{R+Ls}{Ls}$、一次進み要素"
           ],
-          "ans": "$G(s)=\\dfrac{Ls}{R+Ls}$、一次微分要素（$T=K=L/R$）",
-          "note": "回路方程式より $V=(R+Ls)I$、$V_L=LsI$ なので $G(s)=\\dfrac{V_L}{V}=\\dfrac{Ls}{R+Ls}$。分母の定数項を1にするため$R$で割ると $G(s)=\\dfrac{(L/R)s}{1+(L/R)s}=\\dfrac{Ts}{1+Ts}$（$T=L/R$）。この形は $\\dfrac{Ks}{1+sT}$ の一次微分要素で、$K=T=L/R$。②は $v_R$ 側の伝達関数（$V_R/V=R/(R+Ls)$）と取り違えた誤り。③は式は正しいが分類を一次遅れ要素と誤った（$Ks/(1+sT)$の形なのに$K/(1+sT)$の形と混同）誤り。④は分子の$s$を落とした誤り。⑤は分子分母を逆に取った誤り。",
+          "ans": "$G(s)=\\dfrac{Ls}{R+Ls}$、一次微分要素（$T=L/R,\\ K=1$）",
+          "note": "回路方程式より $V=(R+Ls)I$、$V_L=LsI$ なので $G(s)=\\dfrac{V_L}{V}=\\dfrac{Ls}{R+Ls}$。分母の定数項を1にするため$R$で割ると $G(s)=\\dfrac{(L/R)s}{1+(L/R)s}=\\dfrac{Ts}{1+Ts}$（$T=L/R$）。この形は $\\dfrac{KTs}{1+Ts}$ の一次微分要素で、$T=L/R,\\ K=1$。②は $v_R$ 側の伝達関数（$V_R/V=R/(R+Ls)$）と取り違えた誤り。③は式は正しいが分類を一次遅れ要素と誤った（$KTs/(1+Ts)$の形なのに$K/(1+sT)$の形と混同）誤り。④は分子の$s$を落とした誤り。⑤は分子分母を逆に取った誤り。",
           "ref": "<a href=\"/seigyogaku-reikai.html#rei-4-1\">→ 例題4-1・6-1（解き方の全ステップ）</a>"
         },
         {

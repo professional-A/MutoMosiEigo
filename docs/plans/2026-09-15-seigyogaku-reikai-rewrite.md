@@ -140,7 +140,7 @@
 ## 守ること
 
 - 例題の**内容・数式・答えは変えない**。変えるのは説明の量と版面だけ
-- 用語厳守：$\dfrac{Ks}{1+sT}$ は「一次微分要素」。「不完全微分要素」を使わない
+- 用語厳守：$\dfrac{KTs}{1+Ts}$ は「一次微分要素」。「不完全微分要素」を使わない
 - `materials/` の画像を参照しない。図は inline SVG で描く
 - `theme.css` の `:root` を汚染しない。`appShell.mount` を壊さない
 - `tests/2026-4-zenki-matsu-seigyogaku-step` と `-bunrui` の**問題文は変更しない**

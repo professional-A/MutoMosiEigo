@@ -197,7 +197,7 @@
           <tr><td>積分要素</td><td>$G(s)=\dfrac{K}{s}$</td></tr>
           <tr><td>一次遅れ要素</td><td>$G(s)=\dfrac{K}{1+sT}$</td></tr>
           <tr><td>一次進み要素</td><td>$G(s)=K(1+sT)$</td></tr>
-          <tr><td class="sg-em">一次微分要素</td><td class="sg-em">$G(s)=\dfrac{Ks}{1+sT}$</td></tr>
+          <tr><td class="sg-em">一次微分要素</td><td class="sg-em">$G(s)=\dfrac{KTs}{1+Ts}$</td></tr>
           <tr><td class="sg-em">二次遅れ要素</td><td class="sg-em">$G(s)=\dfrac{K\omega_n^2}{s^2+2\zeta\omega_n s+\omega_n^2}$</td></tr>
           <tr><td class="sg-em">二次進み要素</td><td class="sg-em">$G(s)=K(s^2+2\zeta\omega_n s+\omega_n^2)$</td></tr>
           <tr><td class="sg-em">むだ時間要素</td><td class="sg-em">$G(s)=K\varepsilon^{-Ls}$</td></tr>
@@ -205,7 +205,7 @@
       </div>
       <div class="sg-pitfall">
         <b class="sg-pitfall-label">つまずきポイント</b>
-        $\dfrac{Ks}{1+sT}$ を一般名の「<b>不完全微分要素</b>」と呼びたくなるが、この授業では習っていない用語。必ず「<b>一次微分要素</b>」と書く。$\omega_n$：固有角周波数、$\zeta$：減衰率（減衰係数）、$L$（または$\tau$）：むだ時間、$T$：時定数。
+        $\dfrac{KTs}{1+Ts}$ を一般名の「<b>不完全微分要素</b>」と呼びたくなるが、この授業では習っていない用語。必ず「<b>一次微分要素</b>」と書く。$\omega_n$：固有角周波数、$\zeta$：減衰率（減衰係数）、$L$（または$\tau$）：むだ時間、$T$：時定数。
       </div>
     </div>
 
@@ -553,7 +553,7 @@
           <div class="sg-step"><p class="sg-why">出力 $v_L=L\dfrac{di}{dt}$ も同じようにラプラス変換する。</p><div class="sg-eq">$V_L=LsI$</div></div>
           <div class="sg-step"><p class="sg-why">伝達関数の定義どおり、出力のラプラス変換を入力のラプラス変換で割る。</p><div class="sg-eq">$G(s)=\dfrac{V_L}{V}=\dfrac{LsI}{I(Ls+R)}=\dfrac{Ls}{Ls+R}$</div></div>
           <div class="sg-step"><p class="sg-why">分母の定数項を $1$ にするため、分母・分子を $R$ で割る。</p><div class="sg-eq">$G(s)=\dfrac{\frac{L}{R}s}{1+\frac{L}{R}s}=\dfrac{Ts}{1+Ts}\quad\left(T=\dfrac{L}{R}\right)$</div></div>
-          <div class="sg-step"><p class="sg-why">基本要素の表の一次微分要素 $\dfrac{Ks}{1+sT}$ と見比べる。分子の $s$ の係数と分母の $T$ が同じ値になっている点まで一致する。</p><div class="sg-eq">$K=T=\dfrac{L}{R}$</div></div>
+          <div class="sg-step"><p class="sg-why">基本要素の表の一次微分要素 $\dfrac{KTs}{1+Ts}$ と見比べる。分子の $s$ の係数は $KT$ であって $K$ ではない。$T$ を先に読み、$KT$ を $T$ で割って $K$ を出す。ここでは $KT=\dfrac{L}{R}$ かつ $T=\dfrac{L}{R}$ なので $K=1$ になる。</p><div class="sg-eq">$T=\dfrac{L}{R},\quad K=1$</div></div>
         </div>
         <div class="sg-eq-result">$G(s)=\dfrac{Ts}{1+Ts}\ \left(T=\dfrac{L}{R}\right)$ → <b>一次微分要素</b></div>
       </div>
@@ -713,7 +713,7 @@
         <div class="sg-steps">
           <div class="sg-step"><p class="sg-why">分母・分子を分母の定数項 $5$ で割る。分母の $s$ の係数はすでに $1$ なので、割った後も $s$ の係数は $1$ のままである。</p><div class="sg-eq">$G(s)=\dfrac{10}{5+s}=\dfrac{10/5}{1+s/5}$</div></div>
           <div class="sg-step"><p class="sg-why">分数をそれぞれ計算する。</p><div class="sg-eq">$G(s)=\dfrac{2}{1+0.2s}$</div></div>
-          <div class="sg-step"><p class="sg-why">分母の定数項が $1$ になったので、$\dfrac{K}{1+sT}$（一次遅れ要素）の形と直接見比べられる。分子が $K$、$s$ の係数が $T$。</p><div class="sg-eq">$K=2,\quad T=0.2$</div></div>
+          <div class="sg-step"><p class="sg-why">分母の定数項が $1$ になったので、$\dfrac{K}{1+sT}$（一次遅れ要素）の形と直接見比べられる。分子が $K$、$s$ の係数が $T$。</p><div class="sg-eq">$T=0.2,\quad KT=2\Rightarrow K=2\div0.2=10$</div></div>
         </div>
         <div class="sg-eq-result">一次遅れ要素、$K=2,\ T=0.2$</div>
       </div>
@@ -755,7 +755,7 @@
       <div class="sg-part">
         <p class="sg-part-label">① 解き方の流れ</p>
         <ol class="sg-flow">
-          <li>分子に $s$、分母にも $s$ を含む1次式がある（＝一次微分要素 $\dfrac{Ks}{1+sT}$ の形）かどうかを確認する。</li>
+          <li>分子に $s$、分母にも $s$ を含む1次式がある（＝一次微分要素 $\dfrac{KTs}{1+Ts}$ の形）かどうかを確認する。</li>
           <li>分母を定数項1に正規化する。</li>
           <li>正規化後の分子の係数が $K$、分母の $s$ の係数が $T$ に対応する。</li>
         </ol>
@@ -765,9 +765,9 @@
         <div class="sg-steps">
           <div class="sg-step"><p class="sg-why">分母・分子を分母の定数項 $5$ で割る。</p><div class="sg-eq">$G(s)=\dfrac{10s}{5+s}=\dfrac{10s/5}{1+s/5}$</div></div>
           <div class="sg-step"><p class="sg-why">分数をそれぞれ計算する。</p><div class="sg-eq">$G(s)=\dfrac{2s}{1+0.2s}$</div></div>
-          <div class="sg-step"><p class="sg-why">$\dfrac{Ks}{1+sT}$（一次微分要素）の形と見比べる。分子の $s$ の係数が $K$、分母の $s$ の係数が $T$。</p><div class="sg-eq">$K=2,\quad T=0.2$</div></div>
+          <div class="sg-step"><p class="sg-why">$\dfrac{KTs}{1+Ts}$（一次微分要素）の形と見比べる。分母の $s$ の係数が $T$、分子の $s$ の係数が $KT$。$K$ は $KT\div T$ で出す。</p><div class="sg-eq">$T=0.2,\quad KT=2\Rightarrow K=2\div0.2=10$</div></div>
         </div>
-        <div class="sg-eq-result">一次微分要素、$K=2,\ T=0.2$</div>
+        <div class="sg-eq-result">一次微分要素、$T=0.2,\ K=10$</div>
       </div>
       <div class="sg-pitfall">
         <b class="sg-pitfall-label">つまずきポイント</b>
