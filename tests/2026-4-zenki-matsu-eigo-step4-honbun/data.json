@@ -1,0 +1,3267 @@
+{
+  "title": "科学技術英語Ⅰ ・ Step4 本文理解・ハンドアウト・Debate",
+  "subtitle": "Unit 3 (Smart Clothing) ・ Unit 4 (Earth’s Underground Water) の本文理解、ハンドアウトの発問、Debate・fact/opinionを一気に演習",
+  "eyebrow": "科学技術英語Ⅰ ・ 前期末試験 対策",
+  "description": "教科書本文（Unit 3・Unit 4）、教員配布のハンドアウト（Grasp the Main Idea・段落ごとの発問）、Debateの流れと注意点、fact/opinionの判定を出題範囲とする。Summary・Approaching the Contents・Over to you! は範囲外のため出題しない。",
+  "subject": "科学技術英語Ⅰ",
+  "year": 2026,
+  "grade": 4,
+  "exam": "前期末試験",
+  "storageKey": "mutou_eigo_zenkimatsu_step4_v1",
+  "pointsPerQ": 100,
+  "tip": "T/F・Q&A・definitionは本番同様すべて英語で出題する。定義→語の入力問題は綴りを正確に入力すること（大文字・小文字は区別しない）。",
+  "footer": "科学技術英語Ⅰ 前期末試験 対策 ｜ Step4 本文理解・ハンドアウト・Debate 全300問",
+  "sections": [
+    {
+      "id": "indepth",
+      "no": "01",
+      "title": "In-Depth Review（教科書そのまま）",
+      "qs": [
+        {
+          "type": "single",
+          "q": "U3 Part1 (1). ( ) is used to produce a wearable layer of protection from harmful chemicals.",
+          "opts": [
+            "A metal-organic framework",
+            "A lightweight shield",
+            "One new spike shoe"
+          ],
+          "ans": "A metal-organic framework",
+          "note": "本文：coating is made from a metal-organic framework that snags and breaks down harmful compounds。bは効果の言い換え、cは無関係の例。"
+        },
+        {
+          "type": "single",
+          "q": "U3 Part1 (2). Nanowires in the new fabric are expected to ( ).",
+          "opts": [
+            "block the visible light by generating electricity",
+            "keep the wearers warm by using their body heat",
+            "reflect infrared waves by embedding them in the material"
+          ],
+          "ans": "keep the wearers warm by using their body heat",
+          "note": "本文：Fabric embedded with nanowires could reflect your body heat back onto your skin／electric current could provide warmth。他は別パラグラフ（光を通す布）の内容との混同。"
+        },
+        {
+          "type": "single",
+          "q": "U3 Part2 (1). Triboelectric materials and piezoelectric materials help the researchers ( ).",
+          "opts": [
+            "create a new type of solar panel",
+            "develop self-powered outfits",
+            "move their bodies smoothly"
+          ],
+          "ans": "develop self-powered outfits",
+          "note": "摩擦電気・圧電性の素材は「身につけるだけで発電する」服＝self-powered outfitsの開発につながる。aはソーラーパネルの話と混同。"
+        },
+        {
+          "type": "single",
+          "q": "U3 Part2 (2). It is expected that ( ) in future.",
+          "opts": [
+            "conductive thread stitched into a t-shirt will soak up the sun",
+            "data-packed fabric could be replaced by a hands-free key",
+            "the newly developed fabrics with various functions will go on the market"
+          ],
+          "ans": "the newly developed fabrics with various functions will go on the market",
+          "note": "最終段落：still pretty far from hitting retail racks／inventors hope... could someday let you get more from your wardrobe＝将来的に市販化される見込み。"
+        },
+        {
+          "type": "single",
+          "q": "U4 Part1 (1). Groundwater ( ).",
+          "opts": [
+            "does not contain any freshwater",
+            "is hidden from view",
+            "is not found in desert areas"
+          ],
+          "ans": "is hidden from view",
+          "note": "本文：groundwater lurks（隠れている）under mountains, plains and even deserts。aは真逆、cは「砂漠にもある」に反する。"
+        },
+        {
+          "type": "single",
+          "q": "U4 Part1 (2). People can use groundwater to ( ).",
+          "opts": [
+            "extract oil",
+            "produce our food",
+            "build wells"
+          ],
+          "ans": "produce our food",
+          "note": "本文：people extract groundwater through wells for drinking, sanitation, watering crops（作物＝食料生産）など。wellsは地下水を汲み上げる手段であり用途ではない。"
+        },
+        {
+          "type": "single",
+          "q": "U4 Part2 (1). Data from satellites reveal that ( ).",
+          "opts": [
+            "the number of aquifers is decreasing",
+            "more than half of the aquifers in the U.S. are in danger",
+            "some aquifers are getting smaller"
+          ],
+          "ans": "some aquifers are getting smaller",
+          "note": "本文：Twenty-one of Earth’s 37 biggest aquifers are shrinking, satellite data show。「数が減っている」のではなく「縮小している」が正しい。"
+        },
+        {
+          "type": "single",
+          "q": "U4 Part2 (2). The decrease in the amount of groundwater ( ).",
+          "opts": [
+            "damages freshwater ecosystems",
+            "contaminates the aquifer",
+            "triggers big earthquakes around the world"
+          ],
+          "ans": "damages freshwater ecosystems",
+          "note": "本文：they hold less water to refill rivers and streams, threatening freshwater ecosystems。地震はCaliforniaでの\"small earthquakes\"のみで「世界的な大地震」ではない。"
+        }
+      ]
+    },
+    {
+      "id": "tf-u3",
+      "no": "02",
+      "title": "T/F Questions — Unit 3",
+      "qs": [
+        {
+          "type": "single",
+          "q": "Our clothes keep us warm in the winter or cool while we're working out.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.1-2 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Clothes let each of us express our unique sense of style.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.4 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Some researchers think our clothes could be doing even more.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.5 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Doctors and lawyers are dreaming up new ways to make clothes safer.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は Those scientists and engineers。doctors/lawyers は登場しない。"
+        },
+        {
+          "type": "single",
+          "q": "The passage says clothes could be made safer, comfier, or more expensive.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は safer, comfier, or just more convenient。expensive ではない。"
+        },
+        {
+          "type": "single",
+          "q": "The passage states that clothes cannot express our personal style.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は真逆：They let each of us express our unique sense of style。"
+        },
+        {
+          "type": "single",
+          "q": "One new shoe design features pop-out spikes on the sole that grip the ground.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.9-10 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "A new fabric coating could absorb and neutralize some chemical weapons.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.11-12 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "The fabric coating is made from a metal-organic framework.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.13-14 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "The pop-out spikes are located on the toe of the shoe, not the sole.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は on the sole（靴底）。toe（つま先）ではない。"
+        },
+        {
+          "type": "single",
+          "q": "The coating could offer a heavyweight shield to people in war-torn countries.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は a lightweight shield（軽量の盾）。heavyweight ではない。"
+        },
+        {
+          "type": "single",
+          "q": "The metal-organic framework creates harmful compounds instead of breaking them down.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は真逆：snags and breaks down harmful compounds（有害な化合物を分解する）。"
+        },
+        {
+          "type": "single",
+          "q": "Not all advanced attire is designed to save lives.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.16 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Fabric embedded with nanowires could reflect your body heat back onto your skin.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.18-19 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "This heat-generating fabric may be especially useful for people working in hot deserts.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は super cold conditions（極寒の環境）。hot deserts ではない。"
+        },
+        {
+          "type": "single",
+          "q": "Electric current humming through the metal threads could cool the wearer down.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は真逆：could provide warmth（暖かさを与える）。"
+        },
+        {
+          "type": "single",
+          "q": "Only hikers, and no one else, could benefit from this fabric.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は hikers, soldiers, or others working in super cold conditions と複数の対象を挙げている。"
+        },
+        {
+          "type": "single",
+          "q": "Another new fabric traps very little body heat.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.23-24 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Tiny pores in this material let infrared waves pass through it.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.25-26 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "The waves that pass through the material carry heat away from the body to keep you cool.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.26-27 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "This material is see-through because it does not block visible light.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：pores block visible light waves — so the material isn’t see-through。"
+        },
+        {
+          "type": "single",
+          "q": "This fabric is designed to keep the wearer as warm as possible.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "この段落の布は熱を逃がして涼しく保つためのもの（前段落と対照的）。"
+        },
+        {
+          "type": "single",
+          "q": "The tiny pores block infrared waves and let visible light pass through.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：visible light を block し、infrared waves を通す。"
+        },
+        {
+          "type": "single",
+          "q": "Some researchers have dreamt up wholly new uses for clothing, like turning wearers into walking power outlets.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.30-31 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Triboelectric materials can generate electricity when bent or flexed.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.34-35 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Piezoelectric materials produce a charge when squeezed or twisted.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.37-38 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "The future of fashion is only about improving garments' existing functions.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は not just about improving garments’ existing functions。"
+        },
+        {
+          "type": "single",
+          "q": "Flexible solar panels sewn into fabric could soak up moonlight to recharge phones.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は soak up the sun（太陽光）。moonlight ではない。"
+        },
+        {
+          "type": "single",
+          "q": "Friction between different parts of a material reduces triboelectric charge.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は真逆：friction builds up charge（摩擦が電荷を生む）。"
+        },
+        {
+          "type": "single",
+          "q": "In one experiment, researchers stitched conductive thread into a t-shirt.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.41-42 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "This turned the shirt into an antenna that could send signals to a smartphone.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.42-43 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Data-packed fabric could be used as a hands-free key or form of ID.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.45-46 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Another team threaded fabric with magnetized gold and platinum to write data into fabrics.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は magnetized copper and silver（銅と銀）。gold/platinum ではない。"
+        },
+        {
+          "type": "single",
+          "q": "While some fabrics help charge devices, no fabric could ever serve as a device itself.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は真逆：others could serve as devices themselves。"
+        },
+        {
+          "type": "single",
+          "q": "The conductive thread experiment turned the shirt into a solar panel.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は antenna（アンテナ）。solar panel ではない。"
+        },
+        {
+          "type": "single",
+          "q": "Many of these ideas have not yet left the lab.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.47 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "They're still pretty far from hitting retail racks.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.48 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Inventors hope these innovations could someday let you get more from your wardrobe.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.49-50 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "These smart-clothing innovations are already sold widely in stores.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：still pretty far from hitting retail racks（まだ店頭には程遠い）。"
+        },
+        {
+          "type": "single",
+          "q": "The passage says none of these ideas will ever leave the laboratory.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は not yet left the lab（まだ）であり、将来市場に出ることを inventors hope している。"
+        }
+      ]
+    },
+    {
+      "id": "tf-u4",
+      "no": "03",
+      "title": "T/F Questions — Unit 4",
+      "qs": [
+        {
+          "type": "single",
+          "q": "Almost all of the world's liquid freshwater lies underground.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.3 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "This stash beneath our feet is called groundwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.4 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Walking over water is truly a miracle with no scientific explanation.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は「奇跡のようだが実は地下水の上を歩いているだけ」と科学的に説明している。"
+        },
+        {
+          "type": "single",
+          "q": "Groundwater is a stash of freshwater found floating in the sky.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は beneath our feet（足元の地下）。空ではない。"
+        },
+        {
+          "type": "single",
+          "q": "Only a small fraction of the world's liquid freshwater lies underground.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は almost all（ほとんど全て）。"
+        },
+        {
+          "type": "single",
+          "q": "Most of Earth's H2O is in the oceans.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.5-6 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Only about 2.5 percent of the planet's water is freshwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.6-7 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "About 30 percent of Earth's freshwater is groundwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.8 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Nearly 69 percent of Earth's freshwater flows through rivers and fills lakes.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "69%は氷河・氷冠に凍っている割合。川と湖はmeagerな1.2%。"
+        },
+        {
+          "type": "single",
+          "q": "Rivers and lakes hold much more freshwater than groundwater does.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：groundwater(約30%) は rivers and lakes(1.2%) よりずっと多い。"
+        },
+        {
+          "type": "single",
+          "q": "Groundwater is found almost everywhere on Earth, including under deserts.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.10-11 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Together, aquifers hold about 60 times as much water as the world's lakes and rivers combined.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.13-14 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Groundwater is never found under deserts.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：lurks under mountains, plains and even deserts。"
+        },
+        {
+          "type": "single",
+          "q": "Tiny gaps between rocks and soil grains repel water like a raincoat.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：soak up and hold this water like a sponge（スポンジのように吸い込んで保持する）。"
+        },
+        {
+          "type": "single",
+          "q": "Aquifers hold about 60 times as much water as the world's oceans.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は lakes and rivers combined（湖と川の合計）。oceans ではない。"
+        },
+        {
+          "type": "single",
+          "q": "Rain and melted snow seep down into the ground.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.16-17 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Groundwater can stay underground for thousands of years.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.17-18 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "People extract more than 200 times as much groundwater from Earth as oil every year.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.22-23 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Groundwater never feeds into lakes, rivers, or wetlands.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：It also feeds into lakes, rivers, and wetlands。"
+        },
+        {
+          "type": "single",
+          "q": "People extract groundwater only for drinking, never for sanitation or crops.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は for drinking, sanitation, watering crops, and other uses と複数の用途を挙げている。"
+        },
+        {
+          "type": "single",
+          "q": "Most groundwater is used to water crops.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.24 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Groundwater quenches the thirst of some 2 billion people worldwide.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.25 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Groundwater quenches the thirst of only a few thousand people worldwide.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は some 2 billion people（約20億人）。"
+        },
+        {
+          "type": "single",
+          "q": "Less than a quarter of the U.S. population relies on groundwater for drinking water.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は half the population of the United States（約半分）。"
+        },
+        {
+          "type": "single",
+          "q": "No part of the United States' population relies on groundwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は half the population of the United States が地下水を利用。"
+        },
+        {
+          "type": "single",
+          "q": "Human-caused climate change may increase the demand for groundwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.27-28 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Climate change may intensify storms.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.28-29 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Heavier rains are more likely to rush into streams and storm drains than soak into the soil.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.29-30 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Climate change has no effect on how much groundwater is available.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：demand for groundwater may rise／there may be less groundwater to go around。"
+        },
+        {
+          "type": "single",
+          "q": "Heavier rain always soaks more deeply into the ground, increasing groundwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：heavier rains rush into streams and storm drains rather than soaking in。"
+        },
+        {
+          "type": "single",
+          "q": "Twenty-one of Earth's 37 biggest aquifers are shrinking, according to satellite data.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.33-34 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "In California, sucking the ground dry may even be triggering small earthquakes.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.37-38 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "All 37 of Earth's biggest aquifers are shrinking.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は 37のうち21（Twenty-one of Earth’s 37 biggest aquifers）。"
+        },
+        {
+          "type": "single",
+          "q": "The most dried-out aquifers are found deep in untouched rainforests.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は near big cities, farms, or arid regions。rainforest ではない。"
+        },
+        {
+          "type": "single",
+          "q": "Shrinking aquifers hold more water to refill rivers and streams.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：they hold less water to refill rivers and streams。"
+        },
+        {
+          "type": "single",
+          "q": "Arsenic from farming or mining seeps into aquifers.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.40-41 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Chemicals injected underground in a process called fracking also pollute groundwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.41-42 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Electronic waste from discarded devices and sewage have also tainted groundwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "True",
+          "note": "L.42-43 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Human activity has no effect on the quality of groundwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文は逆：human activity pollutes groundwater in many places。"
+        },
+        {
+          "type": "single",
+          "q": "Fracking is a process that purifies groundwater.",
+          "opts": [
+            "True",
+            "False"
+          ],
+          "ans": "False",
+          "note": "本文ではfrackingは地下水を汚染する要因として挙げられている。purifyとは逆。"
+        }
+      ]
+    },
+    {
+      "id": "qa-u3",
+      "no": "04",
+      "title": "Question & Answer — Unit 3",
+      "qs": [
+        {
+          "type": "single",
+          "q": "What do our clothes let us do, besides keeping us warm or cool?",
+          "opts": [
+            "Dress to impress or express our unique sense of style",
+            "Fly through the air",
+            "Breathe underwater"
+          ],
+          "ans": "Dress to impress or express our unique sense of style",
+          "note": "L.2-4 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What are scientists and engineers dreaming up?",
+          "opts": [
+            "New ways to make clothes safer, comfier, or more convenient",
+            "New ways to grow cotton faster",
+            "New laws about clothing sizes"
+          ],
+          "ans": "New ways to make clothes safer, comfier, or more convenient",
+          "note": "L.5-7 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What does one new shoe design feature?",
+          "opts": [
+            "Pop-out spikes on the sole that grip the ground",
+            "A built-in GPS tracker",
+            "A heating element in the laces"
+          ],
+          "ans": "Pop-out spikes on the sole that grip the ground",
+          "note": "L.9-10 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What could the pop-out spikes help people do?",
+          "opts": [
+            "Keep their footing on slippery or uneven terrain",
+            "Run twice as fast",
+            "See in the dark"
+          ],
+          "ans": "Keep their footing on slippery or uneven terrain",
+          "note": "L.10-11 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What could a new fabric coating do?",
+          "opts": [
+            "Absorb and neutralize some chemical weapons",
+            "Generate music",
+            "Charge a smartphone battery"
+          ],
+          "ans": "Absorb and neutralize some chemical weapons",
+          "note": "L.11-12 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the fabric coating made from?",
+          "opts": [
+            "A metal-organic framework",
+            "Pure cotton fibers",
+            "Recycled plastic bottles"
+          ],
+          "ans": "A metal-organic framework",
+          "note": "L.13-14 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What could the fabric coating offer to people in war-torn countries?",
+          "opts": [
+            "A lightweight shield",
+            "A heavy suit of armor",
+            "A waterproof umbrella"
+          ],
+          "ans": "A lightweight shield",
+          "note": "L.14-15 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What could fabric embedded with nanowires do?",
+          "opts": [
+            "Reflect your body heat back onto your skin",
+            "Change color with your mood",
+            "Play music through speakers"
+          ],
+          "ans": "Reflect your body heat back onto your skin",
+          "note": "L.18-19 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Who might find heat-generating fabric especially useful?",
+          "opts": [
+            "Hikers, soldiers, or others working in super cold conditions",
+            "Swimmers in warm pools",
+            "Office workers in summer"
+          ],
+          "ans": "Hikers, soldiers, or others working in super cold conditions",
+          "note": "L.21-22 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What lets visible light be blocked but infrared waves pass through in the cooling fabric?",
+          "opts": [
+            "Tiny pores that are just the right size",
+            "A layer of glass",
+            "A coat of black paint"
+          ],
+          "ans": "Tiny pores that are just the right size",
+          "note": "L.24-26 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What do the infrared waves that pass through the material do?",
+          "opts": [
+            "Carry heat away from your body to keep you cool",
+            "Make the fabric glow in the dark",
+            "Charge the wearer’s phone"
+          ],
+          "ans": "Carry heat away from your body to keep you cool",
+          "note": "L.26-27 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the future of fashion not just about?",
+          "opts": [
+            "Improving garments’ existing functions",
+            "Using new colors and patterns",
+            "Lowering the price of clothes"
+          ],
+          "ans": "Improving garments’ existing functions",
+          "note": "L.29-30 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What could flexible solar panels sewn into fabric do?",
+          "opts": [
+            "Soak up the sun to recharge phones or other devices",
+            "Cool the wearer down instantly",
+            "Repel rain completely"
+          ],
+          "ans": "Soak up the sun to recharge phones or other devices",
+          "note": "L.31-32 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "When can triboelectric materials generate electricity?",
+          "opts": [
+            "When bent or flexed",
+            "When washed in cold water",
+            "When left in the sun for a week"
+          ],
+          "ans": "When bent or flexed",
+          "note": "L.34-35 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What builds up charge in triboelectric materials?",
+          "opts": [
+            "Friction between different parts of the material",
+            "Sunlight hitting the material",
+            "Cold temperatures"
+          ],
+          "ans": "Friction between different parts of the material",
+          "note": "L.35-36 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "When do piezoelectric materials produce a charge?",
+          "opts": [
+            "When squeezed or twisted",
+            "When frozen solid",
+            "When exposed to loud sound"
+          ],
+          "ans": "When squeezed or twisted",
+          "note": "L.37-38 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What did researchers stitch into a t-shirt in one experiment?",
+          "opts": [
+            "Conductive thread",
+            "Solar cells",
+            "Tiny magnets only"
+          ],
+          "ans": "Conductive thread",
+          "note": "L.41-42 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What did the conductive thread turn the shirt into?",
+          "opts": [
+            "An antenna that could send signals to a smartphone",
+            "A pair of headphones",
+            "A portable battery pack"
+          ],
+          "ans": "An antenna that could send signals to a smartphone",
+          "note": "L.42-43 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What did another team use to write data into fabrics?",
+          "opts": [
+            "Magnetized copper and silver",
+            "Liquid crystal ink",
+            "Ultraviolet light"
+          ],
+          "ans": "Magnetized copper and silver",
+          "note": "L.44-45 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What could data-packed fabric be used as?",
+          "opts": [
+            "A hands-free key or form of ID",
+            "A permanent tattoo",
+            "A type of currency"
+          ],
+          "ans": "A hands-free key or form of ID",
+          "note": "L.45-46 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Where are many of these smart-clothing ideas still?",
+          "opts": [
+            "In the lab, far from hitting retail racks",
+            "Already sold out in every store",
+            "Banned by international law"
+          ],
+          "ans": "In the lab, far from hitting retail racks",
+          "note": "L.47-48 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What do inventors hope these innovations could someday let you do?",
+          "opts": [
+            "Get more from your wardrobe",
+            "Travel faster than sound",
+            "Live without clothing"
+          ],
+          "ans": "Get more from your wardrobe",
+          "note": "L.49-50 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "According to paragraph 1, what keeps us cool while we’re working out?",
+          "opts": [
+            "Our clothes",
+            "The weather",
+            "Sports drinks"
+          ],
+          "ans": "Our clothes",
+          "note": "L.2 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What kind of terrain do the pop-out spikes help with?",
+          "opts": [
+            "Slippery or uneven terrain",
+            "Only flat pavement",
+            "Only sand"
+          ],
+          "ans": "Slippery or uneven terrain",
+          "note": "L.10-11 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What happens to harmful compounds that meet the metal-organic framework coating?",
+          "opts": [
+            "They are snagged and broken down",
+            "They multiply and spread",
+            "They turn into steam"
+          ],
+          "ans": "They are snagged and broken down",
+          "note": "L.13-14 本文どおり。"
+        }
+      ]
+    },
+    {
+      "id": "qa-u4",
+      "no": "05",
+      "title": "Question & Answer — Unit 4",
+      "qs": [
+        {
+          "type": "single",
+          "q": "What is called \"groundwater\"?",
+          "opts": [
+            "The stash of liquid freshwater beneath our feet",
+            "Water stored in a water tower",
+            "Rainwater collected in a barrel"
+          ],
+          "ans": "The stash of liquid freshwater beneath our feet",
+          "note": "L.3-4 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Where is most of Earth’s H2O found?",
+          "opts": [
+            "In the oceans",
+            "In the atmosphere",
+            "In glaciers only"
+          ],
+          "ans": "In the oceans",
+          "note": "L.5-6 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "About what percent of the planet’s water is freshwater?",
+          "opts": [
+            "About 2.5 percent",
+            "About 25 percent",
+            "About 50 percent"
+          ],
+          "ans": "About 2.5 percent",
+          "note": "L.6-7 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "About what percent of Earth’s freshwater is frozen in glaciers and ice caps?",
+          "opts": [
+            "Nearly 69 percent",
+            "Nearly 30 percent",
+            "Nearly 1.2 percent"
+          ],
+          "ans": "Nearly 69 percent",
+          "note": "L.7 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "About what percent of Earth’s freshwater is groundwater?",
+          "opts": [
+            "About 30 percent",
+            "About 69 percent",
+            "About 60 percent"
+          ],
+          "ans": "About 30 percent",
+          "note": "L.8 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What percent of freshwater flows through rivers and fills lakes?",
+          "opts": [
+            "The meager 1.2 percent",
+            "About 30 percent",
+            "Nearly 69 percent"
+          ],
+          "ans": "The meager 1.2 percent",
+          "note": "L.8-9 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Where is groundwater found?",
+          "opts": [
+            "Under mountains, plains and even deserts",
+            "Only near the equator",
+            "Only under the ocean floor"
+          ],
+          "ans": "Under mountains, plains and even deserts",
+          "note": "L.10-11 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What holds groundwater like a sponge?",
+          "opts": [
+            "Tiny gaps between rocks and soil grains",
+            "Large underground caves",
+            "Man-made storage tanks"
+          ],
+          "ans": "Tiny gaps between rocks and soil grains",
+          "note": "L.11-12 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What are buried bodies of water called?",
+          "opts": [
+            "Aquifers",
+            "Reservoirs",
+            "Wetlands"
+          ],
+          "ans": "Aquifers",
+          "note": "L.12-13 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "How much water do aquifers hold compared to the world’s lakes and rivers?",
+          "opts": [
+            "About 60 times as much",
+            "About half as much",
+            "About the same amount"
+          ],
+          "ans": "About 60 times as much",
+          "note": "L.13-14 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What happens to rain and melted snow?",
+          "opts": [
+            "They seep down into the ground",
+            "They evaporate immediately",
+            "They flow straight into the ocean"
+          ],
+          "ans": "They seep down into the ground",
+          "note": "L.16-17 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "How long can groundwater stay underground?",
+          "opts": [
+            "For thousands of years",
+            "For only a few days",
+            "For about one month"
+          ],
+          "ans": "For thousands of years",
+          "note": "L.17-18 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "How does some groundwater naturally reach Earth’s surface?",
+          "opts": [
+            "Through springs",
+            "Through volcanic eruptions",
+            "Through underground rivers only"
+          ],
+          "ans": "Through springs",
+          "note": "L.18-19 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What do people use groundwater for?",
+          "opts": [
+            "Drinking, sanitation, watering crops, and other uses",
+            "Only for washing cars",
+            "Only for making electricity"
+          ],
+          "ans": "Drinking, sanitation, watering crops, and other uses",
+          "note": "L.20-21 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "How much groundwater do people extract compared to oil every year?",
+          "opts": [
+            "More than 200 times as much",
+            "About the same amount",
+            "Less than oil"
+          ],
+          "ans": "More than 200 times as much",
+          "note": "L.22-23 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Who does groundwater’s thirst-quenching use include?",
+          "opts": [
+            "Some 2 billion people worldwide, including half the U.S. population",
+            "Only farmers",
+            "Only people in California"
+          ],
+          "ans": "Some 2 billion people worldwide, including half the U.S. population",
+          "note": "L.25-26 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Why may demand for groundwater rise?",
+          "opts": [
+            "Because human-caused climate change dries out parts of the planet",
+            "Because oil is running out",
+            "Because the population is shrinking"
+          ],
+          "ans": "Because human-caused climate change dries out parts of the planet",
+          "note": "L.27-28 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What may climate change do to storms?",
+          "opts": [
+            "Intensify them",
+            "Eliminate them completely",
+            "Make them predictable"
+          ],
+          "ans": "Intensify them",
+          "note": "L.28-29 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Where do heavier rains tend to rush instead of soaking into the soil?",
+          "opts": [
+            "Into streams and storm drains",
+            "Into underground caves",
+            "Into the ocean directly"
+          ],
+          "ans": "Into streams and storm drains",
+          "note": "L.29-30 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "How many of Earth’s 37 biggest aquifers are shrinking?",
+          "opts": [
+            "Twenty-one",
+            "Thirty-seven",
+            "Twelve"
+          ],
+          "ans": "Twenty-one",
+          "note": "L.33-34 本文どおり。数字は文頭でアルファベット綴り。"
+        },
+        {
+          "type": "single",
+          "q": "Where are the most dried-out aquifers found?",
+          "opts": [
+            "Near big cities, farms, or arid regions",
+            "Deep in rainforests",
+            "Under the ocean"
+          ],
+          "ans": "Near big cities, farms, or arid regions",
+          "note": "L.34-35 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What might sucking the ground dry be triggering in California?",
+          "opts": [
+            "Small earthquakes",
+            "Volcanic eruptions",
+            "Tsunamis"
+          ],
+          "ans": "Small earthquakes",
+          "note": "L.37-38 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What seeps into aquifers from farming or mining?",
+          "opts": [
+            "Arsenic",
+            "Sugar",
+            "Salt water"
+          ],
+          "ans": "Arsenic",
+          "note": "L.40-41 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What process injects chemicals underground to flush out oil or gas?",
+          "opts": [
+            "Fracking",
+            "Purification",
+            "Sanitation"
+          ],
+          "ans": "Fracking",
+          "note": "L.41-42 本文どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What are two things that could help protect groundwater?",
+          "opts": [
+            "Cutting back on pollution and finding new ways to purify it",
+            "Drilling more wells everywhere",
+            "Stopping all farming immediately"
+          ],
+          "ans": "Cutting back on pollution and finding new ways to purify it",
+          "note": "L.44-45 本文どおり。"
+        }
+      ]
+    },
+    {
+      "id": "def-single",
+      "no": "06",
+      "title": "Definition → 本文中の語（選択式）",
+      "qs": [
+        {
+          "type": "single",
+          "q": "buried bodies of water that are held in tiny gaps between rocks and soil grains",
+          "opts": [
+            "aquifers",
+            "wetlands",
+            "reservoirs"
+          ],
+          "ans": "aquifers",
+          "note": "U4 L.12-13。ハンドアウトのitem/category/characteristics定義そのまま。"
+        },
+        {
+          "type": "single",
+          "q": "liquid freshwater that lies underground",
+          "opts": [
+            "groundwater",
+            "seawater",
+            "rainwater"
+          ],
+          "ans": "groundwater",
+          "note": "U4 L.3-4。"
+        },
+        {
+          "type": "single",
+          "q": "a permanently frozen dome of ice found on mountains or near the poles",
+          "opts": [
+            "an ice cap",
+            "a glacier",
+            "an aquifer"
+          ],
+          "ans": "an ice cap",
+          "note": "U4 L.7 \"frozen in glaciers and ice caps\"。glacierとice capは近い意味だが、本文では両方登場する別語。"
+        },
+        {
+          "type": "single",
+          "q": "an area of land that is often wet, like a marsh or swamp",
+          "opts": [
+            "a wetland",
+            "a plain",
+            "a spring"
+          ],
+          "ans": "a wetland",
+          "note": "U4 L.19 \"lakes, rivers, and wetlands\"。"
+        },
+        {
+          "type": "single",
+          "q": "a place where water comes up from the ground naturally",
+          "opts": [
+            "a spring",
+            "a storm drain",
+            "a well"
+          ],
+          "ans": "a spring",
+          "note": "U4 L.18-19 \"leaks out onto Earth’s surface through springs\"。"
+        },
+        {
+          "type": "single",
+          "q": "a pipe that carries rainwater away from streets",
+          "opts": [
+            "a storm drain",
+            "a spring",
+            "a sewage pipe"
+          ],
+          "ans": "a storm drain",
+          "note": "U4 L.30 \"rush straight into streams and storm drains\"。"
+        },
+        {
+          "type": "single",
+          "q": "very dry, with little rainfall",
+          "opts": [
+            "arid",
+            "meager",
+            "precious"
+          ],
+          "ans": "arid",
+          "note": "U4 L.35 \"big cities, farms, or arid regions\"。"
+        },
+        {
+          "type": "single",
+          "q": "to become smaller in amount, gradually (used for a store or supply)",
+          "opts": [
+            "dwindle",
+            "shrink",
+            "threaten"
+          ],
+          "ans": "dwindle",
+          "note": "U4 L.35 \"As groundwater stores dwindle\"。shrinkは帯水層自体の「縮小」に使われ、dwindleは「蓄え」の減少に使われる語。"
+        },
+        {
+          "type": "single",
+          "q": "to move slowly through a substance, such as into soil",
+          "opts": [
+            "seep",
+            "leak",
+            "rush"
+          ],
+          "ans": "seep",
+          "note": "U4 L.16, L.40 \"seep down into the ground\" / \"seeps into aquifers\"。"
+        },
+        {
+          "type": "single",
+          "q": "to cause something to start happening",
+          "opts": [
+            "trigger",
+            "threaten",
+            "inject"
+          ],
+          "ans": "trigger",
+          "note": "U4 L.38 \"may even be triggering small earthquakes\"。"
+        },
+        {
+          "type": "single",
+          "q": "very small or not enough",
+          "opts": [
+            "meager",
+            "arid",
+            "precious"
+          ],
+          "ans": "meager",
+          "note": "U4 L.8-9 \"the meager 1.2 percent\"。"
+        },
+        {
+          "type": "single",
+          "q": "a large area of flat land with few trees",
+          "opts": [
+            "a plain",
+            "a wetland",
+            "a gap"
+          ],
+          "ans": "a plain",
+          "note": "U4 L.10-11 \"under mountains, plains and even deserts\"。"
+        },
+        {
+          "type": "single",
+          "q": "an empty space or hole in the middle of something",
+          "opts": [
+            "a gap",
+            "a pore",
+            "a spring"
+          ],
+          "ans": "a gap",
+          "note": "U4 L.11 \"Tiny gaps between rocks and soil grains\"。"
+        },
+        {
+          "type": "single",
+          "q": "to be in a hidden place, often for something bad",
+          "opts": [
+            "lurk",
+            "seep",
+            "dwindle"
+          ],
+          "ans": "lurk",
+          "note": "U4 L.10 \"It lurks under mountains, plains and even deserts\"。"
+        },
+        {
+          "type": "single",
+          "q": "to become smaller in size (used for an aquifer itself)",
+          "opts": [
+            "shrink",
+            "dwindle",
+            "discard"
+          ],
+          "ans": "shrink",
+          "note": "U4 L.33-34 \"aquifers are shrinking\"。"
+        },
+        {
+          "type": "single",
+          "q": "to be likely to cause harm or damage",
+          "opts": [
+            "threaten",
+            "trigger",
+            "pollute"
+          ],
+          "ans": "threaten",
+          "note": "U4 L.36 \"threatening freshwater ecosystems\"。"
+        },
+        {
+          "type": "single",
+          "q": "to put liquid into something, often with force",
+          "opts": [
+            "inject",
+            "extract",
+            "purify"
+          ],
+          "ans": "inject",
+          "note": "U4 L.41 \"chemicals that are injected underground\"。"
+        },
+        {
+          "type": "single",
+          "q": "to throw something away",
+          "opts": [
+            "discard",
+            "extract",
+            "purify"
+          ],
+          "ans": "discard",
+          "note": "U4 L.43 \"discarded devices\"。"
+        },
+        {
+          "type": "single",
+          "q": "to make something clean and free of harmful substances",
+          "opts": [
+            "purify",
+            "pollute",
+            "discard"
+          ],
+          "ans": "purify",
+          "note": "U4 L.45 \"finding new ways to purify groundwater\"。"
+        },
+        {
+          "type": "single",
+          "q": "a hydraulic process that injects chemicals underground to release oil or gas",
+          "opts": [
+            "fracking",
+            "mining",
+            "sanitation"
+          ],
+          "ans": "fracking",
+          "note": "U4 L.42 \"a process called fracking\"。"
+        },
+        {
+          "type": "single",
+          "q": "a chemical element that can pollute groundwater from farming or mining",
+          "opts": [
+            "arsenic",
+            "sewage",
+            "chlorine"
+          ],
+          "ans": "arsenic",
+          "note": "U4 L.40 \"Arsenic from farming or mining seeps into aquifers\"。"
+        },
+        {
+          "type": "single",
+          "q": "the process of keeping places free from dirt by removing waste",
+          "opts": [
+            "sanitation",
+            "sewage",
+            "fracking"
+          ],
+          "ans": "sanitation",
+          "note": "U4 L.21 \"drinking, sanitation, watering crops\"。"
+        },
+        {
+          "type": "single",
+          "q": "waste water and waste materials carried away from homes and buildings",
+          "opts": [
+            "sewage",
+            "sanitation",
+            "arsenic"
+          ],
+          "ans": "sewage",
+          "note": "U4 L.43 \"discarded devices and sewage\"。"
+        },
+        {
+          "type": "single",
+          "q": "a carbon-based chemical that contains clusters of metal atoms and can trap and break down other compounds",
+          "opts": [
+            "a metal-organic framework",
+            "a nanowire",
+            "a triboelectric material"
+          ],
+          "ans": "a metal-organic framework",
+          "note": "U3 L.13-14 およびハンドアウトP8の説明どおり。"
+        },
+        {
+          "type": "single",
+          "q": "a very thin wire, generally with a diameter less than or equal to 100 nanometers",
+          "opts": [
+            "a nanowire",
+            "a metal-organic framework",
+            "conductive thread"
+          ],
+          "ans": "a nanowire",
+          "note": "U3 ハンドアウトP11の説明どおり (1 nm = 1×10⁻⁹ meter)。"
+        }
+      ]
+    },
+    {
+      "id": "def-input",
+      "no": "07",
+      "title": "Definition → 本文中の語（スペル入力・本番形式）",
+      "qs": [
+        {
+          "type": "input",
+          "q": "to be located in a particular place",
+          "ans": "lie",
+          "exact": true,
+          "note": "U4 L.3 \"freshwater lies underground\"。lieの原形で解答。layer(横たえる)の過去形lay と混同しないこと。"
+        },
+        {
+          "type": "input",
+          "q": "the usual weather conditions in a place",
+          "ans": "climate",
+          "exact": true,
+          "note": "U4 L.27 \"human-caused climate change\"。"
+        },
+        {
+          "type": "input",
+          "q": "plants grown for food, such as wheat, rice or vegetables",
+          "ans": "crops",
+          "exact": true,
+          "note": "U4 L.20-21 \"watering crops\"。"
+        },
+        {
+          "type": "input",
+          "q": "in a lower place; under something",
+          "ans": "beneath",
+          "exact": true,
+          "note": "U4 L.4 \"This stash beneath our feet\"。"
+        },
+        {
+          "type": "input",
+          "q": "the feeling of needing to drink something",
+          "ans": "thirst",
+          "exact": true,
+          "note": "U4 L.25 \"quenches the thirst of some 2 billion people\"。"
+        },
+        {
+          "type": "input",
+          "q": "to take out something, especially using force or effort",
+          "ans": "extract",
+          "exact": true,
+          "note": "U4 L.20, L.22 \"People extract groundwater ... extract more than 200 times\"。"
+        },
+        {
+          "type": "input",
+          "q": "very valuable or important",
+          "ans": "precious",
+          "exact": true,
+          "note": "U4 L.45 \"protect this precious resource\"。"
+        },
+        {
+          "type": "input",
+          "q": "to move or go somewhere quickly",
+          "ans": "rush",
+          "exact": true,
+          "note": "U4 L.30 \"rush straight into streams and storm drains\"。"
+        },
+        {
+          "type": "input",
+          "q": "to make something stronger or more extreme",
+          "ans": "intensify",
+          "exact": true,
+          "note": "U4 L.29 \"climate change may intensify storms\"。"
+        },
+        {
+          "type": "input",
+          "q": "the natural features of an area of land, such as whether it is flat, rocky, or uneven",
+          "ans": "terrain",
+          "exact": true,
+          "note": "U3 L.11 \"slippery or uneven terrain\"。"
+        },
+        {
+          "type": "input",
+          "q": "able to allow electricity to pass through easily",
+          "ans": "conductive",
+          "exact": true,
+          "note": "U3 L.42 \"stitched conductive thread into a t-shirt\"。"
+        },
+        {
+          "type": "input",
+          "q": "given magnetic properties, so as to attract iron or steel",
+          "ans": "magnetized",
+          "exact": true,
+          "note": "U3 L.44 \"threaded fabric with magnetized copper and silver\"。"
+        },
+        {
+          "type": "input",
+          "q": "a community of living things together with their environment",
+          "ans": "ecosystem",
+          "exact": true,
+          "note": "U4 L.36 \"threatening freshwater ecosystems\"。"
+        },
+        {
+          "type": "input",
+          "q": "the sale of goods in small quantities directly to consumers, as opposed to wholesale",
+          "ans": "retail",
+          "exact": true,
+          "note": "U3 L.48 \"hitting retail racks\"／ハンドアウトP24の対義語 wholesale。"
+        },
+        {
+          "type": "input",
+          "q": "a piece of soft material full of small holes that can soak up and hold liquid",
+          "ans": "sponge",
+          "exact": true,
+          "note": "U4 L.12 \"soak up and hold this water like a sponge\"。"
+        }
+      ]
+    },
+    {
+      "id": "handout-u3",
+      "no": "08",
+      "title": "ハンドアウトの発問 — Unit 3",
+      "qs": [
+        {
+          "type": "single",
+          "q": "\"while we're working out\" = while we're ( ).",
+          "opts": [
+            "exercising",
+            "relaxing",
+            "sleeping"
+          ],
+          "ans": "exercising",
+          "note": "ハンドアウトP5の書き込みどおり。"
+        },
+        {
+          "type": "single",
+          "q": "\"To impress ( ).\" （省略されている1語を補う）",
+          "opts": [
+            "others",
+            "ourselves",
+            "clothes"
+          ],
+          "ans": "others",
+          "note": "「他人を感心させるため」＝to impress others。ハンドアウトP5どおり。"
+        },
+        {
+          "type": "single",
+          "q": "\"To comfortably veg out on the couch\" = To ( ) on the couch.",
+          "opts": [
+            "relax",
+            "work",
+            "travel"
+          ],
+          "ans": "relax",
+          "note": "veg out = vegetateの短縮形で「のんびり過ごす」。ハンドアウトP5どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Expressing our unique sense of style is a means of ( ) communication.",
+          "opts": [
+            "non-verbal",
+            "written",
+            "formal"
+          ],
+          "ans": "non-verbal",
+          "note": "ハンドアウトP5「非言語コミュニケーションとしての手段」。"
+        },
+        {
+          "type": "single",
+          "q": "In \"our clothes could be doing even more,\" what does \"even\" emphasize?",
+          "opts": [
+            "a much greater degree (similar to \"much\" or \"far\")",
+            "how often something happens",
+            "a small, unimportant amount"
+          ],
+          "ans": "a much greater degree (similar to \"much\" or \"far\")",
+          "note": "ハンドアウトP6「ずっと、はるかに」cf. much, far, a lot, still。"
+        },
+        {
+          "type": "single",
+          "q": "According to the handout, \"even more\" specifically means clothes could become safer, ___, and more convenient.",
+          "opts": [
+            "comfier",
+            "cheaper",
+            "smaller"
+          ],
+          "ans": "comfier",
+          "note": "ハンドアウトP6：①安全②快適③便利。"
+        },
+        {
+          "type": "single",
+          "q": "Paragraph 2 exemplifies which kind of clothes?",
+          "opts": [
+            "safer clothes",
+            "comfier clothes",
+            "more convenient clothes"
+          ],
+          "ans": "safer clothes",
+          "note": "ハンドアウト見出し \"Paragraph 2 – exemplifying (safer) clothes\"。"
+        },
+        {
+          "type": "single",
+          "q": "How do the \"pop-out spikes\" actually work, according to Q7?",
+          "opts": [
+            "The sole stays flat when standing, but bends and stretches to form spikes that stick out when walking.",
+            "The spikes are always sticking out, even when standing still.",
+            "The spikes only appear when the shoes get wet."
+          ],
+          "ans": "The sole stays flat when standing, but bends and stretches to form spikes that stick out when walking.",
+          "note": "ハンドアウトQ7の書き込み：stays (flat) when someone stands. However, when s/he starts to (walk), the sole bends and stretches..."
+        },
+        {
+          "type": "single",
+          "q": "Paragraphs 3 and 4 both exemplify which kind of clothes?",
+          "opts": [
+            "comfier clothes",
+            "safer clothes",
+            "more convenient clothes"
+          ],
+          "ans": "comfier clothes",
+          "note": "ハンドアウト見出しParagraph 3・4ともに\"exemplifying (comfier) clothes\"。"
+        },
+        {
+          "type": "single",
+          "q": "\"On the flip side\" = On the ( ) hand.",
+          "opts": [
+            "other",
+            "same",
+            "flip"
+          ],
+          "ans": "other",
+          "note": "ハンドアウトQ13どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What contrast does paragraph 4 make with paragraph 3, according to Q13?",
+          "opts": [
+            "Paragraph 3's clothes keep body heat in, while paragraph 4's clothes let body heat escape.",
+            "Both paragraphs describe clothes that block sunlight.",
+            "Paragraph 3 is about shoes, and paragraph 4 is about gloves."
+          ],
+          "ans": "Paragraph 3's clothes keep body heat in, while paragraph 4's clothes let body heat escape.",
+          "note": "ハンドアウトQ13の書き込み：第3パラグラフは体温を保つ衣服、第4パラグラフは熱を逃がす衣服。"
+        },
+        {
+          "type": "single",
+          "q": "Fill in: \"Each tiny hole is small enough for visible light waves to ( ), and big enough for infrared waves to ( )( ) it.\"",
+          "opts": [
+            "be blocked / pass through",
+            "be reflected / bounce off",
+            "be absorbed / freeze"
+          ],
+          "ans": "be blocked / pass through",
+          "note": "ハンドアウトQ14どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the past participle of \"sew\" used in this unit?",
+          "opts": [
+            "sewn",
+            "sewed",
+            "sew"
+          ],
+          "ans": "sewn",
+          "note": "ハンドアウトP16の動詞活用確認：sew > sewed > sewn。"
+        },
+        {
+          "type": "single",
+          "q": "What is the past tense of \"dream\" used in this unit?",
+          "opts": [
+            "dreamt",
+            "dreamed only",
+            "drempt"
+          ],
+          "ans": "dreamt",
+          "note": "ハンドアウトの書き込み：dream-dreamt-dreamt。"
+        },
+        {
+          "type": "single",
+          "q": "What is the past tense of \"bend\"?",
+          "opts": [
+            "bent",
+            "bended",
+            "bound"
+          ],
+          "ans": "bent",
+          "note": "ハンドアウトの書き込み：bend-bent-bent。"
+        },
+        {
+          "type": "single",
+          "q": "Paragraph 5 exemplifies which kind of clothes?",
+          "opts": [
+            "more convenient clothes",
+            "safer clothes",
+            "comfier clothes"
+          ],
+          "ans": "more convenient clothes",
+          "note": "ハンドアウト見出し \"Part 2, Paragraph 5 – exemplifying (more convenient) clothes\"。"
+        },
+        {
+          "type": "single",
+          "q": "Choose the best phrase: \"Some researchers have [ ___ ] incorporating completely new functions into clothing.\"",
+          "opts": [
+            "come up with",
+            "been responsible for",
+            "given up"
+          ],
+          "ans": "come up with",
+          "note": "ハンドアウトQ15：come up with = ~を思いつく。"
+        },
+        {
+          "type": "single",
+          "q": "What are the two examples of \"completely new functions\" given in lines 31-34, according to Q17?",
+          "opts": [
+            "Flexible solar panels sewn into fabric that recharge devices, and fabric that harvests energy from a wearer’s motion.",
+            "Waterproof shoes and fireproof gloves.",
+            "Colored fabric and scented fabric."
+          ],
+          "ans": "Flexible solar panels sewn into fabric that recharge devices, and fabric that harvests energy from a wearer’s motion.",
+          "note": "ハンドアウトQ17の書き込み内容どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Fill the omitted words: \"can generate electricity when ( )( ) bent or flexed.\"",
+          "opts": [
+            "they are",
+            "it is",
+            "we are"
+          ],
+          "ans": "they are",
+          "note": "ハンドアウトQ20どおり（接続詞＋S+be動詞の省略）。"
+        },
+        {
+          "type": "single",
+          "q": "Fill the omitted words: \"which produce a charge when ( )( ) squeezed or twisted.\"",
+          "opts": [
+            "they are",
+            "it was",
+            "is"
+          ],
+          "ans": "they are",
+          "note": "ハンドアウトQ20どおり。"
+        },
+        {
+          "type": "single",
+          "q": "In \"a hands-free key or form of ID,\" what does \"or\" connect, according to Q22?",
+          "opts": [
+            "\"key\" and \"form of ID\"",
+            "\"hands-free\" and \"free\"",
+            "\"key\" and \"lock\""
+          ],
+          "ans": "\"key\" and \"form of ID\"",
+          "note": "ハンドアウトQ22：a hands-free (key) or a hands-free (form of ID)。"
+        },
+        {
+          "type": "single",
+          "q": "In \"far from hitting retail racks,\" what does \"hit\" mean here, according to Q23?",
+          "opts": [
+            "reach",
+            "attack",
+            "destroy"
+          ],
+          "ans": "reach",
+          "note": "ハンドアウトQ23の選択肢から reach が正解。"
+        },
+        {
+          "type": "single",
+          "q": "What is the antonym of \"retail\" given in the handout (P24)?",
+          "opts": [
+            "wholesale",
+            "discount",
+            "luxury"
+          ],
+          "ans": "wholesale",
+          "note": "ハンドアウトP24：retailの対義語は wholesale（卸売り）。"
+        }
+      ]
+    },
+    {
+      "id": "handout-u4",
+      "no": "09",
+      "title": "ハンドアウトの発問 — Unit 4",
+      "qs": [
+        {
+          "type": "single",
+          "q": "What does \"it\" refer to in line 2 of Unit 4 (\"How? ...\")?",
+          "opts": [
+            "walking over water",
+            "swimming",
+            "a miracle"
+          ],
+          "ans": "walking over water",
+          "note": "ハンドアウトQ1（Part1, Paragraph1）どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Complete the definition of \"groundwater\": \"Groundwater is ___ that ___.\"",
+          "opts": [
+            "liquid freshwater that lies underground",
+            "solid ice that floats on the ocean",
+            "salt water that fills the seas"
+          ],
+          "ans": "liquid freshwater that lies underground",
+          "note": "ハンドアウトQ2のitem/category/characteristics定義どおり。"
+        },
+        {
+          "type": "single",
+          "q": "About what percent of Earth's water is seawater?",
+          "opts": [
+            "about 97.5 percent",
+            "about 69 percent",
+            "about 30 percent"
+          ],
+          "ans": "about 97.5 percent",
+          "note": "ハンドアウトQ3：淡水が約2.5%なので海水は残り約97.5%。"
+        },
+        {
+          "type": "single",
+          "q": "\"the meager 1.2 percent\" = the small ( ) of 1.2 percent.",
+          "opts": [
+            "amount",
+            "number",
+            "percent"
+          ],
+          "ans": "amount",
+          "note": "ハンドアウトP4どおり。"
+        },
+        {
+          "type": "single",
+          "q": "\"Groundwater is [ hidden / made / lost ] under mountains, plains and even deserts.\" Which word matches \"lurks\" in meaning?",
+          "opts": [
+            "hidden",
+            "made",
+            "lost"
+          ],
+          "ans": "hidden",
+          "note": "ハンドアウトP5の丸どおり（lurk≡隠れている）。"
+        },
+        {
+          "type": "single",
+          "q": "Complete the definition of \"aquifers\": \"Aquifers are ___ that ___.\"",
+          "opts": [
+            "buried bodies of water that are held in tiny gaps between rocks and soil grains",
+            "man-made tanks that store rainwater",
+            "rivers that flow above ground"
+          ],
+          "ans": "buried bodies of water that are held in tiny gaps between rocks and soil grains",
+          "note": "ハンドアウトQ6の定義どおり。"
+        },
+        {
+          "type": "single",
+          "q": "\"Aquifers hold about 60 times the ( ) of water in the world’s lakes and rivers combined.\"",
+          "opts": [
+            "amount",
+            "number",
+            "percent"
+          ],
+          "ans": "amount",
+          "note": "ハンドアウトP7どおり（名詞を使った比較表現）。"
+        },
+        {
+          "type": "single",
+          "q": "According to Paragraph 4 of the handout, what happens to rain and melted snow?",
+          "opts": [
+            "They seep into the ground and can later surface again as springs, or feed lakes, rivers, and wetlands.",
+            "They evaporate completely and disappear.",
+            "They freeze permanently underground."
+          ],
+          "ans": "They seep into the ground and can later surface again as springs, or feed lakes, rivers, and wetlands.",
+          "note": "ハンドアウトP8の書き込み（雨・雪解け水→地下浸透→湧水・湖・川・湿地）どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What are people's purposes for using groundwater, according to Q9?",
+          "opts": [
+            "Drinking water, public sanitation, and watering crops",
+            "Only for generating electricity",
+            "Only for building roads"
+          ],
+          "ans": "Drinking water, public sanitation, and watering crops",
+          "note": "ハンドアウトQ9の書き込みどおり。"
+        },
+        {
+          "type": "single",
+          "q": "\"quenches the thirst\" = used as ( ) water.",
+          "opts": [
+            "drinking",
+            "cooking",
+            "bathing"
+          ],
+          "ans": "drinking",
+          "note": "ハンドアウトP10どおり。"
+        },
+        {
+          "type": "single",
+          "q": "In \"some 2 billion people,\" what does \"some\" mean here?",
+          "opts": [
+            "about",
+            "only",
+            "more than"
+          ],
+          "ans": "about",
+          "note": "ハンドアウトP10どおり。"
+        },
+        {
+          "type": "single",
+          "q": "About how many million people is \"half the population of the United States\"?",
+          "opts": [
+            "about 170 million",
+            "about 340 million",
+            "about 70 million"
+          ],
+          "ans": "about 170 million",
+          "note": "ハンドアウトP11どおり。"
+        },
+        {
+          "type": "single",
+          "q": "The U.S. population is currently about 340 million, the third largest after which two countries?",
+          "opts": [
+            "India and China",
+            "Russia and Brazil",
+            "Indonesia and Nigeria"
+          ],
+          "ans": "India and China",
+          "note": "ハンドアウトP11どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What does the \"As\" at the beginning of paragraph 6 mean, according to P12?",
+          "opts": [
+            "as / while (~するにつれて)",
+            "because",
+            "although"
+          ],
+          "ans": "as / while (~するにつれて)",
+          "note": "ハンドアウトP12どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What effect does \"heavier rain\" have on groundwater, according to Q13?",
+          "opts": [
+            "Heavy rain rushes straight into rivers and storm drains rather than soaking into the ground, so there may be less groundwater.",
+            "Heavy rain always increases the amount of groundwater.",
+            "Heavy rain has no effect on groundwater at all."
+          ],
+          "ans": "Heavy rain rushes straight into rivers and storm drains rather than soaking into the ground, so there may be less groundwater.",
+          "note": "ハンドアウトQ13の書き込みどおり。"
+        },
+        {
+          "type": "single",
+          "q": "What do satellite data show about 21 of Earth's 37 biggest aquifers, according to P14?",
+          "opts": [
+            "They are getting smaller (shrinking).",
+            "They are completely dry.",
+            "They are growing larger."
+          ],
+          "ans": "They are getting smaller (shrinking).",
+          "note": "ハンドアウトP14どおり。"
+        },
+        {
+          "type": "single",
+          "q": "According to the handout, how should numbers at the beginning of a sentence be written?",
+          "opts": [
+            "spelled out in words (e.g. Twenty-one)",
+            "always written as digits",
+            "left blank"
+          ],
+          "ans": "spelled out in words (e.g. Twenty-one)",
+          "note": "ハンドアウトP14の注記どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the implied subject of \"threatening\" in \"...threatening freshwater ecosystems,\" according to Q15?",
+          "opts": [
+            "the whole preceding situation (groundwater stores holding less water)",
+            "the rivers themselves",
+            "the satellites"
+          ],
+          "ans": "the whole preceding situation (groundwater stores holding less water)",
+          "note": "ハンドアウトQ15どおり（直前の内容全体）。"
+        },
+        {
+          "type": "single",
+          "q": "In \"sucking the ground dry,\" what is the grammatical role of \"dry,\" according to Q16?",
+          "opts": [
+            "It is the complement of \"the ground\" (SVOC), not the object of \"sucking.\"",
+            "It is the object of \"sucking.\"",
+            "It is an adverb modifying \"sucking.\""
+          ],
+          "ans": "It is the complement of \"the ground\" (SVOC), not the object of \"sucking.\"",
+          "note": "ハンドアウトQ16どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Which word has a meaning similar to \"trigger\" in this context, according to Q16?",
+          "opts": [
+            "causing",
+            "stopping",
+            "ignoring"
+          ],
+          "ans": "causing",
+          "note": "ハンドアウトQ16どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What are the three factors of human activity that pollute groundwater, according to Q17?",
+          "opts": [
+            "Arsenic from farming/mining; chemicals injected underground during fracking; electronic waste and sewage from discarded devices",
+            "Only rainfall and wind",
+            "Only volcanic ash"
+          ],
+          "ans": "Arsenic from farming/mining; chemicals injected underground during fracking; electronic waste and sewage from discarded devices",
+          "note": "ハンドアウトQ17の書き込みどおり。"
+        },
+        {
+          "type": "single",
+          "q": "Why may demand for groundwater rise, according to Q2 of the handout?",
+          "opts": [
+            "Because human-caused climate change dries out parts of the planet.",
+            "Because more oil is being extracted.",
+            "Because Earth's population is decreasing."
+          ],
+          "ans": "Because human-caused climate change dries out parts of the planet.",
+          "note": "ハンドアウトQ2どおり。"
+        }
+      ]
+    },
+    {
+      "id": "numbers",
+      "no": "10",
+      "title": "数値・事実",
+      "qs": [
+        {
+          "type": "single",
+          "q": "About what percent of Earth's water is freshwater?",
+          "opts": [
+            "about 2.5 percent",
+            "about 25 percent",
+            "about 50 percent"
+          ],
+          "ans": "about 2.5 percent",
+          "note": "U4 L.6-7。"
+        },
+        {
+          "type": "single",
+          "q": "About what percent of Earth’s water is therefore seawater?",
+          "opts": [
+            "about 97.5 percent",
+            "about 69 percent",
+            "about 30 percent"
+          ],
+          "ans": "about 97.5 percent",
+          "note": "淡水約2.5%の残りが海水。"
+        },
+        {
+          "type": "single",
+          "q": "Of Earth's freshwater, about what percent is frozen in glaciers and ice caps?",
+          "opts": [
+            "nearly 69 percent",
+            "about 30 percent",
+            "the meager 1.2 percent"
+          ],
+          "ans": "nearly 69 percent",
+          "note": "U4 L.7。"
+        },
+        {
+          "type": "single",
+          "q": "Of Earth's freshwater, about what percent is groundwater?",
+          "opts": [
+            "about 30 percent",
+            "nearly 69 percent",
+            "the meager 1.2 percent"
+          ],
+          "ans": "about 30 percent",
+          "note": "U4 L.8。"
+        },
+        {
+          "type": "single",
+          "q": "What percent of freshwater flows through rivers and fills lakes?",
+          "opts": [
+            "the meager 1.2 percent",
+            "about 12 percent",
+            "about 21 percent"
+          ],
+          "ans": "the meager 1.2 percent",
+          "note": "U4 L.8-9。"
+        },
+        {
+          "type": "single",
+          "q": "How much water do Earth's aquifers hold, compared to the world's lakes and rivers combined?",
+          "opts": [
+            "about 60 times as much",
+            "about 25 times as much",
+            "about 200 times as much"
+          ],
+          "ans": "about 60 times as much",
+          "note": "U4 L.13-14。教科書の数字どおり。"
+        },
+        {
+          "type": "single",
+          "q": "How much groundwater do people extract from Earth every year, compared to oil?",
+          "opts": [
+            "more than 200 times as much",
+            "about 60 times as much",
+            "about twice as much"
+          ],
+          "ans": "more than 200 times as much",
+          "note": "U4 L.22-23。"
+        },
+        {
+          "type": "single",
+          "q": "About how many people worldwide rely on groundwater to quench their thirst?",
+          "opts": [
+            "some 2 billion people",
+            "some 2 million people",
+            "some 20 billion people"
+          ],
+          "ans": "some 2 billion people",
+          "note": "U4 L.25。"
+        },
+        {
+          "type": "single",
+          "q": "What portion of the population of the United States relies on groundwater for drinking, according to the passage?",
+          "opts": [
+            "half",
+            "a quarter",
+            "nearly all"
+          ],
+          "ans": "half",
+          "note": "U4 L.25-26。"
+        },
+        {
+          "type": "single",
+          "q": "About how many million Americans does \"half the population of the United States\" represent?",
+          "opts": [
+            "about 170 million",
+            "about 340 million",
+            "about 70 million"
+          ],
+          "ans": "about 170 million",
+          "note": "ハンドアウトP11：米国人口約340万人→約170万人。"
+        },
+        {
+          "type": "single",
+          "q": "The U.S. population (about 340 million) is the third largest in the world, after which two countries?",
+          "opts": [
+            "India and China",
+            "Russia and Brazil",
+            "Indonesia and Nigeria"
+          ],
+          "ans": "India and China",
+          "note": "ハンドアウトP11どおり。"
+        },
+        {
+          "type": "single",
+          "q": "How many of Earth's 37 biggest aquifers are shrinking, according to satellite data?",
+          "opts": [
+            "21 of the 37 biggest aquifers",
+            "all 37 of the biggest aquifers",
+            "12 of the 37 biggest aquifers"
+          ],
+          "ans": "21 of the 37 biggest aquifers",
+          "note": "U4 L.33-34。"
+        },
+        {
+          "type": "single",
+          "q": "Where is groundwater found, according to the passage?",
+          "opts": [
+            "under mountains, plains, and even deserts",
+            "only under the ocean floor",
+            "only near the equator"
+          ],
+          "ans": "under mountains, plains, and even deserts",
+          "note": "U4 L.10-11。"
+        },
+        {
+          "type": "single",
+          "q": "Where are the most dried-out aquifers found?",
+          "opts": [
+            "near big cities, farms, or arid regions",
+            "in the North and South Poles",
+            "deep in untouched rainforests"
+          ],
+          "ans": "near big cities, farms, or arid regions",
+          "note": "U4 L.34-35。"
+        },
+        {
+          "type": "single",
+          "q": "In which U.S. state might sucking the ground dry be triggering small earthquakes?",
+          "opts": [
+            "California",
+            "Texas",
+            "Florida"
+          ],
+          "ans": "California",
+          "note": "U4 L.37-38。"
+        },
+        {
+          "type": "single",
+          "q": "Which three factors does the passage mention as polluting groundwater?",
+          "opts": [
+            "arsenic from farming/mining, chemicals injected during fracking, and e-waste/sewage from discarded devices",
+            "only acid rain and volcanic ash",
+            "only plastic bottles and car exhaust"
+          ],
+          "ans": "arsenic from farming/mining, chemicals injected during fracking, and e-waste/sewage from discarded devices",
+          "note": "U4 L.40-43。"
+        },
+        {
+          "type": "single",
+          "q": "How many words is the Unit 3 reading passage?",
+          "opts": [
+            "475 words",
+            "425 words",
+            "500 words"
+          ],
+          "ans": "475 words",
+          "note": "教科書 p.22 \"(475 words)\" 表記どおり。"
+        },
+        {
+          "type": "single",
+          "q": "How many words is the Unit 4 reading passage?",
+          "opts": [
+            "425 words",
+            "475 words",
+            "400 words"
+          ],
+          "ans": "425 words",
+          "note": "教科書 p.29 \"(425 words)\" 表記どおり。"
+        },
+        {
+          "type": "single",
+          "q": "In the Unit 3 experiment, what did stitching conductive thread into a t-shirt turn it into?",
+          "opts": [
+            "an antenna that could send signals to a smartphone",
+            "a solar panel",
+            "a pair of headphones"
+          ],
+          "ans": "an antenna that could send signals to a smartphone",
+          "note": "U3 L.42-43。"
+        },
+        {
+          "type": "single",
+          "q": "The teacher noted that 30% ÷ 1.2% actually calculates to about how many times, even though the textbook itself says \"60 times\"?",
+          "opts": [
+            "about 25 times",
+            "about 60 times",
+            "about 100 times"
+          ],
+          "ans": "about 25 times",
+          "note": "教科書の本文は \"60 times\" のまま出題する。教員スライドの指摘（計算上は約25倍）は補足知識として解説にのみ記す。"
+        }
+      ]
+    },
+    {
+      "id": "debate",
+      "no": "11",
+      "title": "Debate",
+      "qs": [
+        {
+          "type": "sort",
+          "q": "Put the general flow of a debate in the correct order. (Note: only the rebuttal stage starts with the negative side.)",
+          "items": [
+            "Affirmative Constructive Speech",
+            "Negative Constructive Speech",
+            "Strategy Time (1st)",
+            "Negative Rebuttal Speech",
+            "Affirmative Rebuttal Speech",
+            "Strategy Time (2nd)",
+            "Affirmative Summary Speech",
+            "Negative Summary Speech",
+            "Judgement"
+          ],
+          "ans": [
+            "Affirmative Constructive Speech",
+            "Negative Constructive Speech",
+            "Strategy Time (1st)",
+            "Negative Rebuttal Speech",
+            "Affirmative Rebuttal Speech",
+            "Strategy Time (2nd)",
+            "Affirmative Summary Speech",
+            "Negative Summary Speech",
+            "Judgement"
+          ],
+          "note": "Debate #1の図どおり。立論と第二反駁・まとめは「肯定側→否定側」の順だが、第一反駁だけは「否定側→肯定側」の順で始まる（引っかけポイント）。"
+        },
+        {
+          "type": "sort",
+          "q": "Put the three steps of a Constructive Speech (立論) in the correct order.",
+          "items": [
+            "State the team’s position clearly",
+            "Give specific evidence for the claim",
+            "Restate the team’s position once again"
+          ],
+          "ans": [
+            "State the team’s position clearly",
+            "Give specific evidence for the claim",
+            "Restate the team’s position once again"
+          ],
+          "note": "Debate #1：①チームの立場を明確に述べる ②主張の根拠を具体的に述べる ③自分たちの立場をもう一度述べる。"
+        },
+        {
+          "type": "sort",
+          "q": "Put the three steps of a Rebuttal Speech (第一反駁) in the correct order.",
+          "items": [
+            "Summarize the other team’s argument",
+            "Begin the rebuttal",
+            "Restate the team’s position again"
+          ],
+          "ans": [
+            "Summarize the other team’s argument",
+            "Begin the rebuttal",
+            "Restate the team’s position again"
+          ],
+          "note": "Debate #1：①まず相手チームの主張を要約する ②反論を開始する ③自分たちの立場を再度主張する。"
+        },
+        {
+          "type": "single",
+          "q": "What is a debate?",
+          "opts": [
+            "A contest-style discussion in which two teams, the affirmative side and the negative side, argue about a topic",
+            "A casual chat between friends about their opinions",
+            "A written essay submitted for grading"
+          ],
+          "ans": "A contest-style discussion in which two teams, the affirmative side and the negative side, argue about a topic",
+          "note": "Debate #1の定義どおり。"
+        },
+        {
+          "type": "single",
+          "q": "How is a team's side (affirmative or negative) usually decided?",
+          "opts": [
+            "By something like drawing lots, regardless of the speakers' own opinions",
+            "Each speaker chooses whichever side they personally agree with",
+            "The teacher assigns sides based on the students' grades"
+          ],
+          "ans": "By something like drawing lots, regardless of the speakers' own opinions",
+          "note": "「自分の意見とは関係なく、クジなどで担当チームが決まる」とある。"
+        },
+        {
+          "type": "single",
+          "q": "What determines which team wins a debate?",
+          "opts": [
+            "Convincing the judge with a persuasive argument",
+            "Speaking the loudest",
+            "Using the most difficult vocabulary"
+          ],
+          "ans": "Convincing the judge with a persuasive argument",
+          "note": "「ジャッジを納得させた方が勝ちとなる」とある。"
+        },
+        {
+          "type": "single",
+          "q": "What is the main point (ポイント) of debate, according to the handout?",
+          "opts": [
+            "How persuasive the argument is",
+            "How angry a speaker can get",
+            "How long a speaker can talk"
+          ],
+          "ans": "How persuasive the argument is",
+          "note": "「どれだけ説得力のある議論ができるか」とある。"
+        },
+        {
+          "type": "single",
+          "q": "What is the English term for 肯定側?",
+          "opts": [
+            "the affirmative side",
+            "the negative side",
+            "the neutral side"
+          ],
+          "ans": "the affirmative side",
+          "note": "Debate #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the English term for 否定側?",
+          "opts": [
+            "the negative side",
+            "the affirmative side",
+            "the judge side"
+          ],
+          "ans": "the negative side",
+          "note": "Debate #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the English term for 審判 (judge)?",
+          "opts": [
+            "Judge",
+            "Referee",
+            "Chairperson"
+          ],
+          "ans": "Judge",
+          "note": "Debate #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the English term for 立論?",
+          "opts": [
+            "Constructive Speech",
+            "Rebuttal Speech",
+            "Summary Speech"
+          ],
+          "ans": "Constructive Speech",
+          "note": "Debate #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the English term for 第一反駁?",
+          "opts": [
+            "Rebuttal Speech",
+            "Constructive Speech",
+            "Summary Speech"
+          ],
+          "ans": "Rebuttal Speech",
+          "note": "Debate #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the English term for 第二反駁・まとめ?",
+          "opts": [
+            "Summary Speech",
+            "Rebuttal Speech",
+            "Constructive Speech"
+          ],
+          "ans": "Summary Speech",
+          "note": "Debate #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is the English term for 判定?",
+          "opts": [
+            "Judgement",
+            "Rebuttal",
+            "Strategy Time"
+          ],
+          "ans": "Judgement",
+          "note": "Debate #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Which side goes first in the Constructive Speech (立論)?",
+          "opts": [
+            "The affirmative side",
+            "The negative side",
+            "Whichever side is ready first"
+          ],
+          "ans": "The affirmative side",
+          "note": "「肯定側→否定側」の順。"
+        },
+        {
+          "type": "single",
+          "q": "Which side goes first in the Rebuttal Speech (第一反駁)?",
+          "opts": [
+            "The negative side",
+            "The affirmative side",
+            "Both sides speak at the same time"
+          ],
+          "ans": "The negative side",
+          "note": "「反駁だけ否定側からスタートする」引っかけポイント。"
+        },
+        {
+          "type": "single",
+          "q": "Which side goes first in the Summary Speech (第二反駁・まとめ)?",
+          "opts": [
+            "The affirmative side",
+            "The negative side",
+            "The judge decides"
+          ],
+          "ans": "The affirmative side",
+          "note": "「肯定側→否定側」の順に戻る。"
+        },
+        {
+          "type": "single",
+          "q": "About how long is each side's Constructive Speech, including Q&A?",
+          "opts": [
+            "about 5 minutes",
+            "about 2 minutes",
+            "about 10 minutes"
+          ],
+          "ans": "about 5 minutes",
+          "note": "Debate #1の表どおり。"
+        },
+        {
+          "type": "single",
+          "q": "About how long is each side's Rebuttal Speech, including Q&A?",
+          "opts": [
+            "about 5 minutes",
+            "about 2 minutes",
+            "about 1 minute"
+          ],
+          "ans": "about 5 minutes",
+          "note": "Debate #1の表どおり。"
+        },
+        {
+          "type": "single",
+          "q": "About how long is each side's Summary Speech?",
+          "opts": [
+            "about 2 minutes",
+            "about 5 minutes",
+            "about 10 minutes"
+          ],
+          "ans": "about 2 minutes",
+          "note": "Debate #1の表どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What should be done first in a Constructive Speech?",
+          "opts": [
+            "Clearly state the team's position",
+            "Summarize the opponent's argument",
+            "Ask the judge a question"
+          ],
+          "ans": "Clearly state the team's position",
+          "note": "Debate #1の①ステップ1。"
+        },
+        {
+          "type": "single",
+          "q": "What is the second step of a Constructive Speech?",
+          "opts": [
+            "Give specific evidence for the claim",
+            "Apologize to the other team",
+            "Restate the position for the last time"
+          ],
+          "ans": "Give specific evidence for the claim",
+          "note": "Debate #1の①ステップ2。"
+        },
+        {
+          "type": "single",
+          "q": "What is the final step of a Constructive Speech?",
+          "opts": [
+            "Restate the team's position once again",
+            "Introduce a brand-new argument",
+            "Ask for a recess"
+          ],
+          "ans": "Restate the team's position once again",
+          "note": "Debate #1の①ステップ3。"
+        },
+        {
+          "type": "single",
+          "q": "What should be done first in a Rebuttal Speech?",
+          "opts": [
+            "Summarize the other team's argument",
+            "State a completely new claim",
+            "Thank the judge"
+          ],
+          "ans": "Summarize the other team's argument",
+          "note": "Debate #1の②ステップ1。"
+        },
+        {
+          "type": "single",
+          "q": "What comes right after summarizing the opponent's argument in a Rebuttal Speech?",
+          "opts": [
+            "Begin the rebuttal (start refuting)",
+            "End the debate immediately",
+            "Restate the position for the first time"
+          ],
+          "ans": "Begin the rebuttal (start refuting)",
+          "note": "Debate #1の②ステップ2。"
+        },
+        {
+          "type": "single",
+          "q": "What is the final step of a Rebuttal Speech?",
+          "opts": [
+            "Restate the team's position again",
+            "Introduce a new team member",
+            "Apologize for any mistakes"
+          ],
+          "ans": "Restate the team's position again",
+          "note": "Debate #1の②ステップ3。"
+        },
+        {
+          "type": "single",
+          "q": "What is the purpose of a Summary Speech?",
+          "opts": [
+            "To summarize each side's arguments while arguing that your own team's position is superior",
+            "To introduce the topic for the first time",
+            "To ask the other team questions"
+          ],
+          "ans": "To summarize each side's arguments while arguing that your own team's position is superior",
+          "note": "Debate #1の③の説明どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What kind of thinking does debate mainly require?",
+          "opts": [
+            "Logical thinking",
+            "Emotional appeal",
+            "Memorization"
+          ],
+          "ans": "Logical thinking",
+          "note": "「ディベートは論理的思考を求められる活動」とある。"
+        },
+        {
+          "type": "single",
+          "q": "What is debate NOT about, according to the notes?",
+          "opts": [
+            "Verbally defeating (言い負かす) the opponent",
+            "Being polite to the judge",
+            "Following time limits"
+          ],
+          "ans": "Verbally defeating (言い負かす) the opponent",
+          "note": "「相手を言い負かすのではなく」と明記されている。"
+        },
+        {
+          "type": "single",
+          "q": "What should be used to persuade the third party (the judge)?",
+          "opts": [
+            "Objective data and reasons",
+            "Loud shouting and repetition",
+            "Personal insults"
+          ],
+          "ans": "Objective data and reasons",
+          "note": "「客観的なデータや理由を使って...説得する論理的なゲーム」とある。"
+        },
+        {
+          "type": "single",
+          "q": "What else is emphasized as important during a debate, besides winning?",
+          "opts": [
+            "Respecting teammates' and the opposing team's opinions",
+            "Ignoring the other team completely",
+            "Speaking only in the judge's native language"
+          ],
+          "ans": "Respecting teammates' and the opposing team's opinions",
+          "note": "「チームメイトや相手チームの意見を尊重することも大切」とある。"
+        },
+        {
+          "type": "single",
+          "q": "What is emphasized about teamwork in debate?",
+          "opts": [
+            "The whole team should work together on the topic",
+            "Only the strongest speaker should talk",
+            "Each member should argue a different topic"
+          ],
+          "ans": "The whole team should work together on the topic",
+          "note": "「チーム一丸となって論題に取り組むことが大切」とある。"
+        },
+        {
+          "type": "single",
+          "q": "What is a fact, according to the handout?",
+          "opts": [
+            "Something which can be proven to be true or correct",
+            "Something everyone agrees with",
+            "Something that sounds confident"
+          ],
+          "ans": "Something which can be proven to be true or correct",
+          "note": "How to Express Your Opinions #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "What is an opinion, according to the handout?",
+          "opts": [
+            "What someone thinks or believes, which cannot be proved true or false",
+            "A statement backed by scientific evidence",
+            "A fact stated politely"
+          ],
+          "ans": "What someone thinks or believes, which cannot be proved true or false",
+          "note": "How to Express Your Opinions #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Which words describe a \"fact,\" according to the handout?",
+          "opts": [
+            "evidence-supported / unarguable",
+            "personal / emotional",
+            "arguable / debatable"
+          ],
+          "ans": "evidence-supported / unarguable",
+          "note": "How to Express Your Opinions #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Which words describe an \"opinion,\" according to the handout?",
+          "opts": [
+            "personal / arguable / emotional",
+            "evidence-supported / unarguable",
+            "official / undisputable"
+          ],
+          "ans": "personal / arguable / emotional",
+          "note": "How to Express Your Opinions #1どおり。"
+        },
+        {
+          "type": "single",
+          "q": "Why is \"It’s raining now\" considered a fact in Example A?",
+          "opts": [
+            "Because you can look outside and check that it is true",
+            "Because everyone likes rain",
+            "Because it is written in a book"
+          ],
+          "ans": "Because you can look outside and check that it is true",
+          "note": "How to Express Your Opinions #1のExample Aどおり。"
+        },
+        {
+          "type": "single",
+          "q": "Why is \"It’s going to rain later\" considered an opinion in Example B?",
+          "opts": [
+            "Because you think it will rain, but you can't be sure",
+            "Because rain is always unpredictable by science",
+            "Because it already happened"
+          ],
+          "ans": "Because you think it will rain, but you can't be sure",
+          "note": "How to Express Your Opinions #1のExample Bどおり。"
+        },
+        {
+          "type": "single",
+          "q": "Which modal verbs are recommended to avoid sounding too certain when stating an opinion?",
+          "opts": [
+            "may, can",
+            "must, shall",
+            "will, would"
+          ],
+          "ans": "may, can",
+          "note": "「断定することを避けるためにmay, canなどの助動詞を使うとよい」とある。"
+        },
+        {
+          "type": "single",
+          "q": "Which phrase is best for stating a guess with little evidence, according to the handout?",
+          "opts": [
+            "I guess that ...",
+            "I am sure that ...",
+            "I am certain that ..."
+          ],
+          "ans": "I guess that ...",
+          "note": "「根拠があまりなく推測する場合」に使う表現として挙げられている。"
+        }
+      ]
+    },
+    {
+      "id": "factopinion",
+      "no": "12",
+      "title": "fact / opinion 判定",
+      "qs": [
+        {
+          "type": "single",
+          "q": "Shohei Ohtani is the greatest baseball player of all time.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "opinion",
+          "note": "Exercise 1-1。個人の評価であり証明できない。"
+        },
+        {
+          "type": "single",
+          "q": "She woke up at 7:00 this morning.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "fact",
+          "note": "Exercise 1-2。確認できる出来事。"
+        },
+        {
+          "type": "single",
+          "q": "He speaks English very well.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "opinion",
+          "note": "Exercise 1-3。「よく話せる」は人によって基準が異なる。"
+        },
+        {
+          "type": "single",
+          "q": "The blue whale is the largest mammal on Earth.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "fact",
+          "note": "Exercise 1-4。科学的に証明できる。"
+        },
+        {
+          "type": "single",
+          "q": "Mint chocolate chip ice cream tastes terrible.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "opinion",
+          "note": "Exercise 1-5。味の好みは個人差がある。"
+        },
+        {
+          "type": "single",
+          "q": "Water covers about 71 percent of Earth's surface.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "fact",
+          "note": "証明可能な地理的データ。"
+        },
+        {
+          "type": "single",
+          "q": "Chocolate ice cream is better than vanilla ice cream.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "opinion",
+          "note": "好みの比較であり証明できない。"
+        },
+        {
+          "type": "single",
+          "q": "Tokyo is the capital of Japan.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "fact",
+          "note": "公的に定義された事実。"
+        },
+        {
+          "type": "single",
+          "q": "Winter is the best season of the year.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "opinion",
+          "note": "「最高の季節」は人によって異なる。"
+        },
+        {
+          "type": "single",
+          "q": "Mount Fuji is the tallest mountain in Japan.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "fact",
+          "note": "証明可能な地理的データ。"
+        },
+        {
+          "type": "single",
+          "q": "Reading books is more enjoyable than watching movies.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "opinion",
+          "note": "楽しさの比較は個人の感じ方による。"
+        },
+        {
+          "type": "single",
+          "q": "The human body is made up of about 60 percent water.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "fact",
+          "note": "科学的に証明できるデータ。"
+        },
+        {
+          "type": "single",
+          "q": "Cats make better pets than dogs.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "opinion",
+          "note": "ペットの優劣は個人の好みによる。"
+        },
+        {
+          "type": "single",
+          "q": "Groundwater is found under mountains, plains, and deserts.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "fact",
+          "note": "U4本文で述べられている検証可能な事実。"
+        },
+        {
+          "type": "single",
+          "q": "Smart clothing will completely replace ordinary clothing within ten years.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "opinion",
+          "note": "将来の予測であり、現時点では証明できない。"
+        },
+        {
+          "type": "single",
+          "q": "Triboelectric materials can generate electricity when bent or flexed.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "fact",
+          "note": "U3本文で述べられている検証可能な事実。"
+        },
+        {
+          "type": "single",
+          "q": "English is a more difficult language to learn than Japanese.",
+          "opts": [
+            "fact",
+            "opinion"
+          ],
+          "ans": "opinion",
+          "note": "難易度の感じ方は学習者によって異なる。"
+        }
+      ]
+    }
+  ]
+}
