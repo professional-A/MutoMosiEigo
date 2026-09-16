@@ -304,8 +304,8 @@
     ],
     "applies_to": ["vocab"],
     "implication": "本番が単語を綴らせる形式（語彙テストのQ2）なら、練習も選択式だけで済ませず、必ず `type:\"input\"` で綴らせる練習を混ぜる。英語語彙テストでは `exact:true` を使い、派生語・綴り違いの取り違えをそのまま正解にしない。",
-    "caveat": "選択式練習が無駄というわけではなく、選択式テストへの転移には選択式練習で十分。産出テストがゴールのときだけ産出練習が必須になる。",
-    "implemented_in": ["js/quiz-engine.js", "tests/2026-4-zenki-matsu-eigo-vocabtest4/data.json", "tests/2026-4-zenki-matsu-eigo-step1-tango/data.json"],
+    "caveat": "選択式練習が無駄というわけではなく、選択式テストへの転移には選択式練習で十分。産出テストがゴールのときだけ産出練習が必須になる。武藤模試では手入力を採用しない方針（2026-09-17 利用者判断）。紙に書かせてから綴りの罠を含む選択肢で確認する形で代替。",
+    "implemented_in": [],
     "tags": ["vocab", "spelling", "production", "question-format"]
   }
 ]

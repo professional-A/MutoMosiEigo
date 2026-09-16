@@ -7,7 +7,7 @@
       "question": "試験まで日数が少ない現実的な状況で、何をどう出題・再出題すれば点と定着の両方が取れるか",
       "count": 20,
       "date": "2026-09-09",
-      "updated": "2026-09-17 — 産出（スペル）練習の必要性（productive-retrieval-needed-for-spelling）を追加"
+      "updated": "2026-09-17 — 産出（スペル）練習の必要性（productive-retrieval-needed-for-spelling）を追加。同日、利用者判断でinput不採用となり未実装に戻す"
     }
   ],
   "source_documents": [
@@ -151,6 +151,7 @@
     "equal-interval-is-fine-no-need-for-expanding",
     "pretesting-beats-posttesting",
     "spacing-beats-cramming-almost-always",
-    "cap-interval-at-exam-date"
+    "cap-interval-at-exam-date",
+    "productive-retrieval-needed-for-spelling"
   ]
 }
