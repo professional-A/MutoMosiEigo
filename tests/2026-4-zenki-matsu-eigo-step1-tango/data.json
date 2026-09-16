@@ -1,14 +1,14 @@
 {
-  "title": "科学技術英語Ⅰ ・ Step1 単語",
+  "title": "科学技術英語Ⅰ ・ Step1 単語帳",
   "eyebrow": "科学技術英語Ⅰ ・ 前期末試験",
-  "description": "Unit 3・Unit 4 の Word List 60語、Word Choice 20問（教科書そのまま＋別文脈）、教科書語注の重要語40語を、英→日・日→英・定義→語・綴り（記述）の各形式で練習する。最後にUnit 3/Unit 4を混ぜた設問で通しの想起練習をする。",
+  "description": "Unit 3・Unit 4 の Word List 60語（英→日・日→英）とWord Choice 20問を単語帳（フラッシュカード）形式で練習する。",
   "subject": "科学技術英語Ⅰ",
   "year": 2026,
   "grade": 4,
   "exam": "前期末試験",
   "storageKey": "mutou_eigo_zenkimatsu_step1_tango_v1",
   "pointsPerQ": 100,
-  "tip": "綴り問題（Unit 3綴り／Unit 4綴り）は「完全一致」でのみ正解になる。<b>currently</b> と書いて <b>current</b> の代わりにするような部分一致は不正解。空欄のまま採点しても不正解。",
+  "tip": "カードをタップすると裏面が表示される。「覚えた」を押すと進捗に加算される。試験前日のため計140枚に絞った。",
   "sections": [
     {
       "id": "u3-e2j",
@@ -16,364 +16,184 @@
       "title": "Unit 3 英→日",
       "qs": [
         {
-          "type": "single",
-          "q": "\"work out\" の意味は？",
-          "opts": [
-            "運動・トレーニングをする",
-            "布地、生地",
-            "埋め込む",
-            "増大する"
-          ],
-          "ans": "運動・トレーニングをする",
-          "note": "work out（p.v.）＝運動・トレーニングをする"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>work out</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>運動・トレーニングをする</b><br>to perform athletic exercises in order to improve your health or physical fitness"
         },
         {
-          "type": "single",
-          "q": "\"couch\" の意味は？",
-          "opts": [
-            "カウチ、ソファ",
-            "(上)塗り",
-            "電流",
-            "電荷、充電"
-          ],
-          "ans": "カウチ、ソファ",
-          "note": "couch（n）＝カウチ、ソファ"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>couch</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>カウチ、ソファ</b><br>a piece of furniture for seating from two to four people, typically in the form of a bench with a back"
         },
         {
-          "type": "single",
-          "q": "\"impress\" の意味は？",
-          "opts": [
-            "印象付ける",
-            "吸収する",
-            "縫い糸",
-            "(両側から強く～を)押しつぶす"
-          ],
-          "ans": "印象付ける",
-          "note": "impress（v）＝印象付ける"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>impress</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>印象付ける</b><br>to cause someone to feel admiration or interest"
         },
         {
-          "type": "single",
-          "q": "\"aim\" の意味は？",
-          "opts": [
-            "目指す、意図する",
-            "中和する",
-            "中が透けて見える",
-            "ねじ曲げる"
-          ],
-          "ans": "目指す、意図する",
-          "note": "aim（v）＝目指す、意図する"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>aim</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>目指す、意図する</b><br>to have a specified goal or purpose"
         },
         {
-          "type": "single",
-          "q": "\"harm\" の意味は？",
-          "opts": [
-            "危害",
-            "引っかける《米口語》",
-            "電気の差込口、コンセント",
-            "ひと揃いの衣服"
-          ],
-          "ans": "危害",
-          "note": "harm（n）＝危害"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>harm</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>危害</b><br>physical or mental damage or injury"
         },
         {
-          "type": "single",
-          "q": "\"feature\" の意味は？",
-          "opts": [
-            "〜を特徴づける、特徴とする",
-            "保護物",
-            "収集する、取り入れる",
-            "(針で)縫い合わせる"
-          ],
-          "ans": "〜を特徴づける、特徴とする",
-          "note": "feature（v）＝〜を特徴づける、特徴とする"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>feature</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>〜を特徴づける、特徴とする</b><br>to have or include someone or something as an important part"
         },
         {
-          "type": "single",
-          "q": "\"slippery\" の意味は？",
-          "opts": [
-            "滑りやすい",
-            "埋め込む",
-            "生成する、発生させる",
-            "銅"
-          ],
-          "ans": "滑りやすい",
-          "note": "slippery（a）＝滑りやすい"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>slippery</b> <span style=\"opacity:.65\">(a)</span>",
+          "back": "<b>滑りやすい</b><br>difficult to stand on, move on, or hold because of being smooth, wet, icy, etc."
         },
         {
-          "type": "single",
-          "q": "\"fabric\" の意味は？",
-          "opts": [
-            "布地、生地",
-            "電流",
-            "摩擦",
-            "新しく採り入れたもの"
-          ],
-          "ans": "布地、生地",
-          "note": "fabric（n）＝布地、生地"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>fabric</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>布地、生地</b><br>a cloth made by weaving, knitting, or felting fibers"
         },
         {
-          "type": "single",
-          "q": "\"coating\" の意味は？",
-          "opts": [
-            "(上)塗り",
-            "縫い糸",
-            "増大する",
-            "衣装ダンス、衣裳部屋"
-          ],
-          "ans": "(上)塗り",
-          "note": "coating（n）＝(上)塗り"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>coating</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>(上)塗り</b><br>a thin layer or covering of something"
         },
         {
-          "type": "single",
-          "q": "\"absorb\" の意味は？",
-          "opts": [
-            "吸収する",
-            "中が透けて見える",
-            "電荷、充電",
-            "運動・トレーニングをする"
-          ],
-          "ans": "吸収する",
-          "note": "absorb（v）＝吸収する"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>absorb</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>吸収する</b><br>to take in something such as a liquid in a natural or gradual way"
         },
         {
-          "type": "single",
-          "q": "\"neutralize\" の意味は？",
-          "opts": [
-            "中和する",
-            "電気の差込口、コンセント",
-            "(両側から強く～を)押しつぶす",
-            "カウチ、ソファ"
-          ],
-          "ans": "中和する",
-          "note": "neutralize（v）＝中和する"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>neutralize</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>中和する</b><br>to stop something from being effective or harmful"
         },
         {
-          "type": "single",
-          "q": "\"snag\" の意味は？",
-          "opts": [
-            "引っかける《米口語》",
-            "収集する、取り入れる",
-            "ねじ曲げる",
-            "印象付ける"
-          ],
-          "ans": "引っかける《米口語》",
-          "note": "snag（v）＝引っかける《米口語》"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>snag</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>引っかける《米口語》</b><br>to catch, capture, or get something or someone by quick action"
         },
         {
-          "type": "single",
-          "q": "\"shield\" の意味は？",
-          "opts": [
-            "保護物",
-            "生成する、発生させる",
-            "ひと揃いの衣服",
-            "目指す、意図する"
-          ],
-          "ans": "保護物",
-          "note": "shield（n）＝保護物"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>shield</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>保護物</b><br>something that defends or protects someone or something"
         },
         {
-          "type": "single",
-          "q": "\"embed\" の意味は？",
-          "opts": [
-            "埋め込む",
-            "摩擦",
-            "(針で)縫い合わせる",
-            "危害"
-          ],
-          "ans": "埋め込む",
-          "note": "embed（v）＝埋め込む"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>embed</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>埋め込む</b><br>to place or set something firmly in something else"
         },
         {
-          "type": "single",
-          "q": "\"current\" の意味は？",
-          "opts": [
-            "電流",
-            "増大する",
-            "銅",
-            "〜を特徴づける、特徴とする"
-          ],
-          "ans": "電流",
-          "note": "current（n）＝電流"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>current</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>電流</b><br>a flow of electricity"
         },
         {
-          "type": "single",
-          "q": "\"thread\" の意味は？",
-          "opts": [
-            "縫い糸",
-            "電荷、充電",
-            "新しく採り入れたもの",
-            "滑りやすい"
-          ],
-          "ans": "縫い糸",
-          "note": "thread（n）＝縫い糸"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>thread</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>縫い糸</b><br>a long, thin piece of cotton, silk, etc., used for sewing"
         },
         {
-          "type": "single",
-          "q": "\"see-through\" の意味は？",
-          "opts": [
-            "中が透けて見える",
-            "(両側から強く～を)押しつぶす",
-            "衣装ダンス、衣裳部屋",
-            "布地、生地"
-          ],
-          "ans": "中が透けて見える",
-          "note": "see-through（a）＝中が透けて見える"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>see-through</b> <span style=\"opacity:.65\">(a)</span>",
+          "back": "<b>中が透けて見える</b><br>able to be seen through; clear enough to allow light to pass through"
         },
         {
-          "type": "single",
-          "q": "\"outlet\" の意味は？",
-          "opts": [
-            "電気の差込口、コンセント",
-            "ねじ曲げる",
-            "運動・トレーニングをする",
-            "(上)塗り"
-          ],
-          "ans": "電気の差込口、コンセント",
-          "note": "outlet（n）＝電気の差込口、コンセント"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>outlet</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>電気の差込口、コンセント</b><br>a device in a wall into which an electric cord can be plugged in order to provide electricity for a lamp, television, etc."
         },
         {
-          "type": "single",
-          "q": "\"harvest\" の意味は？",
-          "opts": [
-            "収集する、取り入れる",
-            "ひと揃いの衣服",
-            "カウチ、ソファ",
-            "吸収する"
-          ],
-          "ans": "収集する、取り入れる",
-          "note": "harvest（v）＝収集する、取り入れる"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>harvest</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>収集する、取り入れる</b><br>to gather or collect something for use"
         },
         {
-          "type": "single",
-          "q": "\"generate\" の意味は？",
-          "opts": [
-            "生成する、発生させる",
-            "(針で)縫い合わせる",
-            "印象付ける",
-            "中和する"
-          ],
-          "ans": "生成する、発生させる",
-          "note": "generate（v）＝生成する、発生させる"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>generate</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>生成する、発生させる</b><br>to produce something"
         },
         {
-          "type": "single",
-          "q": "\"friction\" の意味は？",
-          "opts": [
-            "摩擦",
-            "銅",
-            "目指す、意図する",
-            "引っかける《米口語》"
-          ],
-          "ans": "摩擦",
-          "note": "friction（n）＝摩擦"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>friction</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>摩擦</b><br>the act of rubbing one thing against another"
         },
         {
-          "type": "single",
-          "q": "\"build up\" の意味は？",
-          "opts": [
-            "増大する",
-            "新しく採り入れたもの",
-            "危害",
-            "保護物"
-          ],
-          "ans": "増大する",
-          "note": "build up（p.v.）＝増大する"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>build up</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>増大する</b><br>to increase gradually in amount as time passes"
         },
         {
-          "type": "single",
-          "q": "\"charge\" の意味は？",
-          "opts": [
-            "電荷、充電",
-            "衣装ダンス、衣裳部屋",
-            "〜を特徴づける、特徴とする",
-            "埋め込む"
-          ],
-          "ans": "電荷、充電",
-          "note": "charge（n）＝電荷、充電"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>charge</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>電荷、充電</b><br>an amount of electricity"
         },
         {
-          "type": "single",
-          "q": "\"squeeze\" の意味は？",
-          "opts": [
-            "(両側から強く～を)押しつぶす",
-            "運動・トレーニングをする",
-            "滑りやすい",
-            "電流"
-          ],
-          "ans": "(両側から強く～を)押しつぶす",
-          "note": "squeeze（v）＝(両側から強く～を)押しつぶす"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>squeeze</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>(両側から強く～を)押しつぶす</b><br>to press together the parts and especially the opposite sides of something"
         },
         {
-          "type": "single",
-          "q": "\"twist\" の意味は？",
-          "opts": [
-            "ねじ曲げる",
-            "カウチ、ソファ",
-            "布地、生地",
-            "縫い糸"
-          ],
-          "ans": "ねじ曲げる",
-          "note": "twist（v）＝ねじ曲げる"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>twist</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>ねじ曲げる</b><br>to bend or turn something in order to change its shape"
         },
         {
-          "type": "single",
-          "q": "\"outfit\" の意味は？",
-          "opts": [
-            "ひと揃いの衣服",
-            "印象付ける",
-            "(上)塗り",
-            "中が透けて見える"
-          ],
-          "ans": "ひと揃いの衣服",
-          "note": "outfit（n）＝ひと揃いの衣服"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>outfit</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>ひと揃いの衣服</b><br>a set of clothes that are worn together"
         },
         {
-          "type": "single",
-          "q": "\"stitch\" の意味は？",
-          "opts": [
-            "(針で)縫い合わせる",
-            "目指す、意図する",
-            "吸収する",
-            "電気の差込口、コンセント"
-          ],
-          "ans": "(針で)縫い合わせる",
-          "note": "stitch（v）＝(針で)縫い合わせる"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>stitch</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>(針で)縫い合わせる</b><br>to use a needle and thread to make or repair something, such as a piece of clothing"
         },
         {
-          "type": "single",
-          "q": "\"copper\" の意味は？",
-          "opts": [
-            "銅",
-            "危害",
-            "中和する",
-            "収集する、取り入れる"
-          ],
-          "ans": "銅",
-          "note": "copper（n）＝銅"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>copper</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>銅</b><br>a reddish-brown metal that allows heat and electricity to pass through it easily"
         },
         {
-          "type": "single",
-          "q": "\"innovation\" の意味は？",
-          "opts": [
-            "新しく採り入れたもの",
-            "〜を特徴づける、特徴とする",
-            "引っかける《米口語》",
-            "生成する、発生させる"
-          ],
-          "ans": "新しく採り入れたもの",
-          "note": "innovation（n）＝新しく採り入れたもの"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>innovation</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>新しく採り入れたもの</b><br>a new idea, device, or method"
         },
         {
-          "type": "single",
-          "q": "\"wardrobe\" の意味は？",
-          "opts": [
-            "衣装ダンス、衣裳部屋",
-            "滑りやすい",
-            "保護物",
-            "摩擦"
-          ],
-          "ans": "衣装ダンス、衣裳部屋",
-          "note": "wardrobe（n）＝衣装ダンス、衣裳部屋"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 英→日",
+          "front": "<b>wardrobe</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>衣装ダンス、衣裳部屋</b><br>a room, closet, or chest where clothes are kept"
         }
       ]
     },
@@ -383,3577 +203,685 @@
       "title": "Unit 3 日→英",
       "qs": [
         {
-          "type": "single",
-          "q": "「運動・トレーニングをする」を表す語は？",
-          "opts": [
-            "work out",
-            "feature",
-            "snag",
-            "outlet"
-          ],
-          "ans": "work out",
-          "note": "運動・トレーニングをする＝work out（p.v.）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>運動・トレーニングをする</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>work out</b><br>to perform athletic exercises in order to improve your health or physical fitness<br><br><b>注意：</b>2語で、間の空白を忘れない。"
         },
         {
-          "type": "single",
-          "q": "「カウチ、ソファ」を表す語は？",
-          "opts": [
-            "couch",
-            "slippery",
-            "shield",
-            "harvest"
-          ],
-          "ans": "couch",
-          "note": "カウチ、ソファ＝couch（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>カウチ、ソファ</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>couch</b><br>a piece of furniture for seating from two to four people, typically in the form of a bench with a back"
         },
         {
-          "type": "single",
-          "q": "「印象付ける」を表す語は？",
-          "opts": [
-            "impress",
-            "fabric",
-            "embed",
-            "generate"
-          ],
-          "ans": "impress",
-          "note": "印象付ける＝impress（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>印象付ける</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>impress</b><br>to cause someone to feel admiration or interest"
         },
         {
-          "type": "single",
-          "q": "「目指す、意図する」を表す語は？",
-          "opts": [
-            "aim",
-            "coating",
-            "current",
-            "friction"
-          ],
-          "ans": "aim",
-          "note": "目指す、意図する＝aim（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>目指す、意図する</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>aim</b><br>to have a specified goal or purpose"
         },
         {
-          "type": "single",
-          "q": "「危害」を表す語は？",
-          "opts": [
-            "harm",
-            "absorb",
-            "thread",
-            "build up"
-          ],
-          "ans": "harm",
-          "note": "危害＝harm（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>危害</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>harm</b><br>physical or mental damage or injury"
         },
         {
-          "type": "single",
-          "q": "「〜を特徴づける、特徴とする」を表す語は？",
-          "opts": [
-            "feature",
-            "neutralize",
-            "see-through",
-            "charge"
-          ],
-          "ans": "feature",
-          "note": "〜を特徴づける、特徴とする＝feature（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>〜を特徴づける、特徴とする</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>feature</b><br>to have or include someone or something as an important part"
         },
         {
-          "type": "single",
-          "q": "「滑りやすい」を表す語は？",
-          "opts": [
-            "slippery",
-            "snag",
-            "outlet",
-            "squeeze"
-          ],
-          "ans": "slippery",
-          "note": "滑りやすい＝slippery（a）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>滑りやすい</b> <span style=\"opacity:.65\">(a)</span>",
+          "back": "<b>slippery</b><br>difficult to stand on, move on, or hold because of being smooth, wet, icy, etc."
         },
         {
-          "type": "single",
-          "q": "「布地、生地」を表す語は？",
-          "opts": [
-            "fabric",
-            "shield",
-            "harvest",
-            "twist"
-          ],
-          "ans": "fabric",
-          "note": "布地、生地＝fabric（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>布地、生地</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>fabric</b><br>a cloth made by weaving, knitting, or felting fibers"
         },
         {
-          "type": "single",
-          "q": "「(上)塗り」を表す語は？",
-          "opts": [
-            "coating",
-            "embed",
-            "generate",
-            "outfit"
-          ],
-          "ans": "coating",
-          "note": "(上)塗り＝coating（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>(上)塗り</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>coating</b><br>a thin layer or covering of something"
         },
         {
-          "type": "single",
-          "q": "「吸収する」を表す語は？",
-          "opts": [
-            "absorb",
-            "current",
-            "friction",
-            "stitch"
-          ],
-          "ans": "absorb",
-          "note": "吸収する＝absorb（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>吸収する</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>absorb</b><br>to take in something such as a liquid in a natural or gradual way"
         },
         {
-          "type": "single",
-          "q": "「中和する」を表す語は？",
-          "opts": [
-            "neutralize",
-            "thread",
-            "build up",
-            "copper"
-          ],
-          "ans": "neutralize",
-          "note": "中和する＝neutralize（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>中和する</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>neutralize</b><br>to stop something from being effective or harmful"
         },
         {
-          "type": "single",
-          "q": "「引っかける《米口語》」を表す語は？",
-          "opts": [
-            "snag",
-            "see-through",
-            "charge",
-            "innovation"
-          ],
-          "ans": "snag",
-          "note": "引っかける《米口語》＝snag（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>引っかける《米口語》</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>snag</b><br>to catch, capture, or get something or someone by quick action"
         },
         {
-          "type": "single",
-          "q": "「保護物」を表す語は？",
-          "opts": [
-            "shield",
-            "outlet",
-            "squeeze",
-            "wardrobe"
-          ],
-          "ans": "shield",
-          "note": "保護物＝shield（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>保護物</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>shield</b><br>something that defends or protects someone or something"
         },
         {
-          "type": "single",
-          "q": "「埋め込む」を表す語は？",
-          "opts": [
-            "embed",
-            "harvest",
-            "twist",
-            "work out"
-          ],
-          "ans": "embed",
-          "note": "埋め込む＝embed（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>埋め込む</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>embed</b><br>to place or set something firmly in something else<br><br><b>注意：</b>過去分詞は embedded（dが2つ）。"
         },
         {
-          "type": "single",
-          "q": "「電流」を表す語は？",
-          "opts": [
-            "current",
-            "generate",
-            "outfit",
-            "couch"
-          ],
-          "ans": "current",
-          "note": "電流＝current（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>電流</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>current</b><br>a flow of electricity<br><br><b>注意：</b>currently（副詞）・currency（通貨）と綴りを混同しない。"
         },
         {
-          "type": "single",
-          "q": "「縫い糸」を表す語は？",
-          "opts": [
-            "thread",
-            "friction",
-            "stitch",
-            "impress"
-          ],
-          "ans": "thread",
-          "note": "縫い糸＝thread（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>縫い糸</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>thread</b><br>a long, thin piece of cotton, silk, etc., used for sewing"
         },
         {
-          "type": "single",
-          "q": "「中が透けて見える」を表す語は？",
-          "opts": [
-            "see-through",
-            "build up",
-            "copper",
-            "aim"
-          ],
-          "ans": "see-through",
-          "note": "中が透けて見える＝see-through（a）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>中が透けて見える</b> <span style=\"opacity:.65\">(a)</span>",
+          "back": "<b>see-through</b><br>able to be seen through; clear enough to allow light to pass through"
         },
         {
-          "type": "single",
-          "q": "「電気の差込口、コンセント」を表す語は？",
-          "opts": [
-            "outlet",
-            "charge",
-            "innovation",
-            "harm"
-          ],
-          "ans": "outlet",
-          "note": "電気の差込口、コンセント＝outlet（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>電気の差込口、コンセント</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>outlet</b><br>a device in a wall into which an electric cord can be plugged in order to provide electricity for a lamp, television, etc."
         },
         {
-          "type": "single",
-          "q": "「収集する、取り入れる」を表す語は？",
-          "opts": [
-            "harvest",
-            "squeeze",
-            "wardrobe",
-            "feature"
-          ],
-          "ans": "harvest",
-          "note": "収集する、取り入れる＝harvest（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>収集する、取り入れる</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>harvest</b><br>to gather or collect something for use"
         },
         {
-          "type": "single",
-          "q": "「生成する、発生させる」を表す語は？",
-          "opts": [
-            "generate",
-            "twist",
-            "work out",
-            "slippery"
-          ],
-          "ans": "generate",
-          "note": "生成する、発生させる＝generate（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>生成する、発生させる</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>generate</b><br>to produce something"
         },
         {
-          "type": "single",
-          "q": "「摩擦」を表す語は？",
-          "opts": [
-            "friction",
-            "outfit",
-            "couch",
-            "fabric"
-          ],
-          "ans": "friction",
-          "note": "摩擦＝friction（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>摩擦</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>friction</b><br>the act of rubbing one thing against another"
         },
         {
-          "type": "single",
-          "q": "「増大する」を表す語は？",
-          "opts": [
-            "build up",
-            "stitch",
-            "impress",
-            "coating"
-          ],
-          "ans": "build up",
-          "note": "増大する＝build up（p.v.）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>増大する</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>build up</b><br>to increase gradually in amount as time passes<br><br><b>注意：</b>2語で、間の空白を忘れない。"
         },
         {
-          "type": "single",
-          "q": "「電荷、充電」を表す語は？",
-          "opts": [
-            "charge",
-            "copper",
-            "aim",
-            "absorb"
-          ],
-          "ans": "charge",
-          "note": "電荷、充電＝charge（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>電荷、充電</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>charge</b><br>an amount of electricity"
         },
         {
-          "type": "single",
-          "q": "「(両側から強く～を)押しつぶす」を表す語は？",
-          "opts": [
-            "squeeze",
-            "innovation",
-            "harm",
-            "neutralize"
-          ],
-          "ans": "squeeze",
-          "note": "(両側から強く～を)押しつぶす＝squeeze（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>(両側から強く～を)押しつぶす</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>squeeze</b><br>to press together the parts and especially the opposite sides of something"
         },
         {
-          "type": "single",
-          "q": "「ねじ曲げる」を表す語は？",
-          "opts": [
-            "twist",
-            "wardrobe",
-            "feature",
-            "snag"
-          ],
-          "ans": "twist",
-          "note": "ねじ曲げる＝twist（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>ねじ曲げる</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>twist</b><br>to bend or turn something in order to change its shape"
         },
         {
-          "type": "single",
-          "q": "「ひと揃いの衣服」を表す語は？",
-          "opts": [
-            "outfit",
-            "work out",
-            "slippery",
-            "shield"
-          ],
-          "ans": "outfit",
-          "note": "ひと揃いの衣服＝outfit（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>ひと揃いの衣服</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>outfit</b><br>a set of clothes that are worn together"
         },
         {
-          "type": "single",
-          "q": "「(針で)縫い合わせる」を表す語は？",
-          "opts": [
-            "stitch",
-            "couch",
-            "fabric",
-            "embed"
-          ],
-          "ans": "stitch",
-          "note": "(針で)縫い合わせる＝stitch（v）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>(針で)縫い合わせる</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>stitch</b><br>to use a needle and thread to make or repair something, such as a piece of clothing"
         },
         {
-          "type": "single",
-          "q": "「銅」を表す語は？",
-          "opts": [
-            "copper",
-            "impress",
-            "coating",
-            "current"
-          ],
-          "ans": "copper",
-          "note": "銅＝copper（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>銅</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>copper</b><br>a reddish-brown metal that allows heat and electricity to pass through it easily"
         },
         {
-          "type": "single",
-          "q": "「新しく採り入れたもの」を表す語は？",
-          "opts": [
-            "innovation",
-            "aim",
-            "absorb",
-            "thread"
-          ],
-          "ans": "innovation",
-          "note": "新しく採り入れたもの＝innovation（n）"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>新しく採り入れたもの</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>innovation</b><br>a new idea, device, or method<br><br><b>注意：</b>動詞は innovate。名詞 innovation の -tion を忘れない。"
         },
         {
-          "type": "single",
-          "q": "「衣装ダンス、衣裳部屋」を表す語は？",
-          "opts": [
-            "wardrobe",
-            "harm",
-            "neutralize",
-            "see-through"
-          ],
-          "ans": "wardrobe",
-          "note": "衣装ダンス、衣裳部屋＝wardrobe（n）"
-        }
-      ]
-    },
-    {
-      "id": "u3-def",
-      "no": "S3",
-      "title": "Unit 3 定義→語",
-      "qs": [
-        {
-          "type": "single",
-          "q": "\"to perform athletic exercises in order to improve your health or physical fitness\"",
-          "opts": [
-            "work out",
-            "absorb",
-            "thread",
-            "squeeze"
-          ],
-          "ans": "work out",
-          "note": "正解：work out（運動・トレーニングをする）"
-        },
-        {
-          "type": "single",
-          "q": "\"a piece of furniture for seating from two to four people, typically in the form of a bench with a back\"",
-          "opts": [
-            "couch",
-            "neutralize",
-            "see-through",
-            "twist"
-          ],
-          "ans": "couch",
-          "note": "正解：couch（カウチ、ソファ）"
-        },
-        {
-          "type": "single",
-          "q": "\"to cause someone to feel admiration or interest\"",
-          "opts": [
-            "impress",
-            "snag",
-            "outlet",
-            "outfit"
-          ],
-          "ans": "impress",
-          "note": "正解：impress（印象付ける）"
-        },
-        {
-          "type": "single",
-          "q": "\"to have a specified goal or purpose\"",
-          "opts": [
-            "aim",
-            "shield",
-            "harvest",
-            "stitch"
-          ],
-          "ans": "aim",
-          "note": "正解：aim（目指す、意図する）"
-        },
-        {
-          "type": "single",
-          "q": "\"physical or mental damage or injury\"",
-          "opts": [
-            "harm",
-            "embed",
-            "generate",
-            "copper"
-          ],
-          "ans": "harm",
-          "note": "正解：harm（危害）"
-        },
-        {
-          "type": "single",
-          "q": "\"to have or include someone or something as an important part\"",
-          "opts": [
-            "feature",
-            "current",
-            "friction",
-            "innovation"
-          ],
-          "ans": "feature",
-          "note": "正解：feature（〜を特徴づける、特徴とする）"
-        },
-        {
-          "type": "single",
-          "q": "\"difficult to stand on, move on, or hold because of being smooth, wet, icy, etc.\"",
-          "opts": [
-            "slippery",
-            "thread",
-            "build up",
-            "wardrobe"
-          ],
-          "ans": "slippery",
-          "note": "正解：slippery（滑りやすい）"
-        },
-        {
-          "type": "single",
-          "q": "\"a cloth made by weaving, knitting, or felting fibers\"",
-          "opts": [
-            "fabric",
-            "see-through",
-            "charge",
-            "work out"
-          ],
-          "ans": "fabric",
-          "note": "正解：fabric（布地、生地）"
-        },
-        {
-          "type": "single",
-          "q": "\"a thin layer or covering of something\"",
-          "opts": [
-            "coating",
-            "outlet",
-            "squeeze",
-            "couch"
-          ],
-          "ans": "coating",
-          "note": "正解：coating（(上)塗り）"
-        },
-        {
-          "type": "single",
-          "q": "\"to take in something such as a liquid in a natural or gradual way\"",
-          "opts": [
-            "absorb",
-            "harvest",
-            "twist",
-            "impress"
-          ],
-          "ans": "absorb",
-          "note": "正解：absorb（吸収する）"
-        },
-        {
-          "type": "single",
-          "q": "\"to stop something from being effective or harmful\"",
-          "opts": [
-            "neutralize",
-            "generate",
-            "outfit",
-            "aim"
-          ],
-          "ans": "neutralize",
-          "note": "正解：neutralize（中和する）"
-        },
-        {
-          "type": "single",
-          "q": "\"to catch, capture, or get something or someone by quick action\"",
-          "opts": [
-            "snag",
-            "friction",
-            "stitch",
-            "harm"
-          ],
-          "ans": "snag",
-          "note": "正解：snag（引っかける《米口語》）"
-        },
-        {
-          "type": "single",
-          "q": "\"something that defends or protects someone or something\"",
-          "opts": [
-            "shield",
-            "build up",
-            "copper",
-            "feature"
-          ],
-          "ans": "shield",
-          "note": "正解：shield（保護物）"
-        },
-        {
-          "type": "single",
-          "q": "\"to place or set something firmly in something else\"",
-          "opts": [
-            "embed",
-            "charge",
-            "innovation",
-            "slippery"
-          ],
-          "ans": "embed",
-          "note": "正解：embed（埋め込む）"
-        },
-        {
-          "type": "single",
-          "q": "\"a flow of electricity\"",
-          "opts": [
-            "current",
-            "squeeze",
-            "wardrobe",
-            "fabric"
-          ],
-          "ans": "current",
-          "note": "正解：current（電流）"
-        },
-        {
-          "type": "single",
-          "q": "\"a long, thin piece of cotton, silk, etc., used for sewing\"",
-          "opts": [
-            "thread",
-            "twist",
-            "work out",
-            "coating"
-          ],
-          "ans": "thread",
-          "note": "正解：thread（縫い糸）"
-        },
-        {
-          "type": "single",
-          "q": "\"able to be seen through; clear enough to allow light to pass through\"",
-          "opts": [
-            "see-through",
-            "outfit",
-            "couch",
-            "absorb"
-          ],
-          "ans": "see-through",
-          "note": "正解：see-through（中が透けて見える）"
-        },
-        {
-          "type": "single",
-          "q": "\"a device in a wall into which an electric cord can be plugged in order to provide electricity for a lamp, television, etc.\"",
-          "opts": [
-            "outlet",
-            "stitch",
-            "impress",
-            "neutralize"
-          ],
-          "ans": "outlet",
-          "note": "正解：outlet（電気の差込口、コンセント）"
-        },
-        {
-          "type": "single",
-          "q": "\"to gather or collect something for use\"",
-          "opts": [
-            "harvest",
-            "copper",
-            "aim",
-            "snag"
-          ],
-          "ans": "harvest",
-          "note": "正解：harvest（収集する、取り入れる）"
-        },
-        {
-          "type": "single",
-          "q": "\"to produce something\"",
-          "opts": [
-            "generate",
-            "innovation",
-            "harm",
-            "shield"
-          ],
-          "ans": "generate",
-          "note": "正解：generate（生成する、発生させる）"
-        },
-        {
-          "type": "single",
-          "q": "\"the act of rubbing one thing against another\"",
-          "opts": [
-            "friction",
-            "wardrobe",
-            "feature",
-            "embed"
-          ],
-          "ans": "friction",
-          "note": "正解：friction（摩擦）"
-        },
-        {
-          "type": "single",
-          "q": "\"to increase gradually in amount as time passes\"",
-          "opts": [
-            "build up",
-            "work out",
-            "slippery",
-            "current"
-          ],
-          "ans": "build up",
-          "note": "正解：build up（増大する）"
-        },
-        {
-          "type": "single",
-          "q": "\"an amount of electricity\"",
-          "opts": [
-            "charge",
-            "couch",
-            "fabric",
-            "thread"
-          ],
-          "ans": "charge",
-          "note": "正解：charge（電荷、充電）"
-        },
-        {
-          "type": "single",
-          "q": "\"to press together the parts and especially the opposite sides of something\"",
-          "opts": [
-            "squeeze",
-            "impress",
-            "coating",
-            "see-through"
-          ],
-          "ans": "squeeze",
-          "note": "正解：squeeze（(両側から強く～を)押しつぶす）"
-        },
-        {
-          "type": "single",
-          "q": "\"to bend or turn something in order to change its shape\"",
-          "opts": [
-            "twist",
-            "aim",
-            "absorb",
-            "outlet"
-          ],
-          "ans": "twist",
-          "note": "正解：twist（ねじ曲げる）"
-        },
-        {
-          "type": "single",
-          "q": "\"a set of clothes that are worn together\"",
-          "opts": [
-            "outfit",
-            "harm",
-            "neutralize",
-            "harvest"
-          ],
-          "ans": "outfit",
-          "note": "正解：outfit（ひと揃いの衣服）"
-        },
-        {
-          "type": "single",
-          "q": "\"to use a needle and thread to make or repair something, such as a piece of clothing\"",
-          "opts": [
-            "stitch",
-            "feature",
-            "snag",
-            "generate"
-          ],
-          "ans": "stitch",
-          "note": "正解：stitch（(針で)縫い合わせる）"
-        },
-        {
-          "type": "single",
-          "q": "\"a reddish-brown metal that allows heat and electricity to pass through it easily\"",
-          "opts": [
-            "copper",
-            "slippery",
-            "shield",
-            "friction"
-          ],
-          "ans": "copper",
-          "note": "正解：copper（銅）"
-        },
-        {
-          "type": "single",
-          "q": "\"a new idea, device, or method\"",
-          "opts": [
-            "innovation",
-            "fabric",
-            "embed",
-            "build up"
-          ],
-          "ans": "innovation",
-          "note": "正解：innovation（新しく採り入れたもの）"
-        },
-        {
-          "type": "single",
-          "q": "\"a room, closet, or chest where clothes are kept\"",
-          "opts": [
-            "wardrobe",
-            "coating",
-            "current",
-            "charge"
-          ],
-          "ans": "wardrobe",
-          "note": "正解：wardrobe（衣装ダンス、衣裳部屋）"
-        }
-      ]
-    },
-    {
-      "id": "u3-spell",
-      "no": "S4",
-      "title": "Unit 3 綴り",
-      "qs": [
-        {
-          "type": "input",
-          "exact": true,
-          "q": "運動・トレーニングをする：\"to perform athletic exercises in order to improve your health or physical fitness\"",
-          "ans": "work out",
-          "note": "正解：work out"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "カウチ、ソファ：\"a piece of furniture for seating from two to four people, typically in the form of a bench with a back\"",
-          "ans": "couch",
-          "note": "正解：couch"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "印象付ける：\"to cause someone to feel admiration or interest\"",
-          "ans": "impress",
-          "note": "正解：impress"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "目指す、意図する：\"to have a specified goal or purpose\"",
-          "ans": "aim",
-          "note": "正解：aim"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "危害：\"physical or mental damage or injury\"",
-          "ans": "harm",
-          "note": "正解：harm"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜を特徴づける、特徴とする：\"to have or include someone or something as an important part\"",
-          "ans": "feature",
-          "note": "正解：feature"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "滑りやすい：\"difficult to stand on, move on, or hold because of being smooth, wet, icy, etc.\"",
-          "ans": "slippery",
-          "note": "正解：slippery"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "布地、生地：\"a cloth made by weaving, knitting, or felting fibers\"",
-          "ans": "fabric",
-          "note": "正解：fabric"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "(上)塗り：\"a thin layer or covering of something\"",
-          "ans": "coating",
-          "note": "正解：coating"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "吸収する：\"to take in something such as a liquid in a natural or gradual way\"",
-          "ans": "absorb",
-          "note": "正解：absorb"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "中和する：\"to stop something from being effective or harmful\"",
-          "ans": "neutralize",
-          "note": "正解：neutralize"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "引っかける《米口語》：\"to catch, capture, or get something or someone by quick action\"",
-          "ans": "snag",
-          "note": "正解：snag"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "保護物：\"something that defends or protects someone or something\"",
-          "ans": "shield",
-          "note": "正解：shield"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "埋め込む：\"to place or set something firmly in something else\"",
-          "ans": "embed",
-          "note": "正解：embed"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "電流：\"a flow of electricity\"",
-          "ans": "current",
-          "note": "正解：current"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "縫い糸：\"a long, thin piece of cotton, silk, etc., used for sewing\"",
-          "ans": "thread",
-          "note": "正解：thread"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "中が透けて見える：\"able to be seen through; clear enough to allow light to pass through\"",
-          "ans": "see-through",
-          "note": "正解：see-through"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "電気の差込口、コンセント：\"a device in a wall into which an electric cord can be plugged in order to provide electricity for a lamp, television, etc.\"",
-          "ans": "outlet",
-          "note": "正解：outlet"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "収集する、取り入れる：\"to gather or collect something for use\"",
-          "ans": "harvest",
-          "note": "正解：harvest"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "生成する、発生させる：\"to produce something\"",
-          "ans": "generate",
-          "note": "正解：generate"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "摩擦：\"the act of rubbing one thing against another\"",
-          "ans": "friction",
-          "note": "正解：friction"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "増大する：\"to increase gradually in amount as time passes\"",
-          "ans": "build up",
-          "note": "正解：build up"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "電荷、充電：\"an amount of electricity\"",
-          "ans": "charge",
-          "note": "正解：charge"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "(両側から強く～を)押しつぶす：\"to press together the parts and especially the opposite sides of something\"",
-          "ans": "squeeze",
-          "note": "正解：squeeze"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "ねじ曲げる：\"to bend or turn something in order to change its shape\"",
-          "ans": "twist",
-          "note": "正解：twist"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "ひと揃いの衣服：\"a set of clothes that are worn together\"",
-          "ans": "outfit",
-          "note": "正解：outfit"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "(針で)縫い合わせる：\"to use a needle and thread to make or repair something, such as a piece of clothing\"",
-          "ans": "stitch",
-          "note": "正解：stitch"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "銅：\"a reddish-brown metal that allows heat and electricity to pass through it easily\"",
-          "ans": "copper",
-          "note": "正解：copper"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "新しく採り入れたもの：\"a new idea, device, or method\"",
-          "ans": "innovation",
-          "note": "正解：innovation"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "衣装ダンス、衣裳部屋：\"a room, closet, or chest where clothes are kept\"",
-          "ans": "wardrobe",
-          "note": "正解：wardrobe"
+          "type": "flashcard",
+          "tag": "U3 ・ Word List ・ 日→英",
+          "front": "<b>衣装ダンス、衣裳部屋</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>wardrobe</b><br>a room, closet, or chest where clothes are kept"
         }
       ]
     },
     {
       "id": "u4-e2j",
-      "no": "S5",
+      "no": "S3",
       "title": "Unit 4 英→日",
       "qs": [
         {
-          "type": "single",
-          "q": "\"liquid\" の意味は？",
-          "opts": [
-            "液体",
-            "平原、平野",
-            "湿地",
-            "〜を脅かす"
-          ],
-          "ans": "液体",
-          "note": "liquid（n）＝液体"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>liquid</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>液体</b><br>A substance that is not solid or gas and can flow, like water or milk."
         },
         {
-          "type": "single",
-          "q": "\"beneath\" の意味は？",
-          "opts": [
-            "〜の下に",
-            "隙間",
-            "取り出す・抽出する",
-            "〜を引き起こす"
-          ],
-          "ans": "〜の下に",
-          "note": "beneath（prep）＝〜の下に"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>beneath</b> <span style=\"opacity:.65\">(prep)</span>",
+          "back": "<b>〜の下に</b><br>In a lower place; under something."
         },
         {
-          "type": "single",
-          "q": "\"groundwater\" の意味は？",
-          "opts": [
-            "地下水",
-            "吸い上げる",
-            "(公衆)衛生",
-            "〜を注入する"
-          ],
-          "ans": "地下水",
-          "note": "groundwater（n）＝地下水"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>groundwater</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>地下水</b><br>Water that is found under the ground."
         },
         {
-          "type": "single",
-          "q": "\"glacier\" の意味は？",
-          "opts": [
-            "氷河",
-            "漏れる",
-            "喉の乾き",
-            "〜を噴出させる"
-          ],
-          "ans": "氷河",
-          "note": "glacier（n）＝氷河"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>glacier</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>氷河</b><br>A large, slow-moving mass of ice on mountains or near the poles."
         },
         {
-          "type": "single",
-          "q": "\"meager\" の意味は？",
-          "opts": [
-            "貧弱な・乏しい",
-            "泉",
-            "気候",
-            "〜を捨てる・廃棄する"
-          ],
-          "ans": "貧弱な・乏しい",
-          "note": "meager（a）＝貧弱な・乏しい"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>meager</b> <span style=\"opacity:.65\">(a)</span>",
+          "back": "<b>貧弱な・乏しい</b><br>Very small or not enough."
         },
         {
-          "type": "single",
-          "q": "\"lie\" の意味は？",
-          "opts": [
-            "存在する",
-            "送り込む・餌を与える",
-            "〜を強める",
-            "下水"
-          ],
-          "ans": "存在する",
-          "note": "lie（v）＝存在する"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>lie</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>存在する</b><br>To be located in a particular place"
         },
         {
-          "type": "single",
-          "q": "\"lurk\" の意味は？",
-          "opts": [
-            "〜に潜む",
-            "湿地",
-            "一気に流入する",
-            "〜を減らす"
-          ],
-          "ans": "〜に潜む",
-          "note": "lurk（v）＝〜に潜む"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>lurk</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>〜に潜む</b><br>To be in a hidden place, often for something bad."
         },
         {
-          "type": "single",
-          "q": "\"plain\" の意味は？",
-          "opts": [
-            "平原、平野",
-            "取り出す・抽出する",
-            "縮小する・縮む",
-            "浄化する"
-          ],
-          "ans": "平原、平野",
-          "note": "plain（n）＝平原、平野"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>plain</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>平原、平野</b><br>A large area of flat land with few trees."
         },
         {
-          "type": "single",
-          "q": "\"gap\" の意味は？",
-          "opts": [
-            "隙間",
-            "(公衆)衛生",
-            "〜を脅かす",
-            "貴重な"
-          ],
-          "ans": "隙間",
-          "note": "gap（n）＝隙間"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>gap</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>隙間</b><br>An empty space or hole in the middle of something."
         },
         {
-          "type": "single",
-          "q": "\"soak up\" の意味は？",
-          "opts": [
-            "吸い上げる",
-            "喉の乾き",
-            "〜を引き起こす",
-            "液体"
-          ],
-          "ans": "吸い上げる",
-          "note": "soak up（p.v.）＝吸い上げる"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>soak up</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>吸い上げる</b><br>To absorb a liquid."
         },
         {
-          "type": "single",
-          "q": "\"leak\" の意味は？",
-          "opts": [
-            "漏れる",
-            "気候",
-            "〜を注入する",
-            "〜の下に"
-          ],
-          "ans": "漏れる",
-          "note": "leak（v）＝漏れる"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>leak</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>漏れる</b><br>To let liquid or gas escapes through a hole or crack."
         },
         {
-          "type": "single",
-          "q": "\"spring\" の意味は？",
-          "opts": [
-            "泉",
-            "〜を強める",
-            "〜を噴出させる",
-            "地下水"
-          ],
-          "ans": "泉",
-          "note": "spring（n）＝泉"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>spring</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>泉</b><br>A place where water comes up from the ground naturally."
         },
         {
-          "type": "single",
-          "q": "\"feed\" の意味は？",
-          "opts": [
-            "送り込む・餌を与える",
-            "一気に流入する",
-            "〜を捨てる・廃棄する",
-            "氷河"
-          ],
-          "ans": "送り込む・餌を与える",
-          "note": "feed（v）＝送り込む・餌を与える"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>feed</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>送り込む・餌を与える</b><br>To supply with something; to give food to a person or animal."
         },
         {
-          "type": "single",
-          "q": "\"wetland\" の意味は？",
-          "opts": [
-            "湿地",
-            "縮小する・縮む",
-            "下水",
-            "貧弱な・乏しい"
-          ],
-          "ans": "湿地",
-          "note": "wetland（n）＝湿地"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>wetland</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>湿地</b><br>An area of land that is often wet, like a marsh or swamp."
         },
         {
-          "type": "single",
-          "q": "\"extract\" の意味は？",
-          "opts": [
-            "取り出す・抽出する",
-            "〜を脅かす",
-            "〜を減らす",
-            "存在する"
-          ],
-          "ans": "取り出す・抽出する",
-          "note": "extract（v）＝取り出す・抽出する"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>extract</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>取り出す・抽出する</b><br>To take out something, especially using force or effort."
         },
         {
-          "type": "single",
-          "q": "\"sanitation\" の意味は？",
-          "opts": [
-            "(公衆)衛生",
-            "〜を引き起こす",
-            "浄化する",
-            "〜に潜む"
-          ],
-          "ans": "(公衆)衛生",
-          "note": "sanitation（n）＝(公衆)衛生"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>sanitation</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>(公衆)衛生</b><br>the process of keeping places free from dirt, infection, disease, etc., by removing waste, trash and garbage, by cleaning streets, etc."
         },
         {
-          "type": "single",
-          "q": "\"thirst\" の意味は？",
-          "opts": [
-            "喉の乾き",
-            "〜を注入する",
-            "貴重な",
-            "平原、平野"
-          ],
-          "ans": "喉の乾き",
-          "note": "thirst（n）＝喉の乾き"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>thirst</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>喉の乾き</b><br>The feeling of needing to drink something."
         },
         {
-          "type": "single",
-          "q": "\"climate\" の意味は？",
-          "opts": [
-            "気候",
-            "〜を噴出させる",
-            "液体",
-            "隙間"
-          ],
-          "ans": "気候",
-          "note": "climate（n）＝気候"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>climate</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>気候</b><br>The usual weather conditions in a place."
         },
         {
-          "type": "single",
-          "q": "\"intensify\" の意味は？",
-          "opts": [
-            "〜を強める",
-            "〜を捨てる・廃棄する",
-            "〜の下に",
-            "吸い上げる"
-          ],
-          "ans": "〜を強める",
-          "note": "intensify（v）＝〜を強める"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>intensify</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>〜を強める</b><br>To make something stronger or more extreme."
         },
         {
-          "type": "single",
-          "q": "\"rush\" の意味は？",
-          "opts": [
-            "一気に流入する",
-            "下水",
-            "地下水",
-            "漏れる"
-          ],
-          "ans": "一気に流入する",
-          "note": "rush（v）＝一気に流入する"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>rush</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>一気に流入する</b><br>To move or go somewhere quickly."
         },
         {
-          "type": "single",
-          "q": "\"shrink\" の意味は？",
-          "opts": [
-            "縮小する・縮む",
-            "〜を減らす",
-            "氷河",
-            "泉"
-          ],
-          "ans": "縮小する・縮む",
-          "note": "shrink（v）＝縮小する・縮む"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>shrink</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>縮小する・縮む</b><br>To become smaller in size."
         },
         {
-          "type": "single",
-          "q": "\"threaten\" の意味は？",
-          "opts": [
-            "〜を脅かす",
-            "浄化する",
-            "貧弱な・乏しい",
-            "送り込む・餌を与える"
-          ],
-          "ans": "〜を脅かす",
-          "note": "threaten（v）＝〜を脅かす"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>threaten</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>〜を脅かす</b><br>To be likely to cause harm or damage."
         },
         {
-          "type": "single",
-          "q": "\"trigger\" の意味は？",
-          "opts": [
-            "〜を引き起こす",
-            "貴重な",
-            "存在する",
-            "湿地"
-          ],
-          "ans": "〜を引き起こす",
-          "note": "trigger（v）＝〜を引き起こす"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>trigger</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>〜を引き起こす</b><br>To cause something to start happening."
         },
         {
-          "type": "single",
-          "q": "\"inject\" の意味は？",
-          "opts": [
-            "〜を注入する",
-            "液体",
-            "〜に潜む",
-            "取り出す・抽出する"
-          ],
-          "ans": "〜を注入する",
-          "note": "inject（v）＝〜を注入する"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>inject</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>〜を注入する</b><br>To put liquid into something, usually with a needle."
         },
         {
-          "type": "single",
-          "q": "\"flush out\" の意味は？",
-          "opts": [
-            "〜を噴出させる",
-            "〜の下に",
-            "平原、平野",
-            "(公衆)衛生"
-          ],
-          "ans": "〜を噴出させる",
-          "note": "flush out（p.v.）＝〜を噴出させる"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>flush out</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>〜を噴出させる</b><br>To cause something to leave a hiding place"
         },
         {
-          "type": "single",
-          "q": "\"discard\" の意味は？",
-          "opts": [
-            "〜を捨てる・廃棄する",
-            "地下水",
-            "隙間",
-            "喉の乾き"
-          ],
-          "ans": "〜を捨てる・廃棄する",
-          "note": "discard（v）＝〜を捨てる・廃棄する"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>discard</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>〜を捨てる・廃棄する</b><br>To throw something away."
         },
         {
-          "type": "single",
-          "q": "\"sewage\" の意味は？",
-          "opts": [
-            "下水",
-            "氷河",
-            "吸い上げる",
-            "気候"
-          ],
-          "ans": "下水",
-          "note": "sewage（n）＝下水"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>sewage</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>下水</b><br>Waste water and waste materials that are carried away from homes and buildings."
         },
         {
-          "type": "single",
-          "q": "\"cut back\" の意味は？",
-          "opts": [
-            "〜を減らす",
-            "貧弱な・乏しい",
-            "漏れる",
-            "〜を強める"
-          ],
-          "ans": "〜を減らす",
-          "note": "cut back（p.v.）＝〜を減らす"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>cut back</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>〜を減らす</b><br>To reduce the amount of something."
         },
         {
-          "type": "single",
-          "q": "\"purify\" の意味は？",
-          "opts": [
-            "浄化する",
-            "存在する",
-            "泉",
-            "一気に流入する"
-          ],
-          "ans": "浄化する",
-          "note": "purify（v）＝浄化する"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>purify</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>浄化する</b><br>To make something clean and free of harmful substances."
         },
         {
-          "type": "single",
-          "q": "\"precious\" の意味は？",
-          "opts": [
-            "貴重な",
-            "〜に潜む",
-            "送り込む・餌を与える",
-            "縮小する・縮む"
-          ],
-          "ans": "貴重な",
-          "note": "precious（a）＝貴重な"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 英→日",
+          "front": "<b>precious</b> <span style=\"opacity:.65\">(a)</span>",
+          "back": "<b>貴重な</b><br>Very valuable or important."
         }
       ]
     },
     {
       "id": "u4-j2e",
-      "no": "S6",
+      "no": "S4",
       "title": "Unit 4 日→英",
       "qs": [
         {
-          "type": "single",
-          "q": "「液体」を表す語は？",
-          "opts": [
-            "liquid",
-            "lie",
-            "spring",
-            "climate"
-          ],
-          "ans": "liquid",
-          "note": "液体＝liquid（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>液体</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>liquid</b><br>A substance that is not solid or gas and can flow, like water or milk."
         },
         {
-          "type": "single",
-          "q": "「〜の下に」を表す語は？",
-          "opts": [
-            "beneath",
-            "lurk",
-            "feed",
-            "intensify"
-          ],
-          "ans": "beneath",
-          "note": "〜の下に＝beneath（prep）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>〜の下に</b> <span style=\"opacity:.65\">(prep)</span>",
+          "back": "<b>beneath</b><br>In a lower place; under something."
         },
         {
-          "type": "single",
-          "q": "「地下水」を表す語は？",
-          "opts": [
-            "groundwater",
-            "plain",
-            "wetland",
-            "rush"
-          ],
-          "ans": "groundwater",
-          "note": "地下水＝groundwater（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>地下水</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>groundwater</b><br>Water that is found under the ground.<br><br><b>注意：</b>Word Listの表記は groudwater と誤植。正しい綴りは groundwater（n が入る）。"
         },
         {
-          "type": "single",
-          "q": "「氷河」を表す語は？",
-          "opts": [
-            "glacier",
-            "gap",
-            "extract",
-            "shrink"
-          ],
-          "ans": "glacier",
-          "note": "氷河＝glacier（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>氷河</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>glacier</b><br>A large, slow-moving mass of ice on mountains or near the poles."
         },
         {
-          "type": "single",
-          "q": "「貧弱な・乏しい」を表す語は？",
-          "opts": [
-            "meager",
-            "soak up",
-            "sanitation",
-            "threaten"
-          ],
-          "ans": "meager",
-          "note": "貧弱な・乏しい＝meager（a）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>貧弱な・乏しい</b> <span style=\"opacity:.65\">(a)</span>",
+          "back": "<b>meager</b><br>Very small or not enough.<br><br><b>注意：</b>イギリス綴り meagre も可。ea の順番に注意。"
         },
         {
-          "type": "single",
-          "q": "「存在する」を表す語は？",
-          "opts": [
-            "lie",
-            "leak",
-            "thirst",
-            "trigger"
-          ],
-          "ans": "lie",
-          "note": "存在する＝lie（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>存在する</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>lie</b><br>To be located in a particular place<br><br><b>注意：</b>「横たえる」の lay-laid や、lie の過去形 lay と混同しない。"
         },
         {
-          "type": "single",
-          "q": "「〜に潜む」を表す語は？",
-          "opts": [
-            "lurk",
-            "spring",
-            "climate",
-            "inject"
-          ],
-          "ans": "lurk",
-          "note": "〜に潜む＝lurk（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>〜に潜む</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>lurk</b><br>To be in a hidden place, often for something bad."
         },
         {
-          "type": "single",
-          "q": "「平原、平野」を表す語は？",
-          "opts": [
-            "plain",
-            "feed",
-            "intensify",
-            "flush out"
-          ],
-          "ans": "plain",
-          "note": "平原、平野＝plain（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>平原、平野</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>plain</b><br>A large area of flat land with few trees.<br><br><b>注意：</b>同音異義語 plane（飛行機・平面）と混同しない。"
         },
         {
-          "type": "single",
-          "q": "「隙間」を表す語は？",
-          "opts": [
-            "gap",
-            "wetland",
-            "rush",
-            "discard"
-          ],
-          "ans": "gap",
-          "note": "隙間＝gap（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>隙間</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>gap</b><br>An empty space or hole in the middle of something."
         },
         {
-          "type": "single",
-          "q": "「吸い上げる」を表す語は？",
-          "opts": [
-            "soak up",
-            "extract",
-            "shrink",
-            "sewage"
-          ],
-          "ans": "soak up",
-          "note": "吸い上げる＝soak up（p.v.）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>吸い上げる</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>soak up</b><br>To absorb a liquid.<br><br><b>注意：</b>2語で、間の空白を忘れない。"
         },
         {
-          "type": "single",
-          "q": "「漏れる」を表す語は？",
-          "opts": [
-            "leak",
-            "sanitation",
-            "threaten",
-            "cut back"
-          ],
-          "ans": "leak",
-          "note": "漏れる＝leak（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>漏れる</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>leak</b><br>To let liquid or gas escapes through a hole or crack."
         },
         {
-          "type": "single",
-          "q": "「泉」を表す語は？",
-          "opts": [
-            "spring",
-            "thirst",
-            "trigger",
-            "purify"
-          ],
-          "ans": "spring",
-          "note": "泉＝spring（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>泉</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>spring</b><br>A place where water comes up from the ground naturally."
         },
         {
-          "type": "single",
-          "q": "「送り込む・餌を与える」を表す語は？",
-          "opts": [
-            "feed",
-            "climate",
-            "inject",
-            "precious"
-          ],
-          "ans": "feed",
-          "note": "送り込む・餌を与える＝feed（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>送り込む・餌を与える</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>feed</b><br>To supply with something; to give food to a person or animal."
         },
         {
-          "type": "single",
-          "q": "「湿地」を表す語は？",
-          "opts": [
-            "wetland",
-            "intensify",
-            "flush out",
-            "liquid"
-          ],
-          "ans": "wetland",
-          "note": "湿地＝wetland（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>湿地</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>wetland</b><br>An area of land that is often wet, like a marsh or swamp.<br><br><b>注意：</b>1語で綴る（wet land と分けない）。"
         },
         {
-          "type": "single",
-          "q": "「取り出す・抽出する」を表す語は？",
-          "opts": [
-            "extract",
-            "rush",
-            "discard",
-            "beneath"
-          ],
-          "ans": "extract",
-          "note": "取り出す・抽出する＝extract（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>取り出す・抽出する</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>extract</b><br>To take out something, especially using force or effort.<br><br><b>注意：</b>名詞形 extraction と混同しない（ここでは動詞の原形）。"
         },
         {
-          "type": "single",
-          "q": "「(公衆)衛生」を表す語は？",
-          "opts": [
-            "sanitation",
-            "shrink",
-            "sewage",
-            "groundwater"
-          ],
-          "ans": "sanitation",
-          "note": "(公衆)衛生＝sanitation（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>(公衆)衛生</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>sanitation</b><br>the process of keeping places free from dirt, infection, disease, etc., by removing waste, trash and garbage, by cleaning streets, etc.<br><br><b>注意：</b>t の後の i を落とさない。"
         },
         {
-          "type": "single",
-          "q": "「喉の乾き」を表す語は？",
-          "opts": [
-            "thirst",
-            "threaten",
-            "cut back",
-            "glacier"
-          ],
-          "ans": "thirst",
-          "note": "喉の乾き＝thirst（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>喉の乾き</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>thirst</b><br>The feeling of needing to drink something.<br><br><b>注意：</b>ir の順番に注意（× thrist）。"
         },
         {
-          "type": "single",
-          "q": "「気候」を表す語は？",
-          "opts": [
-            "climate",
-            "trigger",
-            "purify",
-            "meager"
-          ],
-          "ans": "climate",
-          "note": "気候＝climate（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>気候</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>climate</b><br>The usual weather conditions in a place."
         },
         {
-          "type": "single",
-          "q": "「〜を強める」を表す語は？",
-          "opts": [
-            "intensify",
-            "inject",
-            "precious",
-            "lie"
-          ],
-          "ans": "intensify",
-          "note": "〜を強める＝intensify（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>〜を強める</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>intensify</b><br>To make something stronger or more extreme.<br><br><b>注意：</b>形容詞形 intense と混同しない。"
         },
         {
-          "type": "single",
-          "q": "「一気に流入する」を表す語は？",
-          "opts": [
-            "rush",
-            "flush out",
-            "liquid",
-            "lurk"
-          ],
-          "ans": "rush",
-          "note": "一気に流入する＝rush（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>一気に流入する</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>rush</b><br>To move or go somewhere quickly."
         },
         {
-          "type": "single",
-          "q": "「縮小する・縮む」を表す語は？",
-          "opts": [
-            "shrink",
-            "discard",
-            "beneath",
-            "plain"
-          ],
-          "ans": "shrink",
-          "note": "縮小する・縮む＝shrink（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>縮小する・縮む</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>shrink</b><br>To become smaller in size."
         },
         {
-          "type": "single",
-          "q": "「〜を脅かす」を表す語は？",
-          "opts": [
-            "threaten",
-            "sewage",
-            "groundwater",
-            "gap"
-          ],
-          "ans": "threaten",
-          "note": "〜を脅かす＝threaten（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>〜を脅かす</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>threaten</b><br>To be likely to cause harm or damage.<br><br><b>注意：</b>名詞形 threat と混同しない。"
         },
         {
-          "type": "single",
-          "q": "「〜を引き起こす」を表す語は？",
-          "opts": [
-            "trigger",
-            "cut back",
-            "glacier",
-            "soak up"
-          ],
-          "ans": "trigger",
-          "note": "〜を引き起こす＝trigger（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>〜を引き起こす</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>trigger</b><br>To cause something to start happening.<br><br><b>注意：</b>r が2つ並ぶ。"
         },
         {
-          "type": "single",
-          "q": "「〜を注入する」を表す語は？",
-          "opts": [
-            "inject",
-            "purify",
-            "meager",
-            "leak"
-          ],
-          "ans": "inject",
-          "note": "〜を注入する＝inject（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>〜を注入する</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>inject</b><br>To put liquid into something, usually with a needle."
         },
         {
-          "type": "single",
-          "q": "「〜を噴出させる」を表す語は？",
-          "opts": [
-            "flush out",
-            "precious",
-            "lie",
-            "spring"
-          ],
-          "ans": "flush out",
-          "note": "〜を噴出させる＝flush out（p.v.）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>〜を噴出させる</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>flush out</b><br>To cause something to leave a hiding place<br><br><b>注意：</b>2語で、間の空白を忘れない。"
         },
         {
-          "type": "single",
-          "q": "「〜を捨てる・廃棄する」を表す語は？",
-          "opts": [
-            "discard",
-            "liquid",
-            "lurk",
-            "feed"
-          ],
-          "ans": "discard",
-          "note": "〜を捨てる・廃棄する＝discard（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>〜を捨てる・廃棄する</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>discard</b><br>To throw something away."
         },
         {
-          "type": "single",
-          "q": "「下水」を表す語は？",
-          "opts": [
-            "sewage",
-            "beneath",
-            "plain",
-            "wetland"
-          ],
-          "ans": "sewage",
-          "note": "下水＝sewage（n）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>下水</b> <span style=\"opacity:.65\">(n)</span>",
+          "back": "<b>sewage</b><br>Waste water and waste materials that are carried away from homes and buildings.<br><br><b>注意：</b>下水道の sewer と混同しない。語尾は -age。"
         },
         {
-          "type": "single",
-          "q": "「〜を減らす」を表す語は？",
-          "opts": [
-            "cut back",
-            "groundwater",
-            "gap",
-            "extract"
-          ],
-          "ans": "cut back",
-          "note": "〜を減らす＝cut back（p.v.）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>〜を減らす</b> <span style=\"opacity:.65\">(p.v.)</span>",
+          "back": "<b>cut back</b><br>To reduce the amount of something.<br><br><b>注意：</b>2語で、間の空白を忘れない。"
         },
         {
-          "type": "single",
-          "q": "「浄化する」を表す語は？",
-          "opts": [
-            "purify",
-            "glacier",
-            "soak up",
-            "sanitation"
-          ],
-          "ans": "purify",
-          "note": "浄化する＝purify（v）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>浄化する</b> <span style=\"opacity:.65\">(v)</span>",
+          "back": "<b>purify</b><br>To make something clean and free of harmful substances.<br><br><b>注意：</b>形容詞形 pure と混同しない。"
         },
         {
-          "type": "single",
-          "q": "「貴重な」を表す語は？",
-          "opts": [
-            "precious",
-            "meager",
-            "leak",
-            "thirst"
-          ],
-          "ans": "precious",
-          "note": "貴重な＝precious（a）"
+          "type": "flashcard",
+          "tag": "U4 ・ Word List ・ 日→英",
+          "front": "<b>貴重な</b> <span style=\"opacity:.65\">(a)</span>",
+          "back": "<b>precious</b><br>Very valuable or important.<br><br><b>注意：</b>c と s の順番（-cious）に注意。"
         }
       ]
     },
     {
-      "id": "u4-def",
-      "no": "S7",
-      "title": "Unit 4 定義→語",
-      "qs": [
-        {
-          "type": "single",
-          "q": "\"A substance that is not solid or gas and can flow, like water or milk.\"",
-          "opts": [
-            "liquid",
-            "soak up",
-            "sanitation",
-            "inject"
-          ],
-          "ans": "liquid",
-          "note": "正解：liquid（液体）"
-        },
-        {
-          "type": "single",
-          "q": "\"In a lower place; under something.\"",
-          "opts": [
-            "beneath",
-            "leak",
-            "thirst",
-            "flush out"
-          ],
-          "ans": "beneath",
-          "note": "正解：beneath（〜の下に）"
-        },
-        {
-          "type": "single",
-          "q": "\"Water that is found under the ground.\"",
-          "opts": [
-            "groundwater",
-            "spring",
-            "climate",
-            "discard"
-          ],
-          "ans": "groundwater",
-          "note": "正解：groundwater（地下水）"
-        },
-        {
-          "type": "single",
-          "q": "\"A large, slow-moving mass of ice on mountains or near the poles.\"",
-          "opts": [
-            "glacier",
-            "feed",
-            "intensify",
-            "sewage"
-          ],
-          "ans": "glacier",
-          "note": "正解：glacier（氷河）"
-        },
-        {
-          "type": "single",
-          "q": "\"Very small or not enough.\"",
-          "opts": [
-            "meager",
-            "wetland",
-            "rush",
-            "cut back"
-          ],
-          "ans": "meager",
-          "note": "正解：meager（貧弱な・乏しい）"
-        },
-        {
-          "type": "single",
-          "q": "\"To be located in a particular place\"",
-          "opts": [
-            "lie",
-            "extract",
-            "shrink",
-            "purify"
-          ],
-          "ans": "lie",
-          "note": "正解：lie（存在する）"
-        },
-        {
-          "type": "single",
-          "q": "\"To be in a hidden place, often for something bad.\"",
-          "opts": [
-            "lurk",
-            "sanitation",
-            "threaten",
-            "precious"
-          ],
-          "ans": "lurk",
-          "note": "正解：lurk（〜に潜む）"
-        },
-        {
-          "type": "single",
-          "q": "\"A large area of flat land with few trees.\"",
-          "opts": [
-            "plain",
-            "thirst",
-            "trigger",
-            "liquid"
-          ],
-          "ans": "plain",
-          "note": "正解：plain（平原、平野）"
-        },
-        {
-          "type": "single",
-          "q": "\"An empty space or hole in the middle of something.\"",
-          "opts": [
-            "gap",
-            "climate",
-            "inject",
-            "beneath"
-          ],
-          "ans": "gap",
-          "note": "正解：gap（隙間）"
-        },
-        {
-          "type": "single",
-          "q": "\"To absorb a liquid.\"",
-          "opts": [
-            "soak up",
-            "intensify",
-            "flush out",
-            "groundwater"
-          ],
-          "ans": "soak up",
-          "note": "正解：soak up（吸い上げる）"
-        },
-        {
-          "type": "single",
-          "q": "\"To let liquid or gas escapes through a hole or crack.\"",
-          "opts": [
-            "leak",
-            "rush",
-            "discard",
-            "glacier"
-          ],
-          "ans": "leak",
-          "note": "正解：leak（漏れる）"
-        },
-        {
-          "type": "single",
-          "q": "\"A place where water comes up from the ground naturally.\"",
-          "opts": [
-            "spring",
-            "shrink",
-            "sewage",
-            "meager"
-          ],
-          "ans": "spring",
-          "note": "正解：spring（泉）"
-        },
-        {
-          "type": "single",
-          "q": "\"To supply with something; to give food to a person or animal.\"",
-          "opts": [
-            "feed",
-            "threaten",
-            "cut back",
-            "lie"
-          ],
-          "ans": "feed",
-          "note": "正解：feed（送り込む・餌を与える）"
-        },
-        {
-          "type": "single",
-          "q": "\"An area of land that is often wet, like a marsh or swamp.\"",
-          "opts": [
-            "wetland",
-            "trigger",
-            "purify",
-            "lurk"
-          ],
-          "ans": "wetland",
-          "note": "正解：wetland（湿地）"
-        },
-        {
-          "type": "single",
-          "q": "\"To take out something, especially using force or effort.\"",
-          "opts": [
-            "extract",
-            "inject",
-            "precious",
-            "plain"
-          ],
-          "ans": "extract",
-          "note": "正解：extract（取り出す・抽出する）"
-        },
-        {
-          "type": "single",
-          "q": "\"the process of keeping places free from dirt, infection, disease, etc., by removing waste, trash and garbage, by cleaning streets, etc.\"",
-          "opts": [
-            "sanitation",
-            "flush out",
-            "liquid",
-            "gap"
-          ],
-          "ans": "sanitation",
-          "note": "正解：sanitation（(公衆)衛生）"
-        },
-        {
-          "type": "single",
-          "q": "\"The feeling of needing to drink something.\"",
-          "opts": [
-            "thirst",
-            "discard",
-            "beneath",
-            "soak up"
-          ],
-          "ans": "thirst",
-          "note": "正解：thirst（喉の乾き）"
-        },
-        {
-          "type": "single",
-          "q": "\"The usual weather conditions in a place.\"",
-          "opts": [
-            "climate",
-            "sewage",
-            "groundwater",
-            "leak"
-          ],
-          "ans": "climate",
-          "note": "正解：climate（気候）"
-        },
-        {
-          "type": "single",
-          "q": "\"To make something stronger or more extreme.\"",
-          "opts": [
-            "intensify",
-            "cut back",
-            "glacier",
-            "spring"
-          ],
-          "ans": "intensify",
-          "note": "正解：intensify（〜を強める）"
-        },
-        {
-          "type": "single",
-          "q": "\"To move or go somewhere quickly.\"",
-          "opts": [
-            "rush",
-            "purify",
-            "meager",
-            "feed"
-          ],
-          "ans": "rush",
-          "note": "正解：rush（一気に流入する）"
-        },
-        {
-          "type": "single",
-          "q": "\"To become smaller in size.\"",
-          "opts": [
-            "shrink",
-            "precious",
-            "lie",
-            "wetland"
-          ],
-          "ans": "shrink",
-          "note": "正解：shrink（縮小する・縮む）"
-        },
-        {
-          "type": "single",
-          "q": "\"To be likely to cause harm or damage.\"",
-          "opts": [
-            "threaten",
-            "liquid",
-            "lurk",
-            "extract"
-          ],
-          "ans": "threaten",
-          "note": "正解：threaten（〜を脅かす）"
-        },
-        {
-          "type": "single",
-          "q": "\"To cause something to start happening.\"",
-          "opts": [
-            "trigger",
-            "beneath",
-            "plain",
-            "sanitation"
-          ],
-          "ans": "trigger",
-          "note": "正解：trigger（〜を引き起こす）"
-        },
-        {
-          "type": "single",
-          "q": "\"To put liquid into something, usually with a needle.\"",
-          "opts": [
-            "inject",
-            "groundwater",
-            "gap",
-            "thirst"
-          ],
-          "ans": "inject",
-          "note": "正解：inject（〜を注入する）"
-        },
-        {
-          "type": "single",
-          "q": "\"To cause something to leave a hiding place\"",
-          "opts": [
-            "flush out",
-            "glacier",
-            "soak up",
-            "climate"
-          ],
-          "ans": "flush out",
-          "note": "正解：flush out（〜を噴出させる）"
-        },
-        {
-          "type": "single",
-          "q": "\"To throw something away.\"",
-          "opts": [
-            "discard",
-            "meager",
-            "leak",
-            "intensify"
-          ],
-          "ans": "discard",
-          "note": "正解：discard（〜を捨てる・廃棄する）"
-        },
-        {
-          "type": "single",
-          "q": "\"Waste water and waste materials that are carried away from homes and buildings.\"",
-          "opts": [
-            "sewage",
-            "lie",
-            "spring",
-            "rush"
-          ],
-          "ans": "sewage",
-          "note": "正解：sewage（下水）"
-        },
-        {
-          "type": "single",
-          "q": "\"To reduce the amount of something.\"",
-          "opts": [
-            "cut back",
-            "lurk",
-            "feed",
-            "shrink"
-          ],
-          "ans": "cut back",
-          "note": "正解：cut back（〜を減らす）"
-        },
-        {
-          "type": "single",
-          "q": "\"To make something clean and free of harmful substances.\"",
-          "opts": [
-            "purify",
-            "plain",
-            "wetland",
-            "threaten"
-          ],
-          "ans": "purify",
-          "note": "正解：purify（浄化する）"
-        },
-        {
-          "type": "single",
-          "q": "\"Very valuable or important.\"",
-          "opts": [
-            "precious",
-            "gap",
-            "extract",
-            "trigger"
-          ],
-          "ans": "precious",
-          "note": "正解：precious（貴重な）"
-        }
-      ]
-    },
-    {
-      "id": "u4-spell",
-      "no": "S8",
-      "title": "Unit 4 綴り",
-      "qs": [
-        {
-          "type": "input",
-          "exact": true,
-          "q": "液体：\"A substance that is not solid or gas and can flow, like water or milk.\"",
-          "ans": "liquid",
-          "note": "正解：liquid"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜の下に：\"In a lower place; under something.\"",
-          "ans": "beneath",
-          "note": "正解：beneath"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "地下水：\"Water that is found under the ground.\"",
-          "ans": "groundwater",
-          "note": "正解：groundwater（Word Listの groudwater は誤植）"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "氷河：\"A large, slow-moving mass of ice on mountains or near the poles.\"",
-          "ans": "glacier",
-          "note": "正解：glacier"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "貧弱な・乏しい：\"Very small or not enough.\"",
-          "ans": [
-            "meager",
-            "meagre"
-          ],
-          "note": "正解：meager"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "存在する：\"To be located in a particular place\"",
-          "ans": "lie",
-          "note": "正解：lie"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜に潜む：\"To be in a hidden place, often for something bad.\"",
-          "ans": "lurk",
-          "note": "正解：lurk"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "平原、平野：\"A large area of flat land with few trees.\"",
-          "ans": "plain",
-          "note": "正解：plain"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "隙間：\"An empty space or hole in the middle of something.\"",
-          "ans": "gap",
-          "note": "正解：gap"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "吸い上げる：\"To absorb a liquid.\"",
-          "ans": "soak up",
-          "note": "正解：soak up"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "漏れる：\"To let liquid or gas escapes through a hole or crack.\"",
-          "ans": "leak",
-          "note": "正解：leak"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "泉：\"A place where water comes up from the ground naturally.\"",
-          "ans": "spring",
-          "note": "正解：spring"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "送り込む・餌を与える：\"To supply with something; to give food to a person or animal.\"",
-          "ans": "feed",
-          "note": "正解：feed"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "湿地：\"An area of land that is often wet, like a marsh or swamp.\"",
-          "ans": "wetland",
-          "note": "正解：wetland"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "取り出す・抽出する：\"To take out something, especially using force or effort.\"",
-          "ans": "extract",
-          "note": "正解：extract"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "(公衆)衛生：\"the process of keeping places free from dirt, infection, disease, etc., by removing waste, trash and garbage, by cleaning streets, etc.\"",
-          "ans": "sanitation",
-          "note": "正解：sanitation"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "喉の乾き：\"The feeling of needing to drink something.\"",
-          "ans": "thirst",
-          "note": "正解：thirst"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "気候：\"The usual weather conditions in a place.\"",
-          "ans": "climate",
-          "note": "正解：climate"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜を強める：\"To make something stronger or more extreme.\"",
-          "ans": "intensify",
-          "note": "正解：intensify"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "一気に流入する：\"To move or go somewhere quickly.\"",
-          "ans": "rush",
-          "note": "正解：rush"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "縮小する・縮む：\"To become smaller in size.\"",
-          "ans": "shrink",
-          "note": "正解：shrink"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜を脅かす：\"To be likely to cause harm or damage.\"",
-          "ans": "threaten",
-          "note": "正解：threaten"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜を引き起こす：\"To cause something to start happening.\"",
-          "ans": "trigger",
-          "note": "正解：trigger"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜を注入する：\"To put liquid into something, usually with a needle.\"",
-          "ans": "inject",
-          "note": "正解：inject"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜を噴出させる：\"To cause something to leave a hiding place\"",
-          "ans": "flush out",
-          "note": "正解：flush out"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜を捨てる・廃棄する：\"To throw something away.\"",
-          "ans": "discard",
-          "note": "正解：discard"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "下水：\"Waste water and waste materials that are carried away from homes and buildings.\"",
-          "ans": "sewage",
-          "note": "正解：sewage"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "〜を減らす：\"To reduce the amount of something.\"",
-          "ans": "cut back",
-          "note": "正解：cut back"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "浄化する：\"To make something clean and free of harmful substances.\"",
-          "ans": "purify",
-          "note": "正解：purify"
-        },
-        {
-          "type": "input",
-          "exact": true,
-          "q": "貴重な：\"Very valuable or important.\"",
-          "ans": "precious",
-          "note": "正解：precious"
-        }
-      ]
-    },
-    {
-      "id": "wc-same",
-      "no": "S9",
+      "id": "word-choice",
+      "no": "S5",
       "title": "Word Choice（教科書そのまま）",
       "qs": [
         {
-          "type": "single",
-          "q": "【U3 Part 1】通信販売の衣料ビジネスを始める：launch a mail-order ( ___ ) business",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "apparel",
-          "note": "正解：apparel。語群：absorb / apparel / compounds / grip / pores / uneven"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 1",
+          "front": "通信販売の衣料ビジネスを始める：launch a mail-order ( ___ ) business",
+          "back": "launch a mail-order <b>apparel</b> business<br><br>語群：absorb / apparel / compounds / grip / pores / uneven"
         },
         {
-          "type": "single",
-          "q": "【U3 Part 1】ハンドルをしっかり握る：( ___ ) the wheel tightly",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "grip",
-          "note": "正解：grip。語群：absorb / apparel / compounds / grip / pores / uneven"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 1",
+          "front": "ハンドルをしっかり握る：( ___ ) the wheel tightly",
+          "back": "<b>grip</b> the wheel tightly<br><br>語群：absorb / apparel / compounds / grip / pores / uneven"
         },
         {
-          "type": "single",
-          "q": "【U3 Part 1】でこぼこの地面を走る：run on ( ___ ) ground",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "uneven",
-          "note": "正解：uneven。語群：absorb / apparel / compounds / grip / pores / uneven"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 1",
+          "front": "でこぼこの地面を走る：run on ( ___ ) ground",
+          "back": "run on <b>uneven</b> ground<br><br>語群：absorb / apparel / compounds / grip / pores / uneven"
         },
         {
-          "type": "single",
-          "q": "【U3 Part 1】いくつかの有機化合物を合成する：synthesize some organic ( ___ )",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "compounds",
-          "note": "正解：compounds。語群：absorb / apparel / compounds / grip / pores / uneven"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 1",
+          "front": "いくつかの有機化合物を合成する：synthesize some organic ( ___ )",
+          "back": "synthesize some organic <b>compounds</b><br><br>語群：absorb / apparel / compounds / grip / pores / uneven"
         },
         {
-          "type": "single",
-          "q": "【U3 Part 1】食物から栄養を吸収する：( ___ ) nutrients from food",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "absorb",
-          "note": "正解：absorb。語群：absorb / apparel / compounds / grip / pores / uneven"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 1",
+          "front": "食物から栄養を吸収する：( ___ ) nutrients from food",
+          "back": "<b>absorb</b> nutrients from food<br><br>語群：absorb / apparel / compounds / grip / pores / uneven"
         },
         {
-          "type": "single",
-          "q": "【U3 Part 2】速乾性の布地を開発する：develop a quick-drying ( ___ )",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "fabric",
-          "note": "正解：fabric。語群：fabric / friction / generate / lab / retail / sole"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 2",
+          "front": "速乾性の布地を開発する：develop a quick-drying ( ___ )",
+          "back": "develop a quick-drying <b>fabric</b><br><br>語群：fabric / friction / generate / lab / retail / sole"
         },
         {
-          "type": "single",
-          "q": "【U3 Part 2】高い利益を生むために休みなく働く：work round the clock to ( ___ ) a high profit",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "generate",
-          "note": "正解：generate。語群：fabric / friction / generate / lab / retail / sole"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 2",
+          "front": "高い利益を生むために休みなく働く：work round the clock to ( ___ ) a high profit",
+          "back": "work round the clock to <b>generate</b> a high profit<br><br>語群：fabric / friction / generate / lab / retail / sole"
         },
         {
-          "type": "single",
-          "q": "【U3 Part 2】二国間の貿易摩擦を最小限にする：minimize the trade ( ___ ) between the two countries",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "friction",
-          "note": "正解：friction。語群：fabric / friction / generate / lab / retail / sole"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 2",
+          "front": "二国間の貿易摩擦を最小限にする：minimize the trade ( ___ ) between the two countries",
+          "back": "minimize the trade <b>friction</b> between the two countries<br><br>語群：fabric / friction / generate / lab / retail / sole"
         },
         {
-          "type": "single",
-          "q": "【U3 Part 2】大手小売チェーン店に投資する：invest in a large ( ___ ) chain",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "retail",
-          "note": "正解：retail。語群：fabric / friction / generate / lab / retail / sole"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 2",
+          "front": "大手小売チェーン店に投資する：invest in a large ( ___ ) chain",
+          "back": "invest in a large <b>retail</b> chain<br><br>語群：fabric / friction / generate / lab / retail / sole"
         },
         {
-          "type": "single",
-          "q": "【U3 Part 2】最先端の研究所として評判を得る：gain a reputation for a cutting-edge ( ___ )",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "lab",
-          "note": "正解：lab。語群：fabric / friction / generate / lab / retail / sole"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U3 Part 2",
+          "front": "最先端の研究所として評判を得る：gain a reputation for a cutting-edge ( ___ )",
+          "back": "gain a reputation for a cutting-edge <b>lab</b><br><br>語群：fabric / friction / generate / lab / retail / sole"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 1】写真の下の短い説明文を読む：read the caption ( ___ ) the photos",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "beneath",
-          "note": "正解：beneath。語群：beneath / crops / extract / lurk / sanitation / wetlands"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 1",
+          "front": "写真の下の短い説明文を読む：read the caption ( ___ ) the photos",
+          "back": "read the caption <b>beneath</b> the photos<br><br>語群：beneath / crops / extract / lurk / sanitation / wetlands"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 1】茂みの背後に潜む：( ___ ) behind the bushes",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "lurk",
-          "note": "正解：lurk。語群：beneath / crops / extract / lurk / sanitation / wetlands"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 1",
+          "front": "茂みの背後に潜む：( ___ ) behind the bushes",
+          "back": "<b>lurk</b> behind the bushes<br><br>語群：beneath / crops / extract / lurk / sanitation / wetlands"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 1】空気から水分を取り出す：( ___ ) moisture from the air",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "extract",
-          "note": "正解：extract。語群：beneath / crops / extract / lurk / sanitation / wetlands"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 1",
+          "front": "空気から水分を取り出す：( ___ ) moisture from the air",
+          "back": "<b>extract</b> moisture from the air<br><br>語群：beneath / crops / extract / lurk / sanitation / wetlands"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 1】適切な衛生設備を利用できる：have access to proper ( ___ )",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "sanitation",
-          "note": "正解：sanitation。語群：beneath / crops / extract / lurk / sanitation / wetlands"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 1",
+          "front": "適切な衛生設備を利用できる：have access to proper ( ___ )",
+          "back": "have access to proper <b>sanitation</b><br><br>語群：beneath / crops / extract / lurk / sanitation / wetlands"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 1】病気に強い作物を育てる：grow disease-resistant ( ___ )",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "crops",
-          "note": "正解：crops。語群：beneath / crops / extract / lurk / sanitation / wetlands"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 1",
+          "front": "病気に強い作物を育てる：grow disease-resistant ( ___ )",
+          "back": "grow disease-resistant <b>crops</b><br><br>語群：beneath / crops / extract / lurk / sanitation / wetlands"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 2】激しい喉の渇きに苦しむ：suffer from a burning ( ___ )",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "thirst",
-          "note": "正解：thirst。語群：inject / intensify / purify / sewage / thirst / threaten"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 2",
+          "front": "激しい喉の渇きに苦しむ：suffer from a burning ( ___ )",
+          "back": "suffer from a burning <b>thirst</b><br><br>語群：inject / intensify / purify / sewage / thirst / threaten"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 2】戦争終結に向けた外交努力を強化する：( ___ ) diplomatic efforts to stop the war",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "intensify",
-          "note": "正解：intensify。語群：inject / intensify / purify / sewage / thirst / threaten"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 2",
+          "front": "戦争終結に向けた外交努力を強化する：( ___ ) diplomatic efforts to stop the war",
+          "back": "<b>intensify</b> diplomatic efforts to stop the war<br><br>語群：inject / intensify / purify / sewage / thirst / threaten"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 2】人類の生存を脅かす：( ___ ) the survival of human beings",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "threaten",
-          "note": "正解：threaten。語群：inject / intensify / purify / sewage / thirst / threaten"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 2",
+          "front": "人類の生存を脅かす：( ___ ) the survival of human beings",
+          "back": "<b>threaten</b> the survival of human beings<br><br>語群：inject / intensify / purify / sewage / thirst / threaten"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 2】壊れた下水管を修理する：repair the broken ( ___ ) pipes",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "sewage",
-          "note": "正解：sewage。語群：inject / intensify / purify / sewage / thirst / threaten"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 2",
+          "front": "壊れた下水管を修理する：repair the broken ( ___ ) pipes",
+          "back": "repair the broken <b>sewage</b> pipes<br><br>語群：inject / intensify / purify / sewage / thirst / threaten"
         },
         {
-          "type": "single",
-          "q": "【U4 Part 2】水の浄化に塩素を使う：use chlorine to ( ___ ) water",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "purify",
-          "note": "正解：purify。語群：inject / intensify / purify / sewage / thirst / threaten"
-        }
-      ]
-    },
-    {
-      "id": "wc-new",
-      "no": "S10",
-      "title": "Word Choice（別文脈）",
-      "qs": [
-        {
-          "type": "single",
-          "q": "【U3 Part 1・別文脈】冬物衣料品の新しいラインを発表する：launch a new line of winter ( ___ )",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "apparel",
-          "note": "正解：apparel。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U3 Part 1・別文脈】登る前にしっかりと取っ手を握る必要がある：You need to ( ___ ) the handle firmly before climbing",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "grip",
-          "note": "正解：grip。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U3 Part 1・別文脈】古い部屋の凸凹の床を歩く：walk across the ( ___ ) floor of the old room",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "uneven",
-          "note": "正解：uneven。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U3 Part 1・別文脈】化学者たちはいくつかの新しい化合物を発見した：Chemists discovered several new organic ( ___ )",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "compounds",
-          "note": "正解：compounds。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U3 Part 1・別文脈】スポンジは大量の水を吸収できる：A sponge can ( ___ ) a large amount of water",
-          "opts": [
-            "absorb",
-            "apparel",
-            "compounds",
-            "grip",
-            "pores",
-            "uneven"
-          ],
-          "ans": "absorb",
-          "note": "正解：absorb。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U3 Part 2・別文脈】新しい合成繊維の生地を紹介する：introduce a new synthetic ( ___ )",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "fabric",
-          "note": "正解：fabric。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U3 Part 2・別文脈】太陽光パネルは電力を生み出すことができる：Solar panels can ( ___ ) electricity",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "generate",
-          "note": "正解：generate。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U3 Part 2・別文脈】車輪と道路の間の摩擦を減らす：reduce the ( ___ ) between the wheel and the road",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "friction",
-          "note": "正解：friction。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U3 Part 2・別文脈】都市部に新しい小売店を開く：open a new ( ___ ) store in the city",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "retail",
-          "note": "正解：retail。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U3 Part 2・別文脈】大学の研究室で実験を行う：conduct experiments in the university ( ___ )",
-          "opts": [
-            "fabric",
-            "friction",
-            "generate",
-            "lab",
-            "retail",
-            "sole"
-          ],
-          "ans": "lab",
-          "note": "正解：lab。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 1・別文脈】机の下に鍵を見つけた：found the key ( ___ ) the desk",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "beneath",
-          "note": "正解：beneath。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 1・別文脈】危険は暗い路地に潜んでいるかもしれない：Danger may ( ___ ) in the dark alley",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "lurk",
-          "note": "正解：lurk。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 1・別文脈】花からエッセンシャルオイルを抽出する：( ___ ) essential oil from flowers",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "extract",
-          "note": "正解：extract。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 1・別文脈】きれいな水と衛生設備は健康に不可欠だ：Clean water and ( ___ ) are essential for health",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "sanitation",
-          "note": "正解：sanitation。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 1・別文脈】農家は毎年新しい作物を植える：Farmers plant new ( ___ ) every year",
-          "opts": [
-            "beneath",
-            "crops",
-            "extract",
-            "lurk",
-            "sanitation",
-            "wetlands"
-          ],
-          "ans": "crops",
-          "note": "正解：crops。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 2・別文脈】長い散歩の後、強い喉の渇きを感じた：felt a strong ( ___ ) after the long walk",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "thirst",
-          "note": "正解：thirst。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 2・別文脈】天候が悪化するにつれて風が強まり始めた：The wind began to ( ___ ) as the weather worsened",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "intensify",
-          "note": "正解：intensify。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 2・別文脈】大雨が古い橋を脅かし始めている：Heavy rain is starting to ( ___ ) the old bridge",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "threaten",
-          "note": "正解：threaten。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 2・別文脈】市は下水処理施設を改修した：The city renovated its ( ___ ) treatment facility",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "sewage",
-          "note": "正解：sewage。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        },
-        {
-          "type": "single",
-          "q": "【U4 Part 2・別文脈】このフィルターは空気を浄化できる：This filter can ( ___ ) the air",
-          "opts": [
-            "inject",
-            "intensify",
-            "purify",
-            "sewage",
-            "thirst",
-            "threaten"
-          ],
-          "ans": "purify",
-          "note": "正解：purify。教科書の例文とは違う文脈だが同じ語群から選ぶ。"
-        }
-      ]
-    },
-    {
-      "id": "notes",
-      "no": "S11",
-      "title": "本文の重要語（Word List外・語注）",
-      "qs": [
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"veg out\" の意味は？",
-          "opts": [
-            "のんびり過ごす",
-            "靴底から飛び出すスパイク",
-            "戦争で荒廃した",
-            "その一方で"
-          ],
-          "ans": "のんびり過ごす",
-          "note": "veg out＝のんびり過ごす"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"be dreaming up\" の意味は？",
-          "opts": [
-            "〜を考え出している",
-            "踏ん張る",
-            "衣装、服装",
-            "孔"
-          ],
-          "ans": "〜を考え出している",
-          "note": "be dreaming up＝〜を考え出している"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"comfier\" の意味は？",
-          "opts": [
-            "comfy「心地よい」の比較級",
-            "地形",
-            "何層も重ねる",
-            "赤外線波"
-          ],
-          "ans": "comfy「心地よい」の比較級",
-          "note": "comfier＝comfy「心地よい」の比較級"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"pop-out spikes on the sole\" の意味は？",
-          "opts": [
-            "靴底から飛び出すスパイク",
-            "金属有機構造体",
-            "〜を通じてぶんぶん音を立てる",
-            "衣類、衣服"
-          ],
-          "ans": "靴底から飛び出すスパイク",
-          "note": "pop-out spikes on the sole＝靴底から飛び出すスパイク"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"keep one's footing\" の意味は？",
-          "opts": [
-            "踏ん張る",
-            "戦争で荒廃した",
-            "その一方で",
-            "電源コンセント"
-          ],
-          "ans": "踏ん張る",
-          "note": "keep one's footing＝踏ん張る"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"terrain\" の意味は？",
-          "opts": [
-            "地形",
-            "衣装、服装",
-            "孔",
-            "〜に縫い込まれた"
-          ],
-          "ans": "地形",
-          "note": "terrain＝地形"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"metal-organic framework\" の意味は？",
-          "opts": [
-            "金属有機構造体",
-            "何層も重ねる",
-            "赤外線波",
-            "太陽光線を吸収する"
-          ],
-          "ans": "金属有機構造体",
-          "note": "metal-organic framework＝金属有機構造体"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"war-torn\" の意味は？",
-          "opts": [
-            "戦争で荒廃した",
-            "〜を通じてぶんぶん音を立てる",
-            "衣類、衣服",
-            "外出先で"
-          ],
-          "ans": "戦争で荒廃した",
-          "note": "war-torn＝戦争で荒廃した"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"attire\" の意味は？",
-          "opts": [
-            "衣装、服装",
-            "その一方で",
-            "電源コンセント",
-            "摩擦電気の"
-          ],
-          "ans": "衣装、服装",
-          "note": "attire＝衣装、服装"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"layer up\" の意味は？",
-          "opts": [
-            "何層も重ねる",
-            "孔",
-            "〜に縫い込まれた",
-            "のんびり過ごす"
-          ],
-          "ans": "何層も重ねる",
-          "note": "layer up＝何層も重ねる"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"humming through\" の意味は？",
-          "opts": [
-            "〜を通じてぶんぶん音を立てる",
-            "赤外線波",
-            "太陽光線を吸収する",
-            "〜を考え出している"
-          ],
-          "ans": "〜を通じてぶんぶん音を立てる",
-          "note": "humming through＝〜を通じてぶんぶん音を立てる"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"on the flip side\" の意味は？",
-          "opts": [
-            "その一方で",
-            "衣類、衣服",
-            "外出先で",
-            "comfy「心地よい」の比較級"
-          ],
-          "ans": "その一方で",
-          "note": "on the flip side＝その一方で"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"pore\" の意味は？",
-          "opts": [
-            "孔",
-            "電源コンセント",
-            "摩擦電気の",
-            "靴底から飛び出すスパイク"
-          ],
-          "ans": "孔",
-          "note": "pore＝孔"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"infrared wave\" の意味は？",
-          "opts": [
-            "赤外線波",
-            "〜に縫い込まれた",
-            "のんびり過ごす",
-            "踏ん張る"
-          ],
-          "ans": "赤外線波",
-          "note": "infrared wave＝赤外線波"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"garment\" の意味は？",
-          "opts": [
-            "衣類、衣服",
-            "太陽光線を吸収する",
-            "〜を考え出している",
-            "地形"
-          ],
-          "ans": "衣類、衣服",
-          "note": "garment＝衣類、衣服"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"power outlet\" の意味は？",
-          "opts": [
-            "電源コンセント",
-            "外出先で",
-            "comfy「心地よい」の比較級",
-            "金属有機構造体"
-          ],
-          "ans": "電源コンセント",
-          "note": "power outlet＝電源コンセント"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"sewn into\" の意味は？",
-          "opts": [
-            "〜に縫い込まれた",
-            "摩擦電気の",
-            "靴底から飛び出すスパイク",
-            "戦争で荒廃した"
-          ],
-          "ans": "〜に縫い込まれた",
-          "note": "sewn into＝〜に縫い込まれた"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"soak up the sun\" の意味は？",
-          "opts": [
-            "太陽光線を吸収する",
-            "のんびり過ごす",
-            "踏ん張る",
-            "衣装、服装"
-          ],
-          "ans": "太陽光線を吸収する",
-          "note": "soak up the sun＝太陽光線を吸収する"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"on the go\" の意味は？",
-          "opts": [
-            "外出先で",
-            "〜を考え出している",
-            "地形",
-            "何層も重ねる"
-          ],
-          "ans": "外出先で",
-          "note": "on the go＝外出先で"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U3）：\"triboelectric\" の意味は？",
-          "opts": [
-            "摩擦電気の",
-            "comfy「心地よい」の比較級",
-            "金属有機構造体",
-            "〜を通じてぶんぶん音を立てる"
-          ],
-          "ans": "摩擦電気の",
-          "note": "triboelectric＝摩擦電気の"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"stash\" の意味は？",
-          "opts": [
-            "隠されているもの",
-            "帯水層",
-            "雨水管",
-            "〜を引き起こす"
-          ],
-          "ans": "隠されているもの",
-          "note": "stash＝隠されているもの"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"ice cap\" の意味は？",
-          "opts": [
-            "氷冠",
-            "〜にしみこむ",
-            "乾燥した",
-            "一方で"
-          ],
-          "ans": "氷冠",
-          "note": "ice cap＝氷冠"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"soak up\" の意味は？",
-          "opts": [
-            "〜を吸い上げる",
-            "湿地",
-            "減少する",
-            "〜を汚染する"
-          ],
-          "ans": "〜を吸い上げる",
-          "note": "soak up＝〜を吸い上げる"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"aquifer\" の意味は？",
-          "opts": [
-            "帯水層",
-            "渇きをいやす",
-            "地面から水分を吸い上げつくす",
-            "ヒ素"
-          ],
-          "ans": "帯水層",
-          "note": "aquifer＝帯水層"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"seep down into\" の意味は？",
-          "opts": [
-            "〜にしみこむ",
-            "雨水管",
-            "〜を引き起こす",
-            "採掘"
-          ],
-          "ans": "〜にしみこむ",
-          "note": "seep down into＝〜にしみこむ"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"wetland\" の意味は？",
-          "opts": [
-            "湿地",
-            "乾燥した",
-            "一方で",
-            "注入された"
-          ],
-          "ans": "湿地",
-          "note": "wetland＝湿地"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"quench\" の意味は？",
-          "opts": [
-            "渇きをいやす",
-            "減少する",
-            "〜を汚染する",
-            "水圧破砕法"
-          ],
-          "ans": "渇きをいやす",
-          "note": "quench＝渇きをいやす"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"storm drain\" の意味は？",
-          "opts": [
-            "雨水管",
-            "地面から水分を吸い上げつくす",
-            "ヒ素",
-            "破棄された機器類"
-          ],
-          "ans": "雨水管",
-          "note": "storm drain＝雨水管"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"arid\" の意味は？",
-          "opts": [
-            "乾燥した",
-            "〜を引き起こす",
-            "採掘",
-            "〜も汚した"
-          ],
-          "ans": "乾燥した",
-          "note": "arid＝乾燥した"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"dwindle\" の意味は？",
-          "opts": [
-            "減少する",
-            "一方で",
-            "注入された",
-            "隠されているもの"
-          ],
-          "ans": "減少する",
-          "note": "dwindle＝減少する"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"sucking the ground dry\" の意味は？",
-          "opts": [
-            "地面から水分を吸い上げつくす",
-            "〜を汚染する",
-            "水圧破砕法",
-            "氷冠"
-          ],
-          "ans": "地面から水分を吸い上げつくす",
-          "note": "sucking the ground dry＝地面から水分を吸い上げつくす"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"trigger\" の意味は？",
-          "opts": [
-            "〜を引き起こす",
-            "ヒ素",
-            "破棄された機器類",
-            "〜を吸い上げる"
-          ],
-          "ans": "〜を引き起こす",
-          "note": "trigger＝〜を引き起こす"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"meanwhile\" の意味は？",
-          "opts": [
-            "一方で",
-            "採掘",
-            "〜も汚した",
-            "帯水層"
-          ],
-          "ans": "一方で",
-          "note": "meanwhile＝一方で"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"pollute\" の意味は？",
-          "opts": [
-            "〜を汚染する",
-            "注入された",
-            "隠されているもの",
-            "〜にしみこむ"
-          ],
-          "ans": "〜を汚染する",
-          "note": "pollute＝〜を汚染する"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"arsenic\" の意味は？",
-          "opts": [
-            "ヒ素",
-            "水圧破砕法",
-            "氷冠",
-            "湿地"
-          ],
-          "ans": "ヒ素",
-          "note": "arsenic＝ヒ素"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"mining\" の意味は？",
-          "opts": [
-            "採掘",
-            "破棄された機器類",
-            "〜を吸い上げる",
-            "渇きをいやす"
-          ],
-          "ans": "採掘",
-          "note": "mining＝採掘"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"be injected\" の意味は？",
-          "opts": [
-            "注入された",
-            "〜も汚した",
-            "帯水層",
-            "雨水管"
-          ],
-          "ans": "注入された",
-          "note": "be injected＝注入された"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"fracking\" の意味は？",
-          "opts": [
-            "水圧破砕法",
-            "隠されているもの",
-            "〜にしみこむ",
-            "乾燥した"
-          ],
-          "ans": "水圧破砕法",
-          "note": "fracking＝水圧破砕法"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"discarded device\" の意味は？",
-          "opts": [
-            "破棄された機器類",
-            "氷冠",
-            "湿地",
-            "減少する"
-          ],
-          "ans": "破棄された機器類",
-          "note": "discarded device＝破棄された機器類"
-        },
-        {
-          "type": "single",
-          "q": "本文の語注（U4）：\"have also tainted\" の意味は？",
-          "opts": [
-            "〜も汚した",
-            "〜を吸い上げる",
-            "渇きをいやす",
-            "地面から水分を吸い上げつくす"
-          ],
-          "ans": "〜も汚した",
-          "note": "have also tainted＝〜も汚した"
-        }
-      ]
-    },
-    {
-      "id": "mixed",
-      "no": "S12",
-      "title": "混合（Unit 3 / Unit 4）",
-      "qs": [
-        {
-          "type": "single",
-          "q": "\"impress\" の意味は？",
-          "opts": [
-            "印象付ける",
-            "〜に潜む",
-            "カウチ、ソファ",
-            "地下水"
-          ],
-          "ans": "印象付ける",
-          "note": "impress＝印象付ける（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"extract\" の意味は？",
-          "opts": [
-            "取り出す・抽出する",
-            "布地、生地",
-            "危害",
-            "平原、平野"
-          ],
-          "ans": "取り出す・抽出する",
-          "note": "extract＝取り出す・抽出する（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"absorb\" の意味は？",
-          "opts": [
-            "吸収する",
-            "吸い上げる",
-            "布地、生地",
-            "送り込む・餌を与える"
-          ],
-          "ans": "吸収する",
-          "note": "absorb＝吸収する（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"threaten\" の意味は？",
-          "opts": [
-            "〜を脅かす",
-            "引っかける《米口語》",
-            "中和する",
-            "気候"
-          ],
-          "ans": "〜を脅かす",
-          "note": "threaten＝〜を脅かす（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"current\" の意味は？",
-          "opts": [
-            "電流",
-            "地下水",
-            "埋め込む",
-            "〜を引き起こす"
-          ],
-          "ans": "電流",
-          "note": "current＝電流（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"intensify\" の意味は？",
-          "opts": [
-            "〜を強める",
-            "生成する、発生させる",
-            "中が透けて見える",
-            "〜を減らす"
-          ],
-          "ans": "〜を強める",
-          "note": "intensify＝〜を強める（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"friction\" の意味は？",
-          "opts": [
-            "摩擦",
-            "〜を噴出させる",
-            "生成する、発生させる",
-            "地下水"
-          ],
-          "ans": "摩擦",
-          "note": "friction＝摩擦（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"cut back\" の意味は？",
-          "opts": [
-            "〜を減らす",
-            "ひと揃いの衣服",
-            "電荷、充電",
-            "平原、平野"
-          ],
-          "ans": "〜を減らす",
-          "note": "cut back＝〜を減らす（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"innovation\" の意味は？",
-          "opts": [
-            "新しく採り入れたもの",
-            "(公衆)衛生",
-            "ひと揃いの衣服",
-            "送り込む・餌を与える"
-          ],
-          "ans": "新しく採り入れたもの",
-          "note": "innovation＝新しく採り入れたもの（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"meager\" の意味は？",
-          "opts": [
-            "貧弱な・乏しい",
-            "滑りやすい",
-            "新しく採り入れたもの",
-            "気候"
-          ],
-          "ans": "貧弱な・乏しい",
-          "note": "meager＝貧弱な・乏しい（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"to perform athletic exercises in order to improve your health or physical fitness\"",
-          "opts": [
-            "運動・トレーニングをする",
-            "目指す、意図する",
-            "中和する",
-            "電気の差込口、コンセント"
-          ],
-          "ans": "運動・トレーニングをする",
-          "note": "正解：work out（運動・トレーニングをする）（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"To be located in a particular place\"",
-          "opts": [
-            "存在する",
-            "布地、生地",
-            "電流",
-            "増大する"
-          ],
-          "ans": "存在する",
-          "note": "正解：lie（存在する）（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"physical or mental damage or injury\"",
-          "opts": [
-            "危害",
-            "埋め込む",
-            "摩擦",
-            "銅"
-          ],
-          "ans": "危害",
-          "note": "正解：harm（危害）（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"An empty space or hole in the middle of something.\"",
-          "opts": [
-            "隙間",
-            "電気の差込口、コンセント",
-            "ねじ曲げる",
-            "〜の下に"
-          ],
-          "ans": "隙間",
-          "note": "正解：gap（隙間）（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"able to be seen through; clear enough to allow light to pass through\"",
-          "opts": [
-            "中が透けて見える",
-            "(両側から強く～を)押しつぶす",
-            "液体",
-            "平原、平野"
-          ],
-          "ans": "中が透けて見える",
-          "note": "正解：see-through（中が透けて見える）（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"An area of land that is often wet, like a marsh or swamp.\"",
-          "opts": [
-            "湿地",
-            "銅",
-            "貧弱な・乏しい",
-            "泉"
-          ],
-          "ans": "湿地",
-          "note": "正解：wetland（湿地）（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"an amount of electricity\"",
-          "opts": [
-            "電荷、充電",
-            "氷河",
-            "漏れる",
-            "気候"
-          ],
-          "ans": "電荷、充電",
-          "note": "正解：charge（電荷、充電）（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"To move or go somewhere quickly.\"",
-          "opts": [
-            "一気に流入する",
-            "平原、平野",
-            "取り出す・抽出する",
-            "〜を引き起こす"
-          ],
-          "ans": "一気に流入する",
-          "note": "正解：rush（一気に流入する）（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"to use a needle and thread to make or repair something, such as a piece of clothing\"",
-          "opts": [
-            "(針で)縫い合わせる",
-            "湿地",
-            "縮小する・縮む",
-            "〜を減らす"
-          ],
-          "ans": "(針で)縫い合わせる",
-          "note": "正解：stitch（(針で)縫い合わせる）（U3/U4混合セクション）"
-        },
-        {
-          "type": "single",
-          "q": "\"To throw something away.\"",
-          "opts": [
-            "〜を捨てる・廃棄する",
-            "気候",
-            "〜を噴出させる",
-            "印象付ける"
-          ],
-          "ans": "〜を捨てる・廃棄する",
-          "note": "正解：discard（〜を捨てる・廃棄する）（U3/U4混合セクション）"
+          "type": "flashcard",
+          "tag": "Word Choice ・ U4 Part 2",
+          "front": "水の浄化に塩素を使う：use chlorine to ( ___ ) water",
+          "back": "use chlorine to <b>purify</b> water<br><br>語群：inject / intensify / purify / sewage / thirst / threaten"
         }
       ]
     }

@@ -1,0 +1,394 @@
+{
+  "title": "科学技術英語Ⅰ ・ Step2 熟語帳",
+  "subject": "科学技術英語Ⅰ",
+  "year": 2026,
+  "grade": 4,
+  "exam": "前期末試験",
+  "storageKey": "mutou_zenki_matsu_eigo_step2_v1",
+  "pointsPerQ": 100,
+  "sections": [
+    {
+      "id": "key-phrases",
+      "no": "S1",
+      "title": "Key Phrases（教科書そのまま）",
+      "qs": [
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 3",
+          "front": "I tried to refresh myself by ( ) at the gym after doing the housework.",
+          "back": "<b>working out</b><br>前置詞 by の後ろは動名詞。work out「運動する」。他の3つは別の熟語の語形。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 3",
+          "front": "Some types of herbal tea will help the body ( ) fat.",
+          "back": "<b>break down</b><br>help + O + 原形不定詞。「体が脂肪を分解するのを助ける」。broke downは過去形なので不可。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 3",
+          "front": "Using a credit card ( ) an IC chip requires special caution.",
+          "back": "<b>embedded with</b><br>which is の省略で、過去分詞 embedded with が a credit card を後置修飾。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 3",
+          "front": "After several minutes of anxiety, our airplane ( ) an air pocket.",
+          "back": "<b>passed through</b><br>過去の一回きりの出来事なので過去形。passは形容詞pastと発音は同じだが別の語。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 3",
+          "front": "A tiny packet of drugs was skillfully ( ) the lining of her coat.",
+          "back": "<b>sewn into</b><br>be動詞 + 過去分詞の受動態。sew-sewed-sewn の活用に注意。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 4",
+          "front": "The sponge will ( ) the spilled water almost immediately.",
+          "back": "<b>soak up</b><br>助動詞willの後ろは動詞の原形。soak up「~を吸い上げる」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 4",
+          "front": "News of the company's financial troubles began to ( ).",
+          "back": "<b>leak out</b><br>began to の後ろは動詞の原形。leak out「（情報などが）漏れる」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 4",
+          "front": "All the data in each security camera should ( ) the hard drive in the guards' office.",
+          "back": "<b>be fed into</b><br>should の後は原形だが、データが「送り込まれる」側なので受動態 be fed into が自然。feed intoは自動詞・他動詞の両方があるが、ここでは他動詞の受動態。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 4",
+          "front": "Our uniforms will soon ( ) under the strong sun.",
+          "back": "<b>dry out</b><br>willの後ろは動詞の原形。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Key Phrases ・ Unit 4",
+          "front": "Due to the high increase in prices, we need to ( ) our household spending.",
+          "back": "<b>cut back on</b><br>need to の後は原形。目的語 spending の前には前置詞 on が必要（prices は複数形にも注意）。"
+        }
+      ]
+    },
+    {
+      "id": "idioms",
+      "no": "S2",
+      "title": "熟語・句動詞の意味",
+      "qs": [
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>work out</b>",
+          "back": "<b>運動する</b><br>work out「運動する」（「うまくいく」の意味もある）。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>veg out</b>",
+          "back": "<b>のんびり過ごす</b><br>veg out（vegetateの短縮形）「のんびり過ごす」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>dream up（be dreaming up）の意味は？</b>",
+          "back": "<b>~を考え出す</b><br>dream up ~「（新しい発想）を考え出す」。come up with に近いが本文では研究者の発想の文脈で使われる。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>keep one's footing</b>",
+          "back": "<b>踏ん張る・足場を保つ</b><br>keep one's footing「（滑りやすい場所などで）踏ん張る」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>layer up</b>",
+          "back": "<b>何層も重ね着する</b><br>layer up「服を何層も重ねる」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>on the flip side</b>",
+          "back": "<b>その一方で</b><br>on the flip side = on the other hand「その一方で」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>come up with</b>",
+          "back": "<b>~を思いつく</b><br>come up with ~「~を思いつく・考案する」。本文では have been responsible for / given up ではなく come up with が正解。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>sew into</b>",
+          "back": "<b>~に縫い込む</b><br>sew into ~「~に縫い込む」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>soak up</b>",
+          "back": "<b>~を吸収する</b><br>soak up ~「~を吸収する・吸い上げる」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>on the go</b>",
+          "back": "<b>外出先で</b><br>on the go「（固定電源のない）外出先で」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>build up</b>",
+          "back": "<b>蓄積する・高まる</b><br>build up「（電荷・圧力などが）蓄積する」。摩擦がbuild up chargeする、のように使われる。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>be fashioned into</b>",
+          "back": "<b>~に形作られる</b><br>be fashioned into ~「~に形作られる・加工される」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>far from ~ing</b>",
+          "back": "<b>~にはほど遠い</b><br>far from ~ing「~するには程遠い」。still pretty far from hitting retail racks「小売店の棚に並ぶにはまだほど遠い」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>break down</b>",
+          "back": "<b>分解する</b><br>break down ~「~を分解する」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>embed with</b>",
+          "back": "<b>~を埋め込む</b><br>be embedded with ~「~が埋め込まれている」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>pass through</b>",
+          "back": "<b>通り抜ける</b><br>pass through ~「~を通り抜ける」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>turn A into B</b>",
+          "back": "<b>AをBに変える</b><br>turn A into B「AをBに変える」。導電性の糸がTシャツをアンテナに変えた例。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>leak out</b>",
+          "back": "<b>漏れる</b><br>leak out「（情報・液体・気体が）漏れる」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>feed into</b>",
+          "back": "<b>~に送り込む</b><br>feed into ~「~に送り込む・流れ込む」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>dry out</b>",
+          "back": "<b>乾燥する</b><br>dry out「乾く・干上がる」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>cut back (on)</b>",
+          "back": "<b>~を減らす</b><br>cut back (on) ~「~を減らす」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>flush out</b>",
+          "back": "<b>~を洗い流す・追い出す</b><br>flush out ~「（隠れているものなど）を洗い流して外に出す」。fracking（水圧破砕法）で石油・ガスを flush out する文脈。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>seep down into</b>",
+          "back": "<b>~にしみ込む</b><br>seep down into ~「（雨水などが）~にしみこむ」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞",
+          "front": "<b>go around</b>",
+          "back": "<b>行き渡る</b><br>go around「（数量が）行き渡る」。there may be less groundwater to go around「行き渡る地下水が少なくなるかもしれない」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "熟語・句動詞（意味→語）",
+          "front": "「新しい発想を考え出す」の意味の熟語は？（dream up と come up with の使い分け）",
+          "back": "<b>dream up</b> ・ <b>come up with</b><br>どちらも「思いつく」の意味だが、本文の空所補充では come up with が正解（have come up with incorporating ...）。dream up は researchers are dreaming up new ways のように進行形でよく使われる。"
+        }
+      ]
+    },
+    {
+      "id": "paraphrase",
+      "no": "S3",
+      "title": "本文の言い換え",
+      "qs": [
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "They let each of us express our unique sense of style. と近い意味は？",
+          "back": "<b>to show our personalities</b><br>「自分らしさを表現する」= to show our personalities / to express ourselves。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "while we're working out を言い換えると？",
+          "back": "<b>while we're exercising</b><br>work out「運動する」= exercise。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "to comfortably veg out on the couch を言い換えると？",
+          "back": "<b>to relax on the couch</b><br>veg out（vegetateの短縮形）= relax。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "express our unique sense of style は、どのようなコミュニケーションの手段として述べられているか。",
+          "back": "<b>non-verbal communication</b><br>衣服による自己表現は、言葉を使わない（non-verbal）コミュニケーションの手段。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "our clothes could be doing even more の even の意味に最も近いのは？",
+          "back": "<b>ずっと、はるかに（much, far, a lot, still に近い）</b><br>比較級を強調するeven「ずっと」。cf. much, far, a lot, still。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "our clothes could be doing even more とは具体的にどういうことか。",
+          "back": "<b>衣服が今よりも①安全②快適③便利になるかもしれないということ</b><br>safer, comfier, or just more convenient の3点。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "Some ideas for new apparel aim to protect people from harm. の aim to と近い意味は？",
+          "back": "<b>try to</b><br>aim to = try to「~しようとする」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "This could help people keep their footing on slippery or uneven terrain. を言い換えると？",
+          "back": "<b>walk without falling down</b><br>keep one's footing on slippery terrain = 転ばずに歩く。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "It could offer a lightweight shield to people in war-torn countries. の war-torn countries と近い意味は？",
+          "back": "<b>countries in conflict</b><br>war-torn「戦争で荒廃した」= in conflict（紛争状態の）。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "Not all advanced attire is designed to save lives. の意味に最も近いのは？",
+          "back": "<b>Some advanced attire is designed for saving lives, and others aren't.</b><br>部分否定 Not all ~「すべてが~というわけではない」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "you may not need to layer up to stay warm を言い換えると？",
+          "back": "<b>you may not need to wear layers of clothes to stay warm</b><br>layer up = wear layers of clothes。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "On the flip side を言い換えると？",
+          "back": "<b>On the other hand</b><br>on the flip side = on the other hand「その一方で」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "Some researchers have [ been responsible for / come up with / given up ] incorporating completely new functions into clothing. 正しいのは？",
+          "back": "<b>come up with</b><br>「新しい機能を組み込むことを思いついた」= have come up with。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "they're still pretty far from hitting retail racks の hit と近い意味は？",
+          "back": "<b>reach</b><br>hit retail racks「小売店の棚に並ぶ」のhitはreach（到達する）の意味。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "retail の対義語は？",
+          "back": "<b>wholesale</b><br>retail「小売り」⇔ wholesale「卸売り」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "demand for groundwater may rise を言い換えると？",
+          "back": "<b>more groundwater may be needed</b><br>demand may rise「需要が高まる」= もっと必要になる。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "climate change may intensify storms を言い換えると？",
+          "back": "<b>more storms may occur</b><br>intensify「強める」storms＝より激しく、より多くの嵐が起こりうる。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "the meager 1.2 percent を言い換えると？",
+          "back": "<b>the small amount of 1.2 percent</b><br>meager「わずかな」≒ only / small。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "Groundwater [ hidden / made / lost ] under mountains, plains and even deserts. 本文と同じ意味を表す動詞は？",
+          "back": "<b>hidden</b><br>本文の lurks（潜む）と同等の意味を表す語として hidden が最も近い。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "Almost all of the world's liquid freshwater lies underground. の lies の意味は？",
+          "back": "<b>exists（存在する）</b><br>lie（存在する）の3単現。lay（横たえる／lieの過去形）との混同に注意。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "beneath とほぼ同じ意味の前置詞は？",
+          "back": "<b>below</b><br>beneath ≒ below「~の下に」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "this water also quenches the thirst of some 2 billion people を言い換えると？",
+          "back": "<b>this water is also used as drinking water for about 2 billion people</b><br>quench the thirst of ~「~の渇きをいやす」= drinking water として使われる。some ≒ about。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "this water also quenches the thirst of some 2 billion people の some と近い意味は？",
+          "back": "<b>about</b><br>数詞の前のsome「約、およそ」= about。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "sucking the ground dry may even be triggering small earthquakes の trigger と近い意味は？",
+          "back": "<b>causing</b><br>trigger ≒ cause「引き起こす」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "本文の言い換え",
+          "front": "Cutting back on pollution and finding new ways to purify groundwater may help protect this precious resource. の Cutting back on と近い意味は？",
+          "back": "<b>reducing</b><br>cut back on ~ ≒ reduce ~「~を減らす」。"
+        }
+      ]
+    }
+  ],
+  "description": "Key Phrases 10・熟語/句動詞の意味 25・本文の言い換え 25 を単語帳（フラッシュカード）形式で練習する。",
+  "tip": "カードをタップすると裏面が表示される。「覚えた」を押すと進捗に加算される。試験前日のため計60枚に絞った。"
+}

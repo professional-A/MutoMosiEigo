@@ -1,0 +1,267 @@
+{
+  "title": "科学技術英語Ⅰ ・ Step3 文法・構文帳",
+  "subject": "科学技術英語Ⅰ",
+  "year": 2026,
+  "grade": 4,
+  "exam": "前期末試験",
+  "storageKey": "mutou_zenki_matsu_eigo_step3_v1",
+  "pointsPerQ": 100,
+  "sections": [
+    {
+      "id": "grammar",
+      "no": "S1",
+      "title": "文法・構文（18事項×2）",
+      "qs": [
+        {
+          "type": "flashcard",
+          "tag": "could の用法",
+          "front": "A new fabric coating, meanwhile, ( ) absorb and neutralize some chemical weapons. 空所に入るのは？",
+          "back": "<b>could</b><br>研究段階のアイデアなので断定的な will/must ではなく、控えめな可能性を表す could が使われる。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "could の用法",
+          "front": "Freshwater ecosystems ( ) be threatened if dwindling aquifers don't feed enough water into the rivers and lakes. 空所に入るのは？",
+          "back": "<b>could</b><br>Unit4のWriting Strategyの文。帯水層が縮小した場合の将来的な可能性をcouldで表す。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "let / help + O + 原形",
+          "front": "They let each of us ( ) our unique sense of style. 空所に入るのは？",
+          "back": "<b>express</b><br>let + O + 原形不定詞「Oに~させる」。letの後は原形。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "let / help + O + 原形",
+          "front": "Some types of herbal tea will help the body ( ) fat. 空所に入るのは？",
+          "back": "<b>break down</b><br>help + O + 原形不定詞（to不定詞も可だが、本文・教員解答は原形）。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "過去分詞の後置修飾",
+          "front": "Fabric embedded with nanowires could reflect your body heat back onto your skin. の embedded with nanowires の文法的な働きは？",
+          "back": "<b>Fabric を後ろから修飾する過去分詞句</b><br>Fabric (which is) embedded with nanowires のwhich isが省略された形。「ナノワイヤーを埋め込んである布地」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "過去分詞の後置修飾",
+          "front": "chemicals that are injected underground を過去分詞の後置修飾で書き換えると？",
+          "back": "<b>chemicals injected underground</b><br>that are injectedの「that are」を省略し、過去分詞injectedが直接chemicalsを修飾する形。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "接続詞＋過去分詞（S+be の省略）",
+          "front": "Triboelectric materials, for example, can generate electricity when ( )( ) bent or flexed. 省略されている語を補うと？",
+          "back": "<b>they are</b><br>when (they are) bent or flexed。when以下のS+be動詞が省略されている。主語はTriboelectric materials。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "接続詞＋過去分詞（S+be の省略）",
+          "front": "While ( ) at high temperatures, the material becomes flexible. 空所に入るのは？",
+          "back": "<b>heated</b><br>While (it is) heated。接続詞＋過去分詞。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "ハイフンでつなぐ複合形容詞",
+          "front": "pop-out spikes の pop-out のように、2語をハイフンでつないで1つの形容詞にする用法の説明として正しいのは？",
+          "back": "<b>複数の語を組み合わせて名詞を修飾する複合形容詞を作る</b><br>pop-out（飛び出す）のように、名詞の前で複数語をハイフンでつなぎ1つの形容詞として使う。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "ハイフンでつなぐ複合形容詞",
+          "front": "data-packed fabric の意味は？",
+          "back": "<b>データが詰め込まれた布地</b><br>data-packed「データが詰め込まれた」。such data-packed fabric could be used as a hands-free key。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "不規則動詞の活用",
+          "front": "sew の過去分詞は？",
+          "back": "<b>sewn</b><br>sew - sewed - sewn。was skillfully sewn into で使われる。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "不規則動詞の活用",
+          "front": "lie（存在する）の過去形は？",
+          "back": "<b>lay</b><br>lie（存在する）- lay - lain。lay（横たえる）の原形と同じ形になる点に注意（本人が混同しやすいポイント）。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "部分否定 Not all",
+          "front": "Not all advanced attire is designed to save lives. の意味として正しいのは？",
+          "back": "<b>すべての先進的な衣類が命を救うために設計されているわけではない</b><br>Not all ~「すべてが~というわけではない」という部分否定。全否定（None）と区別する。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "部分否定 Not all",
+          "front": "次のうち全否定を表す語はどれか。",
+          "back": "<b>none</b><br>none, nothing, no one, hardly, barely, scarcely などは全否定・ほぼ全否定を表す。not all/not everyは部分否定。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "比較級の強調 even",
+          "front": "Those scientists and engineers... think our clothes could be doing even more. の even の働きは？",
+          "back": "<b>比較級 more を強調する</b><br>even more「ずっと、はるかに多く」。比較級を強調するevenの用法。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "比較級の強調 even",
+          "front": "比較級を強調する副詞として even と同じグループに入らないものは？",
+          "back": "<b>very</b><br>much, far, a lot, still, evenは比較級を強調できるが、veryは原級を修飾し比較級には使えない。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "enough for ～ to do",
+          "front": "Each tiny hole in this material is small enough for visible light waves to be blocked, and big enough for infrared waves to pass through it. の enough for ... to do の構文の意味として正しいのは？",
+          "back": "<b>…が~するのに十分な（大きさ・小ささ）である</b><br>形容詞 + enough for 意味上の主語 + to do「…が~するのに十分~だ」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "enough for ～ to do",
+          "front": "The bridge is strong enough for trucks to cross safely. の構文と同じ形はどれか。",
+          "back": "<b>The box is light enough for a child to carry.</b><br>形容詞 + enough for 意味上の主語 + to do の同型文。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "倍数表現",
+          "front": "Together, they hold about 60 times as much water as the world's lakes and rivers combined. の構文は？",
+          "back": "<b>倍数 + as much + 名詞 + as ~（原級を使った倍数表現）</b><br>X times as much ~ as ...「…のX倍の~」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "倍数表現",
+          "front": "people extract more than 200 times as much groundwater from Earth as oil every year の意味として正しいのは？",
+          "back": "<b>人々は石油の200倍以上の地下水を毎年採取している</b><br>200 times as much groundwater ... as oil「石油の200倍もの地下水」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "倒置 So do S",
+          "front": "So do chemicals that are injected underground to flush out oil or gas in a process called fracking. の意味として正しいのは？",
+          "back": "<b>Chemicals also pollute groundwater.</b><br>So do S「Sもまたそうだ」という倒置。直前の文（Arsenic ... seeps into aquifers.＝汚染する）を受けて、化学物質も同様に汚染することを示す。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "倒置 So do S",
+          "front": "A: \"I like tea.\" B: \"So ( ) I.\" 空所に入るのは？",
+          "back": "<b>do</b><br>likeは一般動詞・現在形なのでdoを使う。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "As ＝ 〜するにつれて",
+          "front": "As human-caused climate change dries out parts of the planet, demand for groundwater may rise. の As の意味は？",
+          "back": "<b>~するにつれて</b><br>As「~するにつれて」。因果・比例関係を表す接続詞。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "As ＝ 〜するにつれて",
+          "front": "As groundwater stores dwindle, they hold less water to refill rivers and streams. の As の意味は？",
+          "back": "<b>~するにつれて</b><br>As groundwater stores dwindle「地下水の貯えが減るにつれて」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "分詞構文",
+          "front": "..., they hold less water to refill rivers and streams, threatening freshwater ecosystems. の threatening の意味上の主語は？",
+          "back": "<b>直前の内容全体（帯水層が川や小川を満たす水を保持できなくなること）</b><br>分詞構文threateningの意味上の主語は、特定の名詞ではなく直前の節の内容全体。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "分詞構文",
+          "front": "分詞構文の基本的な作り方として正しいのは？",
+          "back": "<b>接続詞を省略し、主語が主節と同じなら省略して動詞をing形にする</b><br>分詞構文は接続詞ごと省略するのが基本（接続詞＋過去分詞の構文とは異なる）。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "SVOC",
+          "front": "In California, sucking the ground dry may even be triggering small earthquakes. の dry の文法的役割は？",
+          "back": "<b>the ground の補語（SVOCのC）</b><br>sucking the ground dry「地面を（吸い上げて）カラカラにする」。dryはthe groundを説明する形容詞補語で、suckingの目的語ではない。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "SVOC",
+          "front": "She painted the door red. の red の文法的役割は？",
+          "back": "<b>the door の補語（SVOCのC）</b><br>sucking the ground dryと同じSVOC構造。paint O C「OをCの状態に塗る」。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "対比の談話標識",
+          "front": "A new fabric coating, meanwhile, could absorb and neutralize some chemical weapons. の meanwhile の働きは？",
+          "back": "<b>前の話題（pop-out spikesの靴）と対比しながら、別の新しい例を導入する</b><br>meanwhile「一方で」。靴の例から布地コーティングの例へと話題を切り替える対比の標識。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "対比の談話標識",
+          "front": "While some fabrics help charge devices, others could serve as devices themselves. の While は何と何を対比しているか。",
+          "back": "<b>デバイスの充電を助ける布地 と それ自体がデバイスになる布地</b><br>ハンドアウトQ21の答え。Whileは対比を表す接続詞。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "同語反復の回避",
+          "front": "Unit3の本文で「衣類、衣服、衣装」を意味する語が段落ごとに異なる語で言い換えられている理由として最も適切なのは？",
+          "back": "<b>同じ語の繰り返しを避けるため</b><br>ハンドアウトQ26の答え。英語の文章では同じ語の繰り返しを避け、類義語で言い換えるのが一般的。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "同語反復の回避",
+          "front": "Paragraph 2 で使われている「衣料」を意味する語は？",
+          "back": "<b>apparel</b><br>Some ideas for new apparel aim to protect people from harm."
+        },
+        {
+          "type": "flashcard",
+          "tag": "関係代名詞で定義を作る",
+          "front": "Groundwater is liquid freshwater that lies underground. の定義の組み立て方として正しいのは？",
+          "back": "<b>item（groundwater）+ category（liquid freshwater）+ 関係詞節（that lies underground）でfeaturesを示す</b><br>ハンドアウトQ2の型：item・category・characteristics（features）を関係代名詞でつないで定義文を作る。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "関係代名詞で定義を作る",
+          "front": "次のうち、item + category + 関係詞節（features）の型で正しく定義できているものはどれか。",
+          "back": "<b>A glacier is a large mass of ice that moves slowly over land.</b><br>item（A glacier）+ category（a large mass of ice）+ features（that moves slowly over land）。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "文頭の数字はアルファベットで綴る",
+          "front": "Twenty-one of Earth's 37 biggest aquifers are shrinking. の数値表現「37」はどのように書き表されるべきか（文中の数字のルール）。",
+          "back": "<b>文頭以外では数字のままでよいが、文頭に来る数字はアルファベットで綴る</b><br>文頭の数字はアルファベットで綴るルール。Twenty-oneが文頭のため綴られ、37はそのまま数字。"
+        },
+        {
+          "type": "flashcard",
+          "tag": "文頭の数字はアルファベットで綴る",
+          "front": "\"37 of Earth's aquifers are shrinking.\" を文法的に正しく書き直すと？",
+          "back": "<b>\"Thirty-seven of Earth's aquifers are shrinking.\"</b><br>文頭に来る数字はアルファベットで綴る。文中であれば37のまま数字でよい。"
+        }
+      ]
+    },
+    {
+      "id": "writing-strategy",
+      "no": "S2",
+      "title": "Writing Strategy",
+      "qs": [
+        {
+          "type": "flashcard",
+          "tag": "Writing Strategy",
+          "front": "東京に本拠を置く会社が、飛び出すスパイクを埋め込んだ靴底を開発した。<br><br>A ___ shoe soles with spikes embedded in them.<br><br>語群：Tokyo-based / company / developed / pop-out",
+          "back": "<b>A Tokyo-based company developed pop-out shoe soles with spikes embedded in them.</b><br>過去分詞embeddedの後置修飾"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Writing Strategy",
+          "front": "もしも、柔軟性のあるソーラーパネルを布地に織り込むならば、発電ができるだろう。<br><br>Flexible solar panels ___.<br><br>語群：could / generate / electricity / if / sewn / into / fabric",
+          "back": "<b>Flexible solar panels could generate electricity if sewn into fabric.</b><br>if の後のS+be省略：if (they are) sewn into fabric"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Writing Strategy",
+          "front": "帯水層が小さくなって、川や湖に十分な水を供給しないならば、水の生態系は脅かされるだろう。<br><br>Freshwater ecosystems could be threatened ___ the rivers and lakes.<br><br>語群：if / dwindling / aquifers / don't / feed / enough water / into",
+          "back": "<b>Freshwater ecosystems could be threatened if dwindling aquifers don't feed enough water into the rivers and lakes.</b>"
+        },
+        {
+          "type": "flashcard",
+          "tag": "Writing Strategy",
+          "front": "地球の帯水層にはたくさんの水がある。実際、そこには、湖と川を合わせたよりもおよそ60倍多くの水がある。<br><br>Earth's aquifers contain lots of freshwater. In fact, ___ the rivers and lakes combined.<br><br>語群：they / hold / approximately / 60 / times / more / water / than",
+          "back": "<b>In fact, they hold approximately 60 times more water than the rivers and lakes combined.</b><br>倍数+more+名詞+than"
+        }
+      ]
+    }
+  ],
+  "description": "教員が授業で取り上げた18の文法事項を各2枚、Writing Strategy 4問を単語帳（フラッシュカード）形式で練習する。",
+  "tip": "カードをタップすると裏面が表示される。Writing Strategyは頭の中で英文を組み立ててから裏返すこと。試験前日のため計40枚に絞った。"
+}
