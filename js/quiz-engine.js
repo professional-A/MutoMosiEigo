@@ -88,14 +88,19 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:v
 .num-actions{display:flex;gap:8px;margin-top:12px;flex-wrap:wrap}
 .num-hint{background:var(--bg2);border-left:3px solid var(--amber);border-radius:0 8px 8px 0;padding:9px 13px;margin-top:10px;font-size:.86rem;color:var(--muted);white-space:pre-line;line-height:1.8}
 .num-reveal{background:rgba(95,224,168,.06);border-left:3px solid var(--good);border-radius:0 8px 8px 0;padding:9px 13px;margin-top:8px;font-size:.86rem;color:#cdfbe5;line-height:1.85}
-.fc{background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:20px 18px;margin-top:11px;cursor:pointer;transition:border-color .2s}
-.fc:hover{border-color:var(--teal-d)}
+.fc{margin-top:11px;cursor:pointer;perspective:1400px;outline:none;-webkit-tap-highlight-color:transparent}
+.fc-inner{display:grid;transition:transform .45s cubic-bezier(.2,.7,.2,1);transform-style:preserve-3d;-webkit-transform-style:preserve-3d}
+.fc.flipped .fc-inner{transform:rotateY(180deg)}
+.fc-face{grid-area:1/1;background:var(--card2);border:1px solid var(--line);border-radius:14px;padding:20px 18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:border-color .2s}
+.fc-back-face{transform:rotateY(180deg)}
+.fc:hover .fc-face,.fc:focus-visible .fc-face{border-color:var(--teal-d)}
+@media (prefers-reduced-motion:reduce){.fc-inner{transition:none}}
 .fc-tag{display:inline-block;font-family:"JetBrains Mono",monospace;font-size:.7rem;color:var(--teal);border:1px solid var(--line);border-radius:6px;padding:2px 7px;margin-bottom:10px}
 .fc-front{font-size:1.15rem;font-weight:600;color:var(--ink);line-height:1.5}
 .fc-hint{font-size:.8rem;color:var(--dim);margin-top:10px}
-.fc-back{margin-top:14px;padding-top:14px;border-top:1px solid var(--line);font-size:.96rem;color:var(--muted);line-height:1.85}
+.fc-back{font-size:.98rem;color:var(--ink);line-height:1.85}
 .fc-actions{display:flex;gap:8px;margin-top:12px}
-.q.correct .fc{border-color:var(--teal-d);background:rgba(70,214,196,.06)}
+.q.correct .fc-face{border-color:var(--teal-d);background:rgba(70,214,196,.06)}
 .q.hash-highlight{outline:2px solid var(--teal);outline-offset:3px;transition:outline-color .6s}
 .q-ref{margin:6px 0 2px;font-size:.82rem}
 .q-ref a{color:var(--teal);text-decoration:none;font-weight:700}
@@ -104,6 +109,7 @@ footer{margin-top:60px;padding-top:24px;border-top:1px solid var(--line);color:v
 
 // Module-level state
 let _data, _sections, _storageKey, _state = {};
+const _fcFlipped = {}; // 単語帳の表裏。保存しない（再読み込みで必ず表に戻る）
 
 function getQ(secId, key) {
   const sec = _sections.find(s => s.id === secId);
@@ -203,7 +209,7 @@ function buildQuestion(q, qi, key, secId) {
   div.className = 'q' + (_state[key] === 1 ? ' correct' : _state[key] === -1 ? ' wrong' : '');
   div.id = `q_${key}`;
 
-  let inner = `<div class="q-top"><span class="qn">Q${qi + 1}</span><div class="q-body"><div class="prompt">${q.q}</div>${q.ref ? `<div class="q-ref">${q.ref}</div>` : ''}`;
+  let inner = `<div class="q-top"><span class="qn">Q${qi + 1}</span><div class="q-body">${q.q != null ? `<div class="prompt">${q.q}</div>` : ''}${q.ref ? `<div class="q-ref">${q.ref}</div>` : ''}`;
 
   if (q.type === 'single') {
     inner += `<div class="opts">`;
@@ -301,15 +307,17 @@ function buildQuestion(q, qi, key, secId) {
 
   } else if (q.type === 'flashcard') {
     const known = _state[key] === 1;
-    const shown = known || _state[key + '_shown'];
-    inner += `<div class="fc" onclick="fcFlip('${key}','${secId}')">`;
-    if (q.tag) inner += `<div class="fc-tag">${q.tag}</div>`;
-    inner += `<div class="fc-front">${q.front}</div>`;
-    inner += shown ? `<div class="fc-back">${q.back}</div>` : `<div class="fc-hint">タップで裏面を表示</div>`;
-    inner += `</div>`;
+    const flipped = !!_fcFlipped[key];
+    const tag = q.tag ? `<div class="fc-tag">${q.tag}</div>` : '';
+    inner += `<div class="fc${flipped ? ' flipped' : ''}" id="fc_${key}" role="button" tabindex="0" aria-pressed="${flipped}" aria-label="カードを裏返す" onclick="fcFlip('${key}')" onkeydown="if(event.key==='Enter'||event.key===' '){event.preventDefault();fcFlip('${key}')}">
+      <div class="fc-inner">
+        <div class="fc-face fc-front-face">${tag}<div class="fc-front">${q.front}</div><div class="fc-hint">タップで裏返す</div></div>
+        <div class="fc-face fc-back-face">${tag}<div class="fc-back">${q.back}</div><div class="fc-hint">タップで表に戻す</div></div>
+      </div>
+    </div>`;
     inner += `<div class="fc-actions">
       <button class="btn ${known ? '' : 'ghost'}" onclick="fcMark('${key}','${secId}',1)">${known ? '✓ 覚えた' : '覚えた'}</button>
-      ${known ? `<button class="btn ghost" onclick="fcMark('${key}','${secId}',0)">まだ</button>` : ''}
+      <button class="btn ${known ? 'ghost' : ''}" onclick="fcMark('${key}','${secId}',0)">まだ</button>
     </div>`;
   }
 
@@ -449,15 +457,20 @@ window.numReveal = function (key, secId) {
   save(); refreshQ(key, secId);
 };
 
-window.fcFlip = function (key, secId) {
-  _state[key + '_shown'] = 1;
-  save(); refreshQ(key, secId);
+window.fcFlip = function (key) {
+  _fcFlipped[key] = !_fcFlipped[key];
+  const el = document.getElementById('fc_' + key);
+  if (el) {
+    el.classList.toggle('flipped', _fcFlipped[key]);
+    el.setAttribute('aria-pressed', String(_fcFlipped[key]));
+  }
 };
 
 window.fcMark = function (key, secId, val) {
   if (val) _state[key] = 1;
   else delete _state[key];
-  _state[key + '_shown'] = 1;
+  delete _state[key + '_shown']; // 旧仕様の「裏を見た」記録は使わない
+  _fcFlipped[key] = false;       // 判定したら表に戻す（次の周回で答えが見えないように）
   save(); refreshQ(key, secId);
 };
 
