@@ -4,20 +4,56 @@
     {
       "name": "武藤模試",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", "-l", "3000", "."],
+      "runtimeArgs": [
+        "--yes",
+        "serve",
+        "-l",
+        "3000",
+        "."
+      ],
       "port": 3000
     },
     {
       "name": "武藤模試-8203",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", "-l", "8203", "-c", ".claude/serve-nocleanurls.json", "."],
+      "runtimeArgs": [
+        "--yes",
+        "serve",
+        "-l",
+        "8203",
+        "-c",
+        ".claude/serve-nocleanurls.json",
+        "."
+      ],
       "port": 8203
     },
     {
       "name": "武藤模試-8210",
       "runtimeExecutable": "npx",
-      "runtimeArgs": ["--yes", "serve", "-l", "8210", "-c", ".claude/serve-nocleanurls.json", "."],
+      "runtimeArgs": [
+        "--yes",
+        "serve",
+        "-l",
+        "8210",
+        "-c",
+        ".claude/serve-nocleanurls.json",
+        "."
+      ],
       "port": 8210
+    },
+    {
+      "name": "武藤模試-8230",
+      "runtimeExecutable": "npx",
+      "runtimeArgs": [
+        "--yes",
+        "serve",
+        "-l",
+        "8230",
+        "-c",
+        ".claude/serve-nocleanurls.json",
+        "."
+      ],
+      "port": 8230
     }
   ]
 }

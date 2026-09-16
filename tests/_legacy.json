@@ -41,5 +41,16 @@
     "totalItems": 0,
     "type": "summary",
     "path": "/seigyogaku-reikai.html"
+  },
+  {
+    "year": 2026,
+    "grade": 4,
+    "exam": "前期末試験",
+    "subject": "科学技術英語Ⅰ",
+    "title": "科学技術英語Ⅰ ・ 本文内容解説",
+    "storageKey": null,
+    "totalItems": 0,
+    "type": "summary",
+    "path": "/eigo-honbun.html"
   }
 ]
