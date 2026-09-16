@@ -12,3 +12,6 @@ AI/
 
 # git worktree（superpowers / EnterWorktree が作成）
 .claude/worktrees/
+
+# 前期末 英語の配布資料（教材PDF・写真）。express.static で公開されるため除外
+前期末　英語/
