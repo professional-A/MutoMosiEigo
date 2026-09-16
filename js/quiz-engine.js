@@ -115,8 +115,13 @@ function getQ(secId, key) {
 function norm(s) {
   return String(s).replace(/[　\s]/g, '').toLowerCase().replace(/[，,。．.、]/g, '');
 }
-function matchInput(val, ans) {
+function matchInput(val, ans, exact) {
   const n = norm(val);
+  if (exact) {
+    if (!n) return false;
+    const list = Array.isArray(ans) ? ans : [ans];
+    return list.some(a => norm(a) === n);
+  }
   const list = Array.isArray(ans) ? ans : [ans];
   return list.some(a => { const na = norm(a); return na === n || n.includes(na) || na.includes(n); });
 }
@@ -401,7 +406,7 @@ window.submitInput = function (key, secId) {
   const q = getQ(secId, key); if (!q || _state[key] !== undefined) return;
   const val = (document.getElementById('inp_' + key) || {}).value || '';
   _state[key + '_val'] = val.trim();
-  const correct = matchInput(val, q.ans);
+  const correct = matchInput(val, q.ans, q.exact === true);
   if (correct) award(key);
   _state[key] = correct ? 1 : -1;
   save(); refreshQ(key, secId);

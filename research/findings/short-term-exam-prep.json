@@ -292,5 +292,20 @@
     "caveat": "密度と点数の関係は相関であって因果ではない。低密度のシートは『理解しているから書く必要がなかった』結果の可能性が高く、知識ゼロの学習者が単に量を減らしても点は上がらない。またカンペ作成自体が点を上げるという仮説を支持する文献はほとんど無く（無関係とした研究が複数）、効果が一貫して確認されているのは不安の低下のみ。シートの完成度に時間を注ぐより検索練習に回すほうが期待値が高い。",
     "implemented_in": ["materials/2026-zenki-matsu-kakougaku/cheatsheet-layout.html", "kakougaku-cheatsheet.html"],
     "tags": ["cheatsheet", "open-book", "authoring", "difficulty"]
+  },
+  {
+    "id": "productive-retrieval-needed-for-spelling",
+    "claim": "産出（スペルを書く）能力は産出形式の練習でしか十分に伸びず、選択式（多肢選択）の練習は選択式テストには転移するが、書かせるテストへの転移は弱い。",
+    "numbers": { "受容 vs 産出練習": "産出テストの成績は産出練習を受けた群が有意に高く、受容（選択式）練習だけでは産出テストへの転移が小さい" },
+    "strength": "high",
+    "sources": [
+      { "cite": "Barenberg, Berlin, Bösecke, Dutke & Ivens (2021) 'Retrieval practice: Beyond receptive vs. productive retrieval formats', Applied Cognitive Psychology 35(1)", "url": "https://onlinelibrary.wiley.com/doi/full/10.1002/acp.3796" },
+      { "cite": "The Effects of Receptive and Productive Word Retrieval Practice on Second Language Vocabulary Learning", "url": "https://www.researchgate.net/publication/303939278_The_Effects_of_Receptive_and_Productive_Word_Retrieval_Practice_on_Second_Language_Vocabulary_Learning" }
+    ],
+    "applies_to": ["vocab"],
+    "implication": "本番が単語を綴らせる形式（語彙テストのQ2）なら、練習も選択式だけで済ませず、必ず `type:\"input\"` で綴らせる練習を混ぜる。英語語彙テストでは `exact:true` を使い、派生語・綴り違いの取り違えをそのまま正解にしない。",
+    "caveat": "選択式練習が無駄というわけではなく、選択式テストへの転移には選択式練習で十分。産出テストがゴールのときだけ産出練習が必須になる。",
+    "implemented_in": ["js/quiz-engine.js", "tests/2026-4-zenki-matsu-eigo-vocabtest4/data.json", "tests/2026-4-zenki-matsu-eigo-step1-tango/data.json"],
+    "tags": ["vocab", "spelling", "production", "question-format"]
   }
 ]

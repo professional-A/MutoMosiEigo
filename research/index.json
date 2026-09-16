@@ -5,9 +5,9 @@
       "file": "findings/short-term-exam-prep.json",
       "title": "短期テスト勉強（残り数日〜2週間）の学習科学",
       "question": "試験まで日数が少ない現実的な状況で、何をどう出題・再出題すれば点と定着の両方が取れるか",
-      "count": 19,
+      "count": 20,
       "date": "2026-09-09",
-      "updated": "2026-09-12 — カンペシートの中身と点数の相関（cheatsheet-content-what-correlates-with-scores）を追加"
+      "updated": "2026-09-17 — 産出（スペル）練習の必要性（productive-retrieval-needed-for-spelling）を追加"
     }
   ],
   "source_documents": [
@@ -129,6 +129,15 @@
     ],
     "open-book": [
       "cheatsheet-content-what-correlates-with-scores"
+    ],
+    "vocab": [
+      "productive-retrieval-needed-for-spelling"
+    ],
+    "spelling": [
+      "productive-retrieval-needed-for-spelling"
+    ],
+    "production": [
+      "productive-retrieval-needed-for-spelling"
     ]
   },
   "unimplemented": [
