@@ -693,27 +693,27 @@ async function buildDataReportSnapshot(examName) {
     }
   } catch(e) {}
 
-  let timetable = [];
-  try {
-    const { rows } = await pool.query('SELECT exam, subject, exam_date, start_time, end_time, teacher, link, note FROM exam_timetable ORDER BY exam_date, start_time, subject');
-    timetable = rows;
-  } catch(e) {}
-
-  let tests = [];
-  try {
-    tests = buildTestsIndex().map(t => ({ subject: t.subject, exam: t.exam, title: t.title, totalItems: t.totalItems }));
-  } catch(e) {}
-  const questionCount = tests.reduce((s, t) => s + (t.totalItems || 0), 0);
+  // 確定済み（スコアから y 相当を逆算）と、未確定だがボードに配置済み（y をそのまま使用）を
+  // 1本の順位表にまとめる。ボードの現在位置＝その人の順位とみなしてよいという運用方針
+  const merged = [];
+  Object.entries(confirmed).forEach(([name, total]) => {
+    const y = maxScore ? ((maxScore - total) / maxScore) * 100 : 50;
+    merged.push({ name, total, y });
+  });
+  Object.entries(positions).forEach(([name, pos]) => {
+    if (confirmed[name] != null) return; // 確定済みは上で追加済み
+    merged.push({ name, total: null, y: pos.y });
+  });
+  merged.sort((a, b) => a.y - b.y);
+  const ranking = merged.map((m, i) => ({ rank: i + 1, name: m.name, total: m.total }));
 
   return {
     generatedAt: new Date().toISOString(),
     exam: examName,
     subjects,
     scores,
-    classRank: { positions, confirmed, maxScore },
-    timetable,
-    tests,
-    stats: { userCount: userRows.length, testCount: tests.length, questionCount },
+    classRank: { ranking, maxScore },
+    stats: { userCount: userRows.length },
   };
 }
 

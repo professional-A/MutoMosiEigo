@@ -83,8 +83,6 @@ async function loadReportDetail(slug) {
     const p = r.payload || {};
     const subjects = Array.isArray(p.subjects) ? p.subjects : [];
     const scores = Array.isArray(p.scores) ? p.scores : [];
-    const timetable = Array.isArray(p.timetable) ? p.timetable : [];
-    const tests = Array.isArray(p.tests) ? p.tests : [];
     const stats = p.stats || {};
     const classRank = p.classRank || {};
 
@@ -121,45 +119,23 @@ async function loadReportDetail(slug) {
         </table></div>`
       : '<p class="rp-empty">成績データがありません</p>';
 
-    const confirmed = classRank.confirmed || {};
-    const confirmedEntries = Object.entries(confirmed).sort((a, b) => b[1] - a[1]);
-    const classRankSection = confirmedEntries.length
+    // ranking: フェーズ1で保存された新形式。旧形式（confirmedのみ）のレポートは後方互換でフォールバック
+    let ranking = Array.isArray(classRank.ranking) ? classRank.ranking : null;
+    if (!ranking) {
+      const confirmed = classRank.confirmed || {};
+      ranking = Object.entries(confirmed)
+        .sort((a, b) => b[1] - a[1])
+        .map(([name, total], i) => ({ rank: i + 1, name, total }));
+    }
+    const classRankSection = ranking.length
       ? `<div class="table-scroll"><table class="ranking-table">
-          <thead><tr><th>#</th><th>コマ</th><th>確定点</th></tr></thead>
-          <tbody>${confirmedEntries.map(([name, total], i) => `
-            <tr><td class="rank-num${i<3?' top':''}">${i+1}</td><td class="rank-name">${esc(name)}</td><td style="text-align:center;font-weight:700;color:var(--rose)">${total}</td></tr>
+          <thead><tr><th>#</th><th>コマ</th><th>点数</th></tr></thead>
+          <tbody>${ranking.map((r2, i) => `
+            <tr><td class="rank-num${i<3?' top':''}">${r2.rank}</td><td class="rank-name">${esc(r2.name)}</td><td style="text-align:center;font-weight:700;color:var(--rose)">${r2.total != null ? r2.total : '<span style="color:var(--dim);font-size:.8rem">未確定</span>'}</td></tr>
           `).join('')}</tbody>
         </table></div>
-        <p style="font-size:.76rem;color:var(--dim);margin-top:6px">満点: ${classRank.maxScore != null ? classRank.maxScore : '―'}</p>`
+        <p style="font-size:.76rem;color:var(--dim);margin-top:6px">満点: ${classRank.maxScore != null ? classRank.maxScore : '―'}（「未確定」はレポート作成時点のボード位置による順位）</p>`
       : '<p class="rp-empty">クラス順位データがありません</p>';
-
-    const timetableSection = timetable.length
-      ? `<div class="table-scroll"><table class="ranking-table">
-          <thead><tr><th>日付</th><th>科目</th><th>時間</th><th>担当</th></tr></thead>
-          <tbody>${timetable.map(t => `
-            <tr>
-              <td>${esc(t.exam_date||'')}</td>
-              <td class="rank-name">${esc(t.subject||'')}</td>
-              <td>${esc(t.start_time||'')}${t.end_time ? '–'+esc(t.end_time) : ''}</td>
-              <td>${esc(t.teacher||'')}</td>
-            </tr>
-          `).join('')}</tbody>
-        </table></div>`
-      : '<p class="rp-empty">時間割データがありません</p>';
-
-    const testsSection = tests.length
-      ? `<div class="table-scroll"><table class="ranking-table">
-          <thead><tr><th>科目</th><th>試験</th><th>タイトル</th><th>問題数</th></tr></thead>
-          <tbody>${tests.map(t => `
-            <tr>
-              <td>${esc(t.subject||'')}</td>
-              <td>${esc(t.exam||'')}</td>
-              <td class="rank-name">${esc(t.title||'')}</td>
-              <td style="text-align:center">${t.totalItems != null ? t.totalItems : '―'}</td>
-            </tr>
-          `).join('')}</tbody>
-        </table></div>`
-      : '<p class="rp-empty">テストデータがありません</p>';
 
     el.innerHTML = `
       <a class="rp-back" href="/reports.html">← 一覧へ</a>
@@ -168,15 +144,11 @@ async function loadReportDetail(slug) {
         <div class="rp-head-meta">
           ${r.exam ? `${esc(r.exam)} ・ ` : ''}作成日: ${_fmtDate(r.created_at)}
           ・ 人数: ${stats.userCount != null ? stats.userCount : '―'}
-          ・ テスト数: ${stats.testCount != null ? stats.testCount : '―'}
-          ・ 問題数: ${stats.questionCount != null ? stats.questionCount : '―'}
         </div>
         ${r.note ? `<div class="rp-head-note">${esc(r.note)}</div>` : ''}
       </div>
       <div class="rp-section"><h2>科目別成績</h2>${scoresSection}</div>
-      <div class="rp-section"><h2>クラス順位（確定点）</h2>${classRankSection}</div>
-      <div class="rp-section"><h2>試験時間割</h2>${timetableSection}</div>
-      <div class="rp-section"><h2>テスト一覧</h2>${testsSection}</div>
+      <div class="rp-section"><h2>クラス順位</h2>${classRankSection}</div>
     `;
   } catch(e) { el.innerHTML = '<a class="rp-back" href="/reports.html">← 一覧へ</a><p class="rp-empty">読み込みエラー</p>'; }
 }
