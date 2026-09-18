@@ -46,6 +46,14 @@
       <button onclick="resetExamScores()" style="padding:9px 12px;border:none;border-radius:8px;background:#dc2626;color:#fff;font-weight:700;cursor:pointer;font-family:inherit">🧹 得点をリセット（次の試験の準備）</button>
     </div>
 
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:16px;display:flex;flex-direction:column;gap:8px">
+      <div style="font-size:.82rem;color:var(--muted)">特定の1人・1科目だけをリセット（誤入力・古い点数の修正用）</div>
+      <input id="ur-username" placeholder="ユーザー名" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
+      <select id="ur-subject" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit"></select>
+      <button onclick="resetUserScore()" style="padding:9px 12px;border:none;border-radius:8px;background:#dc2626;color:#fff;font-weight:700;cursor:pointer;font-family:inherit">🎯 この1件だけリセット</button>
+      <div id="ur-msg" style="font-size:.8rem"></div>
+    </div>
+
     <div id="admin-actions">
       <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
       <button onclick="openTimetableModal()" style="background:#1e2333;color:#8ec5ff;border:1px solid #4a8fd6;font-weight:700">🗓 時間割</button>
@@ -210,7 +218,42 @@ appShell.mount(document.getElementById('app-shell-bar'), {
 
 async function refreshAdminPage() {
   updateSlugOptions();
-  await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn(), loadExamSchedule(), loadRaceSection(), reloadDataReports()]);
+  await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn(), loadExamSchedule(), loadRaceSection(), reloadDataReports(), loadUserResetSubjects()]);
+}
+
+// ── 特定ユーザー・特定科目だけのリセット ──
+async function loadUserResetSubjects() {
+  const sel = document.getElementById('ur-subject');
+  try {
+    const data = await fetch('/api/exam-subjects').then(r => r.json());
+    const subjects = Array.isArray(data.subjects) ? data.subjects : [];
+    sel.innerHTML = subjects.map(s => `<option value="${esc(s.key)}">${s.icon||''} ${esc(s.label)}</option>`).join('');
+  } catch(e) { sel.innerHTML = ''; }
+}
+
+async function resetUserScore() {
+  const username = document.getElementById('ur-username').value.trim();
+  const subject  = document.getElementById('ur-subject').value;
+  const label    = document.getElementById('ur-subject').selectedOptions[0]?.textContent || subject;
+  const msgEl    = document.getElementById('ur-msg');
+  if (!username || !subject) { msgEl.textContent = 'ユーザー名と科目を指定してください'; msgEl.style.color = 'var(--rose)'; return; }
+  if (!confirm(`${username} の「${label}」の点数だけをリセットしますか？この操作は取り消せません。`)) return;
+  try {
+    const res  = await fetch('/api/admin/reset-user-score', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ username, subject })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      msgEl.textContent = `✅ ${data.username} の${data.label}をリセットしました`;
+      msgEl.style.color = 'var(--teal)';
+      document.getElementById('ur-username').value = '';
+    } else {
+      msgEl.textContent = '❌ ' + (data.error || 'エラー');
+      msgEl.style.color = 'var(--rose)';
+    }
+  } catch(e) { msgEl.textContent = '通信エラー'; msgEl.style.color = 'var(--rose)'; }
 }
 
 // ── データレポート ──

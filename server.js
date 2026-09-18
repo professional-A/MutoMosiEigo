@@ -761,6 +761,19 @@ app.post('/api/admin/reset-exam-scores', auth, async (req, res) => {
   res.json({ ok: true, updated: rowCount });
 });
 
+// 特定ユーザーの特定科目（今の試験の科目のみ）だけをNULLに戻す。誤入力・古いキャッシュからの
+// 再送信などのピンポイント修正用。EXAM_SUBJECTS外（test_score等）は対象にできない
+app.post('/api/admin/reset-user-score', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const username = (req.body.username || '').trim();
+  if (!username) return res.status(400).json({ error: 'ユーザー名が必要です' });
+  const subj = EXAM_SUBJECT_BY_KEY[req.body.subject];
+  if (!subj) return res.status(404).json({ error: '不明な科目です' });
+  const { rowCount } = await pool.query(`UPDATE users SET ${subj.column}=NULL WHERE username=$1`, [username]);
+  if (!rowCount) return res.status(404).json({ error: 'ユーザーが見つかりません' });
+  res.json({ ok: true, username, subject: subj.key, label: subj.label });
+});
+
 // 管理者：ユーザー一覧
 app.get('/api/admin/users', auth, async (req, res) => {
   if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
