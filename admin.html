@@ -26,12 +26,12 @@
 
     <h1 style="margin-top:32px">🗄 データレポート</h1>
     <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
-      <input id="dr-slug" placeholder="slug（例: 2026-zenki-chukan）" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
       <input id="dr-title" placeholder="タイトル（例: 2026年度 前期中間試験）" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
-      <select id="dr-exam" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
+      <select id="dr-exam" onchange="updateSlugOptions()" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
         <option value="前期中間試験">前期中間試験</option>
         <option value="前期末試験">前期末試験</option>
       </select>
+      <select id="dr-slug" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit"></select>
       <input id="dr-note" placeholder="メモ（任意）" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
       <button onclick="createDataReport()" style="padding:9px 12px;border:none;border-radius:8px;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-family:inherit">📄 いまのデータでレポートを作成</button>
       <div id="dr-msg" style="font-size:.8rem"></div>
@@ -209,10 +209,22 @@ appShell.mount(document.getElementById('app-shell-bar'), {
 });
 
 async function refreshAdminPage() {
+  updateSlugOptions();
   await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn(), loadExamSchedule(), loadRaceSection(), reloadDataReports()]);
 }
 
 // ── データレポート ──
+function updateSlugOptions() {
+  const exam = document.getElementById('dr-exam').value;
+  const base = exam === '前期末試験' ? 'zenki-matsu' : 'zenki-chukan';
+  const year = new Date().getFullYear();
+  const candidates = [`${year}-${base}`, `${year}-${base}-2`, `${year+1}-${base}`];
+  const sel = document.getElementById('dr-slug');
+  const prev = sel.value;
+  sel.innerHTML = candidates.map(s => `<option value="${s}">${s}</option>`).join('');
+  if (candidates.includes(prev)) sel.value = prev;
+}
+
 async function reloadDataReports() {
   const listEl = document.getElementById('dr-list');
   const selEl  = document.getElementById('dr-reset-slug');
@@ -244,7 +256,7 @@ async function createDataReport() {
   const exam  = document.getElementById('dr-exam').value;
   const note  = document.getElementById('dr-note').value.trim();
   const msgEl = document.getElementById('dr-msg');
-  if (!slug || !title) { msgEl.textContent = 'slugとタイトルを入力してください'; msgEl.style.color = 'var(--rose)'; return; }
+  if (!slug || !title) { msgEl.textContent = 'タイトルを入力してください'; msgEl.style.color = 'var(--rose)'; return; }
   msgEl.textContent = '作成中...'; msgEl.style.color = 'var(--muted)';
   try {
     const res  = await fetch('/api/admin/data-report', {
@@ -256,9 +268,9 @@ async function createDataReport() {
     if (data.ok) {
       msgEl.textContent = `✅ 作成しました（slug: ${data.report.slug}）`;
       msgEl.style.color = 'var(--teal)';
-      document.getElementById('dr-slug').value = '';
       document.getElementById('dr-title').value = '';
       document.getElementById('dr-note').value = '';
+      updateSlugOptions();
       await reloadDataReports();
     } else {
       msgEl.textContent = '❌ ' + (data.error || 'エラー');
