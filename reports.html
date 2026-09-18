@@ -1,0 +1,188 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>データレポート ・ 武藤模試</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<link rel="stylesheet" href="/styles/theme.css">
+<style>
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:'Fraunces',-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif}
+  #app-shell-bar{position:fixed;top:0;left:0;right:0;z-index:100}
+  main{max-width:900px;margin:0 auto;padding:72px 16px 40px}
+  main h1{font-size:1.15rem;margin:8px 0 16px}
+  #reports-content{font-size:.9rem;margin-top:8px}
+
+  .report-card{display:block;text-decoration:none;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-bottom:10px;transition:border-color .15s}
+  .report-card:hover{border-color:var(--teal)}
+  .report-card-title{font-weight:700;font-size:.98rem}
+  .report-card-meta{margin-top:4px;font-size:.76rem;color:var(--dim);display:flex;gap:10px;flex-wrap:wrap}
+  .report-card-exam{color:var(--teal);font-weight:600}
+  .report-card-note{margin-top:6px;font-size:.8rem;color:var(--muted)}
+  .report-card-stats{margin-top:8px;display:flex;gap:8px;flex-wrap:wrap}
+  .report-card-stats span{background:var(--card2);border-radius:6px;padding:3px 9px;font-size:.72rem;color:var(--muted)}
+
+  .rp-back{display:inline-block;margin-bottom:14px;color:var(--teal);text-decoration:none;font-size:.85rem}
+  .rp-back:hover{text-decoration:underline}
+  .rp-head{margin-bottom:18px}
+  .rp-head-title{font-size:1.2rem;font-weight:700}
+  .rp-head-meta{margin-top:4px;font-size:.8rem;color:var(--dim)}
+  .rp-head-note{margin-top:6px;font-size:.85rem;color:var(--muted)}
+  .rp-section{margin-top:28px}
+  .rp-section h2{font-size:.95rem;margin:0 0 10px;color:var(--ink)}
+  .rp-empty{color:var(--dim);font-size:.82rem;padding:10px 0}
+</style>
+</head>
+<body>
+<div id="app-shell-bar"></div>
+<main>
+  <h1>🗄 データレポート</h1>
+  <div id="reports-content">読み込み中...</div>
+</main>
+<script src="/js/api.js"></script>
+<script src="/js/nav.js"></script>
+<script src="/js/app-shell.js"></script>
+<script src="/js/util.js"></script>
+<script>
+appShell.mount(document.getElementById('app-shell-bar'), {
+  nav: window.APP_NAV,
+});
+
+function _fmtDate(s) {
+  if (!s) return '';
+  const d = new Date(s);
+  if (isNaN(d.getTime())) return String(s).slice(0, 10);
+  return `${d.getFullYear()}/${d.getMonth()+1}/${d.getDate()}`;
+}
+
+async function loadReportsList() {
+  const el = document.getElementById('reports-content');
+  try {
+    const res  = await fetch('/api/data-reports');
+    const data = await res.json();
+    if (!Array.isArray(data)) { el.innerHTML = '<p class="rp-empty">読み込めませんでした</p>'; return; }
+    if (!data.length) { el.innerHTML = '<p class="rp-empty">まだレポートがありません</p>'; return; }
+    el.innerHTML = data.map(r => `
+      <a class="report-card" href="/reports.html?r=${encodeURIComponent(r.slug)}">
+        <div class="report-card-title">${esc(r.title)}</div>
+        <div class="report-card-meta">
+          ${r.exam ? `<span class="report-card-exam">${esc(r.exam)}</span>` : ''}
+          <span>作成日: ${_fmtDate(r.created_at)}</span>
+        </div>
+        ${r.note ? `<div class="report-card-note">${esc(r.note)}</div>` : ''}
+      </a>`).join('');
+  } catch(e) { el.innerHTML = '<p class="rp-empty">読み込みエラー</p>'; }
+}
+
+async function loadReportDetail(slug) {
+  const el = document.getElementById('reports-content');
+  try {
+    const res  = await fetch('/api/data-reports/' + encodeURIComponent(slug));
+    if (!res.ok) { el.innerHTML = '<a class="rp-back" href="/reports.html">← 一覧へ</a><p class="rp-empty">レポートが見つかりません</p>'; return; }
+    const r = await res.json();
+    const p = r.payload || {};
+    const subjects = Array.isArray(p.subjects) ? p.subjects : [];
+    const scores = Array.isArray(p.scores) ? p.scores : [];
+    const timetable = Array.isArray(p.timetable) ? p.timetable : [];
+    const tests = Array.isArray(p.tests) ? p.tests : [];
+    const stats = p.stats || {};
+    const classRank = p.classRank || {};
+
+    const sortedScores = [...scores].sort((a, b) => {
+      if (a.total == null && b.total == null) return 0;
+      if (a.total == null) return 1;
+      if (b.total == null) return -1;
+      return b.total - a.total;
+    });
+
+    const scoreRows = sortedScores.map((s, i) => {
+      const cells = subjects.map(sub => {
+        const v = s.byKey ? s.byKey[sub.key] : null;
+        return `<td style="text-align:center">${v != null ? v : '<span style="color:var(--dim);font-size:.8rem">―</span>'}</td>`;
+      }).join('');
+      return `<tr>
+        <td class="rank-num${i < 3 ? ' top' : ''}">${i + 1}</td>
+        <td class="rank-name">
+          <span class="avatar frame-default" style="width:20px;height:20px;font-size:.78rem;margin-right:5px;vertical-align:middle">${s.avatar||'🐸'}</span>
+          <span>${esc(tu(s.username||''))}</span>
+        </td>
+        ${cells}
+        <td style="text-align:center;font-weight:700;color:var(--rose)">${s.total != null ? s.total : '―'}</td>
+        <td style="text-align:center;font-weight:700;color:var(--amber)">${s.avg != null ? s.avg : '―'}</td>
+      </tr>`;
+    }).join('');
+
+    const subjectHeaders = subjects.map(sub => `<th style="text-align:center">${sub.icon||''} ${esc(sub.label)}</th>`).join('');
+
+    const scoresSection = scores.length
+      ? `<div class="table-scroll"><table class="ranking-table">
+          <thead><tr><th>#</th><th>名前</th>${subjectHeaders}<th>合計</th><th>平均</th></tr></thead>
+          <tbody>${scoreRows}</tbody>
+        </table></div>`
+      : '<p class="rp-empty">成績データがありません</p>';
+
+    const confirmed = classRank.confirmed || {};
+    const confirmedEntries = Object.entries(confirmed).sort((a, b) => b[1] - a[1]);
+    const classRankSection = confirmedEntries.length
+      ? `<div class="table-scroll"><table class="ranking-table">
+          <thead><tr><th>#</th><th>コマ</th><th>確定点</th></tr></thead>
+          <tbody>${confirmedEntries.map(([name, total], i) => `
+            <tr><td class="rank-num${i<3?' top':''}">${i+1}</td><td class="rank-name">${esc(name)}</td><td style="text-align:center;font-weight:700;color:var(--rose)">${total}</td></tr>
+          `).join('')}</tbody>
+        </table></div>
+        <p style="font-size:.76rem;color:var(--dim);margin-top:6px">満点: ${classRank.maxScore != null ? classRank.maxScore : '―'}</p>`
+      : '<p class="rp-empty">クラス順位データがありません</p>';
+
+    const timetableSection = timetable.length
+      ? `<div class="table-scroll"><table class="ranking-table">
+          <thead><tr><th>日付</th><th>科目</th><th>時間</th><th>担当</th></tr></thead>
+          <tbody>${timetable.map(t => `
+            <tr>
+              <td>${esc(t.exam_date||'')}</td>
+              <td class="rank-name">${esc(t.subject||'')}</td>
+              <td>${esc(t.start_time||'')}${t.end_time ? '–'+esc(t.end_time) : ''}</td>
+              <td>${esc(t.teacher||'')}</td>
+            </tr>
+          `).join('')}</tbody>
+        </table></div>`
+      : '<p class="rp-empty">時間割データがありません</p>';
+
+    const testsSection = tests.length
+      ? `<div class="table-scroll"><table class="ranking-table">
+          <thead><tr><th>科目</th><th>試験</th><th>タイトル</th><th>問題数</th></tr></thead>
+          <tbody>${tests.map(t => `
+            <tr>
+              <td>${esc(t.subject||'')}</td>
+              <td>${esc(t.exam||'')}</td>
+              <td class="rank-name">${esc(t.title||'')}</td>
+              <td style="text-align:center">${t.totalItems != null ? t.totalItems : '―'}</td>
+            </tr>
+          `).join('')}</tbody>
+        </table></div>`
+      : '<p class="rp-empty">テストデータがありません</p>';
+
+    el.innerHTML = `
+      <a class="rp-back" href="/reports.html">← 一覧へ</a>
+      <div class="rp-head">
+        <div class="rp-head-title">${esc(r.title)}</div>
+        <div class="rp-head-meta">
+          ${r.exam ? `${esc(r.exam)} ・ ` : ''}作成日: ${_fmtDate(r.created_at)}
+          ・ 人数: ${stats.userCount != null ? stats.userCount : '―'}
+          ・ テスト数: ${stats.testCount != null ? stats.testCount : '―'}
+          ・ 問題数: ${stats.questionCount != null ? stats.questionCount : '―'}
+        </div>
+        ${r.note ? `<div class="rp-head-note">${esc(r.note)}</div>` : ''}
+      </div>
+      <div class="rp-section"><h2>科目別成績</h2>${scoresSection}</div>
+      <div class="rp-section"><h2>クラス順位（確定点）</h2>${classRankSection}</div>
+      <div class="rp-section"><h2>試験時間割</h2>${timetableSection}</div>
+      <div class="rp-section"><h2>テスト一覧</h2>${testsSection}</div>
+    `;
+  } catch(e) { el.innerHTML = '<a class="rp-back" href="/reports.html">← 一覧へ</a><p class="rp-empty">読み込みエラー</p>'; }
+}
+
+const _slug = new URLSearchParams(location.search).get('r');
+if (_slug) loadReportDetail(_slug); else loadReportsList();
+</script>
+</body>
+</html>

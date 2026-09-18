@@ -23,6 +23,29 @@
   <div id="admin-root" hidden>
     <h1>登録ユーザー一覧 <span id="admin-count" style="font-size:.8rem;color:var(--muted);font-weight:400"></span></h1>
     <div id="admin-content" style="margin-top:8px"></div>
+
+    <h1 style="margin-top:32px">🗄 データレポート</h1>
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;display:flex;flex-direction:column;gap:8px">
+      <input id="dr-slug" placeholder="slug（例: 2026-zenki-chukan）" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
+      <input id="dr-title" placeholder="タイトル（例: 2026年度 前期中間試験）" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
+      <select id="dr-exam" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
+        <option value="前期中間試験">前期中間試験</option>
+        <option value="前期末試験">前期末試験</option>
+      </select>
+      <input id="dr-note" placeholder="メモ（任意）" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
+      <button onclick="createDataReport()" style="padding:9px 12px;border:none;border-radius:8px;background:var(--teal);color:#0a1626;font-weight:700;cursor:pointer;font-family:inherit">📄 いまのデータでレポートを作成</button>
+      <div id="dr-msg" style="font-size:.8rem"></div>
+    </div>
+    <div id="dr-list" style="margin-top:10px"></div>
+
+    <div style="background:var(--card);border:1px solid var(--line);border-radius:10px;padding:14px 16px;margin-top:16px;display:flex;flex-direction:column;gap:8px">
+      <div style="font-size:.82rem;color:var(--muted)">得点をリセットする前に、保存済みレポートを選んでください。</div>
+      <select id="dr-reset-slug" style="padding:7px 10px;border:1px solid var(--line);border-radius:8px;background:var(--bg);color:var(--ink);font-size:.85rem;font-family:inherit">
+        <option value="">（保存済みレポートを選択）</option>
+      </select>
+      <button onclick="resetExamScores()" style="padding:9px 12px;border:none;border-radius:8px;background:#dc2626;color:#fff;font-weight:700;cursor:pointer;font-family:inherit">🧹 得点をリセット（次の試験の準備）</button>
+    </div>
+
     <div id="admin-actions">
       <button onclick="openScheduleModal()" style="background:#1e2a1e;color:#86efac;border:1px solid #4ade80;font-weight:700">📅 日程管理</button>
       <button onclick="openTimetableModal()" style="background:#1e2333;color:#8ec5ff;border:1px solid #4a8fd6;font-weight:700">🗓 時間割</button>
@@ -186,7 +209,86 @@ appShell.mount(document.getElementById('app-shell-bar'), {
 });
 
 async function refreshAdminPage() {
-  await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn(), loadExamSchedule(), loadRaceSection()]);
+  await Promise.all([reloadAdminContent(), updateLockBtn(), updateScoreLockBtn(), loadExamSchedule(), loadRaceSection(), reloadDataReports()]);
+}
+
+// ── データレポート ──
+async function reloadDataReports() {
+  const listEl = document.getElementById('dr-list');
+  const selEl  = document.getElementById('dr-reset-slug');
+  try {
+    const res  = await fetch('/api/data-reports');
+    const data = await res.json();
+    if (!Array.isArray(data)) { listEl.innerHTML = '<p style="color:red;font-size:.8rem">エラー</p>'; return; }
+    listEl.innerHTML = data.length
+      ? data.map(r => `
+        <div class="admin-card" style="flex-direction:row;align-items:center;justify-content:space-between;gap:10px">
+          <div style="min-width:0">
+            <div style="font-weight:700;font-size:.88rem">${esc(r.title)}</div>
+            <div style="font-size:.72rem;color:var(--dim)">${esc(r.exam||'')} ・ ${esc(r.slug)} ・ ${(r.created_at||'').slice(0,10)}</div>
+          </div>
+          <div style="display:flex;gap:6px;flex-shrink:0">
+            <a href="/reports.html?r=${encodeURIComponent(r.slug)}" target="_blank" style="padding:6px 10px;border:1px solid var(--teal);border-radius:6px;color:var(--teal);font-size:.75rem;text-decoration:none">見る</a>
+            <button onclick="deleteDataReport(${r.id})" style="padding:6px 10px;border:1px solid var(--line);border-radius:6px;background:none;color:var(--dim);font-size:.75rem;cursor:pointer;font-family:inherit">削除</button>
+          </div>
+        </div>`).join('')
+      : '<p style="color:var(--muted);font-size:.8rem;padding:6px 0">まだレポートがありません</p>';
+    selEl.innerHTML = '<option value="">（保存済みレポートを選択）</option>'
+      + data.map(r => `<option value="${esc(r.slug)}">${esc(r.title)}（${esc(r.slug)}）</option>`).join('');
+  } catch(e) { listEl.innerHTML = '<p style="color:red;font-size:.8rem">通信エラー</p>'; }
+}
+
+async function createDataReport() {
+  const slug  = document.getElementById('dr-slug').value.trim();
+  const title = document.getElementById('dr-title').value.trim();
+  const exam  = document.getElementById('dr-exam').value;
+  const note  = document.getElementById('dr-note').value.trim();
+  const msgEl = document.getElementById('dr-msg');
+  if (!slug || !title) { msgEl.textContent = 'slugとタイトルを入力してください'; msgEl.style.color = 'var(--rose)'; return; }
+  msgEl.textContent = '作成中...'; msgEl.style.color = 'var(--muted)';
+  try {
+    const res  = await fetch('/api/admin/data-report', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ slug, title, exam, note })
+    });
+    const data = await res.json();
+    if (data.ok) {
+      msgEl.textContent = `✅ 作成しました（slug: ${data.report.slug}）`;
+      msgEl.style.color = 'var(--teal)';
+      document.getElementById('dr-slug').value = '';
+      document.getElementById('dr-title').value = '';
+      document.getElementById('dr-note').value = '';
+      await reloadDataReports();
+    } else {
+      msgEl.textContent = '❌ ' + (data.error || 'エラー');
+      msgEl.style.color = 'var(--rose)';
+    }
+  } catch(e) { msgEl.textContent = '通信エラー'; msgEl.style.color = 'var(--rose)'; }
+}
+
+async function deleteDataReport(id) {
+  if (!confirm('このレポートを削除しますか？')) return;
+  try {
+    await fetch('/api/admin/data-report/' + id, { method: 'DELETE', headers: { 'Authorization': authToken } });
+    await reloadDataReports();
+  } catch(e) { alert('通信エラー'); }
+}
+
+async function resetExamScores() {
+  const slug = document.getElementById('dr-reset-slug').value;
+  if (!slug) { alert('先に保存済みレポートを選択してください'); return; }
+  if (!confirm(`「${slug}」に保存済みであることを確認しました。得点（英語を除く5科目）をリセットしますか？この操作は取り消せません。`)) return;
+  try {
+    const res  = await fetch('/api/admin/reset-exam-scores', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Authorization': authToken },
+      body: JSON.stringify({ confirm: slug })
+    });
+    const data = await res.json();
+    if (data.ok) { alert(`✅ ${data.updated}件の得点をリセットしました`); await reloadAdminContent(); }
+    else alert('❌ ' + (data.error || 'エラー'));
+  } catch(e) { alert('通信エラー: ' + e.message); }
 }
 
 async function reloadAdminContent() {

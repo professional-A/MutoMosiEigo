@@ -128,6 +128,17 @@ async function initDB() {
     }
   } catch(e) {}
   await pool.query(`
+    CREATE TABLE IF NOT EXISTS data_reports (
+      id         SERIAL PRIMARY KEY,
+      slug       TEXT UNIQUE NOT NULL,
+      title      TEXT NOT NULL,
+      exam       TEXT,
+      note       TEXT,
+      payload    JSONB NOT NULL,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `).catch(()=>{});
+  await pool.query(`
     CREATE TABLE IF NOT EXISTS banners (
       id         SERIAL PRIMARY KEY,
       date       TEXT,
@@ -524,6 +535,29 @@ app.get('/api/scores', async (req, res) => {
   res.json(rows);
 });
 
+// 試験ごとの科目定義。試験が変わったらここに1本足す（フェーズ2で CURRENT_EXAM を差し替える）。
+// データレポートはこの定義を使って「その試験の科目」で焼き付ける。
+// 前期中間（6科目）＝ いま scores.html に並んでいる列。英語は test_score であることに注意
+const SUBJECTS_CHUKAN = [
+  { key: 'eigo',      label: '英語',           column: 'test_score',      color: '#86efac', icon: '📘' },
+  { key: 'ouri',      label: '応用物理',       column: 'ouri_score',      color: '#46d6c4', icon: '⚡' },
+  { key: 'math',      label: '応用数学',       column: 'math_score',      color: '#f06b8e', icon: '📐' },
+  { key: 'kakougaku', label: '加工学',         column: 'kakougaku_score', color: '#f59e0b', icon: '⚙️' },
+  { key: 'nekku',     label: '熱流体',         column: 'nekku_score',     color: '#7c6af7', icon: '🔥' },
+  { key: 'seigyo',    label: '制御工学',       column: 'seigyo_score',    color: '#a78bfa', icon: '🎛️' },
+];
+// 前期末（7科目）＝ 試験時間割どおり。英語は eigo_score（test_score は使わない）
+const SUBJECTS_MATSU = [
+  { key: 'math',      label: '応用数学',       column: 'math_score',      color: '#f06b8e', icon: '📐' },
+  { key: 'ai',        label: '人工知能概論',   column: 'ai_score',        color: '#38bdf8', icon: '🤖' },
+  { key: 'kakougaku', label: '加工学',         column: 'kakougaku_score', color: '#f59e0b', icon: '⚙️' },
+  { key: 'ouri',      label: '応用物理Ⅱ',     column: 'ouri_score',      color: '#46d6c4', icon: '⚡' },
+  { key: 'nekku',     label: '熱流体工学Ⅰ',   column: 'nekku_score',     color: '#7c6af7', icon: '🔥' },
+  { key: 'seigyo',    label: '制御工学Ⅰ',     column: 'seigyo_score',    color: '#a78bfa', icon: '🎛️' },
+  { key: 'eigo',      label: '科学技術英語Ⅰ', column: 'eigo_score',      color: '#86efac', icon: '📘' },
+];
+const SUBJECT_SETS = { '前期中間試験': SUBJECTS_CHUKAN, '前期末試験': SUBJECTS_MATSU };
+
 // 科目別得点入力（自己申告・再入力可）— 旧 /api/{ouri,math,kakougaku,nekku,seigyo}/score を1本に統合
 const SCORE_COL = { ouri: 'ouri_score', math: 'math_score', kakougaku: 'kakougaku_score', nekku: 'nekku_score', seigyo: 'seigyo_score' };
 app.post('/api/score/:subject', auth, async (req, res) => {
@@ -625,6 +659,118 @@ app.post('/api/class-rank/confirm', auth, async (req, res) => {
     [JSON.stringify(conf)]
   );
   res.json({ ok: true });
+});
+
+// ==== データレポート（仕様変更のたびに、その時点のデータを固めて残す）====
+async function buildDataReportSnapshot(examName) {
+  const subjects = SUBJECT_SETS[examName] || SUBJECTS_CHUKAN;
+  const { rows: userRows } = await pool.query('SELECT * FROM users ORDER BY username');
+  const scores = userRows.map(u => {
+    const byKey = {};
+    let total = 0, count = 0;
+    subjects.forEach(s => {
+      const v = u[s.column];
+      byKey[s.key] = v == null ? null : v;
+      if (v != null) { total += v; count++; }
+    });
+    return {
+      username: u.username,
+      avatar: u.avatar,
+      title: u.title,
+      byKey,
+      total: count ? total : null,
+      avg: count ? Math.round((total / count) * 10) / 10 : null,
+    };
+  });
+
+  let positions = {}, confirmed = {}, maxScore = 300;
+  try {
+    const { rows } = await pool.query('SELECT ordered, confirmed, max_score FROM class_rank_state WHERE id=1');
+    if (rows.length) {
+      try { const p = JSON.parse(rows[0].ordered || '{}'); if (!Array.isArray(p)) positions = p; } catch(e) {}
+      try { confirmed = JSON.parse(rows[0].confirmed || '{}'); } catch(e) {}
+      maxScore = rows[0].max_score || 300;
+    }
+  } catch(e) {}
+
+  let timetable = [];
+  try {
+    const { rows } = await pool.query('SELECT exam, subject, exam_date, start_time, end_time, teacher, link, note FROM exam_timetable ORDER BY exam_date, start_time, subject');
+    timetable = rows;
+  } catch(e) {}
+
+  let tests = [];
+  try {
+    tests = buildTestsIndex().map(t => ({ subject: t.subject, exam: t.exam, title: t.title, totalItems: t.totalItems }));
+  } catch(e) {}
+  const questionCount = tests.reduce((s, t) => s + (t.totalItems || 0), 0);
+
+  return {
+    generatedAt: new Date().toISOString(),
+    exam: examName,
+    subjects,
+    scores,
+    classRank: { positions, confirmed, maxScore },
+    timetable,
+    tests,
+    stats: { userCount: userRows.length, testCount: tests.length, questionCount },
+  };
+}
+
+// 一覧（payload は返さない）
+app.get('/api/data-reports', async (req, res) => {
+  const { rows } = await pool.query(
+    'SELECT id, slug, title, exam, note, created_at FROM data_reports ORDER BY created_at DESC'
+  );
+  res.json(rows);
+});
+
+// 1件（payload 込み）
+app.get('/api/data-reports/:slug', async (req, res) => {
+  const { rows } = await pool.query('SELECT * FROM data_reports WHERE slug=$1', [req.params.slug]);
+  if (!rows.length) return res.status(404).json({ error: '見つかりません' });
+  res.json(rows[0]);
+});
+
+// いまのデータでスナップショットを作成
+app.post('/api/admin/data-report', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const { slug, title, exam, note } = req.body;
+  if (!slug || !slug.trim() || !title || !title.trim()) return res.status(400).json({ error: 'slugとタイトルは必須です' });
+  const cleanSlug = slug.trim().slice(0, 80);
+  const { rows: existing } = await pool.query('SELECT id FROM data_reports WHERE slug=$1', [cleanSlug]);
+  if (existing.length) return res.status(409).json({ error: 'このslugは既に使われています' });
+  try {
+    const payload = await buildDataReportSnapshot((exam || '').trim());
+    const { rows } = await pool.query(
+      'INSERT INTO data_reports (slug, title, exam, note, payload) VALUES ($1,$2,$3,$4,$5) RETURNING id, slug, title, exam, note, created_at',
+      [cleanSlug, title.trim(), (exam || '').trim() || null, (note || '').trim() || null, JSON.stringify(payload)]
+    );
+    res.json({ ok: true, report: rows[0] });
+  } catch(e) {
+    console.error('[data-report] ' + ((e && e.stack) || e));
+    res.status(500).json({ error: 'レポート作成に失敗しました: ' + String(e) });
+  }
+});
+
+// 削除（誤作成用）
+app.delete('/api/admin/data-report/:id', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  await pool.query('DELETE FROM data_reports WHERE id=$1', [req.params.id]);
+  res.json({ ok: true });
+});
+
+// 得点リセット（次の試験の入力を空から始めるため）。test_score は絶対に消さない
+const RESETTABLE_SCORE_COLS = ['ouri_score', 'math_score', 'kakougaku_score', 'nekku_score', 'seigyo_score'];
+app.post('/api/admin/reset-exam-scores', auth, async (req, res) => {
+  if (req.user.email !== 'kabu6113450@gmail.com') return res.status(403).json({ error: '権限がありません' });
+  const confirmSlug = (req.body.confirm || '').trim();
+  if (!confirmSlug) return res.status(400).json({ error: '保存済みレポートのslugを指定してください' });
+  const { rows: reportRows } = await pool.query('SELECT id FROM data_reports WHERE slug=$1', [confirmSlug]);
+  if (!reportRows.length) return res.status(400).json({ error: '指定されたレポートが見つかりません。先にレポートを作成してください' });
+  const setClause = RESETTABLE_SCORE_COLS.map(c => `${c}=NULL`).join(', ');
+  const { rowCount } = await pool.query(`UPDATE users SET ${setClause}`);
+  res.json({ ok: true, updated: rowCount });
 });
 
 // 管理者：ユーザー一覧

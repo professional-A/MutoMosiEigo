@@ -9,5 +9,6 @@ window.APP_NAV = [
   { key: 'battle',  icon: '⚔️', label: 'バトル',       href: '/battle.html' },
   { key: 'race',    icon: '🏁', label: 'レース',       href: '/race.html', id: 'race-view-btn' },
   { key: 'members', icon: '👥', label: 'メンバー',     href: '/members.html' },
+  { key: 'reports', icon: '🗄', label: 'データレポート', href: '/reports.html' },
   { key: 'admin',   icon: '🛠', label: '管理',         href: '/admin.html', adminOnly: true }
 ];
