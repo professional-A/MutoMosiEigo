@@ -96,7 +96,9 @@ async function loadReportDetail(slug) {
     const scoreRows = sortedScores.map((s, i) => {
       const cells = subjects.map(sub => {
         const v = s.byKey ? s.byKey[sub.key] : null;
-        return `<td style="text-align:center">${v != null ? v : '<span style="color:var(--dim);font-size:.8rem">―</span>'}</td>`;
+        if (v == null) return '<td style="text-align:center"><span style="color:var(--dim);font-size:.8rem">―</span></td>';
+        const text = sub.maxRaw ? `${Math.round(v * (100/sub.maxRaw))}<span style="color:var(--dim);font-size:.8em">(${v})</span>` : v;
+        return `<td style="text-align:center">${text}</td>`;
       }).join('');
       return `<tr>
         <td class="rank-num${i < 3 ? ' top' : ''}">${i + 1}</td>

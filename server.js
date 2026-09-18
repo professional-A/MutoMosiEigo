@@ -84,6 +84,8 @@ async function initDB() {
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS kakougaku_score  INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS nekku_score      INTEGER`).catch(()=>{});
   await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS seigyo_score     INTEGER`).catch(()=>{});
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS ai_score         INTEGER`).catch(()=>{}); // 前期末: 人工知能概論、50点満点の生点
+  await pool.query(`ALTER TABLE users ADD COLUMN IF NOT EXISTS eigo_score       INTEGER`).catch(()=>{}); // 前期末: 科学技術英語Ⅰ（test_scoreは前期中間の記録として残す）
   await pool.query(`
     CREATE TABLE IF NOT EXISTS exam_schedule (
       id            SERIAL PRIMARY KEY,
@@ -525,10 +527,11 @@ app.get('/api/members', async (req, res) => {
   res.json(rows.map(applyTitleOverride));
 });
 
-// 科目別成績一覧（ログイン不要）
+// 科目別成績一覧（ログイン不要）— EXAM_SUBJECTS の列を動的にSELECT
 app.get('/api/scores', async (req, res) => {
+  const cols = [...new Set(EXAM_SUBJECTS.map(s => s.column))];
   const { rows } = await pool.query(`
-    SELECT username, avatar, frame, title, test_score, ouri_score, math_score, kakougaku_score, nekku_score, seigyo_score
+    SELECT username, avatar, frame, title, ${cols.join(', ')}
     FROM users
     ORDER BY username
   `);
@@ -549,7 +552,7 @@ const SUBJECTS_CHUKAN = [
 // 前期末（7科目）＝ 試験時間割どおり。英語は eigo_score（test_score は使わない）
 const SUBJECTS_MATSU = [
   { key: 'math',      label: '応用数学',       column: 'math_score',      color: '#f06b8e', icon: '📐' },
-  { key: 'ai',        label: '人工知能概論',   column: 'ai_score',        color: '#38bdf8', icon: '🤖' },
+  { key: 'ai',        label: '人工知能概論',   column: 'ai_score',        color: '#38bdf8', icon: '🤖', maxRaw: 50 }, // 50点満点。表示は「換算後(生点)」、合計/平均/クラス順位は換算後(×2)を使う
   { key: 'kakougaku', label: '加工学',         column: 'kakougaku_score', color: '#f59e0b', icon: '⚙️' },
   { key: 'ouri',      label: '応用物理Ⅱ',     column: 'ouri_score',      color: '#46d6c4', icon: '⚡' },
   { key: 'nekku',     label: '熱流体工学Ⅰ',   column: 'nekku_score',     color: '#7c6af7', icon: '🔥' },
@@ -557,15 +560,23 @@ const SUBJECTS_MATSU = [
   { key: 'eigo',      label: '科学技術英語Ⅰ', column: 'eigo_score',      color: '#86efac', icon: '📘' },
 ];
 const SUBJECT_SETS = { '前期中間試験': SUBJECTS_CHUKAN, '前期末試験': SUBJECTS_MATSU };
+const CURRENT_EXAM = '前期末試験';
+const EXAM_SUBJECTS = SUBJECT_SETS[CURRENT_EXAM];
+const EXAM_SUBJECT_BY_KEY = Object.fromEntries(EXAM_SUBJECTS.map(s => [s.key, s]));
+
+app.get('/api/exam-subjects', (req, res) => {
+  res.json({ exam: CURRENT_EXAM, subjects: EXAM_SUBJECTS });
+});
 
 // 科目別得点入力（自己申告・再入力可）— 旧 /api/{ouri,math,kakougaku,nekku,seigyo}/score を1本に統合
-const SCORE_COL = { ouri: 'ouri_score', math: 'math_score', kakougaku: 'kakougaku_score', nekku: 'nekku_score', seigyo: 'seigyo_score' };
+const SCORE_COL = Object.fromEntries(EXAM_SUBJECTS.map(s => [s.key, s.column]));
 app.post('/api/score/:subject', auth, async (req, res) => {
-  const col = SCORE_COL[req.params.subject];
-  if (!col) return res.status(404).json({ error: '不明な科目です' });
+  const subj = EXAM_SUBJECT_BY_KEY[req.params.subject];
+  if (!subj) return res.status(404).json({ error: '不明な科目です' });
+  const max = subj.maxRaw || 100;
   const s = parseInt(req.body.score, 10);
-  if (isNaN(s) || s < 0 || s > 100) return res.status(400).json({ error: '0〜100で入力してください' });
-  await pool.query(`UPDATE users SET ${col}=$1 WHERE id=$2`, [s, req.user.id]);
+  if (isNaN(s) || s < 0 || s > max) return res.status(400).json({ error: `0〜${max}で入力してください` });
+  await pool.query(`UPDATE users SET ${subj.column}=$1 WHERE id=$2`, [s, req.user.id]);
   res.json({ ok: true, score: s });
 });
 
@@ -592,32 +603,29 @@ app.get('/api/class-rank', async (req, res) => {
   let positions = {};
   try { const p = JSON.parse(rows[0].ordered || '{}'); if (!Array.isArray(p)) positions = p; } catch(e) {}
   const conf = JSON.parse(rows[0].confirmed || '{}');
-  // 入力済み教科数 × 100 を満点として自動算出
+  // 入力済み教科数 × 100 を満点として自動算出（EXAM_SUBJECTSベース）
   let autoMaxScore = 100;
   try {
-    const { rows: sc } = await pool.query(`
-      SELECT
-        (COUNT(*) FILTER (WHERE test_score       IS NOT NULL)) > 0 AS has_test,
-        (COUNT(*) FILTER (WHERE ouri_score       IS NOT NULL)) > 0 AS has_ouri,
-        (COUNT(*) FILTER (WHERE math_score       IS NOT NULL)) > 0 AS has_math,
-        (COUNT(*) FILTER (WHERE kakougaku_score  IS NOT NULL)) > 0 AS has_kakougaku,
-        (COUNT(*) FILTER (WHERE nekku_score      IS NOT NULL)) > 0 AS has_nekku,
-        (COUNT(*) FILTER (WHERE seigyo_score     IS NOT NULL)) > 0 AS has_seigyo
-      FROM users
-    `);
+    const cols = [...new Set(EXAM_SUBJECTS.map(s => s.column))];
+    const selectSql = cols.map(c => `(COUNT(*) FILTER (WHERE ${c} IS NOT NULL)) > 0 AS has_${c}`).join(', ');
+    const { rows: sc } = await pool.query(`SELECT ${selectSql} FROM users`);
     const s = sc[0];
-    autoMaxScore = ([s.has_test, s.has_ouri, s.has_math, s.has_kakougaku, s.has_nekku, s.has_seigyo].filter(Boolean).length) * 100 || 100;
+    autoMaxScore = (cols.filter(c => s['has_' + c]).length) * 100 || 100;
   } catch(e) {}
-  // ユーザー紐づけ：全入力済みの人を確定点に自動反映
+  // ユーザー紐づけ：EXAM_SUBJECTSの全科目が入力済みの人を確定点に自動反映（ai科目は換算後(×2)を使う）
   try {
     const usernames = Object.keys(USER_CLRANK_MAP);
+    const cols = [...new Set(EXAM_SUBJECTS.map(s => s.column))];
     const { rows: urows } = await pool.query(
-      'SELECT username, test_score, ouri_score, math_score, kakougaku_score, nekku_score FROM users WHERE username = ANY($1)',
+      `SELECT username, ${cols.join(', ')} FROM users WHERE username = ANY($1)`,
       [usernames]
     );
     for (const u of urows) {
-      if (u.test_score != null && u.ouri_score != null && u.math_score != null && u.kakougaku_score != null && u.nekku_score != null) {
-        conf[USER_CLRANK_MAP[u.username]] = u.test_score + u.ouri_score + u.math_score + u.kakougaku_score + u.nekku_score;
+      const allFilled = EXAM_SUBJECTS.every(s => u[s.column] != null);
+      if (allFilled) {
+        conf[USER_CLRANK_MAP[u.username]] = EXAM_SUBJECTS.reduce(
+          (sum, s) => sum + (s.maxRaw ? u[s.column] * (100 / s.maxRaw) : u[s.column]), 0
+        );
       }
     }
   } catch(e) {}
@@ -663,7 +671,7 @@ app.post('/api/class-rank/confirm', auth, async (req, res) => {
 
 // ==== データレポート（仕様変更のたびに、その時点のデータを固めて残す）====
 async function buildDataReportSnapshot(examName) {
-  const subjects = SUBJECT_SETS[examName] || SUBJECTS_CHUKAN;
+  const subjects = SUBJECT_SETS[examName] || EXAM_SUBJECTS;
   const { rows: userRows } = await pool.query('SELECT * FROM users ORDER BY username');
   const scores = userRows.map(u => {
     const byKey = {};
@@ -671,7 +679,7 @@ async function buildDataReportSnapshot(examName) {
     subjects.forEach(s => {
       const v = u[s.column];
       byKey[s.key] = v == null ? null : v;
-      if (v != null) { total += v; count++; }
+      if (v != null) { total += s.maxRaw ? v * (100 / s.maxRaw) : v; count++; }
     });
     return {
       username: u.username,

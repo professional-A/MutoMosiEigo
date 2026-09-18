@@ -41,15 +41,9 @@
 <body>
 <div id="app-shell-bar"></div>
 <main>
-  <h1>📊 科目別成績</h1>
+  <h1>📊 科目別成績 <span id="scores-exam-label" style="font-size:.75rem;color:var(--muted);font-weight:400"></span></h1>
   <div id="scores-content">読み込み中...</div>
-  <div class="score-input-row" id="score-input-row">
-    <button id="ouri-input-btn" style="display:none;border:1px solid var(--teal);background:rgba(70,214,196,.1);color:var(--teal)" onclick="submitOuriScore()">⚡ 応用物理の点数を入力</button>
-    <button id="math-input-btn" style="display:none;border:1px solid var(--rose);background:rgba(240,107,142,.1);color:var(--rose)" onclick="submitMathScore()">📐 応用数学の点数を入力</button>
-    <button id="kakougaku-input-btn" style="display:none;border:1px solid #f59e0b;background:rgba(245,158,11,.1);color:#f59e0b" onclick="submitKakougakuScore()">⚙️ 加工学の点数を入力</button>
-    <button id="nekku-input-btn" style="display:none;border:1px solid #7c6af7;background:rgba(124,106,247,.1);color:#7c6af7" onclick="submitNekkuScore()">🔥 熱流体工学Ⅰの点数を入力</button>
-    <button id="seigyo-input-btn" style="display:none;border:1px solid #a78bfa;background:rgba(167,139,250,.1);color:#a78bfa" onclick="submitSeigyoScore()">🎛️ 制御工学Ⅰの点数を入力</button>
-  </div>
+  <div class="score-input-row" id="score-input-row"></div>
   <div id="score-inline-wrap" style="display:none;margin-top:10px;padding:10px 12px;background:rgba(70,214,196,.07);border:1px solid rgba(70,214,196,.3);border-radius:8px;align-items:center;gap:8px;flex-wrap:wrap">
     <span id="score-inline-label" style="font-size:.85rem;color:var(--dim)"></span>
     <input id="score-inline-val" type="number" min="0" max="100" placeholder="0〜100" style="width:80px;padding:5px 8px;border:1px solid var(--line);border-radius:6px;background:#0a172b;color:var(--fg);font-size:.9rem;font-family:inherit" onkeydown="if(event.key==='Enter')_confirmScoreInline()">
@@ -76,28 +70,52 @@ appShell.mount(document.getElementById('app-shell-bar'), {
   nav: window.APP_NAV,
 });
 
-// ===== index.html:3044-3181 verbatim (loadScores / sortScores / _scSort) =====
+// /api/exam-subjects から取得する、いまの試験の科目定義（列・ラベル・色・50点満点なら maxRaw）
+let _examSubjects = [];
+let _examName = '';
+async function loadExamSubjects() {
+  try {
+    const data = await fetch('/api/exam-subjects').then(r => r.json());
+    _examSubjects = Array.isArray(data.subjects) ? data.subjects : [];
+    _examName = data.exam || '';
+    document.getElementById('scores-exam-label').textContent = _examName ? `（${_examName}）` : '';
+  } catch(e) { _examSubjects = []; }
+}
+
+// 科目の値を「換算後(生点)」表示に変換（maxRawが無ければそのまま）。ソート・合計・平均には換算後の値を使う
+function _convVal(sub, raw) {
+  if (raw == null) return null;
+  return sub.maxRaw ? raw * (100 / sub.maxRaw) : raw;
+}
+
 let _scSort = { key: '_avg', dir: 1 };
 async function loadScores() {
   const el = document.getElementById('scores-content');
   try {
+    if (!_examSubjects.length) await loadExamSubjects();
     const res  = await fetch('/api/scores');
     const data = await res.json();
     if (!Array.isArray(data) || !data.length) { el.innerHTML = '<p style="color:var(--muted)">まだ点数が登録されていません</p>'; return; }
+    if (!_examSubjects.length) { el.innerHTML = '<p style="color:var(--muted)">科目情報を読み込めませんでした</p>'; return; }
 
-    const seigyoActive = new Date() >= new Date('2026-06-23T00:00:00Z');
-
-    // 平均点・合計点を計算（入力済み科目のみ）
+    // 平均点・合計点を計算（入力済み科目のみ、換算後の値を使用）
     data.forEach(r => {
-      const vals = [r.test_score, r.ouri_score, r.math_score, r.kakougaku_score, r.nekku_score, ...(seigyoActive ? [r.seigyo_score] : [])].filter(v => v != null);
+      const vals = _examSubjects.map(s => _convVal(s, r[s.column])).filter(v => v != null);
       r._avg   = vals.length ? vals.reduce((s, v) => s + v, 0) / vals.length : null;
       r._total = vals.length ? vals.reduce((s, v) => s + v, 0) : null;
     });
 
+    const subByCol = {};
+    _examSubjects.forEach(s => { subByCol[s.column] = s; });
+    const sortKeyVal = (r, key) => {
+      if (key === '_avg' || key === '_total') return r[key];
+      const sub = subByCol[key];
+      return sub ? _convVal(sub, r[key]) : r[key];
+    };
+
     // # 列: 現在のソートキーで昇順に並べた順位（ソートが変わると連動）
     const rankBase = [...data].sort((a, b) => {
-      const k = _scSort.key;
-      const av = a[k], bv = b[k];
+      const av = sortKeyVal(a, _scSort.key), bv = sortKeyVal(b, _scSort.key);
       if (av == null && bv == null) return 0;
       if (av == null) return 1;
       if (bv == null) return -1;
@@ -106,7 +124,7 @@ async function loadScores() {
     let rnk = 0, prevV = null;
     const rankMap = {};
     rankBase.forEach((r, i) => {
-      const v = r[_scSort.key];
+      const v = sortKeyVal(r, _scSort.key);
       if (v == null) { rankMap[r.username] = null; return; }
       if (v !== prevV) { rnk = i + 1; prevV = v; }
       rankMap[r.username] = rnk;
@@ -114,17 +132,21 @@ async function loadScores() {
 
     // 選択キーでソート、未入力は末尾
     const sorted = [...data].sort((a, b) => {
-      const k = _scSort.key;
-      const av = a[k], bv = b[k];
+      const av = sortKeyVal(a, _scSort.key), bv = sortKeyVal(b, _scSort.key);
       if (av == null && bv == null) return 0;
       if (av == null) return 1;
       if (bv == null) return -1;
       return (av - bv) * _scSort.dir;
     });
 
-    const sc = v => v != null
-      ? `<span style="font-weight:700;color:var(--teal)">${v}</span>`
-      : `<span style="color:var(--dim);font-size:.8rem">―</span>`;
+    const sc = (sub, raw) => {
+      if (raw == null) return `<span style="color:var(--dim);font-size:.8rem">―</span>`;
+      if (sub.maxRaw) {
+        const conv = Math.round(raw * (100 / sub.maxRaw));
+        return `<span style="font-weight:700;color:var(--teal)">${conv}<span style="color:var(--dim);font-size:.78em">(${raw})</span></span>`;
+      }
+      return `<span style="font-weight:700;color:var(--teal)">${raw}</span>`;
+    };
 
     const th = (key, label, extraStyle='') => {
       const active = _scSort.key === key;
@@ -135,8 +157,8 @@ async function loadScores() {
 
     // みっつー波多野ライン: 現在のソートキーに値がある場合のみ基準に使う
     const _lk = _scSort.key;
-    const mittsIdx  = (() => { const i = sorted.findIndex(r => r.username === 'ミッツ' && r[_lk] != null); return i >= 0 ? i : null; })();
-    const hatanoIdx = (() => { const i = sorted.findIndex(r => r.username === '波多野裏技' && r[_lk] != null); return i >= 0 ? i : null; })();
+    const mittsIdx  = (() => { const i = sorted.findIndex(r => r.username === 'ミッツ' && sortKeyVal(r,_lk) != null); return i >= 0 ? i : null; })();
+    const hatanoIdx = (() => { const i = sorted.findIndex(r => r.username === '波多野裏技' && sortKeyVal(r,_lk) != null); return i >= 0 ? i : null; })();
     // lineIdx行の「後ろ」に線が描画される
     // 降順：高い方（小さいidx）の上に線 → lineIdx = Math.min - 1
     // 昇順：悪い方（大きいidx）の後に線  → lineIdx = Math.max
@@ -150,6 +172,8 @@ async function loadScores() {
       lineIdx = _lineDesc ? hatanoIdx - 1 : hatanoIdx;
     }
 
+    const colspan = _examSubjects.length + 4; // #, 名前, 科目...,合計, 平均
+
     const rows = sorted.map((r, i) => {
       const isMe = r.username === authUser;
       const inZone = lineIdx !== null && (_lineDesc ? i > lineIdx : i <= lineIdx);
@@ -160,6 +184,7 @@ async function loadScores() {
       const avgTd = r._avg != null
         ? `<td style="text-align:center;font-weight:700;color:var(--amber)">${Math.round(r._avg * 10) / 10}</td>`
         : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`;
+      const subjCells = _examSubjects.map(s => `<td style="text-align:center">${sc(s, r[s.column])}</td>`).join('');
       const styles = [];
       if (isMe) styles.push('background:rgba(70,214,196,.06)');
       else if (inZone) styles.push('background:rgba(239,68,68,.08)');
@@ -170,16 +195,10 @@ async function loadScores() {
           <span class="avatar frame-${r.frame||'default'}" style="width:20px;height:20px;font-size:.78rem;margin-right:5px;vertical-align:middle">${r.avatar||'🐸'}</span>
           <span>${esc(tu(r.username))}${isMe ? ' 👈' : ''}</span>
         </td>
-        <td style="text-align:center">${sc(r.test_score)}</td>
-        <td style="text-align:center">${sc(r.ouri_score)}</td>
-        <td style="text-align:center">${sc(r.math_score)}</td>
-        <td style="text-align:center">${sc(r.kakougaku_score)}</td>
-        <td style="text-align:center">${sc(r.nekku_score)}</td>
-        ${seigyoActive ? `<td style="text-align:center">${sc(r.seigyo_score)}</td>` : ''}
-        ${r._total != null ? `<td style="text-align:center;font-weight:700;color:var(--rose)">${r._total}</td>` : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`}
+        ${subjCells}
+        ${r._total != null ? `<td style="text-align:center;font-weight:700;color:var(--rose)">${Math.round(r._total)}</td>` : `<td style="text-align:center;color:var(--dim);font-size:.8rem">―</td>`}
         ${avgTd}
       </tr>`;
-      const colspan = seigyoActive ? 10 : 9;
       if (i === lineIdx) {
         return row + `<tr><td colspan="${colspan}" style="padding:0;border:none">
           <div class="mh-line" style="display:flex;align-items:center;gap:8px;padding:4px 10px 5px">
@@ -192,16 +211,13 @@ async function loadScores() {
       return row;
     }).join('');
 
+    const headerCells = _examSubjects.map(s => th(s.column, `${s.icon||''} ${esc(s.label)}`)).join('');
+
     el.innerHTML = `<div class="table-scroll"><table class="ranking-table">
       <thead><tr>
         <th>#</th>
         <th>名前</th>
-        ${th('test_score', '📘 英語')}
-        ${th('ouri_score', '⚡ 応用物理')}
-        ${th('math_score', '📐 応用数学')}
-        ${th('kakougaku_score', '⚙️ 加工学')}
-        ${th('nekku_score', '🔥 熱流体')}
-        ${seigyoActive ? th('seigyo_score', '🎛️ 制御工学') : ''}
+        ${headerCells}
         ${th('_total', '合計')}
         ${th('_avg', '平均')}
       </tr></thead>
@@ -224,36 +240,35 @@ function sortScores(key) {
   loadScores();
 }
 
-// ===== index.html:3021-3036 modal opener, adapted: renamed refreshScoresPage, modal-open lines removed =====
+// 科目ごとの入力ボタンを /api/exam-subjects の定義から生成する
 async function refreshScoresPage() {
-  const seigyoActive = new Date() >= new Date('2026-06-23T00:00:00Z');
-  const btn = document.getElementById('ouri-input-btn');
-  if (btn) btn.style.display = authToken ? 'inline-block' : 'none';
-  const btn2 = document.getElementById('math-input-btn');
-  if (btn2) btn2.style.display = authToken ? 'inline-block' : 'none';
-  const btn4 = document.getElementById('kakougaku-input-btn');
-  if (btn4) btn4.style.display = authToken ? 'inline-block' : 'none';
-  const btn5 = document.getElementById('nekku-input-btn');
-  if (btn5) btn5.style.display = authToken ? 'inline-block' : 'none';
-  const btn3 = document.getElementById('seigyo-input-btn');
-  if (btn3) btn3.style.display = (authToken && seigyoActive) ? 'inline-block' : 'none';
+  if (!_examSubjects.length) await loadExamSubjects();
+  const row = document.getElementById('score-input-row');
+  row.innerHTML = _examSubjects.map(s => {
+    const color = s.color || 'var(--teal)';
+    return `<button style="display:${authToken ? 'inline-block' : 'none'};border:1px solid ${color};background:color-mix(in srgb, ${color} 12%, transparent);color:${color}"
+      onclick="submitSubjectScore('${s.key}', ${JSON.stringify(s.label)}, ${s.maxRaw || 100})">${s.icon||''} ${esc(s.label)}の点数を入力</button>`;
+  }).join('');
   await loadScores();
 }
 
-// ===== index.html:3852-3876 verbatim, EXCEPT _confirmScoreInline now awaits refreshScoresPage() instead of the modal opener =====
-let _scoreEndpoint = '';
-async function _submitScore(label, endpoint) {
+let _scoreEndpoint = '', _scoreMax = 100;
+async function submitSubjectScore(key, label, maxRaw) {
   if (!authToken) { alert('ログインしてください'); return; }
-  _scoreEndpoint = endpoint;
+  _scoreEndpoint = '/api/score/' + key;
+  _scoreMax = maxRaw;
   const wrap = document.getElementById('score-inline-wrap');
-  document.getElementById('score-inline-label').textContent = `${label}（0〜100点）:`;
-  document.getElementById('score-inline-val').value = '';
+  document.getElementById('score-inline-label').textContent = `${label}（0〜${maxRaw}点）:`;
+  const input = document.getElementById('score-inline-val');
+  input.max = maxRaw;
+  input.placeholder = `0〜${maxRaw}`;
+  input.value = '';
   wrap.style.display = 'flex';
-  setTimeout(() => document.getElementById('score-inline-val').focus(), 50);
+  setTimeout(() => input.focus(), 50);
 }
 async function _confirmScoreInline() {
   const n = parseInt(document.getElementById('score-inline-val').value, 10);
-  if (isNaN(n) || n < 0 || n > 100) { alert('0〜100の整数で入力してください'); return; }
+  if (isNaN(n) || n < 0 || n > _scoreMax) { alert(`0〜${_scoreMax}の整数で入力してください`); return; }
   try {
     const res  = await fetch(_scoreEndpoint, { method:'POST', headers:{'Content-Type':'application/json','Authorization':authToken}, body: JSON.stringify({ score: n }) });
     const data = await res.json();
@@ -261,11 +276,6 @@ async function _confirmScoreInline() {
     else alert('❌ ' + (data.error || 'エラー'));
   } catch(e) { alert('通信エラー'); }
 }
-async function submitOuriScore() { await _submitScore('応用物理', '/api/score/ouri'); }
-async function submitMathScore() { await _submitScore('応用数学', '/api/score/math'); }
-async function submitKakougakuScore() { await _submitScore('加工学', '/api/score/kakougaku'); }
-async function submitNekkuScore() { await _submitScore('熱流体工学Ⅰ', '/api/score/nekku'); }
-async function submitSeigyoScore() { await _submitScore('制御工学Ⅰ', '/api/score/seigyo'); }
 
 function onAuthReady() { refreshScoresPage(); }
 loadScores();   // 認証解決前でも表本体は出す
