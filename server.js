@@ -109,26 +109,6 @@ async function initDB() {
       UNIQUE(exam, subject)
     )
   `).catch(()=>{});
-  // 初回のみ 4S 前期末試験の時間割を投入（以降は管理UIから編集）
-  try {
-    const { rows } = await pool.query('SELECT COUNT(*)::int AS n FROM exam_timetable');
-    if (rows[0].n === 0) {
-      const seed = [
-        ['前期末試験', '応用数学',       '2026-09-11', '09:00', '09:50',  '奥村、降旗'],
-        ['前期末試験', '人工知能概論',   '2026-09-14', '09:00', '10:30', 'ユーハラシェット'],
-        ['前期末試験', '加工学',         '2026-09-14', '10:50', '11:40', '堀川'],
-        ['前期末試験', '応用物理Ⅱ',     '2026-09-15', '09:00', '10:30', '松井'],
-        ['前期末試験', '熱流体工学Ⅰ',   '2026-09-15', '10:50', '12:20', '阿部（晶）'],
-        ['前期末試験', '制御工学Ⅰ',     '2026-09-16', '09:00', '10:30', '森川'],
-        ['前期末試験', '科学技術英語Ⅰ', '2026-09-17', '09:00', '10:30', '鈴木'],
-      ];
-      for (const s of seed) {
-        await pool.query(
-          `INSERT INTO exam_timetable (exam, subject, exam_date, start_time, end_time, teacher)
-           VALUES ($1,$2,$3,$4,$5,$6) ON CONFLICT (exam, subject) DO NOTHING`, s).catch(()=>{});
-      }
-    }
-  } catch(e) {}
   await pool.query(`
     CREATE TABLE IF NOT EXISTS data_reports (
       id         SERIAL PRIMARY KEY,

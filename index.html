@@ -25,27 +25,6 @@ body{
 .archived-toggle:hover{color:var(--teal);border-color:var(--teal)}
 .wrap{max-width:920px;margin:0 auto;padding:0 18px}
 
-/* 試験時間割 */
-.tt-head{display:flex;align-items:flex-end;justify-content:space-between;gap:12px;margin-bottom:12px}
-.tt-eyebrow{font-size:.7rem;letter-spacing:.18em;text-transform:uppercase;color:var(--teal);font-weight:600}
-.tt-title{font-size:1.1rem;font-weight:600;color:var(--ink);font-family:"Fraunces",serif}
-.tt-day{border:1px solid var(--line);background:var(--card);border-radius:12px;padding:12px 14px;margin-bottom:10px}
-.tt-day.tt-next{border-color:var(--teal);box-shadow:0 0 0 1px rgba(70,214,196,.25)}
-.tt-day.tt-done{opacity:.45}
-.tt-dayhead{display:flex;align-items:center;gap:10px;margin-bottom:8px;flex-wrap:wrap}
-.tt-date{font-size:.9rem;font-weight:700;color:var(--ink)}
-.tt-left{font-size:.7rem;font-weight:700;padding:2px 9px;border-radius:99px;background:rgba(70,214,196,.14);color:var(--teal)}
-.tt-left.soon{background:rgba(240,113,110,.16);color:var(--rose)}
-.tt-left.done{background:rgba(255,255,255,.05);color:var(--dim)}
-.tt-row{display:flex;align-items:center;gap:10px;padding:7px 0;border-top:1px solid var(--line);flex-wrap:wrap}
-.tt-row:first-of-type{border-top:none}
-.tt-time{font-size:.75rem;color:var(--dim);font-variant-numeric:tabular-nums;min-width:88px}
-.tt-subject{font-size:.95rem;font-weight:600;color:var(--ink);flex:1;min-width:120px}
-.tt-teacher{font-size:.72rem;color:var(--muted)}
-.tt-min{font-size:.66rem;color:var(--dim);border:1px solid var(--line);border-radius:5px;padding:1px 6px}
-.tt-link{font-size:.72rem;font-weight:600;text-decoration:none;padding:3px 10px;border-radius:6px;border:1px solid var(--teal);color:var(--teal);background:rgba(70,214,196,.1);transition:.15s;white-space:nowrap}
-.tt-link:hover{background:var(--teal);color:#0a1626}
-
 /* Header */
 header{
   padding:46px 0 30px;
@@ -571,18 +550,6 @@ h1{
 </header>
 
 <div class="wrap">
-  <!-- 試験時間割 -->
-  <section id="timetable-card" style="display:none;margin-bottom:26px">
-    <div class="tt-head">
-      <div>
-        <div class="tt-eyebrow">Exam Schedule</div>
-        <div class="tt-title" id="tt-title">試験時間割</div>
-      </div>
-      <button class="archived-toggle" id="tt-toggle" onclick="toggleTimetable()">たたむ</button>
-    </div>
-    <div id="tt-body"></div>
-  </section>
-
   <!-- フォルダビュー（デフォルト） -->
   <div id="folder-view">
     <div style="display:flex;justify-content:flex-end;margin-bottom:8px">
@@ -645,100 +612,6 @@ function applyExamArchive() {
     const d = _examSchedule[key];
     if (d && today >= d) t.archived = true;
   });
-}
-
-// ── 試験時間割 ────────────────────────────────────────────────
-let _timetable = [];
-const TT_WD = ['日','月','火','水','木','金','土'];
-function ttEsc(s){ return String(s == null ? '' : s).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;'); }
-function ttToday() { const d = new Date(); d.setHours(0,0,0,0); return d; }
-function ttDaysLeft(ymd) {
-  const [y,m,d] = ymd.split('-').map(Number);
-  return Math.round((new Date(y, m-1, d) - ttToday()) / 86400000);
-}
-function ttLeftLabel(n) {
-  if (n < 0)  return { text: '終了',      cls: 'done' };
-  if (n === 0) return { text: '今日',      cls: 'soon' };
-  if (n === 1) return { text: '明日',      cls: 'soon' };
-  if (n <= 3)  return { text: 'あと' + n + '日', cls: 'soon' };
-  return { text: 'あと' + n + '日', cls: '' };
-}
-// DBは "HH:MM"（time inputがゼロ埋めを要求する）、表示は先頭0を落とす
-function ttPad(t) {
-  if (!t) return '';
-  const m = String(t).match(/^(\d{1,2}):(\d{2})/);
-  return m ? String(m[1]).padStart(2, '0') + ':' + m[2] : '';
-}
-function ttShow(t) { return ttPad(t).replace(/^0/, ''); }
-function ttMinutes(st, et) {
-  if (!st || !et) return '';
-  const [sh,sm] = st.split(':').map(Number), [eh,em] = et.split(':').map(Number);
-  const n = (eh*60+em) - (sh*60+sm);
-  return n > 0 ? n + '分' : '';
-}
-
-async function loadTimetable() {
-  try {
-    const data = await fetch('/api/exam-timetable').then(r => r.json());
-    _timetable = Array.isArray(data) ? data : [];
-  } catch(e) { _timetable = []; }
-  renderTimetable();
-}
-
-function renderTimetable() {
-  const card = document.getElementById('timetable-card');
-  const body = document.getElementById('tt-body');
-  if (!card || !body) return;
-  if (!_timetable.length) { card.style.display = 'none'; return; }
-  card.style.display = '';
-
-  const examName = _timetable[0].exam || '試験';
-  document.getElementById('tt-title').textContent = examName + ' 時間割';
-
-  // 日付ごとにまとめる
-  const days = [];
-  _timetable.forEach(r => {
-    let g = days.find(x => x.date === r.exam_date);
-    if (!g) { g = { date: r.exam_date, rows: [] }; days.push(g); }
-    g.rows.push(r);
-  });
-  days.sort((a,b) => a.date < b.date ? -1 : 1);
-
-  const nextDate = (days.find(g => ttDaysLeft(g.date) >= 0) || {}).date;
-
-  body.innerHTML = days.map(g => {
-    const n = ttDaysLeft(g.date);
-    const lb = ttLeftLabel(n);
-    const [y,m,d] = g.date.split('-').map(Number);
-    const wd = TT_WD[new Date(y, m-1, d).getDay()];
-    const cls = n < 0 ? ' tt-done' : (g.date === nextDate ? ' tt-next' : '');
-    const rows = g.rows.map(r => {
-      const mins = ttMinutes(r.start_time, r.end_time);
-      return `<div class="tt-row">
-        <span class="tt-time">${ttEsc(ttShow(r.start_time))}${r.end_time ? '–' + ttEsc(ttShow(r.end_time)) : ''}</span>
-        <span class="tt-subject">${ttEsc(r.subject)}</span>
-        ${mins ? `<span class="tt-min">${mins}</span>` : ''}
-        ${r.teacher ? `<span class="tt-teacher">${ttEsc(r.teacher)}</span>` : ''}
-        ${r.note ? `<span class="tt-teacher">${ttEsc(r.note)}</span>` : ''}
-        ${r.link ? `<a class="tt-link" href="${ttEsc(r.link)}">対策 →</a>` : ''}
-      </div>`;
-    }).join('');
-    return `<div class="tt-day${cls}">
-      <div class="tt-dayhead">
-        <span class="tt-date">${m}/${d}（${wd}）</span>
-        <span class="tt-left ${lb.cls}">${lb.text}</span>
-      </div>
-      ${rows}
-    </div>`;
-  }).join('');
-}
-
-function toggleTimetable() {
-  const body = document.getElementById('tt-body');
-  const btn  = document.getElementById('tt-toggle');
-  const open = body.style.display !== 'none';
-  body.style.display = open ? 'none' : '';
-  btn.textContent = open ? '開く' : 'たたむ';
 }
 
 // ── テーマ ────────────────────────────────────────────────
@@ -905,7 +778,6 @@ document.getElementById("exam-filters").addEventListener("click", e => {
 });
 
 loadTheme();
-loadTimetable();
 
 fetch("/api/tests")
   .then(r => r.json())
