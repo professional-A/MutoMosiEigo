@@ -247,14 +247,17 @@ async function refreshScoresPage() {
   row.innerHTML = _examSubjects.map(s => {
     const color = s.color || 'var(--teal)';
     return `<button style="display:${authToken ? 'inline-block' : 'none'};border:1px solid ${color};background:color-mix(in srgb, ${color} 12%, transparent);color:${color}"
-      onclick="submitSubjectScore('${s.key}', ${JSON.stringify(s.label)}, ${s.maxRaw || 100})">${s.icon||''} ${esc(s.label)}の点数を入力</button>`;
+      onclick="submitSubjectScore('${s.key}')">${s.icon||''} ${esc(s.label)}の点数を入力</button>`;
   }).join('');
   await loadScores();
 }
 
 let _scoreEndpoint = '', _scoreMax = 100;
-async function submitSubjectScore(key, label, maxRaw) {
+async function submitSubjectScore(key) {
   if (!authToken) { alert('ログインしてください'); return; }
+  const s = _examSubjects.find(x => x.key === key);
+  if (!s) return;
+  const label = s.label, maxRaw = s.maxRaw || 100;
   _scoreEndpoint = '/api/score/' + key;
   _scoreMax = maxRaw;
   const wrap = document.getElementById('score-inline-wrap');
